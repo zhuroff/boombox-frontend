@@ -1,0 +1,136 @@
+.album {
+
+  &__frame {
+    text-align: center;
+    padding: 0 10px;
+
+    & > iframe {
+      border-radius: 5px;
+      width: 100% !important;
+    }
+  }
+
+  .album__frame {
+    min-width: 350px;
+    padding: 0;
+  }
+
+  &__player {
+    margin-bottom: 7px;
+
+    iframe {
+      width: 100% !important;
+      height: 212px !important;
+      border-radius: 5px;
+      display: block;
+    }
+  }
+
+  &__link {
+    padding: 0 10px;
+    display: block;
+    text-align: center;
+    position: relative;
+    min-height: 252px;
+  }
+
+  &__cover {
+    object-fit: cover;
+    margin-bottom: 7px;
+    position: relative;
+
+    &_img,
+    &_vinyl {
+      width: 100%;
+      display: block;
+      height: 212px;
+      transition: transform 0.5s $animation;
+    }
+
+    &_img {
+      position: relative;
+      z-index: 2;
+      border-radius: 5px;
+
+      &:hover {
+        transform: translateX(-10px);
+        transition: transform 0.5s $animation;
+
+        & + .album__cover_vinyl {
+          transform: translateX(20px);
+          transition: transform 0.5s $animation;
+        }
+      }
+    }
+
+    &_vinyl {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      right: 0;
+    }
+
+    &_skeleton {
+      top: 0;
+      left: 10px;
+      width: calc(100% - 20px);
+      height: 212px;
+      background-color: $skeleton;
+      border-radius: 5px;
+      margin-bottom: 7px;
+      overflow: hidden;
+      position: absolute;
+
+      &:before {
+        content: '';
+        @include skeleton;
+      }
+    }
+  }
+
+  &__title {
+    font-weight: 600;
+    color: $dark;
+    font-size: 14px;
+    position: relative;
+
+    &_skeleton {
+      width: calc(100% - 20px);
+      height: 15px;
+      background-color: $skeleton;
+      border-radius: 5px;
+      left: 10px;
+      bottom: 18px;
+      overflow: hidden;
+      position: absolute;
+
+      &:before {
+        content: '';
+        @include skeleton;
+      }
+    }
+  }
+
+  &__info {
+    font-weight: 600;
+    color: $pale;
+    font-size: 12px;
+    position: relative;
+
+    &_skeleton {
+      width: calc(100% - 20px);
+      height: 15px;
+      background-color: $skeleton;
+      border-radius: 5px;
+      left: 10px;
+      bottom: 0;
+      overflow: hidden;
+      position: absolute;
+
+      &:before {
+        content: '';
+        @include skeleton;
+      }
+    }
+  }
+}

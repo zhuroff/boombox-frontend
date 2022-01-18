@@ -1,0 +1,93 @@
+$font: 'Source Sans Pro', sans-serif;
+
+$white: #fff;
+$dark: #0f1e36;
+$pale: #828c9b;
+$border: #eee;
+$accent: #f51e38;
+$error: #ff3860;
+$warning: #ffe08a;
+$success: #23d160;
+$info: #209cee;
+$skeleton: #c1c8d3;
+$transDark: rgba(15, 30, 54, 0.9);
+$transLight: rgba(255, 255, 255, 0.9);
+
+$containerWidth: 1198px;
+$headerHeight: 70px;
+$asideWidth: 170px;
+$playerHeight: 62px;
+
+$animation: cubic-bezier(.17,.67,.35,.99);
+
+@mixin button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  height: 35px;
+  padding: 0 20px;
+  border-radius: 5px;
+  border: 1px solid $info;
+  background-color: $info;
+  color: $white;
+  font-family: $font;
+  font-weight: 600;
+  font-size: 14px;
+  outline: none;
+  text-transform: uppercase;
+}
+
+@mixin collapser {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  font-size: 12px;
+  color: $dark;
+  font-weight: 600;
+  flex: none;
+  width: 100%;
+  outline: none;
+  background-color: transparent;
+  border: 0;
+  border-radius: 3px;
+  transition: box-shadow 0.2s ease;
+
+  &:focus,
+  &:active,
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: box-shadow 0.2s ease;
+  }
+}
+
+@mixin buttonClose {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  z-index: 10;
+
+  .icon-delete {
+    fill: $white;
+  }
+}
+
+@mixin skeleton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 1;
+  width: 700%;
+  margin-left: -350%;
+  background: linear-gradient(to right, rgba($white, 0) 46%, rgba($white, 0.35) 50%, rgba($white, 0) 54%) 50% 50%;
+  animation: skeleton 1s linear infinite;
+}

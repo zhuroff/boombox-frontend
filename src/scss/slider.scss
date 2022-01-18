@@ -1,0 +1,46 @@
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  .carousel {
+    height: 100%;
+  
+    &__viewport,
+    &__track,
+    &__slide {
+      height: inherit;
+    }
+  
+    &__slide {
+      padding: 25px;
+    }
+  
+    &__image {
+      display: block;
+      max-height: calc(100vh - 50px);
+      max-width: calc(100vw - 50px);
+    }
+  
+    &__prev {
+      transform: translate(25px, -50%);
+      background-color: transparent;
+      width: 75px;
+      height: 75px;
+    }
+  
+    &__next {
+      transform: translate(-25px, -50%);
+      background-color: transparent;
+      width: 75px;
+      height: 75px;
+    }
+
+    &__icon {
+      width: inherit;
+      height: inherit;
+    }
+  }
+}
