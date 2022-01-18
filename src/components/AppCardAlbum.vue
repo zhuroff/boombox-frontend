@@ -21,7 +21,7 @@
   <div class="album__title">{{ album.title }}</div>
 
   <div class="album__info">
-    {{ album.artist ? album.artist.title : '' }}, {{ album.period ? album.period.title : '' }} / {{ album.genre ? album.genre.title : '' }}
+    {{ album.artist.title }}, {{ album.period.title }} / {{ album.genre.title }}
   </div>
 </router-link>
 
@@ -29,12 +29,13 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { IAlbumBasic } from '~/types/Album'
 
 export default defineComponent({
   props: {
     album: {
-      type: Object,
+      type: Object as PropType<IAlbumBasic>,
       required: true
     }
   }

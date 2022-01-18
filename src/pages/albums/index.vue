@@ -55,7 +55,7 @@ export default defineComponent({
 
     const page = ref(route.query.p || 1)
     const limit = ref(40)
-    const sort = reactive({ title: 1 })
+    const sort = reactive({ dateCreated: -1 })
     const pagination = ref(null)
 
     if (!route.query.p) {

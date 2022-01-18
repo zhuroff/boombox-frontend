@@ -11,9 +11,10 @@
 
 <script>
 
+import { defineComponent } from 'vue'
 import AppSprite from '~/components/AppSprite.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppSprite
   },
@@ -23,7 +24,7 @@ export default {
 
     return { deleteItem }
   }
-}
+})
 
 </script>
 

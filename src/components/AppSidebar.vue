@@ -27,7 +27,7 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import AppSprite from '~/components/AppSprite.vue'
 
 export default defineComponent({
@@ -35,59 +35,61 @@ export default defineComponent({
     AppSprite
   },
 
-  data() {
+  setup() {
+    const navbar = reactive([
+      // {
+      //   title: 'Artists',
+      //   route: 'artists'
+      // },
+
+      // {
+      //   title: 'Genres',
+      //   route: 'genres'
+      // },
+
+      {
+        title: 'Albums',
+        route: 'albums'
+      },
+
+      // {
+      //   title: 'Periods',
+      //   route: 'periods'
+      // },
+
+      // {
+      //   title: 'Collections',
+      //   route: 'collections'
+      // },
+
+      // {
+      //   title: 'Playlists',
+      //   route: 'playlists'
+      // },
+
+      // {
+      //   title: 'YouTube',
+      //   route: 'youtube'
+      // },
+
+      // {
+      //   title: 'Frames',
+      //   route: 'frames'
+      // },
+
+      // {
+      //   title: 'Radio',
+      //   route: 'radio'
+      // },
+
+      {
+        title: 'Backups',
+        route: 'backups'
+      }
+    ])
+  
     return {
-      navbar: [
-        // {
-        //   title: 'Artists',
-        //   route: 'artists'
-        // },
-
-        // {
-        //   title: 'Genres',
-        //   route: 'genres'
-        // },
-
-        {
-          title: 'Albums',
-          route: 'albums'
-        },
-
-        // {
-        //   title: 'Periods',
-        //   route: 'periods'
-        // },
-
-        // {
-        //   title: 'Collections',
-        //   route: 'collections'
-        // },
-
-        // {
-        //   title: 'Playlists',
-        //   route: 'playlists'
-        // },
-
-        // {
-        //   title: 'YouTube',
-        //   route: 'youtube'
-        // },
-
-        // {
-        //   title: 'Frames',
-        //   route: 'frames'
-        // },
-
-        // {
-        //   title: 'Radio',
-        //   route: 'radio'
-        // },
-
-        {
-          title: 'Backups',
-          route: 'backups'
-        }
-      ]
+      navbar
     }
   }
 })
