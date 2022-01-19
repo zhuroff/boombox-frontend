@@ -14,6 +14,10 @@
         <button @click="backupDelete(item.timestamp)">Delete</button>
       </li>
     </ul>
+    <AppButton
+      text="Synchronize"
+      @onClick="synchronizeCollection"
+    />
   </section>
 </template>
 
@@ -62,10 +66,7 @@ export default defineComponent({
     const createBackups = async () => {
       try {
         const response = await api.post('/api/backup/save')
-
-        if (response) {
-          fetchBackups()
-        }
+        if (response) fetchBackups()
       } catch (error) {
         console.error(error)
       }
@@ -90,6 +91,15 @@ export default defineComponent({
       }
     }
 
+    const synchronizeCollection = async () => {
+      try {
+        const response = await api.post('/api/sync')
+        console.log(response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
     // const cleanAlbums = async () => {
     //   try {
     //     const response = await api.post('/api/backup/clean')
@@ -106,7 +116,8 @@ export default defineComponent({
       backups,
       createBackups,
       backupRestore,
-      backupDelete
+      backupDelete,
+      synchronizeCollection
     }
   }
 })
