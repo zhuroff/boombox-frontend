@@ -57,7 +57,8 @@ export default defineComponent({
     const fetchBackups = async () => {
       try {
         const response = await api.get('/api/backup/list')
-        setBackups(response.data)
+
+        if (response) setBackups(response.data)
       } catch (error) {
         console.error(error)
       }
