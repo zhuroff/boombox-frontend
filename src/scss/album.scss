@@ -51,6 +51,7 @@
       position: relative;
       z-index: 2;
       border-radius: 5px;
+      object-fit: cover;
 
       &:hover {
         transform: translateX(-10px);

@@ -1,34 +1,16 @@
-import { createStore } from 'vuex'
-// import News from './news'
-// import Player from './player'
-// import Album from './album'
-// import Playlist from './playlist'
+import { InjectionKey } from 'vue'
+import { createStore, Store } from 'vuex'
+import modules from './modules'
+import { ExampleStateInterface } from '~/store/modules/state'
 
-export interface State {
-  count: number
+export interface StateInterface {
+  instance: ExampleStateInterface
 }
 
-export default createStore({
-  // mutations: {
-  //   setTrackDuration: (state, payload) => {
-  //     let targetTrack
+export const key: InjectionKey<Store<StateInterface>> = Symbol()
 
-  //     if (state.Album.album._id === payload.album) {
-  //       targetTrack = state.Album.album.tracks.find((el) => el.fileid === payload.fileid)
-  //     } else if (state.Playlist.playlist._id === payload.album) {
-  //       targetTrack = state.Playlist.playlist.tracks.find((el) => el.fileid === payload.fileid)
-  //     }
-
-  //     if (targetTrack && !targetTrack.duration) {
-  //       targetTrack.duration = payload.duration
-  //     }
-  //   }
-  // },
-
-  // modules: {
-  //   News,
-  //   Player,
-  //   Album,
-  //   Playlist
-  // }
+export default createStore<StateInterface>({
+  modules: {
+    instance: modules
+  }
 })

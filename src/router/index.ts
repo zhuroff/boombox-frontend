@@ -14,11 +14,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: 'albums' */ '~/pages/albums/index.vue')
   },
 
-  // {
-  //   path: '/albums/:id',
-  //   name: 'Album',
-  //   component: () => import(/* webpackChunkName: 'albums' */ '@/pages/albums/_id/index.vue')
-  // },
+  {
+    path: '/albums/:id',
+    name: 'Album',
+    component: () => import(/* webpackChunkName: 'album' */ '~/pages/albums/_id/index.vue')
+  },
 
   // {
   //   path: '/artists',
