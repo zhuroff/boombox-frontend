@@ -114,7 +114,6 @@ export default defineComponent({
     const store = useStore(key)
 
     onMounted(async () => {
-      // store.dispatch('fetchAlbum', route.params.id)
       try {
         const albumResponse = await api.get(`/api/albums/${route.params.id}`)
 

@@ -8,7 +8,8 @@
     </transition>
 
     <div id="scrollspace">
-      <transition name="flyUp">
+      <h1 class="section__title">There are {{ totalAlbums }} albums in your collection</h1>
+      <transition-group name="flyUp">
         <ul
           v-if="albums.isFetched"
           class="cardlist"
@@ -21,12 +22,13 @@
           </AppCardWrapper>
         </ul>
 
-        <!-- <AppPagination
-          v-if="pagination && pagination.totalPages > 1"
-          :pagination="pagination"
+        <AppPagination
+          v-if="totalPages > 1"
+          :totalPages="totalPages"
+          :currentPage="currentPage"
           @switchPagination="switchPagination"
-        /> -->
-      </transition>
+        />
+      </transition-group>
     </div>
   </section>
 </template>
@@ -35,10 +37,12 @@
 
 import { defineComponent, ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { IAlbumBasic } from '~/types/Album'
+import { IPagination } from '~/types/Global'
 import AppPreloader from '~/components/AppPreloader.vue'
 import AppCardWrapper from '~/components/AppCardWrapper.vue'
 import AppCardAlbum from '~/components/AppCardAlbum.vue'
-// import AppPagination from '~/components/AppPagination.vue'
+import AppPagination from '~/components/AppPagination.vue'
 import api from '~/api'
 
 export default defineComponent({
@@ -46,54 +50,71 @@ export default defineComponent({
     AppPreloader,
     AppCardWrapper,
     AppCardAlbum,
-    // AppPagination
+    AppPagination
   },
 
   setup() {
     const router = useRouter()
     const route = useRoute()
 
-    const page = ref(route.query.p || 1)
+    const currentPage = ref(Number(route.query.p) || 1)
     const limit = ref(40)
-    const sort = reactive({ dateCreated: -1 })
-    const pagination = ref(null)
+    const sort = ref({ dateCreated: -1 })
+    const totalAlbums = ref(0)
+    const totalPages = ref(0)
 
     if (!route.query.p) {
-      router.push({ query: { p: page.value } })
+      router.push({ query: { p: currentPage.value } })
     }
     
-    const albums = reactive({
+    const albums: { isFetched: boolean, data: IAlbumBasic[] } = reactive({
       isFetched: false,
       data: []
     })
 
     const fetchAlbums = async () => {
       try {
-        const payload = { page: page.value, limit: limit.value, sort }
+        const payload = {
+          page: currentPage.value,
+          limit: limit.value,
+          sort: sort.value
+        }
+
         const response = await api.post('/api/albums', payload)
 
-        albums.data = response.data.docs
-        albums.isFetched = true
-        // pagination.value = response.data.pagination
+        if (response?.status === 200) {
+          setAlbum(response.data.docs)
+          setPagination(response.data.pagination)
+        }
       } catch (error) {
-        // console.error(error)
         throw error
       }
+    }
+
+    const setAlbum = (data: IAlbumBasic[]) => {
+      albums.data = data
+      albums.isFetched = true
+    }
+
+    const setPagination = (data: IPagination) => {
+      totalAlbums.value = data.totalDocs
+      totalPages.value = data.totalPages
     }
 
     fetchAlbums()
 
     const switchPagination = (value: any) => {
-      page.value = value
-      // albums.value = albumsPlaceholder
-      // albums.value = []
-      router.push({ query: { p: page.value } })
+      currentPage.value = value
+      albums.isFetched = false
+      router.push({ query: { p: currentPage.value } })
       fetchAlbums()
     }
 
     return {
       albums,
-      pagination,
+      totalAlbums,
+      totalPages,
+      currentPage,
       switchPagination
     }
   }

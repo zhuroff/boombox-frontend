@@ -1,0 +1,44 @@
+#app {
+  background: linear-gradient(to right, #000, #e5e5e5, #000);
+  background: linear-gradient(to right, #0f0c29, #cccbdd, #24243e);
+  background: linear-gradient(to right, #0f1e36, #e5e5e5, #0f1e36);
+}
+
+.section {
+  overflow: hidden;
+  height: calc(100vh - #{$headerHeight} - #{$playerHeight});
+  position: relative;
+  z-index: 1000;
+
+  &__title {
+    padding: 25px 25px 0;
+  }
+}
+
+#scrollspace {
+  height: 100%;
+}
+
+.simplebar-content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - #{$headerHeight} - #{$playerHeight});
+}
+
+.simplebar-vertical {
+  top: 15px;
+  bottom: 15px;
+
+  .simplebar-scrollbar {
+
+    &:before {
+      background-color: $pale;
+    }
+  }
+}
+
+.hero {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
