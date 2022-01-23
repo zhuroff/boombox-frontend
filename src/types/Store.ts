@@ -1,7 +1,9 @@
+import { IAlbumFull } from '~/types/Album'
+
 interface IState {}
 
 interface IAlbumState {
-  album: any
+  album: IAlbumFull
 }
 
 export {

@@ -15,8 +15,8 @@
         >
           <div class="album__aside">
             <AlbumCoverArt
-              :cover="albumCover"
-              :bookletID="albumBookletID"
+              :albumCover="albumCover"
+              :albumCoverArt="albumCoverArt"
               @coverClick="fetchAlbumBooklet"
             />
 
@@ -37,18 +37,18 @@
             /> -->
           </div>
 
-          <!-- <div class="album__content">
+          <div class="album__content">
             <AlbumHeading
-              :heading="albumHeading"
-              @textInputHandler="saveAlbumDescription"
+              :albumHead="albumHead"
+              @textInputHandler="descriptionHandler"
             />
 
-            <AlbumTrackList
+            <!-- <AlbumTrackList
               :album="albumContent"
               @changeTracksOrder="changeTracksOrder"
               @saveLyrics="saveLyrics"
-            />
-          </div> -->
+            /> -->
+          </div>
         </div>
       </transition>
 
@@ -75,14 +75,14 @@
 <script lang="ts">
 
 // import { computed, ref, reactive } from 'vue'
-import { defineComponent, onMounted, computed } from 'vue'
+import { defineComponent, onMounted, ComputedRef, computed, ref, Ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-// import axios from 'axios'
+import { AlbumHeadProps } from '~/types/Album'
 import AppPreloader from '~/components/AppPreloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
-// import AlbumHeading from '~/components/AlbumHeading.vue'
+import AlbumHeading from '~/components/AlbumHeading.vue'
 // import AlbumTrackList from '~/components/TrackList/TrackList.vue'
 // import AppListModal from '~/components/AppListModal/AppListModal.vue'
 // // import DiscogsTable from '~/components/DiscogsTable.vue'
@@ -93,7 +93,7 @@ export default defineComponent({
   components: {
     AlbumCoverArt,
     AppPreloader,
-    // AlbumHeading,
+    AlbumHeading,
     // AlbumTrackList,
     // AppListModal,
     // // DiscogsTable,
@@ -110,17 +110,18 @@ export default defineComponent({
     })
 
     // const lists = ref(null)
-    // const inputTimer = ref(0)
+    const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
 
     // const booklet = reactive({
     //   isFetching: false,
     //   data: []
     // })
 
-    const albumIsLoaded = computed(() => store.getters.albumIsLoaded)
-    const albumCover = computed(() => store.getters.albumCover)
-    const albumBookletID = computed(() => store.getters.albumBookletID)
-    // const albumHeading = computed(() => store.getters.albumHeading)
+    const albumIsLoaded: ComputedRef<boolean> = computed(() => store.getters.albumIsLoaded)
+    const albumCover: ComputedRef<string> = computed(() => store.getters.albumCover)
+    const albumCoverArt: ComputedRef<number> = computed(() => store.getters.albumCoverArt)
+    const albumHead: ComputedRef<AlbumHeadProps> = computed(() => store.getters.albumHead)
+
     // const albumContent = computed(() => store.getters.album)
     // const discogsData = reactive(computed(() => store.getters.discogsData))
     // const discogsPagination = computed(() => store.getters.discogsPagination)
@@ -201,20 +202,17 @@ export default defineComponent({
     //   lists.value = null
     // }
 
-    // const patchDescription = async (value) => {
-    //   const payload = { description: value }
+    const patchDescription = (value: string) => {
+      const payload = { description: value, id: route.params.id }
+      store.dispatch('updateAlbumDescription', payload)
+    }
 
-    //   try {
-    //     await axios.patch(`/api/albums/${route.params.id}/description`, payload)
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // }
-
-    // const saveAlbumDescription = (value) => {
-    //   clearTimeout(inputTimer.value)
-    //   inputTimer.value = setTimeout(() => patchDescription(value), 2000)
-    // }
+    const descriptionHandler = (value: string) => {
+      if (typeof inputTimer.value === 'number') {
+        clearTimeout(inputTimer.value)
+        inputTimer.value = setTimeout(() => patchDescription(value), 2000)
+      }
+    }
 
     // const saveLyrics = async (payload) => {
     //   try {
@@ -237,9 +235,10 @@ export default defineComponent({
     return {
       albumIsLoaded,
       albumCover,
-      albumBookletID,
+      albumCoverArt,
       fetchAlbumBooklet,
-      // albumHeading,
+      albumHead,
+      descriptionHandler,
       // albumContent,
       // discogsData,
       // discogsPagination,
@@ -252,7 +251,6 @@ export default defineComponent({
       // createNewList,
       // itemAction,
       // closeListModal,
-      // saveAlbumDescription,
       // saveLyrics,
       // switchDiscogsPagination
     }

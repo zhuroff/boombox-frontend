@@ -21,10 +21,20 @@ interface IAlbumFull extends IAlbumBasic {
   albumCoverArt: number
   description: string
   tracks: IAlbumTracks[]
+  isLoaded: boolean
+}
+
+type AlbumHeadProps = {
+  title: string
+  artist: ICategoryBasic,
+  period: ICategoryBasic,
+  genre: ICategoryBasic,
+  description: string
 }
 
 export {
   IAlbumBasic,
   IAlbumFull,
-  IAlbumTracks
+  IAlbumTracks,
+  AlbumHeadProps
 }

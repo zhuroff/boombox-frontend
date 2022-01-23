@@ -2,8 +2,8 @@
   
 <div class="album__booklet">
   <img
-    :src="cover || 'https://s.mxmcdn.net/site/images/album-placeholder.png'"
-    :class="[{ '--booklet' : bookletID > 0 }, 'album__cover']"
+    :src="albumCover || 'https://s.mxmcdn.net/site/images/album-placeholder.png'"
+    :class="[{ '--booklet' : albumCoverArt > 0 }, 'album__cover']"
     @click="$emit('coverClick')"
   >
 
@@ -37,12 +37,12 @@ export default defineComponent({
   },
 
   props: {
-    cover: {
+    albumCover: {
       type: String,
       required: false
     },
 
-    bookletID: {
+    albumCoverArt: {
       type: Number,
       required: false
     },
@@ -95,7 +95,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .album {
 

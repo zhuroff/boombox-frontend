@@ -1,12 +1,23 @@
 import { IAlbumFull } from '~/types/Album'
 
 export interface ExampleStateInterface {
-  album: IAlbumFull | null
+  album: IAlbumFull
 }
 
 function state(): ExampleStateInterface {
   return {
-    album: null
+    album: {
+      _id: '',
+      albumCover: '',
+      title: '',
+      artist: { _id: '', title: '' },
+      genre: { _id: '', title: '' },
+      period: { _id: '', title: '' },
+      albumCoverArt: 0,
+      description: '',
+      tracks: [],
+      isLoaded: false
+    }
   }
 }
 

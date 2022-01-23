@@ -1,34 +1,33 @@
 <template>
   
 <div
-  v-if="heading.title"
   class="album__heading"
 >
-  <h1 class="album__title">{{ heading.title }}</h1>
+  <h1 class="album__title">{{ albumHead.title }}</h1>
 
   <div
     class="album__info"
-    v-if="heading.artist"
+    v-if="albumHead.artist"
   >
     <router-link
-      :to="`/artists/${heading.artist._id}`"
+      :to="`/artists/${albumHead.artist._id}`"
       class="album__info-link"
     >
-      {{ heading.artist.title }}
+      {{ albumHead.artist.title }}
     </router-link>,
 
     <router-link
-      :to="`/periods/${heading.period}`"
+      :to="`/periods/${albumHead.period._id}`"
       class="album__info-link"
     >
-      {{ heading.releaseYear }}
+      {{ albumHead.period.title }}
     </router-link> /
 
     <router-link
-      :to="`/genres/${heading.genre._id}`"
+      :to="`/genres/${albumHead.genre._id}`"
       class="album__info-link"
     >
-      {{ heading.genre.title }}
+      {{ albumHead.genre.title }}
     </router-link>
 
     <AppTextarea
@@ -41,49 +40,47 @@
   </div>
 </div>
 
-<div
-  v-else
-  class="album__heading --placeholder"
-></div>
-
 </template>
 
-<script>
+<script lang="ts">
 
-import { computed } from 'vue'
-import AppTextarea from '@/components/AppTextarea.vue'
+import { defineComponent, ComputedRef, computed } from 'vue'
+import { AlbumHeadProps } from '~/types/Album'
+import AppTextarea from '~/components/AppTextarea.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppTextarea
   },
 
   props: {
-    heading: {
-      type: Object,
+    albumHead: {
+      type: Object as () => AlbumHeadProps,
       required: true
     }
   },
 
   setup(props, { emit }) {
-    const albumDescription = computed(() => (
-      props.heading.description
+    const albumDescription: ComputedRef<string> = computed(() => (
+      props.albumHead.description
     ))
 
-    const textInputHandler = (value) => emit('textInputHandler', value)
+    const textInputHandler = (value: string) => (
+      emit('textInputHandler', value)
+    )
 
     return {
       albumDescription,
       textInputHandler
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .album {
 
