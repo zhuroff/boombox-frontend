@@ -1,23 +1,24 @@
-import { IAlbumFull } from '~/types/Album'
+import { IPlaylist } from '~/types/Player'
 
-export interface ExampleStateInterface {
-  album: IAlbumFull
+const initPlaylist: IPlaylist = {
+  _id: '',
+  title: '',
+  albumCover: '',
+  artist: { _id: '', title: '' },
+  period: { _id: '', title: '' },
+  tracks: []
 }
 
-function state(): ExampleStateInterface {
+export interface AppStateInterface {
+  currentPlaylist: IPlaylist
+  reservedPlaylist: IPlaylist
+}
+
+function state(): AppStateInterface {
   return {
-    album: {
-      _id: '',
-      albumCover: '',
-      title: '',
-      artist: { _id: '', title: '' },
-      genre: { _id: '', title: '' },
-      period: { _id: '', title: '' },
-      albumCoverArt: 0,
-      description: '',
-      tracks: [],
-      isLoaded: false
-    }
+    currentPlaylist: { ...initPlaylist },
+
+    reservedPlaylist: { ...initPlaylist }
   }
 }
 

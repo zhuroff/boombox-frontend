@@ -75,11 +75,18 @@
 <script lang="ts">
 
 // import { computed, ref, reactive } from 'vue'
-import { defineComponent, onMounted, ComputedRef, computed, ref, Ref } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  ComputedRef,
+  computed,
+  ref,
+  Ref
+} from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { AlbumHeadProps } from '~/types/Album'
+import { IAlbumFull, AlbumHeadProps } from '~/types/Album'
 import AppPreloader from '~/components/AppPreloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
@@ -88,6 +95,7 @@ import AlbumHeading from '~/components/AlbumHeading.vue'
 // // import DiscogsTable from '~/components/DiscogsTable.vue'
 // import AppModal from '~/components/AppModal.vue'
 // import AppSlider from '~/components/AppSlider.vue'
+import api from '~/api'
 
 export default defineComponent({
   components: {
@@ -105,8 +113,36 @@ export default defineComponent({
     const route = useRoute()
     const store = useStore(key)
 
-    onMounted(() => {
-      store.dispatch('fetchAlbum', route.params.id)
+    onMounted(async () => {
+      // store.dispatch('fetchAlbum', route.params.id)
+      try {
+        const albumResponse = await api.get(`/api/albums/${route.params.id}`)
+
+        if (albumResponse?.status === 200) {
+          setAlbumState(albumResponse.data)
+          store.commit('setPlayerPlaylist', albumResponse.data)
+        }
+      } catch (error) {
+        throw error
+      }
+    })
+
+    const setAlbumState = (data: IAlbumFull) => {
+      album.value = data
+      album.value.isLoaded = true
+    }
+
+    const album: Ref<IAlbumFull> = ref({
+      _id: '',
+      albumCover: '',
+      title: '',
+      artist: { _id: '', title: '' },
+      genre: { _id: '', title: '' },
+      period: { _id: '', title: '' },
+      albumCoverArt: 0,
+      description: '',
+      tracks: [],
+      isLoaded: false
     })
 
     // const lists = ref(null)
@@ -117,10 +153,16 @@ export default defineComponent({
     //   data: []
     // })
 
-    const albumIsLoaded: ComputedRef<boolean> = computed(() => store.getters.albumIsLoaded)
-    const albumCover: ComputedRef<string> = computed(() => store.getters.albumCover)
-    const albumCoverArt: ComputedRef<number> = computed(() => store.getters.albumCoverArt)
-    const albumHead: ComputedRef<AlbumHeadProps> = computed(() => store.getters.albumHead)
+    const albumIsLoaded: ComputedRef<boolean> = computed(() => album.value.isLoaded)
+    const albumCover: ComputedRef<string> = computed(() => album.value.albumCover)
+    const albumCoverArt: ComputedRef<number> = computed(() => album.value.albumCoverArt)
+    const albumHead: ComputedRef<AlbumHeadProps> = computed(() => ({
+      title: album.value.title,
+      artist: album.value.artist,
+      period: album.value.period,
+      genre: album.value.genre,
+      description: album.value.description
+    }))
 
     // const albumContent = computed(() => store.getters.album)
     // const discogsData = reactive(computed(() => store.getters.discogsData))
@@ -202,9 +244,12 @@ export default defineComponent({
     //   lists.value = null
     // }
 
-    const patchDescription = (value: string) => {
-      const payload = { description: value, id: route.params.id }
-      store.dispatch('updateAlbumDescription', payload)
+    const patchDescription = async (value: string) => {
+      try {
+        await api.patch(`/api/albums/${route.params.id}/description`, { description: value })
+      } catch (error) {
+        throw error
+      }
     }
 
     const descriptionHandler = (value: string) => {

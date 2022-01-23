@@ -1,10 +1,10 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 import modules from './modules'
-import { ExampleStateInterface } from '~/store/modules/state'
+import { AppStateInterface } from '~/store/modules/state'
 
 export interface StateInterface {
-  instance: ExampleStateInterface
+  instance: AppStateInterface
 }
 
 export const key: InjectionKey<Store<StateInterface>> = Symbol()
