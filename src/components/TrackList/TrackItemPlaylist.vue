@@ -19,14 +19,15 @@
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { ref, computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
-import AppSprite from '@/components/AppSprite.vue'
-import AppListModal from '@/components/AppListModal/AppListModal.vue'
+import { key } from '~/store'
+import AppSprite from '~/components/AppSprite.vue'
+import AppListModal from '~/components/AppListModal/AppListModal.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppSprite,
     AppListModal
@@ -40,32 +41,34 @@ export default {
   },
 
   setup(props, { emit }) {
-    const store = useStore()
+    const store = useStore(key)
     const isModalActive = ref(false)
     const clearfiedPlaylists = computed(() => (
-      store.getters.playlists?.map((el) => ({
-        id: el._id,
-        title: el.title,
-        items: el.tracks.map((track) => track.track)
-      })) || []
+      // store.getters.playlists?.map((el: any) => ({
+      //   id: el._id,
+      //   title: el.title,
+      //   items: el.tracks.map((track: any) => track.track)
+      // })) || []
+      []
     ))
 
-    const getPlaylists = (event) => {
-      const isModalSection = event.composedPath().some((el) => el.className === 'applist__modal')
+    const getPlaylists = (event: any) => {
+      console.log(event)
+      // const isModalSection = event.composedPath().some((el: any) => el.className === 'applist__modal')
 
-      if (!isModalSection) {
-        isModalActive.value = !isModalActive.value
-        store.dispatch('fetchPlaylists')
-      }
+      // if (!isModalSection) {
+      //   isModalActive.value = !isModalActive.value
+      //   store.dispatch('fetchPlaylists')
+      // }
     }
 
     const closeListModal = () => {
       isModalActive.value = false
     }
 
-    const createNewList = (title) => emit('createNewList', title)
+    const createNewList = (title: string) => emit('createNewList', title)
 
-    const itemAction = (payload) => emit('itemAction', payload)
+    const itemAction = (payload: any) => emit('itemAction', payload)
 
     return {
       isModalActive,
@@ -76,13 +79,13 @@ export default {
       itemAction
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .tracklist__row {
 

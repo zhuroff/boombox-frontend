@@ -13,32 +13,32 @@
     {{ track.order || index + 1 }}
   </div>
 
-  <!-- <TrackItemPlay
+  <TrackItemPlay
     :fileid="track.fileid"
     :index="index"
     @playTrack="playTrack"
   />
 
   <TrackItemTitle
-    :title="trackTitle"
+    :title="track.title"
     @callLyricsModal="callLyricsModal"
   />
 
   <TrackItemDuration :duration="track.duration" />
 
-  <TrackItemRemove
-    v-if="isPlaylist"
-    @removeTrackFromPlaylist="removeTrackFromPlaylist"
-  />
-
   <TrackItemPlaylist
-    v-else
+    v-if="!isPlaylist"
     :trackID="track._id"
     @createNewList="createNewList"
     @itemAction="itemAction"
   />
 
-  <TrackItemDisable @disableTrack="disableTrack" /> -->
+  <!-- <TrackItemRemove
+    v-else
+    @removeTrackFromPlaylist="removeTrackFromPlaylist"
+  /> -->
+
+  <TrackItemDisable @disableTrack="disableTrack" />
 
   <div class="tracklist__row_cell --fix">
     {{ track.listened }}
@@ -67,24 +67,24 @@ import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { IAlbumTrack } from '~/types/Album'
 import AppSprite from '~/components/AppSprite.vue'
-// import TrackItemPlay from './TrackItemPlay.vue'
-// import TrackItemTitle from './TrackItemTitle.vue'
-// import TrackItemDuration from './TrackItemDuration.vue'
+import TrackItemPlay from './TrackItemPlay.vue'
+import TrackItemTitle from './TrackItemTitle.vue'
+import TrackItemDuration from './TrackItemDuration.vue'
 // import TrackItemRemove from './TrackItemRemove.vue'
-// import TrackItemPlaylist from './TrackItemPlaylist.vue'
-// import TrackItemDisable from './TrackItemDisable.vue'
+import TrackItemPlaylist from './TrackItemPlaylist.vue'
+import TrackItemDisable from './TrackItemDisable.vue'
 // import AppModal from '@/components/AppModal.vue'
 // import AppLyrics from '@/components/AppLyrics.vue'
 
 export default defineComponent({
   components: {
     AppSprite,
-    // TrackItemPlay,
-    // TrackItemTitle,
-    // TrackItemDuration,
+    TrackItemPlay,
+    TrackItemTitle,
+    TrackItemDuration,
     // TrackItemRemove,
-    // TrackItemPlaylist,
-    // TrackItemDisable,
+    TrackItemPlaylist,
+    TrackItemDisable,
     // AppModal,
     // AppLyrics
   },
@@ -115,36 +115,30 @@ export default defineComponent({
       false
     ))
 
-    // const trackTitle = computed(() => {
-    //   if (!props.isPlaylist && !isModalActive.value) {
-    //     return props.track.title
-    //   }
+    const createNewList = (title: string) => {
+      console.log(title)
+      // emit('createNewList', {
+      //   title,
+      //   id: props.track._id,
+      //   fileid: props.track.fileid
+      // })
+    }
 
-    //   return `${props.track.artist.title} - ${props.track.track || props.track.title}`
-    // })
+    const playTrack = () => {
+      console.log('play track')
+      // const payload = {
+      //   order: props.track.order || props.index,
+      //   fileid: props.track.fileid,
+      //   link: props.track.link,
+      //   duration: props.track.duration
+      // }
 
-    // const createNewList = (title) => {
-    //   emit('createNewList', {
-    //     title,
-    //     id: props.track._id,
-    //     fileid: props.track.fileid
-    //   })
-    // }
+      // emit('playTrack', payload)
+    }
 
-    // const playTrack = () => {
-    //   const payload = {
-    //     order: props.track.order || props.index,
-    //     fileid: props.track.fileid,
-    //     link: props.track.link,
-    //     duration: props.track.duration
-    //   }
-
-    //   emit('playTrack', payload)
-    // }
-
-    // const callLyricsModal = () => {
-    //   isModalActive.value = true
-    // }
+    const callLyricsModal = () => {
+      isModalActive.value = true
+    }
 
     // const closeModalForm = () => {
     //   isModalActive.value = false
@@ -158,16 +152,17 @@ export default defineComponent({
     //   })
     // }
 
-    // const itemAction = (payload) => {
-    //   emit('itemAction', {
-    //     ...payload,
-    //     fileid: props.track.fileid
-    //   })
-    // }
+    const itemAction = (payload: any) => {
+      console.log(payload)
+      // emit('itemAction', {
+      //   ...payload,
+      //   fileid: props.track.fileid
+      // })
+    }
 
-    // const disableTrack = () => {
-    //   emit('disableTrack', { trackID: props.track._id })
-    // }
+    const disableTrack = () => {
+      emit('disableTrack', { trackID: props.track._id })
+    }
 
     // const saveLyrics = (lyrics) => {
     //   const payload = {
@@ -181,14 +176,13 @@ export default defineComponent({
     return {
       isModalActive,
       isPlayingTrack,
-      // trackTitle,
-      // createNewList,
-      // playTrack,
-      // callLyricsModal,
+      playTrack,
+      callLyricsModal,
+      createNewList,
       // closeModalForm,
       // removeTrackFromPlaylist,
-      // itemAction,
-      // disableTrack,
+      itemAction,
+      disableTrack,
       // saveLyrics
     }
   }

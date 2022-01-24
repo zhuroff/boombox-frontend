@@ -19,13 +19,14 @@
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { computed } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
-import AppSprite from '@/components/AppSprite.vue'
+import { key } from '~/store'
+import AppSprite from '~/components/AppSprite.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppSprite
   },
@@ -43,27 +44,32 @@ export default {
   },
 
   setup(props, { emit }) {
-    const store = useStore()
+    const store = useStore(key)
     const loadingTrack = computed(() => store.getters.loadingTrack)
 
     const isOnPlay = computed(() => (
-      store.getters.playingTrack.fileid === props.fileid
-      && !store.getters.playingTrack.isOnPause
-      && !loadingTrack.value
+      // store.getters.playingTrack.fileid === props.fileid
+      // && !store.getters.playingTrack.isOnPause
+      // && !loadingTrack.value
+      false
     ))
 
-    const isOnPause = computed(() => store.getters.playingTrack.isOnPause)
+    const isOnPause = computed(() => (
+      // store.getters.playingTrack.isOnPause
+      false
+    ))
 
     const pauseTrack = (value = true) => {
       store.commit('setPauseState', value)
     }
 
     const playTrack = () => {
-      if (props.fileid === store.getters.playingTrack.fileid) {
-        pauseTrack(false)
-      } else {
-        emit('playTrack')
-      }
+      console.log('play track')
+      // if (props.fileid === store.getters.playingTrack.fileid) {
+      //   pauseTrack(false)
+      // } else {
+      //   emit('playTrack')
+      // }
     }
 
     return {
@@ -74,13 +80,13 @@ export default {
       playTrack
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .tracklist__row {
 
@@ -109,8 +115,8 @@ export default {
   .icon-play,
   .icon-pause,
   .icon-spinner  {
-    width: 13px;
-    height: 13px;
+    width: 18px;
+    height: 18px;
     fill: $pale;
     transition: fill 0.2s ease;
   }

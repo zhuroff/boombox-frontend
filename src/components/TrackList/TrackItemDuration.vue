@@ -6,9 +6,9 @@
 
 <script>
 
-import { computed } from 'vue'
+import { defineComponent, computed } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     duration: {
       required: false
@@ -29,6 +29,6 @@ export default {
 
     return { secondsToMinutes }
   }
-}
+})
 
 </script>
