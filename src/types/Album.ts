@@ -1,11 +1,12 @@
 import { ICategoryBasic } from '~/types/Category'
 
-interface IAlbumTracks {
+interface IAlbumTrack {
   _id: string
   fileid: number
   link: string
   listened: number
   title: string
+  isDisabled?: boolean
 }
 
 interface IAlbumBasic {
@@ -20,7 +21,7 @@ interface IAlbumBasic {
 interface IAlbumFull extends IAlbumBasic {
   albumCoverArt: number
   description: string
-  tracks: IAlbumTracks[]
+  tracks: IAlbumTrack[]
   isLoaded: boolean
 }
 
@@ -35,6 +36,6 @@ type AlbumHeadProps = {
 export {
   IAlbumBasic,
   IAlbumFull,
-  IAlbumTracks,
+  IAlbumTrack,
   AlbumHeadProps
 }

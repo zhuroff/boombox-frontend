@@ -1,9 +1,6 @@
 <template>
   
-<div
-  v-if="album.tracks.length"
-  class="wrapper"
->
+<div class="wrapper">
   <div class="tracklist">
     <VueDraggableNext
       handle=".--drag"
@@ -12,11 +9,11 @@
     >
       <transition-group>
         <TrackItem
-          v-for="(track, index) in album.tracks"
+          v-for="(track, index) in tracks"
           :key="track.fileid"
-          :track="{ ...track, artist: { title: !album.isPlaylist ? album.artist.title : track.artist.title } }"
+          :track="track"
           :index="index"
-          :isPlaylist="album.isPlaylist"
+          :isPlaylist="false"
           @playTrack="playTrack"
           @createNewList="createPlaylist"
           @removeTrackFromPlaylist="playlistAction"
@@ -29,43 +26,39 @@
   </div>
 </div>
 
-<div
-  v-else
-  class="wrapper --placeholder"
-></div>
-
 </template>
 
-<script>
+<script lang="ts">
 
-import { ref, reactive, computed } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
-import axios from 'axios'
+import { IAlbumTrack } from '~/types/Album'
+import { IDraggableEvent } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
 import TrackItem from './TrackItem.vue'
 
-export default {
+export default defineComponent({
   components: {
     VueDraggableNext,
     TrackItem
   },
 
   props: {
-    album: {
-      type: Object,
+    tracks: {
+      type: Array as () => IAlbumTrack[],
       required: true
     }
   },
 
   setup(props, { emit }) {
-    const store = useStore()
+    // const store = useStore(key)
 
     const dragOptions = reactive({
       animation: 300,
       disabled: false
     })
 
-    const orderChanged = (event) => {
+    const orderChanged = (event: IDraggableEvent) => {
       const payload = {
         oldOrder: event.oldIndex,
         newOrder: event.newIndex
@@ -74,45 +67,50 @@ export default {
       emit('changeTracksOrder', payload)
     }
 
-    const playTrack = (payload) => {
-      store.dispatch('playTrack', { ...payload, playlist: props.album })
+    const playTrack = (payload: any) => {
+      // store.dispatch('playTrack', { ...payload, playlist: props.album })
+      console.log(payload)
     }
 
-    const createPlaylist = (data) => {
-      const payload = {
-        title: data.title,
-        tracks: [{
-          track: data.id,
-          fileid: data.fileid,
-          artist: props.album.artist._id,
-          album: props.album._id,
-          order: 1
-        }]
-      }
+    const createPlaylist = (data: any) => {
+      console.log(data)
+      // const payload = {
+      //   title: data.title,
+      //   tracks: [{
+      //     track: data.id,
+      //     fileid: data.fileid,
+      //     artist: props.album.artist._id,
+      //     album: props.album._id,
+      //     order: 1
+      //   }]
+      // }
 
-      store.dispatch('createPlaylist', payload)
+      // store.dispatch('createPlaylist', payload)
     }
 
-    const playlistAction = async (data) => {
-      const payload = {
-        ...data,
-        artist: props.album.artist?._id,
-        album: props.album._id
-      }
+    const playlistAction = async (data: any) => {
+      console.log(data)
+      // const payload = {
+      //   ...data,
+      //   artist: props.album.artist?._id,
+      //   album: props.album._id
+      // }
 
-      await axios.patch(`/api/playlists/${payload.listID}`, payload)
+      // await axios.patch(`/api/playlists/${payload.listID}`, payload)
 
-      if (props.album.isPlaylist) {
-        store.dispatch('fetchPlaylist', payload.listID)
-      }
+      // if (props.album.isPlaylist) {
+      //   store.dispatch('fetchPlaylist', payload.listID)
+      // }
     }
 
-    const disableTrack = (payload) => {
-      store.commit('disableTrack', payload)
+    const disableTrack = (payload: any) => {
+      console.log(payload)
+      // store.commit('disableTrack', payload)
     }
 
-    const saveLyrics = async (payload) => {
-      emit('saveLyrics', payload)
+    const saveLyrics = async (payload: any) => {
+      console.log(payload)
+      // emit('saveLyrics', payload)
     }
 
     return {
@@ -125,13 +123,13 @@ export default {
       saveLyrics
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .flip-list-move {
   transition: transform 0.5s;

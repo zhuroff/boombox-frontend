@@ -13,7 +13,7 @@
     {{ track.order || index + 1 }}
   </div>
 
-  <TrackItemPlay
+  <!-- <TrackItemPlay
     :fileid="track.fileid"
     :index="index"
     @playTrack="playTrack"
@@ -38,13 +38,13 @@
     @itemAction="itemAction"
   />
 
-  <TrackItemDisable @disableTrack="disableTrack" />
+  <TrackItemDisable @disableTrack="disableTrack" /> -->
 
   <div class="tracklist__row_cell --fix">
     {{ track.listened }}
   </div>
   
-  <transition name="fade">
+  <!-- <transition name="fade">
     <AppModal
       v-if="isModalActive"
       :isModalActive="isModalActive"
@@ -56,41 +56,42 @@
         @saveLyrics="saveLyrics"
       />
     </AppModal>
-  </transition>
+  </transition> -->
 </div>
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { ref, computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
-import AppSprite from '@/components/AppSprite.vue'
-import TrackItemPlay from './TrackItemPlay.vue'
-import TrackItemTitle from './TrackItemTitle.vue'
-import TrackItemDuration from './TrackItemDuration.vue'
-import TrackItemRemove from './TrackItemRemove.vue'
-import TrackItemPlaylist from './TrackItemPlaylist.vue'
-import TrackItemDisable from './TrackItemDisable.vue'
-import AppModal from '@/components/AppModal.vue'
-import AppLyrics from '@/components/AppLyrics.vue'
+import { IAlbumTrack } from '~/types/Album'
+import AppSprite from '~/components/AppSprite.vue'
+// import TrackItemPlay from './TrackItemPlay.vue'
+// import TrackItemTitle from './TrackItemTitle.vue'
+// import TrackItemDuration from './TrackItemDuration.vue'
+// import TrackItemRemove from './TrackItemRemove.vue'
+// import TrackItemPlaylist from './TrackItemPlaylist.vue'
+// import TrackItemDisable from './TrackItemDisable.vue'
+// import AppModal from '@/components/AppModal.vue'
+// import AppLyrics from '@/components/AppLyrics.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppSprite,
-    TrackItemPlay,
-    TrackItemTitle,
-    TrackItemDuration,
-    TrackItemRemove,
-    TrackItemPlaylist,
-    TrackItemDisable,
-    AppModal,
-    AppLyrics
+    // TrackItemPlay,
+    // TrackItemTitle,
+    // TrackItemDuration,
+    // TrackItemRemove,
+    // TrackItemPlaylist,
+    // TrackItemDisable,
+    // AppModal,
+    // AppLyrics
   },
 
   props: {
     track: {
-      type: Object,
+      type: Object as () => IAlbumTrack,
       required: true
     },
 
@@ -105,98 +106,99 @@ export default {
   },
 
   setup(props, { emit }) {
-    const store = useStore()
+    // const store = useStore(key)
     const isModalActive = ref(false)
 
     const isPlayingTrack = computed(() => (
-      store.getters.playingTrack
-      && store.getters.playingTrack.fileid === props.track.fileid
+      // store.getters.playingTrack
+      // && store.getters.playingTrack.fileid === props.track.fileid
+      false
     ))
 
-    const trackTitle = computed(() => {
-      if (!props.isPlaylist && !isModalActive.value) {
-        return props.track.title
-      }
+    // const trackTitle = computed(() => {
+    //   if (!props.isPlaylist && !isModalActive.value) {
+    //     return props.track.title
+    //   }
 
-      return `${props.track.artist.title} - ${props.track.track || props.track.title}`
-    })
+    //   return `${props.track.artist.title} - ${props.track.track || props.track.title}`
+    // })
 
-    const createNewList = (title) => {
-      emit('createNewList', {
-        title,
-        id: props.track._id,
-        fileid: props.track.fileid
-      })
-    }
+    // const createNewList = (title) => {
+    //   emit('createNewList', {
+    //     title,
+    //     id: props.track._id,
+    //     fileid: props.track.fileid
+    //   })
+    // }
 
-    const playTrack = () => {
-      const payload = {
-        order: props.track.order || props.index,
-        fileid: props.track.fileid,
-        link: props.track.link,
-        duration: props.track.duration
-      }
+    // const playTrack = () => {
+    //   const payload = {
+    //     order: props.track.order || props.index,
+    //     fileid: props.track.fileid,
+    //     link: props.track.link,
+    //     duration: props.track.duration
+    //   }
 
-      emit('playTrack', payload)
-    }
+    //   emit('playTrack', payload)
+    // }
 
-    const callLyricsModal = () => {
-      isModalActive.value = true
-    }
+    // const callLyricsModal = () => {
+    //   isModalActive.value = true
+    // }
 
-    const closeModalForm = () => {
-      isModalActive.value = false
-    }
+    // const closeModalForm = () => {
+    //   isModalActive.value = false
+    // }
 
-    const removeTrackFromPlaylist = (payload) => {
-      emit('removeTrackFromPlaylist', {
-        ...payload,
-        itemID: props.track.trackID,
-        isSave: false
-      })
-    }
+    // const removeTrackFromPlaylist = (payload) => {
+    //   emit('removeTrackFromPlaylist', {
+    //     ...payload,
+    //     itemID: props.track.trackID,
+    //     isSave: false
+    //   })
+    // }
 
-    const itemAction = (payload) => {
-      emit('itemAction', {
-        ...payload,
-        fileid: props.track.fileid
-      })
-    }
+    // const itemAction = (payload) => {
+    //   emit('itemAction', {
+    //     ...payload,
+    //     fileid: props.track.fileid
+    //   })
+    // }
 
-    const disableTrack = () => {
-      emit('disableTrack', { trackID: props.track._id })
-    }
+    // const disableTrack = () => {
+    //   emit('disableTrack', { trackID: props.track._id })
+    // }
 
-    const saveLyrics = (lyrics) => {
-      const payload = {
-        lyrics,
-        fileid: props.track.fileid
-      }
+    // const saveLyrics = (lyrics) => {
+    //   const payload = {
+    //     lyrics,
+    //     fileid: props.track.fileid
+    //   }
 
-      emit('saveLyrics', payload)
-    }
+    //   emit('saveLyrics', payload)
+    // }
 
     return {
       isModalActive,
       isPlayingTrack,
-      trackTitle,
-      createNewList,
-      playTrack,
-      callLyricsModal,
-      closeModalForm,
-      removeTrackFromPlaylist,
-      itemAction,
-      disableTrack,
-      saveLyrics
+      // trackTitle,
+      // createNewList,
+      // playTrack,
+      // callLyricsModal,
+      // closeModalForm,
+      // removeTrackFromPlaylist,
+      // itemAction,
+      // disableTrack,
+      // saveLyrics
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .tracklist__row {
   font-weight: 600;

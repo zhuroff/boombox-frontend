@@ -43,11 +43,11 @@
               @textInputHandler="descriptionHandler"
             />
 
-            <!-- <AlbumTrackList
-              :album="albumContent"
+            <AlbumTrackList
+              :tracks="albumTracks"
               @changeTracksOrder="changeTracksOrder"
               @saveLyrics="saveLyrics"
-            /> -->
+            />
           </div>
         </div>
       </transition>
@@ -86,11 +86,12 @@ import {
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { IAlbumFull, AlbumHeadProps } from '~/types/Album'
+import { IAlbumFull, IAlbumTrack, AlbumHeadProps } from '~/types/Album'
+import { IDraggableEvent } from '~/types/Global'
 import AppPreloader from '~/components/AppPreloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
-// import AlbumTrackList from '~/components/TrackList/TrackList.vue'
+import AlbumTrackList from '~/components/TrackList/TrackList.vue'
 // import AppListModal from '~/components/AppListModal/AppListModal.vue'
 // // import DiscogsTable from '~/components/DiscogsTable.vue'
 // import AppModal from '~/components/AppModal.vue'
@@ -102,7 +103,7 @@ export default defineComponent({
     AlbumCoverArt,
     AppPreloader,
     AlbumHeading,
-    // AlbumTrackList,
+    AlbumTrackList,
     // AppListModal,
     // // DiscogsTable,
     // AppModal,
@@ -162,8 +163,8 @@ export default defineComponent({
       genre: album.value.genre,
       description: album.value.description
     }))
+    const albumTracks: ComputedRef<IAlbumTrack[]> = computed(() => album.value.tracks)
 
-    // const albumContent = computed(() => store.getters.album)
     // const discogsData = reactive(computed(() => store.getters.discogsData))
     // const discogsPagination = computed(() => store.getters.discogsPagination)
     // const clearfiedLists = computed(() => (
@@ -174,13 +175,14 @@ export default defineComponent({
     //   })) || []
     // ))
 
-    // const changeTracksOrder = (payload) => {
-    //   store.commit('updateAlbumsTracksOrder', payload)
+    const changeTracksOrder = (payload: IDraggableEvent) => {
+      console.log(payload)
+      // store.commit('updateAlbumsTracksOrder', payload)
 
-    //   if (albumContent.value._id === store.getters.currentPlaylist._id) {
-    //     store.commit('setPrevNextTracks')
-    //   }
-    // }
+      // if (albumContent.value._id === store.getters.currentPlaylist._id) {
+      //   store.commit('setPrevNextTracks')
+      // }
+    }
 
     // const callListsModal = async () => {
     //   lists.value = []
@@ -258,14 +260,15 @@ export default defineComponent({
       }
     }
 
-    // const saveLyrics = async (payload) => {
-    //   try {
-    //     await axios.patch(`/api/albums/${store.getters.album._id}/lyrics`, payload)
-    //     store.commit('setAlbumLyrics', payload)
-    //   } catch (error) {
-    //     console.error(error.response)
-    //   }
-    // }
+    const saveLyrics = async (payload: any) => {
+      console.log(payload)
+      // try {
+      //   await axios.patch(`/api/albums/${store.getters.album._id}/lyrics`, payload)
+      //   store.commit('setAlbumLyrics', payload)
+      // } catch (error) {
+      //   console.error(error.response)
+      // }
+    }
 
     // const switchDiscogsPagination = (page) => {
     //   const payload = {
@@ -283,19 +286,19 @@ export default defineComponent({
       fetchAlbumBooklet,
       albumHead,
       descriptionHandler,
-      // albumContent,
+      albumTracks,
+      changeTracksOrder,
+      saveLyrics,
       // discogsData,
       // discogsPagination,
       // booklet,
       // lists,
       // clearfiedLists,
-      // changeTracksOrder,
       // callListsModal,
       // closeBooklet,
       // createNewList,
       // itemAction,
       // closeListModal,
-      // saveLyrics,
       // switchDiscogsPagination
     }
   }

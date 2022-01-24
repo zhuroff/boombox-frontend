@@ -3,6 +3,12 @@ interface IPagination {
   totalPages: number
 }
 
+interface IDraggableEvent {
+  newIndex: number
+  oldIndex: number
+}
+
 export {
-  IPagination
+  IPagination,
+  IDraggableEvent
 }

@@ -1,5 +1,5 @@
 import { ICategoryBasic } from '~/types/Category'
-import { IAlbumTracks } from '~/types/Album'
+import { IAlbumTrack } from '~/types/Album'
 
 interface IPlaylist {
   _id: string
@@ -7,7 +7,7 @@ interface IPlaylist {
   artist: ICategoryBasic
   period: ICategoryBasic
   title: string
-  tracks: IAlbumTracks[]
+  tracks: IAlbumTrack[]
 }
 
 export {
