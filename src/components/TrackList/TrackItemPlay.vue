@@ -5,15 +5,15 @@
   class="tracklist__row_cell --pointer --fix"
   @click="pauseTrack"
 >
-  <AppSprite name="pause" />
+  <AppSprite name="playing" />
 </div>
   
 <div
   v-else
-  :class="[{ '--disabled' : loadingTrack === fileid }, 'tracklist__row_cell --pointer --fix']"
+  :class="[{ '--disabled' : isOnLoading }, 'tracklist__row_cell --pointer --fix']"
   @click="playTrack"
 >
-  <AppSprite v-if="loadingTrack === fileid" name="spinner" />
+  <AppSprite v-if="isOnLoading" name="spinner" />
   <AppSprite v-else name="play" />
 </div>
 
@@ -37,6 +37,11 @@ export default defineComponent({
       required: true
     },
 
+    albumID: {
+      type: String,
+      required: true
+    },
+
     index: {
       type: Number,
       required: true
@@ -45,18 +50,21 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const store = useStore(key)
-    const loadingTrack = computed(() => store.getters.loadingTrack)
 
     const isOnPlay = computed(() => (
-      // store.getters.playingTrack.fileid === props.fileid
-      // && !store.getters.playingTrack.isOnPause
-      // && !loadingTrack.value
-      false
+      store.getters.playingTrack.fileid === props.fileid
+      && !store.getters.playingTrack.isOnPause
+      && !store.getters.playingTrack.isOnLoading
     ))
 
     const isOnPause = computed(() => (
-      // store.getters.playingTrack.isOnPause
-      false
+      store.getters.playingTrack.fileid === props.fileid
+      && store.getters.playingTrack.isOnPause
+    ))
+
+    const isOnLoading = computed(() => (
+      store.getters.playingTrack.fileid === props.fileid
+      && store.getters.playingTrack.isOnLoading
     ))
 
     const pauseTrack = (value = true) => {
@@ -64,18 +72,31 @@ export default defineComponent({
     }
 
     const playTrack = () => {
-      console.log('play track')
+      store.dispatch('playTrack', props.fileid)
+      store.dispatch('incrementListeningCounter', {
+        albumID: props.albumID,
+        fileID: props.fileid
+      })
+      // store.dispatch('playTrack', { ...payload, playlist: props.album })
+      
       // if (props.fileid === store.getters.playingTrack.fileid) {
       //   pauseTrack(false)
       // } else {
       //   emit('playTrack')
       // }
+      
+      // const payload = {
+      //   order: props.track.order || props.index,
+      //   fileid: props.track.fileid,
+      //   link: props.track.link,
+      //   duration: props.track.duration
+      // }
     }
 
     return {
-      loadingTrack,
       isOnPlay,
       isOnPause,
+      isOnLoading,
       pauseTrack,
       playTrack
     }
@@ -83,47 +104,3 @@ export default defineComponent({
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.tracklist__row {
-
-  &_cell {
-
-    &:hover {
-
-      .icon-play,
-      .icon-pause,
-      .icon-spinner {
-        fill: $dark;
-        transition: fill 0.2s ease;
-      }
-    }
-  }
-
-  &.--playing {
-
-    .icon-play,
-    .icon-pause,
-    .icon-spinner {
-      fill: $dark;
-    }
-  }
-
-  .icon-play,
-  .icon-pause,
-  .icon-spinner  {
-    width: 18px;
-    height: 18px;
-    fill: $pale;
-    transition: fill 0.2s ease;
-  }
-
-  .icon-spinner {
-    animation: rotating 1s linear infinite
-  }
-}
-
-</style>

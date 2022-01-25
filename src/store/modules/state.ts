@@ -1,24 +1,19 @@
-import { IPlaylist } from '~/types/Player'
-
-const initPlaylist: IPlaylist = {
-  _id: '',
-  title: '',
-  albumCover: '',
-  artist: { _id: '', title: '' },
-  period: { _id: '', title: '' },
-  tracks: []
-}
+import { IPlaylist, IPlayingTrack } from '~/types/Player'
+import { initPlaylist, playingTrackInitial } from './initStates'
 
 export interface AppStateInterface {
   currentPlaylist: IPlaylist
   reservedPlaylist: IPlaylist
+  playingTrack: IPlayingTrack
 }
 
 function state(): AppStateInterface {
   return {
     currentPlaylist: { ...initPlaylist },
 
-    reservedPlaylist: { ...initPlaylist }
+    reservedPlaylist: { ...initPlaylist },
+
+    playingTrack: { ...playingTrackInitial }
   }
 }
 

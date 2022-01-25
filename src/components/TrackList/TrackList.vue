@@ -12,9 +12,9 @@
           v-for="(track, index) in tracks"
           :key="track.fileid"
           :track="track"
+          :albumID="albumID"
           :index="index"
           :isPlaylist="false"
-          @playTrack="playTrack"
           @createNewList="createPlaylist"
           @removeTrackFromPlaylist="playlistAction"
           @itemAction="playlistAction"
@@ -31,7 +31,6 @@
 <script lang="ts">
 
 import { defineComponent, reactive } from 'vue'
-import { useStore } from 'vuex'
 import { IAlbumTrack } from '~/types/Album'
 import { IDraggableEvent } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
@@ -47,12 +46,15 @@ export default defineComponent({
     tracks: {
       type: Array as () => IAlbumTrack[],
       required: true
+    },
+
+    albumID: {
+      type: String,
+      required: true
     }
   },
 
   setup(props, { emit }) {
-    // const store = useStore(key)
-
     const dragOptions = reactive({
       animation: 300,
       disabled: false
@@ -65,11 +67,6 @@ export default defineComponent({
       }
 
       emit('changeTracksOrder', payload)
-    }
-
-    const playTrack = (payload: any) => {
-      // store.dispatch('playTrack', { ...payload, playlist: props.album })
-      console.log(payload)
     }
 
     const createPlaylist = (data: any) => {
@@ -116,7 +113,6 @@ export default defineComponent({
     return {
       dragOptions,
       orderChanged,
-      playTrack,
       createPlaylist,
       playlistAction,
       disableTrack,

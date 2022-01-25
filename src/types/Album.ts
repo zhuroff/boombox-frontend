@@ -6,6 +6,8 @@ interface IAlbumTrack {
   link: string
   listened: number
   title: string
+  lyrics?: string
+  duration?: number | string
   isDisabled?: boolean
 }
 

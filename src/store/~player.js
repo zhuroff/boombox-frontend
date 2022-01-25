@@ -147,16 +147,16 @@ const Player = {
     },
 
     startTrack(state, payload) {
-      state.playingTrack = { isOnPause: false }
-      state.playingTrack.order = payload.order
-      state.playingTrack.fileid = payload.fileid
-      state.playingTrack.duration = payload.duration
-      state.playingTrack.isRepeat = state.playingTrack.isRepeat || false
-      state.playingTrack.artist = trackArtist(state.currentPlaylist, payload.fileid)
-      state.playingTrack.album = trackAlbum(state.currentPlaylist, payload.fileid)
-      state.playingTrack.title = trackName(state.currentPlaylist.tracks, payload.fileid)
-      state.playingTrack.year = trackYear(state.currentPlaylist, payload.fileid)
-      state.playingTrack.cover = trackCover(state.currentPlaylist, payload.fileid)
+      // state.playingTrack = { isOnPause: false }
+      // // state.playingTrack.order = payload.order
+      // state.playingTrack.fileid = payload.fileid
+      // state.playingTrack.duration = payload.duration
+      // state.playingTrack.isRepeat = state.playingTrack.isRepeat || false
+      // state.playingTrack.artist = trackArtist(state.currentPlaylist, payload.fileid)
+      // state.playingTrack.album = trackAlbum(state.currentPlaylist, payload.fileid)
+      // state.playingTrack.title = trackName(state.currentPlaylist.tracks, payload.fileid)
+      // state.playingTrack.year = trackYear(state.currentPlaylist, payload.fileid)
+      // state.playingTrack.cover = trackCover(state.currentPlaylist, payload.fileid)
 
       if (state.progressHandler) {
         state.trackElement.removeEventListener('timeupdate', state.progressHandler)

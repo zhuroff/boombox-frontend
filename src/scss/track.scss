@@ -1,0 +1,72 @@
+.tracklist__row {
+  font-weight: 600;
+  font-size: 12px;
+  color: $pale;
+  height: 40px;
+  display: flex;
+
+  &_cell {
+    display: flex;
+    align-items: center;
+
+    &.--order {
+      width: 20px;
+      flex: none;
+    }
+
+    &.--drag {
+      width: 30px;
+      flex: none;
+      justify-content: flex-start;
+      cursor: move;
+    }
+
+    &.--fix {
+      width: 50px;
+      flex: none;
+      justify-content: center;
+    }
+
+    &.--pointer {
+      cursor: pointer;
+    }
+
+    &.--disabled {
+      pointer-events: none;
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      fill: $pale;
+      transition: fill 0.2s ease;
+    }
+
+    &:hover {
+
+      .icon {
+        fill: $dark;
+        transition: fill 0.2s ease;
+      }
+    }
+  }
+
+  &.--playing {
+    background-color: $white;
+    color: $dark;
+  }
+
+  &.--disabled {
+    
+    & > *:not(:nth-last-child(2)) {
+      opacity: 0.25;
+      pointer-events: none;
+    }
+  }
+
+  &.sortable-chosen {
+    background-color: $border;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 3px;
+  }
+}

@@ -43,8 +43,9 @@
               @textInputHandler="descriptionHandler"
             />
 
-            <AlbumTrackList
+            <TrackList
               :tracks="albumTracks"
+              :albumID="albumID"
               @changeTracksOrder="changeTracksOrder"
               @saveLyrics="saveLyrics"
             />
@@ -91,9 +92,9 @@ import { IDraggableEvent } from '~/types/Global'
 import AppPreloader from '~/components/AppPreloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
-import AlbumTrackList from '~/components/TrackList/TrackList.vue'
+import TrackList from '~/components/TrackList/TrackList.vue'
 // import AppListModal from '~/components/AppListModal/AppListModal.vue'
-// // import DiscogsTable from '~/components/DiscogsTable.vue'
+// import DiscogsTable from '~/components/DiscogsTable.vue'
 // import AppModal from '~/components/AppModal.vue'
 // import AppSlider from '~/components/AppSlider.vue'
 import api from '~/api'
@@ -103,9 +104,9 @@ export default defineComponent({
     AlbumCoverArt,
     AppPreloader,
     AlbumHeading,
-    AlbumTrackList,
+    TrackList,
     // AppListModal,
-    // // DiscogsTable,
+    // DiscogsTable,
     // AppModal,
     // AppSlider
   },
@@ -164,6 +165,7 @@ export default defineComponent({
       description: album.value.description
     }))
     const albumTracks: ComputedRef<IAlbumTrack[]> = computed(() => album.value.tracks)
+    const albumID = computed(() => album.value._id)
 
     // const discogsData = reactive(computed(() => store.getters.discogsData))
     // const discogsPagination = computed(() => store.getters.discogsPagination)
@@ -287,6 +289,7 @@ export default defineComponent({
       albumHead,
       descriptionHandler,
       albumTracks,
+      albumID,
       changeTracksOrder,
       saveLyrics,
       // discogsData,

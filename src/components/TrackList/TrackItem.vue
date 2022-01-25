@@ -15,8 +15,8 @@
 
   <TrackItemPlay
     :fileid="track.fileid"
+    :albumID="albumID"
     :index="index"
-    @playTrack="playTrack"
   />
 
   <TrackItemTitle
@@ -65,6 +65,7 @@
 
 import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
+import { key } from '~/store'
 import { IAlbumTrack } from '~/types/Album'
 import AppSprite from '~/components/AppSprite.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
@@ -95,6 +96,11 @@ export default defineComponent({
       required: true
     },
 
+    albumID: {
+      type: String,
+      required: true
+    },
+
     index: {
       type: Number,
       required: true
@@ -106,13 +112,11 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    // const store = useStore(key)
+    const store = useStore(key)
     const isModalActive = ref(false)
 
     const isPlayingTrack = computed(() => (
-      // store.getters.playingTrack
-      // && store.getters.playingTrack.fileid === props.track.fileid
-      false
+      store.getters.playingTrack.fileid === props.track.fileid
     ))
 
     const createNewList = (title: string) => {
@@ -122,18 +126,6 @@ export default defineComponent({
       //   id: props.track._id,
       //   fileid: props.track.fileid
       // })
-    }
-
-    const playTrack = () => {
-      console.log('play track')
-      // const payload = {
-      //   order: props.track.order || props.index,
-      //   fileid: props.track.fileid,
-      //   link: props.track.link,
-      //   duration: props.track.duration
-      // }
-
-      // emit('playTrack', payload)
     }
 
     const callLyricsModal = () => {
@@ -176,7 +168,6 @@ export default defineComponent({
     return {
       isModalActive,
       isPlayingTrack,
-      playTrack,
       callLyricsModal,
       createNewList,
       // closeModalForm,
@@ -189,84 +180,3 @@ export default defineComponent({
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.tracklist__row {
-  font-weight: 600;
-  font-size: 12px;
-  color: $pale;
-  height: 40px;
-  display: flex;
-
-  &_cell {
-    display: flex;
-    align-items: center;
-
-    &.--order {
-      width: 20px;
-      flex: none;
-    }
-
-    &.--drag {
-      width: 30px;
-      flex: none;
-      justify-content: flex-start;
-      cursor: move;
-
-      .icon-burger {
-        width: 12px;
-        height: 12px;
-        fill: $pale;
-        transition: fill 0.2s ease;
-        position: relative;
-        top: 1px;
-      }
-    }
-
-    &.--fix {
-      width: 50px;
-      flex: none;
-      justify-content: center;
-    }
-
-    &.--pointer {
-      cursor: pointer;
-    }
-
-    &.--disabled {
-      pointer-events: none;
-    }
-  }
-
-  &.--playing {
-    background-color: $white;
-    color: $dark;
-
-    &.--drag {
-
-      .icon-burger {
-        fill: $dark;
-        transition: fill 0.2s ease;
-      }
-    }
-  }
-
-  &.--disabled {
-    
-    & > *:not(:nth-last-child(2)) {
-      opacity: 0.25;
-      pointer-events: none;
-    }
-  }
-
-  &.sortable-chosen {
-    background-color: $border;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-radius: 3px;
-  }
-}
-
-</style>
