@@ -12,7 +12,9 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
 
   incrementListeningCounter: async ({ commit }, payload: { albumID: string, fileID: number }) => {
     console.log('Counter increment', payload)
-  }
+  },
+
+  // saveTrackDuration: async ({ commit }: payload: { albumID: string, fileid: number:  })
 }
 
 export default actions
