@@ -12,7 +12,7 @@ interface IPlaylist {
 
 interface IPlayingTrack {
   fileid: number
-  duration: number | string
+  duration: number | string | null
   isOnPause: boolean
   isOnRepeat: boolean
   artistName: string
@@ -26,6 +26,7 @@ interface IPlayingTrack {
   isOnLoading: boolean
   progressLine: number
   progressTime: number
+  _id: string
 }
 
 export {

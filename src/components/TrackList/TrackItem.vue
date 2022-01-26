@@ -15,7 +15,7 @@
 
   <TrackItemPlay
     :fileid="track.fileid"
-    :albumID="albumID"
+    :trackid="track._id"
     :index="index"
   />
 
@@ -38,7 +38,7 @@
     @removeTrackFromPlaylist="removeTrackFromPlaylist"
   /> -->
 
-  <TrackItemDisable @disableTrack="disableTrack" />
+  <TrackItemDisable :fileid="track.fileid" />
 
   <div class="tracklist__row_cell --fix">
     {{ track.listened }}
@@ -96,11 +96,6 @@ export default defineComponent({
       required: true
     },
 
-    albumID: {
-      type: String,
-      required: true
-    },
-
     index: {
       type: Number,
       required: true
@@ -152,10 +147,6 @@ export default defineComponent({
       // })
     }
 
-    const disableTrack = () => {
-      emit('disableTrack', { trackID: props.track._id })
-    }
-
     // const saveLyrics = (lyrics) => {
     //   const payload = {
     //     lyrics,
@@ -173,7 +164,6 @@ export default defineComponent({
       // closeModalForm,
       // removeTrackFromPlaylist,
       itemAction,
-      disableTrack,
       // saveLyrics
     }
   }

@@ -3,13 +3,13 @@ import { AppStateInterface } from './state'
 import { IAlbumFull } from '~/types/Album'
 import { IPlaylist } from '~/types/Player'
 import { initPlaylist } from './initStates'
+import { playingTrackInitial } from './initStates'
 import {
   artistName,
   albumName,
   periodName,
   albumCover
 } from '~/shared/stringifier'
-import actions from './actions'
 
 const getChosenTrack = (playlist: IPlaylist, fileid: number) => (
   playlist.tracks.find((el) => el.fileid === fileid)
@@ -42,15 +42,20 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.isOnPause = false
       state.playingTrack.isOnRepeat = false
       state.playingTrack.fileid = fileid
+      state.playingTrack._id = chosenTrack._id
       state.playingTrack.title = chosenTrack.title
       state.playingTrack.source = chosenTrack.link
-      state.playingTrack.duration = chosenTrack?.duration || '--/--'
+      state.playingTrack.duration = chosenTrack?.duration || null
       state.playingTrack.artistName = artistName(state.currentPlaylist.artist)
       state.playingTrack.albumName = albumName(state.currentPlaylist)
       state.playingTrack.year = periodName(state.currentPlaylist.period)
       state.playingTrack.cover = albumCover(state.currentPlaylist)
       state.playingTrack.isOnLoading = true
     }
+  },
+
+  nullifyPlayerTrack: (state: AppStateInterface) => {
+    state.playingTrack = { ...playingTrackInitial }
   },
 
   createAudioContext: (state: AppStateInterface) => {
@@ -62,25 +67,15 @@ const mutations: MutationTree<AppStateInterface> = {
     state.playingTrack.audio.src = state.playingTrack.source
   },
 
-  playAudioTrack: (state: AppStateInterface) => {
-    state.playingTrack.audio.play()
-      .then(() => {
-        state.playingTrack.isOnLoading = false
-      })
-      .then(() => {
-        state.playingTrack.audio.ontimeupdate = () => {
-          state.playingTrack.progressLine = (
-            state.playingTrack.audio.currentTime / state.playingTrack.audio.duration
-          )
-  
-          state.playingTrack.progressTime = state.playingTrack.audio.currentTime
-          console.log(state.playingTrack.progressLine)
-  
-          if (state.playingTrack.progressLine === 1) {
-            console.log(actions)
-          }
-        }
-      })
+  deleteLoadingState: (state: AppStateInterface) => {
+    state.playingTrack.isOnLoading = false
+  },
+
+  updateListeningProgress: (state: AppStateInterface, payload) => {
+    const { progressLine, progressTime } = payload
+
+    state.playingTrack.progressLine = progressLine
+    state.playingTrack.progressTime = progressTime
   },
 
   continuePlay: (state: AppStateInterface) => {
@@ -91,6 +86,37 @@ const mutations: MutationTree<AppStateInterface> = {
   setTrackOnPause: (state: AppStateInterface) => {
     state.playingTrack.isOnPause = true
     state.playingTrack.audio.pause()
+  },
+
+  updateListeningCounter: (state: AppStateInterface, id: string) => {
+    const targetTrack = state.currentPlaylist.tracks.find((track) => (
+      track._id === id
+    ))
+
+    if (targetTrack) {
+      targetTrack.listened += 1
+    }
+  },
+
+  setTrackDuration: (state: AppStateInterface, payload) => {
+    const { trackID, duration } = payload
+    const targetTrack = state.currentPlaylist.tracks.find((track) => (
+      track._id === trackID
+    ))
+
+    if (targetTrack) {
+      state.playingTrack.duration = duration
+      targetTrack.duration = duration
+    }
+  },
+
+  disableOrEnableTrack: (state: AppStateInterface, fileid) => {
+    const targetTrack = state.currentPlaylist.tracks.find((el) => el.fileid === fileid)
+      || state.reservedPlaylist.tracks.find((el) => el.fileid === fileid)
+
+    if (targetTrack) {
+      targetTrack.isDisabled = !targetTrack.isDisabled
+    }
   }
 }
 

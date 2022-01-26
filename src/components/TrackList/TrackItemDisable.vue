@@ -2,21 +2,40 @@
   
 <div
   class="tracklist__row_cell --pointer --fix"
-  @click="$emit('disableTrack')"
+  @click="disableTrack"
 >
   <AppSprite name="disable" />
 </div>
 
 </template>
 
-<script>
+<script lang="ts">
 
 import { defineComponent } from 'vue'
-import AppSprite from '@/components/AppSprite.vue'
+import { useStore } from 'vuex'
+import { key } from '~/store'
+import AppSprite from '~/components/AppSprite.vue'
 
 export default defineComponent({
   components: {
     AppSprite
+  },
+
+  props: {
+    fileid: {
+      type: Number,
+      required: true
+    }
+  },
+
+  setup(props) {
+    const store = useStore(key)
+
+    const disableTrack = () => {
+      store.commit('disableOrEnableTrack', props.fileid)
+    }
+
+    return { disableTrack }
   }
 })
 
@@ -28,52 +47,12 @@ export default defineComponent({
 
 .tracklist__row {
 
-  &_cell {
-    position: relative;
-
-    &:hover {
-
-      .icon-disable {
-        stroke: $dark;
-        fill: $dark;
-        transition: stroke 0.2s ease;
-      }
-    }
-  }
-
   &.--playing {
 
     .tracklist__row_cell {
       opacity: 0.25;
       pointer-events: none;
     }
-
-    .icon-disable {
-      stroke: $dark;
-      fill: $dark;
-    }
-  }
-
-  &.--disabled {
-
-    .tracklist__row_cell {
-
-      &:last-child {
-
-        .icon-disable {
-          stroke: $accent;
-          fill: $accent;
-        }
-      }
-    }
-  }
-
-  .icon-disable {
-    width: 15px;
-    height: 15px;
-    stroke: $pale;
-    fill: $pale;
-    transition: stroke 0.2s ease;
   }
 }
 

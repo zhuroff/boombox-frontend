@@ -38,7 +38,7 @@ export default defineComponent({
       required: true
     },
 
-    albumID: {
+    trackid: {
       type: String,
       required: true
     },
@@ -72,13 +72,6 @@ export default defineComponent({
       store.commit('setTrackOnPause')
     }
 
-    const incrementListeningCounter = () => {
-      store.dispatch('incrementListeningCounter', {
-        albumID: props.albumID,
-        fileID: props.fileid
-      })
-    }
-
     const playTrack = () => {
       store.dispatch('playTrack', props.fileid)
     }
@@ -86,7 +79,6 @@ export default defineComponent({
     const playingStateSplitter = () => {
       if (store.getters.playingTrack.fileid === 0) {
         playTrack()
-        incrementListeningCounter()
       } else if (store.getters.playingTrack.fileid === props.fileid) {
         if (!store.getters.playingTrack.isOnPause) {
           playTrack()
@@ -95,7 +87,6 @@ export default defineComponent({
         }
       } else {
         playTrack()
-        incrementListeningCounter()
       }
     }
 

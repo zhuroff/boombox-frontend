@@ -12,7 +12,7 @@ const initPlaylist: IPlaylist = {
 const playingTrackInitial: IPlayingTrack = {
   isOnPause: false,
   fileid: 0,
-  duration: '--/--',
+  duration: null,
   isOnRepeat: false,
   artistName: '',
   albumName: '',
@@ -24,7 +24,8 @@ const playingTrackInitial: IPlayingTrack = {
   progressHandler: null,
   isOnLoading: false,
   progressLine: 0,
-  progressTime: 0
+  progressTime: 0,
+  _id: ''
 }
 
 export {

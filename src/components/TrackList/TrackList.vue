@@ -12,13 +12,11 @@
           v-for="(track, index) in tracks"
           :key="track.fileid"
           :track="track"
-          :albumID="albumID"
           :index="index"
           :isPlaylist="false"
           @createNewList="createPlaylist"
           @removeTrackFromPlaylist="playlistAction"
           @itemAction="playlistAction"
-          @disableTrack="disableTrack"
           @saveLyrics="saveLyrics"
         />
       </transition-group>
@@ -100,11 +98,6 @@ export default defineComponent({
       // }
     }
 
-    const disableTrack = (payload: any) => {
-      console.log(payload)
-      // store.commit('disableTrack', payload)
-    }
-
     const saveLyrics = async (payload: any) => {
       console.log(payload)
       // emit('saveLyrics', payload)
@@ -115,7 +108,6 @@ export default defineComponent({
       orderChanged,
       createPlaylist,
       playlistAction,
-      disableTrack,
       saveLyrics
     }
   }

@@ -1,20 +1,74 @@
 import { ActionTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { StateInterface } from '..'
+import api from '~/api'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
-  playTrack: ({ commit }, fileid: number) => {
+  playTrack: ({ commit, dispatch }, fileid: number) => {
     commit('checkOrReplacePlaylists', fileid)
     commit('preparePlayerTrack', fileid)
     commit('createAudioContext')
-    commit('playAudioTrack')
+    dispatch('playAudioTrack', fileid)
   },
 
-  incrementListeningCounter: async ({ commit }, payload: { albumID: string, fileID: number }) => {
-    console.log('Counter increment', payload)
+  playAudioTrack: ({ commit, dispatch, state }, fileid: number) =>  {
+    const playingTrack = state.playingTrack.audio
+
+    playingTrack.play()
+      .then(() => commit('deleteLoadingState'))
+      .then(() => dispatch('incrementListeningCounter'))
+      .then(() => {
+        dispatch('saveTrackDuration', playingTrack.duration)
+
+        playingTrack.ontimeupdate = () => {
+          const progressLine = playingTrack.currentTime / playingTrack.duration
+          const progressTime = playingTrack.currentTime
+
+          commit('updateListeningProgress', { progressLine, progressTime })
+
+          if (progressLine >= 1) {
+            const activePlaylist = state.currentPlaylist.tracks
+              .filter((track) => !track.isDisabled)
+
+            const currentTrackIndex = activePlaylist
+              .findIndex((track) => track.fileid === fileid)
+            
+            const nextTrack = activePlaylist[currentTrackIndex + 1]
+
+            if (nextTrack) {
+              dispatch('playTrack', nextTrack.fileid)
+            } else {
+              commit('nullifyPlayerTrack')
+            }
+          }
+        }
+      })
   },
 
-  // saveTrackDuration: async ({ commit }: payload: { albumID: string, fileid: number:  })
+  incrementListeningCounter: async ({ commit, state }) => {
+    const trackID = state.playingTrack._id
+
+    try {
+      await api.patch(`/api/tracks/${trackID}/listened`)
+      commit('updateListeningCounter', trackID)
+    } catch (error) {
+      throw error
+    }
+  },
+
+  saveTrackDuration: async ({ commit, state }, duration: number) => {
+    const fileDuration = state.playingTrack.duration
+    const trackID = state.playingTrack._id
+
+    if (!fileDuration) {
+      try {
+        await api.patch(`/api/tracks/${trackID}/duration`, { duration })
+        commit('setTrackDuration', { trackID, duration })
+      } catch (error) {
+        throw error
+      }
+    }
+  }
 }
 
 export default actions
