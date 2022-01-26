@@ -11,9 +11,10 @@
 <div
   v-else
   :class="[{ '--disabled' : isOnLoading }, 'tracklist__row_cell --pointer --fix']"
-  @click="playTrack"
+  @click="playingStateSplitter"
 >
   <AppSprite v-if="isOnLoading" name="spinner" />
+  <AppSprite v-else-if="isOnPause" name="pause" />
   <AppSprite v-else name="play" />
 </div>
 
@@ -67,30 +68,35 @@ export default defineComponent({
       && store.getters.playingTrack.isOnLoading
     ))
 
-    const pauseTrack = (value = true) => {
-      store.commit('setPauseState', value)
+    const pauseTrack = () => {
+      store.commit('setTrackOnPause')
     }
 
-    const playTrack = () => {
-      store.dispatch('playTrack', props.fileid)
+    const incrementListeningCounter = () => {
       store.dispatch('incrementListeningCounter', {
         albumID: props.albumID,
         fileID: props.fileid
       })
-      // store.dispatch('playTrack', { ...payload, playlist: props.album })
-      
-      // if (props.fileid === store.getters.playingTrack.fileid) {
-      //   pauseTrack(false)
-      // } else {
-      //   emit('playTrack')
-      // }
-      
-      // const payload = {
-      //   order: props.track.order || props.index,
-      //   fileid: props.track.fileid,
-      //   link: props.track.link,
-      //   duration: props.track.duration
-      // }
+    }
+
+    const playTrack = () => {
+      store.dispatch('playTrack', props.fileid)
+    }
+
+    const playingStateSplitter = () => {
+      if (store.getters.playingTrack.fileid === 0) {
+        playTrack()
+        incrementListeningCounter()
+      } else if (store.getters.playingTrack.fileid === props.fileid) {
+        if (!store.getters.playingTrack.isOnPause) {
+          playTrack()
+        } else {
+          store.commit('continuePlay')
+        }
+      } else {
+        playTrack()
+        incrementListeningCounter()
+      }
     }
 
     return {
@@ -98,7 +104,7 @@ export default defineComponent({
       isOnPause,
       isOnLoading,
       pauseTrack,
-      playTrack
+      playingStateSplitter
     }
   }
 })

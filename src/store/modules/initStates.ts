@@ -10,7 +10,7 @@ const initPlaylist: IPlaylist = {
 }
 
 const playingTrackInitial: IPlayingTrack = {
-  isOnPause: true,
+  isOnPause: false,
   fileid: 0,
   duration: '--/--',
   isOnRepeat: false,

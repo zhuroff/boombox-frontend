@@ -4,7 +4,7 @@
   class="tracklist__row_cell --pointer --fix"
   @click="getPlaylists"
 >
-  <AppSprite name="plus-circle" />
+  <AppSprite name="plus" />
 
   <AppListModal
     v-if="isModalActive"
@@ -82,39 +82,3 @@ export default defineComponent({
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.tracklist__row {
-
-  &_cell {
-    position: relative;
-
-    &:hover {
-
-      .icon-plus-circle {
-        stroke: $dark;
-        transition: stroke 0.2s ease;
-      }
-    }
-  }
-
-  &.--playing {
-
-    .icon-plus-circle {
-      stroke: $dark;
-    }
-  }
-
-  .icon-plus-circle {
-    width: 15px;
-    height: 15px;
-    stroke: $pale;
-    fill: transparent;
-    transition: stroke 0.2s ease;
-  }
-}
-
-</style>

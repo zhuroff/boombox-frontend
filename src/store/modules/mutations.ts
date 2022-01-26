@@ -81,6 +81,16 @@ const mutations: MutationTree<AppStateInterface> = {
           }
         }
       })
+  },
+
+  continuePlay: (state: AppStateInterface) => {
+    state.playingTrack.isOnPause = false
+    state.playingTrack.audio.play()
+  },
+
+  setTrackOnPause: (state: AppStateInterface) => {
+    state.playingTrack.isOnPause = true
+    state.playingTrack.audio.pause()
   }
 }
 
