@@ -12,33 +12,38 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
   },
 
   playAudioTrack: ({ commit, dispatch, state }, fileid: number) =>  {
-    const playingTrack = state.playingTrack.audio
+    const playingTrack = state.playingTrack
+    const playingAudio = playingTrack.audio
 
-    playingTrack.play()
+    playingAudio.play()
       .then(() => commit('deleteLoadingState'))
       .then(() => dispatch('incrementListeningCounter'))
       .then(() => {
-        dispatch('saveTrackDuration', playingTrack.duration)
+        dispatch('saveTrackDuration', playingAudio.duration)
 
-        playingTrack.ontimeupdate = () => {
-          const progressLine = playingTrack.currentTime / playingTrack.duration
-          const progressTime = playingTrack.currentTime
+        playingAudio.ontimeupdate = () => {
+          const progressLine = playingAudio.currentTime / playingAudio.duration
+          const progressTime = playingAudio.currentTime
 
           commit('updateListeningProgress', { progressLine, progressTime })
 
           if (progressLine >= 1) {
-            const activePlaylist = state.currentPlaylist.tracks
-              .filter((track) => !track.isDisabled)
-
-            const currentTrackIndex = activePlaylist
-              .findIndex((track) => track.fileid === fileid)
-            
-            const nextTrack = activePlaylist[currentTrackIndex + 1]
-
-            if (nextTrack) {
-              dispatch('playTrack', nextTrack.fileid)
+            if (playingTrack.isOnRepeat) {
+              dispatch('playAudioTrack', fileid)
             } else {
-              commit('nullifyPlayerTrack')
+              const activePlaylist = state.currentPlaylist.tracks
+                .filter((track) => !track.isDisabled)
+
+              const currentTrackIndex = activePlaylist
+                .findIndex((track) => track.fileid === fileid)
+              
+              const nextTrack = activePlaylist[currentTrackIndex + 1]
+
+              if (nextTrack) {
+                dispatch('playTrack', nextTrack.fileid)
+              } else {
+                commit('nullifyPlayerTrack')
+              }
             }
           }
         }

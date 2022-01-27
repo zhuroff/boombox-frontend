@@ -1,6 +1,17 @@
 import { ICategoryBasic } from '~/types/Category'
 import { IAlbumTrack } from '~/types/Album'
 
+interface IOrderPayload {
+  oldOrder: number
+  newOrder: number
+  playlistID: string
+}
+
+interface ITrackProgress {
+  progressLine: number
+  progressTime: number
+}
+
 interface IPlaylist {
   _id: string
   albumCover: string
@@ -10,7 +21,7 @@ interface IPlaylist {
   tracks: IAlbumTrack[]
 }
 
-interface IPlayingTrack {
+interface IPlayingTrack extends ITrackProgress {
   fileid: number
   duration: number | string | null
   isOnPause: boolean
@@ -24,12 +35,12 @@ interface IPlayingTrack {
   audio: HTMLAudioElement
   progressHandler: (() => void) | null
   isOnLoading: boolean
-  progressLine: number
-  progressTime: number
   _id: string
 }
 
 export {
+  IOrderPayload,
+  ITrackProgress,
   IPlaylist,
   IPlayingTrack
 }

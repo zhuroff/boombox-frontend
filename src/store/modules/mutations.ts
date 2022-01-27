@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { IAlbumFull } from '~/types/Album'
-import { IPlaylist } from '~/types/Player'
+import { IOrderPayload, ITrackProgress, IPlaylist } from '~/types/Player'
 import { initPlaylist } from './initStates'
 import { playingTrackInitial } from './initStates'
 import {
@@ -71,7 +71,7 @@ const mutations: MutationTree<AppStateInterface> = {
     state.playingTrack.isOnLoading = false
   },
 
-  updateListeningProgress: (state: AppStateInterface, payload) => {
+  updateListeningProgress: (state: AppStateInterface, payload: ITrackProgress) => {
     const { progressLine, progressTime } = payload
 
     state.playingTrack.progressLine = progressLine
@@ -117,7 +117,33 @@ const mutations: MutationTree<AppStateInterface> = {
     if (targetTrack) {
       targetTrack.isDisabled = !targetTrack.isDisabled
     }
-  }
+  },
+
+  changePlaylistOrder: (state: AppStateInterface, payload: IOrderPayload) => {
+    const targetPlaylistTracks = state.currentPlaylist._id === payload.playlistID
+      ? state.currentPlaylist.tracks
+      : state.reservedPlaylist.tracks
+
+    targetPlaylistTracks.splice(
+      payload.newOrder, 0,
+      targetPlaylistTracks.splice(payload.oldOrder, 1)[0]
+    )
+    
+    /* eslint no-param-reassign: 0 */
+    targetPlaylistTracks.forEach((el, index) => {
+      el.order = index + 1
+    })
+  },
+
+  changeRepeatState: (state: AppStateInterface) => {
+    state.playingTrack.isOnRepeat = !state.playingTrack.isOnRepeat
+  },
+
+  setPosition: (state: AppStateInterface, value: number) => {
+    // state.trackElement.currentTime = value * state.trackElement.duration
+    state.playingTrack.audio.currentTime = value * state.playingTrack.audio.duration
+  },
+
 }
 
 export default mutations

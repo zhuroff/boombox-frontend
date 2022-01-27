@@ -8,7 +8,7 @@
       <component :is="Component" />
     </router-view>
   </main>
-  <!-- <AppPlayer /> -->
+  <AppPlayer />
 </div>
 
 </template>
@@ -18,13 +18,13 @@
 import { defineComponent } from 'vue'
 import AppSidebar from '~/components/AppSidebar.vue'
 import AppHeader from '~/components/AppHeader.vue'
-// import AppPlayer from '~/components/AppPlayer.vue'
+import AppPlayer from '~/components/Player/AppPlayer.vue'
 
 export default defineComponent({
   components: {
     AppSidebar,
     AppHeader,
-    // AppPlayer
+    AppPlayer
   }
 })
 

@@ -46,7 +46,6 @@
             <TrackList
               :tracks="albumTracks"
               :albumID="albumID"
-              @changeTracksOrder="changeTracksOrder"
               @saveLyrics="saveLyrics"
             />
           </div>
@@ -177,15 +176,6 @@ export default defineComponent({
     //   })) || []
     // ))
 
-    const changeTracksOrder = (payload: IDraggableEvent) => {
-      console.log(payload)
-      // store.commit('updateAlbumsTracksOrder', payload)
-
-      // if (albumContent.value._id === store.getters.currentPlaylist._id) {
-      //   store.commit('setPrevNextTracks')
-      // }
-    }
-
     // const callListsModal = async () => {
     //   lists.value = []
       
@@ -290,7 +280,6 @@ export default defineComponent({
       descriptionHandler,
       albumTracks,
       albumID,
-      changeTracksOrder,
       saveLyrics,
       // discogsData,
       // discogsPagination,

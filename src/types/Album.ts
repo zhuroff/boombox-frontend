@@ -9,6 +9,7 @@ interface IAlbumTrack {
   lyrics?: string
   duration?: number | string
   isDisabled?: boolean
+  order?: number
 }
 
 interface IAlbumBasic {
