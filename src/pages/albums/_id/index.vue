@@ -14,27 +14,29 @@
           class="album"
         >
           <div class="album__aside">
-            <AlbumCoverArt
-              :albumCover="albumCover"
-              :albumCoverArt="albumCoverArt"
-              @coverClick="fetchAlbumBooklet"
-            />
+            <div class="album__sidebar">
+              <AlbumCoverArt
+                :albumCover="albumCover"
+                :albumCoverArt="albumCoverArt"
+                @coverClick="fetchAlbumBooklet"
+              />
 
-            <!-- <button
-              v-if="!lists"
-              class="album__to-list"
-              @click="callListsModal"
-            >Add to list</button>
+              <AppButton
+                text="Add to list"
+                isFullWidth
+                @onClick="callListsModal"
+              />
 
-            <AppListModal
-              v-if="lists"
-              :data="clearfiedLists"
-              :itemID="albumContent._id"
-              placeholder="Create new collection"
-              @createNewList="createNewList"
-              @itemAction="itemAction"
-              @closeListModal="closeListModal"
-            /> -->
+              <!-- <AppListModal
+                v-if="lists"
+                :data="clearfiedLists"
+                :itemID="albumContent._id"
+                placeholder="Create new collection"
+                @createNewList="createNewList"
+                @itemAction="itemAction"
+                @closeListModal="closeListModal"
+              /> -->
+            </div>
           </div>
 
           <div class="album__content">
@@ -80,6 +82,7 @@ import {
   onMounted,
   ComputedRef,
   computed,
+  reactive,
   ref,
   Ref
 } from 'vue'
@@ -87,9 +90,9 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { IAlbumFull, IAlbumTrack, AlbumHeadProps } from '~/types/Album'
-import { IDraggableEvent } from '~/types/Global'
 import AppPreloader from '~/components/AppPreloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
+import AppButton from '~/components/AppButton.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 // import AppListModal from '~/components/AppListModal/AppListModal.vue'
@@ -101,6 +104,7 @@ import api from '~/api'
 export default defineComponent({
   components: {
     AlbumCoverArt,
+    AppButton,
     AppPreloader,
     AlbumHeading,
     TrackList,
@@ -145,7 +149,7 @@ export default defineComponent({
       isLoaded: false
     })
 
-    // const lists = ref(null)
+    const lists = reactive([])
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
 
     // const booklet = reactive({
@@ -176,16 +180,17 @@ export default defineComponent({
     //   })) || []
     // ))
 
-    // const callListsModal = async () => {
-    //   lists.value = []
+    const callListsModal = async () => {
+      lists.length = 0
       
-    //   try {
-    //     const response = await axios.get('/api/collections')
-    //     lists.value = response.data
-    //   } catch (error) {
-    //     console.error(error.response)
-    //   }
-    // }
+      try {
+        const response = await api.get('/api/collections')
+        console.log(response)
+        // lists.push(...response.data)
+      } catch (error) {
+        throw error
+      }
+    }
 
     const fetchAlbumBooklet = async () => {
       console.log('click')
@@ -281,12 +286,12 @@ export default defineComponent({
       albumTracks,
       albumID,
       saveLyrics,
+      callListsModal,
       // discogsData,
       // discogsPagination,
       // booklet,
       // lists,
       // clearfiedLists,
-      // callListsModal,
       // closeBooklet,
       // createNewList,
       // itemAction,

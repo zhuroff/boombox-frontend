@@ -140,7 +140,6 @@ export default {
       width: calc(100% + 20px);
       height: calc(100% + 20px);
       border-radius: 5px;
-      background-color: $skeleton;
     }
   }
 

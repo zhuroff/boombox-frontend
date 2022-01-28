@@ -5,12 +5,7 @@
   :to="{ path: `/albums/${album._id}` }"
 >
   <transition-group name="fade">
-    <div
-      v-if="album.preloader"
-      class="album__cover_skeleton"
-    ></div>
-
-    <div class="album__cover" v-else>
+    <div class="album__cover">
       <img
         :src="album.albumCover"
         :alt="album.title"
@@ -27,24 +22,12 @@
 
   <transition-group name="fade">
     <div
-      v-if="album.preloader"
-      class="album__title_skeleton"
-    ></div>
-
-    <div
-      v-else
       class="album__title"
     >{{ album.title }}</div>
   </transition-group>
 
   <transition-group name="fade">
     <div
-      v-if="album.preloader"
-      class="album__info_skeleton"
-    ></div>
-
-    <div
-      v-else
       class="album__info"
     >
       {{ album.artist.title }}, {{ album.releaseYear || album.period.title }} / {{ album.genre.title }}

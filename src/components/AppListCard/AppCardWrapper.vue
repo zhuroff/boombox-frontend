@@ -108,11 +108,6 @@ export default defineComponent({
     border-radius: 5px;
     z-index: 10;
 
-    &_cancel,
-    &_delete {
-      @include button;
-    }
-
     &_cancel {
       background-color: $white;
       border-color: $white;

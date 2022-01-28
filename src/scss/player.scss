@@ -85,7 +85,6 @@
     border: 0;
     padding: 0;
     cursor: pointer;
-    outline: none;
     margin-right: 50px;
     display: flex;
     justify-content: center;
@@ -108,7 +107,6 @@
     align-items: center;
     border: 0;
     cursor: pointer;
-    outline: none;
     border-radius: 50%;
     flex: none;
     margin: 0 20px;
@@ -213,7 +211,6 @@
     width: inherit;
     border: 0;
     background-color: transparent;
-    outline: none;
     cursor: pointer;
     position: relative;
     z-index: 10;
@@ -269,7 +266,6 @@
     &-input {
       width: 175px;
       appearance: none;
-      outline: none;
       background-color: transparent;
 
       &::-webkit-slider-runnable-track {
@@ -297,7 +293,6 @@
       width: inherit;
       border: 0;
       background-color: transparent;
-      outline: none;
       cursor: pointer;
       position: relative;
       z-index: 10;
@@ -340,7 +335,6 @@
     cursor: pointer;
     border: 0;
     background-color: transparent;
-    outline: none;
     padding: 0;
 
     .icon {

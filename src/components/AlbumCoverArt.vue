@@ -102,8 +102,6 @@ export default defineComponent({
   &__booklet {
     width: 230px;
     flex: none;
-    position: sticky;
-    top: 25px;
     z-index: 10;
 
     &:hover {
@@ -124,12 +122,7 @@ export default defineComponent({
 
     &.--booklet {
       cursor: pointer;
-    }
-
-    &.--placeholder {
-      background: repeating-linear-gradient(-45deg, transparent, transparent 15px, $border 15px, $border 30px);
-      background-size: 150% 150%;
-      animation: placeholder 5s linear infinite;
+      margin-bottom: 10px;
     }
 
     &_upload {

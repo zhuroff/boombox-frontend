@@ -1,4 +1,30 @@
 .album {
+  flex: 1 1 0;
+  position: relative;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: 230px 1fr;
+
+  &__aside {
+    position: relative;
+
+    .applist__modal {
+      width: max-content;
+      position: sticky !important;
+      top: 270px !important;
+      max-height: calc(100vh - 420px);
+    }
+  }
+  
+  &__sidebar {
+    position: sticky;
+    top: 25px;
+  }
+
+  &__content {
+    padding-left: 25px;
+    flex: 1 1 0;
+  }
 
   &__frame {
     text-align: center;
@@ -36,7 +62,6 @@
 
   &__cover {
     object-fit: cover;
-    margin-bottom: 7px;
     position: relative;
 
     &_img,
@@ -70,23 +95,6 @@
       top: 0;
       right: 0;
     }
-
-    &_skeleton {
-      top: 0;
-      left: 10px;
-      width: calc(100% - 20px);
-      height: 212px;
-      background-color: $skeleton;
-      border-radius: 5px;
-      margin-bottom: 7px;
-      overflow: hidden;
-      position: absolute;
-
-      &:before {
-        content: '';
-        @include skeleton;
-      }
-    }
   }
 
   &__title {
@@ -94,22 +102,7 @@
     color: $dark;
     font-size: 14px;
     position: relative;
-
-    &_skeleton {
-      width: calc(100% - 20px);
-      height: 15px;
-      background-color: $skeleton;
-      border-radius: 5px;
-      left: 10px;
-      bottom: 18px;
-      overflow: hidden;
-      position: absolute;
-
-      &:before {
-        content: '';
-        @include skeleton;
-      }
-    }
+    margin-top: 7px;
   }
 
   &__info {
@@ -117,20 +110,21 @@
     color: $pale;
     font-size: 12px;
     position: relative;
+  }
 
-    &_skeleton {
-      width: calc(100% - 20px);
-      height: 15px;
-      background-color: $skeleton;
-      border-radius: 5px;
-      left: 10px;
-      bottom: 0;
-      overflow: hidden;
-      position: absolute;
+  &__cover {
 
-      &:before {
-        content: '';
-        @include skeleton;
+    &_label {
+      position: relative;
+      z-index: 1;
+
+      .icon-camera {
+        width: 50px;
+        height: 50px;
+
+        path {
+          fill: $white;
+        }
       }
     }
   }

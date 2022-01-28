@@ -22,33 +22,3 @@
     }
   }
 }
-
-.album {
-  display: flex;
-  padding: 25px;
-  position: relative;
-  flex: 1 1 0;
-
-  &__aside {
-    width: 230px;
-    position: relative;
-
-    .applist__modal {
-      width: max-content;
-      position: sticky !important;
-      top: 270px !important;
-      max-height: calc(100vh - 420px);
-    }
-  }
-
-  &__to-list {
-    position: sticky;
-    top: 275px;
-    @include collapser;
-  }
-
-  &__content {
-    padding-left: 25px;
-    flex: 1 1 0;
-  }
-}

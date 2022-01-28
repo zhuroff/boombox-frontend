@@ -39,14 +39,6 @@ export default {
 
 .radio__genre {
   margin-right: 10px;
-
-  &_button {
-    @include button;
-
-    &.--active {
-      background-color: $success;
-    }
-  }
 }
 
 </style>
