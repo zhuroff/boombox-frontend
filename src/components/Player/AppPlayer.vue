@@ -30,32 +30,9 @@
       <AppPlayerNextTrack />
       <AppPlayerProgressBar />
       <AppPlayerCrackle />
+      <AppPlayerSound />
 
-      <!-- <div class="player__sound">
-        <div
-          class="player__sound_range"
-          @mousewheel="changeSoundVolumeMouse"
-        >
-          <div class="player__sound_range-wrapper">
-            <input
-              type="range"
-              :min="0"
-              :max="1"
-              :step="0.001"
-              @input="changeSoundVolume"
-            />
-          </div>
-        </div>
-
-        <button
-          :class="[{ '--disabled' : isSoundOff }, 'player__sound_button']"
-          @click="soundOnOff"
-        >
-          <AppSprite name="sound" />
-        </button>
-      </div>
-
-      <button
+      <!-- <button
         v-if="playingTrack.artist"
         class="player__youtube"
         @click.prevent="proceedToYouTube"
@@ -79,6 +56,7 @@ import AppPlayerNextTrack from './AppPlayerNextTrack.vue'
 import AppPlayerPlayPause from './AppPlayerPlayPause.vue'
 import AppPlayerProgressBar from './AppPlayerProgressBar.vue'
 import AppPlayerCrackle from './AppPlayerCrackle.vue'
+import AppPlayerSound from './AppPlayerSound.vue'
 
 export default defineComponent({
   components: {
@@ -88,32 +66,18 @@ export default defineComponent({
     AppPlayerNextTrack,
     AppPlayerPlayPause,
     AppPlayerProgressBar,
-    AppPlayerCrackle
+    AppPlayerCrackle,
+    AppPlayerSound
   },
 
   setup() {
     const { playingTrack } = usePlayer()
-
-    // const isSoundOff = computed(() => store.getters.isSoundOff)
-
-    // const soundOnOff = () => {
-    //   store.commit('soundOnOff')
-    // }
 
     // const proceedToYouTube = () => {
     //   const targetTrack = store.getters.playingTrack
     //   const query = `https://www.youtube.com/results?search_query=${targetTrack.artist} ${targetTrack.title}`
       
     //   window.open(query)
-    // }
-
-    // const changeSoundVolume = (event: any) => {
-    //   console.log(event)
-    //   // store.commit('setSoundVolume', Number(event.target.value))
-    // }
-
-    // const changeSoundVolumeMouse = () => {
-    //   console.log('Mouse scroll')
     // }
 
     return {

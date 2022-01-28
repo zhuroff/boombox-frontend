@@ -45,7 +45,6 @@ const useCategories = (apiQuery: string) => {
   }
 
   const setFetchedData = (data: any) => {
-    console.log(data)
     categoryData.pagination = data?.pagination || {}
     categoryData.items = data?.docs || []
     categoryData.isFetched = true

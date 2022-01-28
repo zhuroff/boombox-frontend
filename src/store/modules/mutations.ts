@@ -142,6 +142,16 @@ const mutations: MutationTree<AppStateInterface> = {
 
   setPosition: (state: AppStateInterface, value: number) => {
     state.playingTrack.audio.currentTime = value * state.playingTrack.audio.duration
+  },
+
+  setSoundVolume: (state: AppStateInterface, value: number) => {
+    state.playingTrack.audio.volume = value
+    state.playingTrack.crackle.volume = value
+  },
+
+  switchMuteState: (state: AppStateInterface) => {
+    state.playingTrack.audio.muted = !state.playingTrack.audio.muted
+    state.playingTrack.crackle.muted = !state.playingTrack.crackle.muted
   }
 }
 
