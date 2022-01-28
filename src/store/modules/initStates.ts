@@ -21,6 +21,7 @@ const playingTrackInitial: IPlayingTrack = {
   year: '',
   cover: 'https://sverigesradio.se/dist/images/album-cover-placeholder-light.png',
   audio: new Audio(),
+  crackle: new Audio('/media/vinyl_01.wav'),
   progressHandler: null,
   isOnLoading: false,
   progressLine: 0,

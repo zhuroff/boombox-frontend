@@ -198,33 +198,28 @@
     }
   }
 
-  &__vinyl {
-    
-    &_button {
-      margin-left: auto;
-      height: 22px;
-      width: inherit;
-      border: 0;
-      background-color: transparent;
-      outline: none;
-      cursor: pointer;
-      position: relative;
-      z-index: 10;
-      padding: 0;
+  &__crackle {
+    margin-left: auto;
+    height: 24px;
+    width: inherit;
+    border: 0;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+    padding: 0;
+
+    .icon-vinyl {
+      width: 24px;
+      height: 24px;
+      color: $white;
+    }
+
+    &.--active {
 
       .icon-vinyl {
-        width: 22px;
-        height: 22px;
-        fill: $white;
-        stroke: $white;
-      }
-
-      &.--active {
-
-        .icon-vinyl {
-          fill: $accent;
-          stroke: $accent;
-        }
+        color: $accent;
       }
     }
   }

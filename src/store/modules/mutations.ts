@@ -51,6 +51,7 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.year = periodName(state.currentPlaylist.period)
       state.playingTrack.cover = albumCover(state.currentPlaylist)
       state.playingTrack.isOnLoading = true
+      state.playingTrack.crackle.loop = true
     }
   },
 
@@ -140,10 +141,8 @@ const mutations: MutationTree<AppStateInterface> = {
   },
 
   setPosition: (state: AppStateInterface, value: number) => {
-    // state.trackElement.currentTime = value * state.trackElement.duration
     state.playingTrack.audio.currentTime = value * state.playingTrack.audio.duration
-  },
-
+  }
 }
 
 export default mutations

@@ -73,6 +73,14 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
         throw error
       }
     }
+  },
+
+  crackleSwitch: ({ state }) => {
+    if (state.playingTrack.crackle.paused) {
+      state.playingTrack.crackle.play()
+    } else {
+      state.playingTrack.crackle.pause()
+    }
   }
 }
 

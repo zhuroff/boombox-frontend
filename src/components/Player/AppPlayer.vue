@@ -29,15 +29,9 @@
       <AppPlayerPlayPause />
       <AppPlayerNextTrack />
       <AppPlayerProgressBar />
+      <AppPlayerCrackle />
 
-      <!-- <button
-        :class="[{ '--active' : crackleElement && !crackleElement.paused }, 'player__vinyl_button']"
-        @click="vinylCrackleSwitch"
-      >
-        <AppSprite name="vinyl" />
-      </button>
-
-      <div class="player__sound">
+      <!-- <div class="player__sound">
         <div
           class="player__sound_range"
           @mousewheel="changeSoundVolumeMouse"
@@ -84,6 +78,7 @@ import AppPlayerPrevTrack from './AppPlayerPrevTrack.vue'
 import AppPlayerNextTrack from './AppPlayerNextTrack.vue'
 import AppPlayerPlayPause from './AppPlayerPlayPause.vue'
 import AppPlayerProgressBar from './AppPlayerProgressBar.vue'
+import AppPlayerCrackle from './AppPlayerCrackle.vue'
 
 export default defineComponent({
   components: {
@@ -92,21 +87,14 @@ export default defineComponent({
     AppPlayerPrevTrack,
     AppPlayerNextTrack,
     AppPlayerPlayPause,
-    AppPlayerProgressBar
+    AppPlayerProgressBar,
+    AppPlayerCrackle
   },
 
   setup() {
     const { playingTrack } = usePlayer()
 
     // const isSoundOff = computed(() => store.getters.isSoundOff)
-
-    // const nextTrack = computed(() => store.getters.nextTrack)
-
-    // const crackleElement = computed(() => store.getters.crackleElement)
-
-    // const vinylCrackleSwitch = () => {
-    //   // store.commit('vinylCrackleSwitch')
-    // }
 
     // const soundOnOff = () => {
     //   store.commit('soundOnOff')

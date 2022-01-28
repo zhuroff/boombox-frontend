@@ -33,6 +33,7 @@ interface IPlayingTrack extends ITrackProgress {
   year: string
   cover: string
   audio: HTMLAudioElement
+  crackle: HTMLAudioElement
   progressHandler: (() => void) | null
   isOnLoading: boolean
   _id: string
