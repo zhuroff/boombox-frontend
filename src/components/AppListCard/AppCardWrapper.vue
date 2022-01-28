@@ -25,12 +25,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { ref } from 'vue'
-import AppDelete from '@/components/AppDelete.vue'
+import { defineComponent, ref } from 'vue'
+import AppDelete from '~/components/AppDelete.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppDelete
   },
@@ -64,7 +64,7 @@ export default {
       deleteItem
     }
   }
-}
+})
 
 </script>
 

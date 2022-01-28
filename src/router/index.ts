@@ -20,17 +20,17 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: 'album' */ '~/pages/albums/_id/index.vue')
   },
 
-  // {
-  //   path: '/artists',
-  //   name: 'Artists',
-  //   component: () => import(/* webpackChunkName: 'artists' */ '@/pages/artists/index.vue')
-  // },
+  {
+    path: '/artists',
+    name: 'Artists',
+    component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/index.vue')
+  },
 
-  // {
-  //   path: '/artists/:id',
-  //   name: 'Artist',
-  //   component: () => import(/* webpackChunkName: 'artists' */ '@/pages/artists/_id/index.vue')
-  // },
+  {
+    path: '/artists/:id',
+    name: 'Artist',
+    component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/_id/index.vue')
+  },
 
   // {
   //   path: '/genres',

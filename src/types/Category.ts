@@ -3,6 +3,12 @@ interface ICategoryBasic {
   title: string
 }
 
+interface ICategoryMedium extends ICategoryBasic {
+  albums: number
+  avatar: string | undefined
+}
+
 export {
-  ICategoryBasic
+  ICategoryBasic,
+  ICategoryMedium
 }

@@ -2,52 +2,36 @@
   
 <router-link
   class="category__link"
-  :to="`/${categorySlug}/${category.id}`"
+  :to="`/${categorySlug}/${category._id}`"
   :disabled="category.preloader"
 >
   <img
-    v-if="category.image"
-    :src="category.image"
+    :src="category.avatar || placeholder"
     :alt="category.title"
     class="category__cover"
   >
 
-  <div
-    v-else
-    class="category__cover_skeleton"
-  ></div>
+  <div class="category__title">{{ category.title }}</div>
 
-  <div
-    v-if="category.title"
-    class="category__title"
-  >{{ category.title }}</div>
-
-  <div
-    v-else
-    class="category__title_skeleton"
-  ></div>
-
-  <div
-    v-if="category.albumsLength && !isNaN(category.albumsLength)"
-    class="category__info"
-  >
-    Albums: {{ category.albumsLength }}
-  </div>
-
-  <div
-    v-else
-    class="category__info_skeleton"
-  ></div>
+  <div class="category__info">Albums: {{ category.albums }}</div>
 </router-link>
 
 </template>
 
-<script>
+<script lang="ts">
 
-export default {
+import { defineComponent } from 'vue'
+import { ICategoryMedium } from '~/types/Category'
+
+export default defineComponent({
   props: {
     category: {
-      type: Object,
+      type: Object as () => ICategoryMedium,
+      required: true
+    },
+
+    placeholder: {
+      type: String,
       required: true
     },
 
@@ -56,13 +40,13 @@ export default {
       required: true
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .category {
 
@@ -84,58 +68,18 @@ export default {
     object-fit: cover;
     position: relative;
     z-index: 10;
-
-    &_skeleton {
-      width: 170px;
-      height: 170px;
-      margin-bottom: 7px;
-      border-radius: 50%;
-      position: relative;
-      background-color: $skeleton;
-
-      &:after {
-        content: '';
-        @include skeleton;
-      }
-    }
   }
 
   &__title {
     font-weight: 600;
     color: $dark;
     font-size: 14px;
-
-    &_skeleton {
-      height: 15px;
-      background-color: $skeleton;
-      width: 75%;
-      margin: 0 auto 3px;
-      position: relative;
-
-      &:after {
-        content: '';
-        @include skeleton;
-      }
-    }
   }
 
   &__info {
     font-weight: 600;
     color: $pale;
     font-size: 12px;
-
-    &_skeleton {
-      height: 15px;
-      background-color: $skeleton;
-      width: 90%;
-      margin: 0 auto;
-      position: relative;
-
-      &:after {
-        content: '';
-        @include skeleton;
-      }
-    }
   }
 }
 

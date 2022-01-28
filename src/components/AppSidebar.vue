@@ -37,10 +37,10 @@ export default defineComponent({
 
   setup() {
     const navbar = reactive([
-      // {
-      //   title: 'Artists',
-      //   route: 'artists'
-      // },
+      {
+        title: 'Artists',
+        route: 'artists'
+      },
 
       // {
       //   title: 'Genres',

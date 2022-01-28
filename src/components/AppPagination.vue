@@ -3,8 +3,8 @@
 <div class="pagination">
   <button
     class="pagination__button"
-    :disabled="currentPage === 1"
-    @click="switchPagination(currentPage - 1)"
+    :disabled="pagination.page === 1"
+    @click="switchPagination(pagination.page - 1)"
   >
     <AppSprite name="angle" />
   </button>
@@ -18,14 +18,14 @@
       v-for="option in options"
       :key="option"
       :value="option"
-      :selected="option === currentPage"
+      :selected="option === pagination.page"
     >{{ option }} of {{ options.length }}</option>
   </select>
 
   <button
     class="pagination__button"
-    :disabled="currentPage === totalPages"
-    @click="switchPagination(currentPage + 1)"
+    :disabled="pagination.page === pagination.totalPages"
+    @click="switchPagination(pagination.page + 1)"
   >
     <AppSprite name="angle" />
   </button>
@@ -36,6 +36,7 @@
 <script lang="ts">
 
 import { defineComponent, computed } from 'vue'
+import { IPagination } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
 
 export default defineComponent({
@@ -44,13 +45,8 @@ export default defineComponent({
   },
 
   props: {
-    totalPages: {
-      type: Number,
-      required: true
-    },
-
-    currentPage: {
-      type: Number,
+    pagination: {
+      type: Object as () => IPagination,
       required: true
     },
 
@@ -63,11 +59,11 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const options = computed(() => (
-      Array.from({ length: props.totalPages }, (a, b) => (b + 1))
+      Array.from({ length: props.pagination.totalPages }, (a, b) => (b + 1))
     ))
 
     const switchPagination = (page: number) => {
-      if (page !== props.currentPage) {
+      if (page !== props.pagination.page) {
         emit('switchPagination', page)
       }
     }
@@ -111,10 +107,8 @@ export default defineComponent({
       pointer-events: none;
     }
 
-    .icon-angle {
-      fill: $dark;
-      width: 15px;
-      height: 15px;
+    .icon {
+      color: $dark;
     }
   }
 
