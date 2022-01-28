@@ -31,14 +31,7 @@
       <AppPlayerProgressBar />
       <AppPlayerCrackle />
       <AppPlayerSound />
-
-      <!-- <button
-        v-if="playingTrack.artist"
-        class="player__youtube"
-        @click.prevent="proceedToYouTube"
-      >
-        <AppSprite name="youtube" />
-      </button> -->
+      <AppPlayerExternal />
     </div>
   </div>
 </section>
@@ -49,7 +42,6 @@
 
 import { defineComponent } from 'vue'
 import usePlayer from './usePlayer'
-import AppSprite from '~/components/AppSprite.vue'
 import AppPlayerRepeatTrack from './AppPlayerRepeatTrack.vue'
 import AppPlayerPrevTrack from './AppPlayerPrevTrack.vue'
 import AppPlayerNextTrack from './AppPlayerNextTrack.vue'
@@ -57,32 +49,24 @@ import AppPlayerPlayPause from './AppPlayerPlayPause.vue'
 import AppPlayerProgressBar from './AppPlayerProgressBar.vue'
 import AppPlayerCrackle from './AppPlayerCrackle.vue'
 import AppPlayerSound from './AppPlayerSound.vue'
+import AppPlayerExternal from './AppPlayerExternal.vue'
 
 export default defineComponent({
   components: {
-    AppSprite,
     AppPlayerRepeatTrack,
     AppPlayerPrevTrack,
     AppPlayerNextTrack,
     AppPlayerPlayPause,
     AppPlayerProgressBar,
     AppPlayerCrackle,
-    AppPlayerSound
+    AppPlayerSound,
+    AppPlayerExternal
   },
 
   setup() {
     const { playingTrack } = usePlayer()
 
-    // const proceedToYouTube = () => {
-    //   const targetTrack = store.getters.playingTrack
-    //   const query = `https://www.youtube.com/results?search_query=${targetTrack.artist} ${targetTrack.title}`
-      
-    //   window.open(query)
-    // }
-
-    return {
-      playingTrack
-    }
+    return { playingTrack }
   }
 })
 
