@@ -1,6 +1,8 @@
 import { IAlbumBasic } from '~/types/Album'
 import { IFrameBasic } from '~/types/Frame'
 
+type CategoryImagesKeys = 'poster' | 'avatar'
+
 interface ICategoryBasic {
   _id: string
   title: string
@@ -19,6 +21,7 @@ interface ICategoryFull extends ICategoryBasic {
 }
 
 export {
+  CategoryImagesKeys,
   ICategoryBasic,
   ICategoryMedium,
   ICategoryFull

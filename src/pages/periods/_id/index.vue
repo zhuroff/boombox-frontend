@@ -13,6 +13,7 @@
           v-if="category.isFetched"
           :category="category.data"
           categorySlug="periods"
+          @setCategoryImage="setCategoryImage"
         />
 
         <ul
@@ -55,9 +56,15 @@ export default defineComponent({
 
   setup() {
     const apiQuery = '/api/periods'
-    const { category } = useCategory(apiQuery)
+    const {
+      category,
+      setCategoryImage
+    } = useCategory(apiQuery)
 
-    return { category }
+    return {
+      category,
+      setCategoryImage
+    }
   }
 })
 

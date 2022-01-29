@@ -1,6 +1,6 @@
 import { reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { ICategoryFull } from '~/types/Category'
+import { ICategoryFull, CategoryImagesKeys } from '~/types/Category'
 import api from '~/api'
 
 const useCategories = (apiQuery: string) => {
@@ -71,6 +71,10 @@ const useCategory = (apiQuery: string) => {
     data: {} as unknown as ICategoryFull
   })
 
+  const setCategoryImage = (payload: { key: string, url: string }) => {
+    category.data[payload.key as CategoryImagesKeys] = payload.url
+  }
+
   const sortAlbumsByYears = (data: any) => {
     const sorted = data.sort((a: any, b: any) => {
       const aYear = a.period.title
@@ -106,7 +110,7 @@ const useCategory = (apiQuery: string) => {
   
   onMounted(() => fetchCategoryEntry())
 
-  return { category }
+  return { category, setCategoryImage }
 }
 
 export { useCategories, useCategory }

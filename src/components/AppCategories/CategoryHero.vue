@@ -4,7 +4,7 @@
   <div class="hero__poster">
     <img
       v-if="category.poster"
-      :src="category.poster"
+      :src="host(category.poster)"
       :alt="category.title"
       class="hero__poster_image"
     >
@@ -25,7 +25,7 @@
     <div class="hero__avatar">
       <img
         v-if="category.avatar"
-        :src="category.avatar"
+        :src="host(category.avatar)"
         :alt="category.title"
         class="hero__avatar_image"
       >
@@ -55,7 +55,9 @@
 
 import { defineComponent, Ref, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { CategoryImagesKeys } from '~/types/Category'
 import AppSprite from '~/components/AppSprite.vue'
+import { hostString } from '~/shared/media'
 import api from '~/api'
 
 export default defineComponent({
@@ -75,13 +77,13 @@ export default defineComponent({
     }
   },
 
-  setup(props) {
+  setup(props, { emit }) {
     const route = useRoute()
 
     const posterElement: Ref<null | HTMLInputElement> = ref(null)
     const avatarElement: Ref<null | HTMLInputElement> = ref(null)
 
-    const uploadImage = async (file: any, fieldname: string) => {
+    const uploadImage = async (file: any, fieldname: CategoryImagesKeys) => {
       const formData = new FormData()
       const url = `/api/${props.categorySlug}/${route.params.id}/${fieldname}`
 
@@ -89,30 +91,32 @@ export default defineComponent({
 
       try {
         const response = await api.post(url, formData)
-        console.log(response)
-        // props.category.updateCategoryImages(response.data)
+        emit('setCategoryImage', { key: fieldname, url: response.data[fieldname] })
       } catch (error) {
         console.error(error)
       }
     }
 
     const setPoster = () => {
-      if (posterElement.value) {
-        // uploadImage(posterElement.value.files[0], 'poster')
+      if (posterElement.value?.files?.length) {
+        uploadImage(posterElement.value.files[0], 'poster')
       }
     }
 
     const setAvatar = () => {
-      if (avatarElement.value) {
-        // uploadImage(avatarElement.value.files[0], 'avatar')
+      if (avatarElement.value?.files?.length) {
+        uploadImage(avatarElement.value.files[0], 'avatar')
       }
     }
+
+    const host = (pathname: string) => hostString(pathname)
 
     return {
       posterElement,
       avatarElement,
       setPoster,
-      setAvatar
+      setAvatar,
+      host
     }
   }
 })

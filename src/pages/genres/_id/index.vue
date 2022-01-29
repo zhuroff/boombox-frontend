@@ -13,6 +13,7 @@
           v-if="category.isFetched"
           :category="category.data"
           categorySlug="genres"
+          @setCategoryImage="setCategoryImage"
         />
 
         <ul
@@ -55,9 +56,15 @@ export default defineComponent({
 
   setup() {
     const apiQuery = '/api/genres'
-    const { category } = useCategory(apiQuery)
+    const {
+      category,
+      setCategoryImage
+    } = useCategory(apiQuery)
 
-    return { category }
+    return {
+      category,
+      setCategoryImage
+    }
   }
 })
 

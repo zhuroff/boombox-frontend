@@ -6,7 +6,7 @@
   :disabled="category.preloader"
 >
   <img
-    :src="category.avatar || placeholder"
+    :src="category.avatar ? host(category.avatar) : placeholder"
     :alt="category.title"
     class="category__cover"
   >
@@ -22,6 +22,7 @@
 
 import { defineComponent } from 'vue'
 import { ICategoryMedium } from '~/types/Category'
+import { hostString } from '~/shared/media'
 
 export default defineComponent({
   props: {
@@ -39,6 +40,12 @@ export default defineComponent({
       type: String,
       required: true
     }
+  },
+
+  setup() {
+    const host = (pathname: string) => hostString(pathname)
+
+    return { host }
   }
 })
 
