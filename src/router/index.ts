@@ -32,17 +32,29 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/_id/index.vue')
   },
 
-  // {
-  //   path: '/genres',
-  //   name: 'Genres',
-  //   component: () => import(/* webpackChunkName: 'genres' */ '@/pages/genres/index.vue')
-  // },
+  {
+    path: '/genres',
+    name: 'Genres',
+    component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/index.vue')
+  },
 
-  // {
-  //   path: '/genres/:id',
-  //   name: 'Genre',
-  //   component: () => import(/* webpackChunkName: 'genres' */ '@/pages/genres/_id/index.vue')
-  // },
+  {
+    path: '/genres/:id',
+    name: 'Genre',
+    component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/_id/index.vue')
+  },
+
+  {
+    path: '/periods',
+    name: 'Periods',
+    component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/index.vue')
+  },
+
+  {
+    path: '/periods/:id',
+    name: 'Period',
+    component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/_id/index.vue')
+  },
 
   // {
   //   path: '/collections',
@@ -66,18 +78,6 @@ const routes: Array<RouteRecordRaw> = [
   //   path: '/playlists/:id',
   //   name: 'Playlist',
   //   component: () => import(/* webpackChunkName: 'playlists' */ '@/pages/playlists/_id/index.vue')
-  // },
-
-  // {
-  //   path: '/periods',
-  //   name: 'Periods',
-  //   component: () => import(/* webpackChunkName: 'periods' */ '@/pages/periods/index.vue')
-  // },
-
-  // {
-  //   path: '/periods/:id',
-  //   name: 'Period',
-  //   component: () => import(/* webpackChunkName: 'periods' */ '@/pages/periods/_id/index.vue')
   // },
 
   // {

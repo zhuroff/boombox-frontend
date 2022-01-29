@@ -38,24 +38,24 @@ export default defineComponent({
   setup() {
     const navbar = reactive([
       {
-        title: 'Artists',
-        route: 'artists'
-      },
-
-      // {
-      //   title: 'Genres',
-      //   route: 'genres'
-      // },
-
-      {
         title: 'Albums',
         route: 'albums'
       },
 
-      // {
-      //   title: 'Periods',
-      //   route: 'periods'
-      // },
+      {
+        title: 'Artists',
+        route: 'artists'
+      },
+
+      {
+        title: 'Genres',
+        route: 'genres'
+      },
+
+      {
+        title: 'Periods',
+        route: 'periods'
+      },
 
       // {
       //   title: 'Collections',

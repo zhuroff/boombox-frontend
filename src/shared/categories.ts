@@ -9,7 +9,7 @@ const useCategories = (apiQuery: string) => {
 
   const pageConfig = reactive({
     current: route.query.p || 1,
-    limit: 20,
+    limit: 40,
     sorting: { title: 1 }
   })
 
