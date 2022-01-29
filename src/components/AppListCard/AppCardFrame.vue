@@ -9,17 +9,10 @@
   <router-link
     :to="{ path: `/frames/${album._id}` }"
   >
-    <transition-group name="fade">
-      <div
-        class="album__title"
-      >{{ album.title }}</div>
-
-      <div
-        class="album__info"
-      >
-        {{ album.artist.title }}, {{ album.releaseYear.title }} / {{ album.genre.title }}
-      </div>
-    </transition-group>
+    <div class="album__title">{{ album.title }}</div>
+    <div lass="album__info">
+      {{ album.artist.title }}, {{ album.releaseYear.title }} / {{ album.genre.title }}
+    </div>
   </router-link>
 </div>
 
@@ -27,13 +20,15 @@
 
 <script>
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   props: {
     album: {
       type: Object,
       required: true
     }
   }
-}
+})
 
 </script>

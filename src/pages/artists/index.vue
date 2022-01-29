@@ -2,7 +2,7 @@
   <section class="section">
     <transition name="fade">
       <AppPreloader
-        v-if="!categoryData.isFetched"
+        v-if="!categories.isFetched"
         mode="light"
       />
     </transition>
@@ -10,11 +10,11 @@
     <div id="scrollspace">
       <transition-group name="flyUp">
         <ul
-          v-if="categoryData.isFetched"
+          v-if="categories.isFetched"
           class="cardlist"
         >
           <AppCardWrapper
-            v-for="artist in categoryData.items"
+            v-for="artist in categories.items"
             :key="artist.id"
           >
             <AppCardCategory
@@ -26,8 +26,8 @@
         </ul>
 
         <AppPagination
-          v-if="categoryData.isFetched && categoryData.pagination.totalPages > 1"
-          :pagination="categoryData.pagination"
+          v-if="categories.isFetched && categories.pagination.totalPages > 1"
+          :pagination="categories.pagination"
           @switchPagination="switchPagination"
         />
       </transition-group>
@@ -56,12 +56,12 @@ export default defineComponent({
     const apiQuery = '/api/artists'
 
     const {
-      categoryData,
+      categories,
       switchPagination
     } = useCategories(apiQuery)
 
     return {
-      categoryData,
+      categories,
       switchPagination
     }
   }

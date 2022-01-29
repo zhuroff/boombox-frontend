@@ -1,28 +1,7 @@
-import { ref, reactive, computed } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { ICategoryFull } from '~/types/Category'
 import api from '~/api'
-
-class Category {
-  constructor(data = []) {
-    // Object.keys(data).forEach((key) => {
-    //   this[key] = data[key]
-    // })
-  }
-
-  updateCategoryImages(data: any) {
-    console.log(data)
-    // this.poster = data.poster
-    // this.avatar = data.avatar
-  }
-
-  fillCategory(data: any) {
-    console.log(data)
-  //   this.title = data.title
-  //   this.listened = data.listened
-  //   this.albums = sortAlbumsByYears([...data.albums, ...data.framesAlbums])
-  //   this.updateCategoryImages(data)
-  }
-}
 
 const useCategories = (apiQuery: string) => {
   const router = useRouter()
@@ -34,7 +13,7 @@ const useCategories = (apiQuery: string) => {
     sorting: { title: 1 }
   })
 
-  const categoryData = reactive({
+  const categories = reactive({
     isFetched: false,
     pagination: {},
     items: []
@@ -45,14 +24,14 @@ const useCategories = (apiQuery: string) => {
   }
 
   const setFetchedData = (data: any) => {
-    categoryData.pagination = data?.pagination || {}
-    categoryData.items = data?.docs || []
-    categoryData.isFetched = true
+    categories.pagination = data?.pagination || {}
+    categories.items = data?.docs || []
+    categories.isFetched = true
   }
 
   const clearfyCategoryList = () => {
-    categoryData.isFetched = false
-    categoryData.items = []
+    categories.isFetched = false
+    categories.items = []
   }
 
   const switchPagination = (value: number) => {
@@ -76,10 +55,10 @@ const useCategories = (apiQuery: string) => {
     changeRoutePage(pageConfig.current as any)
   }
 
-  fetchCategoryList()
+  onMounted(() => fetchCategoryList())
 
   return {
-    categoryData,
+    categories,
     switchPagination
   }
 }
@@ -87,15 +66,45 @@ const useCategories = (apiQuery: string) => {
 const useCategory = (apiQuery: string) => {
   const route = useRoute()
 
-  const category = reactive(new Category())
-  
-  const fetchCategoryEntry = () => {
-    api.get(`${apiQuery}/${route.params.id}`)
-      .then((response) => category.fillCategory(response.data))
-      .catch((error) => console.error(error.response))
+  const category: { isFetched: boolean, data: ICategoryFull } = reactive({
+    isFetched: false,
+    data: {} as unknown as ICategoryFull
+  })
+
+  const sortAlbumsByYears = (data: any) => {
+    const sorted = data.sort((a: any, b: any) => {
+      const aYear = a.period.title
+      const bYear = b.period.title
+
+      if (aYear < bYear) return -1
+      if (aYear > bYear) return 1
+      return 0
+    })
+
+    return sorted
+  }
+
+  const setCategory = (data: any) => {
+    category.data = {
+      ...data,
+      albums: sortAlbumsByYears([...data.albums, ...data.frames])
+    }
+
+    delete category.data.frames
+
+    category.isFetched = true
   }
   
-  fetchCategoryEntry()
+  const fetchCategoryEntry = async () => {
+    try {
+      const response = await api.get(`${apiQuery}/${route.params.id}`)
+      setCategory(response.data)
+    } catch (error) {
+      throw error
+    }
+  }
+  
+  onMounted(() => fetchCategoryEntry())
 
   return { category }
 }

@@ -44,21 +44,21 @@
 
     <div class="hero__content">
       <div class="hero__title">{{ category.title }}</div>
-      <div class="hero__albums">Albums: {{ category.albums.length }}, listened: {{ category.listened }}</div>
+      <div class="hero__albums">Albums: {{ category.albums.length }}</div>
     </div>
   </div>
 </div>
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { ref } from 'vue'
+import { defineComponent, Ref, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
-import AppSprite from '@/components/AppSprite.vue'
+import AppSprite from '~/components/AppSprite.vue'
+import api from '~/api'
 
-export default {
+export default defineComponent({
   components: {
     AppSprite
   },
@@ -78,29 +78,34 @@ export default {
   setup(props) {
     const route = useRoute()
 
-    const posterElement = ref(null)
-    const avatarElement = ref(null)
+    const posterElement: Ref<null | HTMLInputElement> = ref(null)
+    const avatarElement: Ref<null | HTMLInputElement> = ref(null)
 
-    const uploadImage = async (file, fieldname) => {
+    const uploadImage = async (file: any, fieldname: string) => {
       const formData = new FormData()
       const url = `/api/${props.categorySlug}/${route.params.id}/${fieldname}`
 
       formData.append(fieldname, file)
 
       try {
-        const response = await axios.post(url, formData)
-        props.category.updateCategoryImages(response.data)
+        const response = await api.post(url, formData)
+        console.log(response)
+        // props.category.updateCategoryImages(response.data)
       } catch (error) {
         console.error(error)
       }
     }
 
     const setPoster = () => {
-      uploadImage(posterElement.value.files[0], 'poster')
+      if (posterElement.value) {
+        // uploadImage(posterElement.value.files[0], 'poster')
+      }
     }
 
     const setAvatar = () => {
-      uploadImage(avatarElement.value.files[0], 'avatar')
+      if (avatarElement.value) {
+        // uploadImage(avatarElement.value.files[0], 'avatar')
+      }
     }
 
     return {
@@ -110,13 +115,13 @@ export default {
       setAvatar
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .hero {
 
@@ -174,6 +179,10 @@ export default {
         opacity: 0;
         outline: none;
       }
+
+      .icon {
+        color: $white;
+      }
     }
   }
 
@@ -229,6 +238,10 @@ export default {
         height: 0;
         opacity: 0;
         outline: none;
+      }
+
+      .icon {
+        color: $white;
       }
     }
   }

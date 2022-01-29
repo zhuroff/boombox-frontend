@@ -19,6 +19,7 @@ interface IAlbumBasic {
   artist: ICategoryBasic
   genre: ICategoryBasic
   period: ICategoryBasic
+  folderid?: number
 }
 
 interface IAlbumFull extends IAlbumBasic {
