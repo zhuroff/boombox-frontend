@@ -66,10 +66,6 @@ export default defineComponent({
   },
 
   setup() {
-    onMounted(() => keyboardNavHandler())
-
-    onUnmounted(() => keyboardNavHandlerDestroy())
-
     const { playingTrack } = usePlayer()
 
     const playOrPause = () => {
@@ -115,6 +111,10 @@ export default defineComponent({
     const keyboardNavHandlerDestroy = () => {
       document.removeEventListener('keyup', keyboardNavHandler, false)
     }
+
+    onMounted(() => keyboardNavHandler())
+
+    onUnmounted(() => keyboardNavHandlerDestroy())
 
     return { playingTrack }
   }

@@ -6,7 +6,7 @@
 >
   <AppSprite name="plus" />
 
-  <AppListModal
+  <FloatModal
     v-if="isModalActive"
     :data="clearfiedPlaylists"
     :itemID="trackID"
@@ -25,12 +25,12 @@ import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import AppSprite from '~/components/AppSprite.vue'
-import AppListModal from '~/components/AppListModal/AppListModal.vue'
+import FloatModal from '~/components/FloatModal/FloatModal.vue'
 
 export default defineComponent({
   components: {
     AppSprite,
-    AppListModal
+    FloatModal
   },
 
   props: {

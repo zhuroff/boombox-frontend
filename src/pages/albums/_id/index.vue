@@ -24,18 +24,18 @@
               <AppButton
                 text="Add to list"
                 isFullWidth
-                @onClick="callListsModal"
+                @onClick="callCollectionsModal"
               />
 
-              <!-- <AppListModal
-                v-if="lists"
-                :data="clearfiedLists"
-                :itemID="albumContent._id"
+              <FloatModal
+                v-if="collections.isActive"
+                :data="collections"
+                :itemID="album.data._id"
                 placeholder="Create new collection"
-                @createNewList="createNewList"
-                @itemAction="itemAction"
-                @closeListModal="closeListModal"
-              /> -->
+                @createNewCollection="createNewCollection"
+                @checkFloatModalItem="addOrRemoveFromCollection"
+                @closeFloatModal="closeCollectionsModal"
+              />
             </div>
           </div>
 
@@ -84,7 +84,6 @@
 
 <script lang="ts">
 
-// import { computed, ref, reactive } from 'vue'
 import {
   defineComponent,
   onMounted,
@@ -97,13 +96,14 @@ import {
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { IAlbumFull, IAlbumTrack, AlbumHeadProps } from '~/types/Album'
-import AppPreloader from '~/components/AppPreloader.vue'
+import { IAlbumFull, AlbumHeadProps } from '~/types/Album'
+import { IFloatModal } from '~/types/Global'
+import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
 import AppButton from '~/components/AppButton.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
-// import AppListModal from '~/components/AppListModal/AppListModal.vue'
+import FloatModal from '~/components/FloatModal/FloatModal.vue'
 // import DiscogsTable from '~/components/DiscogsTable.vue'
 import AppModal from '~/components/AppModal.vue'
 import AppSlider from '~/components/AppSlider.vue'
@@ -116,7 +116,7 @@ export default defineComponent({
     AppPreloader,
     AlbumHeading,
     TrackList,
-    // AppListModal,
+    FloatModal,
     // DiscogsTable,
     AppModal,
     AppSlider
@@ -134,7 +134,11 @@ export default defineComponent({
       data: {} as IAlbumFull
     })
 
-    const lists = reactive([])
+    const collections: IFloatModal = reactive({
+      isFetched: false,
+      isActive: false,
+      data: []
+    })
 
     // const booklet = reactive({
     //   isFetching: false,
@@ -159,16 +163,32 @@ export default defineComponent({
     //   })) || []
     // ))
 
-    const callListsModal = async () => {
-      lists.length = 0
-      
+    const closeCollectionsModal = () => {
+      collections.data = []
+      collections.isFetched = false
+      collections.isActive = false
+    }
+
+    const setCollections = (data: any) => {
+      collections.data = data
+      collections.isFetched = true
+    }
+
+    const fetchCollections = async () => {
       try {
         const response = await api.get('/api/collections')
-        console.log(response)
-        // lists.push(...response.data)
+
+        if (response.status === 200) {
+          setCollections(response.data)
+        }
       } catch (error) {
         throw error
       }
+    }
+
+    const callCollectionsModal = () => {
+      collections.isActive = true
+      fetchCollections()
     }
 
     const setAlbumBooklet = (data: { albumCover: string }[]) => {
@@ -176,11 +196,11 @@ export default defineComponent({
     }
 
     const fetchAlbumBooklet = async () => {
-      isBookletModalActive.value = true
-
       if (Array.isArray(album.data.albumCoverArt)) {
-
+        isBookletModalActive.value = true
       } else if (album.data.albumCoverArt > 0) {
+        isBookletModalActive.value = true
+
         try {
           const response = await api.get(`/api/albums/${album.data._id}/${album.data.albumCoverArt}`)
           
@@ -191,52 +211,33 @@ export default defineComponent({
           throw error
         }
       }
-      // if (store.getters.album.albumCoverArt) {
-      //   booklet.isFetching = true
-
-      //   try {
-      //     const response = await axios.get(`/api/albums/${store.getters.album._id}/${store.getters.album.albumCoverArt}`)
-      //     const slides = response.data.map((el) => {
-      //       /* eslint no-param-reassign: 0 */
-      //       el = el.albumCover
-      //       return el
-      //     })
-
-      //     booklet.data.push(...slides)
-      //   } catch (error) {
-      //     booklet.isFetching = false
-      //     console.error(error.response)
-      //   }
-      // }
     }
 
     const closeBookletModal = () => {
       isBookletModalActive.value = false
     }
 
-    // const createNewList = async (title) => {
-    //   const payload = { title, album: albumContent.value._id }
+    const createNewCollection = async (title: string) => {
+      console.log(title)
+      // const payload = { title, album: albumContent.value._id }
 
-    //   try {
-    //     await axios.post('/api/collections/create', payload)
-    //     callListsModal()
-    //   } catch (error) {
-    //     console.log(error.response)
-    //   }
-    // }
+      // try {
+      //   await axios.post('/api/collections/create', payload)
+      //   callCollectionsModal()
+      // } catch (error) {
+      //   console.log(error.response)
+      // }
+    }
 
-    // const itemAction = async (payload) => {
-    //   try {
-    //     const response = await axios.patch(`/api/collections/${payload.listID}`, payload)
-    //     console.log(response.data)
-    //   } catch (error) {
-    //     console.error(error.response)
-    //   }
-    // }
-
-    // const closeListModal = () => {
-    //   lists.value = null
-    // }
+    const addOrRemoveFromCollection = async (payload: any) => {
+      console.log(payload)
+      // try {
+      //   const response = await axios.patch(`/api/collections/${payload.listID}`, payload)
+      //   console.log(response.data)
+      // } catch (error) {
+      //   console.error(error.response)
+      // }
+    }
 
     const patchDescription = async (value: string) => {
       try {
@@ -297,17 +298,18 @@ export default defineComponent({
       albumHead,
       descriptionHandler,
       saveLyrics,
-      callListsModal,
+      callCollectionsModal,
       isBookletModalActive,
       closeBookletModal,
+      collections,
+      createNewCollection,
+      closeCollectionsModal,
+      addOrRemoveFromCollection
       // discogsData,
       // discogsPagination,
       // booklet,
       // lists,
       // clearfiedLists,
-      // createNewList,
-      // itemAction,
-      // closeListModal,
       // switchDiscogsPagination
     }
   }

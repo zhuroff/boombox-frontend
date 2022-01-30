@@ -39,7 +39,7 @@
 
 import { defineComponent } from 'vue'
 import { useCategories } from '~/shared/categories'
-import AppPreloader from '~/components/AppPreloader.vue'
+import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AppCardWrapper from '~/components/AppListCard/AppCardWrapper.vue'
 import AppCardCategory from '~/components/AppListCard/AppCardCategory.vue'
 import AppPagination from '~/components/AppPagination.vue'

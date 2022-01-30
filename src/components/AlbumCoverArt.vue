@@ -119,10 +119,10 @@ export default defineComponent({
     height: 230px;
     object-fit: cover;
     border-radius: 3px;
+    margin-bottom: 10px;
 
     &.--booklet {
       cursor: pointer;
-      margin-bottom: 10px;
     }
 
     &_upload {

@@ -6,7 +6,7 @@
       type="checkbox"
       class="--checkbox"
       :checked="isChecked"
-      @input="checkAction"
+      @change="checkFloatModalItem"
     >
     <span class="--name">{{ item.title }}</span>
   </label>
@@ -14,11 +14,11 @@
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     item: {
       type: Object,
@@ -32,9 +32,9 @@ export default {
   },
 
   setup(props, { emit }) {
-    const isChecked = ref(props.item.items.some((el) => el === props.itemID))
+    const isChecked = ref(props.item.items.some((el: any) => el === props.itemID))
 
-    const checkAction = () => {
+    const checkFloatModalItem = () => {
       isChecked.value = !isChecked.value
 
       const payload = {
@@ -43,21 +43,21 @@ export default {
         isSave: isChecked.value
       }
 
-      emit('itemAction', payload)
+      emit('checkFloatModalItem', payload)
     }
 
     return {
       isChecked,
-      checkAction
+      checkFloatModalItem
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .applist__list {
 

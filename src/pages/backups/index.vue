@@ -43,7 +43,7 @@
 
 import { defineComponent, ref, reactive } from 'vue'
 import AppButton from '~/components/AppButton.vue'
-import AppPreloader from '~/components/AppPreloader.vue'
+import AppPreloader from '~/components/Preloader/Preloader.vue'
 import api from '~/api'
 
 interface BackupList {

@@ -9,13 +9,17 @@
 
     <div id="scrollspace">
       <transition-group name="flyUp">
-        <h1 class="section__title">
+        <h1
+          class="section__title"
+          key="heading"
+        >
           There are {{ albums.pagination.totalDocs }} albums in your collection
         </h1>
 
         <ul
           v-if="albums.isFetched"
           class="cardlist"
+          key="list"
         >
           <AppCardWrapper
             v-for="(album, index) in albums.data"
@@ -28,6 +32,7 @@
         <AppPagination
           v-if="albums.isFetched && albums.pagination.totalPages > 1"
           :pagination="albums.pagination"
+          key="pagination"
           @switchPagination="switchPagination"
         />
       </transition-group>
@@ -41,7 +46,7 @@ import { defineComponent, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { IAlbumBasic } from '~/types/Album'
 import { IPagination } from '~/types/Global'
-import AppPreloader from '~/components/AppPreloader.vue'
+import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AppCardWrapper from '~/components/AppCardWrapper.vue'
 import AppCardAlbum from '~/components/AppCardAlbum.vue'
 import AppPagination from '~/components/AppPagination.vue'

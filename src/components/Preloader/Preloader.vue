@@ -11,6 +11,7 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
+import './Preloader.scss'
 
 export default defineComponent({
   props: {
@@ -25,40 +26,3 @@ export default defineComponent({
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.preloader {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 3000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &.--dark {
-    height: 100%;
-    
-    .preloader__icon {
-      fill: $white;
-    }
-  }
-
-  &.--light {
-    height: calc(100vh - #{$playerHeight + $headerHeight});
-    background-color: $transLight;
-  }
-
-  &__icon {
-    
-    path {
-      fill: $pale;
-    }
-  }
-}
-
-</style>
