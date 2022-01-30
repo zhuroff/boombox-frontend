@@ -2,7 +2,7 @@
   <section class="section">
     <transition name="fade">
       <AppPreloader
-        v-if="!albumIsLoaded"
+        v-if="!album.isFetched"
         mode="light"
       />
     </transition>
@@ -10,14 +10,14 @@
     <div id="scrollspace">
       <transition name="flyUp">
         <div
-          v-if="albumIsLoaded"
+          v-if="album.isFetched"
           class="album"
         >
           <div class="album__aside">
             <div class="album__sidebar">
               <AlbumCoverArt
-                :albumCover="albumCover"
-                :albumCoverArt="albumCoverArt"
+                :albumCover="album.data.albumCover"
+                :isBooklet="album.data.albumCoverArt !== 0"
                 @coverClick="fetchAlbumBooklet"
               />
 
@@ -46,8 +46,8 @@
             />
 
             <TrackList
-              :tracks="albumTracks"
-              :albumID="albumID"
+              :tracks="album.data.tracks"
+              :albumID="album.data._id"
               @saveLyrics="saveLyrics"
             />
           </div>
@@ -62,15 +62,23 @@
       /> -->
     </div>
 
-    <!-- <transition name="fade">
+    <transition name="fade">
       <AppModal
-        v-if="booklet.isFetching"
-        :isModalActive="booklet.isFetching"
-        @closeModalForm="closeBooklet"
+        v-if="isBookletModalActive"
+        :isModalActive="isBookletModalActive"
+        @closeModal="closeBookletModal"
       >
-        <AppSlider :data="booklet"/>
+        <AppPreloader
+          v-if="!Array.isArray(album.data.albumCoverArt)"
+          mode="dark"
+        />
+        
+        <AppSlider
+          v-else
+          :data="album.data.albumCoverArt"
+        />
       </AppModal>
-    </transition> -->
+    </transition>
   </section>
 </template>
 
@@ -97,8 +105,8 @@ import AlbumHeading from '~/components/AlbumHeading.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 // import AppListModal from '~/components/AppListModal/AppListModal.vue'
 // import DiscogsTable from '~/components/DiscogsTable.vue'
-// import AppModal from '~/components/AppModal.vue'
-// import AppSlider from '~/components/AppSlider.vue'
+import AppModal from '~/components/AppModal.vue'
+import AppSlider from '~/components/AppSlider.vue'
 import api from '~/api'
 
 export default defineComponent({
@@ -110,65 +118,36 @@ export default defineComponent({
     TrackList,
     // AppListModal,
     // DiscogsTable,
-    // AppModal,
-    // AppSlider
+    AppModal,
+    AppSlider
   },
 
   setup() {
     const route = useRoute()
     const store = useStore(key)
 
-    onMounted(async () => {
-      try {
-        const albumResponse = await api.get(`/api/albums/${route.params.id}`)
+    const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
+    const isBookletModalActive = ref(false)
 
-        if (albumResponse?.status === 200) {
-          setAlbumState(albumResponse.data)
-          store.commit('setPlayerPlaylist', albumResponse.data)
-        }
-      } catch (error) {
-        throw error
-      }
-    })
-
-    const setAlbumState = (data: IAlbumFull) => {
-      album.value = data
-      album.value.isLoaded = true
-    }
-
-    const album: Ref<IAlbumFull> = ref({
-      _id: '',
-      albumCover: '',
-      title: '',
-      artist: { _id: '', title: '' },
-      genre: { _id: '', title: '' },
-      period: { _id: '', title: '' },
-      albumCoverArt: 0,
-      description: '',
-      tracks: [],
-      isLoaded: false
+    const album = reactive({
+      isFetched: false,
+      data: {} as IAlbumFull
     })
 
     const lists = reactive([])
-    const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
 
     // const booklet = reactive({
     //   isFetching: false,
     //   data: []
     // })
 
-    const albumIsLoaded: ComputedRef<boolean> = computed(() => album.value.isLoaded)
-    const albumCover: ComputedRef<string> = computed(() => album.value.albumCover)
-    const albumCoverArt: ComputedRef<number> = computed(() => album.value.albumCoverArt)
     const albumHead: ComputedRef<AlbumHeadProps> = computed(() => ({
-      title: album.value.title,
-      artist: album.value.artist,
-      period: album.value.period,
-      genre: album.value.genre,
-      description: album.value.description
+      title: album.data.title,
+      artist: album.data.artist,
+      period: album.data.period,
+      genre: album.data.genre,
+      description: album.data.description
     }))
-    const albumTracks: ComputedRef<IAlbumTrack[]> = computed(() => album.value.tracks)
-    const albumID = computed(() => album.value._id)
 
     // const discogsData = reactive(computed(() => store.getters.discogsData))
     // const discogsPagination = computed(() => store.getters.discogsPagination)
@@ -192,8 +171,26 @@ export default defineComponent({
       }
     }
 
+    const setAlbumBooklet = (data: { albumCover: string }[]) => {
+      album.data.albumCoverArt = data.map((el) => el.albumCover)
+    }
+
     const fetchAlbumBooklet = async () => {
-      console.log('click')
+      isBookletModalActive.value = true
+
+      if (Array.isArray(album.data.albumCoverArt)) {
+
+      } else if (album.data.albumCoverArt > 0) {
+        try {
+          const response = await api.get(`/api/albums/${album.data._id}/${album.data.albumCoverArt}`)
+          
+          if (response?.status === 201) {
+            setAlbumBooklet(response.data)
+          }
+        } catch (error) {
+          throw error
+        }
+      }
       // if (store.getters.album.albumCoverArt) {
       //   booklet.isFetching = true
 
@@ -213,10 +210,9 @@ export default defineComponent({
       // }
     }
 
-    // const closeBooklet = () => {
-    //   booklet.isFetching = false
-    //   booklet.data = []
-    // }
+    const closeBookletModal = () => {
+      isBookletModalActive.value = false
+    }
 
     // const createNewList = async (title) => {
     //   const payload = { title, album: albumContent.value._id }
@@ -275,24 +271,40 @@ export default defineComponent({
       
     //   store.dispatch('fetchDiscogsData', payload)
     // }
+    const setAlbumState = (data: IAlbumFull) => {
+      album.data = data
+      album.isFetched = true
+    }
+
+    const fetchAlbumEntry = async () => {
+      try {
+        const response = await api.get(`/api/albums/${route.params.id}`)
+
+        if (response?.status === 200) {
+          setAlbumState(response.data)
+          store.commit('setPlayerPlaylist', response.data)
+        }
+      } catch (error) {
+        throw error
+      }
+    }
+    
+    onMounted(() => fetchAlbumEntry())
 
     return {
-      albumIsLoaded,
-      albumCover,
-      albumCoverArt,
+      album,
       fetchAlbumBooklet,
       albumHead,
       descriptionHandler,
-      albumTracks,
-      albumID,
       saveLyrics,
       callListsModal,
+      isBookletModalActive,
+      closeBookletModal,
       // discogsData,
       // discogsPagination,
       // booklet,
       // lists,
       // clearfiedLists,
-      // closeBooklet,
       // createNewList,
       // itemAction,
       // closeListModal,

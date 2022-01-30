@@ -14,7 +14,7 @@
           class="cardlist"
         >
           <AppCardWrapper
-            v-for="artist in categories.items"
+            v-for="artist in categories.data"
             :key="artist.id"
           >
             <AppCardCategory

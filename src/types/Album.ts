@@ -23,7 +23,7 @@ interface IAlbumBasic {
 }
 
 interface IAlbumFull extends IAlbumBasic {
-  albumCoverArt: number
+  albumCoverArt: number | string[]
   description: string
   tracks: IAlbumTrack[]
   isLoaded: boolean

@@ -21,6 +21,18 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
+    path: '/frames',
+    name: 'Frames',
+    component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/index.vue')
+  },
+
+  {
+    path: '/frames/:id',
+    name: 'Frame',
+    component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/_id/index.vue')
+  },
+
+  {
     path: '/artists',
     name: 'Artists',
     component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/index.vue')
@@ -59,49 +71,37 @@ const routes: Array<RouteRecordRaw> = [
   // {
   //   path: '/collections',
   //   name: 'Collections',
-  //   component: () => import(/* webpackChunkName: 'lists' */ '@/pages/collections/index.vue')
+  //   component: () => import(/* webpackChunkName: 'lists' */ '~/pages/collections/index.vue')
   // },
 
   // {
   //   path: '/collections/:id',
   //   name: 'Collection',
-  //   component: () => import(/* webpackChunkName: 'lists' */ '@/pages/collections/_id/index.vue')
+  //   component: () => import(/* webpackChunkName: 'lists' */ '~/pages/collections/_id/index.vue')
   // },
 
   // {
   //   path: '/playlists',
   //   name: 'Playlists',
-  //   component: () => import(/* webpackChunkName: 'playlists' */ '@/pages/playlists/index.vue')
+  //   component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/index.vue')
   // },
 
   // {
   //   path: '/playlists/:id',
   //   name: 'Playlist',
-  //   component: () => import(/* webpackChunkName: 'playlists' */ '@/pages/playlists/_id/index.vue')
+  //   component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/_id/index.vue')
   // },
 
   // {
   //   path: '/youtube',
   //   name: 'YouTube',
-  //   component: () => import(/* webpackChunkName: 'youtube' */ '@/pages/youtube/index.vue')
-  // },
-
-  // {
-  //   path: '/frames',
-  //   name: 'Frames',
-  //   component: () => import(/* webpackChunkName: 'frames' */ '@/pages/frames/index.vue')
-  // },
-
-  // {
-  //   path: '/frames/:id',
-  //   name: 'Frame',
-  //   component: () => import(/* webpackChunkName: 'frames' */ '@/pages/frames/_id/index.vue')
+  //   component: () => import(/* webpackChunkName: 'youtube' */ '~/pages/youtube/index.vue')
   // },
 
   // {
   //   path: '/radio',
   //   name: 'Radio',
-  //   component: () => import(/* webpackChunkName: 'radio' */ '@/pages/radio/index.vue')
+  //   component: () => import(/* webpackChunkName: 'radio' */ '~/pages/radio/index.vue')
   // },
 
   {
@@ -114,7 +114,7 @@ const routes: Array<RouteRecordRaw> = [
   //   path: '/login',
   //   name: 'Login',
   //   meta: { layout: 'AuthTemplate' },
-  //   component: () => import(/* webpackChunkName: 'auth' */ '@/pages/login/index.vue')
+  //   component: () => import(/* webpackChunkName: 'auth' */ '~/pages/login/index.vue')
   // }
 ]
 

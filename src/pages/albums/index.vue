@@ -8,8 +8,11 @@
     </transition>
 
     <div id="scrollspace">
-      <h1 class="section__title">There are {{ totalAlbums }} albums in your collection</h1>
       <transition-group name="flyUp">
+        <h1 class="section__title">
+          There are {{ albums.pagination.totalDocs }} albums in your collection
+        </h1>
+
         <ul
           v-if="albums.isFetched"
           class="cardlist"
@@ -23,9 +26,8 @@
         </ul>
 
         <AppPagination
-          v-if="totalPages > 1"
-          :totalPages="totalPages"
-          :currentPage="currentPage"
+          v-if="albums.isFetched && albums.pagination.totalPages > 1"
+          :pagination="albums.pagination"
           @switchPagination="switchPagination"
         />
       </transition-group>
@@ -35,7 +37,7 @@
 
 <script lang="ts">
 
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { IAlbumBasic } from '~/types/Album'
 import { IPagination } from '~/types/Global'
@@ -57,64 +59,66 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
-    const currentPage = ref(Number(route.query.p) || 1)
-    const limit = ref(40)
-    const sort = ref({ dateCreated: -1 })
-    const totalAlbums = ref(0)
-    const totalPages = ref(0)
-
-    if (!route.query.p) {
-      router.push({ query: { p: currentPage.value } })
-    }
-    
-    const albums: { isFetched: boolean, data: IAlbumBasic[] } = reactive({
-      isFetched: false,
-      data: []
+    const pageConfig = reactive({
+      page: Number(route.query.p) || 1,
+      sort: { title: 1 },
+      limit: 40
     })
+
+    const albums = reactive({
+      isFetched: false,
+      data: [] as IAlbumBasic[],
+      pagination: {} as IPagination
+    })
+
+    const clearfyAlbumList = () => {
+      albums.isFetched = false
+      albums.data = []
+    }
+
+    const changeRoutePage = (value: number) => {
+      router.push({ query: { p: value } })
+    }
+
+    const switchPagination = (value: number) => {
+      pageConfig.page = value
+
+      clearfyAlbumList()
+      changeRoutePage(value)
+      fetchAlbums()
+    }
+
+    const setFetchedData = (data: { docs: IAlbumBasic[], pagination: IPagination }) => {
+      albums.isFetched = true
+
+      if (data) {
+        albums.pagination = data.pagination
+        albums.data = data.docs
+      }
+    }
 
     const fetchAlbums = async () => {
       try {
-        const payload = {
-          page: currentPage.value,
-          limit: limit.value,
-          sort: sort.value
-        }
-
-        const response = await api.post('/api/albums', payload)
+        const response = await api.post('/api/albums', pageConfig)
 
         if (response?.status === 200) {
-          setAlbum(response.data.docs)
-          setPagination(response.data.pagination)
+          setFetchedData(response.data)
         }
       } catch (error) {
         throw error
       }
     }
 
-    const setAlbum = (data: IAlbumBasic[]) => {
-      albums.data = data
-      albums.isFetched = true
-    }
+    onMounted(() => {
+      if (!route.query.p) {
+        changeRoutePage(pageConfig.page)
+      }
 
-    const setPagination = (data: IPagination) => {
-      totalAlbums.value = data.totalDocs
-      totalPages.value = data.totalPages
-    }
-
-    fetchAlbums()
-
-    const switchPagination = (value: any) => {
-      currentPage.value = value
-      albums.isFetched = false
-      router.push({ query: { p: currentPage.value } })
       fetchAlbums()
-    }
+    })
 
     return {
       albums,
-      totalAlbums,
-      totalPages,
-      currentPage,
       switchPagination
     }
   }

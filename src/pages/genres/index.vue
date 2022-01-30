@@ -14,7 +14,7 @@
           class="cardlist"
         >
           <AppCardWrapper
-            v-for="genre in categories.items"
+            v-for="genre in categories.data"
             :key="genre.id"
           >
             <AppCardCategory

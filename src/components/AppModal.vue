@@ -1,24 +1,22 @@
-<template>
-  
-<div class="modal">
-  <button
-    class="modal__close"
-    @click="closeModalForm"
-  >
-    <AppSprite name="delete" />
-  </button>
-  
-  <slot></slot>
-</div>
-
+<template>  
+  <div class="modal">
+    <button
+      class="modal__close"
+      @click="closeModal"
+    >
+      <AppSprite name="delete" />
+    </button>
+    
+    <slot></slot>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
 
-import { watchEffect } from 'vue'
-import AppSprite from '@/components/AppSprite.vue'
+import { defineComponent, watchEffect } from 'vue'
+import AppSprite from '~/components/AppSprite.vue'
 
-export default {
+export default defineComponent({
   components: {
     AppSprite
   },
@@ -31,27 +29,27 @@ export default {
   },
 
   setup(props, { emit }) {
-    const closeModalForm = () => emit('closeModalForm')
+    const closeModal = () => emit('closeModal')
 
     watchEffect(() => {
       if (props.isModalActive) {
-        document.querySelector('.header').classList.add('--z-low')
-        document.querySelector('.player').classList.add('--z-low')
+        document.querySelector('.header')?.classList.add('--z-low')
+        document.querySelector('.player')?.classList.add('--z-low')
       } else {
-        document.querySelector('.header').classList.remove('--z-low')
-        document.querySelector('.player').classList.remove('--z-low')
+        document.querySelector('.header')?.classList.remove('--z-low')
+        document.querySelector('.player')?.classList.remove('--z-low')
       }
     })
 
-    return { closeModalForm }
+    return { closeModal }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .modal {
   position: fixed;

@@ -1,6 +1,7 @@
 import { reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { ICategoryFull, CategoryImagesKeys } from '~/types/Category'
+import { IPagination } from '~/types/Global'
+import { ICategoryMedium, ICategoryFull, CategoryImagesKeys } from '~/types/Category'
 import api from '~/api'
 
 const useCategories = (apiQuery: string) => {
@@ -8,51 +9,57 @@ const useCategories = (apiQuery: string) => {
   const route = useRoute()
 
   const pageConfig = reactive({
-    current: route.query.p || 1,
-    limit: 40,
-    sorting: { title: 1 }
+    page: Number(route.query.p) || 1,
+    sort: { title: 1 },
+    limit: 40
   })
 
   const categories = reactive({
     isFetched: false,
-    pagination: {},
-    items: []
+    data: [] as ICategoryMedium[],
+    pagination: {} as IPagination
   })
 
   const changeRoutePage = (value: number) => {
     router.push({ query: { p: value } })
   }
 
-  const setFetchedData = (data: any) => {
-    categories.pagination = data?.pagination || {}
-    categories.items = data?.docs || []
-    categories.isFetched = true
-  }
-
   const clearfyCategoryList = () => {
     categories.isFetched = false
-    categories.items = []
+    categories.data = []
   }
 
   const switchPagination = (value: number) => {
-    pageConfig.current = value
+    pageConfig.page = value
 
     clearfyCategoryList()
     changeRoutePage(value)
     fetchCategoryList()
   }
+
+  const setFetchedData = (data: { docs: ICategoryMedium[], pagination: IPagination }) => {
+    categories.isFetched = true
+
+    if (data) {
+      categories.pagination = data.pagination
+      categories.data = data.docs
+    }
+  }
   
   const fetchCategoryList = async () => {
     try {
       const response = await api.post(apiQuery, pageConfig)
-      setFetchedData(response.data)
+
+      if (response?.status === 200) {
+        setFetchedData(response?.data)
+      }
     } catch (error) {
       throw error
     }
   }
 
   if (!route.query.p) {
-    changeRoutePage(pageConfig.current as any)
+    changeRoutePage(pageConfig.page)
   }
 
   onMounted(() => fetchCategoryList())
@@ -66,9 +73,9 @@ const useCategories = (apiQuery: string) => {
 const useCategory = (apiQuery: string) => {
   const route = useRoute()
 
-  const category: { isFetched: boolean, data: ICategoryFull } = reactive({
+  const category = reactive({
     isFetched: false,
-    data: {} as unknown as ICategoryFull
+    data: {} as ICategoryFull
   })
 
   const setCategoryImage = (payload: { key: string, url: string }) => {

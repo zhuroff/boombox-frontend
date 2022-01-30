@@ -97,12 +97,12 @@ export default defineComponent({
     }
 
     const backupRestore = async (timestamp: number) => {
-      // try {
-      //   const response = await api.post(`/api/backup/restore/${timestamp}`)
-      //   console.log(response.data)
-      // } catch (error) {
-      //   console.error(error)
-      // }
+      try {
+        const response = await api.post(`/api/backup/restore/${timestamp}`)
+        console.log(response.data)
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     const backupDelete = async (timestamp: number) => {

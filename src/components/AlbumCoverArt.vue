@@ -3,7 +3,7 @@
 <div class="album__booklet">
   <img
     :src="albumCover || 'https://s.mxmcdn.net/site/images/album-placeholder.png'"
-    :class="[{ '--booklet' : albumCoverArt > 0 }, 'album__cover']"
+    :class="[{ '--booklet' : isBooklet }, 'album__cover']"
     @click="$emit('coverClick')"
   >
 
@@ -42,8 +42,8 @@ export default defineComponent({
       required: false
     },
 
-    albumCoverArt: {
-      type: Number,
+    isBooklet: {
+      type: Boolean,
       required: false
     },
 

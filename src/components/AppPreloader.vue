@@ -35,17 +35,21 @@ export default defineComponent({
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100vh - #{$playerHeight + $headerHeight});
   z-index: 3000;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &.--dark {
-    background-color: $transDark;
+    height: 100%;
+    
+    .preloader__icon {
+      fill: $white;
+    }
   }
 
   &.--light {
+    height: calc(100vh - #{$playerHeight + $headerHeight});
     background-color: $transLight;
   }
 

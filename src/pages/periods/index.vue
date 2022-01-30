@@ -14,7 +14,7 @@
           class="cardlist"
         >
           <AppCardWrapper
-            v-for="period in categories.items"
+            v-for="period in categories.data"
             :key="period.id"
           >
             <AppCardCategory

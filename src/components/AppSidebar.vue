@@ -43,6 +43,11 @@ export default defineComponent({
       },
 
       {
+        title: 'Frames',
+        route: 'frames'
+      },
+
+      {
         title: 'Artists',
         route: 'artists'
       },
@@ -70,11 +75,6 @@ export default defineComponent({
       // {
       //   title: 'YouTube',
       //   route: 'youtube'
-      // },
-
-      // {
-      //   title: 'Frames',
-      //   route: 'frames'
       // },
 
       // {
