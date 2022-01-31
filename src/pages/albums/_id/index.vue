@@ -31,6 +31,8 @@
                 v-if="collections.isActive"
                 :data="collections"
                 :itemID="album.data._id"
+                dataKey="albums"
+                itemKey="album"
                 placeholder="Create new collection"
                 @createNewCollection="createNewCollection"
                 @checkFloatModalItem="addOrRemoveFromCollection"
@@ -218,15 +220,14 @@ export default defineComponent({
     }
 
     const createNewCollection = async (title: string) => {
-      console.log(title)
-      // const payload = { title, album: albumContent.value._id }
+      const payload = { title, album: album.data._id }
 
-      // try {
-      //   await axios.post('/api/collections/create', payload)
-      //   callCollectionsModal()
-      // } catch (error) {
-      //   console.log(error.response)
-      // }
+      try {
+        await api.post('/api/collections/create', payload)
+        fetchCollections()
+      } catch (error) {
+        throw error
+      }
     }
 
     const addOrRemoveFromCollection = async (payload: any) => {

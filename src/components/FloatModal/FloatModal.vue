@@ -26,6 +26,7 @@
           :key="item._id"
           :item="item"
           :itemID="itemID"
+          :isChecked="item[dataKey].some((el) => el[itemKey]._id === itemID)"
           @checkFloatModalItem="checkFloatModalItem"
         />
       </ul>
@@ -66,12 +67,7 @@
 
 <script lang="ts">
 
-import {
-  defineComponent,
-  ref,
-  onMounted,
-  onBeforeUnmount,
-} from 'vue'
+import { defineComponent, ref } from 'vue'
 import { IFloatModal } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AppSprite from '~/components/AppSprite.vue'
@@ -92,6 +88,16 @@ export default defineComponent({
     },
 
     itemID: {
+      type: String,
+      required: true
+    },
+
+    dataKey: {
+      type: String,
+      required: true
+    },
+
+    itemKey: {
       type: String,
       required: true
     },

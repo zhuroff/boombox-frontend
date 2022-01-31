@@ -28,26 +28,30 @@ export default defineComponent({
     itemID: {
       type: String,
       required: true
+    },
+
+    isChecked: {
+      type: Boolean,
+      required: false,
+      frfault: false
     }
   },
 
   setup(props, { emit }) {
-    const isChecked = ref(props.item.items.some((el: any) => el === props.itemID))
 
     const checkFloatModalItem = () => {
-      isChecked.value = !isChecked.value
+      // isChecked.value = !isChecked.value
 
-      const payload = {
-        itemID: props.itemID,
-        listID: props.item.id,
-        isSave: isChecked.value
-      }
+      // const payload = {
+      //   itemID: props.itemID,
+      //   listID: props.item.id,
+      //   isSave: isChecked.value
+      // }
 
-      emit('checkFloatModalItem', payload)
+      // emit('checkFloatModalItem', payload)
     }
 
     return {
-      isChecked,
       checkFloatModalItem
     }
   }
