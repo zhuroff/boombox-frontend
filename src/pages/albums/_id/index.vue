@@ -240,27 +240,44 @@ export default defineComponent({
     }
 
     const createNewCollection = async (title: string) => {
+      collections.isFetched = false
+
       const payload: ICollectionPayloadPost = {
         title,
         album: album.data._id
       }
 
       try {
-        await api.post('/api/collections/create', payload)
-        fetchCollections()
+        const response = await api.post('/api/collections/create', payload)
+
+        if (response?.status === 200) {
+          console.log(response.data.message)
+          fetchCollections()
+        }
       } catch (error) {
         throw error
       }
     }
 
     const addOrRemoveFromCollection = async (payload: IFloatModalCheckAction) => {
-      console.log(payload)
-      // try {
-      //   const response = await axios.patch(`/api/collections/${payload.listID}`, payload)
-      //   console.log(response.data)
-      // } catch (error) {
-      //   console.error(error.response)
-      // }
+      const targetCollection = collections.data.find((collection) => (
+        collection._id === payload.listID
+      ))
+      
+      if (targetCollection) {
+        payload.order = targetCollection.albums.length + 1
+
+        try {
+          const response = await api.patch(`/api/collections/${payload.listID}`, payload)
+
+          if (response?.status === 200) {
+            console.log(response.data.message)
+            fetchCollections()
+          }
+        } catch (error) {
+          throw error
+        }
+      }
     }
 
     const patchDescription = async (value: string) => {

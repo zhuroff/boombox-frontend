@@ -43,7 +43,7 @@
 <script lang="ts">
 
 import { defineComponent, reactive } from 'vue'
-import { IPlaylistBasic } from '~/types/Playlist'
+import { IPlaylistPayloadPost, IPlaylistBasic } from '~/types/Playlist'
 import { IFloatModalCheckAction } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
@@ -72,7 +72,7 @@ export default defineComponent({
     })
 
     const isItemChecked = (item: IPlaylistBasic) => (
-      item.tracks.some((track) => track.track === props.trackID)
+      item.tracks.some((el) => el.track === props.trackID)
     )
 
     const setPlaylists = (data: IPlaylistBasic[]) => {
@@ -104,20 +104,20 @@ export default defineComponent({
     }
 
     const createNewPlaylist = async (title: string) => {
-      const payload: IPlaylistBasic = {
-        _id: '',
+      playlists.isFetched = false
+
+      const payload: IPlaylistPayloadPost = {
         title,
-        tracks: [{
-          _id: '',
-          track: props.trackID,
-          order: 1
-        }]
+        track: props.trackID
       }
 
       try {
-        await api.post('/api/playlists', payload)
-        playlists.isFetched = false
-        fetchPlaylists()
+        const response = await api.post('/api/playlists', payload)
+
+        if (response?.status === 200) {
+          console.log(response.data.message)
+          fetchPlaylists()
+        }
       } catch (error) {
         throw error
       }
@@ -132,8 +132,12 @@ export default defineComponent({
         payload.order = targetPlaylist.tracks.length + 1
 
         try {
-          await api.patch(`/api/playlists/${payload.listID}`, payload)
-          fetchPlaylists()
+          const response = await api.patch(`/api/playlists/${payload.listID}`, payload)
+
+          if (response?.status === 200) {
+            console.log(response.data.message)
+            fetchPlaylists()
+          }
         } catch (error) {
           throw error
         }

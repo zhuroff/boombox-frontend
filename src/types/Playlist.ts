@@ -1,16 +1,20 @@
-interface INewPlaylistPayloadTrack {
-  _id: string
-  track: string,
+interface IPlaylistPayloadPost {
+  title: string
+  track: string
+}
+
+interface IPlaylistTrackBasic {
   order: number
+  track: string,
 }
 
 interface IPlaylistBasic {
   _id: string
   title: string
-  tracks: INewPlaylistPayloadTrack[]
+  tracks: IPlaylistTrackBasic[]
 }
 
 export {
-  INewPlaylistPayloadTrack,
+  IPlaylistPayloadPost,
   IPlaylistBasic
 }
