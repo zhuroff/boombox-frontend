@@ -1,10 +1,12 @@
 <template>
   
-<div
-  class="tracklist__row_cell --pointer --fix"
-  @click="removeTrackFromPlaylist"
->
-  <AppSprite name="delete" />
+<div class="tracklist__row_cell --pointer --fix">
+  <button
+    class="tracklist__row_action"
+    @click="removeTrackFromPlaylist"
+  >
+    <AppSprite name="delete" />
+  </button>
 </div>
 
 </template>

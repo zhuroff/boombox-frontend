@@ -6,7 +6,9 @@
   'tracklist__row'
 ]">
   <div class="tracklist__row_cell --drag">
-    <AppSprite name="burger" />
+    <button class="tracklist__row_action">
+      <AppSprite name="burger" />
+    </button>
   </div>
 
   <div class="tracklist__row_cell --order">
@@ -29,8 +31,6 @@
   <TrackItemPlaylist
     v-if="!isPlaylist"
     :trackID="track._id"
-    @createNewList="createNewList"
-    @itemAction="itemAction"
   />
 
   <!-- <TrackItemRemove
@@ -113,16 +113,6 @@ export default defineComponent({
     const isPlayingTrack = computed(() => (
       store.getters.playingTrack.fileid === props.track.fileid
     ))
-
-    const createNewList = (title: string) => {
-      console.log(title)
-      // emit('createNewList', {
-      //   title,
-      //   id: props.track._id,
-      //   fileid: props.track.fileid
-      // })
-    }
-
     const callLyricsModal = () => {
       isModalActive.value = true
     }
@@ -139,14 +129,6 @@ export default defineComponent({
     //   })
     // }
 
-    const itemAction = (payload: any) => {
-      console.log(payload)
-      // emit('itemAction', {
-      //   ...payload,
-      //   fileid: props.track.fileid
-      // })
-    }
-
     // const saveLyrics = (lyrics) => {
     //   const payload = {
     //     lyrics,
@@ -160,10 +142,8 @@ export default defineComponent({
       isModalActive,
       isPlayingTrack,
       callLyricsModal,
-      createNewList,
       // closeModalForm,
       // removeTrackFromPlaylist,
-      itemAction,
       // saveLyrics
     }
   }

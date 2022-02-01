@@ -3,19 +3,27 @@
 <div
   v-if="isOnPlay"
   class="tracklist__row_cell --pointer --fix"
-  @click="pauseTrack"
 >
-  <AppSprite name="playing" />
+  <button
+    class="tracklist__row_action"
+    @click="pauseTrack"
+  >
+    <AppSprite name="playing" />
+  </button>
 </div>
   
 <div
   v-else
   :class="[{ '--disabled' : isOnLoading }, 'tracklist__row_cell --pointer --fix']"
-  @click="playingStateSplitter"
 >
-  <AppSprite v-if="isOnLoading" name="spinner" />
-  <AppSprite v-else-if="isOnPause" name="pause" />
-  <AppSprite v-else name="play" />
+  <button
+    class="tracklist__row_action"
+    @click="playingStateSplitter"
+  >
+    <AppSprite v-if="isOnLoading" name="spinner" />
+    <AppSprite v-else-if="isOnPause" name="pause" />
+    <AppSprite v-else name="play" />
+  </button>
 </div>
 
 </template>

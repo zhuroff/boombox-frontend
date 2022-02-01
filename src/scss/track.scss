@@ -8,6 +8,7 @@
   &_cell {
     display: flex;
     align-items: center;
+    position: relative;
 
     &.--order {
       width: 20px;
@@ -18,7 +19,10 @@
       width: 30px;
       flex: none;
       justify-content: flex-start;
-      cursor: move;
+      
+      * {
+        cursor: move;
+      }
     }
 
     &.--fix {
@@ -35,17 +39,41 @@
       pointer-events: none;
     }
 
+    .float-modal {
+      width: 230px;
+      min-height: 230px;
+
+      .preloader {
+        height: 100%;
+
+        &__icon {
+          width: 50px;
+          height: 50px;
+        }
+      }
+    }
+  }
+
+  &_action {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+
     .icon {
       width: 18px;
       height: 18px;
-      fill: $pale;
+      color: $pale;
       transition: fill 0.2s ease;
     }
 
     &:hover {
 
       .icon {
-        fill: $dark;
+        color: $dark;
         transition: fill 0.2s ease;
       }
     }

@@ -2,17 +2,19 @@
 
 .float-modal {
   position: absolute;
-  min-width: 100px;
   right: 0;
   top: 100%;
   background: $white;
   z-index: 10;
   border-radius: 3px;
   cursor: default;
-  min-height: 80px;
-  display: flex;
-  flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &__content {
+    min-height: inherit;
+    display: flex;
+    flex-direction: column;
+  }
 
   &__close {
     position: absolute;
@@ -43,6 +45,7 @@
     justify-content: center;
 
     strong {
+      font-size: 16px;
       font-weight: 600;
       display: block;
       margin-bottom: 10px;
@@ -52,6 +55,32 @@
       font-size: 14px;
       color: $pale;
     }
+  }
+
+  &__item{
+    margin-bottom: 10px;
+    user-select: none;
+    padding: 0 25px;
+    
+    label {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 12px;
+      color: $pale;
+
+      .--checkbox {
+        margin-right: 5px;
+      }
+    }
+
+    &:first-child {
+      padding-top: 25px;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }  
   }
 
   &__create {

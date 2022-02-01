@@ -29,15 +29,32 @@
 
               <FloatModal
                 v-if="collections.isActive"
-                :data="collections"
-                :itemID="album.data._id"
-                dataKey="albums"
-                itemKey="album"
+                :isFetched="collections.isFetched"
+                :isEmpty="!collections.data.length"
                 placeholder="Create new collection"
-                @createNewCollection="createNewCollection"
-                @checkFloatModalItem="addOrRemoveFromCollection"
+                @createNewEntry="createNewCollection"
                 @closeFloatModal="closeCollectionsModal"
-              />
+              >
+                <template v-slot:empty>
+                  <div class="float-modal__empty">
+                    <strong>You haven't created any collections yet</strong>
+                    <span>To create a collection, use the form below</span>
+                  </div>
+                </template>
+
+                <template v-slot:list>
+                  <ul class="float-modal__list">
+                    <FloatModalItem
+                      v-for="item in collections.data"
+                      :key="item.id"
+                      :item="item"
+                      :itemID="album.data._id"
+                      :isChecked="isCollectionItemChecked(item)"
+                      @checkFloatModalItem="addOrRemoveFromCollection"
+                    />
+                  </ul>
+                </template>
+              </FloatModal>
             </div>
           </div>
 
@@ -50,6 +67,7 @@
             <TrackList
               :tracks="album.data.tracks"
               :albumID="album.data._id"
+              :artistID="album.data.artist._id"
               @saveLyrics="saveLyrics"
             />
           </div>
@@ -99,13 +117,15 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { IAlbumFull, AlbumHeadProps } from '~/types/Album'
-import { IFloatModal } from '~/types/Global'
+import { ICollectionPayloadPost, ICollectionBasic } from '~/types/Collection'
+import { IFloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
 import AppButton from '~/components/AppButton.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
+import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
 // import DiscogsTable from '~/components/DiscogsTable.vue'
 import AppModal from '~/components/AppModal.vue'
 import AppSlider from '~/components/AppSlider.vue'
@@ -119,6 +139,7 @@ export default defineComponent({
     AlbumHeading,
     TrackList,
     FloatModal,
+    FloatModalItem,
     // DiscogsTable,
     AppModal,
     AppSlider
@@ -136,16 +157,11 @@ export default defineComponent({
       data: {} as IAlbumFull
     })
 
-    const collections: IFloatModal = reactive({
+    const collections = reactive({
       isFetched: false,
       isActive: false,
-      data: []
+      data: [] as ICollectionBasic[]
     })
-
-    // const booklet = reactive({
-    //   isFetching: false,
-    //   data: []
-    // })
 
     const albumHead: ComputedRef<AlbumHeadProps> = computed(() => ({
       title: album.data.title,
@@ -165,13 +181,17 @@ export default defineComponent({
     //   })) || []
     // ))
 
+    const isCollectionItemChecked = (item: ICollectionBasic) => (
+      item.albums.some((el) => el.album._id === album.data._id)
+    )
+
     const closeCollectionsModal = () => {
       collections.data = []
       collections.isFetched = false
       collections.isActive = false
     }
 
-    const setCollections = (data: any) => {
+    const setCollections = (data: ICollectionBasic[]) => {
       collections.data = data
       collections.isFetched = true
     }
@@ -220,7 +240,10 @@ export default defineComponent({
     }
 
     const createNewCollection = async (title: string) => {
-      const payload = { title, album: album.data._id }
+      const payload: ICollectionPayloadPost = {
+        title,
+        album: album.data._id
+      }
 
       try {
         await api.post('/api/collections/create', payload)
@@ -230,7 +253,7 @@ export default defineComponent({
       }
     }
 
-    const addOrRemoveFromCollection = async (payload: any) => {
+    const addOrRemoveFromCollection = async (payload: IFloatModalCheckAction) => {
       console.log(payload)
       // try {
       //   const response = await axios.patch(`/api/collections/${payload.listID}`, payload)
@@ -305,12 +328,10 @@ export default defineComponent({
       collections,
       createNewCollection,
       closeCollectionsModal,
-      addOrRemoveFromCollection
+      addOrRemoveFromCollection,
+      isCollectionItemChecked
       // discogsData,
       // discogsPagination,
-      // booklet,
-      // lists,
-      // clearfiedLists,
       // switchDiscogsPagination
     }
   }

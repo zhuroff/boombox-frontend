@@ -1,36 +1,60 @@
 <template>
   
-<div
-  class="tracklist__row_cell --pointer --fix"
-  @click="getPlaylists"
->
-  <AppSprite name="plus" />
+<div class="tracklist__row_cell --pointer --fix">
+  <button
+    class="tracklist__row_action"
+    @click="callPlaylistsModal"
+  >
+    <AppSprite name="plus" />
+  </button>
 
   <FloatModal
-    v-if="isModalActive"
-    :data="clearfiedPlaylists"
-    :itemID="trackID"
+    v-if="playlists.isActive"
+    :isFetched="playlists.isFetched"
+    :isEmpty="!playlists.data.length"
     placeholder="Create new playlist"
-    @createNewList="createNewList"
-    @itemAction="itemAction"
-    @closeListModal="closeListModal"
-  />
+    @createNewEntry="createNewPlaylist"
+    @closeFloatModal="closePlaylistModal"
+  >
+    <template v-slot:empty>
+      <div class="float-modal__empty">
+        <strong>You haven't created any playlists yet</strong>
+        <span>To create a playlist, use the form below</span>
+      </div>
+    </template>
+
+    <template v-slot:list>
+      <ul class="float-modal__list">
+        <FloatModalItem
+          v-for="item in playlists.data"
+          :key="item.id"
+          :item="item"
+          :itemID="trackID"
+          :isChecked="isItemChecked(item)"
+          @checkFloatModalItem="playlistItemAction"
+        />
+      </ul>
+    </template>
+  </FloatModal>
 </div>
 
 </template>
 
 <script lang="ts">
 
-import { defineComponent, ref, computed } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import { defineComponent, reactive } from 'vue'
+import { IPlaylistBasic } from '~/types/Playlist'
+import { IFloatModalCheckAction } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
+import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
+import api from '~/api'
 
 export default defineComponent({
   components: {
     AppSprite,
-    FloatModal
+    FloatModal,
+    FloatModalItem
   },
 
   props: {
@@ -41,42 +65,88 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const store = useStore(key)
-    const isModalActive = ref(false)
-    const clearfiedPlaylists = computed(() => (
-      // store.getters.playlists?.map((el: any) => ({
-      //   id: el._id,
-      //   title: el.title,
-      //   items: el.tracks.map((track: any) => track.track)
-      // })) || []
-      []
-    ))
+    const playlists = reactive({
+      isFetched: false,
+      isActive: false,
+      data: [] as IPlaylistBasic[]
+    })
 
-    const getPlaylists = (event: any) => {
-      console.log(event)
-      // const isModalSection = event.composedPath().some((el: any) => el.className === 'applist__modal')
+    const isItemChecked = (item: IPlaylistBasic) => (
+      item.tracks.some((track) => track.track === props.trackID)
+    )
 
-      // if (!isModalSection) {
-      //   isModalActive.value = !isModalActive.value
-      //   store.dispatch('fetchPlaylists')
-      // }
+    const setPlaylists = (data: IPlaylistBasic[]) => {
+      playlists.data = data
+      playlists.isFetched = true
     }
 
-    const closeListModal = () => {
-      isModalActive.value = false
+    const fetchPlaylists = async () => {
+      try {
+        const response = await api.get('/api/playlists')
+
+        if (response.status === 200) {
+          setPlaylists(response.data)
+        }
+      } catch (error) {
+        throw error
+      }
     }
 
-    const createNewList = (title: string) => emit('createNewList', title)
+    const callPlaylistsModal = () => {
+      playlists.isActive = true
+      fetchPlaylists()
+    }
 
-    const itemAction = (payload: any) => emit('itemAction', payload)
+    const closePlaylistModal = () => {
+      playlists.data = []
+      playlists.isFetched = false
+      playlists.isActive = false
+    }
+
+    const createNewPlaylist = async (title: string) => {
+      const payload: IPlaylistBasic = {
+        _id: '',
+        title,
+        tracks: [{
+          _id: '',
+          track: props.trackID,
+          order: 1
+        }]
+      }
+
+      try {
+        await api.post('/api/playlists', payload)
+        playlists.isFetched = false
+        fetchPlaylists()
+      } catch (error) {
+        throw error
+      }
+    }
+
+    const playlistItemAction = async (payload: IFloatModalCheckAction) => {
+      const targetPlaylist = playlists.data.find((playlist) => (
+        playlist._id === payload.listID
+      ))
+
+      if (targetPlaylist) {
+        payload.order = targetPlaylist.tracks.length + 1
+
+        try {
+          await api.patch(`/api/playlists/${payload.listID}`, payload)
+          fetchPlaylists()
+        } catch (error) {
+          throw error
+        }
+      }
+    }
 
     return {
-      isModalActive,
-      clearfiedPlaylists,
-      getPlaylists,
-      closeListModal,
-      createNewList,
-      itemAction
+      playlists,
+      isItemChecked,
+      callPlaylistsModal,
+      closePlaylistModal,
+      createNewPlaylist,
+      playlistItemAction
     }
   }
 })

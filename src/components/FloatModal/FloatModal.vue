@@ -2,103 +2,78 @@
   <div class="float-modal">
     <transition name="fade">
       <AppPreloader
-        v-if="!data.isFetched"
+        v-if="!isFetched"
         mode="light"
       />
     </transition>
 
-    <transition-group name="flyUp">
-      <button
-        class="float-modal__close"
-        key="close"
-        @click="closeFloatModal"
-      >
-        <AppSprite name="delete" />
-      </button>
-
-      <ul
-        v-if="data.isFetched && data.data.length"
-        class="float-modal__list"
-        key="list"
-      >
-        <FloatModalItem
-          v-for="item in data.data"
-          :key="item._id"
-          :item="item"
-          :itemID="itemID"
-          :isChecked="item[dataKey].some((el) => el[itemKey]._id === itemID)"
-          @checkFloatModalItem="checkFloatModalItem"
-        />
-      </ul>
-
-      <div
-        v-if="data.isFetched && !data.data.length"
-        class="float-modal__empty"
-        key="empty"
-      >
-        <strong>You haven't created any collections yet</strong>
-        <span>To create a collection, use the form below</span>
-      </div>
-
-      <form
-        v-if="data.isFetched"
-        class="float-modal__create"
-        key="form"
-        @submit.prevent="createNewCollection"
-      >
-        <input
-          type="text"
-          class="float-modal__input"
-          :placeholder="placeholder"
-          v-model="listName"
-        >
-
+    <transition name="flyUp">
+      <div class="float-modal__content">
         <button
-          class="float-modal__submit"
-          type="submit"
-          :disabled="!listName.length"
+          class="float-modal__close"
+          key="close"
+          @click="closeFloatModal"
         >
-          <span>OK</span>
+          <AppSprite name="delete" />
         </button>
-      </form>
-    </transition-group>
+
+        <slot
+          v-if="isFetched && isEmpty"
+          name="empty"
+        />
+
+        <slot
+          v-if="isFetched && !isEmpty"
+          name="list"
+        />
+
+        <form
+          v-if="isFetched"
+          class="float-modal__create"
+          key="form"
+          @submit.prevent="createNewEntry"
+        >
+          <input
+            type="text"
+            class="float-modal__input"
+            :placeholder="placeholder"
+            v-model="listName"
+          >
+
+          <button
+            class="float-modal__submit"
+            type="submit"
+            :disabled="!listName.length"
+          >
+            <span>OK</span>
+          </button>
+        </form>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
 
 import { defineComponent, ref } from 'vue'
-import { IFloatModal } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AppSprite from '~/components/AppSprite.vue'
-import FloatModalItem from './FloatModalItem.vue'
 import './FloatModal.scss'
 
 export default defineComponent({
   components: {
     AppPreloader,
-    AppSprite,
-    FloatModalItem
+    AppSprite
   },
 
   props: {
-    data: {
-      type: Object as () => IFloatModal,
+    isFetched: {
+      type: Boolean,
       required: true
     },
 
-    itemID: {
-      type: String,
-      required: true
-    },
-
-    dataKey: {
-      type: String,
-      required: true
-    },
-
-    itemKey: {
-      type: String,
+    isEmpty: {
+      type: Boolean,
       required: true
     },
 
@@ -115,19 +90,14 @@ export default defineComponent({
       emit('closeFloatModal')
     }
 
-    const createNewCollection = () => {
-      emit('createNewCollection', listName.value)
-    }
-
-    const checkFloatModalItem = (payload: any) => {
-      emit('checkFloatModalItem', payload)
+    const createNewEntry = () => {
+      emit('createNewEntry', listName.value)
     }
 
     return {
       listName,
-      createNewCollection,
-      closeFloatModal,
-      checkFloatModalItem
+      createNewEntry,
+      closeFloatModal
     }
   }
 })

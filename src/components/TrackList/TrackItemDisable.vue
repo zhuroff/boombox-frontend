@@ -1,10 +1,12 @@
 <template>
   
-<div
-  class="tracklist__row_cell --pointer --fix"
-  @click="disableTrack"
->
-  <AppSprite name="disable" />
+<div class="tracklist__row_cell --pointer --fix">
+  <button
+    class="tracklist__row_action"
+    @click="disableTrack"
+  >
+    <AppSprite name="disable" />
+  </button>
 </div>
 
 </template>

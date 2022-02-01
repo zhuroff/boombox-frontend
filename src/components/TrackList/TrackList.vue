@@ -14,9 +14,6 @@
           :track="track"
           :index="index"
           :isPlaylist="false"
-          @createNewList="createPlaylist"
-          @removeTrackFromPlaylist="playlistAction"
-          @itemAction="playlistAction"
           @saveLyrics="saveLyrics"
         />
       </transition-group>
@@ -52,6 +49,11 @@ export default defineComponent({
     albumID: {
       type: String,
       required: true
+    },
+
+    artistID: {
+      type: String,
+      required: true
     }
   },
 
@@ -73,37 +75,6 @@ export default defineComponent({
       store.commit('changePlaylistOrder', payload)
     }
 
-    const createPlaylist = (data: any) => {
-      console.log(data)
-      // const payload = {
-      //   title: data.title,
-      //   tracks: [{
-      //     track: data.id,
-      //     fileid: data.fileid,
-      //     artist: props.album.artist._id,
-      //     album: props.album._id,
-      //     order: 1
-      //   }]
-      // }
-
-      // store.dispatch('createPlaylist', payload)
-    }
-
-    const playlistAction = async (data: any) => {
-      console.log(data)
-      // const payload = {
-      //   ...data,
-      //   artist: props.album.artist?._id,
-      //   album: props.album._id
-      // }
-
-      // await axios.patch(`/api/playlists/${payload.listID}`, payload)
-
-      // if (props.album.isPlaylist) {
-      //   store.dispatch('fetchPlaylist', payload.listID)
-      // }
-    }
-
     const saveLyrics = async (payload: any) => {
       console.log(payload)
       // emit('saveLyrics', payload)
@@ -112,8 +83,6 @@ export default defineComponent({
     return {
       dragOptions,
       orderChanged,
-      createPlaylist,
-      playlistAction,
       saveLyrics
     }
   }

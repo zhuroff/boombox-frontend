@@ -9,14 +9,15 @@ interface IDraggableEvent {
   oldIndex: number
 }
 
-interface IFloatModal {
-  isFetched: boolean,
-  isActive: boolean,
-  data: any
+interface IFloatModalCheckAction {
+  inList: boolean
+  itemID: string
+  listID: string
+  order?: number
 }
 
 export {
   IPagination,
   IDraggableEvent,
-  IFloatModal
+  IFloatModalCheckAction
 }

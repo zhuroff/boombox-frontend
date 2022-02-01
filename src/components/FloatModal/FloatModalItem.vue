@@ -1,7 +1,7 @@
 <template>
   
-<li class="applist__list_item">
-  <label class="applist__list_item-label">
+<li class="float-modal__item">
+  <label>
     <input
       type="checkbox"
       class="--checkbox"
@@ -16,7 +16,8 @@
 
 <script lang="ts">
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
+import { IFloatModalCheckAction } from '~/types/Global'
 
 export default defineComponent({
   props: {
@@ -40,15 +41,13 @@ export default defineComponent({
   setup(props, { emit }) {
 
     const checkFloatModalItem = () => {
-      // isChecked.value = !isChecked.value
+      const payload: IFloatModalCheckAction = {
+        itemID: props.itemID,
+        listID: props.item._id,
+        inList: props.isChecked
+      }
 
-      // const payload = {
-      //   itemID: props.itemID,
-      //   listID: props.item.id,
-      //   isSave: isChecked.value
-      // }
-
-      // emit('checkFloatModalItem', payload)
+      emit('checkFloatModalItem', payload)
     }
 
     return {
@@ -58,38 +57,3 @@ export default defineComponent({
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.applist__list {
-
-  &_item {
-    margin-bottom: 10px;
-    user-select: none;
-    padding: 0 25px;
-    
-    &-label {
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-      font-size: 12px;
-      color: $pale;
-
-      .--checkbox {
-        margin-right: 5px;
-      }
-    }
-
-    &:first-child {
-      padding-top: 25px;
-    }
-
-    &:last-child {
-      padding-bottom: 0;
-    }
-  }
-}
-
-</style>
