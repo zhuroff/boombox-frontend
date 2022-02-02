@@ -1,6 +1,4 @@
-<template>
-  
-<div class="wrapper">
+<template>  
   <div class="tracklist">
     <VueDraggableNext
       handle=".--drag"
@@ -14,13 +12,10 @@
           :track="track"
           :index="index"
           :isPlaylist="false"
-          @saveLyrics="saveLyrics"
         />
       </transition-group>
     </VueDraggableNext>
   </div>
-</div>
-
 </template>
 
 <script lang="ts">
@@ -33,6 +28,7 @@ import { IOrderPayload } from '~/types/Player'
 import { IDraggableEvent } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
 import TrackItem from './TrackItem.vue'
+import './TrackList.scss'
 
 export default defineComponent({
   components: {
@@ -47,11 +43,6 @@ export default defineComponent({
     },
 
     albumID: {
-      type: String,
-      required: true
-    },
-
-    artistID: {
       type: String,
       required: true
     }
@@ -75,42 +66,11 @@ export default defineComponent({
       store.commit('changePlaylistOrder', payload)
     }
 
-    const saveLyrics = async (payload: any) => {
-      console.log(payload)
-      // emit('saveLyrics', payload)
-    }
-
     return {
       dragOptions,
-      orderChanged,
-      saveLyrics
+      orderChanged
     }
   }
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.flip-list-move {
-  transition: transform 0.5s;
-}
-
-.no-move {
-  transition: transform 0s;
-}
-
-.wrapper {
-  margin: 20px 0;
-
-  &.--placeholder {
-    height: 260px;
-    background: repeating-linear-gradient(-45deg, transparent, transparent 15px, $border 15px, $border 30px);
-    background-size: 150% 150%;
-    animation: placeholder 5s linear infinite;
-  }
-}
-
-</style>

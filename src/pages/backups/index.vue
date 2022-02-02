@@ -42,6 +42,8 @@
 <script lang="ts">
 
 import { defineComponent, ref, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import AppButton from '~/components/AppButton.vue'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import api from '~/api'
@@ -58,6 +60,8 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore(key)
+
     const backups = reactive([]) as unknown as BackupList[]
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
@@ -121,9 +125,16 @@ export default defineComponent({
       try {
         const response = await api.post('/api/sync')
         isSynchronized.value = true
-        console.log(response)
+
+        if (response.status === 200) {
+          store.commit('setSnackbarMessage', {
+            message: response.data.message,
+            type: 'success'
+          })
+        }
       } catch (error) {
-        console.error(error)
+        isSynchronized.value = true
+        throw error
       }
     }
 

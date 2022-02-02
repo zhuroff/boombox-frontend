@@ -44,19 +44,19 @@
     {{ track.listened }}
   </div>
   
-  <!-- <transition name="fade">
-    <AppModal
+  <transition name="fade">
+    <Modal
       v-if="isModalActive"
       :isModalActive="isModalActive"
-      @closeModalForm="closeModalForm"
+      @closeModal="closeModal"
     >
-      <AppLyrics
+      <TrackLyrics
         :lyrics="track.lyrics || ''"
-        :heading="trackTitle"
+        :heading="trackArtistAndTitle"
         @saveLyrics="saveLyrics"
       />
-    </AppModal>
-  </transition> -->
+    </Modal>
+  </transition>
 </div>
 
 </template>
@@ -74,8 +74,9 @@ import TrackItemDuration from './TrackItemDuration.vue'
 // import TrackItemRemove from './TrackItemRemove.vue'
 import TrackItemPlaylist from './TrackItemPlaylist.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
-// import AppModal from '@/components/AppModal.vue'
-// import AppLyrics from '@/components/AppLyrics.vue'
+import Modal from '~/components/Modal/Modal.vue'
+import TrackLyrics from './TrackLyrics.vue'
+import api from '~/api'
 
 export default defineComponent({
   components: {
@@ -86,8 +87,8 @@ export default defineComponent({
     // TrackItemRemove,
     TrackItemPlaylist,
     TrackItemDisable,
-    // AppModal,
-    // AppLyrics
+    Modal,
+    TrackLyrics
   },
 
   props: {
@@ -108,7 +109,10 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const store = useStore(key)
+
     const isModalActive = ref(false)
+
+    const trackArtistAndTitle = computed(() => `${props.track.artist.title} - ${props.track.title}`)
 
     const isPlayingTrack = computed(() => (
       store.getters.playingTrack.fileid === props.track.fileid
@@ -117,9 +121,9 @@ export default defineComponent({
       isModalActive.value = true
     }
 
-    // const closeModalForm = () => {
-    //   isModalActive.value = false
-    // }
+    const closeModal = () => {
+      isModalActive.value = false
+    }
 
     // const removeTrackFromPlaylist = (payload) => {
     //   emit('removeTrackFromPlaylist', {
@@ -129,22 +133,22 @@ export default defineComponent({
     //   })
     // }
 
-    // const saveLyrics = (lyrics) => {
-    //   const payload = {
-    //     lyrics,
-    //     fileid: props.track.fileid
-    //   }
-
-    //   emit('saveLyrics', payload)
-    // }
+    const saveLyrics = async (lyrics: string) => {
+      try {
+        await api.patch(`/api/tracks/${props.track._id}/lyrics`, { lyrics })
+      } catch (error) {
+        throw error
+      }
+    }
 
     return {
       isModalActive,
       isPlayingTrack,
       callLyricsModal,
-      // closeModalForm,
+      closeModal,
       // removeTrackFromPlaylist,
-      // saveLyrics
+      trackArtistAndTitle,
+      saveLyrics
     }
   }
 })

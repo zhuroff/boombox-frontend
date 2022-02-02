@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="[{ '--fullwidth' : isFullWidth }, 'button']"
+    :class="[{ '--fullwidth' : isFullWidth }, { '--outlined' : isOutlined }, 'button']"
     @click="emitButtonClick"
   >
     <span class="button__text">{{ text }}</span>
@@ -16,6 +16,12 @@ export default defineComponent({
     text: {
       type: String,
       required: true
+    },
+
+    isOutlined: {
+      type: Boolean,
+      required: false,
+      default: false
     },
 
     isFullWidth: {
@@ -44,7 +50,7 @@ export default defineComponent({
   justify-content: center;
   height: 40px;
   flex: none;
-  background-color: transparent;
+  background-color: $white;
   border: 1px solid $dark;
   border-radius: 3px;
   padding: 0 20px;
@@ -61,6 +67,23 @@ export default defineComponent({
 
   &.--fullwidth {
     width: 100%;
+  }
+
+  &.--outlined {
+    border-color: $white;
+    background-color: transparent;
+
+    .button__text {
+      color: $white;
+    }
+
+    &:hover {
+      background-color: $white;
+
+      .button__text {
+        color: $dark;
+      }
+    }
   }
 
   &:hover {

@@ -22,7 +22,7 @@
               />
 
               <AppButton
-                text="Add to list"
+                text="Add to collection"
                 isFullWidth
                 @onClick="callCollectionsModal"
               />
@@ -67,8 +67,7 @@
             <TrackList
               :tracks="album.data.tracks"
               :albumID="album.data._id"
-              :artistID="album.data.artist._id"
-              @saveLyrics="saveLyrics"
+              :artist="album.data.artist"
             />
           </div>
         </div>
@@ -83,7 +82,7 @@
     </div>
 
     <transition name="fade">
-      <AppModal
+      <Modal
         v-if="isBookletModalActive"
         :isModalActive="isBookletModalActive"
         @closeModal="closeBookletModal"
@@ -97,7 +96,7 @@
           v-else
           :data="album.data.albumCoverArt"
         />
-      </AppModal>
+      </Modal>
     </transition>
   </section>
 </template>
@@ -127,7 +126,7 @@ import TrackList from '~/components/TrackList/TrackList.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
 import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
 // import DiscogsTable from '~/components/DiscogsTable.vue'
-import AppModal from '~/components/AppModal.vue'
+import Modal from '~/components/Modal/Modal.vue'
 import AppSlider from '~/components/AppSlider.vue'
 import api from '~/api'
 
@@ -141,7 +140,7 @@ export default defineComponent({
     FloatModal,
     FloatModalItem,
     // DiscogsTable,
-    AppModal,
+    Modal,
     AppSlider
   },
 
@@ -301,16 +300,6 @@ export default defineComponent({
       }
     }
 
-    const saveLyrics = async (payload: any) => {
-      console.log(payload)
-      // try {
-      //   await axios.patch(`/api/albums/${store.getters.album._id}/lyrics`, payload)
-      //   store.commit('setAlbumLyrics', payload)
-      // } catch (error) {
-      //   console.error(error.response)
-      // }
-    }
-
     // const switchDiscogsPagination = (page) => {
     //   const payload = {
     //     album: store.getters.album,
@@ -344,7 +333,6 @@ export default defineComponent({
       fetchAlbumBooklet,
       albumHead,
       descriptionHandler,
-      saveLyrics,
       callCollectionsModal,
       isBookletModalActive,
       closeBookletModal,
