@@ -137,6 +137,8 @@ export default defineComponent({
       ))
 
       if (targetPlaylist) {
+        payload.order = targetPlaylist.tracks.length + 1
+
         try {
           const response = await api.patch(`/api/playlists/${payload.listID}`, payload)
 

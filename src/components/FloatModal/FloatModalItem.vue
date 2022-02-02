@@ -44,7 +44,8 @@ export default defineComponent({
       const payload: IFloatModalCheckAction = {
         itemID: props.itemID,
         listID: props.item._id,
-        inList: props.isChecked
+        inList: props.isChecked,
+        order: 0
       }
 
       emit('checkFloatModalItem', payload)

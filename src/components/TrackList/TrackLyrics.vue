@@ -6,7 +6,7 @@
     <AppButton
       text="Get lyrics"
       isOutlined
-      @emitButtonClick="fetchLyrics"
+      @onClick="fetchLyrics"
     />
   </header>
 
@@ -94,6 +94,8 @@
 <script lang="ts">
 
 import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import AppButton from '~/components/AppButton.vue'
 import SimpleBar from 'simplebar'
 import AppTextarea from '~/components/AppTextarea.vue'
@@ -120,6 +122,8 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
+    const store = useStore(key)
+
     const lyricsContent = ref(props.lyrics)
     const expandedLyrics: Ref<null | number> = ref(null)
     const scrollspace = ref(null as any)
@@ -145,11 +149,20 @@ export default defineComponent({
       try {
         const response = await api.post('/api/tracks/lyrics', { query: props.heading })
 
-        fetchedLyrics.data = response.data
-        fetchedLyrics.isFetched = true
         isFetching.value = false
+        
+        if (response) {
+          fetchedLyrics.data = response.data
+          fetchedLyrics.isFetched = true
+        } else {
+          store.commit('setSnackbarMessage', {
+            message: 'Unknown error',
+            type: 'error'
+          })
+        }
       } catch (error) {
         console.log(error)
+        isFetching.value = false
         throw error
       }
     }

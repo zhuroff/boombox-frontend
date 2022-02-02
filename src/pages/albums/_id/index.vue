@@ -268,6 +268,8 @@ export default defineComponent({
       ))
       
       if (targetCollection) {
+        payload.order = targetCollection.albums.length + 1
+
         try {
           const response = await api.patch(`/api/collections/${payload.listID}`, payload)
 

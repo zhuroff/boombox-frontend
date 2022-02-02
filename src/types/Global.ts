@@ -13,6 +13,7 @@ interface IFloatModalCheckAction {
   inList: boolean
   itemID: string
   listID: string
+  order: number
 }
 
 interface ISnackbar {
