@@ -9,6 +9,7 @@
     </router-view>
   </main>
   <AppPlayer />
+  <Snackbar />
 </div>
 
 </template>
@@ -19,12 +20,14 @@ import { defineComponent } from 'vue'
 import AppSidebar from '~/components/AppSidebar.vue'
 import AppHeader from '~/components/AppHeader.vue'
 import AppPlayer from '~/components/Player/AppPlayer.vue'
+import Snackbar from '~/components/Snackbar/Snackbar.vue'
 
 export default defineComponent({
   components: {
     AppSidebar,
     AppHeader,
-    AppPlayer
+    AppPlayer,
+    Snackbar
   }
 })
 

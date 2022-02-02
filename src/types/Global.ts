@@ -13,11 +13,17 @@ interface IFloatModalCheckAction {
   inList: boolean
   itemID: string
   listID: string
-  order?: number
+}
+
+interface ISnackbar {
+  message: string
+  type: 'warning' | 'success' | 'error' | 'info'
+  order: number
 }
 
 export {
   IPagination,
   IDraggableEvent,
-  IFloatModalCheckAction
+  IFloatModalCheckAction,
+  ISnackbar
 }

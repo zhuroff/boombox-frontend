@@ -251,7 +251,11 @@ export default defineComponent({
         const response = await api.post('/api/collections/create', payload)
 
         if (response?.status === 200) {
-          console.log(response.data.message)
+          store.commit('setSnackbarMessage', {
+            message: response.data.message,
+            type: 'success'
+          })
+
           fetchCollections()
         }
       } catch (error) {
@@ -265,13 +269,15 @@ export default defineComponent({
       ))
       
       if (targetCollection) {
-        payload.order = targetCollection.albums.length + 1
-
         try {
           const response = await api.patch(`/api/collections/${payload.listID}`, payload)
 
           if (response?.status === 200) {
-            console.log(response.data.message)
+            store.commit('setSnackbarMessage', {
+              message: response.data.message,
+              type: 'success'
+            })
+
             fetchCollections()
           }
         } catch (error) {

@@ -1,5 +1,6 @@
 import { MutationTree } from 'vuex'
 import { AppStateInterface } from './state'
+import { ISnackbar } from '~/types/Global'
 import { IAlbumFull } from '~/types/Album'
 import { IOrderPayload, ITrackProgress, IPlaylist } from '~/types/Player'
 import { initPlaylist } from './initStates'
@@ -16,6 +17,15 @@ const getChosenTrack = (playlist: IPlaylist, fileid: number) => (
 )
 
 const mutations: MutationTree<AppStateInterface> = {
+  setSnackbarMessage: (state: AppStateInterface, snackbar: ISnackbar) => {
+    state.snackbar.push(snackbar)
+    setTimeout(() => state.snackbar.splice(0, 1), 5000)
+  },
+
+  closeSnackbar: (state: AppStateInterface, index: number) => {
+    state.snackbar.splice(index, 1)
+  },
+
   setPlayerPlaylist: (state: AppStateInterface, data: IAlbumFull) => {
     const playlist = { ...data, tracks: data.tracks }
 

@@ -43,6 +43,8 @@
 <script lang="ts">
 
 import { defineComponent, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import { IPlaylistPayloadPost, IPlaylistBasic } from '~/types/Playlist'
 import { IFloatModalCheckAction } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
@@ -65,6 +67,8 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
+    const store = useStore(key)
+
     const playlists = reactive({
       isFetched: false,
       isActive: false,
@@ -115,7 +119,11 @@ export default defineComponent({
         const response = await api.post('/api/playlists', payload)
 
         if (response?.status === 200) {
-          console.log(response.data.message)
+          store.commit('setSnackbarMessage', {
+            message: response.data.message,
+            type: 'success'
+          })
+          
           fetchPlaylists()
         }
       } catch (error) {
@@ -129,13 +137,15 @@ export default defineComponent({
       ))
 
       if (targetPlaylist) {
-        payload.order = targetPlaylist.tracks.length + 1
-
         try {
           const response = await api.patch(`/api/playlists/${payload.listID}`, payload)
 
           if (response?.status === 200) {
-            console.log(response.data.message)
+            store.commit('setSnackbarMessage', {
+              message: response.data.message,
+              type: 'success'
+            })
+
             fetchPlaylists()
           }
         } catch (error) {
