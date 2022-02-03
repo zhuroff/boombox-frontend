@@ -268,7 +268,9 @@ export default defineComponent({
       ))
       
       if (targetCollection) {
-        payload.order = targetCollection.albums.length + 1
+        payload.order = Math.max(...targetCollection.albums.map((album) => (
+          album.order
+        ))) + 1
 
         try {
           const response = await api.patch(`/api/collections/${payload.listID}`, payload)
