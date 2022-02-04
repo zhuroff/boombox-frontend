@@ -1,162 +1,113 @@
 <template>
   <section class="section">
+    <transition name="fade">
+      <AppPreloader
+        v-if="!albums.isFetched"
+        mode="light"
+      />
+    </transition>
+
     <div id="scrollspace">
-      <ul v-if="albums.isFetched" class="cardlist">
-        <AppCardWrapper
-          v-for="album in albums.data"
-          :key="album._id"
-          deletable
-          @deleteItem="deleteFrameAlbum(album._id)"
-        >
-          <!-- <AppCardFrame
-            :album="album"
-          /> -->
-        </AppCardWrapper>
-      </ul>
-
-      <transition name="slide">
+      <transition-group name="flyUp">
         <div
-          v-if="isModalActive"
-          class="frames__form-wrapper"
+          class="section__heading"
+          key="heading"
         >
-          <button
-            class="frames__form-close"
-            @click="closeModalForm"
-          >
-            <AppSprite name="delete" />
-          </button>
+          <h1 class="section__title">There are {{ albums.pagination.totalDocs }} frames in your collection</h1>
 
-          <form
-            class="frames__form"
-            @submit.prevent="submitForm"
-          >
-            <!-- <AppInput
-              placeholder="Album title"
-              v-model="newAlbumTitle"
-            />
-
-            <AppInput
-              type="textarea"
-              placeholder="iFrame"
-              v-model="newAlbumFrame"
-            /> -->
-
-            <button
-              type="button"
-              class="frames__form-button"
-              @click="callCategoryList('artists')"
-            >{{ newAlbumArtist.title }}</button>
-
-            <button
-              type="button"
-              class="frames__form-button"
-              @click="callCategoryList('genres')"
-            >{{ newAlbumGenre.title }}</button>
-
-            <button
-              type="button"
-              class="frames__form-button"
-              @click="callCategoryList('periods')"
-            >{{ newAlbumYear.title }}</button>
-
-            <input
-              type="submit"
-              class="frames__form-submit"
-              value="Save"
-            >
-
-            <transition name="slide">
-              <div
-                v-if="isCategoryListActive"
-                class="frames__categories"
-              >
-                <div class="frames__categories-title">{{ categoryKey }}</div>
-
-                <button
-                  class="frames__categories-close"
-                  @click="closeCategoryList"
-                >
-                  <AppSprite name="delete" />
-                </button>
-
-                <!-- <AppInput
-                  type="search"
-                  placeholder="Category name"
-                  v-model="categorySearchQuery"
-                  @input="searchCategory"
-                /> -->
-
-                <div
-                  v-if="searchResults"
-                  class="frames__categories-results"
-                >
-                  <ul
-                    v-if="searchResults.length"
-                    class="frames__categories-list"
-                  >
-                    <li
-                      v-for="item in searchResults"
-                      :key="item._id"
-                      class="frames__categories-item"
-                    >
-                      <label>
-                        <input type="radio" @change="chooseCategory(item)">
-                        <span>{{ item.title }}</span>
-                      </label>
-                    </li>
-                  </ul>
-
-                  <div class="frames__categories-empty">
-                    <span v-if="!searchResults.length">No results</span>
-                    <button
-                      type="button"
-                      @click="createNewCategory"
-                    >Save new category</button>
-                  </div>
-                </div>
-              </div>
-            </transition>
-          </form>
+          <Button
+            text="Add new frame"
+            :onClick="callFrameCreatingModal"
+          />
         </div>
+        
+        <ul
+          v-if="albums.isFetched"
+          class="cardlist"
+          key="list"
+        >
+          <CardWrapper
+            v-for="album in albums.data"
+            :key="album._id"
+            deletable
+            @deleteItem="deleteFrameAlbum(album._id)"
+          >
+            <CardFrame :album="album" />
+          </CardWrapper>
+        </ul>
+
+        <AppPagination
+          v-if="albums.isFetched && albums.pagination.totalPages > 1"
+          :pagination="albums.pagination"
+          key="pagination"
+          @switchPagination="switchPagination"
+        />
+      </transition-group>
+
+      <transition name="fade">
+        <Modal
+          v-if="isCreatingFrameModalActive"
+          :isModalActive="isCreatingFrameModalActive"
+          @closeModal="closeCreatingModalFrame"
+        >
+          <FrameForm />
+        </Modal>
       </transition>
 
-      <button
-        class="frames__create"
-        @click="callCreatingModal"
-      >Add new album</button>
+      
     </div>
   </section>
 </template>
 
 <script lang="ts">
 
-import { defineComponent, Ref, ref, reactive, watchEffect } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  Ref,
+  ref,
+  reactive,
+  watchEffect
+} from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { IPagination } from '~/types/Global'
 import { IFrameBasic } from '~/types/Frame'
+import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Button from '~/components/Button/Button.vue'
 import AppSprite from '~/components/AppSprite.vue'
 // import AppInput from '~/components/AppInput.vue'
-import AppCardWrapper from '~/components/AppListCard/AppCardWrapper.vue'
-// import AppCardFrame from '~/components/AppListCard/AppCardFrame.vue'
+import CardWrapper from '~/components/Cards/CardWrapper.vue'
+import CardFrame from '~/components/Cards/CardFrame.vue'
+import AppPagination from '~/components/AppPagination.vue'
+import Modal from '~/components/Modal/Modal.vue'
+import FrameForm from '~/components/Frame/FrameForm.vue'
 import api from '~/api'
 
 export default defineComponent({
   components: {
+    AppPreloader,
+    Button,
     AppSprite,
     // AppInput,
-    AppCardWrapper,
-    // AppCardFrame
+    CardWrapper,
+    CardFrame,
+    AppPagination,
+    Modal,
+    FrameForm
   },
 
   setup() {
     const router = useRouter()
     const route = useRoute()
-    const searchTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
 
-    const page = ref(route.query.p || 1)
-    const limit = ref(40)
-    const sort = reactive({ title: 1 })
+    const searchTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
     const searchResults = ref(null)
+
+    const pageConfig = reactive({
+      page: Number(route.query.p) || 1,
+      sort: { title: 1 },
+      limit: 40
+    })
 
     const albums = reactive({
       isFetched: false,
@@ -164,20 +115,12 @@ export default defineComponent({
       pagination: {} as IPagination
     })
 
-    if (!route.query.p) {
-      router.push({ query: { p: page.value } })
-    }
-
-    const isModalActive = ref(false)
-    const isCategoryListActive = ref(false)
+    const isCreatingFrameModalActive = ref(false)
     const categorySearchQuery = ref('')
-    const categoryKey = ref('')
 
     const newAlbumTitle = ref('')
     const newAlbumFrame = ref('')
-    const newAlbumArtist = reactive({ id: '', title: 'Artist' })
-    const newAlbumGenre = reactive({ id: '', title: 'Genre' })
-    const newAlbumYear = reactive({ id: '', title: 'Year' })
+    
 
     const deleteFrameAlbum = async (id: string) => {
       try {
@@ -203,24 +146,17 @@ export default defineComponent({
       }
     }
 
-    const closeModalForm = () => {
-      isModalActive.value = false
-      isCategoryListActive.value = false
+    const closeCreatingModalFrame = () => {
+      isCreatingFrameModalActive.value = false
       categorySearchQuery.value = ''
       searchResults.value = null
       newAlbumTitle.value = ''
       newAlbumFrame.value = ''
-      newAlbumArtist.id = ''
-      newAlbumGenre.id = ''
-      newAlbumYear.id = ''
     }
 
     const submitForm = async () => {
       const payload = {
         title: newAlbumTitle.value,
-        artist: newAlbumArtist.id,
-        genre: newAlbumGenre.id,
-        releaseYear: newAlbumYear.id,
         iframe: newAlbumFrame.value
       }
 
@@ -228,40 +164,33 @@ export default defineComponent({
         const response = await api.post('/api/frames/create', payload)
 
         albums.data.unshift(response.data)
-        closeModalForm()
+        closeCreatingModalFrame()
       } catch (error) {
         throw error
       }
     }
 
-    const callCreatingModal = () => {
-      isModalActive.value = true
-    }
-
-    const callCategoryList = (key: string) => {
-      isCategoryListActive.value = true
-      categoryKey.value = key
+    const callFrameCreatingModal = () => {
+      isCreatingFrameModalActive.value = true
     }
 
     const closeCategoryList = () => {
-      isCategoryListActive.value = false
       categorySearchQuery.value = ''
       searchResults.value = null
     }
 
-    const fetchSearchedCategory = async (query: any) => {
-      console.log(query)
-      try {
-        const payload = {
-          query,
-          key: categoryKey.value
-        }
+    const fetchSearchedCategory = async (query: string) => {
+      // try {
+      //   const payload = {
+      //     query,
+      //     key: categoryKey.value
+      //   }
 
-        const response = await api.post('/api/search', payload)
-        searchResults.value = response.data
-      } catch (error) {
-        throw error
-      }
+      //   const response = await api.post('/api/search', payload)
+      //   searchResults.value = response.data
+      // } catch (error) {
+      //   throw error
+      // }
     }
 
     const searchCategory = (event: any) => {
@@ -275,83 +204,111 @@ export default defineComponent({
 
     const chooseCategory = (item: any) => {
       console.log(item)
-      if (categoryKey.value === 'artists') {
-        newAlbumArtist.id = item._id
-        newAlbumArtist.title = item.title
-      }
+      // if (categoryKey.value === 'artists') {
+      //   newAlbumArtist.id = item._id
+      //   newAlbumArtist.title = item.title
+      // }
 
-      if (categoryKey.value === 'genres') {
-        newAlbumGenre.id = item._id
-        newAlbumGenre.title = item.title
-      }
+      // if (categoryKey.value === 'genres') {
+      //   newAlbumGenre.id = item._id
+      //   newAlbumGenre.title = item.title
+      // }
 
-      if (categoryKey.value === 'periods') {
-        newAlbumYear.id = item._id
-        newAlbumYear.title = item.title
-      }
+      // if (categoryKey.value === 'periods') {
+      //   newAlbumYear.id = item._id
+      //   newAlbumYear.title = item.title
+      // }
 
       closeCategoryList()
     }
 
     const createNewCategory = async () => {
-      const payload = {
-        category: categoryKey.value,
-        value: categorySearchQuery.value
-      }
+      // const payload = {
+      //   category: categoryKey.value,
+      //   value: categorySearchQuery.value
+      // }
 
-      try {
-        const response = await api.post('/api/synchronize/create', payload)
-        chooseCategory(response.data)
-      } catch (error) {
-        console.error(error)
+      // try {
+      //   const response = await api.post('/api/synchronize/create', payload)
+      //   chooseCategory(response.data)
+      // } catch (error) {
+      //   console.error(error)
+      // }
+    }
+
+    const clearfyFramesList = () => {
+      albums.isFetched = false
+      albums.data = []
+    }
+
+    const switchPagination = (value: number) => {
+      pageConfig.page = value
+
+      clearfyFramesList()
+      changeRoutePage(value)
+      fetchFrameAlbums()
+    }
+
+    const changeRoutePage = (value: number) => {
+      router.push({ query: { p: value } })
+    }
+
+    const setFramesAlbums = (data: { docs: IFrameBasic[], pagination: IPagination }) => {
+      albums.isFetched = true
+      console.log(data)
+
+      if (data) {
+        albums.pagination = data.pagination
+        albums.data = data.docs
       }
     }
 
-    const fetchBCAlbums = async () => {
-      const payload = { page: page.value, limit: limit.value, sort }
-
+    const fetchFrameAlbums = async () => {
       try {        
-        const response = await api.post('/api/frames', payload)
-        albums.data = response.data.docs
-        albums.isFetched = true
+        const response = await api.post('/api/frames', pageConfig)
+        
+        if (response?.status === 200) {
+          setFramesAlbums(response.data)
+        }
       } catch (error) {
         throw error
       }
     }
 
-    fetchBCAlbums()
+    onMounted(() => {
+      if (!route.query.p) {
+        changeRoutePage(pageConfig.page)
+      }
+
+      fetchFrameAlbums()
+    })
 
     watchEffect(() => {
-      if (isModalActive.value) {
-        document.querySelector('.header')?.classList.add('--z-low')
-        document.querySelector('.player')?.classList.add('--z-low')
-      } else {
-        document.querySelector('.header')?.classList.remove('--z-low')
-        document.querySelector('.player')?.classList.remove('--z-low')
-      }
+      // if (isCreatingFrameModalActive.value) {
+      //   document.querySelector('.header')?.classList.add('--z-low')
+      //   document.querySelector('.player')?.classList.add('--z-low')
+      // } else {
+      //   document.querySelector('.header')?.classList.remove('--z-low')
+      //   document.querySelector('.player')?.classList.remove('--z-low')
+      // }
     })
 
     return {
       albums,
       deleteFrameAlbum,
-      isModalActive,
-      isCategoryListActive,
+      isCreatingFrameModalActive,
       newAlbumTitle,
-      newAlbumArtist,
-      newAlbumGenre,
-      newAlbumYear,
       newAlbumFrame,
       submitForm,
-      callCreatingModal,
-      callCategoryList,
-      closeModalForm,
+      callFrameCreatingModal,
+      closeCreatingModalFrame,
       closeCategoryList,
-      categoryKey,
       categorySearchQuery,
       searchCategory,
       searchResults,
       chooseCategory,
-      createNewCategory
+      createNewCategory,
+      switchPagination
     }
   }
 })
@@ -414,12 +371,6 @@ export default defineComponent({
       float: right;
       padding: 0 20px;
     }
-  }
-
-  &__create {
-    // @include button;
-    margin: 0 25px 25px;
-    width: calc(100% - 50px);
   }
 
   &__categories {

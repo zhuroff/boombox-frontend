@@ -13,16 +13,16 @@
           v-if="categories.isFetched"
           class="cardlist"
         >
-          <AppCardWrapper
+          <CardWrapper
             v-for="artist in categories.data"
             :key="artist.id"
           >
-            <AppCardCategory
+            <CardCategory
               :category="artist"
               placeholder="/img/artist.jpg"
               categorySlug="artists"
             />
-          </AppCardWrapper>
+          </CardWrapper>
         </ul>
 
         <AppPagination
@@ -40,15 +40,15 @@
 import { defineComponent } from 'vue'
 import { useCategories } from '~/shared/categories'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import AppCardWrapper from '~/components/AppListCard/AppCardWrapper.vue'
-import AppCardCategory from '~/components/AppListCard/AppCardCategory.vue'
+import CardWrapper from '~/components/Cards/CardWrapper.vue'
+import CardCategory from '~/components/Cards/CardCategory.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
 export default defineComponent({
   components: {
     AppPreloader,
-    AppCardWrapper,
-    AppCardCategory,
+    CardWrapper,
+    CardCategory,
     AppPagination
   },
 

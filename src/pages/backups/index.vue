@@ -13,7 +13,7 @@
           v-if="isPageLoaded"
           class="backups"
         >
-          <AppButton
+          <Button
             text="Create backup"
             @onClick="createBackups"
           />
@@ -29,7 +29,7 @@
             </li>
           </ul>
 
-          <AppButton
+          <Button
             text="Synchronize"
             @onClick="synchronizeCollection"
           />
@@ -44,7 +44,7 @@
 import { defineComponent, ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import AppButton from '~/components/AppButton.vue'
+import Button from '~/components/Button/Button.vue'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import api from '~/api'
 
@@ -55,7 +55,7 @@ interface BackupList {
 
 export default defineComponent({
   components: {
-    AppButton,
+    Button,
     AppPreloader
   },
 

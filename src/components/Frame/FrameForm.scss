@@ -1,0 +1,19 @@
+@import '~/scss/variables';
+
+.form-frame {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+
+  &__row {
+    margin-bottom: 10px;
+
+    .textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 3px;
+      border: 1px solid $border;
+    }
+  }
+}

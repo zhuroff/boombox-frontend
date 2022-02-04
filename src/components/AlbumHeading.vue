@@ -30,12 +30,12 @@
       {{ albumHead.genre.title }}
     </router-link>
 
-    <AppTextarea
-      :initHeight="44"
+    <Textarea
+      :rows="2"
       :content="albumDescription"
       classname="album__description"
       placeholder="Type some description..."
-      @typeText="textInputHandler"
+      @setTextareaValue="textInputHandler"
     />
   </div>
 </div>
@@ -46,11 +46,11 @@
 
 import { defineComponent, ComputedRef, computed } from 'vue'
 import { AlbumHeadProps } from '~/types/Album'
-import AppTextarea from '~/components/AppTextarea.vue'
+import Textarea from '~/components/Inputs/Textarea.vue'
 
 export default defineComponent({
   components: {
-    AppTextarea
+    Textarea
   },
 
   props: {

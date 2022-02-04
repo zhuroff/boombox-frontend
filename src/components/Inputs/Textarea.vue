@@ -3,12 +3,12 @@
 <textarea
   :placeholder="placeholder"
   :class="`textarea ${classname}`"
-  :style="`height: ${initHeight}px`"
+  :rows="rows"
   :disabled="isDisabled"
   v-model="text"
   ref="textElement"
   spellcheck="false"
-  @input="typeText"
+  @input="emitTextareaValue"
 ></textarea>
 
 </template>
@@ -25,7 +25,7 @@ export default defineComponent({
       default: ''
     },
 
-    initHeight: {
+    rows: {
       type: Number,
       required: true,
       validator: (value: number) => value > 0
@@ -71,15 +71,15 @@ export default defineComponent({
       setTimeout(() => resizeTextarea(), 0)
     })
 
-    const typeText = () => {
+    const emitTextareaValue = () => {
       resizeTextarea()
-      emit('typeText', text.value)
+      emit('setTextareaValue', text.value)
     }
 
     return {
       textElement,
       text,
-      typeText
+      emitTextareaValue
     }
   }
 })

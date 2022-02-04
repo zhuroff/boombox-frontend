@@ -3,12 +3,12 @@
 <div class="container">
   <AppSidebar />
   <main class="main">
-    <AppHeader />
+    <Header />
     <router-view v-slot="{ Component }">
       <component :is="Component" />
     </router-view>
   </main>
-  <AppPlayer />
+  <Player />
   <Snackbar />
 </div>
 
@@ -16,17 +16,17 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import AppSidebar from '~/components/AppSidebar.vue'
-import AppHeader from '~/components/AppHeader.vue'
-import AppPlayer from '~/components/Player/AppPlayer.vue'
+import Header from '~/components/Header/Header.vue'
+import Player from '~/components/Player/Player.vue'
 import Snackbar from '~/components/Snackbar/Snackbar.vue'
 
 export default defineComponent({
   components: {
     AppSidebar,
-    AppHeader,
-    AppPlayer,
+    Header,
+    Player,
     Snackbar
   }
 })

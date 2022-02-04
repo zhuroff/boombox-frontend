@@ -1,7 +1,6 @@
 <template>
   <header class="header">
-    <!-- <AppSearch />
-    <AppSync /> -->
+    <!-- <AppSearch /> -->
   </header>
 </template>
 
@@ -9,13 +8,11 @@
 
 import { defineComponent } from 'vue'
 // import AppSearch from './AppSearch.vue'
-// import AppSync from './AppSync.vue'
 
 export default defineComponent({
-  // components: {
-  //   AppSearch,
-  //   AppSync
-  // }
+  components: {
+    // AppSearch,
+  }
 })
 
 </script>

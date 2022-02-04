@@ -24,14 +24,14 @@
       v-if="playingTrack.fileid"
       class="player__right-content"
     >
-      <AppPlayerRepeatTrack />
-      <AppPlayerPrevTrack />
-      <AppPlayerPlayPause />
-      <AppPlayerNextTrack />
-      <AppPlayerProgressBar />
-      <AppPlayerCrackle />
-      <AppPlayerSound />
-      <AppPlayerExternal />
+      <PlayerRepeatTrack />
+      <PlayerPrevTrack />
+      <PlayerPlayPause />
+      <PlayerNextTrack />
+      <PlayerProgressBar />
+      <PlayerCrackle />
+      <PlayerSound />
+      <PlayerExternal />
     </div>
   </div>
 </section>
@@ -42,27 +42,28 @@
 
 import { defineComponent, onMounted, onUnmounted, reactive } from 'vue'
 import usePlayer from './usePlayer'
-import AppPlayerRepeatTrack from './AppPlayerRepeatTrack.vue'
-import AppPlayerPrevTrack from './AppPlayerPrevTrack.vue'
-import AppPlayerNextTrack from './AppPlayerNextTrack.vue'
-import AppPlayerPlayPause from './AppPlayerPlayPause.vue'
-import AppPlayerProgressBar from './AppPlayerProgressBar.vue'
-import AppPlayerCrackle from './AppPlayerCrackle.vue'
-import AppPlayerSound from './AppPlayerSound.vue'
-import AppPlayerExternal from './AppPlayerExternal.vue'
+import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
+import PlayerPrevTrack from './PlayerPrevTrack.vue'
+import PlayerNextTrack from './PlayerNextTrack.vue'
+import PlayerPlayPause from './PlayerPlayPause.vue'
+import PlayerProgressBar from './PlayerProgressBar.vue'
+import PlayerCrackle from './PlayerCrackle.vue'
+import PlayerSound from './PlayerSound.vue'
+import PlayerExternal from './PlayerExternal.vue'
+import './Player.scss'
 
 type PlayerKeyNav = 'Space' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown'
 
 export default defineComponent({
   components: {
-    AppPlayerRepeatTrack,
-    AppPlayerPrevTrack,
-    AppPlayerNextTrack,
-    AppPlayerPlayPause,
-    AppPlayerProgressBar,
-    AppPlayerCrackle,
-    AppPlayerSound,
-    AppPlayerExternal
+    PlayerRepeatTrack,
+    PlayerPrevTrack,
+    PlayerNextTrack,
+    PlayerPlayPause,
+    PlayerProgressBar,
+    PlayerCrackle,
+    PlayerSound,
+    PlayerExternal
   },
 
   setup() {

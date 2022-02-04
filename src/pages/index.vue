@@ -44,12 +44,12 @@
         v-if="allNews.length"
         class="news__list"
       >
-        <AppCardWrapper
+        <CardWrapper
           v-for="item in allNews"
           :key="item.id"
         >
           <AppCardNews :item="item" />
-        </AppCardWrapper>
+        </CardWrapper>
       </ul>
 
       <AppPagination
@@ -79,15 +79,15 @@ import { defineComponent } from 'vue'
 // import { useRoute, useRouter } from 'vue-router'
 // import { formatDates } from '@/helpers/formatters'
 // import AppPreloader from '@/components/AppPreloader.vue'
-// import AppCardWrapper from '@/components/AppListCard/AppCardWrapper.vue'
-// import AppCardNews from '@/components/AppListCard/AppCardNews.vue'
+// import CardWrapper from '@/components/Cards/CardWrapper.vue'
+// import AppCardNews from '@/components/Cards/AppCardNews.vue'
 // import AppPagination from '@/components/AppPagination.vue'
 // import AppSnackbar from '@/components/AppSnackbar.vue'
 
 export default defineComponent({
   // components: {
   //   AppPreloader,
-  //   AppCardWrapper,
+  //   CardWrapper,
   //   AppCardNews,
   //   AppPagination,
   //   AppSnackbar

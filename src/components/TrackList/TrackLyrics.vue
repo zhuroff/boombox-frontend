@@ -3,7 +3,7 @@
 <div class="lyrics">
   <header class="lyrics__header">
     <div class="lyrics__heading">{{ heading }}</div>
-    <AppButton
+    <Button
       text="Get lyrics"
       isOutlined
       @onClick="fetchLyrics"
@@ -28,13 +28,13 @@
       >No lyrics here yet</div>
     </transition>
 
-    <AppTextarea
+    <Textarea
       v-if="!isFetching && !fetchedLyrics.data.length"
-      :initHeight="44"
+      :rows="3"
       :content="lyricsContent"
       classname="lyrics__text"
       placeholder="You can add lyrics manually in this field, or use the search button above."
-      @typeText="setLyrics"
+      @setTextareaValue="setLyrics"
     />
 
     <div
@@ -70,9 +70,9 @@
               @click="saveLyrics(item.lyrics)"
             >Save lyrics</button>
 
-            <AppTextarea
+            <Textarea
               v-if="expandedLyrics === index"
-              :initHeight="44"
+              :rows="3"
               :content="item.lyrics"
               classname="lyrics__item_text"
               isDisabled
@@ -96,16 +96,16 @@
 import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import AppButton from '~/components/AppButton.vue'
+import Button from '~/components/Button/Button.vue'
 import SimpleBar from 'simplebar'
-import AppTextarea from '~/components/AppTextarea.vue'
+import Textarea from '~/components/Inputs/Textarea.vue'
 import Preloader from '~/components/Preloader/Preloader.vue'
 import api from '~/api'
 
 export default defineComponent({
   components: {
-    AppButton,
-    AppTextarea,
+    Button,
+    Textarea,
     Preloader
   },
 

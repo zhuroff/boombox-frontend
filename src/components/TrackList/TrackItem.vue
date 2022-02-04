@@ -135,7 +135,14 @@ export default defineComponent({
 
     const saveLyrics = async (lyrics: string) => {
       try {
-        await api.patch(`/api/tracks/${props.track._id}/lyrics`, { lyrics })
+        const response = await api.patch(`/api/tracks/${props.track._id}/lyrics`, { lyrics })
+        
+        if (response?.status === 200) {
+            store.commit('setSnackbarMessage', {
+              message: response.data.message,
+              type: 'success'
+            })
+          }
       } catch (error) {
         throw error
       }

@@ -20,15 +20,15 @@
           v-if="category.isFetched"
           class="cardlist"
         >
-          <AppCardWrapper
+          <CardWrapper
             v-for="album in category.data.albums"
             :key="album.folderid"
           >
             <component
-              :is="album.iframe ? 'AppCardFrame' : 'AppCardAlbum'"
+              :is="album.iframe ? 'CardFrame' : 'CardAlbum'"
               :album="album"
             />
-          </AppCardWrapper>
+          </CardWrapper>
         </ul>
       </transition-group>
     </div>
@@ -40,18 +40,18 @@
 import { defineComponent } from 'vue'
 import { useCategory } from '~/shared/categories'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CategoryHero from '~/components/AppCategories/CategoryHero.vue'
-import AppCardWrapper from '~/components/AppListCard/AppCardWrapper.vue'
-import AppCardAlbum from '~/components/AppListCard/AppCardAlbum.vue'
-import AppCardFrame from '~/components/AppListCard/AppCardFrame.vue'
+import CategoryHero from '~/components/Hero/CategoryHero.vue'
+import CardWrapper from '~/components/Cards/CardWrapper.vue'
+import CardAlbum from '~/components/Cards/CardAlbum.vue'
+import CardFrame from '~/components/Cards/CardFrame.vue'
 
 export default defineComponent({
   components: {
     AppPreloader,
     CategoryHero,
-    AppCardWrapper,
-    AppCardAlbum,
-    AppCardFrame
+    CardWrapper,
+    CardAlbum,
+    CardFrame
   },
 
   setup() {

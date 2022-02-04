@@ -21,7 +21,7 @@
                 @coverClick="fetchAlbumBooklet"
               />
 
-              <AppButton
+              <Button
                 text="Add to collection"
                 isFullWidth
                 @onClick="callCollectionsModal"
@@ -120,7 +120,7 @@ import { ICollectionPayloadPost, ICollectionBasic } from '~/types/Collection'
 import { IFloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
-import AppButton from '~/components/AppButton.vue'
+import Button from '~/components/Button/Button.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
@@ -133,7 +133,7 @@ import api from '~/api'
 export default defineComponent({
   components: {
     AlbumCoverArt,
-    AppButton,
+    Button,
     AppPreloader,
     AlbumHeading,
     TrackList,

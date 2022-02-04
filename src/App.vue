@@ -23,7 +23,6 @@ export default defineComponent({
     const syncMessage = localStorage.getItem('syncMessage')
 
     if (syncMessage) {
-      console.log(syncMessage)
       localStorage.removeItem('syncMessage')
     }
 
