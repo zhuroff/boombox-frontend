@@ -1,6 +1,7 @@
 <template>
   <button
     :class="[{ '--fullwidth' : isFullWidth }, { '--outlined' : isOutlined }, 'button']"
+    :type="type"
     @click="emitButtonClick"
   >
     <span class="button__text">{{ text }}</span>
@@ -16,6 +17,12 @@ export default defineComponent({
     text: {
       type: String,
       required: true
+    },
+
+    type: {
+      type: String,
+      required: false,
+      default: 'button'
     },
 
     isOutlined: {

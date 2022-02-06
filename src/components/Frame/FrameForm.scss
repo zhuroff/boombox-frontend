@@ -5,6 +5,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 400px;
+  position: relative;
 
   &__row {
     margin-bottom: 10px;
@@ -14,6 +15,45 @@
       padding: 10px;
       border-radius: 3px;
       border: 1px solid $border;
+    }
+  }
+
+  &__categories {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: $white;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  &__heading {
+    font-weight: 700;
+    margin-bottom: 15px;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  &__close {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .icon {
+      width: 18px;
+      height: 18px;
     }
   }
 }

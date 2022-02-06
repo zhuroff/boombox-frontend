@@ -1,5 +1,8 @@
 <template>
-  <form class="form-frame">
+  <form
+    class="form-frame"
+    @submit.prevent="saveNewFrame"
+  >
     <div class="form-frame__row">
       <InputText
         type="text"
@@ -17,35 +20,68 @@
     </div>
 
     <div class="form-frame__row">
-      <button
-        type="button"
-        class="frames__form-button"
-        @click="callCategoryList('artists')"
-      >{{ newArtist.title }}</button>
+      <Button
+        :text="newFrame.artist.title"
+        isFullWidth
+        @onClick="openCloseCategoryList('artists')"
+      />
     </div>
 
     <div class="form-frame__row">
-      <button
-        type="button"
-        class="frames__form-button"
-        @click="callCategoryList('genres')"
-      >{{ newGenre.title }}</button>
+      <Button
+        :text="newFrame.genre.title"
+        isFullWidth
+        @onClick="openCloseCategoryList('genres')"
+      />
     </div>
 
     <div class="form-frame__row">
-      <button
-        type="button"
-        class="frames__form-button"
-        @click="callCategoryList('periods')"
-      >{{ newPeriod.title }}</button>
+      <Button
+        :text="newFrame.period.title"
+        isFullWidth
+        @onClick="openCloseCategoryList('periods')"
+      />
     </div>
 
     <div class="form-frame__row">
-      <input
+      <Button
+        text="Save"
         type="submit"
-        class="frames__form-submit"
-        value="Save"
+      />
+    </div>
+
+    <div
+      v-if="categoryState.isActive"
+      class="form-frame__categories"
+    >
+      <div class="form-frame__heading">{{ categoryState.key }}</div>
+      <button
+        class="form-frame__close"
+        @click="openCloseCategoryList('')"
       >
+        <AppSprite name="delete" />
+      </button>
+
+      <div class="form-frame__row">
+        <InputText
+          type="text"
+          placeholder="Search..."
+          @setInputValue="searchByQuery"
+        />
+      </div>
+
+      <ul
+        v-if="categoryState.results.length"
+        class="form-frame__results"
+      >
+        <li
+          v-for="item in categoryState.results"
+          :key="item._id"
+          class="form-frame__result"
+        >
+          {{ item.title }}
+        </li>
+      </ul>
     </div>
   </form>
 
@@ -53,21 +89,6 @@
                 v-if="isCategoryListActive"
                 class="frames__categories"
               >
-                <div class="frames__categories-title">{{ categoryKey }}</div>
-
-                <button
-                  class="frames__categories-close"
-                  @click="closeCategoryList"
-                >
-                  <AppSprite name="delete" />
-                </button>
-
-                <AppInput
-                  type="search"
-                  placeholder="Category name"
-                  v-model="categorySearchQuery"
-                  @input="searchCategory"
-                />
 
                 <div
                   v-if="searchResults"
@@ -102,48 +123,94 @@
 
 <script lang="ts">
 
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, Ref, ref, reactive } from 'vue'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
+import Button from '~/components/Button/Button.vue'
+import AppSprite from '~/components/AppSprite.vue'
+import api from '~/api'
 import './FrameForm.scss'
 
 export default defineComponent({
   components: {
     InputText,
-    Textarea
+    Textarea,
+    Button,
+    AppSprite
   },
 
   setup() {
-    const newArtist = reactive({ id: '', title: 'Artist' })
-    const newGenre = reactive({ id: '', title: 'Genre' })
-    const newPeriod = reactive({ id: '', title: 'Year' })
+    const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
+
+    const newFrame = reactive({
+      title: '',
+      frame: '',
+      artist: { id: '', title: 'Artist' },
+      genre: { id: '', title: 'Genre' },
+      period: { id: '', title: 'Year' }
+    })
 
     const categoryState = reactive({
       isActive: false,
       key: '',
-      search: ''
+      results: []
     })
 
     const setFrameTitle = (value: string) => {
-      console.log(value)
+      newFrame.title = value
     }
 
     const setFrameCode = (value: any) => {
-      console.log(value)
+      newFrame.frame = value
     }
 
-    const callCategoryList = (key: string) => {
-      categoryState.isActive = true
+    const openCloseCategoryList = (key: string) => {
+      categoryState.isActive = !categoryState.isActive
       categoryState.key = key
+      categoryState.results = []
+    }
+
+    const setSearchResults = (data: any) => {
+      console.log(data)
+      categoryState.results = data
+    }
+
+    const postSearchQuery = async (query: string) => {
+      const payload = {
+        query,
+        key: categoryState.key
+      }
+
+      try {
+        const response = await api.post('/api/search', payload)
+        
+        if (response?.status === 200) {
+          setSearchResults(response.data)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const searchByQuery = (value: string) => {
+      if (typeof inputTimer.value === 'number') {
+        clearTimeout(inputTimer.value)
+        inputTimer.value = setTimeout(() => postSearchQuery(value), 2000)
+      }
+    }
+
+    const saveNewFrame = () => {
+      console.log('submit')
     }
 
     return {
-      newArtist,
-      newGenre,
-      newPeriod,
+      newFrame,
       setFrameTitle,
       setFrameCode,
-      callCategoryList
+      openCloseCategoryList,
+      searchByQuery,
+      categoryState,
+      saveNewFrame
     }
   },
 })
