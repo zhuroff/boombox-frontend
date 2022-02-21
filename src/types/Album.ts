@@ -1,6 +1,7 @@
-import { ICategoryBasic } from '~/types/Category'
+import { ICategoryBasic } from './Category'
+import { IPagination } from './Global'
 
-interface IAlbumTrack {
+type IAlbumTrack = {
   _id: string
   fileid: number
   link: string
@@ -13,7 +14,7 @@ interface IAlbumTrack {
   order?: number
 }
 
-interface IAlbumBasic {
+type IAlbumBasic = {
   _id: string
   albumCover: string
   title: string
@@ -23,11 +24,16 @@ interface IAlbumBasic {
   folderid?: number
 }
 
-interface IAlbumFull extends IAlbumBasic {
+type IAlbumFull = IAlbumBasic & {
   albumCoverArt: number | string[]
   description: string
   tracks: IAlbumTrack[]
   isLoaded: boolean
+}
+
+type AlbumBasicResponse = {
+  docs: IAlbumBasic[]
+  pagination: IPagination
 }
 
 type AlbumHeadProps = {
@@ -42,5 +48,6 @@ export {
   IAlbumBasic,
   IAlbumFull,
   IAlbumTrack,
+  AlbumBasicResponse,
   AlbumHeadProps
 }

@@ -1,30 +1,42 @@
-interface IPagination {
+type IPagination = {
   totalDocs: number
   totalPages: number
   page: number
 }
 
-interface IDraggableEvent {
+type IDraggableEvent = {
   newIndex: number
   oldIndex: number
 }
 
-interface IFloatModalCheckAction {
+type IFloatModalCheckAction = {
   inList: boolean
   itemID: string
   listID: string
   order: number
 }
 
-interface ISnackbar {
+type ISnackbar = {
   message: string
   type: 'warning' | 'success' | 'error' | 'info'
   order: number
+}
+
+type RequestConfig = {
+  page: number
+  sort: { [index: string]: number },
+  limit: number
+}
+
+type ResponseMessage = {
+  message: string | number
 }
 
 export {
   IPagination,
   IDraggableEvent,
   IFloatModalCheckAction,
-  ISnackbar
+  ISnackbar,
+  RequestConfig,
+  ResponseMessage
 }

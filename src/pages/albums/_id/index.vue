@@ -72,13 +72,6 @@
           </div>
         </div>
       </transition>
-
-      <!-- <DiscogsTable
-        v-if="discogsData.length"
-        :data="discogsData"
-        :pagination="discogsPagination"
-        @switchPagination="switchDiscogsPagination"
-      /> -->
     </div>
 
     <transition name="fade">
@@ -116,7 +109,7 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { IAlbumFull, AlbumHeadProps } from '~/types/Album'
-import { ICollectionPayloadPost, ICollectionBasic } from '~/types/Collection'
+import { ICollectionBasic } from '~/types/Collection'
 import { IFloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
@@ -125,10 +118,10 @@ import AlbumHeading from '~/components/AlbumHeading.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
 import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
-// import DiscogsTable from '~/components/DiscogsTable.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import AppSlider from '~/components/AppSlider.vue'
-import api from '~/api'
+import AlbumServices from '~/services/AlbumServices'
+import CollectionServices from '~/services/CollectionServices'
 
 export default defineComponent({
   components: {
@@ -139,7 +132,6 @@ export default defineComponent({
     TrackList,
     FloatModal,
     FloatModalItem,
-    // DiscogsTable,
     Modal,
     AppSlider
   },
@@ -162,23 +154,10 @@ export default defineComponent({
       data: [] as ICollectionBasic[]
     })
 
-    const albumHead: ComputedRef<AlbumHeadProps> = computed(() => ({
-      title: album.data.title,
-      artist: album.data.artist,
-      period: album.data.period,
-      genre: album.data.genre,
-      description: album.data.description
-    }))
-
-    // const discogsData = reactive(computed(() => store.getters.discogsData))
-    // const discogsPagination = computed(() => store.getters.discogsPagination)
-    // const clearfiedLists = computed(() => (
-    //   lists.value?.map((el) => ({
-    //     id: el._id,
-    //     title: el.title,
-    //     items: el.albums.map((album) => album.album._id)
-    //   })) || []
-    // ))
+    const albumHead: ComputedRef<AlbumHeadProps> = computed(() => {
+      const { title, artist, period, genre, description } = album.data
+      return { title, artist, period, genre, description }
+    })
 
     const isCollectionItemChecked = (item: ICollectionBasic) => (
       item.albums.some((el) => el.album._id === album.data._id)
@@ -195,16 +174,10 @@ export default defineComponent({
       collections.isFetched = true
     }
 
-    const fetchCollections = async () => {
-      try {
-        const response = await api.get('/api/collections')
-
-        if (response.status === 200) {
-          setCollections(response.data)
-        }
-      } catch (error) {
-        throw error
-      }
+    const fetchCollections = () => {
+      CollectionServices.list()
+        .then((result) => setCollections(result))
+        .catch((ignore) => ignore)
     }
 
     const callCollectionsModal = () => {
@@ -212,25 +185,19 @@ export default defineComponent({
       fetchCollections()
     }
 
-    const setAlbumBooklet = (data: { albumCover: string }[]) => {
-      album.data.albumCoverArt = data.map((el) => el.albumCover)
+    const setAlbumBooklet = (data: string[]) => {
+      album.data.albumCoverArt = data
     }
 
-    const fetchAlbumBooklet = async () => {
+    const fetchAlbumBooklet = () => {
       if (Array.isArray(album.data.albumCoverArt)) {
         isBookletModalActive.value = true
       } else if (album.data.albumCoverArt > 0) {
         isBookletModalActive.value = true
 
-        try {
-          const response = await api.get(`/api/albums/${album.data._id}/${album.data.albumCoverArt}`)
-          
-          if (response?.status === 201) {
-            setAlbumBooklet(response.data)
-          }
-        } catch (error) {
-          throw error
-        }
+        AlbumServices.booklet(album.data._id, album.data.albumCoverArt)
+          .then((result) => setAlbumBooklet(result))
+          .catch((ignore) => ignore)
       }
     }
 
@@ -238,96 +205,47 @@ export default defineComponent({
       isBookletModalActive.value = false
     }
 
-    const createNewCollection = async (title: string) => {
+    const createNewCollection = (title: string) => {
       collections.isFetched = false
 
-      const payload: ICollectionPayloadPost = {
-        title,
-        album: album.data._id
-      }
-
-      try {
-        const response = await api.post('/api/collections/create', payload)
-
-        if (response?.status === 200) {
-          store.commit('setSnackbarMessage', {
-            message: response.data.message,
-            type: 'success'
-          })
-
+      CollectionServices.create(title, album.data._id)
+        .then((result) => {
+          store.commit('setSnackbarMessage', result)
           fetchCollections()
-        }
-      } catch (error) {
-        throw error
-      }
+        })
+        .catch((ignore) => ignore)
     }
 
-    const addOrRemoveFromCollection = async (payload: IFloatModalCheckAction) => {
-      const targetCollection = collections.data.find((collection) => (
-        collection._id === payload.listID
-      ))
-      
-      if (targetCollection) {
-        payload.order = Math.max(...targetCollection.albums.map((album) => (
-          album.order
-        ))) + 1
-
-        try {
-          const response = await api.patch(`/api/collections/${payload.listID}`, payload)
-
-          if (response?.status === 200) {
-            store.commit('setSnackbarMessage', {
-              message: response.data.message,
-              type: 'success'
-            })
-
-            fetchCollections()
-          }
-        } catch (error) {
-          throw error
-        }
-      }
+    const addOrRemoveFromCollection = (payload: IFloatModalCheckAction) => {
+      CollectionServices.addRemove(collections.data, payload)
+        .then((result) => {
+          store.commit('setSnackbarMessage', result)
+          fetchCollections()
+        })
+        .catch((ignore) => ignore)
     }
 
-    const patchDescription = async (value: string) => {
-      try {
-        await api.patch(`/api/albums/${route.params.id}/description`, { description: value })
-      } catch (error) {
-        throw error
-      }
-    }
-
-    const descriptionHandler = (value: string) => {
+    const descriptionHandler = (description: string) => {
       if (typeof inputTimer.value === 'number') {
         clearTimeout(inputTimer.value)
-        inputTimer.value = setTimeout(() => patchDescription(value), 2000)
+        inputTimer.value = setTimeout(() => (
+          AlbumServices.description(String(route.params.id), description)
+        ), 1000)
       }
     }
 
-    // const switchDiscogsPagination = (page) => {
-    //   const payload = {
-    //     album: store.getters.album,
-    //     page: page
-    //   }
-      
-    //   store.dispatch('fetchDiscogsData', payload)
-    // }
     const setAlbumState = (data: IAlbumFull) => {
       album.data = data
       album.isFetched = true
     }
 
-    const fetchAlbumEntry = async () => {
-      try {
-        const response = await api.get(`/api/albums/${route.params.id}`)
-
-        if (response?.status === 200) {
-          setAlbumState(response.data)
-          store.commit('setPlayerPlaylist', response.data)
-        }
-      } catch (error) {
-        throw error
-      }
+    const fetchAlbumEntry = () => {
+      AlbumServices.album(String(route.params.id))
+        .then((data) => {
+          setAlbumState(data)
+          store.commit('setPlayerPlaylist', data)
+        })
+        .catch((ignore) => ignore)
     }
     
     onMounted(() => fetchAlbumEntry())
@@ -345,9 +263,6 @@ export default defineComponent({
       closeCollectionsModal,
       addOrRemoveFromCollection,
       isCollectionItemChecked
-      // discogsData,
-      // discogsPagination,
-      // switchDiscogsPagination
     }
   }
 })

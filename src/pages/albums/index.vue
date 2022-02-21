@@ -46,13 +46,13 @@
 
 import { defineComponent, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { IAlbumBasic } from '~/types/Album'
-import { IPagination } from '~/types/Global'
+import { AlbumBasicResponse, IAlbumBasic } from '~/types/Album'
+import { IPagination, RequestConfig } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import AppCardAlbum from '~/components/AppCardAlbum.vue'
 import AppPagination from '~/components/AppPagination.vue'
-import api from '~/api'
+import AlbumServices from '~/services/AlbumServices'
 
 export default defineComponent({
   components: {
@@ -66,7 +66,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
-    const pageConfig = reactive({
+    const pageConfig = reactive<RequestConfig>({
       page: Number(route.query.p) || 1,
       sort: { title: 1 },
       limit: 40
@@ -95,25 +95,16 @@ export default defineComponent({
       fetchAlbums()
     }
 
-    const setFetchedData = (data: { docs: IAlbumBasic[], pagination: IPagination }) => {
+    const setFetchedData = (data: AlbumBasicResponse) => {
+      albums.pagination = data.pagination
+      albums.data = data.docs
       albums.isFetched = true
-
-      if (data) {
-        albums.pagination = data.pagination
-        albums.data = data.docs
-      }
     }
 
-    const fetchAlbums = async () => {
-      try {
-        const response = await api.post('/api/albums', pageConfig)
-
-        if (response?.status === 200) {
-          setFetchedData(response.data)
-        }
-      } catch (error) {
-        throw error
-      }
+    const fetchAlbums = () => {
+      AlbumServices.list(pageConfig)
+        .then((data) => setFetchedData(data))
+        .catch((ignore) => ignore)
     }
 
     onMounted(() => {
