@@ -14,10 +14,10 @@ export default class AlbumServices {
   }
 
   static async album(id: string): Promise<IAlbumFull> {
-    const response = await api.get<{ album: IAlbumFull }>(`/api/albums/${id}`)
+    const response = await api.get<IAlbumFull>(`/api/albums/${id}`)
 
     if (response?.status === 200) {
-      return response.data.album
+      return response.data
     }
 
     throw new Error('Failed request')
