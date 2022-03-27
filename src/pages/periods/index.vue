@@ -1,69 +1,32 @@
 <template>
-  <section class="section">
-    <transition name="fade">
-      <AppPreloader
-        v-if="!categories.isFetched"
-        mode="light"
-      />
-    </transition>
-      
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <ul
-          v-if="categories.isFetched"
-          class="cardlist"
-        >
-          <CardWrapper
-            v-for="period in categories.data"
-            :key="period.id"
-          >
-            <CardCategory
-              :category="period"
-              placeholder="/img/calendar.png"
-              categorySlug="periods"
-            />
-          </CardWrapper>
-        </ul>
-
-        <AppPagination
-          v-if="categories.isFetched && categories.pagination.totalPages > 1"
-          :pagination="categories.pagination"
-          @switchPagination="switchPagination"
-        />
-      </transition-group>
-    </div>
-  </section>
+  <Component :is="routeComponent" />
 </template>
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
-import { useCategories } from '~/shared/categories'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import CardCategory from '~/components/Cards/CardCategory.vue'
-import AppPagination from '~/components/AppPagination.vue'
+import { defineComponent, computed } from '@vue/runtime-core'
+import { useRoute } from 'vue-router'
+import PeriodsList from './list/index.vue'
+import PeriodPage from './_id/index.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
-    CardWrapper,
-    CardCategory,
-    AppPagination
+    PeriodsList,
+    PeriodPage
   },
 
   setup() {
-    const apiQuery = '/api/periods'
+    const route = useRoute()
 
-    const {
-      categories,
-      switchPagination
-    } = useCategories(apiQuery)
+    const routeComponent = computed(() => {
+      if (route.name === 'Periods') {
+        return PeriodsList
+      }
 
-    return {
-      categories,
-      switchPagination
-    }
+      return PeriodPage
+    })
+
+    return { routeComponent }
   }
 })
 

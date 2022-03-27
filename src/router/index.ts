@@ -11,13 +11,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/albums',
     name: 'Albums',
-    component: () => import(/* webpackChunkName: 'albums' */ '~/pages/albums/index.vue')
-  },
-
-  {
-    path: '/albums/:id',
-    name: 'Album',
-    component: () => import(/* webpackChunkName: 'album' */ '~/pages/albums/_id/index.vue')
+    component: () => import(/* webpackChunkName: 'albums' */ '~/pages/albums/index.vue'),
+    children: [
+      {
+        path: '/albums/:id',
+        name: 'Album',
+        component: () => import(/* webpackChunkName: 'albums' */ '~/pages/albums/index.vue')
+      }
+    ]
   },
 
   {
@@ -35,37 +36,40 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/artists',
     name: 'Artists',
-    component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/index.vue')
-  },
-
-  {
-    path: '/artists/:id',
-    name: 'Artist',
-    component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/_id/index.vue')
+    component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/index.vue'),
+    children: [
+      {
+        path: '/artists/:id',
+        name: 'Artist',
+        component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/index.vue')
+      }
+    ]
   },
 
   {
     path: '/genres',
     name: 'Genres',
-    component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/index.vue')
-  },
-
-  {
-    path: '/genres/:id',
-    name: 'Genre',
-    component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/_id/index.vue')
+    component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/index.vue'),
+    children: [
+      {
+        path: '/genres/:id',
+        name: 'Genre',
+        component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/index.vue')
+      }
+    ]
   },
 
   {
     path: '/periods',
     name: 'Periods',
-    component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/index.vue')
-  },
-
-  {
-    path: '/periods/:id',
-    name: 'Period',
-    component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/_id/index.vue')
+    component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/index.vue'),
+    children: [
+      {
+        path: '/periods/:id',
+        name: 'Period',
+        component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/index.vue')
+      }
+    ]
   },
 
   // {

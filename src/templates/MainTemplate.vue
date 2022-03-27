@@ -1,7 +1,7 @@
 <template>
 
 <div class="container">
-  <AppSidebar />
+  <Sidebar />
   <main class="main">
     <Header />
     <router-view v-slot="{ Component }">
@@ -17,14 +17,14 @@
 <script lang="ts">
 
 import { defineComponent, computed } from 'vue'
-import AppSidebar from '~/components/AppSidebar.vue'
+import Sidebar from '~/components/Sidebar/Sidebar.vue'
 import Header from '~/components/Header/Header.vue'
 import Player from '~/components/Player/Player.vue'
 import Snackbar from '~/components/Snackbar/Snackbar.vue'
 
 export default defineComponent({
   components: {
-    AppSidebar,
+    Sidebar,
     Header,
     Player,
     Snackbar
