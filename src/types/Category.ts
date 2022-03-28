@@ -1,9 +1,11 @@
 import { IAlbumBasic } from '~/types/Album'
-import { IFrameBasic } from '~/types/Frame'
+import { FrameBasic } from '~/types/Frame'
 
 type CategoryImagesKeys = 'poster' | 'avatar'
+type CategoryKeysSingular = 'artist' | 'genre' | 'period'
+type CategoryKeysPlural = 'artists' | 'genres' | 'periods'
 
-interface ICategoryBasic {
+type ICategoryBasic = {
   _id: string
   title: string
 }
@@ -15,14 +17,22 @@ interface ICategoryMedium extends ICategoryBasic {
 
 interface ICategoryFull extends ICategoryBasic {
   poster: string
-  albums: IAlbumBasic[] | IFrameBasic[]
-  frames?: IFrameBasic[]
+  albums: IAlbumBasic[] | FrameBasic[]
+  frames?: FrameBasic[]
   avatar: string | undefined
+}
+
+type CategorySearchResult = ICategoryBasic & {
+  poster: string
+  avatar: string
 }
 
 export {
   CategoryImagesKeys,
+  CategoryKeysSingular,
+  CategoryKeysPlural,
   ICategoryBasic,
   ICategoryMedium,
-  ICategoryFull
+  ICategoryFull,
+  CategorySearchResult
 }

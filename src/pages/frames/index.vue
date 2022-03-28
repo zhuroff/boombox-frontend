@@ -71,7 +71,7 @@ import {
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { IPagination } from '~/types/Global'
-import { IFrameBasic } from '~/types/Frame'
+import { FramePage } from '~/types/Frame'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import AppSprite from '~/components/AppSprite.vue'
@@ -111,7 +111,7 @@ export default defineComponent({
 
     const albums = reactive({
       isFetched: false,
-      data: [] as IFrameBasic[],
+      data: [] as FramePage[],
       pagination: {} as IPagination
     })
 
@@ -139,10 +139,10 @@ export default defineComponent({
           }
 
           const response = await api.post(`/api/frames/${id}/delete`, payload)
-          console.log(response)
+          // console.log(response)
         }
       } catch (error) {
-        console.error(error)
+        console.dir(error)
       }
     }
 
@@ -203,7 +203,7 @@ export default defineComponent({
     }
 
     const chooseCategory = (item: any) => {
-      console.log(item)
+      console.log('index', item)
       // if (categoryKey.value === 'artists') {
       //   newAlbumArtist.id = item._id
       //   newAlbumArtist.title = item.title
@@ -253,9 +253,9 @@ export default defineComponent({
       router.push({ query: { p: value } })
     }
 
-    const setFramesAlbums = (data: { docs: IFrameBasic[], pagination: IPagination }) => {
+    const setFramesAlbums = (data: { docs: FramePage[], pagination: IPagination }) => {
       albums.isFetched = true
-      console.log(data)
+      // console.log(data)
 
       if (data) {
         albums.pagination = data.pagination

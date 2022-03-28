@@ -1,8 +1,8 @@
+import api from '~/api'
 import { reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { IPagination } from '~/types/Global'
 import { ICategoryMedium, ICategoryFull, CategoryImagesKeys } from '~/types/Category'
-import api from '~/api'
 
 const useCategories = (apiQuery: string) => {
   const router = useRouter()

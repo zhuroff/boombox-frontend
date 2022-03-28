@@ -1,14 +1,18 @@
 import { ICategoryBasic } from '~/types/Category'
 
-interface IFrameBasic {
-  _id: string
+type FrameBasic = {
   title: string
   artist: ICategoryBasic
   genre: ICategoryBasic
   period: ICategoryBasic
-  iframe: string
+  frame: string
+}
+
+type FramePage = FrameBasic & {
+  _id: string
 }
 
 export {
-  IFrameBasic
+  FrameBasic,
+  FramePage
 }

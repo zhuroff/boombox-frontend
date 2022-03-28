@@ -23,7 +23,7 @@
       <Button
         :text="newFrame.artist.title"
         isFullWidth
-        @onClick="openCloseCategoryList('artists')"
+        @onClick="openCategoryList('artists')"
       />
     </div>
 
@@ -31,7 +31,7 @@
       <Button
         :text="newFrame.genre.title"
         isFullWidth
-        @onClick="openCloseCategoryList('genres')"
+        @onClick="openCategoryList('genres')"
       />
     </div>
 
@@ -39,7 +39,7 @@
       <Button
         :text="newFrame.period.title"
         isFullWidth
-        @onClick="openCloseCategoryList('periods')"
+        @onClick="openCategoryList('periods')"
       />
     </div>
 
@@ -57,7 +57,7 @@
       <div class="form-frame__heading">{{ categoryState.key }}</div>
       <button
         class="form-frame__close"
-        @click="openCloseCategoryList('')"
+        @click="closeCategoryList"
       >
         <AppSprite name="delete" />
       </button>
@@ -69,19 +69,24 @@
           @setInputValue="searchByQuery"
         />
       </div>
-
-      <ul
+      
+      <FrameResults
         v-if="categoryState.results.length"
-        class="form-frame__results"
+        :items="categoryState.results"
+        :defaultAvatar="keysMatcher[categoryState.key]"
+        @selectCategory="selectCategory"
+      />
+
+      <div
+        v-if="categoryState.isActive && !categoryState.results.length"
+        class="form-frame__empty"
       >
-        <li
-          v-for="item in categoryState.results"
-          :key="item._id"
-          class="form-frame__result"
-        >
-          {{ item.title }}
-        </li>
-      </ul>
+        <span>No results</span>
+        <button
+          type="button"
+          @click="createCategory"
+        >Save new category</button>
+      </div>
     </div>
   </form>
 
@@ -128,32 +133,42 @@ import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
 import AppSprite from '~/components/AppSprite.vue'
+import FrameResults from './FrameResults.vue'
 import api from '~/api'
 import './FrameForm.scss'
+import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult } from '~/types/Category'
+import { FrameBasic } from '~/types/Frame'
 
 export default defineComponent({
   components: {
     InputText,
     Textarea,
     Button,
-    AppSprite
+    AppSprite,
+    FrameResults
   },
 
   setup() {
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
 
-    const newFrame = reactive({
+    const keysMatcher = reactive<{ [index: string]: CategoryKeysSingular }>({
+      artists: 'artist',
+      genres: 'genre',
+      periods: 'period'
+    })
+
+    const newFrame = reactive<FrameBasic>({
       title: '',
       frame: '',
-      artist: { id: '', title: 'Artist' },
-      genre: { id: '', title: 'Genre' },
-      period: { id: '', title: 'Year' }
+      artist: { _id: '', title: 'Artist' },
+      genre: { _id: '', title: 'Genre' },
+      period: { _id: '', title: 'Year' }
     })
 
     const categoryState = reactive({
       isActive: false,
-      key: '',
-      results: []
+      key: '' as CategoryKeysPlural,
+      results: [] as CategorySearchResult[]
     })
 
     const setFrameTitle = (value: string) => {
@@ -164,14 +179,18 @@ export default defineComponent({
       newFrame.frame = value
     }
 
-    const openCloseCategoryList = (key: string) => {
-      categoryState.isActive = !categoryState.isActive
+    const openCategoryList = (key: CategoryKeysPlural) => {
+      categoryState.isActive = true
       categoryState.key = key
       categoryState.results = []
     }
 
-    const setSearchResults = (data: any) => {
-      console.log(data)
+    const closeCategoryList = () => {
+      categoryState.isActive = false
+      categoryState.results = []
+    }
+
+    const setSearchResults = (data: CategorySearchResult[]) => {
       categoryState.results = data
     }
 
@@ -203,14 +222,31 @@ export default defineComponent({
       console.log('submit')
     }
 
+    const selectCategory = (category: CategorySearchResult) => {
+      newFrame[keysMatcher[categoryState.key]] = {
+        _id: category._id,
+        title: category.title
+      }
+
+      closeCategoryList()
+    }
+
+    const createCategory = () => {
+      console.log(categoryState)
+    }
+
     return {
       newFrame,
       setFrameTitle,
       setFrameCode,
-      openCloseCategoryList,
+      openCategoryList,
       searchByQuery,
       categoryState,
-      saveNewFrame
+      saveNewFrame,
+      selectCategory,
+      closeCategoryList,
+      keysMatcher,
+      createCategory
     }
   },
 })
