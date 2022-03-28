@@ -51,10 +51,10 @@
     </div>
 
     <div
-      v-if="categoryState.isActive"
+      v-if="activeCategory.isActive"
       class="form-frame__categories"
     >
-      <div class="form-frame__heading">{{ categoryState.key }}</div>
+      <div class="form-frame__heading">{{ activeCategory.key }}</div>
       <button
         class="form-frame__close"
         @click="closeCategoryList"
@@ -71,14 +71,14 @@
       </div>
       
       <FrameResults
-        v-if="categoryState.results.length"
-        :items="categoryState.results"
-        :defaultAvatar="keysMatcher[categoryState.key]"
+        v-if="activeCategory.results.length"
+        :items="activeCategory.results"
+        :defaultAvatar="keysMatcher[activeCategory.key]"
         @selectCategory="selectCategory"
       />
 
       <div
-        v-if="categoryState.isActive && !categoryState.results.length"
+        v-if="activeCategory.isActive && !activeCategory.results.length"
         class="form-frame__empty"
       >
         <span>No results</span>
@@ -165,7 +165,7 @@ export default defineComponent({
       period: { _id: '', title: 'Year' }
     })
 
-    const categoryState = reactive({
+    const activeCategory = reactive({
       isActive: false,
       key: '' as CategoryKeysPlural,
       results: [] as CategorySearchResult[]
@@ -175,29 +175,29 @@ export default defineComponent({
       newFrame.title = value
     }
 
-    const setFrameCode = (value: any) => {
+    const setFrameCode = (value: string) => {
       newFrame.frame = value
     }
 
     const openCategoryList = (key: CategoryKeysPlural) => {
-      categoryState.isActive = true
-      categoryState.key = key
-      categoryState.results = []
+      activeCategory.isActive = true
+      activeCategory.key = key
+      activeCategory.results = []
     }
 
     const closeCategoryList = () => {
-      categoryState.isActive = false
-      categoryState.results = []
+      activeCategory.isActive = false
+      activeCategory.results = []
     }
 
     const setSearchResults = (data: CategorySearchResult[]) => {
-      categoryState.results = data
+      activeCategory.results = data
     }
 
     const postSearchQuery = async (query: string) => {
       const payload = {
         query,
-        key: categoryState.key
+        key: activeCategory.key
       }
 
       try {
@@ -223,7 +223,7 @@ export default defineComponent({
     }
 
     const selectCategory = (category: CategorySearchResult) => {
-      newFrame[keysMatcher[categoryState.key]] = {
+      newFrame[keysMatcher[activeCategory.key]] = {
         _id: category._id,
         title: category.title
       }
@@ -232,7 +232,7 @@ export default defineComponent({
     }
 
     const createCategory = () => {
-      console.log(categoryState)
+      console.log(activeCategory)
     }
 
     return {
@@ -241,7 +241,7 @@ export default defineComponent({
       setFrameCode,
       openCategoryList,
       searchByQuery,
-      categoryState,
+      activeCategory,
       saveNewFrame,
       selectCategory,
       closeCategoryList,

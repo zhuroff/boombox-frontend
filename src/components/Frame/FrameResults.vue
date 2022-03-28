@@ -1,22 +1,20 @@
 <template>
 
-<div class="form-frame__results">
-  <ul class="form-frame__categories">
-    <li
-      v-for="item in items"
-      :key="item._id"
-      class="form-frame__category"
-      @click="selectCategory(item)"
+<ul class="form-frame__results">
+  <li
+    v-for="item in items"
+    :key="item._id"
+    class="form-frame__result"
+    @click="selectCategory(item)"
+  >
+    <img
+      :src="host(item.avatar)"
+      :alt="item.title"
+      class="form-frame__avatar"
     >
-      <img
-        :src="host(item.avatar)"
-        :alt="item.title"
-        class="form-frame__avatar"
-      >
-      <span class="form-frame__title">{{ item.title }}</span>
-    </li>
-  </ul>
-</div>
+    <span class="form-frame__title">{{ item.title }}</span>
+  </li>
+</ul>
 
 </template>
 
@@ -63,7 +61,7 @@ export default defineComponent({
 
 .form-frame {
 
-  &__category {
+  &__result {
     display: flex;
     align-items: center;
     cursor: pointer;
