@@ -24,13 +24,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/frames',
     name: 'Frames',
-    component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/index.vue')
-  },
-
-  {
-    path: '/frames/:id',
-    name: 'Frame',
-    component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/_id/index.vue')
+    component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/index.vue'),
+    children: [
+      {
+        path: '/frames/:id',
+        name: 'Frame',
+        component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/index.vue')
+      }
+    ]
   },
 
   {
