@@ -1,51 +1,43 @@
 <template>
   
 <a
-  :href="item.site_url"
+  :href="item.siteUrl"
   target="_blank"
   class="news__link"
 >
   <img
-    :src="item.images[0].image"
+    :src="item.imageUrl"
     :alt="item.title"
     class="news__thumbnail"
   />
 
-  <time class="news__dates">{{ readableDate }}</time>
+  <time class="news__dates">{{ item.dates }}</time>
   <div class="news__title">{{ item.title }}</div>
   <div class="news__description">{{ item.description }}</div>
   <div
-    v-if="item.price || item.is_free"
+    v-if="item.price || item.isFree"
     class="news__price"
   >
-    <span v-if="item.is_free" class="--free">Бесплатно</span>
+    <span v-if="item.isFree" class="--free">Бесплатно</span>
     <span v-else-if="item.price" class="--paid">{{ item.price }}</span>
   </div>
 </a>
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { computed } from 'vue'
-import { formatDates } from '@/helpers/formatters'
+import { defineComponent } from 'vue'
+import { NewsPage } from '~/types/News'
 
-export default {
+export default defineComponent({
   props: {
     item: {
-      type: Object,
+      type: Object as () => NewsPage,
       required: true
     }
-  },
-
-  setup(props) {
-    const readableDate = computed(() => formatDates(props.item.dates))
-
-    return {
-      readableDate
-    }
   }
-}
+})
 
 </script>
 

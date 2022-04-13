@@ -1,21 +1,28 @@
 <template>
 
 <section class="section">
+  <transition name="fade">
+    <AppPreloader
+      v-if="!isFetched"
+      mode="light"
+    />
+  </transition>
+
   <div id="scrollspace">
-    <!-- <div class="hero">
-      <transition-group name="fade">
+    <transition-group name="flyUp">
+      <div class="hero">
         <div
-          v-if="allNews.length"
+          v-if="isFetched"
           class="hero__wrapper"
         >
           <div class="hero__content">
             <time class="hero__content-header">
-              {{ readableDate(topNews.dates) }}
+              {{ topNews.dates }}
             </time>
             <div class="hero__content-title">{{ topNews.title }}</div>
             <div class="hero__content-description">{{ topNews.description }}</div>
             <a
-              :href="topNews.site_url"
+              :href="topNews.siteUrl"
               target="_blank"
               class="hero__content-link"
             >Read more</a>
@@ -23,118 +30,122 @@
           
           <div class="hero__cover">
             <img
-              :src="topNews.images[0].image"
+              :src="topNews.imageUrl"
               :alt="topNews.title"
               class="hero__cover-image"
             >
           </div>
         </div>
+      </div>
 
-        <div
-          v-else-if="!allNews.length && !errorMessage"
-          class="hero__placeholder"
-        >
-          <AppPreloader />
-        </div>
-      </transition-group>
-    </div>
-
-    <div class="news">
-      <ul
-        v-if="allNews.length"
-        class="news__list"
+      <div
+        v-if="isFetched"
+        class="news"
       >
-        <CardWrapper
-          v-for="item in allNews"
-          :key="item.id"
+        <ul
+          v-if="restNews.length"
+          class="news__list"
         >
-          <AppCardNews :item="item" />
-        </CardWrapper>
-      </ul>
+          <CardWrapper
+            v-for="item in restNews"
+            :key="item.id"
+          >
+            <CardNews :item="item" />
+          </CardWrapper>
+        </ul>
 
-      <AppPagination
-        v-if="!errorMessage"
-        :pagination="pagination"
-        :isSelectable="false"
-        @switchPagination="switchPagination"
-      />
-    </div> -->
+        <AppPagination
+          v-if="isFetched && pagination.totalPages > 1"
+          :pagination="pagination"
+          key="pagination"
+          @switchPagination="switchPagination"
+        />
+      </div>
+    </transition-group>
   </div>
-
-  <!-- <AppSnackbar
-    v-if="errorMessage"
-    :message="errorMessage"
-    buttonText="To first page"
-    type="error"
-    @snackClickhandler="switchPagination(1)"
-  /> -->
 </section>
 
 </template>
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
-// import { useStore } from 'vuex'
-// import { useRoute, useRouter } from 'vue-router'
-// import { formatDates } from '@/helpers/formatters'
-// import AppPreloader from '@/components/AppPreloader.vue'
-// import CardWrapper from '@/components/Cards/CardWrapper.vue'
-// import AppCardNews from '@/components/Cards/AppCardNews.vue'
-// import AppPagination from '@/components/AppPagination.vue'
-// import AppSnackbar from '@/components/AppSnackbar.vue'
+import { defineComponent, computed, onMounted, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import AppPreloader from '~/components/Preloader/Preloader.vue'
+import CardWrapper from '~/components/Cards/CardWrapper.vue'
+import CardNews from '~/components/Cards/CardNews.vue'
+import AppPagination from '~/components/AppPagination.vue'
+import NewsServices from '~/services/NewsServices'
+import { IPagination, RequestConfig } from '~/types/Global'
+import { NewsPage, NewsPageResponse } from '~/types/News'
 
 export default defineComponent({
-  // components: {
-  //   AppPreloader,
-  //   CardWrapper,
-  //   AppCardNews,
-  //   AppPagination,
-  //   AppSnackbar
-  // },
+  components: {
+    AppPreloader,
+    CardWrapper,
+    CardNews,
+    AppPagination
+  },
 
   setup() {
-    // const store = useStore()
-    // const route = useRoute()
-    // const router = useRouter()
+    const route = useRoute()
+    const router = useRouter()
 
-    // const page = ref(route.query.p || 1)
+    const pageConfig = reactive<RequestConfig>({
+      page: Number(route.query.p) || 1,
+      sort: { title: 1 },
+      limit: 33
+    })
 
-    // if (!route.query.p) {
-    //   router.push({ query: { p: page.value } })
-    // }
+    const news = reactive({
+      isFetched: false,
+      data: [] as NewsPage[],
+      pagination: {} as IPagination
+    })
 
-    // const topNews = computed(() => store.getters.topNews)
-    // const allNews = computed(() => store.getters.allNews)
-    // const errorMessage = computed(() => store.getters.errorMessage)
-    // const pagination = computed(() => (
-    //   {
-    //     page: Number(page.value),
-    //     totalPages: Infinity
-    //   }
-    // ))
+    const isFetched = computed(() => news.isFetched)
+    const topNews = computed(() => news.data[0])
+    const restNews = computed(() => news.data.filter((_, index) => index > 0))
+    const pagination = computed(() => news.pagination)
 
-    // const readableDate = (dates) => formatDates(dates)
+    const switchPagination = (value: number) => {
+      news.isFetched = false
+      pageConfig.page = value
+      router.push({ query: { p: value } })
+      fetchNews()
+    }
 
-    // const switchPagination = (value) => {
-    //   page.value = value
-    //   router.push({ query: { p: page.value } })
-    //   store.commit('setNews', [{}])
-    //   store.dispatch('fetchNews', page.value)
-    // }
+    const setFetchedData = (data: NewsPageResponse) => {
+      news.pagination = data.pagination
+      news.data = data.docs
+      news.isFetched = true
+    }
+
+    const fetchNews = async () => {
+      NewsServices.list(pageConfig)
+        .then((events) => setFetchedData(events))
+        .catch((ignore) => ignore)   
+    }
+
+    const changeRoutePage = (value: number) => {
+      router.push({ query: { p: value } })
+    }
     
-    // if (!allNews.value.length) {
-    //   store.dispatch('fetchNews', page.value)
-    // }
+    onMounted(() => {
+      if (!route.query.p) {
+        changeRoutePage(pageConfig.page)
+      }
 
-    // return {
-    //   topNews,
-    //   allNews,
-    //   errorMessage,
-    //   readableDate,
-    //   pagination,
-    //   switchPagination
-    // }
+      fetchNews()
+    })
+
+    return {
+      isFetched,
+      topNews,
+      restNews,
+      pagination,
+      switchPagination
+    }
   }
 })
 
