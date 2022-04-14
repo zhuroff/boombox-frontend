@@ -15,20 +15,10 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // const store = useStore(key)
-
     if (error.response) {
-      const statusCode = error.response?.status
-      const responseData = error.response.data
-      console.log(statusCode)
-      console.log(responseData)
-
-      // if ('error' in responseData) {
-      //   store.commit('setSnackbarMessage', {
-      //     message: responseData.error,
-      //     type: 'error'
-      //   })
-      // }
+      throw error.response.data
+    } else {
+      console.dir(error)
     }
   }
 )

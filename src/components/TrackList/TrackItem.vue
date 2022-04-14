@@ -24,7 +24,7 @@
   <TrackItemTitle
     :title="track.title"
     :id="track._id"
-    @callLyricsModal="callLyricsModal"
+    @callLyricsModal="lyricsModalSwitcher"
   />
 
   <TrackItemDuration :duration="track.duration" />
@@ -49,12 +49,11 @@
     <Modal
       v-if="isModalActive"
       :isModalActive="isModalActive"
-      @closeModal="closeModal"
+      @closeModal="lyricsModalSwitcher"
     >
       <TrackLyrics
-        :lyrics="trackLyrics"
         :heading="trackArtistAndTitle"
-        @saveLyrics="saveLyrics"
+        :id="track._id"
       />
     </Modal>
   </transition>
@@ -77,7 +76,6 @@ import TrackItemPlaylist from './TrackItemPlaylist.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import TrackLyrics from './TrackLyrics.vue'
-import api from '~/api'
 
 export default defineComponent({
   components: {
@@ -108,36 +106,21 @@ export default defineComponent({
     }
   },
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore(key)
 
     const isModalActive = ref(false)
 
-    const trackArtistAndTitle = computed(() => `${props.track.artist.title} - ${props.track.title}`)
+    const trackArtistAndTitle = computed(() => (
+      `${props.track.artist.title} - ${props.track.title}`
+    ))
 
     const isPlayingTrack = computed(() => (
       store.getters.playingTrack.fileid === props.track.fileid
     ))
 
-    const trackLyrics = ref('')
-
-    const fetchTrackLyrics = async (id: string) => {
-      try {
-        const response = await api.get(`/api/tracks/${id}/lyrics`)
-        trackLyrics.value = response?.data.lyrics
-      } catch (error) {
-        console.dir(error)
-      }
-    }
-
-    const callLyricsModal = (id: string) => {
-      isModalActive.value = true
-      fetchTrackLyrics(id)
-    }
-
-    const closeModal = () => {
-      isModalActive.value = false
-      trackLyrics.value = ''
+    const lyricsModalSwitcher = () => {
+      isModalActive.value = !isModalActive.value
     }
 
     // const removeTrackFromPlaylist = (payload) => {
@@ -148,30 +131,12 @@ export default defineComponent({
     //   })
     // }
 
-    const saveLyrics = async (lyrics: string) => {
-      try {
-        const response = await api.patch(`/api/tracks/${props.track._id}/lyrics`, { lyrics })
-        
-        if (response?.status === 200) {
-            store.commit('setSnackbarMessage', {
-              message: response.data.message,
-              type: 'success'
-            })
-          }
-      } catch (error) {
-        throw error
-      }
-    }
-
     return {
       isModalActive,
       isPlayingTrack,
-      callLyricsModal,
-      trackLyrics,
-      closeModal,
+      lyricsModalSwitcher,
       // removeTrackFromPlaylist,
-      trackArtistAndTitle,
-      saveLyrics
+      trackArtistAndTitle
     }
   }
 })

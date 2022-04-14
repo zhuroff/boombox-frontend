@@ -3,11 +3,13 @@
 <div class="lyrics">
   <header class="lyrics__header">
     <div class="lyrics__heading">{{ heading }}</div>
+
     <Button
       text="Get lyrics"
       isOutlined
       @onClick="fetchLyrics"
     />
+
   </header>
 
   <div class="lyrics__content">
@@ -20,33 +22,33 @@
 
     <transition
       name="flyUp"
-      v-if="!fetchedLyrics.isFetched"
+      v-if="!isFetching"
     >
       <div
-        v-if="!lyricsContent"
+        v-if="!lyrics && !fetchedLyrics.length"
         class="lyrics__empty"
       >No lyrics here yet</div>
     </transition>
 
     <Textarea
-      v-if="!isFetching && !fetchedLyrics.data.length"
+      v-if="!isFetching && !fetchedLyrics.length"
       :rows="3"
-      :content="lyricsContent"
+      :content="lyrics"
       classname="lyrics__text"
       placeholder="You can add lyrics manually in this field, or use the search button above."
-      @setTextareaValue="setLyrics"
+      @setTextareaValue="updateLyrics"
     />
 
     <div
-      v-if="fetchedLyrics.isFetched"
+      v-if="!isFetching"
       class="lyrics__results"
     >
       <ul
-        v-if="fetchedLyrics.data.length"
+        v-if="fetchedLyrics.length"
         class="lyrics__list"
       >
         <li
-          v-for="(item, index) in fetchedLyrics.data"
+          v-for="(item, index) in fetchedLyrics"
           :key="index"
           class="lyrics__item"
         >
@@ -80,11 +82,6 @@
           </div>
         </li>
       </ul>
-
-      <div
-        v-else
-        class="lyrics__empty"
-      >Nothing was found</div>
     </div>
   </div>
 </div>
@@ -93,14 +90,15 @@
 
 <script lang="ts">
 
-import { defineComponent, Ref, ref, reactive, onMounted, computed } from 'vue'
+import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
+import { TrackLyricsResponse } from '~/types/Track'
 import Button from '~/components/Button/Button.vue'
 import SimpleBar from 'simplebar'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Preloader from '~/components/Preloader/Preloader.vue'
-import api from '~/api'
+import TrackServices from '~/services/TrackServices'
 
 export default defineComponent({
   components: {
@@ -110,27 +108,82 @@ export default defineComponent({
   },
 
   props: {
-    lyrics: {
+    heading: {
       type: String,
-      required: false
+      required: true
     },
 
-    heading: {
+    id: {
       type: String,
       required: true
     }
   },
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore(key)
 
-    const initialLyrics = ref(props.lyrics)
+    const lyrics: Ref<null | string> = ref(null)
     const expandedLyrics: Ref<null | number> = ref(null)
     const scrollspace = ref(null as any)
     const isFetching = ref(false)
-    const fetchErrorMessage = ref(null)
+    const fetchedLyrics = reactive<TrackLyricsResponse[]>([])
+
+    const updateLyrics = (value: string) => {
+      lyrics.value = value
+    }
+
+    const setFoundLyrics = (data: TrackLyricsResponse[]) => {
+      isFetching.value = false
+      fetchedLyrics.push(...data)
+    }
+
+    const setNotFoundLyricsError = (error: { message: string }) => {
+      isFetching.value = false
+
+      store.commit('setSnackbarMessage', {
+        message: error.message,
+        type: 'error'
+      })
+    }
+
+    const fetchLyrics = () => {
+      isFetching.value = true
+
+      TrackServices.searchLyrics(props.heading)
+        .then((result) => setFoundLyrics(result))
+        .catch((error) => setNotFoundLyricsError(error))
+    }
+
+    const expandLyrics = (index: number) => {
+      expandedLyrics.value =
+        index === expandedLyrics.value
+          ? null
+          : index
+    }
+
+    const saveLyrics = (payload: string) => {
+      lyrics.value = payload
+      fetchedLyrics.length = 0
+
+      TrackServices.saveLyrics(props.id, payload)
+        .then((message) => {
+          store.commit('setSnackbarMessage', {
+            message,
+            type: 'success'
+          })
+        })
+        .catch((error) => console.dir(error))
+    }
+
+    const fetchTrackLyrics = async (id: string) => {
+      TrackServices.fetchLyrics(id)
+        .then((data) => lyrics.value = data)
+        .catch((error) => console.dir(error))
+    }
 
     onMounted(() => {
+      fetchTrackLyrics(props.id)
+
       const scrollElement = document.querySelector('.lyrics__content') as HTMLElement
 
       if (scrollElement) {
@@ -138,72 +191,15 @@ export default defineComponent({
       }
     })
 
-    const fetchedLyrics = reactive({
-      isFetched: false,
-      data: []
-    })
-
-    const lyricsContent = computed(() => (
-      initialLyrics.value || props.lyrics
-    ))
-
-    const fetchLyrics = async () => {
-      isFetching.value = true
-
-      try {
-        const response = await api.post('/api/tracks/lyrics', { query: props.heading })
-
-        isFetching.value = false
-        
-        if (response) {
-          fetchedLyrics.data = response.data
-          fetchedLyrics.isFetched = true
-        } else {
-          store.commit('setSnackbarMessage', {
-            message: 'Unknown error',
-            type: 'error'
-          })
-        }
-      } catch (error) {
-        console.log(error)
-        isFetching.value = false
-        throw error
-      }
-    }
-
-    const setLyrics = (value: string) => {
-      initialLyrics.value = value
-    }
-
-    const expandLyrics = (index: number) => {
-      expandedLyrics.value = index === expandedLyrics.value
-        ? null
-        : index
-    }
-
-    const saveLyrics = (lyrics: string) => {
-      initialLyrics.value = lyrics
-      fetchedLyrics.isFetched = false
-      fetchedLyrics.data = []
-
-      emit('saveLyrics', lyrics)
-    }
-
-    const closeSnackbar = () => {
-      fetchErrorMessage.value = null
-    }
-
     return {
-      lyricsContent,
+      lyrics,
       expandedLyrics,
       isFetching,
       fetchLyrics,
       fetchedLyrics,
-      setLyrics,
+      updateLyrics,
       expandLyrics,
-      saveLyrics,
-      fetchErrorMessage,
-      closeSnackbar
+      saveLyrics
     }
   }
 })
