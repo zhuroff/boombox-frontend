@@ -93,7 +93,7 @@
 
 <script lang="ts">
 
-import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
+import { defineComponent, Ref, ref, reactive, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import Button from '~/components/Button/Button.vue'
@@ -124,7 +124,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const store = useStore(key)
 
-    const lyricsContent = ref(props.lyrics)
+    const initialLyrics = ref(props.lyrics)
     const expandedLyrics: Ref<null | number> = ref(null)
     const scrollspace = ref(null as any)
     const isFetching = ref(false)
@@ -142,6 +142,10 @@ export default defineComponent({
       isFetched: false,
       data: []
     })
+
+    const lyricsContent = computed(() => (
+      initialLyrics.value || props.lyrics
+    ))
 
     const fetchLyrics = async () => {
       isFetching.value = true
@@ -168,7 +172,7 @@ export default defineComponent({
     }
 
     const setLyrics = (value: string) => {
-      lyricsContent.value = value
+      initialLyrics.value = value
     }
 
     const expandLyrics = (index: number) => {
@@ -178,7 +182,7 @@ export default defineComponent({
     }
 
     const saveLyrics = (lyrics: string) => {
-      lyricsContent.value = lyrics
+      initialLyrics.value = lyrics
       fetchedLyrics.isFetched = false
       fetchedLyrics.data = []
 

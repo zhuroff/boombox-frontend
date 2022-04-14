@@ -16,12 +16,17 @@ export default defineComponent({
     title: {
       type: String,
       required: true
+    },
+
+    id: {
+      type: String,
+      required: true
     }
   },
 
   setup(props, { emit }) {
     const callLyricsModal = () => (
-      emit('callLyricsModal')
+      emit('callLyricsModal', props.id)
     )
 
     return { callLyricsModal }

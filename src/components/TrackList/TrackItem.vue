@@ -23,6 +23,7 @@
 
   <TrackItemTitle
     :title="track.title"
+    :id="track._id"
     @callLyricsModal="callLyricsModal"
   />
 
@@ -51,7 +52,7 @@
       @closeModal="closeModal"
     >
       <TrackLyrics
-        :lyrics="track.lyrics || ''"
+        :lyrics="trackLyrics"
         :heading="trackArtistAndTitle"
         @saveLyrics="saveLyrics"
       />
@@ -117,12 +118,26 @@ export default defineComponent({
     const isPlayingTrack = computed(() => (
       store.getters.playingTrack.fileid === props.track.fileid
     ))
-    const callLyricsModal = () => {
+
+    const trackLyrics = ref('')
+
+    const fetchTrackLyrics = async (id: string) => {
+      try {
+        const response = await api.get(`/api/tracks/${id}/lyrics`)
+        trackLyrics.value = response?.data.lyrics
+      } catch (error) {
+        console.dir(error)
+      }
+    }
+
+    const callLyricsModal = (id: string) => {
       isModalActive.value = true
+      fetchTrackLyrics(id)
     }
 
     const closeModal = () => {
       isModalActive.value = false
+      trackLyrics.value = ''
     }
 
     // const removeTrackFromPlaylist = (payload) => {
@@ -152,6 +167,7 @@ export default defineComponent({
       isModalActive,
       isPlayingTrack,
       callLyricsModal,
+      trackLyrics,
       closeModal,
       // removeTrackFromPlaylist,
       trackArtistAndTitle,
