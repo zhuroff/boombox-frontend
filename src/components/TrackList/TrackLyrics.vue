@@ -127,9 +127,17 @@ export default defineComponent({
     const scrollspace = ref(null as any)
     const isFetching = ref(false)
     const fetchedLyrics = reactive<TrackLyricsResponse[]>([])
+    const updateLyricsTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
 
     const updateLyrics = (value: string) => {
       lyrics.value = value
+
+      if (typeof updateLyricsTimer.value === 'number') {
+        clearTimeout(updateLyricsTimer.value)
+        updateLyricsTimer.value = setTimeout(() => (
+          saveLyrics(value, false)
+        ), 1000)
+      }
     }
 
     const setFoundLyrics = (data: TrackLyricsResponse[]) => {
@@ -161,16 +169,18 @@ export default defineComponent({
           : index
     }
 
-    const saveLyrics = (payload: string) => {
+    const saveLyrics = (payload: string, isConfirm = true) => {
       lyrics.value = payload
       fetchedLyrics.length = 0
 
       TrackServices.saveLyrics(props.id, payload)
         .then((message) => {
-          store.commit('setSnackbarMessage', {
-            message,
-            type: 'success'
-          })
+          if (isConfirm) {
+            store.commit('setSnackbarMessage', {
+              message,
+              type: 'success'
+            })
+          }
         })
         .catch((error) => console.dir(error))
     }

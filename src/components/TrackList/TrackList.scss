@@ -18,6 +18,8 @@
       &.--order {
         width: 20px;
         flex: none;
+        line-height: 1;
+        justify-content: flex-end;
       }
   
       &.--drag {
