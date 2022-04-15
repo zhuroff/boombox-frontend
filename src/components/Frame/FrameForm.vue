@@ -78,14 +78,14 @@
       />
 
       <div
-        v-if="activeCategory.isActive && !activeCategory.results.length"
+        v-if="isNotFound"
         class="form-frame__empty"
       >
         <span>No results</span>
-        <button
-          type="button"
-          @click="createCategory"
-        >Save new category</button>
+        <Button
+          text="Save new category"
+          @onClick="createCategory"
+        />
       </div>
     </div>
   </form>
@@ -128,7 +128,7 @@
 
 <script lang="ts">
 
-import { defineComponent, Ref, ref, reactive } from 'vue'
+import { defineComponent, Ref, ref, reactive, computed } from 'vue'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
@@ -136,8 +136,9 @@ import AppSprite from '~/components/AppSprite.vue'
 import FrameResults from './FrameResults.vue'
 import api from '~/api'
 import './FrameForm.scss'
-import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult } from '~/types/Category'
+import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult, ICategoryBasic } from '~/types/Category'
 import { FrameBasic } from '~/types/Frame'
+import CategoryServices from '~/services/CategoryServices'
 
 export default defineComponent({
   components: {
@@ -150,6 +151,7 @@ export default defineComponent({
 
   setup() {
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
+    const searchQuery = ref('')
 
     const keysMatcher = reactive<{ [index: string]: CategoryKeysSingular }>({
       artists: 'artist',
@@ -167,9 +169,14 @@ export default defineComponent({
 
     const activeCategory = reactive({
       isActive: false,
+      isFetched: false,
       key: '' as CategoryKeysPlural,
       results: [] as CategorySearchResult[]
     })
+
+    const isNotFound = computed(() => (
+      activeCategory.isActive && !activeCategory.results.length && searchQuery.value.length && activeCategory.isFetched
+    ))
 
     const setFrameTitle = (value: string) => {
       newFrame.title = value
@@ -204,6 +211,7 @@ export default defineComponent({
         const response = await api.post('/api/search', payload)
         
         if (response?.status === 200) {
+          activeCategory.isFetched = true
           setSearchResults(response.data)
         }
       } catch (error) {
@@ -212,9 +220,12 @@ export default defineComponent({
     }
 
     const searchByQuery = (value: string) => {
+      searchQuery.value = value
+      activeCategory.isFetched = false
+
       if (typeof inputTimer.value === 'number') {
         clearTimeout(inputTimer.value)
-        inputTimer.value = setTimeout(() => postSearchQuery(value), 2000)
+        inputTimer.value = setTimeout(() => postSearchQuery(searchQuery.value), 1000)
       }
     }
 
@@ -222,7 +233,7 @@ export default defineComponent({
       console.log('submit')
     }
 
-    const selectCategory = (category: CategorySearchResult) => {
+    const selectCategory = (category: CategorySearchResult | ICategoryBasic) => {
       newFrame[keysMatcher[activeCategory.key]] = {
         _id: category._id,
         title: category.title
@@ -232,16 +243,20 @@ export default defineComponent({
     }
 
     const createCategory = () => {
-      console.log(activeCategory)
+      CategoryServices.create(activeCategory.key, searchQuery.value)
+        .then((result) => selectCategory(result))
+        .catch((error) => console.dir(error))
     }
 
     return {
+      searchQuery,
       newFrame,
       setFrameTitle,
       setFrameCode,
       openCategoryList,
       searchByQuery,
       activeCategory,
+      isNotFound,
       saveNewFrame,
       selectCategory,
       closeCategoryList,

@@ -90,6 +90,8 @@ export default defineComponent({
 
 .textarea {
   overflow-y: hidden;
+  font-size: 14px;
+  display: block;
 }
 
 </style>

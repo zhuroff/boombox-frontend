@@ -55,10 +55,11 @@ export default defineComponent({
 
 .input {
   width: 100%;
-  height: 35px;
+  height: 40px;
   border-radius: 3px;
   border: 1px solid $border;
   padding: 0 10px;
+  font-size: 14px;
 }
 
 </style>
