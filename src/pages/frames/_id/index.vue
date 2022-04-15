@@ -2,7 +2,7 @@
 
 <div id="scrollspace">
   <div class="album" v-if="album">
-    <div class="album__frame" v-html="album.iframe"></div>
+    <div class="album__frame" v-html="album.frame"></div>
     <AlbumHeading
       :heading="frameHeading"
       @textInputHandler="saveFrameDescription"

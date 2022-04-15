@@ -25,7 +25,7 @@
             :key="album.folderid"
           >
             <component
-              :is="album.iframe ? 'CardFrame' : 'CardAlbum'"
+              :is="album.frame ? 'CardFrame' : 'CardAlbum'"
               :album="album"
             />
           </CardWrapper>

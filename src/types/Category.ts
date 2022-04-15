@@ -5,6 +5,12 @@ type CategoryImagesKeys = 'poster' | 'avatar'
 type CategoryKeysSingular = 'artist' | 'genre' | 'period'
 type CategoryKeysPlural = 'artists' | 'genres' | 'periods'
 
+type CategoryKeys = {
+  artist: string
+  genre: string
+  period: string
+}
+
 type ICategoryBasic = {
   _id: string
   title: string
@@ -31,6 +37,7 @@ export {
   CategoryImagesKeys,
   CategoryKeysSingular,
   CategoryKeysPlural,
+  CategoryKeys,
   ICategoryBasic,
   ICategoryMedium,
   ICategoryFull,

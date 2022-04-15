@@ -17,7 +17,7 @@
 
           <Button
             text="Add new frame"
-            :onClick="callFrameCreatingModal"
+            :onClick="frameModalSwitcher"
           />
         </div>
         
@@ -48,9 +48,9 @@
         <Modal
           v-if="isCreatingFrameModalActive"
           :isModalActive="isCreatingFrameModalActive"
-          @closeModal="closeCreatingModalFrame"
+          @closeModal="frameModalSwitcher"
         >
-          <FrameForm />
+          <FrameForm @addNewFrame="addNewFrame" />
         </Modal>
       </transition>
 
@@ -64,31 +64,30 @@
 import {
   defineComponent,
   onMounted,
-  Ref,
   ref,
   reactive,
-  watchEffect
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { IPagination } from '~/types/Global'
-import { FramePage } from '~/types/Frame'
+import { IPagination, RequestConfig } from '~/types/Global'
+import { FrameBasicResponse, FramePage } from '~/types/Frame'
+import { CategoryKeys } from '~/types/Category'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import AppSprite from '~/components/AppSprite.vue'
-// import AppInput from '~/components/AppInput.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardFrame from '~/components/Cards/CardFrame.vue'
 import AppPagination from '~/components/AppPagination.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import FrameForm from '~/components/Frame/FrameForm.vue'
-import api from '~/api'
+import FrameServices from '~/services/FrameServices'
 
 export default defineComponent({
   components: {
     AppPreloader,
     Button,
     AppSprite,
-    // AppInput,
     CardWrapper,
     CardFrame,
     AppPagination,
@@ -97,13 +96,11 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore(key)
     const router = useRouter()
     const route = useRoute()
 
-    const searchTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
-    const searchResults = ref(null)
-
-    const pageConfig = reactive({
+    const pageConfig = reactive<RequestConfig>({
       page: Number(route.query.p) || 1,
       sort: { title: 1 },
       limit: 40
@@ -116,124 +113,12 @@ export default defineComponent({
     })
 
     const isCreatingFrameModalActive = ref(false)
-    const categorySearchQuery = ref('')
 
     const newAlbumTitle = ref('')
     const newAlbumFrame = ref('')
-    
 
-    const deleteFrameAlbum = async (id: string) => {
-      try {
-        const targetAlbumIndex = albums.data.findIndex((el) => el._id === id)
-        let albumGhost
-
-        if (targetAlbumIndex > -1) {
-          albumGhost = albums.data.splice(targetAlbumIndex, 1)
-        }
-
-        if (albumGhost) {
-          const payload = {
-            artist: albumGhost[0].artist._id,
-            genre: albumGhost[0].genre._id,
-            period: albumGhost[0].period._id
-          }
-
-          const response = await api.post(`/api/frames/${id}/delete`, payload)
-          // console.log(response)
-        }
-      } catch (error) {
-        console.dir(error)
-      }
-    }
-
-    const closeCreatingModalFrame = () => {
-      isCreatingFrameModalActive.value = false
-      categorySearchQuery.value = ''
-      searchResults.value = null
-      newAlbumTitle.value = ''
-      newAlbumFrame.value = ''
-    }
-
-    const submitForm = async () => {
-      const payload = {
-        title: newAlbumTitle.value,
-        iframe: newAlbumFrame.value
-      }
-
-      try {
-        const response = await api.post('/api/frames/create', payload)
-
-        albums.data.unshift(response.data)
-        closeCreatingModalFrame()
-      } catch (error) {
-        throw error
-      }
-    }
-
-    const callFrameCreatingModal = () => {
-      isCreatingFrameModalActive.value = true
-    }
-
-    const closeCategoryList = () => {
-      categorySearchQuery.value = ''
-      searchResults.value = null
-    }
-
-    const fetchSearchedCategory = async (query: string) => {
-      // try {
-      //   const payload = {
-      //     query,
-      //     key: categoryKey.value
-      //   }
-
-      //   const response = await api.post('/api/search', payload)
-      //   searchResults.value = response.data
-      // } catch (error) {
-      //   throw error
-      // }
-    }
-
-    const searchCategory = (event: any) => {
-      if (typeof searchTimer.value === 'number') {
-        clearTimeout(searchTimer.value)
-        searchTimer.value = setTimeout(() => {
-          fetchSearchedCategory(event?.target?.value)
-        }, 1000)
-      }
-    }
-
-    const chooseCategory = (item: any) => {
-      console.log('index', item)
-      // if (categoryKey.value === 'artists') {
-      //   newAlbumArtist.id = item._id
-      //   newAlbumArtist.title = item.title
-      // }
-
-      // if (categoryKey.value === 'genres') {
-      //   newAlbumGenre.id = item._id
-      //   newAlbumGenre.title = item.title
-      // }
-
-      // if (categoryKey.value === 'periods') {
-      //   newAlbumYear.id = item._id
-      //   newAlbumYear.title = item.title
-      // }
-
-      closeCategoryList()
-    }
-
-    const createNewCategory = async () => {
-      // const payload = {
-      //   category: categoryKey.value,
-      //   value: categorySearchQuery.value
-      // }
-
-      // try {
-      //   const response = await api.post('/api/synchronize/create', payload)
-      //   chooseCategory(response.data)
-      // } catch (error) {
-      //   console.error(error)
-      // }
+    const frameModalSwitcher = () => {
+      isCreatingFrameModalActive.value = !isCreatingFrameModalActive.value
     }
 
     const clearfyFramesList = () => {
@@ -253,25 +138,53 @@ export default defineComponent({
       router.push({ query: { p: value } })
     }
 
-    const setFramesAlbums = (data: { docs: FramePage[], pagination: IPagination }) => {
-      albums.isFetched = true
-      // console.log(data)
+    const addNewFrame = (frame: FramePage) => {
+      albums.data.unshift(frame)
+      albums.pagination.totalDocs += 1
 
-      if (data) {
-        albums.pagination = data.pagination
-        albums.data = data.docs
-      }
+      store.commit('setSnackbarMessage', {
+        message: 'Album successfully added to collection',
+        type: 'success'
+      })
+
+      frameModalSwitcher()
+    }
+
+    const setFramesAlbums = (data: FrameBasicResponse) => {
+      albums.isFetched = true
+      albums.pagination = data.pagination
+      albums.data = data.docs
     }
 
     const fetchFrameAlbums = async () => {
-      try {        
-        const response = await api.post('/api/frames', pageConfig)
-        
-        if (response?.status === 200) {
-          setFramesAlbums(response.data)
+      FrameServices.list(pageConfig)
+        .then((data) => setFramesAlbums(data))
+        .catch((error) => console.dir(error))
+    }
+
+    const deleteFrameAlbum = async (id: string) => {
+      const targetAlbumIndex = albums.data.findIndex((el) => el._id === id)
+      let deletedFrame
+
+      if (targetAlbumIndex > -1) {
+        deletedFrame = albums.data.splice(targetAlbumIndex, 1)
+      }
+
+      if (deletedFrame) {
+        const payload: CategoryKeys = {
+          artist: deletedFrame[0].artist._id,
+          genre: deletedFrame[0].genre._id,
+          period: deletedFrame[0].period._id
         }
-      } catch (error) {
-        throw error
+
+        FrameServices.remove(id, payload)
+          .then((response) => {
+            store.commit('setSnackbarMessage', {
+              message: response.message,
+              type: 'success'
+            })
+          })
+          .catch((error) => console.dir(error))
       }
     }
 
@@ -283,32 +196,15 @@ export default defineComponent({
       fetchFrameAlbums()
     })
 
-    watchEffect(() => {
-      // if (isCreatingFrameModalActive.value) {
-      //   document.querySelector('.header')?.classList.add('--z-low')
-      //   document.querySelector('.player')?.classList.add('--z-low')
-      // } else {
-      //   document.querySelector('.header')?.classList.remove('--z-low')
-      //   document.querySelector('.player')?.classList.remove('--z-low')
-      // }
-    })
-
     return {
       albums,
       deleteFrameAlbum,
       isCreatingFrameModalActive,
       newAlbumTitle,
       newAlbumFrame,
-      submitForm,
-      callFrameCreatingModal,
-      closeCreatingModalFrame,
-      closeCategoryList,
-      categorySearchQuery,
-      searchCategory,
-      searchResults,
-      chooseCategory,
-      createNewCategory,
-      switchPagination
+      frameModalSwitcher,
+      switchPagination,
+      addNewFrame
     }
   }
 })

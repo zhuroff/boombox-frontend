@@ -10,15 +10,16 @@
     v-if="isConfirmation"
     class="card__confirmation"
   >
-    <button
-      class="card__confirmation_cancel"
-      @click="confirmationHandler"
-    >Cancel</button>
+    <Button
+      text="Cancel"
+      @onClick="confirmationHandler"
+    />
 
-    <button
-      class="card__confirmation_delete"
-      @click="deleteItem"
-    >Confirm</button>
+    <Button
+      text="Confirm"
+      isOutlined
+      @onClick="deleteItem"
+    />
   </div>
   <slot></slot>
 </li>
@@ -29,10 +30,12 @@
 
 import { defineComponent, ref } from 'vue'
 import AppDelete from '~/components/AppDelete.vue'
+import Button from '~/components/Button/Button.vue'
 
 export default defineComponent({
   components: {
-    AppDelete
+    AppDelete,
+    Button
   },
 
   props: {
@@ -108,16 +111,7 @@ export default defineComponent({
     border-radius: 5px;
     z-index: 10;
 
-    &_cancel {
-      background-color: $white;
-      border-color: $white;
-      color: $dark;
-      margin: 5px 0;
-    }
-
-    &_delete {
-      background-color: $error;
-      border-color: $error;
+    .button {
       margin: 5px 0;
     }
   }

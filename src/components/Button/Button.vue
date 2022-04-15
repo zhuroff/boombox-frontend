@@ -2,6 +2,7 @@
   <button
     :class="[{ '--fullwidth' : isFullWidth }, { '--outlined' : isOutlined }, 'button']"
     :type="type"
+    :disabled="isDisabled"
     @click="emitButtonClick"
   >
     <span class="button__text">{{ text }}</span>
@@ -35,10 +36,16 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+
+    isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const emitButtonClick = () => emit('onClick')
 
     return { emitButtonClick }
@@ -62,6 +69,11 @@ export default defineComponent({
   border-radius: 3px;
   padding: 0 20px;
   transition: background-color 0.5s $animation;
+
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 
   &__text {
     font-size: 14px;

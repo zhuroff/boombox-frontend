@@ -1,4 +1,5 @@
 import { ICategoryBasic } from '~/types/Category'
+import { IPagination } from './Global'
 
 type FrameBasic = {
   title: string
@@ -12,7 +13,13 @@ type FramePage = FrameBasic & {
   _id: string
 }
 
+type FrameBasicResponse = {
+  docs: FramePage[]
+  pagination: IPagination
+}
+
 export {
   FrameBasic,
-  FramePage
+  FramePage,
+  FrameBasicResponse
 }

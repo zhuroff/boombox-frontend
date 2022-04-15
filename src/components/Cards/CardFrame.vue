@@ -3,29 +3,30 @@
 <div class="album__frame">
   <div
     class="album__player"
-    v-html="album.iframe"
+    v-html="album.frame"
   ></div>
 
   <router-link
     :to="{ path: `/frames/${album._id}` }"
   >
     <div class="album__title">{{ album.title }}</div>
-    <div lass="album__info">
-      {{ album.artist.title }}, {{ album.releaseYear.title }} / {{ album.genre.title }}
+    <div class="album__info">
+      {{ album.artist.title }}, {{ album.period.title }} / {{ album.genre.title }}
     </div>
   </router-link>
 </div>
 
 </template>
 
-<script>
+<script lang="ts">
 
 import { defineComponent } from 'vue'
+import { FramePage } from '~/types/Frame'
 
 export default defineComponent({
   props: {
     album: {
-      type: Object,
+      type: Object as () => FramePage,
       required: true
     }
   }

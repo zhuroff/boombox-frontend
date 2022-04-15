@@ -47,6 +47,7 @@
       <Button
         text="Save"
         type="submit"
+        :isDisabled="isSubmitDisabled"
       />
     </div>
 
@@ -89,56 +90,22 @@
       </div>
     </div>
   </form>
-
-  <!-- <div
-                v-if="isCategoryListActive"
-                class="frames__categories"
-              >
-
-                <div
-                  v-if="searchResults"
-                  class="frames__categories-results"
-                >
-                  <ul
-                    v-if="searchResults.length"
-                    class="frames__categories-list"
-                  >
-                    <li
-                      v-for="item in searchResults"
-                      :key="item._id"
-                      class="frames__categories-item"
-                    >
-                      <label>
-                        <input type="radio" @change="chooseCategory(item)">
-                        <span>{{ item.title }}</span>
-                      </label>
-                    </li>
-                  </ul>
-
-                  <div class="frames__categories-empty">
-                    <span v-if="!searchResults.length">No results</span>
-                    <button
-                      type="button"
-                      @click="createNewCategory"
-                    >Save new category</button>
-                  </div>
-                </div>
-              </div> -->
 </template>
 
 <script lang="ts">
 
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
+import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult, ICategoryBasic } from '~/types/Category'
+import { FrameBasic } from '~/types/Frame'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
 import AppSprite from '~/components/AppSprite.vue'
 import FrameResults from './FrameResults.vue'
+import CategoryServices from '~/services/CategoryServices'
+import FrameServices from '~/services/FrameServices'
 import api from '~/api'
 import './FrameForm.scss'
-import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult, ICategoryBasic } from '~/types/Category'
-import { FrameBasic } from '~/types/Frame'
-import CategoryServices from '~/services/CategoryServices'
 
 export default defineComponent({
   components: {
@@ -149,9 +116,10 @@ export default defineComponent({
     FrameResults
   },
 
-  setup() {
+  setup(_, { emit }) {
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
     const searchQuery = ref('')
+    const isSubmitDisabled = ref(false)
 
     const keysMatcher = reactive<{ [index: string]: CategoryKeysSingular }>({
       artists: 'artist',
@@ -230,7 +198,11 @@ export default defineComponent({
     }
 
     const saveNewFrame = () => {
-      console.log('submit')
+      isSubmitDisabled.value = true
+
+      FrameServices.create(newFrame)
+        .then((frame) => emit('addNewFrame', frame))
+        .catch((error) => console.dir(error))
     }
 
     const selectCategory = (category: CategorySearchResult | ICategoryBasic) => {
@@ -250,6 +222,7 @@ export default defineComponent({
 
     return {
       searchQuery,
+      isSubmitDisabled,
       newFrame,
       setFrameTitle,
       setFrameCode,
