@@ -19,16 +19,23 @@
   </div>
 
   <div class="album__title">{{ album.title }}</div>
+
+  <div class="album__info">
+    Albums in collection: {{ album.albums.length }}
+  </div>
 </router-link>
 
 </template>
 
-<script>
+<script lang="ts">
 
-export default {
+import { defineComponent, PropType } from 'vue'
+import { CollectionListItem } from '~/types/Collection'
+
+export default defineComponent({
   props: {
     album: {
-      type: Object,
+      type: Object as PropType<CollectionListItem>,
       required: true
     },
 
@@ -37,6 +44,6 @@ export default {
       required: true
     }
   }
-}
+})
 
 </script>

@@ -109,7 +109,7 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { IAlbumFull, AlbumHeadProps } from '~/types/Album'
-import { ICollectionBasic } from '~/types/Collection'
+import { CollectionListItem } from '~/types/Collection'
 import { IFloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
@@ -151,7 +151,7 @@ export default defineComponent({
     const collections = reactive({
       isFetched: false,
       isActive: false,
-      data: [] as ICollectionBasic[]
+      data: [] as CollectionListItem[]
     })
 
     const albumHead: ComputedRef<AlbumHeadProps> = computed(() => {
@@ -159,7 +159,7 @@ export default defineComponent({
       return { title, artist, period, genre, description }
     })
 
-    const isCollectionItemChecked = (item: ICollectionBasic) => (
+    const isCollectionItemChecked = (item: CollectionListItem) => (
       item.albums.some((el) => el.album._id === album.data._id)
     )
 
@@ -169,7 +169,7 @@ export default defineComponent({
       collections.isActive = false
     }
 
-    const setCollections = (data: ICollectionBasic[]) => {
+    const setCollections = (data: CollectionListItem[]) => {
       collections.data = data
       collections.isFetched = true
     }

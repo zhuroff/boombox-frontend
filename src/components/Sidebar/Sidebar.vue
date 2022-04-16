@@ -62,10 +62,10 @@ export default defineComponent({
         route: 'periods'
       },
 
-      // {
-      //   title: 'Collections',
-      //   route: 'collections'
-      // },
+      {
+        title: 'Collections',
+        route: 'collections'
+      },
 
       // {
       //   title: 'Playlists',

@@ -6,24 +6,24 @@
 
 import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import AlbumsList from './list/index.vue'
-import AlbumPage from './_id/index.vue'
+import CollectionList from './list/index.vue'
+import CollectionPage from './_id/index.vue'
 
 export default defineComponent({
   components: {
-    AlbumsList,
-    AlbumPage
+    CollectionList,
+    CollectionPage
   },
 
   setup() {
     const route = useRoute()
 
     const routeComponent = computed(() => {
-      if (route.name === 'Albums') {
-        return AlbumsList
+      if (route.name === 'Collections') {
+        return CollectionList
       }
 
-      return AlbumPage
+      return CollectionPage
     })
 
     return { routeComponent }

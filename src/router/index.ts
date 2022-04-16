@@ -73,17 +73,18 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
 
-  // {
-  //   path: '/collections',
-  //   name: 'Collections',
-  //   component: () => import(/* webpackChunkName: 'lists' */ '~/pages/collections/index.vue')
-  // },
-
-  // {
-  //   path: '/collections/:id',
-  //   name: 'Collection',
-  //   component: () => import(/* webpackChunkName: 'lists' */ '~/pages/collections/_id/index.vue')
-  // },
+  {
+    path: '/collections',
+    name: 'Collections',
+    component: () => import(/* webpackChunkName: 'lists' */ '~/pages/collections/index.vue'),
+    children: [
+      {
+        path: '/collections/:id',
+        name: 'Collection',
+        component: () => import(/* webpackChunkName: 'lists' */ '~/pages/collections/index.vue')
+      }
+    ]
+  },
 
   // {
   //   path: '/playlists',

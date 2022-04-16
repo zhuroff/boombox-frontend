@@ -158,10 +158,12 @@ export default defineComponent({
       activeCategory.isActive = true
       activeCategory.key = key
       activeCategory.results = []
+      searchQuery.value = ''
     }
 
     const closeCategoryList = () => {
       activeCategory.isActive = false
+      activeCategory.isFetched = false
       activeCategory.results = []
     }
 

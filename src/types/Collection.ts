@@ -1,22 +1,22 @@
-interface ICollectionPayloadPost {
+type ICollectionPayloadPost = {
   title: string
   album: string
 }
 
-interface ICollectionAlbumBasic {
+type CollectionListItemAlbum = {
   order: number
   album: {
     _id: string
   }
 }
 
-interface ICollectionBasic {
+type CollectionListItem = {
   _id: string
   title: string
-  albums: ICollectionAlbumBasic[]
+  albums: CollectionListItemAlbum[]
 }
 
 export {
   ICollectionPayloadPost,
-  ICollectionBasic
+  CollectionListItem
 }
