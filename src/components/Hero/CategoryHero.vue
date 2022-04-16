@@ -1,54 +1,52 @@
 <template>
-  
-<div class="hero">
-  <div class="hero__poster">
-    <img
-      v-if="category.poster"
-      :src="host(category.poster)"
-      :alt="category.title"
-      class="hero__poster_image"
-    >
-
-    <form class="hero__poster_form">
-      <label class="hero__poster_label">
-        <input
-          type="file"
-          ref="posterElement"
-          @change="setPoster"
-        >
-        <AppSprite name="camera" />
-      </label>
-    </form>
-  </div>
-
-  <div class="hero__info">
-    <div class="hero__avatar">
+  <div class="hero">
+    <div class="hero__poster">
       <img
-        v-if="category.avatar"
-        :src="host(category.avatar)"
+        v-if="category.poster"
+        :src="host(category.poster)"
         :alt="category.title"
-        class="hero__avatar_image"
+        class="hero__poster_image"
       >
 
-      <form class="hero__avatar_form">
-        <label class="hero__avatar_label">
+      <form class="hero__poster_form">
+        <label class="hero__poster_label">
           <input
             type="file"
-            ref="avatarElement"
-            @change="setAvatar"
+            ref="posterElement"
+            @change="setPoster"
           >
           <AppSprite name="camera" />
         </label>
       </form>
     </div>
 
-    <div class="hero__content">
-      <div class="hero__title">{{ category.title }}</div>
-      <div class="hero__albums">Albums: {{ category.albums.length }}</div>
+    <div class="hero__info">
+      <div class="hero__avatar">
+        <img
+          v-if="category.avatar"
+          :src="host(category.avatar)"
+          :alt="category.title"
+          class="hero__avatar_image"
+        >
+
+        <form class="hero__avatar_form">
+          <label class="hero__avatar_label">
+            <input
+              type="file"
+              ref="avatarElement"
+              @change="setAvatar"
+            >
+            <AppSprite name="camera" />
+          </label>
+        </form>
+      </div>
+
+      <div class="hero__content">
+        <div class="hero__title">{{ category.title }}</div>
+        <div class="hero__albums">Albums: {{ category.albums.length }}</div>
+      </div>
     </div>
   </div>
-</div>
-
 </template>
 
 <script lang="ts">
@@ -56,9 +54,10 @@
 import { defineComponent, Ref, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { CategoryImagesKeys } from '~/types/Category'
-import AppSprite from '~/components/AppSprite.vue'
 import { hostString } from '~/shared/media'
+import AppSprite from '~/components/AppSprite.vue'
 import api from '~/api'
+import './Hero.scss'
 
 export default defineComponent({
   components: {
@@ -122,152 +121,3 @@ export default defineComponent({
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.hero {
-
-  &__poster {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    &:before {
-      content: '';
-      background-color: rgba(0, 0, 0, 0.75);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    &:hover {
-
-      .hero__poster_label {
-        opacity: 1;
-        transition: opacity 0.3s ease;
-      }
-    }
-
-    &_image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    &_form {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-
-    &_label {
-      width: 78px;
-      height: 78px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      
-      input {
-        position: absolute;
-        width: 0;
-        height: 0;
-        opacity: 0;
-        outline: none;
-      }
-
-      .icon {
-        color: $white;
-      }
-    }
-  }
-
-  &__info {
-    position: absolute;
-    bottom: 25px;
-    left: 25px;
-    display: flex;
-    align-items: center;
-  }
-
-  &__avatar {
-    width: 78px;
-    height: 78px;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
-    &_image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    &_form {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.75);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-
-      &:hover {
-        opacity: 1;
-        transition: opacity 0.3s ease;
-      }
-    }
-
-    &_label {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-
-      input {
-        position: absolute;
-        width: 0;
-        height: 0;
-        opacity: 0;
-        outline: none;
-      }
-
-      .icon {
-        color: $white;
-      }
-    }
-  }
-
-  &__content {
-    margin-left: 15px;
-  }
-
-  &__title {
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 34px;
-    text-transform: uppercase;
-    color: $white;
-  }
-
-  &__albums {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 20px;
-    color: $white;
-  }
-}
-
-</style>
