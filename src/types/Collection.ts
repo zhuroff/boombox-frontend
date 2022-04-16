@@ -30,8 +30,15 @@ type CollectionPageItem = {
   albums: CollectionPageItemAlbum[]
 }
 
+type ReorderPayload = {
+  collectionID: string
+  oldOrder: number
+  newOrder: number
+}
+
 export {
   ICollectionPayloadPost,
   CollectionListItem,
-  CollectionPageItem
+  CollectionPageItem,
+  ReorderPayload
 }

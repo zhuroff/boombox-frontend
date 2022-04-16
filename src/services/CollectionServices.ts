@@ -1,4 +1,4 @@
-import { CollectionListItem, CollectionPageItem } from '~/types/Collection';
+import { CollectionListItem, CollectionPageItem, ReorderPayload } from '~/types/Collection';
 import { IFloatModalCheckAction, ResponseMessage } from '~/types/Global';
 import api from '~/api'
 
@@ -63,6 +63,16 @@ export default class CollectionServices {
 
   static async remove(id: string) {
     const response = await api.delete<ResponseMessage>(`/api/collections/${id}`)
+
+    if (response?.status === 201) {
+      return response.data.message
+    }
+
+    throw new Error('Request failed')
+  }
+
+  static async reorder(payload: ReorderPayload) {
+    const response = await api.patch<ResponseMessage>(`/api/collections/${payload.collectionID}/reorder`, payload)
 
     if (response?.status === 201) {
       return response.data.message

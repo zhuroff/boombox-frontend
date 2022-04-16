@@ -1,45 +1,58 @@
-<template>
-  
-<li :class="[{ '--active' : isActive }, 'card']">
-  <AppDelete
-    v-if="deletable && !isConfirmation"
-    @deleteItem="confirmationHandler"
-  />
-
-  <div
-    v-if="isConfirmation"
-    class="card__confirmation"
-  >
-    <Button
-      text="Cancel"
-      @onClick="confirmationHandler"
+<template> 
+  <li :class="[{ '--active' : isActive }, 'card']">
+    <AppDelete
+      v-if="deletable && !isConfirmation"
+      @deleteItem="confirmationHandler"
     />
 
-    <Button
-      text="Confirm"
-      isOutlined
-      @onClick="deleteItem"
-    />
-  </div>
-  <slot></slot>
-</li>
+    <span
+      v-if="draggable"
+      class="--drag"
+    >
+      <AppSprite name="burger" />
+    </span>
 
+    <div
+      v-if="isConfirmation"
+      class="card__confirmation"
+    >
+      <Button
+        text="Cancel"
+        @onClick="confirmationHandler"
+      />
+
+      <Button
+        text="Confirm"
+        isOutlined
+        @onClick="deleteItem"
+      />
+    </div>
+    <slot></slot>
+  </li>
 </template>
 
 <script lang="ts">
 
 import { defineComponent, ref } from 'vue'
 import AppDelete from '~/components/AppDelete.vue'
+import AppSprite from '~/components/AppSprite.vue'
 import Button from '~/components/Button/Button.vue'
 
 export default defineComponent({
   components: {
     AppDelete,
+    AppSprite,
     Button
   },
 
   props: {
     deletable: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    draggable: {
       type: Boolean,
       required: false,
       default: false
@@ -79,12 +92,16 @@ export default defineComponent({
   width: 25%;
   margin-bottom: 15px;
   position: relative;
-  padding: 10px;
   border-radius: 5px;
+  padding: 10px;
   transition: all 0.3s ease;
 
   &.--active {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+  &.sortable-chosen {
+    background-color: $border;
   }
 
   &:hover {
@@ -92,6 +109,11 @@ export default defineComponent({
     transition: box-shadow 0.3s ease;
 
     .delete {
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .--drag {
       opacity: 1;
       transition: opacity 0.3s ease;
     }
@@ -113,6 +135,27 @@ export default defineComponent({
 
     .button {
       margin: 5px 0;
+    }
+  }
+
+  .--drag {
+    width: 30px;
+    height: 30px;
+    cursor: move;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .icon {
+      width: 18px;
     }
   }
 }

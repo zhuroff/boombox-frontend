@@ -10,7 +10,7 @@
 
   <div id="scrollspace">
     <transition-group name="flyUp">
-      <div class="hero">
+      <div class="hero" key="hero">
         <div
           v-if="isFetched"
           class="hero__wrapper"
@@ -41,6 +41,7 @@
       <div
         v-if="isFetched"
         class="news"
+        key="events"
       >
         <ul
           v-if="restNews.length"
