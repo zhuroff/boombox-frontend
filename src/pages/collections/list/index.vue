@@ -26,6 +26,8 @@
           <CardWrapper
             v-for="album in collections.data"
             :key="album._id"
+            deletable
+            @deleteItem="deleteCollection(album._id)"
           >
             <CardCollection
               :album="album"
@@ -41,6 +43,8 @@
 <script lang="ts">
 
 import { defineComponent, onMounted, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import { CollectionListItem } from '~/types/Collection'
 import CollectionServices from '~/services/CollectionServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -55,6 +59,8 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore(key)
+
     const collections = reactive({
       isFetched: false,
       data: [] as CollectionListItem[]
@@ -65,16 +71,34 @@ export default defineComponent({
       collections.isFetched = true
     }
 
+    const spliceCollection = (id: string) => {
+      const deletedCollectionIndex = collections.data.findIndex((collection) => (
+        collection._id === id
+      ))
+
+      if (deletedCollectionIndex > -1) {
+        collections.data.splice(deletedCollectionIndex, 1)
+      }
+    }
+
     const fetchCollections = () => {
       CollectionServices.list()
         .then((data) => setCollectionList(data))
         .catch((error) => console.dir(error))
     }
 
+    const deleteCollection = (id: string) => {
+      CollectionServices.remove(id)
+        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+        .then(_ => spliceCollection(id))
+        .catch((error) => console.dir(error))
+    }
+
     onMounted(() => fetchCollections())
 
     return {
-      collections
+      collections,
+      deleteCollection
     }
   }
 })

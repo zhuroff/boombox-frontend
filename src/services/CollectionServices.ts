@@ -1,5 +1,5 @@
 import { CollectionListItem, CollectionPageItem } from '~/types/Collection';
-import { IFloatModalCheckAction } from '~/types/Global';
+import { IFloatModalCheckAction, ResponseMessage } from '~/types/Global';
 import api from '~/api'
 
 export default class CollectionServices {
@@ -13,7 +13,7 @@ export default class CollectionServices {
         album.order
       ))) + 1
 
-      const response = await api.patch(`/api/collections/${payload.listID}`, payload)
+      const response = await api.patch<ResponseMessage>(`/api/collections/${payload.listID}`, payload)
 
       if (response?.status === 201) {
         return {
@@ -29,7 +29,7 @@ export default class CollectionServices {
   }
 
   static async create(title: string, album: string) {
-    const response = await api.post('/api/collections/create', { title, album })
+    const response = await api.post<ResponseMessage>('/api/collections/create', { title, album })
 
     if (response?.status === 201) {
       return {
@@ -56,6 +56,16 @@ export default class CollectionServices {
     
     if (response?.status === 200) {
       return response.data
+    }
+
+    throw new Error('Request failed')
+  }
+
+  static async remove(id: string) {
+    const response = await api.delete<ResponseMessage>(`/api/collections/${id}`)
+
+    if (response?.status === 201) {
+      return response.data.message
     }
 
     throw new Error('Request failed')
