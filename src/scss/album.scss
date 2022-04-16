@@ -5,6 +5,10 @@
   display: grid;
   grid-template-columns: 230px 1fr;
 
+  &.--frame {
+    grid-template-columns: 350px 1fr;
+  }
+
   &__aside {
     position: relative;
 

@@ -10,8 +10,8 @@
     <div id="scrollspace">
       <transition-group name="flyUp">
         <div
-          class="section__heading"
           key="heading"
+          class="section__heading"
         >
           <h1 class="section__title">There are {{ albums.pagination.totalDocs }} frames in your collection</h1>
 
@@ -22,9 +22,9 @@
         </div>
         
         <ul
+          key="list"
           v-if="albums.isFetched"
           class="cardlist"
-          key="list"
         >
           <CardWrapper
             v-for="album in albums.data"
@@ -37,9 +37,9 @@
         </ul>
 
         <AppPagination
+          key="pagination"
           v-if="albums.isFetched && albums.pagination.totalPages > 1"
           :pagination="albums.pagination"
-          key="pagination"
           @switchPagination="switchPagination"
         />
       </transition-group>

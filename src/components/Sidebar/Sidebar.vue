@@ -72,10 +72,10 @@ export default defineComponent({
       //   route: 'playlists'
       // },
 
-      // {
-      //   title: 'YouTube',
-      //   route: 'youtube'
-      // },
+      {
+        title: 'YouTube',
+        route: 'youtube'
+      },
 
       // {
       //   title: 'Radio',

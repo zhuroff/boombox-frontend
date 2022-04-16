@@ -97,11 +97,11 @@ const routes: Array<RouteRecordRaw> = [
   //   component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/_id/index.vue')
   // },
 
-  // {
-  //   path: '/youtube',
-  //   name: 'YouTube',
-  //   component: () => import(/* webpackChunkName: 'youtube' */ '~/pages/youtube/index.vue')
-  // },
+  {
+    path: '/youtube',
+    name: 'YouTube',
+    component: () => import(/* webpackChunkName: 'youtube' */ '~/pages/youtube/index.vue')
+  },
 
   // {
   //   path: '/radio',

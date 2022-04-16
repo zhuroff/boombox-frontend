@@ -1,56 +1,81 @@
 <template>
 
-<div id="scrollspace">
-  <div class="album" v-if="album">
-    <div class="album__frame" v-html="album.frame"></div>
-    <AlbumHeading
-      :heading="frameHeading"
-      @textInputHandler="saveFrameDescription"
+<section class="section">
+  <transition name="fade">
+    <AppPreloader
+      v-if="!album.isFetched"
+      mode="light"
     />
+  </transition>
+
+  <div id="scrollspace">
+    <transition name="flyUp">
+      <div
+        v-if="album.isFetched"
+        class="album --frame"
+      >
+        <div
+          class="album__frame"
+          v-html="album.data.frame"
+        ></div>
+
+        <AlbumHeading
+          :albumHead="frameHeading"
+          @textInputHandler="saveFrameDescription"
+        />
+      </div>
+    </transition>
   </div>
-</div>
+</section>
 
 </template>
 
-<script>
+<script lang="ts">
 
-import { ref, reactive, computed } from 'vue'
+import { defineComponent, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
-import AlbumHeading from '@/components/AlbumHeading.vue'
+import { FramePage } from '~/types/Frame'
+import FrameServices from '~/services/FrameServices'
+import AppPreloader from '~/components/Preloader/Preloader.vue'
+import AlbumHeading from '~/components/AlbumHeading.vue'
 
-export default {
+export default defineComponent({
   components: {
+    AppPreloader,
     AlbumHeading
   },
 
   setup() {
     const route = useRoute()
 
-    const album = ref(null)
+    const album = reactive({
+      isFetched: false,
+      data: {} as FramePage
+    })
 
     const frameHeading = reactive(computed(() => ({
-      title: album.value.title,
-      artist: album.value.artist,
-      releaseYear: album.value.releaseYear.title,
-      period: album.value.releaseYear._id,
-      genre: album.value.genre
+      title: album.data.title,
+      artist: album.data.artist,
+      period: album.data.period,
+      genre: album.data.genre
     })))
 
-    const saveFrameDescription = (value) => {
+    const saveFrameDescription = (value: string) => {
       console.log(value)
     }
 
-    const fetchFrame = async () => {
-      try {
-        const response = await axios.get(`/api/frames/${route.params.id}`)
-        album.value = response.data
-      } catch (error) {
-        console.error(error.response)
-      }
+    const setAlbumState = (data: FramePage) => {
+      album.isFetched = true
+      album.data = data
     }
 
-    fetchFrame()
+    const fetchFrame = async () => {
+      FrameServices.single(String(route.params.id))
+        .then((frame) => setAlbumState(frame))
+        .catch((error) => console.dir(error))
+    }
+
+    onMounted(() => fetchFrame())
 
     return {
       album,
@@ -58,7 +83,7 @@ export default {
       saveFrameDescription
     }
   }
-}
+})
 
 </script>
 

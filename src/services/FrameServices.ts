@@ -24,6 +24,16 @@ export default class FrameServices {
     throw new Error()
   }
 
+  static async single(id: string) {
+    const response = await api.get<FramePage>(`/api/frames/${id}`)
+    
+    if (response?.status === 200) {
+      return response.data
+    }
+
+    throw new Error()
+  }
+
   static async remove(id: string, payload: CategoryKeys) {
     const response = await api.post<ResponseMessage>(`/api/frames/${id}/delete`, payload)
 
