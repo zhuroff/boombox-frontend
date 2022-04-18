@@ -2,12 +2,12 @@
 
 <router-link
   class="album__link"
-  :to="{ path: `/${slug}/${album._id}` }"
+  :to="{ path: `/${slug}/${data._id}` }"
 >
   <div class="album__cover">
     <img
-      :src="album.poster || '/img/album.jpg'"
-      :alt="album.title"
+      :src="data.poster || '/img/album.jpg'"
+      :alt="data.title"
       class="album__cover_img"
     >
 
@@ -18,10 +18,10 @@
     >
   </div>
 
-  <div class="album__title">{{ album.title }}</div>
+  <div class="album__title">{{ data.title }}</div>
 
   <div class="album__info">
-    Albums in collection: {{ album.albums.length }}
+    {{ title }} {{ data.albums?.length || data.tracks?.length }}
   </div>
 </router-link>
 
@@ -31,11 +31,17 @@
 
 import { defineComponent, PropType } from 'vue'
 import { CollectionListItem } from '~/types/Collection'
+import { PlayListItem } from '~/types/Playlist'
 
 export default defineComponent({
   props: {
-    album: {
-      type: Object as PropType<CollectionListItem>,
+    data: {
+      type: Object as PropType<CollectionListItem | PlayListItem>,
+      required: true
+    },
+
+    title: {
+      type: String,
       required: true
     },
 

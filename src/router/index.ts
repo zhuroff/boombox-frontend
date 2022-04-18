@@ -86,17 +86,18 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
 
-  // {
-  //   path: '/playlists',
-  //   name: 'Playlists',
-  //   component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/index.vue')
-  // },
-
-  // {
-  //   path: '/playlists/:id',
-  //   name: 'Playlist',
-  //   component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/_id/index.vue')
-  // },
+  {
+    path: '/playlists',
+    name: 'Playlists',
+    component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/index.vue'),
+    children: [
+      {
+        path: '/playlists/:id',
+        name: 'Playlist',
+        component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/index.vue')
+      }
+    ]
+  },
 
   {
     path: '/youtube',

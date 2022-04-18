@@ -30,7 +30,8 @@
             @deleteItem="deleteCollection(album._id)"
           >
             <CardCollection
-              :album="album"
+              :data="album"
+              title="Albums in collection:"
               slug="collections"
             />
           </CardWrapper>
@@ -51,6 +52,11 @@ import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardCollection from '~/components/Cards/CardCollection.vue'
 
+type CollectionsPage = {
+  isFetched: boolean
+  data: CollectionListItem[] 
+}
+
 export default defineComponent({
   components: {
     AppPreloader,
@@ -61,9 +67,9 @@ export default defineComponent({
   setup() {
     const store = useStore(key)
 
-    const collections = reactive({
+    const collections = reactive<CollectionsPage>({
       isFetched: false,
-      data: [] as CollectionListItem[]
+      data: []
     })
 
     const setCollectionList = (data: CollectionListItem[]) => {

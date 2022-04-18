@@ -67,10 +67,10 @@ export default defineComponent({
         route: 'collections'
       },
 
-      // {
-      //   title: 'Playlists',
-      //   route: 'playlists'
-      // },
+      {
+        title: 'Playlists',
+        route: 'playlists'
+      },
 
       {
         title: 'YouTube',

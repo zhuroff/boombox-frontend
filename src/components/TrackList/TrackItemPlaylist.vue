@@ -45,7 +45,7 @@
 import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { IPlaylistPayloadPost, IPlaylistBasic } from '~/types/Playlist'
+import { IPlaylistPayloadPost, PlayListItem } from '~/types/Playlist'
 import { IFloatModalCheckAction } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
@@ -72,14 +72,14 @@ export default defineComponent({
     const playlists = reactive({
       isFetched: false,
       isActive: false,
-      data: [] as IPlaylistBasic[]
+      data: [] as PlayListItem[]
     })
 
-    const isItemChecked = (item: IPlaylistBasic) => (
+    const isItemChecked = (item: PlayListItem) => (
       item.tracks.some((el) => el.track === props.trackID)
     )
 
-    const setPlaylists = (data: IPlaylistBasic[]) => {
+    const setPlaylists = (data: PlayListItem[]) => {
       playlists.data = data
       playlists.isFetched = true
     }

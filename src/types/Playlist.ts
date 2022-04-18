@@ -8,7 +8,7 @@ interface IPlaylistTrackBasic {
   track: string,
 }
 
-interface IPlaylistBasic {
+type PlayListItem = {
   _id: string
   title: string
   tracks: IPlaylistTrackBasic[]
@@ -16,5 +16,5 @@ interface IPlaylistBasic {
 
 export {
   IPlaylistPayloadPost,
-  IPlaylistBasic
+  PlayListItem
 }
