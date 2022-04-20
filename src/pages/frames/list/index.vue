@@ -68,8 +68,8 @@ import {
   reactive,
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { IPagination, RequestConfig } from '~/types/Global'
-import { FrameBasicResponse, FramePage } from '~/types/Frame'
+import { TPagination, RequestConfig } from '~/types/Global'
+import { FrameAlbumResponse, FrameAlbum } from '~/types/Frame'
 import { CategoryKeys } from '~/types/Category'
 import { useStore } from 'vuex'
 import { key } from '~/store'
@@ -108,8 +108,8 @@ export default defineComponent({
 
     const albums = reactive({
       isFetched: false,
-      data: [] as FramePage[],
-      pagination: {} as IPagination
+      data: [] as FrameAlbum[],
+      pagination: {} as TPagination
     })
 
     const isCreatingFrameModalActive = ref(false)
@@ -138,7 +138,7 @@ export default defineComponent({
       router.push({ query: { p: value } })
     }
 
-    const addNewFrame = (frame: FramePage) => {
+    const addNewFrame = (frame: FrameAlbum) => {
       albums.data.unshift(frame)
       albums.pagination.totalDocs += 1
 
@@ -150,7 +150,7 @@ export default defineComponent({
       frameModalSwitcher()
     }
 
-    const setFramesAlbums = (data: FrameBasicResponse) => {
+    const setFramesAlbums = (data: FrameAlbumResponse) => {
       albums.isFetched = true
       albums.pagination = data.pagination
       albums.data = data.docs

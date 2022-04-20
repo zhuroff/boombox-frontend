@@ -34,7 +34,7 @@
 
 import { defineComponent, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { FramePage } from '~/types/Frame'
+import { FrameAlbum } from '~/types/Frame'
 import FrameServices from '~/services/FrameServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AlbumHeading from '~/components/AlbumHeading.vue'
@@ -50,7 +50,7 @@ export default defineComponent({
 
     const album = reactive({
       isFetched: false,
-      data: {} as FramePage
+      data: {} as FrameAlbum
     })
 
     const frameHeading = reactive(computed(() => ({
@@ -64,7 +64,7 @@ export default defineComponent({
       console.log(value)
     }
 
-    const setAlbumState = (data: FramePage) => {
+    const setAlbumState = (data: FrameAlbum) => {
       album.isFetched = true
       album.data = data
     }

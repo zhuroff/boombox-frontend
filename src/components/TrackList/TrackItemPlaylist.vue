@@ -45,8 +45,8 @@
 import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { IPlaylistPayloadPost, PlayListItem } from '~/types/Playlist'
-import { IFloatModalCheckAction } from '~/types/Global'
+import { PlaylistPayload, PlayListItem } from '~/types/Playlist'
+import { FloatModalCheckAction } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
 import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
@@ -110,7 +110,7 @@ export default defineComponent({
     const createNewPlaylist = async (title: string) => {
       playlists.isFetched = false
 
-      const payload: IPlaylistPayloadPost = {
+      const payload: PlaylistPayload = {
         title,
         track: props.trackID
       }
@@ -118,7 +118,7 @@ export default defineComponent({
       try {
         const response = await api.post('/api/playlists', payload)
 
-        if (response?.status === 200) {
+        if (response?.status === 201) {
           store.commit('setSnackbarMessage', {
             message: response.data.message,
             type: 'success'
@@ -131,7 +131,7 @@ export default defineComponent({
       }
     }
 
-    const playlistItemAction = async (payload: IFloatModalCheckAction) => {
+    const playlistItemAction = async (payload: FloatModalCheckAction) => {
       const targetPlaylist = playlists.data.find((playlist) => (
         playlist._id === payload.listID
       ))
@@ -144,7 +144,7 @@ export default defineComponent({
         try {
           const response = await api.patch(`/api/playlists/${payload.listID}`, payload)
 
-          if (response?.status === 200) {
+          if (response?.status === 201) {
             store.commit('setSnackbarMessage', {
               message: response.data.message,
               type: 'success'

@@ -72,13 +72,13 @@
 
 import { defineComponent, computed, onMounted, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { TPagination, RequestConfig } from '~/types/Global'
+import { NewsPage, NewsPageResponse } from '~/types/News'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardNews from '~/components/Cards/CardNews.vue'
 import AppPagination from '~/components/AppPagination.vue'
 import NewsServices from '~/services/NewsServices'
-import { IPagination, RequestConfig } from '~/types/Global'
-import { NewsPage, NewsPageResponse } from '~/types/News'
 
 export default defineComponent({
   components: {
@@ -101,7 +101,7 @@ export default defineComponent({
     const news = reactive({
       isFetched: false,
       data: [] as NewsPage[],
-      pagination: {} as IPagination
+      pagination: {} as TPagination
     })
 
     const isFetched = computed(() => news.isFetched)

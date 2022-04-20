@@ -1,8 +1,8 @@
 import { MutationTree } from 'vuex'
 import { AppStateInterface } from './state'
-import { ISnackbar } from '~/types/Global'
-import { IAlbumFull } from '~/types/Album'
-import { IOrderPayload, ITrackProgress, IPlaylist } from '~/types/Player'
+import { TSnackbar, ReorderPayload } from '~/types/Global'
+import { AlbumPage } from '~/types/Album'
+import { TrackProgress, PlayerPlaylist } from '~/types/Player'
 import { initPlaylist } from './initStates'
 import { playingTrackInitial } from './initStates'
 import {
@@ -11,13 +11,14 @@ import {
   periodName,
   albumCover
 } from '~/shared/stringifier'
+import { PlaylistPage } from '~/types/Playlist'
 
-const getChosenTrack = (playlist: IPlaylist, fileid: number) => (
+const getChosenTrack = (playlist: PlayerPlaylist, fileid: number) => (
   playlist.tracks.find((el) => el.fileid === fileid)
 )
 
 const mutations: MutationTree<AppStateInterface> = {
-  setSnackbarMessage: (state: AppStateInterface, snackbar: ISnackbar) => {
+  setSnackbarMessage: (state: AppStateInterface, snackbar: TSnackbar) => {
     state.snackbar.push(snackbar)
     setTimeout(() => state.snackbar.splice(0, 1), 5000)
   },
@@ -26,7 +27,7 @@ const mutations: MutationTree<AppStateInterface> = {
     state.snackbar.splice(index, 1)
   },
 
-  setPlayerPlaylist: (state: AppStateInterface, data: IAlbumFull) => {
+  setPlayerPlaylist: <T extends AlbumPage & PlaylistPage>(state: AppStateInterface, data: T) => {
     const playlist = { ...data, tracks: data.tracks }
 
     if (!state.currentPlaylist._id.length) {
@@ -41,7 +42,7 @@ const mutations: MutationTree<AppStateInterface> = {
 
     if (!chosenTrack) {
       state.currentPlaylist = { ...state.reservedPlaylist }
-      state.reservedPlaylist = { ...initPlaylist } as IPlaylist
+      state.reservedPlaylist = { ...initPlaylist } as PlayerPlaylist
     }
   },
 
@@ -56,10 +57,10 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.title = chosenTrack.title
       state.playingTrack.source = chosenTrack.link
       state.playingTrack.duration = chosenTrack?.duration || null
-      state.playingTrack.artistName = artistName(state.currentPlaylist.artist)
-      state.playingTrack.albumName = albumName(state.currentPlaylist)
-      state.playingTrack.year = periodName(state.currentPlaylist.period)
-      state.playingTrack.cover = albumCover(state.currentPlaylist)
+      state.playingTrack.artistName = artistName(state.currentPlaylist.artist || chosenTrack.artist)
+      state.playingTrack.albumName = albumName(chosenTrack.inAlbum?.title || state.currentPlaylist.title)
+      state.playingTrack.year = periodName(state.currentPlaylist?.period || chosenTrack.inAlbum?.period)
+      state.playingTrack.cover = albumCover(state.currentPlaylist?.albumCover || chosenTrack.inAlbum?.albumCover)
       state.playingTrack.isOnLoading = true
       state.playingTrack.crackle.loop = true
     }
@@ -82,7 +83,7 @@ const mutations: MutationTree<AppStateInterface> = {
     state.playingTrack.isOnLoading = false
   },
 
-  updateListeningProgress: (state: AppStateInterface, payload: ITrackProgress) => {
+  updateListeningProgress: (state: AppStateInterface, payload: TrackProgress) => {
     const { progressLine, progressTime } = payload
 
     state.playingTrack.progressLine = progressLine
@@ -130,8 +131,8 @@ const mutations: MutationTree<AppStateInterface> = {
     }
   },
 
-  changePlaylistOrder: (state: AppStateInterface, payload: IOrderPayload) => {
-    const targetPlaylistTracks = state.currentPlaylist._id === payload.playlistID
+  changePlaylistOrder: (state: AppStateInterface, payload: ReorderPayload) => {
+    const targetPlaylistTracks = state.currentPlaylist._id === payload.entityID
       ? state.currentPlaylist.tracks
       : state.reservedPlaylist.tracks
 

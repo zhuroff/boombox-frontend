@@ -17,7 +17,7 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import { IFloatModalCheckAction } from '~/types/Global'
+import { FloatModalCheckAction } from '~/types/Global'
 
 export default defineComponent({
   props: {
@@ -41,7 +41,7 @@ export default defineComponent({
   setup(props, { emit }) {
 
     const checkFloatModalItem = () => {
-      const payload: IFloatModalCheckAction = {
+      const payload: FloatModalCheckAction = {
         itemID: props.itemID,
         listID: props.item._id,
         inList: props.isChecked,

@@ -1,12 +1,12 @@
-import { ISnackbar } from '~/types/Global'
-import { IPlaylist, IPlayingTrack } from '~/types/Player'
+import { TSnackbar } from '~/types/Global'
+import { PlayerPlaylist, PlayingTrack } from '~/types/Player'
 import { initPlaylist, playingTrackInitial } from './initStates'
 
 export interface AppStateInterface {
-  currentPlaylist: IPlaylist
-  reservedPlaylist: IPlaylist
-  playingTrack: IPlayingTrack
-  snackbar: ISnackbar[]
+  currentPlaylist: PlayerPlaylist
+  reservedPlaylist: PlayerPlaylist
+  playingTrack: PlayingTrack
+  snackbar: TSnackbar[]
 }
 
 function state(): AppStateInterface {

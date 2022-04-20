@@ -1,8 +1,8 @@
 import api from '~/api'
 import { reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { IPagination } from '~/types/Global'
-import { ICategoryMedium, ICategoryFull, CategoryImagesKeys } from '~/types/Category'
+import { TPagination } from '~/types/Global'
+import { CategoryItem, CategoryPage, CategoryImagesKeys } from '~/types/Category'
 
 const useCategories = (apiQuery: string) => {
   const router = useRouter()
@@ -16,8 +16,8 @@ const useCategories = (apiQuery: string) => {
 
   const categories = reactive({
     isFetched: false,
-    data: [] as ICategoryMedium[],
-    pagination: {} as IPagination
+    data: [] as CategoryItem[],
+    pagination: {} as TPagination
   })
 
   const changeRoutePage = (value: number) => {
@@ -37,7 +37,7 @@ const useCategories = (apiQuery: string) => {
     fetchCategoryList()
   }
 
-  const setFetchedData = (data: { docs: ICategoryMedium[], pagination: IPagination }) => {
+  const setFetchedData = (data: { docs: CategoryItem[], pagination: TPagination }) => {
     categories.isFetched = true
 
     if (data) {
@@ -75,7 +75,7 @@ const useCategory = (apiQuery: string) => {
 
   const category = reactive({
     isFetched: false,
-    data: {} as ICategoryFull
+    data: {} as CategoryPage
   })
 
   const setCategoryImage = (payload: { key: string, url: string }) => {

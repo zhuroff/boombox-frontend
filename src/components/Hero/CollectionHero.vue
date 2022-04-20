@@ -23,7 +23,7 @@
     <div class="hero__info">
       <div class="hero__content">
         <div class="hero__title">{{ collection.title }}</div>
-        <div class="hero__albums">Albums: {{ collection.albums.length }}</div>
+        <div class="hero__albums">{{ keyWord }}: {{ collection.albums?.length || collection.tracks?.length }}</div>
       </div>
     </div>
   </div>
@@ -43,6 +43,11 @@ export default defineComponent({
   },
 
   props: {
+    keyWord: {
+      type: String,
+      required: true
+    },
+
     collection: {
       type: Object as PropType<CollectionPageItem>,
       required: true

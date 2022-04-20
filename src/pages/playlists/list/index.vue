@@ -44,16 +44,11 @@
 <script lang="ts">
 
 import { defineComponent, onMounted, reactive } from 'vue'
-import { PlayListItem } from '~/types/Playlist'
+import { PlaylistItemProps, PlayListItem } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardCollection from '~/components/Cards/CardCollection.vue'
-
-type PlaylistsPage = {
-  isFetched: boolean
-  data: PlayListItem[] 
-}
 
 export default defineComponent({
   components: {
@@ -63,7 +58,7 @@ export default defineComponent({
   },
 
   setup() {
-    const playlists = reactive<PlaylistsPage>({
+    const playlists = reactive<PlaylistItemProps>({
       isFetched: false,
       data: []
     })

@@ -11,6 +11,7 @@
       <transition-group name="flyUp">
         <CollectionHero
           v-if="collection.isFetched"
+          keyWord="Albums"
           :collection="collection.data"
           @setCollectionImage="setCollectionImage"
         />
@@ -42,8 +43,8 @@ import { defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { CollectionPageItem, ReorderPayload } from '~/types/Collection'
-import { IDraggableEvent } from '~/types/Global'
+import { CollectionPageItem } from '~/types/Collection'
+import { DraggableEvent, ReorderPayload } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
 import CollectionServices from '~/services/CollectionServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -74,9 +75,9 @@ export default defineComponent({
       disabled: false
     })
 
-    const orderChanged = (event: IDraggableEvent) => {
+    const orderChanged = (event: DraggableEvent) => {
       const payload: ReorderPayload = {
-        collectionID: collection.data._id,
+        entityID: collection.data._id,
         oldOrder: event.oldIndex,
         newOrder: event.newIndex
       }

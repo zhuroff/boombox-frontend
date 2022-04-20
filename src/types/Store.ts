@@ -1,9 +1,9 @@
-import { IAlbumFull } from '~/types/Album'
+import { AlbumPage } from '~/types/Album'
 
 interface IState {}
 
 interface IAlbumState {
-  album: IAlbumFull
+  album: AlbumPage
 }
 
 export {

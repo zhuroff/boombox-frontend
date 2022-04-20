@@ -1,4 +1,4 @@
-import { IPagination } from './Global'
+import { TPagination } from './Global'
 
 type NewsPage = {
   id: number
@@ -13,7 +13,7 @@ type NewsPage = {
 
 type NewsPageResponse = {
   docs: NewsPage[]
-  pagination: IPagination
+  pagination: TPagination
 }
 
 export {

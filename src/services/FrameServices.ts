@@ -1,11 +1,11 @@
 import { CategoryKeys } from '~/types/Category'
-import { FrameBasic, FrameBasicResponse, FramePage } from '~/types/Frame'
+import { FrameAlbum, FrameAlbumResponse, FramePayload } from '~/types/Frame'
 import { RequestConfig, ResponseMessage } from '~/types/Global'
 import api from '~/api'
 
 export default class FrameServices {
-  static async create(payload: FrameBasic) {
-    const response = await api.post<FramePage>('/api/frames/create', payload)
+  static async create(payload: FramePayload) {
+    const response = await api.post<FrameAlbum>('/api/frames/create', payload)
 
     if (response?.status === 200) {
       return response.data
@@ -15,7 +15,7 @@ export default class FrameServices {
   }
 
   static async list(config: RequestConfig) {
-    const response = await api.post<FrameBasicResponse>('/api/frames', config)
+    const response = await api.post<FrameAlbumResponse>('/api/frames', config)
 
     if (response?.status === 200) {
       return response.data
@@ -25,7 +25,7 @@ export default class FrameServices {
   }
 
   static async single(id: string) {
-    const response = await api.get<FramePage>(`/api/frames/${id}`)
+    const response = await api.get<FrameAlbum>(`/api/frames/${id}`)
     
     if (response?.status === 200) {
       return response.data

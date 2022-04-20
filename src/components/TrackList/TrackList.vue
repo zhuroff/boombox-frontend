@@ -23,9 +23,8 @@
 import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { IAlbumTrack } from '~/types/Album'
-import { IOrderPayload } from '~/types/Player'
-import { IDraggableEvent } from '~/types/Global'
+import { Track } from '~/types/Track'
+import { DraggableEvent, ReorderPayload } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
 import TrackItem from './TrackItem.vue'
 import './TrackList.scss'
@@ -38,7 +37,7 @@ export default defineComponent({
 
   props: {
     tracks: {
-      type: Array as () => IAlbumTrack[],
+      type: Array as () => Track[],
       required: true
     },
 
@@ -56,11 +55,11 @@ export default defineComponent({
       disabled: false
     })
 
-    const orderChanged = (event: IDraggableEvent) => {
-      const payload: IOrderPayload = {
+    const orderChanged = (event: DraggableEvent) => {
+      const payload: ReorderPayload = {
         oldOrder: event.oldIndex,
         newOrder: event.newIndex,
-        playlistID: props.albumID
+        entityID: props.albumID
       }
 
       store.commit('changePlaylistOrder', payload)

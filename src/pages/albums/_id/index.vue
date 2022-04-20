@@ -108,9 +108,9 @@ import {
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { IAlbumFull, AlbumHeadProps } from '~/types/Album'
+import { AlbumPage, AlbumPageProps, AlbumHeadProps } from '~/types/Album'
 import { CollectionListItem } from '~/types/Collection'
-import { IFloatModalCheckAction } from '~/types/Global'
+import { FloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
 import Button from '~/components/Button/Button.vue'
@@ -143,9 +143,9 @@ export default defineComponent({
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
     const isBookletModalActive = ref(false)
 
-    const album = reactive({
+    const album = reactive<AlbumPageProps>({
       isFetched: false,
-      data: {} as IAlbumFull
+      data: {} as AlbumPage
     })
 
     const collections = reactive({
@@ -216,7 +216,7 @@ export default defineComponent({
         .catch((ignore) => ignore)
     }
 
-    const addOrRemoveFromCollection = (payload: IFloatModalCheckAction) => {
+    const addOrRemoveFromCollection = (payload: FloatModalCheckAction) => {
       CollectionServices.addRemove(collections.data, payload)
         .then((result) => {
           store.commit('setSnackbarMessage', result)
@@ -234,7 +234,7 @@ export default defineComponent({
       }
     }
 
-    const setAlbumState = (data: IAlbumFull) => {
+    const setAlbumState = (data: AlbumPage) => {
       album.data = data
       album.isFetched = true
     }

@@ -29,15 +29,7 @@
 
   <TrackItemDuration :duration="track.duration" />
 
-  <TrackItemPlaylist
-    v-if="!isPlaylist"
-    :trackID="track._id"
-  />
-
-  <!-- <TrackItemRemove
-    v-else
-    @removeTrackFromPlaylist="removeTrackFromPlaylist"
-  /> -->
+  <TrackItemPlaylist :trackID="track._id" />
 
   <TrackItemDisable :fileid="track.fileid" />
 
@@ -66,12 +58,11 @@
 import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { IAlbumTrack } from '~/types/Album'
+import { Track } from '~/types/Track'
 import AppSprite from '~/components/AppSprite.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
-// import TrackItemRemove from './TrackItemRemove.vue'
 import TrackItemPlaylist from './TrackItemPlaylist.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
 import Modal from '~/components/Modal/Modal.vue'
@@ -83,7 +74,6 @@ export default defineComponent({
     TrackItemPlay,
     TrackItemTitle,
     TrackItemDuration,
-    // TrackItemRemove,
     TrackItemPlaylist,
     TrackItemDisable,
     Modal,
@@ -92,17 +82,13 @@ export default defineComponent({
 
   props: {
     track: {
-      type: Object as () => IAlbumTrack,
+      type: Object as () => Track,
       required: true
     },
 
     index: {
       type: Number,
       required: true
-    },
-
-    isPlaylist: {
-      required: false
     }
   },
 
@@ -123,19 +109,10 @@ export default defineComponent({
       isModalActive.value = !isModalActive.value
     }
 
-    // const removeTrackFromPlaylist = (payload) => {
-    //   emit('removeTrackFromPlaylist', {
-    //     ...payload,
-    //     itemID: props.track.trackID,
-    //     isSave: false
-    //   })
-    // }
-
     return {
       isModalActive,
       isPlayingTrack,
       lyricsModalSwitcher,
-      // removeTrackFromPlaylist,
       trackArtistAndTitle
     }
   }

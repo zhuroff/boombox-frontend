@@ -1,9 +1,9 @@
-import { CollectionListItem, CollectionPageItem, ReorderPayload } from '~/types/Collection';
-import { IFloatModalCheckAction, ResponseMessage } from '~/types/Global';
+import { CollectionListItem, CollectionPageItem } from '~/types/Collection';
+import { FloatModalCheckAction, ResponseMessage, ReorderPayload } from '~/types/Global';
 import api from '~/api'
 
 export default class CollectionServices {
-  static async addRemove(collections: CollectionListItem[], payload: IFloatModalCheckAction) {
+  static async addRemove(collections: CollectionListItem[], payload: FloatModalCheckAction) {
     const targetCollection = collections.find((collection) => (
         collection._id === payload.listID
       ))
@@ -72,7 +72,7 @@ export default class CollectionServices {
   }
 
   static async reorder(payload: ReorderPayload) {
-    const response = await api.patch<ResponseMessage>(`/api/collections/${payload.collectionID}/reorder`, payload)
+    const response = await api.patch<ResponseMessage>(`/api/collections/${payload.entityID}/reorder`, payload)
 
     if (response?.status === 201) {
       return response.data.message

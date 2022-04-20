@@ -1,6 +1,6 @@
-import { IPlaylist, IPlayingTrack } from '~/types/Player'
+import { PlayerPlaylist, PlayingTrack } from '~/types/Player'
 
-const initPlaylist: IPlaylist = {
+const initPlaylist: PlayerPlaylist = {
   _id: '',
   title: '',
   albumCover: '',
@@ -9,7 +9,7 @@ const initPlaylist: IPlaylist = {
   tracks: []
 }
 
-const playingTrackInitial: IPlayingTrack = {
+const playingTrackInitial: PlayingTrack = {
   isOnPause: false,
   fileid: 0,
   duration: null,

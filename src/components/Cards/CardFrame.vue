@@ -20,13 +20,13 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
-import { FramePage } from '~/types/Frame'
+import { defineComponent, PropType } from 'vue'
+import { FrameAlbum } from '~/types/Frame'
 
 export default defineComponent({
   props: {
     album: {
-      type: Object as () => FramePage,
+      type: Object as PropType<FrameAlbum>,
       required: true
     }
   }

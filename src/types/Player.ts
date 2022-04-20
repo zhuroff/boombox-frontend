@@ -1,27 +1,21 @@
-import { ICategoryBasic } from '~/types/Category'
-import { IAlbumTrack } from '~/types/Album'
+import { CategoryBasic } from '~/types/Category'
+import { Track } from '~/types/Track'
 
-interface IOrderPayload {
-  oldOrder: number
-  newOrder: number
-  playlistID: string
-}
-
-interface ITrackProgress {
+type TrackProgress = {
   progressLine: number
   progressTime: number
 }
 
-interface IPlaylist {
+type PlayerPlaylist = {
   _id: string
-  albumCover: string
-  artist: ICategoryBasic
-  period: ICategoryBasic
   title: string
-  tracks: IAlbumTrack[]
+  tracks: Track[]
+  albumCover?: string
+  artist?: CategoryBasic
+  period?: CategoryBasic
 }
 
-interface IPlayingTrack extends ITrackProgress {
+type PlayingTrack = TrackProgress & {
   fileid: number
   duration: number | string | null
   isOnPause: boolean
@@ -40,8 +34,7 @@ interface IPlayingTrack extends ITrackProgress {
 }
 
 export {
-  IOrderPayload,
-  ITrackProgress,
-  IPlaylist,
-  IPlayingTrack
+  TrackProgress,
+  PlayerPlaylist,
+  PlayingTrack
 }

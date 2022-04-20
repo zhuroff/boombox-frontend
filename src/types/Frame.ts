@@ -1,25 +1,25 @@
-import { ICategoryBasic } from '~/types/Category'
-import { IPagination } from './Global'
+import { CategoryBasic } from '~/types/Category'
+import { TPagination } from './Global'
 
-type FrameBasic = {
+type FramePayload = {
   title: string
-  artist: ICategoryBasic
-  genre: ICategoryBasic
-  period: ICategoryBasic
+  artist: CategoryBasic
+  genre: CategoryBasic
+  period: CategoryBasic
   frame: string
 }
 
-type FramePage = FrameBasic & {
+type FrameAlbum = FramePayload & {
   _id: string
 }
 
-type FrameBasicResponse = {
-  docs: FramePage[]
-  pagination: IPagination
+type FrameAlbumResponse = {
+  docs: FrameAlbum[]
+  pagination: TPagination
 }
 
 export {
-  FrameBasic,
-  FramePage,
-  FrameBasicResponse
+  FramePayload,
+  FrameAlbum,
+  FrameAlbumResponse
 }

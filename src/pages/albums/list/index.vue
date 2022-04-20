@@ -47,8 +47,8 @@
 
 import { defineComponent, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { AlbumBasicResponse, IAlbumBasic } from '~/types/Album'
-import { IPagination, RequestConfig } from '~/types/Global'
+import { AlbumPageResponse, AlbumItemProps } from '~/types/Album'
+import { TPagination, RequestConfig } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import AppCardAlbum from '~/components/AppCardAlbum.vue'
@@ -73,10 +73,10 @@ export default defineComponent({
       limit: 40
     })
 
-    const albums = reactive({
+    const albums = reactive<AlbumItemProps>({
       isFetched: false,
-      data: [] as IAlbumBasic[],
-      pagination: {} as IPagination
+      data: [],
+      pagination: {} as TPagination
     })
 
     const clearfyAlbumList = () => {
@@ -96,7 +96,7 @@ export default defineComponent({
       fetchAlbums()
     }
 
-    const setFetchedData = (data: AlbumBasicResponse) => {
+    const setFetchedData = (data: AlbumPageResponse) => {
       albums.pagination = data.pagination
       albums.data = data.docs
       albums.isFetched = true

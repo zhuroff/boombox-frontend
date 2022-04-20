@@ -1,9 +1,4 @@
-import { IAlbumBasic } from "./Album"
-
-type ICollectionPayloadPost = {
-  title: string
-  album: string
-}
+import { AlbumItem } from './Album'
 
 type CollectionListItemAlbum = {
   order: number
@@ -21,7 +16,7 @@ type CollectionListItem = {
 type CollectionPageItemAlbum = {
   order: number
   _id: string
-  album: IAlbumBasic
+  album: AlbumItem
 }
 
 type CollectionPageItem = {
@@ -30,15 +25,7 @@ type CollectionPageItem = {
   albums: CollectionPageItemAlbum[]
 }
 
-type ReorderPayload = {
-  collectionID: string
-  oldOrder: number
-  newOrder: number
-}
-
 export {
-  ICollectionPayloadPost,
   CollectionListItem,
-  CollectionPageItem,
-  ReorderPayload
+  CollectionPageItem
 }

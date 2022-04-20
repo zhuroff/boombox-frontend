@@ -1,53 +1,53 @@
-import { ICategoryBasic } from './Category'
-import { IPagination } from './Global'
+import { CategoryBasic } from './Category'
+import { TPagination } from './Global'
+import { Track } from './Track'
 
-type IAlbumTrack = {
-  _id: string
-  fileid: number
-  link: string
-  listened: number
-  title: string
-  artist: ICategoryBasic
-  lyrics?: string
-  duration?: number | string
-  isDisabled?: boolean
-  order?: number
-}
-
-type IAlbumBasic = {
+type AlbumItem = {
   _id: string
   albumCover: string
   title: string
-  artist: ICategoryBasic
-  genre: ICategoryBasic
-  period: ICategoryBasic
+  artist: CategoryBasic
+  genre: CategoryBasic
+  period: CategoryBasic
   folderid?: number
 }
 
-type IAlbumFull = IAlbumBasic & {
+type AlbumPage = AlbumItem & {
   albumCoverArt: number | string[]
   description: string
-  tracks: IAlbumTrack[]
+  tracks: Track[]
   isLoaded: boolean
 }
 
-type AlbumBasicResponse = {
-  docs: IAlbumBasic[]
-  pagination: IPagination
+type AlbumPageResponse = {
+  docs: AlbumItem[]
+  pagination: TPagination
+}
+
+type AlbumItemProps = {
+  isFetched: boolean
+  data: AlbumItem[]
+  pagination: TPagination
+}
+
+type AlbumPageProps = {
+  isFetched: boolean
+  data: AlbumPage
 }
 
 type AlbumHeadProps = {
   title: string
-  artist: ICategoryBasic,
-  period: ICategoryBasic,
-  genre: ICategoryBasic,
+  artist: CategoryBasic,
+  period: CategoryBasic,
+  genre: CategoryBasic,
   description: string
 }
 
 export {
-  IAlbumBasic,
-  IAlbumFull,
-  IAlbumTrack,
-  AlbumBasicResponse,
-  AlbumHeadProps
+  AlbumItem,
+  AlbumPage,
+  AlbumHeadProps,
+  AlbumItemProps,
+  AlbumPageProps,
+  AlbumPageResponse
 }

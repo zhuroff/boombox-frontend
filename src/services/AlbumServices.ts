@@ -1,10 +1,10 @@
-import { AlbumBasicResponse, IAlbumFull } from '~/types/Album'
+import { AlbumPageResponse, AlbumPage } from '~/types/Album'
 import { RequestConfig } from '~/types/Global'
 import api from '~/api'
 
 export default class AlbumServices {
-  static async list(config: RequestConfig): Promise<AlbumBasicResponse> {
-    const response = await api.post<AlbumBasicResponse>('/api/albums', config)
+  static async list(config: RequestConfig) {
+    const response = await api.post<AlbumPageResponse>('/api/albums', config)
 
     if (response?.status === 200) {
       return response.data
@@ -13,8 +13,8 @@ export default class AlbumServices {
     throw new Error()
   }
 
-  static async album(id: string): Promise<IAlbumFull> {
-    const response = await api.get<IAlbumFull>(`/api/albums/${id}`)
+  static async album(id: string) {
+    const response = await api.get<AlbumPage>(`/api/albums/${id}`)
 
     if (response?.status === 200) {
       return response.data

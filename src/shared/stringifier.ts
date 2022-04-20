@@ -1,47 +1,34 @@
-import { ICategoryBasic } from '~/types/Category'
-import { IPlaylist } from '~/types/Player'
+import { CategoryBasic } from '~/types/Category'
 
-const artistName = (artist: ICategoryBasic, fileid?: number) => {
+const artistName = (artist: CategoryBasic) => {
   if (artist) {
     return artist.title
   }
 
-  // const targetTrack = playlist.tracks.find((el) => el.fileid === fileid)
-
-  // if (targetTrack) return targetTrack.artist.title
   return 'Untitled artist'
 }
 
-const albumName = (album: IPlaylist, fileid?: number) => {
-  if (album.title) {
-    return album.title
+const albumName = (albumTitle: string) => {
+  if (albumTitle) {
+    return albumTitle
   }
 
-  // const targetTrack = playlist.tracks.find((el) => el.fileid === fileid)
-
-  // if (targetTrack) return targetTrack.album.title
   return 'Untitled album'
 }
 
-const periodName = (period: ICategoryBasic, fileid?: number) => {
-  if (period.title) {
+const periodName = (period: CategoryBasic | undefined) => {
+  if (period?.title) {
     return period.title
   }
 
-  // const targetTrack = playlist.tracks.find((el) => el.fileid === fileid)
-
-  // if (targetTrack) return targetTrack.album.releaseYear
   return 'Unknown year'
 }
 
-const albumCover = (album: IPlaylist, fileid?: number) => {
-  if (album.albumCover) {
-    return album.albumCover
+const albumCover = (cover: string | undefined) => {
+  if (cover) {
+    return cover
   }
 
-  // const targetTrack = playlist.tracks.find((el) => el.fileid === fileid)
-
-  // if (targetTrack) return targetTrack.album.albumCover
   return 'https://sverigesradio.se/dist/images/album-cover-placeholder-light.png'
 }
 

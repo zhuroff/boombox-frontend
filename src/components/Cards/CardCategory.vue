@@ -20,14 +20,14 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
-import { ICategoryMedium } from '~/types/Category'
+import { defineComponent, PropType } from 'vue'
+import { CategoryItem } from '~/types/Category'
 import { hostString } from '~/shared/media'
 
 export default defineComponent({
   props: {
     category: {
-      type: Object as () => ICategoryMedium,
+      type: Object as PropType<CategoryItem>,
       required: true
     },
 

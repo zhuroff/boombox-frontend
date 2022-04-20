@@ -1,9 +1,11 @@
-interface IPlaylistPayloadPost {
+import { Track } from './Track'
+
+type PlaylistPayload = {
   title: string
   track: string
 }
 
-interface IPlaylistTrackBasic {
+type PlaylistTrackItem = {
   order: number
   track: string,
 }
@@ -11,10 +13,30 @@ interface IPlaylistTrackBasic {
 type PlayListItem = {
   _id: string
   title: string
-  tracks: IPlaylistTrackBasic[]
+  tracks: PlaylistTrackItem[]
+}
+
+type PlaylistPage = {
+  _id: string
+  title: string
+  dateCreated: string
+  tracks: Track[]
+}
+
+type PlaylistItemProps = {
+  isFetched: boolean
+  data: PlayListItem[] 
+}
+
+type PlaylistPageProps = {
+  isFetched: boolean
+  data: PlaylistPage
 }
 
 export {
-  IPlaylistPayloadPost,
-  PlayListItem
+  PlaylistPayload,
+  PlayListItem,
+  PlaylistPage,
+  PlaylistItemProps,
+  PlaylistPageProps
 }

@@ -95,8 +95,8 @@
 <script lang="ts">
 
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
-import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult, ICategoryBasic } from '~/types/Category'
-import { FrameBasic } from '~/types/Frame'
+import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult, CategoryBasic } from '~/types/Category'
+import { FramePayload } from '~/types/Frame'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
@@ -127,7 +127,7 @@ export default defineComponent({
       periods: 'period'
     })
 
-    const newFrame = reactive<FrameBasic>({
+    const newFrame = reactive<FramePayload>({
       title: '',
       frame: '',
       artist: { _id: '', title: 'Artist' },
@@ -207,7 +207,7 @@ export default defineComponent({
         .catch((error) => console.dir(error))
     }
 
-    const selectCategory = (category: CategorySearchResult | ICategoryBasic) => {
+    const selectCategory = (category: CategorySearchResult | CategoryBasic) => {
       newFrame[keysMatcher[activeCategory.key]] = {
         _id: category._id,
         title: category.title

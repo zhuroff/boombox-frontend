@@ -30,12 +30,12 @@
 <script lang="ts">
 
 import { defineComponent, PropType } from 'vue'
-import { IAlbumBasic } from '~/types/Album'
+import { AlbumItem } from '~/types/Album'
 
 export default defineComponent({
   props: {
     album: {
-      type: Object as PropType<IAlbumBasic>,
+      type: Object as PropType<AlbumItem>,
       required: true
     }
   }

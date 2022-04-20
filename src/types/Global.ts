@@ -1,22 +1,28 @@
-type IPagination = {
+type TPagination = {
   totalDocs: number
   totalPages: number
   page: number
 }
 
-type IDraggableEvent = {
+type DraggableEvent = {
   newIndex: number
   oldIndex: number
 }
 
-type IFloatModalCheckAction = {
+type ReorderPayload = {
+  entityID: string
+  oldOrder: number
+  newOrder: number
+}
+
+type FloatModalCheckAction = {
   inList: boolean
   itemID: string
   listID: string
   order: number
 }
 
-type ISnackbar = {
+type TSnackbar = {
   message: string
   type: 'warning' | 'success' | 'error' | 'info'
   order: number
@@ -33,10 +39,11 @@ type ResponseMessage = {
 }
 
 export {
-  IPagination,
-  IDraggableEvent,
-  IFloatModalCheckAction,
-  ISnackbar,
+  TPagination,
+  DraggableEvent,
+  ReorderPayload,
+  FloatModalCheckAction,
+  TSnackbar,
   RequestConfig,
   ResponseMessage
 }

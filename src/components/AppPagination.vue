@@ -36,7 +36,7 @@
 <script lang="ts">
 
 import { defineComponent, computed } from 'vue'
-import { IPagination } from '~/types/Global'
+import { TPagination } from '~/types/Global'
 import AppSprite from '~/components/AppSprite.vue'
 
 export default defineComponent({
@@ -46,7 +46,7 @@ export default defineComponent({
 
   props: {
     pagination: {
-      type: Object as () => IPagination,
+      type: Object as () => TPagination,
       required: true
     },
 
