@@ -27,13 +27,15 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { NewsPage } from '~/types/News'
 
 export default defineComponent({
+  name: 'CardNews',
+
   props: {
     item: {
-      type: Object as () => NewsPage,
+      type: Object as PropType<NewsPage>,
       required: true
     }
   }

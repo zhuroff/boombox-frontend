@@ -1,8 +1,8 @@
 import api from '~/api'
 import { reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { TPagination } from '~/types/Global'
-import { CategoryItem, CategoryPage, CategoryImagesKeys } from '~/types/Category'
+import { TPagination, UploadImageResult } from '~/types/Global'
+import { CategoryItem, CategoryPage } from '~/types/Category'
 
 const useCategories = (apiQuery: string) => {
   const router = useRouter()
@@ -78,8 +78,8 @@ const useCategory = (apiQuery: string) => {
     data: {} as CategoryPage
   })
 
-  const setCategoryImage = (payload: { key: string, url: string }) => {
-    category.data[payload.key as CategoryImagesKeys] = payload.url
+  const setCategoryImage = (payload: UploadImageResult) => {
+    category.data[payload.key] = payload.url
   }
 
   const sortAlbumsByYears = (data: any) => {

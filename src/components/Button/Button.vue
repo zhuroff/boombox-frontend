@@ -12,8 +12,11 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
+import './Button.scss'
 
 export default defineComponent({
+  name: 'Button',
+
   props: {
     text: {
       type: String,
@@ -53,67 +56,3 @@ export default defineComponent({
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  flex: none;
-  background-color: $white;
-  border: 1px solid $dark;
-  border-radius: 3px;
-  padding: 0 20px;
-  transition: background-color 0.5s $animation;
-
-  &[disabled] {
-    pointer-events: none;
-    opacity: 0.5;
-  }
-
-  &__text {
-    font-size: 14px;
-    color: $dark;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    transition: color 0.5s $animation;
-  }
-
-  &.--fullwidth {
-    width: 100%;
-  }
-
-  &.--outlined {
-    border-color: $white;
-    background-color: transparent;
-
-    .button__text {
-      color: $white;
-    }
-
-    &:hover {
-      background-color: $white;
-
-      .button__text {
-        color: $dark;
-      }
-    }
-  }
-
-  &:hover {
-    background-color: $dark;
-    transition: background-color 0.5s $animation;
-
-    .button__text {
-      color: $white;
-      transition: color 0.5s $animation;
-    }
-  }
-}
-
-</style>

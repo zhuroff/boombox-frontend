@@ -20,14 +20,16 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { hostString } from '~/shared/media'
 import { CategorySearchResult } from '~/types/Category'
 
 export default defineComponent({
+  name: 'FrameResults',
+
   props: {
     items: {
-      type: Array as () => CategorySearchResult[]
+      type: Array as PropType<CategorySearchResult[]>
     },
 
     defaultAvatar: {

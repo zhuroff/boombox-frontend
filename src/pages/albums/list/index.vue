@@ -28,7 +28,7 @@
             :key="album._id"
             :itemKey="album._id"
           >
-            <AppCardAlbum :album="album" />
+            <CardAlbum :album="album" />
           </CardWrapper>
         </ul>
 
@@ -51,7 +51,7 @@ import { AlbumPageResponse, AlbumItemProps } from '~/types/Album'
 import { TPagination, RequestConfig } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import AppCardAlbum from '~/components/AppCardAlbum.vue'
+import CardAlbum from '~/components/Cards/CardAlbum.vue'
 import AppPagination from '~/components/AppPagination.vue'
 import AlbumServices from '~/services/AlbumServices'
 
@@ -59,7 +59,7 @@ export default defineComponent({
   components: {
     AppPreloader,
     CardWrapper,
-    AppCardAlbum,
+    CardAlbum,
     AppPagination
   },
 

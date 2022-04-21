@@ -61,6 +61,8 @@ import AppSprite from '~/components/AppSprite.vue'
 import './FloatModal.scss'
 
 export default defineComponent({
+  name: 'FloatModal',
+
   components: {
     AppPreloader,
     AppSprite
@@ -83,7 +85,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const listName = ref('')
 
     const closeFloatModal = () => {

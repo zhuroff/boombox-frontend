@@ -29,12 +29,15 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { AlbumItem } from '~/types/Album'
 
 export default defineComponent({
+  name: 'CardAlbum',
+
   props: {
     album: {
-      type: Object,
+      type: Object as PropType<AlbumItem>,
       required: true
     }
   }

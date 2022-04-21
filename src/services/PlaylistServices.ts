@@ -1,6 +1,6 @@
-import api from '~/api'
 import { ReorderPayload, ResponseMessage } from '~/types/Global'
 import { PlayListItem, PlaylistPage } from '~/types/Playlist'
+import api from '~/api'
 
 export default class PlaylistServices {
   static async list() {

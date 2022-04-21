@@ -25,6 +25,8 @@ import { CategoryItem } from '~/types/Category'
 import { hostString } from '~/shared/media'
 
 export default defineComponent({
+  name: 'CardCategory',
+
   props: {
     category: {
       type: Object as PropType<CategoryItem>,

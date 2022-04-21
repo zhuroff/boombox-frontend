@@ -95,7 +95,7 @@
 <script lang="ts">
 
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
-import { CategoryKeysPlural, CategoryKeysSingular, CategorySearchResult, CategoryBasic } from '~/types/Category'
+import { CategoryKeysPlural, CategorySearchResult, CategoryBasic, CategoryMatcher, CategoryActive } from '~/types/Category'
 import { FramePayload } from '~/types/Frame'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
@@ -104,10 +104,13 @@ import AppSprite from '~/components/AppSprite.vue'
 import FrameResults from './FrameResults.vue'
 import CategoryServices from '~/services/CategoryServices'
 import FrameServices from '~/services/FrameServices'
-import api from '~/api'
+import SearchServices from '~/services/SearchServices'
 import './FrameForm.scss'
+import { SearchPayload } from '~/types/Search'
 
 export default defineComponent({
+  name: 'FrameForm',
+
   components: {
     InputText,
     Textarea,
@@ -121,7 +124,7 @@ export default defineComponent({
     const searchQuery = ref('')
     const isSubmitDisabled = ref(false)
 
-    const keysMatcher = reactive<{ [index: string]: CategoryKeysSingular }>({
+    const keysMatcher = reactive<CategoryMatcher>({
       artists: 'artist',
       genres: 'genre',
       periods: 'period'
@@ -135,11 +138,11 @@ export default defineComponent({
       period: { _id: '', title: 'Year' }
     })
 
-    const activeCategory = reactive({
+    const activeCategory = reactive<CategoryActive>({
       isActive: false,
       isFetched: false,
       key: '' as CategoryKeysPlural,
-      results: [] as CategorySearchResult[]
+      results: []
     })
 
     const isNotFound = computed(() => (
@@ -172,21 +175,12 @@ export default defineComponent({
     }
 
     const postSearchQuery = async (query: string) => {
-      const payload = {
-        query,
-        key: activeCategory.key
-      }
+      const payload: SearchPayload = { query, key: activeCategory.key }
 
-      try {
-        const response = await api.post('/api/search', payload)
-        
-        if (response?.status === 200) {
-          activeCategory.isFetched = true
-          setSearchResults(response.data)
-        }
-      } catch (error) {
-        console.error(error)
-      }
+      SearchServices.search<CategorySearchResult>(payload)
+        .then((result) => setSearchResults(result))
+        .then(_ => activeCategory.isFetched = true)
+        .catch((error) => console.dir(error))
     }
 
     const searchByQuery = (value: string) => {

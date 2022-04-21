@@ -34,6 +34,8 @@ import { CollectionListItem } from '~/types/Collection'
 import { PlayListItem } from '~/types/Playlist'
 
 export default defineComponent({
+  name: 'CardCollection',
+
   props: {
     data: {
       type: Object as PropType<CollectionListItem | PlayListItem>,

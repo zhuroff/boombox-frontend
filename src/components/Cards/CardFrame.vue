@@ -24,6 +24,8 @@ import { defineComponent, PropType } from 'vue'
 import { FrameAlbum } from '~/types/Frame'
 
 export default defineComponent({
+  name: 'CardFrame',
+
   props: {
     album: {
       type: Object as PropType<FrameAlbum>,

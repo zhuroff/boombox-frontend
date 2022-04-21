@@ -51,12 +51,13 @@
 
 <script lang="ts">
 
-import { defineComponent, Ref, ref } from 'vue'
+import { defineComponent, PropType, Ref, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { CategoryImagesKeys } from '~/types/Category'
+import { ImagePayload } from '~/types/Global'
+import { CategoryPage } from '~/types/Category'
 import { hostString } from '~/shared/media'
 import AppSprite from '~/components/AppSprite.vue'
-import api from '~/api'
+import UploadServices from '~/services/UploadServices'
 import './Hero.scss'
 
 export default defineComponent({
@@ -66,7 +67,7 @@ export default defineComponent({
 
   props: {
     category: {
-      type: Object,
+      type: Object as PropType<CategoryPage>,
       required: true
     },
 
@@ -82,29 +83,39 @@ export default defineComponent({
     const posterElement: Ref<null | HTMLInputElement> = ref(null)
     const avatarElement: Ref<null | HTMLInputElement> = ref(null)
 
-    const uploadImage = async (file: any, fieldname: CategoryImagesKeys) => {
-      const formData = new FormData()
-      const url = `/api/${props.categorySlug}/${route.params.id}/${fieldname}`
-
-      formData.append(fieldname, file)
-
-      try {
-        const response = await api.post(url, formData)
-        emit('setCategoryImage', { key: fieldname, url: response.data[fieldname] })
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
     const setPoster = () => {
       if (posterElement.value?.files?.length) {
-        uploadImage(posterElement.value.files[0], 'poster')
+        const payload: ImagePayload = {
+          file: posterElement.value.files[0],
+          type: 'poster',
+          slug: props.categorySlug,
+          id: String(route.params.id)
+        }
+
+        UploadServices.uploadImage<CategoryPage>(payload)
+          .then((data) => emit('setCategoryImage', {
+            key: payload.type,
+            url: data.poster
+          }))
+          .catch((error) => console.dir(error))
       }
     }
 
     const setAvatar = () => {
       if (avatarElement.value?.files?.length) {
-        uploadImage(avatarElement.value.files[0], 'avatar')
+        const payload: ImagePayload = {
+          file: avatarElement.value.files[0],
+          type: 'avatar',
+          slug: props.categorySlug,
+          id: String(route.params.id)
+        }
+
+        UploadServices.uploadImage<CategoryPage>(payload)
+          .then((data) => emit('setCategoryImage', {
+            key: payload.type,
+            url: data.avatar
+          }))
+          .catch((error) => console.dir(error))
       }
     }
 

@@ -1,3 +1,5 @@
+import { CategoryImagesKeys } from "./Category"
+
 type TPagination = {
   totalDocs: number
   totalPages: number
@@ -34,6 +36,18 @@ type RequestConfig = {
   limit: number
 }
 
+type ImagePayload = {
+  file: File
+  type: CategoryImagesKeys
+  slug: string
+  id: string
+}
+
+type UploadImageResult = {
+  key: CategoryImagesKeys
+  url: string
+}
+
 type ResponseMessage = {
   message: string | number
 }
@@ -45,5 +59,7 @@ export {
   FloatModalCheckAction,
   TSnackbar,
   RequestConfig,
+  ImagePayload,
+  UploadImageResult,
   ResponseMessage
 }

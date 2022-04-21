@@ -22,6 +22,7 @@ type CollectionPageItemAlbum = {
 type CollectionPageItem = {
   _id: string
   title: string
+  poster?: string
   albums: CollectionPageItemAlbum[]
 }
 

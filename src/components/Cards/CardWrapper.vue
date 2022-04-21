@@ -39,6 +39,8 @@ import AppSprite from '~/components/AppSprite.vue'
 import Button from '~/components/Button/Button.vue'
 
 export default defineComponent({
+  name: 'CardWrapper',
+
   components: {
     AppDelete,
     AppSprite,
@@ -65,7 +67,7 @@ export default defineComponent({
     }
   },
 
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const isConfirmation = ref(false)
 
     const confirmationHandler = () => {

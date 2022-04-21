@@ -44,7 +44,7 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { CollectionPageItem } from '~/types/Collection'
-import { DraggableEvent, ReorderPayload } from '~/types/Global'
+import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
 import CollectionServices from '~/services/CollectionServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -92,8 +92,8 @@ export default defineComponent({
       collection.isFetched = true
     }
 
-    const setCollectionImage = (payload: any) => {
-      console.log(payload)
+    const setCollectionImage = (payload: UploadImageResult) => {
+      collection.data.poster = payload.url
     }
 
     const fetchCollection = () => {

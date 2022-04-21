@@ -1,17 +1,17 @@
 <template>
-
-<li class="radio__genre">
-  <button
-    :class="[{ '--active' : isActive }, 'radio__genre_button']"
-    @click="fetchByGenre"
-  >{{ genre }}</button>
-</li>
-
+  <li class="radio__genre">
+    <button
+      :class="[{ '--active' : isActive }, 'radio__genre_button']"
+      @click="fetchByGenre"
+    >{{ genre }}</button>
+  </li>
 </template>
 
 <script>
 
 export default {
+  name: 'CardRadioGenre',
+
   props: {
     genre: {
       type: String,

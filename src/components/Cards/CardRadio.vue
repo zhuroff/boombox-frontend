@@ -1,52 +1,50 @@
-<template>
-  
-<div :class="[{ '--current' : current.fileid === station.stationuuid }, 'station']">
-  <div class="station__cover">
-    <button
-      class="station__play"
-      @click="playStation"
-    >
-      <AppSprite
-        v-if="current.fileid !== station.stationuuid || current.isOnPause"
-        name="play"
-      />
+<template>  
+  <div :class="[{ '--current' : current.fileid === station.stationuuid }, 'station']">
+    <div class="station__cover">
+      <button
+        class="station__play"
+        @click="playStation"
+      >
+        <AppSprite
+          v-if="current.fileid !== station.stationuuid || current.isOnPause"
+          name="play"
+        />
 
-      <AppSprite
-        v-else-if="current.fileid === station.stationuuid && !current.isOnPause"
-        name="pause"
-      />
+        <AppSprite
+          v-else-if="current.fileid === station.stationuuid && !current.isOnPause"
+          name="pause"
+        />
+      </button>
+    </div>
+
+    <div class="station__content">
+      <div class="station__name">{{ station.name }}</div>
+      <div class="station__tags">
+        <button
+          v-for="(tag, index) in stationTags"
+          :key="index"
+          :class="[{ '--selected' : tag === genre }, 'station__tags_button']"
+          @click="$emit('fetchByGenre', tag)"
+        >{{ tag }}</button>
+      </div>
+    </div>
+
+    <button
+      v-if="isSaved"
+      class="station__save"
+      @click="removeStationFromDatabase"
+    >
+      <AppSprite name="remove" />
+    </button>
+
+    <button
+      v-else
+      class="station__save"
+      @click="saveStationToDatabase"
+    >
+      <AppSprite name="save" />
     </button>
   </div>
-
-  <div class="station__content">
-    <div class="station__name">{{ station.name }}</div>
-    <div class="station__tags">
-      <button
-        v-for="(tag, index) in stationTags"
-        :key="index"
-        :class="[{ '--selected' : tag === genre }, 'station__tags_button']"
-        @click="$emit('fetchByGenre', tag)"
-      >{{ tag }}</button>
-    </div>
-  </div>
-
-  <button
-    v-if="isSaved"
-    class="station__save"
-    @click="removeStationFromDatabase"
-  >
-    <AppSprite name="remove" />
-  </button>
-
-  <button
-    v-else
-    class="station__save"
-    @click="saveStationToDatabase"
-  >
-    <AppSprite name="save" />
-  </button>
-</div>
-
 </template>
 
 <script>
@@ -55,6 +53,8 @@ import { computed, reactive } from 'vue'
 import AppSprite from '@/components/AppSprite.vue'
 
 export default {
+  name: 'CardRadio',
+
   components: {
     AppSprite
   },

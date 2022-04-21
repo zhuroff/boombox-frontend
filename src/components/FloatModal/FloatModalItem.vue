@@ -1,28 +1,30 @@
-<template>
-  
-<li class="float-modal__item">
-  <label>
-    <input
-      type="checkbox"
-      class="--checkbox"
-      :checked="isChecked"
-      @change="checkFloatModalItem"
-    >
-    <span class="--name">{{ item.title }}</span>
-  </label>
-</li>
-
+<template>  
+  <li class="float-modal__item">
+    <label>
+      <input
+        type="checkbox"
+        class="--checkbox"
+        :checked="isChecked"
+        @change="checkFloatModalItem"
+      >
+      <span class="--name">{{ item.title }}</span>
+    </label>
+  </li>
 </template>
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { CollectionListItem } from '~/types/Collection'
 import { FloatModalCheckAction } from '~/types/Global'
+import { PlayListItem } from '~/types/Playlist'
 
 export default defineComponent({
+  name: 'FloatModalItem',
+
   props: {
     item: {
-      type: Object,
+      type: Object as PropType<CollectionListItem | PlayListItem>,
       required: true
     },
 
