@@ -11,7 +11,6 @@
           :key="track.fileid"
           :track="track"
           :index="index"
-          :isPlaylist="false"
         />
       </transition-group>
     </VueDraggableNext>
@@ -44,6 +43,12 @@ export default defineComponent({
     albumID: {
       type: String,
       required: true
+    },
+
+    isPlaylist: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 
@@ -63,6 +68,10 @@ export default defineComponent({
       }
 
       store.commit('changePlaylistOrder', payload)
+
+      if (props.isPlaylist) {
+        emit('orderChanged', payload)
+      }
     }
 
     return {

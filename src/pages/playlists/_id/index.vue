@@ -25,6 +25,8 @@
           <TrackList
             :tracks="playlist.data.tracks"
             :albumID="playlist.data._id"
+            isPlaylist
+            @orderChanged="orderChanged"
           />
         </div>
       </transition-group>
@@ -38,6 +40,7 @@ import { defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
+import { ReorderPayload } from '~/types/Global'
 import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -64,6 +67,13 @@ export default defineComponent({
       console.log(payload)
     }
 
+    const orderChanged = (payload: ReorderPayload) => {
+      console.log(payload)
+      PlaylistServices.reorder(payload)
+        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+        .catch((error) => console.dir(error))
+    }
+
     const setPlaylist = (data: PlaylistPage) => {
       playlist.data = data
       playlist.isFetched = true
@@ -82,7 +92,8 @@ export default defineComponent({
 
     return {
       playlist,
-      setPlaylistImage
+      setPlaylistImage,
+      orderChanged
     }
   }
 })

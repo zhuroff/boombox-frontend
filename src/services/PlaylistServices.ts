@@ -1,6 +1,6 @@
 import api from '~/api'
+import { ReorderPayload, ResponseMessage } from '~/types/Global'
 import { PlayListItem, PlaylistPage } from '~/types/Playlist'
-import { Track } from '~/types/Track'
 
 export default class PlaylistServices {
   static async list() {
@@ -29,5 +29,15 @@ export default class PlaylistServices {
     }
 
     throw new Error()
+  }
+
+  static async reorder(payload: ReorderPayload) {
+    const response = await api.patch<ResponseMessage>(`/api/playlists/${payload.entityID}/reorder`, payload)
+
+    if (response?.status === 201) {
+      return response.data.message
+    }
+
+    throw new Error('Request failed')
   }
 }
