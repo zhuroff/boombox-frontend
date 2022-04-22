@@ -4,7 +4,7 @@
       class="modal__close"
       @click="closeModal"
     >
-      <AppSprite name="delete" />
+      <Sprite name="delete" />
     </button>
     
     <slot></slot>
@@ -14,11 +14,11 @@
 <script lang="ts">
 
 import { defineComponent, watchEffect } from 'vue'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   props: {

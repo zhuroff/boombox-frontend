@@ -4,12 +4,12 @@
   class="player__repeat"
   @click="changeRepeatState"
 >
-  <AppSprite
+  <Sprite
     v-if="!isTrackRepeat"
     name="repeat"
   />
 
-  <AppSprite
+  <Sprite
     v-else
     name="repeat-active"
   />
@@ -22,11 +22,11 @@
 import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   setup() {

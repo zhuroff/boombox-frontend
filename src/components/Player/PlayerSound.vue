@@ -15,8 +15,8 @@
       :class="[{ '--muted' : isMuted }, 'player__sound_button']"
       @click="switchMuteState"
     >
-      <AppSprite v-if="!isMuted" name="volume" />
-      <AppSprite v-else name="volume-off" />
+      <Sprite v-if="!isMuted" name="volume" />
+      <Sprite v-else name="volume-off" />
     </button>
   </div>
 </template>
@@ -25,11 +25,11 @@
 
 import { defineComponent, ref } from 'vue'
 import usePlayer from './usePlayer'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   setup() {

@@ -5,7 +5,7 @@
     class="tracklist__row_action"
     @click="callPlaylistsModal"
   >
-    <AppSprite name="plus" />
+    <Sprite name="plus" />
   </button>
 
   <FloatModal
@@ -47,14 +47,14 @@ import { useStore } from 'vuex'
 import { key } from '~/store'
 import { PlaylistPayload, PlayListItem } from '~/types/Playlist'
 import { FloatModalCheckAction } from '~/types/Global'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
 import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
 import api from '~/api'
 
 export default defineComponent({
   components: {
-    AppSprite,
+    Sprite,
     FloatModal,
     FloatModalItem
   },

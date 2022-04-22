@@ -4,7 +4,7 @@
       class="aside__homelink"
       to="/"
     >
-      <AppSprite name="vinyl" />
+      <Sprite name="vinyl" />
       <span>BoomBox</span>
     </router-link>
 
@@ -28,11 +28,11 @@
 <script lang="ts">
 
 import { defineComponent, reactive } from 'vue'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   setup() {

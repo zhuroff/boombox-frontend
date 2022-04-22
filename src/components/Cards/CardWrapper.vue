@@ -1,6 +1,6 @@
 <template> 
   <li :class="[{ '--active' : isActive }, 'card']">
-    <AppDelete
+    <ButtonDelete
       v-if="deletable && !isConfirmation"
       @deleteItem="confirmationHandler"
     />
@@ -9,7 +9,7 @@
       v-if="draggable"
       class="--drag"
     >
-      <AppSprite name="burger" />
+      <Sprite name="burger" />
     </span>
 
     <div
@@ -34,16 +34,16 @@
 <script lang="ts">
 
 import { defineComponent, ref } from 'vue'
-import AppDelete from '~/components/AppDelete.vue'
-import AppSprite from '~/components/AppSprite.vue'
+import ButtonDelete from '~/components/Button/ButtonDelete.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button/Button.vue'
 
 export default defineComponent({
   name: 'CardWrapper',
 
   components: {
-    AppDelete,
-    AppSprite,
+    ButtonDelete,
+    Sprite,
     Button
   },
 

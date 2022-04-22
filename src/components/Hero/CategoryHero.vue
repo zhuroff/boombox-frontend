@@ -15,7 +15,7 @@
             ref="posterElement"
             @change="setPoster"
           >
-          <AppSprite name="camera" />
+          <Sprite name="camera" />
         </label>
       </form>
     </div>
@@ -39,7 +39,7 @@
               ref="avatarElement"
               @change="setAvatar"
             >
-            <AppSprite name="camera" />
+            <Sprite name="camera" />
           </label>
         </form>
       </div>
@@ -59,7 +59,7 @@ import { useRoute } from 'vue-router'
 import { ImagePayload } from '~/types/Global'
 import { CategoryPage } from '~/types/Category'
 import { hostString } from '~/shared/media'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import UploadServices from '~/services/UploadServices'
 import './Hero.scss'
 
@@ -67,7 +67,7 @@ export default defineComponent({
   name: 'CategoryHero',
 
   components: {
-    AppSprite
+    Sprite
   },
 
   props: {

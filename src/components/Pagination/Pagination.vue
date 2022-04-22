@@ -6,7 +6,7 @@
     :disabled="pagination.page === 1"
     @click="switchPagination(pagination.page - 1)"
   >
-    <AppSprite name="angle" />
+    <Sprite name="angle" />
   </button>
 
   <select
@@ -27,7 +27,7 @@
     :disabled="pagination.page === pagination.totalPages"
     @click="switchPagination(pagination.page + 1)"
   >
-    <AppSprite name="angle" />
+    <Sprite name="angle" />
   </button>
 </div>
 
@@ -37,14 +37,14 @@
 
 import { defineComponent, computed, PropType } from 'vue'
 import { TPagination } from '~/types/Global'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import './Pagination.scss'
 
 export default defineComponent({
   name: 'Pagination',
 
   components: {
-    AppSprite
+    Sprite
   },
 
   props: {

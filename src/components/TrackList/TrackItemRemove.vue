@@ -5,7 +5,7 @@
     class="tracklist__row_action"
     @click="removeTrackFromPlaylist"
   >
-    <AppSprite name="delete" />
+    <Sprite name="delete" />
   </button>
 </div>
 
@@ -15,11 +15,11 @@
 
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
-import AppSprite from '@/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default {
   components: {
-    AppSprite
+    Sprite
   },
 
   setup(props, { emit }) {

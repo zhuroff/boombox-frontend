@@ -75,7 +75,6 @@ import { useStore } from 'vuex'
 import { key } from '~/store'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
-import AppSprite from '~/components/AppSprite.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardFrame from '~/components/Cards/CardFrame.vue'
 import Pagination from '~/components/Pagination/Pagination.vue'
@@ -87,7 +86,6 @@ export default defineComponent({
   components: {
     AppPreloader,
     Button,
-    AppSprite,
     CardWrapper,
     CardFrame,
     Pagination,

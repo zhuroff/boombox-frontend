@@ -17,7 +17,7 @@
         ref="coverElement"
         @change="setCover"
       >
-      <AppSprite name="camera" />
+      <Sprite name="camera" />
     </label>
   </form>
 </div>
@@ -27,14 +27,14 @@
 <script lang="ts">
 
 import { defineComponent, ref, Ref } from 'vue'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import './CoverArt.scss'
 
 export default defineComponent({
   name: 'CoverArt',
 
   components: {
-    AppSprite
+    Sprite
   },
 
   props: {

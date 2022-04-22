@@ -4,7 +4,7 @@
   class="delete"
   @click="deleteItem"
 >
-  <AppSprite name="remove" />
+  <Sprite name="remove" />
 </button>
 
 </template>
@@ -12,14 +12,16 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
+  name: 'ButtonDelete',
+
   components: {
-    AppSprite
+    Sprite
   },
 
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const deleteItem = () => emit('deleteItem')
 
     return { deleteItem }

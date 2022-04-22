@@ -60,7 +60,7 @@
         class="form-frame__close"
         @click="closeCategoryList"
       >
-        <AppSprite name="delete" />
+        <Sprite name="delete" />
       </button>
 
       <div class="form-frame__row">
@@ -101,7 +101,7 @@ import { SearchPayload } from '~/types/Search'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import FrameResults from './FrameResults.vue'
 import CategoryServices from '~/services/CategoryServices'
 import FrameServices from '~/services/FrameServices'
@@ -115,7 +115,7 @@ export default defineComponent({
     InputText,
     Textarea,
     Button,
-    AppSprite,
+    Sprite,
     FrameResults
   },
 

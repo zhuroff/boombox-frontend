@@ -5,7 +5,7 @@
     class="tracklist__row_action"
     @click="disableTrack"
   >
-    <AppSprite name="disable" />
+    <Sprite name="disable" />
   </button>
 </div>
 
@@ -16,11 +16,11 @@
 import { defineComponent } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   props: {

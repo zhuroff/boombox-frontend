@@ -5,12 +5,12 @@
         class="station__play"
         @click="playStation"
       >
-        <AppSprite
+        <Sprite
           v-if="current.fileid !== station.stationuuid || current.isOnPause"
           name="play"
         />
 
-        <AppSprite
+        <Sprite
           v-else-if="current.fileid === station.stationuuid && !current.isOnPause"
           name="pause"
         />
@@ -34,7 +34,7 @@
       class="station__save"
       @click="removeStationFromDatabase"
     >
-      <AppSprite name="remove" />
+      <Sprite name="remove" />
     </button>
 
     <button
@@ -42,7 +42,7 @@
       class="station__save"
       @click="saveStationToDatabase"
     >
-      <AppSprite name="save" />
+      <Sprite name="save" />
     </button>
   </div>
 </template>
@@ -50,13 +50,13 @@
 <script>
 
 import { computed, reactive } from 'vue'
-import AppSprite from '@/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default {
   name: 'CardRadio',
 
   components: {
-    AppSprite
+    Sprite
   },
 
   props: {

@@ -4,7 +4,7 @@
   :class="[{ '--active' : isCrackled }, 'player__crackle']"
   @click="crackleSwitch"
 >
-  <AppSprite name="vinyl" />
+  <Sprite name="vinyl" />
 </button>
 
 </template>
@@ -13,11 +13,11 @@
 
 import { defineComponent, ref } from 'vue'
 import usePlayer from './usePlayer'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   setup() {

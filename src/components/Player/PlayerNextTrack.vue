@@ -5,7 +5,7 @@
   :disabled="!isNextTrackExist"
   @click="switchToNextTrack"
 >
-  <AppSprite name="next" />
+  <Sprite name="next" />
 </button>
 
 </template>
@@ -14,11 +14,11 @@
 
 import { defineComponent, computed } from 'vue'
 import usePlayer from './usePlayer'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   setup() {

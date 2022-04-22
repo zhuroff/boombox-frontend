@@ -7,7 +7,7 @@
 ]">
   <div class="tracklist__row_cell --drag">
     <button class="tracklist__row_action">
-      <AppSprite name="burger" />
+      <Sprite name="burger" />
     </button>
   </div>
 
@@ -59,7 +59,7 @@ import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { Track } from '~/types/Track'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
@@ -70,7 +70,7 @@ import TrackLyrics from './TrackLyrics.vue'
 
 export default defineComponent({
   components: {
-    AppSprite,
+    Sprite,
     TrackItemPlay,
     TrackItemTitle,
     TrackItemDuration,

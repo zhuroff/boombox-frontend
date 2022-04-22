@@ -8,7 +8,7 @@
     class="tracklist__row_action"
     @click="pauseTrack"
   >
-    <AppSprite name="playing" />
+    <Sprite name="playing" />
   </button>
 </div>
   
@@ -20,9 +20,9 @@
     class="tracklist__row_action"
     @click="playingStateSplitter"
   >
-    <AppSprite v-if="isOnLoading" name="spinner" />
-    <AppSprite v-else-if="isOnPause" name="pause" />
-    <AppSprite v-else name="play" />
+    <Sprite v-if="isOnLoading" name="spinner" />
+    <Sprite v-else-if="isOnPause" name="pause" />
+    <Sprite v-else name="play" />
   </button>
 </div>
 
@@ -33,11 +33,11 @@
 import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   props: {

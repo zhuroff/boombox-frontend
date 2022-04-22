@@ -14,7 +14,7 @@
           key="close"
           @click="closeFloatModal"
         >
-          <AppSprite name="delete" />
+          <Sprite name="delete" />
         </button>
 
         <slot
@@ -57,7 +57,7 @@
 
 import { defineComponent, ref } from 'vue'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 import './FloatModal.scss'
 
 export default defineComponent({
@@ -65,7 +65,7 @@ export default defineComponent({
 
   components: {
     AppPreloader,
-    AppSprite
+    Sprite
   },
 
   props: {

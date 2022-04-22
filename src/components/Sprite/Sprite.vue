@@ -284,6 +284,8 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'Sprite',
+
   props: {
     name: {
       type: String,

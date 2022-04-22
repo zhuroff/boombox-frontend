@@ -5,7 +5,7 @@
   class="player__play"
   @click="continuePlay"  
 >
-  <AppSprite name="play" />
+  <Sprite name="play" />
 </button>
 
 <button
@@ -13,7 +13,7 @@
   class="player__pause"
   @click="setTrackOnPause"
 >
-  <AppSprite name="pause" />
+  <Sprite name="pause" />
 </button>
 
 </template>
@@ -22,11 +22,11 @@
 
 import { defineComponent } from 'vue'
 import usePlayer from './usePlayer'
-import AppSprite from '~/components/AppSprite.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
-    AppSprite
+    Sprite
   },
 
   setup() {
