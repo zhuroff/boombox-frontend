@@ -73,7 +73,7 @@
     min-height: 252px;
   }
 
-  &__cover {
+  &__image {
     object-fit: cover;
     position: relative;
 
@@ -95,7 +95,7 @@
         transform: translateX(-10px);
         transition: transform 0.5s $animation;
 
-        & + .album__cover_vinyl {
+        & + .album__image_vinyl {
           transform: translateX(20px);
           transition: transform 0.5s $animation;
         }

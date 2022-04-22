@@ -1,5 +1,5 @@
 import api from '~/api'
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { TPagination, UploadImageResult } from '~/types/Global'
 import { CategoryItem, CategoryPage } from '~/types/Category'
@@ -78,7 +78,11 @@ const useCategory = (apiQuery: string) => {
     data: {} as CategoryPage
   })
 
-  const setCategoryImage = (payload: UploadImageResult) => {
+  const categoryDescription = computed(() => (
+    `Albums: ${category.data.albums?.length}`
+  ))
+
+  const setUploadedImage = (payload: UploadImageResult) => {
     category.data[payload.key] = payload.url
   }
 
@@ -117,7 +121,11 @@ const useCategory = (apiQuery: string) => {
   
   onMounted(() => fetchCategoryEntry())
 
-  return { category, setCategoryImage }
+  return {
+    category,
+    categoryDescription,
+    setUploadedImage
+  }
 }
 
 export { useCategories, useCategory }

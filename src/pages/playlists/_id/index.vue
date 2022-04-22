@@ -9,25 +9,40 @@
       
     <div id="scrollspace">
       <transition-group name="flyUp">
-        <CollectionHero
+        <CategoryHero
           v-if="playlist.isFetched"
           key="hero"
-          keyWord="Tracks"
-          :collection="playlist.data"
-          @setCollectionImage="setPlaylistImage"
+          :data="playlist.data"
+          :description="playlistDescription"
+          slug="playlists"
+          noAvatar
+          @setUploadedImage="setUploadedImage"
         />
 
         <div
           v-if="playlist.isFetched"
           key="playlist"
-          class="playlist"
+          class="album"
         >
-          <TrackList
-            :tracks="playlist.data.tracks"
-            :albumID="playlist.data._id"
-            isPlaylist
-            @orderChanged="orderChanged"
-          />
+          <div class="album__aside">
+            <div class="album__sidebar">
+              <CoverArt
+                :albumCover="albumCover"
+                :isBooklet="false"
+                uploadable
+                @uploadImage="uploadCover"
+              />
+            </div>
+          </div>
+
+          <div class="album__content">
+            <TrackList
+              :tracks="playlist.data.tracks"
+              :albumID="playlist.data._id"
+              isPlaylist
+              @orderChanged="orderChanged"
+            />
+          </div>
         </div>
       </transition-group>
     </div>
@@ -36,21 +51,25 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, reactive } from 'vue'
+import { computed, defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { ReorderPayload } from '~/types/Global'
+import { hostString } from '~/shared/media'
+import { ImagePayload, ReorderPayload, UploadImageResult } from '~/types/Global'
 import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CollectionHero from '~/components/Hero/CollectionHero.vue'
+import CategoryHero from '~/components/Hero/CategoryHero.vue'
+import CoverArt from '~/components/CoverArt/CoverArt.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
+import UploadServices from '~/services/UploadServices'
 
 export default defineComponent({
   components: {
     AppPreloader,
-    CollectionHero,
+    CategoryHero,
+    CoverArt,
     TrackList
   },
 
@@ -63,12 +82,32 @@ export default defineComponent({
       data: {} as PlaylistPage
     })
 
-    const setPlaylistImage = (payload: any) => {
-      console.log(payload)
+    const playlistDescription = computed(() => (
+      `Tracks in playlist: ${playlist.data.tracks?.length}`
+    ))
+
+    const albumCover = computed(() => (
+      playlist.data.avatar && host(playlist.data.avatar)
+    ))
+
+    const setUploadedImage = (payload: UploadImageResult) => {
+      playlist.data[payload.key] = payload.url
+    }
+
+    const uploadCover = (file: File) => {
+      const payload: ImagePayload = {
+        file,
+        type: 'avatar',
+        slug: 'playlists',
+        id: String(route.params.id)
+      }
+
+      UploadServices.uploadImage<PlaylistPage>(payload)
+        .then((data) => playlist.data.avatar = data.avatar)
+        .catch((error) => console.dir(error))
     }
 
     const orderChanged = (payload: ReorderPayload) => {
-      console.log(payload)
       PlaylistServices.reorder(payload)
         .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
         .catch((error) => console.dir(error))
@@ -88,12 +127,17 @@ export default defineComponent({
         .catch((error) => console.dir(error))
     }
 
+    const host = (pathname: string) => hostString(pathname)
+
     onMounted(() => fetchPlaylist())
 
     return {
       playlist,
-      setPlaylistImage,
-      orderChanged
+      albumCover,
+      setUploadedImage,
+      uploadCover,
+      orderChanged,
+      playlistDescription
     }
   }
 })

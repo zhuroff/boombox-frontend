@@ -15,7 +15,7 @@
         >
           <div class="album__aside">
             <div class="album__sidebar">
-              <AlbumCoverArt
+              <CoverArt
                 :albumCover="album.data.albumCover"
                 :isBooklet="album.data.albumCoverArt !== 0"
                 @coverClick="fetchAlbumBooklet"
@@ -85,7 +85,7 @@
           mode="dark"
         />
         
-        <AppSlider
+        <Slider
           v-else
           :data="album.data.albumCoverArt"
         />
@@ -112,20 +112,20 @@ import { AlbumPage, AlbumPageProps, AlbumHeadProps } from '~/types/Album'
 import { CollectionListItem } from '~/types/Collection'
 import { FloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import AlbumCoverArt from '~/components/AlbumCoverArt.vue'
+import CoverArt from '~/components/CoverArt/CoverArt.vue'
 import Button from '~/components/Button/Button.vue'
-import AlbumHeading from '~/components/AlbumHeading.vue'
+import AlbumHeading from '~/components/AlbumHeading/AlbumHeading.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
 import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
 import Modal from '~/components/Modal/Modal.vue'
-import AppSlider from '~/components/AppSlider.vue'
+import Slider from '~/components/Slider/Slider.vue'
 import AlbumServices from '~/services/AlbumServices'
 import CollectionServices from '~/services/CollectionServices'
 
 export default defineComponent({
   components: {
-    AlbumCoverArt,
+    CoverArt,
     Button,
     AppPreloader,
     AlbumHeading,
@@ -133,7 +133,7 @@ export default defineComponent({
     FloatModal,
     FloatModalItem,
     Modal,
-    AppSlider
+    Slider
   },
 
   setup() {

@@ -36,7 +36,7 @@
           </CardWrapper>
         </ul>
 
-        <AppPagination
+        <Pagination
           key="pagination"
           v-if="albums.isFetched && albums.pagination.totalPages > 1"
           :pagination="albums.pagination"
@@ -78,7 +78,7 @@ import Button from '~/components/Button/Button.vue'
 import AppSprite from '~/components/AppSprite.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardFrame from '~/components/Cards/CardFrame.vue'
-import AppPagination from '~/components/AppPagination.vue'
+import Pagination from '~/components/Pagination/Pagination.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import FrameForm from '~/components/Frame/FrameForm.vue'
 import FrameServices from '~/services/FrameServices'
@@ -90,7 +90,7 @@ export default defineComponent({
     AppSprite,
     CardWrapper,
     CardFrame,
-    AppPagination,
+    Pagination,
     Modal,
     FrameForm
   },

@@ -37,7 +37,7 @@ import { useRoute } from 'vue-router'
 import { FrameAlbum } from '~/types/Frame'
 import FrameServices from '~/services/FrameServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import AlbumHeading from '~/components/AlbumHeading.vue'
+import AlbumHeading from '~/components/AlbumHeading/AlbumHeading.vue'
 
 export default defineComponent({
   components: {

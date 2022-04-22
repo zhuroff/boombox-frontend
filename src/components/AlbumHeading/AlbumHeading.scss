@@ -1,0 +1,57 @@
+@import '~/scss/variables';
+
+.album {
+
+  &__heading {
+
+    &.--placeholder {
+      height: 131px;
+      background: repeating-linear-gradient(-45deg, transparent, transparent 15px, $border 15px, $border 30px);
+      background-size: 150% 150%;
+      animation: placeholder 5s linear infinite;
+    }
+  }
+
+  &__name {
+    font-weight: 700;
+    font-size: 50px;
+    color: $dark;
+  }
+
+  &__data {
+    font-size: 18px;
+    font-weight: 600;
+    color: $pale;
+    margin-bottom: 10px;
+
+    &-link {
+      color: inherit;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $dark;
+        transition: color 0.2s ease;
+      }
+    }
+  }
+
+  &__description {
+    border: 0;
+    border-bottom: 1px solid transparent;
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+    background-color: transparent;
+    outline: none;
+    transition: border-color 0.2s ease;
+    font-size: 14px;
+    color: $pale;
+    line-height: 20px;
+
+    &:focus,
+    &:active {
+      border-color: $pale;
+      transition: border-color 0.2s ease;
+    }
+  }
+}

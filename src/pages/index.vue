@@ -55,7 +55,7 @@
           </CardWrapper>
         </ul>
 
-        <AppPagination
+        <Pagination
           v-if="isFetched && pagination.totalPages > 1"
           :pagination="pagination"
           key="pagination"
@@ -77,7 +77,7 @@ import { NewsPage, NewsPageResponse } from '~/types/News'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardNews from '~/components/Cards/CardNews.vue'
-import AppPagination from '~/components/AppPagination.vue'
+import Pagination from '~/components/Pagination/Pagination.vue'
 import NewsServices from '~/services/NewsServices'
 
 export default defineComponent({
@@ -85,7 +85,7 @@ export default defineComponent({
     AppPreloader,
     CardWrapper,
     CardNews,
-    AppPagination
+    Pagination
   },
 
   setup() {

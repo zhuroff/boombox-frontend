@@ -32,7 +32,7 @@
           </CardWrapper>
         </ul>
 
-        <AppPagination
+        <Pagination
           v-if="albums.isFetched && albums.pagination.totalPages > 1"
           :pagination="albums.pagination"
           key="pagination"
@@ -52,7 +52,7 @@ import { TPagination, RequestConfig } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardAlbum from '~/components/Cards/CardAlbum.vue'
-import AppPagination from '~/components/AppPagination.vue'
+import Pagination from '~/components/Pagination/Pagination.vue'
 import AlbumServices from '~/services/AlbumServices'
 
 export default defineComponent({
@@ -60,7 +60,7 @@ export default defineComponent({
     AppPreloader,
     CardWrapper,
     CardAlbum,
-    AppPagination
+    Pagination
   },
 
   setup() {

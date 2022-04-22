@@ -4,17 +4,17 @@
   class="album__link"
   :to="{ path: `/${slug}/${data._id}` }"
 >
-  <div class="album__cover">
+  <div class="album__image">
     <img
-      :src="data.poster || '/img/album.jpg'"
+      :src="host(data.avatar)"
       :alt="data.title"
-      class="album__cover_img"
+      class="album__image_img"
     >
 
     <img
       src="/img/vinyl.png"
       alt="vinyl placeholder"
-      class="album__cover_vinyl"
+      class="album__image_vinyl"
     >
   </div>
 
@@ -30,6 +30,7 @@
 <script lang="ts">
 
 import { defineComponent, PropType } from 'vue'
+import { hostString } from '~/shared/media'
 import { CollectionListItem } from '~/types/Collection'
 import { PlayListItem } from '~/types/Playlist'
 
@@ -51,6 +52,14 @@ export default defineComponent({
       type: String,
       required: true
     }
+  },
+
+  setup() {
+    const host = (pathname: string) => (
+      pathname ? hostString(pathname) : '/img/album.jpg'
+    )
+
+    return { host }
   }
 })
 

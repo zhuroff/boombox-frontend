@@ -24,10 +24,10 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
-import 'vue3-carousel/dist/carousel.css'
+import { defineComponent, PropType } from 'vue'
 // @ts-ignore
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
+import 'vue3-carousel/dist/carousel.css'
 
 export default defineComponent({
   components: {
@@ -38,7 +38,7 @@ export default defineComponent({
 
   props: {
     data: {
-      type: Array as () => string[],
+      type: Array as PropType<string[]>,
       required: true
     }
   }

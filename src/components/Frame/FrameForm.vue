@@ -97,6 +97,7 @@
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
 import { CategoryKeysPlural, CategorySearchResult, CategoryBasic, CategoryMatcher, CategoryActive } from '~/types/Category'
 import { FramePayload } from '~/types/Frame'
+import { SearchPayload } from '~/types/Search'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
@@ -106,7 +107,6 @@ import CategoryServices from '~/services/CategoryServices'
 import FrameServices from '~/services/FrameServices'
 import SearchServices from '~/services/SearchServices'
 import './FrameForm.scss'
-import { SearchPayload } from '~/types/Search'
 
 export default defineComponent({
   name: 'FrameForm',

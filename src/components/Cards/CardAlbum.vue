@@ -4,17 +4,17 @@
   class="album__link"
   :to="{ path: `/albums/${album._id}` }"
 >
-  <div class="album__cover">
+  <div class="album__image">
     <img
       :src="album.albumCover"
       :alt="album.title"
-      class="album__cover_img"
+      class="album__image_img"
     >
 
     <img
       src="/img/vinyl.png"
       alt="vinyl placeholder"
-      class="album__cover_vinyl"
+      class="album__image_vinyl"
     >
   </div>
 

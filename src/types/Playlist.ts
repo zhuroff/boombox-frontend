@@ -19,6 +19,8 @@ type PlayListItem = {
 type PlaylistPage = {
   _id: string
   title: string
+  poster?: string
+  avatar?: string
   dateCreated: string
   tracks: Track[]
 }

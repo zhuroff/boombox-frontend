@@ -11,9 +11,10 @@
       <transition-group name="flyUp">
         <CategoryHero
           v-if="category.isFetched"
-          :category="category.data"
-          categorySlug="periods"
-          @setCategoryImage="setCategoryImage"
+          :data="category.data"
+          :description="categoryDescription"
+          slug="periods"
+          @setUploadedImage="setUploadedImage"
         />
 
         <ul
@@ -32,7 +33,7 @@
         </ul>
       </transition-group>
     </div>
-  </section>  
+  </section>
 </template>
 
 <script lang="ts">
@@ -58,12 +59,14 @@ export default defineComponent({
     const apiQuery = '/api/periods'
     const {
       category,
-      setCategoryImage
+      setUploadedImage,
+      categoryDescription
     } = useCategory(apiQuery)
 
     return {
       category,
-      setCategoryImage
+      setUploadedImage,
+      categoryDescription
     }
   }
 })

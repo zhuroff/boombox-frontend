@@ -9,11 +9,12 @@
       
     <div id="scrollspace">
       <transition-group name="flyUp">
-        <CollectionHero
+        <CategoryHero
           v-if="collection.isFetched"
-          keyWord="Albums"
-          :collection="collection.data"
-          @setCollectionImage="setCollectionImage"
+          :data="collection.data"
+          :description="collectionDescription"
+          slug="collections"
+          @setUploadedImage="setUploadedImage"
         />
 
         <VueDraggableNext
@@ -39,7 +40,7 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, reactive } from 'vue'
+import { computed, defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
@@ -48,7 +49,7 @@ import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Globa
 import { VueDraggableNext } from 'vue-draggable-next'
 import CollectionServices from '~/services/CollectionServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CollectionHero from '~/components/Hero/CollectionHero.vue'
+import CategoryHero from '~/components/Hero/CategoryHero.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardAlbum from '~/components/Cards/CardAlbum.vue'
 
@@ -56,7 +57,7 @@ export default defineComponent({
   components: {
     AppPreloader,
     VueDraggableNext,
-    CollectionHero,
+    CategoryHero,
     CardWrapper,
     CardAlbum
   },
@@ -75,6 +76,10 @@ export default defineComponent({
       disabled: false
     })
 
+    const collectionDescription = computed(() => (
+      `Albums in collection: ${collection.data.albums?.length}`
+    ))
+
     const orderChanged = (event: DraggableEvent) => {
       const payload: ReorderPayload = {
         entityID: collection.data._id,
@@ -92,8 +97,8 @@ export default defineComponent({
       collection.isFetched = true
     }
 
-    const setCollectionImage = (payload: UploadImageResult) => {
-      collection.data.poster = payload.url
+    const setUploadedImage = (payload: UploadImageResult) => {
+      collection.data[payload.key] = payload.url
     }
 
     const fetchCollection = () => {
@@ -108,7 +113,8 @@ export default defineComponent({
       collection,
       dragOptions,
       orderChanged,
-      setCollectionImage
+      setUploadedImage,
+      collectionDescription
     }
   }
 })

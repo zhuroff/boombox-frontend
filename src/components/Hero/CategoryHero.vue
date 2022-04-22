@@ -2,9 +2,9 @@
   <div class="hero">
     <div class="hero__poster">
       <img
-        v-if="category.poster"
-        :src="host(category.poster)"
-        :alt="category.title"
+        v-if="data.poster"
+        :src="host(data.poster)"
+        :alt="data.title"
         class="hero__poster_image"
       >
 
@@ -21,11 +21,14 @@
     </div>
 
     <div class="hero__info">
-      <div class="hero__avatar">
+      <div
+        v-if="!noAvatar"
+        class="hero__avatar"
+      >
         <img
-          v-if="category.avatar"
-          :src="host(category.avatar)"
-          :alt="category.title"
+          v-if="data.avatar"
+          :src="host(data.avatar)"
+          :alt="data.title"
           class="hero__avatar_image"
         >
 
@@ -42,8 +45,8 @@
       </div>
 
       <div class="hero__content">
-        <div class="hero__title">{{ category.title }}</div>
-        <div class="hero__albums">Albums: {{ category.albums.length }}</div>
+        <div class="hero__title">{{ data.title }}</div>
+        <div class="hero__description">{{ description }}</div>
       </div>
     </div>
   </div>
@@ -61,19 +64,32 @@ import UploadServices from '~/services/UploadServices'
 import './Hero.scss'
 
 export default defineComponent({
+  name: 'CategoryHero',
+
   components: {
     AppSprite
   },
 
   props: {
-    category: {
+    data: {
       type: Object as PropType<CategoryPage>,
       required: true
     },
 
-    categorySlug: {
+    slug: {
       type: String,
       required: true
+    },
+
+    description: {
+      type: String,
+      required: true
+    },
+
+    noAvatar: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 
@@ -88,12 +104,12 @@ export default defineComponent({
         const payload: ImagePayload = {
           file: posterElement.value.files[0],
           type: 'poster',
-          slug: props.categorySlug,
+          slug: props.slug,
           id: String(route.params.id)
         }
 
         UploadServices.uploadImage<CategoryPage>(payload)
-          .then((data) => emit('setCategoryImage', {
+          .then((data) => emit('setUploadedImage', {
             key: payload.type,
             url: data.poster
           }))
@@ -106,12 +122,12 @@ export default defineComponent({
         const payload: ImagePayload = {
           file: avatarElement.value.files[0],
           type: 'avatar',
-          slug: props.categorySlug,
+          slug: props.slug,
           id: String(route.params.id)
         }
 
         UploadServices.uploadImage<CategoryPage>(payload)
-          .then((data) => emit('setCategoryImage', {
+          .then((data) => emit('setUploadedImage', {
             key: payload.type,
             url: data.avatar
           }))

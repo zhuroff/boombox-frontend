@@ -1,0 +1,79 @@
+<template>
+  
+<div class="album__booklet">
+  <img
+    :src="albumCover || 'https://s.mxmcdn.net/site/images/album-placeholder.png'"
+    :class="[{ '--booklet' : isBooklet }, 'album__cover']"
+    @click="$emit('coverClick')"
+  >
+
+  <form
+    v-if="uploadable"
+    class="album__cover_upload"
+  >
+    <label class="album__cover_label">
+      <input
+        type="file"
+        ref="coverElement"
+        @change="setCover"
+      >
+      <AppSprite name="camera" />
+    </label>
+  </form>
+</div>
+
+</template>
+
+<script lang="ts">
+
+import { defineComponent, ref, Ref } from 'vue'
+import AppSprite from '~/components/AppSprite.vue'
+import './CoverArt.scss'
+
+export default defineComponent({
+  name: 'CoverArt',
+
+  components: {
+    AppSprite
+  },
+
+  props: {
+    albumCover: {
+      type: String,
+      required: false
+    },
+
+    isBooklet: {
+      type: Boolean,
+      required: false
+    },
+
+    uploadable: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    uploadSlug: {
+      type: String,
+      required: false
+    }
+  },
+
+  setup(_, { emit }) {
+    const coverElement: Ref<null | HTMLInputElement> = ref(null)
+
+    const setCover = () => {
+      if (coverElement?.value?.files) {
+        emit('uploadImage', coverElement.value.files[0])
+      }
+    }
+
+    return {
+      coverElement,
+      setCover
+    }
+  }
+})
+
+</script>

@@ -25,7 +25,7 @@
           </CardWrapper>
         </ul>
 
-        <AppPagination
+        <Pagination
           v-if="categories.isFetched && categories.pagination.totalPages > 1"
           :pagination="categories.pagination"
           @switchPagination="switchPagination"
@@ -42,14 +42,14 @@ import { useCategories } from '~/shared/categories'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardCategory from '~/components/Cards/CardCategory.vue'
-import AppPagination from '~/components/AppPagination.vue'
+import Pagination from '~/components/Pagination/Pagination.vue'
 
 export default defineComponent({
   components: {
     AppPreloader,
     CardWrapper,
     CardCategory,
-    AppPagination
+    Pagination
   },
 
   setup() {

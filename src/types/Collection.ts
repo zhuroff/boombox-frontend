@@ -23,6 +23,7 @@ type CollectionPageItem = {
   _id: string
   title: string
   poster?: string
+  avatar?: string
   albums: CollectionPageItemAlbum[]
 }
 
