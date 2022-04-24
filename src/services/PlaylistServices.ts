@@ -40,4 +40,24 @@ export default class PlaylistServices {
 
     throw new Error('Request failed')
   }
+
+  static async remove(id: string) {
+    const response = await api.delete<ResponseMessage>(`/api/playlists/${id}`)
+    
+    if (response?.status === 201) {
+      return response.data.message
+    }
+
+    throw new Error('Request failed')
+  }
+
+  static async rename(id: string, title: string) {
+    const response = await api.patch<ResponseMessage>(`/api/playlists/${id}/rename`, { title })
+
+    if (response?.status === 201) {
+      return response.data.message
+    }
+
+    throw new Error('Request failed')
+  }
 }

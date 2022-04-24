@@ -112,9 +112,6 @@ export default defineComponent({
 
     const isCreatingFrameModalActive = ref(false)
 
-    const newAlbumTitle = ref('')
-    const newAlbumFrame = ref('')
-
     const frameModalSwitcher = () => {
       isCreatingFrameModalActive.value = !isCreatingFrameModalActive.value
     }
@@ -198,8 +195,6 @@ export default defineComponent({
       albums,
       deleteFrameAlbum,
       isCreatingFrameModalActive,
-      newAlbumTitle,
-      newAlbumFrame,
       frameModalSwitcher,
       switchPagination,
       addNewFrame

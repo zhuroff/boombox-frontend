@@ -133,6 +133,11 @@
     line-height: 34px;
     text-transform: uppercase;
     color: $white;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    background-color: transparent;
   }
 
   &__description {

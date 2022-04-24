@@ -45,7 +45,12 @@
       </div>
 
       <div class="hero__content">
-        <div class="hero__title">{{ data.title }}</div>
+        <input
+          type="text"
+          class="hero__title"
+          v-model="heroTitle"
+          :readonly="!isEditable"
+        >
         <div class="hero__description">{{ description }}</div>
       </div>
     </div>
@@ -54,7 +59,7 @@
 
 <script lang="ts">
 
-import { defineComponent, PropType, Ref, ref } from 'vue'
+import { defineComponent, PropType, Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ImagePayload } from '~/types/Global'
 import { CategoryPage } from '~/types/Category'
@@ -90,6 +95,12 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+
+    isEditable: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 
@@ -98,6 +109,8 @@ export default defineComponent({
 
     const posterElement: Ref<null | HTMLInputElement> = ref(null)
     const avatarElement: Ref<null | HTMLInputElement> = ref(null)
+    const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
+    const heroTitle = ref(props.data.title)
 
     const setPoster = () => {
       if (posterElement.value?.files?.length) {
@@ -137,9 +150,20 @@ export default defineComponent({
 
     const host = (pathname: string) => hostString(pathname)
 
+    watch(heroTitle, (newValue) => {
+      if (typeof inputTimer.value === 'number') {
+        clearTimeout(inputTimer.value)
+        
+        inputTimer.value = setTimeout(() => {
+          emit('saveTitle', newValue)
+        }, 1000)
+      }
+    })
+
     return {
       posterElement,
       avatarElement,
+      heroTitle,
       setPoster,
       setAvatar,
       host

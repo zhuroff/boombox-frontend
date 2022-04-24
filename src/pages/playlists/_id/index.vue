@@ -16,7 +16,9 @@
           :description="playlistDescription"
           slug="playlists"
           noAvatar
+          isEditable
           @setUploadedImage="setUploadedImage"
+          @saveTitle="saveTitle"
         />
 
         <div
@@ -127,6 +129,13 @@ export default defineComponent({
         .catch((error) => console.dir(error))
     }
 
+    const saveTitle = (title: string) => {
+      if (title !== playlist.data?.title && title.length > 1) {
+        PlaylistServices.rename(String(route.params.id), title)
+          .catch((error) => console.dir(error))
+      }
+    }
+
     const host = (pathname: string) => hostString(pathname)
 
     onMounted(() => fetchPlaylist())
@@ -137,7 +146,8 @@ export default defineComponent({
       setUploadedImage,
       uploadCover,
       orderChanged,
-      playlistDescription
+      playlistDescription,
+      saveTitle
     }
   }
 })
