@@ -26,7 +26,6 @@
           <CardWrapper
             v-for="album in albums.data"
             :key="album._id"
-            :itemKey="album._id"
           >
             <CardAlbum :album="album" />
           </CardWrapper>

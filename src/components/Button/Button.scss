@@ -30,20 +30,11 @@
     width: 100%;
   }
 
-  &.--outlined {
-    border-color: $white;
-    background-color: transparent;
+  &.--filled {
+    background-color: $dark;
 
     .button__text {
       color: $white;
-    }
-
-    &:hover {
-      background-color: $white;
-
-      .button__text {
-        color: $dark;
-      }
     }
   }
 

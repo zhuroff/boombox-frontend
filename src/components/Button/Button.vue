@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="[{ '--fullwidth' : isFullWidth }, { '--outlined' : isOutlined }, 'button']"
+    :class="[{ '--fullwidth' : isFullWidth }, { '--filled' : isFilled }, 'button']"
     :type="type"
     :disabled="isDisabled"
     @click="emitButtonClick"
@@ -29,7 +29,7 @@ export default defineComponent({
       default: 'button'
     },
 
-    isOutlined: {
+    isFilled: {
       type: Boolean,
       required: false,
       default: false

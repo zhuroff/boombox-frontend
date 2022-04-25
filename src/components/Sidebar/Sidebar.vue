@@ -77,10 +77,10 @@ export default defineComponent({
         route: 'youtube'
       },
 
-      // {
-      //   title: 'Radio',
-      //   route: 'radio'
-      // },
+      {
+        title: 'Radio',
+        route: 'radio'
+      },
 
       {
         title: 'Backups',
