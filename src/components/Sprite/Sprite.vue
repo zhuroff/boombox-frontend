@@ -21,7 +21,7 @@
 <svg
   v-else-if="name === 'play'"
   viewBox="0 0 24 24"
-  class="icon"
+  class="icon play"
 >
   <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
 </svg>
@@ -29,7 +29,7 @@
 <svg
   v-else-if="name === 'pause'"
   viewBox="0 0 24 24"
-  class="icon"
+  class="icon pause"
 >
   <path fill="currentColor" d="M14,19H18V5H14M6,19H10V5H6V19Z" />
 </svg>
@@ -135,6 +135,17 @@
   class="icon"
 >
   <path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+</svg>
+
+<svg
+  v-else-if="name === 'save'"
+  viewBox="0 0 24 24"
+  width="24"
+  height="24"
+  class="icon-save"
+>
+  <path fill="none" d="M0 0h24v24H0z"/>
+  <path d="M4 3h14l2.707 2.707a1 1 0 0 1 .293.707V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm3 1v5h9V4H7zm-1 8v7h12v-7H6zm7-7h2v3h-2V5z" fill="#000"/>
 </svg>
 
 <svg

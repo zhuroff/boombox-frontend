@@ -27,7 +27,7 @@
         @onClick="deleteItem"
       />
     </div>
-    <slot></slot>
+    <slot />
   </li>
 </template>
 
@@ -55,6 +55,12 @@ export default defineComponent({
     },
 
     draggable: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    savable: {
       type: Boolean,
       required: false,
       default: false

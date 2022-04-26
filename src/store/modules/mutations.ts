@@ -3,6 +3,7 @@ import { AppStateInterface } from './state'
 import { TSnackbar, ReorderPayload } from '~/types/Global'
 import { AlbumPage } from '~/types/Album'
 import { TrackProgress, PlayerPlaylist } from '~/types/Player'
+import { PlaylistPage } from '~/types/Playlist'
 import { initPlaylist } from './initStates'
 import { playingTrackInitial } from './initStates'
 import {
@@ -11,7 +12,7 @@ import {
   periodName,
   albumCover
 } from '~/shared/stringifier'
-import { PlaylistPage } from '~/types/Playlist'
+import { RadioStationResponse } from '~/types/Radio'
 
 const getChosenTrack = (playlist: PlayerPlaylist, fileid: number) => (
   playlist.tracks.find((el) => el.fileid === fileid)
@@ -34,6 +35,30 @@ const mutations: MutationTree<AppStateInterface> = {
       state.currentPlaylist = playlist
     } else if (state.currentPlaylist._id !== data._id) {
       state.reservedPlaylist = playlist
+    }
+  },
+
+  setPlayingStation: (state: AppStateInterface, station: RadioStationResponse) => {
+    if (state.playingTrack.fileid === station.stationuuid) {
+      if (state.playingTrack.isOnPause) {
+        state.playingTrack.isOnPause = false
+        state.playingTrack.audio.play()
+      } else {
+        state.playingTrack.isOnPause = true
+        state.playingTrack.audio.pause()
+      }
+    } else {
+      state.playingTrack.albumName = station.country
+      state.playingTrack.artistName = station.name
+      state.playingTrack.audio.src = station.url_resolved
+      state.playingTrack.duration = '--'
+      state.playingTrack.fileid = station.stationuuid
+      state.playingTrack.isOnPause = false
+      state.playingTrack.isOnRepeat = false
+      state.playingTrack.title = station.name
+      state.playingTrack.cover = 'https://sverigesradio.se/dist/images/album-cover-placeholder-light.png'
+      state.currentPlaylist = { ...initPlaylist }
+      state.playingTrack.audio.play()
     }
   },
 
@@ -152,7 +177,11 @@ const mutations: MutationTree<AppStateInterface> = {
   },
 
   setPosition: (state: AppStateInterface, value: number) => {
-    state.playingTrack.audio.currentTime = value * state.playingTrack.audio.duration
+    try {
+      state.playingTrack.audio.currentTime = value * state.playingTrack.audio.duration
+    } catch (ignore) {
+      ignore
+    }
   },
 
   setSoundVolume: (state: AppStateInterface, value: number) => {

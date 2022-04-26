@@ -1,15 +1,17 @@
 <template>
-  <li class="radio__genre">
+  <li class="station__tag">
     <button
-      :class="[{ '--active' : isActive }, 'radio__genre_button']"
+      :class="[{ '--active' : isActive }, 'station__tag-button']"
       @click="fetchByGenre"
     >{{ genre }}</button>
   </li>
 </template>
 
-<script>
+<script lang="ts">
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'CardRadioGenre',
 
   props: {
@@ -29,7 +31,7 @@ export default {
 
     return { fetchByGenre }
   }
-}
+})
 
 </script>
 
@@ -37,8 +39,29 @@ export default {
 
 @import '@/scss/variables';
 
-.radio__genre {
-  margin-right: 10px;
+.station__tag {
+
+  &-button {
+    padding: 2px 7px;
+    border: 0;
+    background-color: transparent;
+    outline: none;
+    color: $pale;
+    font-size: 12px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $white;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      transition: all 0.2s ease;
+    }
+
+    &.--selected {
+      background-color: $white;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+  }
 }
 
 </style>

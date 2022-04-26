@@ -25,15 +25,14 @@
 
         <ul
           v-if="stations.isFetched"
-          class="cardlist --saved"
+          class="stations --saved"
           key="saved"
         >
-          <!-- <AppCardWrapper
-            v-for="(station, index) in stations.saved"
-            :key="index"
-            :isActive="playingTrack.fileid === station.stationuuid && !station.preloader"
+          <CardWrapper
+            v-for="station in stations.data.get('saved')"
+            :key="station.stationuuid"
           >
-            <AppCardRadio
+            <CardRadio
               :station="station"
               :current="playingTrack"
               :genre="activeGenre"
@@ -42,7 +41,7 @@
               @fetchByGenre="setNewGenre"
               @removeStationFromDatabase="removeStationFromDatabase"
             />
-          </AppCardWrapper> -->
+          </CardWrapper>
         </ul>
 
         <ul
@@ -51,25 +50,19 @@
           key="all"
         >
           <CardWrapper
-            v-for="station in stations.data.get('all')"
+            v-for="station in filteredStations"
             :key="station.stationuuid"
           >
-            {{station.name}}
-          </CardWrapper>
-          <!-- <AppCardWrapper
-            v-for="(station, index) in filteredStations"
-            :key="index"
-            :isActive="playingTrack.fileid === station.stationuuid && !station.preloader"
-          >
-            <AppCardRadio
+            <CardRadio
               :station="station"
               :current="playingTrack"
               :genre="activeGenre"
+              :isSaved="false"
               @playStation="playStation"
               @fetchByGenre="setNewGenre"
               @saveStationToDatabase="saveStationToDatabase"
             />
-          </AppCardWrapper> -->
+          </CardWrapper>
         </ul>
       </transition-group>
     </div>
@@ -82,25 +75,19 @@ import { defineComponent, onMounted, ref, reactive, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
+import { RadioPage, RadioStationResponse } from '~/types/Radio'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import axios from 'axios'
-// import { albumsPlaceholder } from '@/helpers/modules'
-// import AppCardRadioGenre from '@/components/AppListCard/AppCardRadioGenre.vue'
-// import AppCardWrapper from '@/components/AppListCard/AppCardWrapper.vue'
-// import AppCardRadio from '@/components/AppListCard/AppCardRadio.vue'
+import CardRadio from '~/components/Cards/CardRadio.vue'
 import RadioServices from '~/services/RadioServices'
-import { RadioPage, RadioStationResponse } from '~/types/Radio'
 
 export default defineComponent({
   components: {
     AppPreloader,
     Button,
-    CardWrapper
-    // AppCardRadioGenre,
-    // AppCardWrapper,
-    // AppCardRadio
+    CardWrapper,
+    CardRadio
   },
 
   setup() {
@@ -122,47 +109,20 @@ export default defineComponent({
 
     const playingTrack = computed(() => store.getters.playingTrack)
 
-    const filteredStations = reactive(computed(() => {
-      // if (!dbStations.length) {
-      //   //return stations.value
-      // }
+    const filteredStations = computed(() => {
+      if (!stations.data.get('saved')?.length) {
+        return stations.data.get('all')
+      }
 
-      // // return stations.value.filter((el: any) => {
-      // //   if (dbStations.some((s: any) => s.stationuuid === el.stationuuid)) {
-      // //     return false
-      // //   }
-
-      // //   return el
-      // // })
-    }))
-
-    const playStation = (payload: any) => (
-      store.dispatch('playStation', payload)
-    )
-
-    const sortByVotes = (data: any) => data.sort((a: any, b: any) => {
-      if (a.votes < b.votes) return 1
-      if (a.votes > b.votes) return -1
-      return 0
+      return stations.data.get('all')?.filter((station) => (
+          !stations.data.get('saved')?.some((s: RadioStationResponse) => (
+            s.stationuuid === station.stationuuid
+          ))
+        ))
     })
 
-    const filterByProp = (data: any) => {
-      // const existing = {}
-      // const result = data.filter(({ name }) => {
-      //   const reducedName = name.replace(/\s/g, '').toLowerCase()
-      //   if (existing[reducedName]) {
-      //     return false
-      //   }
-
-      //   existing[reducedName] = true
-      //   return true
-      // })
-
-      // return result
-    }
-
-    const setExtStations = (data: any) => {
-      // stations.value = sortByVotes(filterByProp(data))
+    const playStation = (payload: RadioStationResponse) => {
+      store.commit('setPlayingStation', payload)
     }
 
     const setNewGenre = (genre: string) => {
@@ -172,30 +132,44 @@ export default defineComponent({
       fetchAllStations()
     }
 
-    const saveStationToDatabase = async (payload: any) => {
-      console.log(payload)
-      // try {
-      //   await axios.post('/api/stations', payload)
-      //   // dbStations.push(payload)
-      // } catch (error) {
-      //   console.dir(error)
-      // }
+    const moveSavedToList = (id: string) => {
+      const movedStationIndex = stations.data.get('all')?.findIndex((station: RadioStationResponse) => (
+        station.stationuuid === id
+      ))
+
+      if (movedStationIndex && movedStationIndex > -1) {
+        const movedStation = stations.data.get('all')?.splice(movedStationIndex, 1)
+
+        if (movedStation) {
+          stations.data.get('saved')?.push(...movedStation)
+        }
+      }
     }
 
-    const removeStationFromDatabase = async (payload: any) => {
-      // const targetStationIndex = dbStations.findIndex((el: any) => (
-      //   el.stationuuid === payload.stationuuid
-      // ))
+    const removeStation = (id: string) => {
+      const deletedStationIndex = stations.data.get('saved')?.findIndex((station: RadioStationResponse) => (
+        station.stationuuid === id
+      ))
 
-      // if (targetStationIndex > -1) {
-      //   try {
-      //     const response = await axios.delete(`/api/stations/${payload.stationuuid}`)
-      //     console.log(response)
-      //     dbStations.splice(targetStationIndex, 1)
-      //   } catch (error) {
-      //     console.dir(error)
-      //   }
-      // }
+      if (deletedStationIndex && deletedStationIndex > -1) {
+        stations.data.get('saved')?.splice(deletedStationIndex, 1)
+      }
+    }
+
+    const saveStationToDatabase = async (station: RadioStationResponse) => {
+      const { stationuuid, name } = station
+
+      RadioServices.save({ stationuuid, name })
+        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+        .then(_ => moveSavedToList(stationuuid))
+        .catch((error) => console.dir(error))
+    }
+
+    const removeStationFromDatabase = async (payload: RadioStationResponse) => {
+      RadioServices.remove(payload.stationuuid)
+        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+        .then(_ => removeStation(payload.stationuuid))
+        .catch((error) => console.dir(error))
     }
 
     const radioSetter = (key: 'saved' | 'all', data: RadioStationResponse[]) => {
@@ -258,34 +232,21 @@ export default defineComponent({
 }
 
 .stations {
-  column-count: 2;
-  column-gap: 10px;
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 25px;
 
   &.--saved {
     min-height: auto;
-    // box-shadow: inset 0 0 20px $skeleton;
     padding-bottom: 10px;
+    background-color: $border;
   }
 
   .card {
     width: 100%;
     display: grid;
     grid-template-rows: 1fr auto;
-    break-inside: avoid;
   }
-}
-
-.genrelist {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 25px;
-  position: sticky;
-  top: 0;
-  background-color: $white;
-  z-index: 10;
 }
 
 </style>

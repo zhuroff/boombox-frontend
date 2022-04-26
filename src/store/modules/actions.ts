@@ -2,6 +2,7 @@ import { ActionTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { StateInterface } from '..'
 import api from '~/api'
+import { RadioStationResponse } from '~/types/Radio'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
   playTrack: ({ commit, dispatch }, fileid: number) => {

@@ -6,12 +6,17 @@
         @click="playStation"
       >
         <Sprite
-          v-if="current.fileid !== station.stationuuid || current.isOnPause"
+          v-if="isOnPlay"
+          name="playing"
+        />
+
+        <Sprite
+          v-else-if="current.fileid !== station.stationuuid || current.isOnPause"
           name="play"
         />
 
         <Sprite
-          v-else-if="current.fileid === station.stationuuid && !current.isOnPause"
+          v-else
           name="pause"
         />
       </button>
@@ -19,14 +24,16 @@
 
     <div class="station__content">
       <div class="station__name">{{ station.name }}</div>
-      <div class="station__tags">
-        <button
+      <div class="station__country">{{ station.country }}</div>
+      <ul class="station__tags">
+        <CardRadioGenre
           v-for="(tag, index) in stationTags"
           :key="index"
-          :class="[{ '--selected' : tag === genre }, 'station__tags_button']"
+          :genre="tag"
+          :isActive="tag === genre"
           @click="$emit('fetchByGenre', tag)"
-        >{{ tag }}</button>
-      </div>
+        />
+      </ul>
     </div>
 
     <button
@@ -42,26 +49,31 @@
       class="station__save"
       @click="saveStationToDatabase"
     >
-      <Sprite name="save" />
+      <Sprite name="plus" />
     </button>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
-import { computed, reactive } from 'vue'
+import { defineComponent, computed, reactive, PropType } from 'vue'
+import { RadioStationResponse } from '~/types/Radio'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
+import CardRadioGenre from '@/components/Cards/CardRadioGenre.vue'
 
-export default {
+export default defineComponent({
   name: 'CardRadio',
 
   components: {
-    Sprite
+    Sprite,
+    CardRadioGenre
   },
 
   props: {
     station: {
-      type: Object,
+      type: Object as PropType<RadioStationResponse>,
       required: true
     },
 
@@ -83,9 +95,17 @@ export default {
   },
 
   setup(props, { emit }) {
+    const store = useStore(key)
+
     const stationTags = reactive(computed(() => (
       props.station?.tags?.split(',')
     )))
+
+    const isOnPlay = computed(() => (
+      store.getters.playingTrack.fileid === props.station.stationuuid
+      && !store.getters.playingTrack.isOnPause
+      && !store.getters.playingTrack.isOnLoading
+    ))
 
     const playStation = () => emit('playStation', props.station)
 
@@ -98,19 +118,20 @@ export default {
     }
 
     return {
+      isOnPlay,
       stationTags,
       playStation,
       saveStationToDatabase,
       removeStationFromDatabase
     }
   }
-}
+})
 
 </script>
 
 <style lang="scss" scoped>
 
-@import '@/scss/variables';
+@import '~/scss/variables';
 
 .station {
   position: relative;
@@ -127,6 +148,11 @@ export default {
     .station__play {
       opacity: 1;
       transition: opacity 0.2s ease;
+    }
+
+    .station__save {
+      opacity: 1;
+      transition: opacity 0.3s $animation;
     }
   }
 
@@ -159,16 +185,18 @@ export default {
     transform: translate(-50%, -50%);
     transition: opacity 0.2s ease;
 
-    .icon-play,
-    .icon-pause {
-      width: 10px;
-      height: 10px;
-      margin-left: 2px;
-      fill: $white;
+    .icon.play,
+    .icon.pause {
+      width: 20px;
+      height: 20px;
+      color: $white;
     }
 
-    .icon-pause {
-      margin-left: 0;
+    .icon.playing {
+      width: 20px;
+      height: 20px;
+      margin-left: 2px;
+      fill: $white;
     }
   }
 
@@ -197,38 +225,23 @@ export default {
     margin: 0 0 3px 7px;
   }
 
+  &__country {
+    font-weight: 600;
+    color: $dark;
+    font-size: 12px;
+    margin: 0 0 3px 7px;
+  }
+
   &__tags {
     display: flex;
     flex-wrap: wrap;
-
-    &_button {
-      padding: 2px 7px;
-      border: 0;
-      background-color: transparent;
-      outline: none;
-      color: $pale;
-      font-size: 12px;
-      border-radius: 3px;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background-color: $white;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        transition: all 0.2s ease;
-      }
-
-      &.--selected {
-        background-color: $white;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-      }
-    }
   }
 
   &__save {
     position: absolute;
     z-index: 1;
-    top: 0;
-    right: 0;
+    top: -9px;
+    right: -9px;
     width: 30px;
     height: 30px;
     border: 0;
@@ -238,13 +251,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s $animation;
 
-    .icon-save {
-      width: 20px;
-      height: 20px;
-    }
-
-    .icon-remove {
+    .icon {
       width: 17px;
       height: 17px;
     }

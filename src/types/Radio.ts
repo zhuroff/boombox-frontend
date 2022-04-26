@@ -5,23 +5,26 @@ type RadioConfig = {
 
 type RadioStationResponse = {
   country: string
-  countrycode: string
-  favicon: string
-  homepage: string
   name: string
   stationuuid: string
   url: string
   url_resolved: string
-  votes: number
+  tags: string
 }
 
 type RadioPage = {
   isFetched: boolean
-  data: Map<'saved' | 'all', any>
+  data: Map<'saved' | 'all', RadioStationResponse[]>
+}
+
+type RadioSavePayload = {
+  stationuuid: string
+  name: string
 }
 
 export {
   RadioConfig,
   RadioStationResponse,
-  RadioPage
+  RadioPage,
+  RadioSavePayload
 }
