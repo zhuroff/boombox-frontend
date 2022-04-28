@@ -130,7 +130,6 @@ export default defineComponent({
 
       if (!playlist.isFetched) {
         playlist.data = result
-        console.log(playlist.data)
         playlist.isFetched = true
       } else {
         playlist.data.push(...result)

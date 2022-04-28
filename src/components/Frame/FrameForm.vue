@@ -97,7 +97,7 @@
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
 import { CategoryKeysPlural, CategorySearchResult, CategoryBasic, CategoryMatcher, CategoryActive } from '~/types/Category'
 import { FramePayload } from '~/types/Frame'
-import { SearchPayload } from '~/types/Search'
+import { SearchPayload, SearchResult } from '~/types/Search'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
@@ -170,14 +170,14 @@ export default defineComponent({
       activeCategory.results = []
     }
 
-    const setSearchResults = (data: CategorySearchResult[]) => {
-      activeCategory.results = data
+    const setSearchResults = (data: SearchResult) => {
+      activeCategory.results = Object.values(data).flat() as CategorySearchResult[]
     }
 
     const postSearchQuery = async (query: string) => {
       const payload: SearchPayload = { query, key: activeCategory.key }
 
-      SearchServices.search<CategorySearchResult>(payload)
+      SearchServices.search(payload)
         .then((result) => setSearchResults(result))
         .then(_ => activeCategory.isFetched = true)
         .catch((error) => console.dir(error))

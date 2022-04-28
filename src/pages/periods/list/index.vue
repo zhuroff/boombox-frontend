@@ -19,7 +19,7 @@
           >
             <CardCategory
               :category="period"
-              placeholder="/img/calendar.png"
+              placeholder="/img/period.webp"
               categorySlug="periods"
             />
           </CardWrapper>

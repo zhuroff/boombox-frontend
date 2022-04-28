@@ -19,7 +19,7 @@ const playingTrackInitial: PlayingTrack = {
   title: '',
   source: '',
   year: '',
-  cover: 'https://sverigesradio.se/dist/images/album-cover-placeholder-light.png',
+  cover: '/img/album.webp',
   audio: new Audio(),
   crackle: new Audio('/media/vinyl_01.wav'),
   progressHandler: null,

@@ -56,7 +56,7 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.isOnPause = false
       state.playingTrack.isOnRepeat = false
       state.playingTrack.title = station.name
-      state.playingTrack.cover = 'https://sverigesradio.se/dist/images/album-cover-placeholder-light.png'
+      state.playingTrack.cover = '/img/album.webp'
       state.currentPlaylist = { ...initPlaylist }
       state.playingTrack.audio.play()
     }

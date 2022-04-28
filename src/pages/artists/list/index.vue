@@ -19,7 +19,7 @@
           >
             <CardCategory
               :category="artist"
-              placeholder="/img/artist.jpg"
+              placeholder="/img/artist.webp"
               categorySlug="artists"
             />
           </CardWrapper>

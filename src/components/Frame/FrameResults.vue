@@ -45,7 +45,7 @@ export default defineComponent({
     const host = (pathname: string) => {
       return pathname
         ? hostString(pathname)
-        : `/img/${props.defaultAvatar}.jpg`
+        : `/img/${props.defaultAvatar}.webp`
     }
 
     return {

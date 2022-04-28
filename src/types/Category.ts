@@ -31,7 +31,6 @@ type CategoryPage = CategoryBasic & {
 }
 
 type CategorySearchResult = CategoryBasic & {
-  poster: string
   avatar: string
 }
 

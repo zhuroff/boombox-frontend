@@ -19,7 +19,7 @@
           >
             <CardCategory
               :category="genre"
-              placeholder="/img/hashtag.png"
+              placeholder="/img/genre.webp"
               categorySlug="genres"
             />
           </CardWrapper>

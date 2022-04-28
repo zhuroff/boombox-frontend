@@ -56,7 +56,7 @@ export default defineComponent({
 
   setup() {
     const host = (pathname: string) => (
-      pathname ? hostString(pathname) : '/img/album.jpg'
+      pathname ? hostString(pathname) : '/img/album.webp'
     )
 
     return { host }

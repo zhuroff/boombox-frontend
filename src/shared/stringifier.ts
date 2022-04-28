@@ -29,7 +29,7 @@ const albumCover = (cover: string | undefined) => {
     return cover
   }
 
-  return 'https://sverigesradio.se/dist/images/album-cover-placeholder-light.png'
+  return '/img/album.webp'
 }
 
 export {

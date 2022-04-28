@@ -2,7 +2,7 @@
   
 <div class="album__booklet">
   <img
-    :src="albumCover || 'https://s.mxmcdn.net/site/images/album-placeholder.png'"
+    :src="albumCover || '/img/album.webp'"
     :class="[{ '--booklet' : isBooklet }, 'album__cover']"
     @click="$emit('coverClick')"
   >
