@@ -2,7 +2,7 @@
 
 <div class="search">
   <button
-    v-if="isSearchResults"
+    v-if="searchString.length"
     class="search__close"
     @click.prevent="cleanSearchResults"
   >
@@ -17,12 +17,17 @@
       placeholder="Search..."
     >
 
-    <div
-      v-if="isSearchResults"
+    <SearchResults
+      v-if="!searchResults.isFetching && searchString.length"
+      :results="searchResults.data"
+    />
+
+    <!-- <div
+      v-if="!searchResults.isFetching && searchString.length"
       class="search__modal"
       id="scrollmodal"
     >
-      <!-- <div
+      <div
         v-if="searchResults.albums.length"
         class="search__results"
       >
@@ -38,9 +43,9 @@
           />
 
         </ul>
-      </div> -->
+      </div>
 
-      <!-- <div
+      <div
         v-if="searchResults.frames.length"
         class="search__results"
       >
@@ -56,9 +61,9 @@
           />
 
         </ul>
-      </div> -->
+      </div>
 
-      <!-- <div
+      <div
         v-if="searchResults.artists.length"
         class="search__results"
       >
@@ -74,9 +79,9 @@
           />
 
         </ul>
-      </div> -->
+      </div>
 
-      <!-- <div
+      <div
         v-if="searchResults.genres.length"
         class="search__results"
       >
@@ -92,9 +97,9 @@
           />
 
         </ul>
-      </div> -->
+      </div>
 
-      <!-- <div
+      <div
         v-if="searchResults.periods.length"
         class="search__results"
       >
@@ -110,8 +115,8 @@
           />
 
         </ul>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
   </form>
 </div>
 
@@ -119,43 +124,27 @@
 
 <script lang="ts">
 
-import { defineComponent, ref, reactive, computed, nextTick, watch, Ref } from 'vue'
-import SimpleBar from 'simplebar'
+import { defineComponent, ref, reactive, watch, Ref } from 'vue'
+import { SearchedResult, SearchEntityKey, SearchPayload, SearchResult } from '~/types/Search'
+import SearchServices from '~/services/SearchServices'
 import SearchResults from './SearchResults.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
-import SearchItem from './SearchItem.vue'
-import SearchServices from '~/services/SearchServices'
-import { SearchPayload } from '~/types/Search'
-import { CategorySearchResult } from '~/types/Category'
 
 export default defineComponent({
   name: 'Search',
 
   components: {
     SearchResults,
-    Sprite,
-    SearchItem
+    Sprite
   },
 
   setup() {
     const searchString = ref('')
-    const searchResults = reactive(new Map())
-    const scrollModal = ref(null)
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
 
-    const isSearchResults = computed(() => {
-      // if (!searchString.value.length) {
-      //   return false
-      // }
-
-      // return (
-      //   searchResults.albums?.length
-      //   || searchResults.artists?.length
-      //   || searchResults.genres?.length
-      //   || searchResults.frames?.length
-      //   || searchResults.periods?.length
-      // )
-      return false
+    const searchResults = reactive<SearchedResult>({
+      isFetching: false,
+      data: new Map()
     })
 
     const cleanSearchResults = () => {
@@ -169,24 +158,11 @@ export default defineComponent({
       // delete searchResults.periods
     }
 
-    const initSimpleBar = () => {
-      // const resultModal = document.querySelector('#scrollmodal')
-      // scrollModal.value = new SimpleBar(resultModal, { autoHide: false })
-    }
-
-    // const setSearchResults = (data: any) => {
-    //   // Object.keys(data).forEach((key) => {
-    //   //   searchResults[key] = data[key]
-    //   // })
-
-    //   nextTick(() => initSimpleBar())
-    // }
-
-    const setSearchResults = (result: any) => {
+    const setSearchResults = (result: SearchResult) => {
       Object.keys(result).forEach((key) => {
-        searchResults.set(key, result[key])
+        searchResults.data.set(key as SearchEntityKey, result[key as SearchEntityKey])
       })
-      console.log(searchResults)
+      searchResults.isFetching = false
     }
 
     const searchBySite = (query: string) => {
@@ -194,13 +170,15 @@ export default defineComponent({
 
       SearchServices.search(payload)
         .then((result) => setSearchResults(result))
-        // .then((result) => setSearchResults(result))
-        // .then(_ => activeCategory.isFetched = true)
-        .catch((error) => console.dir(error))
+        .catch((error) => {
+          searchResults.isFetching = false
+          console.dir(error)
+        })
     }
 
     watch(searchString, (newValue) => {
       if (typeof inputTimer.value === 'number') {
+        searchResults.isFetching = true
         clearTimeout(inputTimer.value)
         
         inputTimer.value = setTimeout(() => {
@@ -212,7 +190,6 @@ export default defineComponent({
     return {
       searchString,
       searchResults,
-      isSearchResults,
       cleanSearchResults,
       searchBySite
     }

@@ -9,11 +9,26 @@ type SearchPayload = {
   key?: string
 }
 
+type SearchResultData = {
+  title: string
+  data: (CategorySearchResult | AlbumItem | Partial<FrameAlbum>)[]
+}
+
 type SearchResult = {
-  [K in SearchEntityKey]: (CategorySearchResult | AlbumItem | Partial<FrameAlbum>)[]
+  [K in SearchEntityKey]: SearchResultData
+}
+
+type SearchedData = Map<SearchEntityKey, SearchResultData>
+
+type SearchedResult = {
+  isFetching: boolean
+  data: SearchedData
 }
 
 export {
+  SearchEntityKey,
   SearchPayload,
-  SearchResult
+  SearchResult,
+  SearchedResult,
+  SearchedData
 }

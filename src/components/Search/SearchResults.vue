@@ -1,6 +1,6 @@
 <template>
   <div class="search__results">
-    <div class="search__heading">{{ heading }}</div>
+    <!-- <div class="search__heading">{{ heading }}</div>
     <ul class="search__list">
 
       <SearchItem
@@ -11,36 +11,30 @@
         :section="slug"
       />
 
-    </ul>
+    </ul> -->
   </div>
 </template>
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, PropType } from 'vue'
+import SimpleBar from 'simplebar'
+import { SearchedData } from '~/types/Search'
 
 export default defineComponent({
   name: 'SearchResults',
 
   props: {
-    heading: {
-      type: String,
-      required: true
-    },
-
-    slug: {
-      type: String,
-      required: true
-    },
-
-    list: {
-      type: Array,
+    results: {
+      type: Map as PropType<SearchedData>,
       required: true
     }
   },
 
-  setup() {
-    
+  setup(props) {
+    onMounted(() => {
+      console.log(props.results)
+    })
   }
 })
 

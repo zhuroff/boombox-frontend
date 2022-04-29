@@ -171,7 +171,7 @@ export default defineComponent({
     }
 
     const setSearchResults = (data: SearchResult) => {
-      activeCategory.results = Object.values(data).flat() as CategorySearchResult[]
+      activeCategory.results = Object.values(data).map((item) => item.data).flat() as CategorySearchResult[]
     }
 
     const postSearchQuery = async (query: string) => {
