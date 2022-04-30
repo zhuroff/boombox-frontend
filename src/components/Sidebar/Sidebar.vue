@@ -8,6 +8,8 @@
       <span>BoomBox</span>
     </router-link>
 
+    <Search />
+
     <nav class="aside__nav">
       <ul class="aside__nav-list">
         <li
@@ -29,10 +31,12 @@
 
 import { defineComponent, reactive } from 'vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
+import Search from '~/components/Search/Search.vue'
 
 export default defineComponent({
   components: {
-    Sprite
+    Sprite,
+    Search
   },
 
   setup() {
@@ -105,13 +109,19 @@ export default defineComponent({
   flex: none;
   background-color: $white;
   border-right: 1px solid $border;
+  position: relative;
+  z-index: 2000;
+
+  &.--z-low {
+    z-index: 1000;
+  }
 
   &__homelink {
     display: flex;
     align-items: center;
     font-size: 16px;
     padding: 0 25px;
-    height: $headerHeight;
+    height: 70px;
     font-weight: 700;
     text-transform: uppercase;
     color: $pale;
@@ -127,7 +137,7 @@ export default defineComponent({
   }
 
   &__nav {
-    padding: 25px;
+    padding: 0 25px;
 
     &-link {
       font-size: 14px;

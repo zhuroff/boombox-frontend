@@ -173,15 +173,17 @@ export default defineComponent({
       activeCategory.results = []
     }
 
-    const setSearchResults = (data: SearchResultData[]) => {
-      activeCategory.results.push(...data)
+    const setSearchResults = (data: SearchResultData[] | undefined) => {
+      if (data) {
+        activeCategory.results.push(...data)
+      }
     }
 
     const postSearchQuery = async (query: string) => {
       const payload: SearchPayload = { query, key: activeCategory.key }
 
       SearchServices.search(payload)
-        .then((result) => setSearchResults(result[0].data))
+        .then((result) => setSearchResults(result[0]?.data))
         .then(_ => activeCategory.isFetched = true)
         .catch((error) => console.dir(error))
     }

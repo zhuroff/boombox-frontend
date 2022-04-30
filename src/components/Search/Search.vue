@@ -18,7 +18,7 @@
     >
 
     <SearchResults
-      v-if="!searchResults.isFetching && searchString.length"
+      v-if="!searchResults.isFetching && (searchString.length || searchResults.errorMessage)"
       :results="searchResults.data"
       :errorMessage="searchResults.errorMessage"
       @cleanSearchResults="cleanSearchResults"
@@ -61,13 +61,14 @@ export default defineComponent({
     }
 
     const setSearchResults = (result: SearchResultState[]) => {
-      if (!result.length) {
-        return searchResults.errorMessage = 'Nothing was found'
-      }
-
-      searchResults.data.push(...result)
       searchResults.isFetching = false
-      searchResults.errorMessage = null
+      
+      if (!result?.length) {
+        searchResults.errorMessage = 'Nothing was found'
+      } else {
+        searchResults.data = result
+        searchResults.errorMessage = null
+      }
     }
 
     const searchBySite = (query: string) => {
@@ -108,14 +109,13 @@ export default defineComponent({
 @import '~/scss/variables';
 
 .search {
-  width: calc(100% - 40px - 24px);
-  max-width: 500px;
   position: relative;
+  padding: 0 25px;
 
   &__close {
     position: absolute;
-    right: 10px;
-    top: 11px;
+    right: 14px;
+    top: 8px;
     width: 15px;
     height: 15px;
     outline: none;
@@ -146,13 +146,18 @@ export default defineComponent({
   }
 
   &__input {
-    height: 40px;
+    height: 30px;
     width: 100%;
     outline: none;
     border: 0;
     border-bottom: 1px solid transparent;
     padding: 0;
     transition: border-color 0.3s ease;
+    background-color: transparent;
+
+    &:focus {
+      border-color: $border;
+    }
   }
 
   &__modal {

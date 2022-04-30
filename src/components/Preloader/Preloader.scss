@@ -19,7 +19,7 @@
   }
 
   &.--light {
-    height: calc(100vh - #{$playerHeight + $headerHeight});
+    height: calc(100vh - #{$playerHeight});
     background-color: $transLight;
   }
 

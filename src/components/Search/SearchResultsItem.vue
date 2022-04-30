@@ -90,13 +90,8 @@ export default defineComponent({
 .search {
 
   &__item {
-    margin-bottom: 5px;
     border-radius: 3px;
     transition: background-color 0.3s ease;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
 
     &:hover {
       background-color: $border;
@@ -107,7 +102,7 @@ export default defineComponent({
   &__link {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 5px 15px;
   }
 
   &__image {

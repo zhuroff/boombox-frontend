@@ -2,7 +2,9 @@
   <div
     v-if="errorMessage"
     class="search__results"
-  >{{ errorMessage }}</div>
+  >
+    <div class="search__results-empty">{{ errorMessage }}</div>
+  </div>
   
   <div
     v-else
@@ -73,11 +75,20 @@ export default defineComponent({
   &__results {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 25px;
     background-color: $white;
-    width: 100%;
+    width: 100vw;
+    max-width: 300px;
     border-radius: 5px;
     box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+    padding: 10px 0;
+
+    &-empty {
+      padding: 0 15px;
+      font-size: 14px;
+      font-weight: 600;
+      color: $error;
+    }
   }
 
   &__section {
@@ -88,7 +99,7 @@ export default defineComponent({
       display: block;
       color: $dark;
       text-transform: uppercase;
-      margin: 10px 15px;
+      margin: 5px 15px;
     }
   }
 }

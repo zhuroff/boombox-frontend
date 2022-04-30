@@ -6,7 +6,7 @@
 
 .section {
   overflow: hidden;
-  height: calc(100vh - #{$headerHeight} - #{$playerHeight});
+  height: calc(100vh - #{$playerHeight});
   position: relative;
   z-index: 1000;
 
@@ -30,7 +30,7 @@
 .simplebar-content {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - #{$headerHeight} - #{$playerHeight});
+  min-height: calc(100vh - #{$playerHeight});
 }
 
 .simplebar-vertical {

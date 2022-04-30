@@ -30,14 +30,14 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const closeModal = () => {
-      document.querySelector('.header')?.classList.remove('--z-low')
+      document.querySelector('.aside')?.classList.remove('--z-low')
       document.querySelector('.player')?.classList.remove('--z-low')
       emit('closeModal')
     }
 
     watchEffect(() => {
       if (props.isModalActive) {
-        document.querySelector('.header')?.classList.add('--z-low')
+        document.querySelector('.aside')?.classList.add('--z-low')
         document.querySelector('.player')?.classList.add('--z-low')
       }
     })
