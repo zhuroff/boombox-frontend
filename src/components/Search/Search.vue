@@ -20,103 +20,9 @@
     <SearchResults
       v-if="!searchResults.isFetching && searchString.length"
       :results="searchResults.data"
+      :errorMessage="searchResults.errorMessage"
+      @cleanSearchResults="cleanSearchResults"
     />
-
-    <!-- <div
-      v-if="!searchResults.isFetching && searchString.length"
-      class="search__modal"
-      id="scrollmodal"
-    >
-      <div
-        v-if="searchResults.albums.length"
-        class="search__results"
-      >
-        <div class="search__heading">Albums</div>
-        <ul class="search__list">
-
-          <SearchItem
-            v-for="item in searchResults.albums"
-            :key="item._id"
-            :item="item"
-            slug="albums"
-            section="albums"
-          />
-
-        </ul>
-      </div>
-
-      <div
-        v-if="searchResults.frames.length"
-        class="search__results"
-      >
-        <div class="search__heading">Frame albums</div>
-        <ul class="search__list">
-
-          <SearchItem
-            v-for="item in searchResults.frames"
-            :key="item._id"
-            :item="item"
-            slug="frames"
-            section="frames"
-          />
-
-        </ul>
-      </div>
-
-      <div
-        v-if="searchResults.artists.length"
-        class="search__results"
-      >
-        <div class="search__heading">Artists</div>
-        <ul class="search__list">
-
-          <SearchItem
-            v-for="item in searchResults.artists"
-            :key="item._id"
-            :item="item"
-            slug="artists"
-            section="artists"
-          />
-
-        </ul>
-      </div>
-
-      <div
-        v-if="searchResults.genres.length"
-        class="search__results"
-      >
-        <div class="search__heading">Genres</div>
-        <ul class="search__list">
-
-          <SearchItem
-            v-for="item in searchResults.genres"
-            :key="item._id"
-            :item="item"
-            slug="genres"
-            section="genres"
-          />
-
-        </ul>
-      </div>
-
-      <div
-        v-if="searchResults.periods.length"
-        class="search__results"
-      >
-        <div class="search__heading">Years</div>
-        <ul class="search__list">
-
-          <SearchItem
-            v-for="item in searchResults.periods"
-            :key="item._id"
-            :item="item"
-            slug="periods"
-            section="periods"
-          />
-
-        </ul>
-      </div>
-    </div> -->
   </form>
 </div>
 
@@ -125,7 +31,7 @@
 <script lang="ts">
 
 import { defineComponent, ref, reactive, watch, Ref } from 'vue'
-import { SearchedResult, SearchEntityKey, SearchPayload, SearchResult } from '~/types/Search'
+import { SearchedResult, SearchPayload, SearchResultState } from '~/types/Search'
 import SearchServices from '~/services/SearchServices'
 import SearchResults from './SearchResults.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
@@ -144,25 +50,24 @@ export default defineComponent({
 
     const searchResults = reactive<SearchedResult>({
       isFetching: false,
-      data: new Map()
+      data: [],
+      errorMessage: null
     })
 
     const cleanSearchResults = () => {
-      // searchString.value = ''
-      // scrollModal.value = null
-
-      // delete searchResults.albums
-      // delete searchResults.artists
-      // delete searchResults.genres
-      // delete searchResults.frames
-      // delete searchResults.periods
+      searchString.value = ''
+      searchResults.data = []
+      searchResults.errorMessage = null
     }
 
-    const setSearchResults = (result: SearchResult) => {
-      Object.keys(result).forEach((key) => {
-        searchResults.data.set(key as SearchEntityKey, result[key as SearchEntityKey])
-      })
+    const setSearchResults = (result: SearchResultState[]) => {
+      if (!result.length) {
+        return searchResults.errorMessage = 'Nothing was found'
+      }
+
+      searchResults.data.push(...result)
       searchResults.isFetching = false
+      searchResults.errorMessage = null
     }
 
     const searchBySite = (query: string) => {
@@ -170,9 +75,9 @@ export default defineComponent({
 
       SearchServices.search(payload)
         .then((result) => setSearchResults(result))
-        .catch((error) => {
+        .catch(_ => {
           searchResults.isFetching = false
-          console.dir(error)
+          searchResults.errorMessage = 'Nothing was found'
         })
     }
 
@@ -210,9 +115,9 @@ export default defineComponent({
   &__close {
     position: absolute;
     right: 10px;
-    top: calc(100% + 5px);
-    width: 30px;
-    height: 30px;
+    top: 11px;
+    width: 15px;
+    height: 15px;
     outline: none;
     background-color: transparent;
     border: 0;

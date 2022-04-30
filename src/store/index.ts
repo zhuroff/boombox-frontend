@@ -1,7 +1,7 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
-import modules from './modules'
 import { AppStateInterface } from '~/store/modules/state'
+import modules from './modules'
 
 export interface StateInterface {
   instance: AppStateInterface

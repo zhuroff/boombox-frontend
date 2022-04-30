@@ -1,5 +1,6 @@
 import { AlbumItem } from '~/types/Album'
 import { FrameAlbum } from '~/types/Frame'
+import { SearchResultData } from './Search'
 
 type CategoryImagesKeys = 'poster' | 'avatar'
 type CategoryKeysSingular = 'artist' | 'genre' | 'period'
@@ -38,7 +39,7 @@ type CategoryActive = {
   isActive: boolean,
   isFetched: boolean,
   key: CategoryKeysPlural,
-  results: CategorySearchResult[]
+  results: SearchResultData[]
 }
 
 export {

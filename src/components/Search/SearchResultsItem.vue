@@ -1,13 +1,10 @@
 <template>
   
 <li class="search__item">
-  <!-- <a
-    :href="`/${slug}/${item._id}`"
-    class="search__link"
-  > -->
   <router-link
     :to="{ path: `/${slug}/${item._id}` }"
     class="search__link"
+    @click="cleanSearchResults"
   >
     <img
       :src="itemCover"
@@ -17,55 +14,69 @@
 
     <div class="search__info">
       <strong>{{ item.title }}</strong>
-      <span v-if="section === 'albums' || section === 'frames'">
+      <span v-if="slug === 'albums' || slug === 'frames'">
         {{ item.artist.title }},
-        {{ item.releaseYear }} /
+        {{ item.period.title }} /
         {{ item.genre.title }}
       </span>
     </div>
   </router-link>
-  <!-- </a> -->
 </li>
 
 </template>
 
 <script lang="ts">
 
-import { defineComponent, computed, reactive } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
+import { SearchResultData } from '~/types/Search'
+import { hostString } from '~/shared/media'
 
 export default defineComponent({
+  name: 'SearchResultsItem',
+
   props: {
     item: {
-      type: Object,
+      type: Object as PropType<SearchResultData>,
       required: true
     },
 
     slug: {
       type: String,
       required: true
-    },
-
-    section: {
-      type: String,
-      required: true
     }
   },
 
-  setup(props) {
-    const coverInSections = reactive({
-      albums: props.item.albumCover,
-      frames: '/img/frame.webp',
-      artists: props.item.avatar || props.item.poster || '/img/artist.webp',
-      genres: props.item.avatar || props.item.poster || '/img/genre.webp',
-      periods: props.item.avatar || props.item.poster || '/img/period.webp'
+  setup(props, { emit }) {
+    const coverPlaceholders = (slug: string) => {
+      switch(slug) {
+        case 'artists':
+          return '/img/artist.webp'
+        case 'genres':
+          return '/img/genre.webp'
+        case 'periods':
+          return '/img/period.webp'
+        case 'frames':
+          return '/img/frame.webp'
+        default:
+          return '/img/album.webp'
+      }
+    }
+    
+    const itemCover = computed(() => {
+      if ('albumCover' in props.item) {
+        return props.item.albumCover
+      }
+
+      return 'avatar' in props.item
+        ? hostString(props.item.avatar)
+        : coverPlaceholders(props.slug)
     })
 
-    const itemCover = computed(() => {
-      // coverInSections[props.section]
-    })
+    const cleanSearchResults = () => emit('cleanSearchResults')
 
     return {
-      itemCover
+      itemCover,
+      cleanSearchResults
     }
   }
 })
@@ -81,7 +92,6 @@ export default defineComponent({
   &__item {
     margin-bottom: 5px;
     border-radius: 3px;
-    padding: 5px;
     transition: background-color 0.3s ease;
 
     &:last-child {
@@ -97,6 +107,7 @@ export default defineComponent({
   &__link {
     display: flex;
     align-items: center;
+    padding: 15px;
   }
 
   &__image {

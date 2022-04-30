@@ -97,7 +97,7 @@
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
 import { CategoryKeysPlural, CategorySearchResult, CategoryBasic, CategoryMatcher, CategoryActive } from '~/types/Category'
 import { FramePayload } from '~/types/Frame'
-import { SearchPayload, SearchResult } from '~/types/Search'
+import { SearchPayload, SearchResultData, SearchResultState } from '~/types/Search'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
@@ -146,7 +146,10 @@ export default defineComponent({
     })
 
     const isNotFound = computed(() => (
-      activeCategory.isActive && !activeCategory.results.length && searchQuery.value.length && activeCategory.isFetched
+      activeCategory.isActive
+      && !activeCategory.results.length
+      && searchQuery.value.length
+      && activeCategory.isFetched
     ))
 
     const setFrameTitle = (value: string) => {
@@ -170,15 +173,15 @@ export default defineComponent({
       activeCategory.results = []
     }
 
-    const setSearchResults = (data: SearchResult) => {
-      activeCategory.results = Object.values(data).map((item) => item.data).flat() as CategorySearchResult[]
+    const setSearchResults = (data: SearchResultData[]) => {
+      activeCategory.results.push(...data)
     }
 
     const postSearchQuery = async (query: string) => {
       const payload: SearchPayload = { query, key: activeCategory.key }
 
       SearchServices.search(payload)
-        .then((result) => setSearchResults(result))
+        .then((result) => setSearchResults(result[0].data))
         .then(_ => activeCategory.isFetched = true)
         .catch((error) => console.dir(error))
     }

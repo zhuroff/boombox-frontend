@@ -1,34 +1,29 @@
 import { AlbumItem } from './Album'
 import { FrameAlbum } from '~/types/Frame'
-import { CategoryKeysPlural, CategorySearchResult } from './Category'
-
-type SearchEntityKey = CategoryKeysPlural | 'collections' | 'playlists' | 'albums'
+import { CategorySearchResult } from './Category'
 
 type SearchPayload = {
   query: string
   key?: string
 }
 
-type SearchResultData = {
+type SearchResultData = (CategorySearchResult | AlbumItem | Partial<FrameAlbum>)
+
+type SearchResultState = {
   title: string
-  data: (CategorySearchResult | AlbumItem | Partial<FrameAlbum>)[]
+  key: string
+  data: SearchResultData[]
 }
-
-type SearchResult = {
-  [K in SearchEntityKey]: SearchResultData
-}
-
-type SearchedData = Map<SearchEntityKey, SearchResultData>
 
 type SearchedResult = {
   isFetching: boolean
-  data: SearchedData
+  data: SearchResultState[],
+  errorMessage: string | null
 }
 
 export {
-  SearchEntityKey,
   SearchPayload,
-  SearchResult,
-  SearchedResult,
-  SearchedData
+  SearchResultData,
+  SearchResultState,
+  SearchedResult
 }
