@@ -33,6 +33,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .container {
   height: 100vh;
@@ -48,7 +49,14 @@ export default defineComponent({
   flex: none;
   position: relative;
   overflow: hidden;
-  width: calc(100% - #{$asideWidth});
+
+  @include media('<laptop') {
+    width: 100vw;
+  }
+
+  @include media('>=laptop') {
+    width: calc(100% - #{$asideWidth});
+  }
 }
 
 </style>

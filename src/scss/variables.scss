@@ -20,6 +20,12 @@ $playerHeight: 62px;
 
 $animation: cubic-bezier(.17,.67,.35,.99);
 
+$breakpoints: (
+  'laptop': 1024px,
+  'desktop': 1200px,
+  'landscape': '(orientation: landscape)'
+) !default;
+
 @mixin buttonClose {
   position: absolute;
   top: 25px;

@@ -1,0 +1,100 @@
+@import '~/scss/variables';
+@import 'include-media';
+
+.aside {
+  width: $asideWidth;
+  flex: none;
+  background-color: $white;
+  z-index: 2000;
+
+  @include media('<laptop') {
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    padding-top: 50px;
+    transform: translateX(#{$asideWidth});
+    transition: all 0.3s $animation;
+    background-color: $dark;
+
+    &.--opened {
+      box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+      transform: translateX(0);
+      transition: all 0.3s $animation;
+    }
+  }
+
+  @include media('>=laptop') {
+    border-right: 1px solid $border;
+    position: relative;
+  }
+
+  &.--z-low {
+    z-index: 1000;
+  }
+
+  &__homelink {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    padding: 0 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: $pale;
+
+    @include media('<laptop') {
+      justify-content: flex-end;
+      height: 50px;
+    }
+
+    @include media('>=laptop') {
+      height: 70px;
+    }
+
+    .icon-vinyl {
+
+      @include media('<laptop') {
+        display: none;
+      }
+
+      @include media('>=laptop') {
+        width: 25px;
+        height: 25px;
+        margin-right: 10px;
+        flex: none;
+        fill: $pale;
+        stroke: $pale;
+      }
+    }
+  }
+
+  &__nav {
+    padding: 0 25px;
+
+    &-link {
+      font-size: 14px;
+      color: $pale;
+      line-height: 3;
+      font-weight: 600;
+      display: block;
+      transition: color 0.2s ease;
+
+      @include media('<laptop') {
+        text-align: right;
+      }
+
+      &:hover,
+      &.router-link-active {
+        transition: color 0.2s ease;
+
+        @include media('<laptop') {
+          color: $white;
+        }
+
+        @include media('>=laptop') {
+          color: $dark;
+        }
+      }
+    }
+  }
+}

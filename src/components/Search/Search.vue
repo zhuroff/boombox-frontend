@@ -14,7 +14,7 @@
       type="search"
       class="search__input"
       v-model="searchString"
-      placeholder="Search..."
+      placeholder="Search"
     >
 
     <SearchResults
@@ -107,6 +107,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .search {
   position: relative;
@@ -154,6 +155,11 @@ export default defineComponent({
     padding: 0;
     transition: border-color 0.3s ease;
     background-color: transparent;
+
+    @include media('<laptop') {
+      text-align: right;
+      color: $white;
+    }
 
     &:focus {
       border-color: $border;

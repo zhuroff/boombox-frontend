@@ -1,8 +1,14 @@
 <template>
-  <aside class="aside">
+  <aside :class="[{ '--opened' : isNavOpened }, 'aside']">
+    <ButtonBurger
+      :isActive="isNavOpened"
+      @burgerClick="burgerClick"
+    />
+
     <router-link
       class="aside__homelink"
       to="/"
+      @click="burgerClick"
     >
       <Sprite name="vinyl" />
       <span>BoomBox</span>
@@ -20,6 +26,7 @@
           <router-link
             :to="`/${item.route}`"
             class="aside__nav-link"
+            @click="burgerClick"
           >{{ item.title }}</router-link>
         </li>
       </ul>
@@ -29,17 +36,22 @@
 
 <script lang="ts">
 
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
+import ButtonBurger from '~/components/Button/ButtonBurger.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Search from '~/components/Search/Search.vue'
+import './Sidebar.scss'
 
 export default defineComponent({
   components: {
+    ButtonBurger,
     Sprite,
     Search
   },
 
   setup() {
+    const isNavOpened = ref(false)
+
     const navbar = reactive([
       {
         title: 'Albums',
@@ -91,69 +103,17 @@ export default defineComponent({
         route: 'backups'
       }
     ])
+
+    const burgerClick = () => {
+      isNavOpened.value = !isNavOpened.value
+    }
   
     return {
-      navbar
+      isNavOpened,
+      navbar,
+      burgerClick
     }
   }
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-
-.aside {
-  width: $asideWidth;
-  flex: none;
-  background-color: $white;
-  border-right: 1px solid $border;
-  position: relative;
-  z-index: 2000;
-
-  &.--z-low {
-    z-index: 1000;
-  }
-
-  &__homelink {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    padding: 0 25px;
-    height: 70px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: $pale;
-
-    .icon-vinyl {
-      width: 25px;
-      height: 25px;
-      margin-right: 10px;
-      flex: none;
-      fill: $pale;
-      stroke: $pale;
-    }
-  }
-
-  &__nav {
-    padding: 0 25px;
-
-    &-link {
-      font-size: 14px;
-      color: $pale;
-      line-height: 3;
-      font-weight: 600;
-      display: block;
-      transition: color 0.2s ease;
-
-      &:hover,
-      &.router-link-active {
-        color: $dark;
-        transition: color 0.2s ease;
-      }
-    }
-  }
-}
-
-</style>
