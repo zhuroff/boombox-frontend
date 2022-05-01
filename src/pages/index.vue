@@ -277,6 +277,7 @@ export default defineComponent({
       break-inside: avoid;
       display: grid;
       grid-template-rows: 1fr auto;
+      margin-bottom: 25px;
     }
   }
 }

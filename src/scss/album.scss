@@ -66,11 +66,14 @@
   }
 
   &__link {
-    padding: 0 10px;
     display: block;
     text-align: center;
     position: relative;
-    min-height: 252px;
+
+    @include media('>=desktop') {
+      padding: 0 10px;
+      min-height: 252px;
+    }
   }
 
   &__image {
@@ -81,8 +84,11 @@
     &_vinyl {
       width: 100%;
       display: block;
-      height: 212px;
       transition: transform 0.5s $animation;
+
+      @include media('>=desktop') {
+        height: 212px;
+      }
     }
 
     &_img {
@@ -91,38 +97,59 @@
       border-radius: 5px;
       object-fit: cover;
 
-      &:hover {
-        transform: translateX(-10px);
-        transition: transform 0.5s $animation;
-
-        & + .album__image_vinyl {
-          transform: translateX(20px);
+      @include media('>=desktop') {
+        &:hover {
+          transform: translateX(-10px);
           transition: transform 0.5s $animation;
+
+          & + .album__image_vinyl {
+            transform: translateX(20px);
+            transition: transform 0.5s $animation;
+          }
         }
       }
     }
 
     &_vinyl {
-      position: absolute;
-      z-index: 1;
-      top: 0;
-      right: 0;
+      @include media('<desktop') {
+        display: none
+      }
+
+      @include media('>=desktop') {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+      }
     }
   }
 
   &__title {
-    font-weight: 600;
-    color: $dark;
-    font-size: 14px;
-    position: relative;
-    margin-top: 7px;
+
+    @include media('<desktop') {
+      display: none
+    }
+
+    @include media('>=desktop') {
+      font-weight: 600;
+      color: $dark;
+      font-size: 14px;
+      position: relative;
+      margin-top: 7px;
+    }
   }
 
   &__info {
-    font-weight: 600;
-    color: $pale;
-    font-size: 12px;
-    position: relative;
+    @include media('<desktop') {
+      display: none
+    }
+
+    @include media('>=desktop') {
+      font-weight: 600;
+      color: $pale;
+      font-size: 12px;
+      position: relative;
+    }
   }
 
   &__cover {

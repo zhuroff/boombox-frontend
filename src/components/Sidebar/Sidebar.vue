@@ -1,7 +1,7 @@
 <template>
-  <aside :class="[{ '--opened' : isNavOpened }, 'aside']">
+  <aside :class="[{ '--opened' : isExpanded }, 'aside']">
     <ButtonBurger
-      :isActive="isNavOpened"
+      :isActive="isExpanded"
       @burgerClick="burgerClick"
     />
 
@@ -49,9 +49,14 @@ export default defineComponent({
     Search
   },
 
-  setup() {
-    const isNavOpened = ref(false)
+  props: {
+    isExpanded: {
+      type: Boolean,
+      required: true
+    }
+  },
 
+  setup(_, { emit }) {
     const navbar = reactive([
       {
         title: 'Albums',
@@ -105,11 +110,10 @@ export default defineComponent({
     ])
 
     const burgerClick = () => {
-      isNavOpened.value = !isNavOpened.value
+      emit('burgerClick')
     }
   
     return {
-      isNavOpened,
       navbar,
       burgerClick
     }

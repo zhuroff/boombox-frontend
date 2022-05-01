@@ -69,19 +69,27 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .search {
 
   &__results {
     position: absolute;
     top: 100%;
-    left: 25px;
     background-color: $white;
     width: 100vw;
     max-width: 300px;
     border-radius: 5px;
     box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
     padding: 10px 0;
+
+    @include media('<laptop') {
+      right: 25px;
+    }
+
+    @include media('>=laptop') {
+      left: 25px;
+    }
 
     &-empty {
       padding: 0 15px;

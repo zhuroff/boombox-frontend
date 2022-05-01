@@ -2,31 +2,31 @@
 @import 'include-media';
 
 .aside {
-  width: $asideWidth;
   flex: none;
   background-color: $white;
   z-index: 2000;
 
   @include media('<laptop') {
-    position: fixed;
+    position: relative;
+    width: $asideWidthMobile;
     height: 100vh;
     top: 0;
     right: 0;
     padding-top: 50px;
-    transform: translateX(#{$asideWidth});
-    transition: all 0.3s $animation;
-    background-color: $dark;
+    transition: transform 0.75s $animation;
+    background-color: $accent;
+    order: 1;
 
     &.--opened {
-      box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
-      transform: translateX(0);
-      transition: all 0.3s $animation;
+      transform: translateX(-#{$asideWidthMobile});
+      transition: transform 0.5s $animation;
     }
   }
 
   @include media('>=laptop') {
     border-right: 1px solid $border;
     position: relative;
+    width: $asideWidth;
   }
 
   &.--z-low {
@@ -40,15 +40,16 @@
     padding: 0 25px;
     font-weight: 700;
     text-transform: uppercase;
-    color: $pale;
 
     @include media('<laptop') {
       justify-content: flex-end;
       height: 50px;
+      color: $white;
     }
 
     @include media('>=laptop') {
       height: 70px;
+      color: $pale;
     }
 
     .icon-vinyl {
@@ -73,7 +74,6 @@
 
     &-link {
       font-size: 14px;
-      color: $pale;
       line-height: 3;
       font-weight: 600;
       display: block;
@@ -81,19 +81,17 @@
 
       @include media('<laptop') {
         text-align: right;
+        color: $white;
+      }
+
+      @include media('>=laptop') {
+        color: $pale;
       }
 
       &:hover,
       &.router-link-active {
         transition: color 0.2s ease;
-
-        @include media('<laptop') {
-          color: $white;
-        }
-
-        @include media('>=laptop') {
-          color: $dark;
-        }
+        color: $dark;
       }
     }
   }

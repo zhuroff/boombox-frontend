@@ -39,7 +39,6 @@ export default defineComponent({
   outline: none;
 
   @include media('<laptop') {
-    transform: translateX(-50px);
     width: 50px;
     height: 50px;
     background-color: transparent;
@@ -50,7 +49,7 @@ export default defineComponent({
     flex-direction: column;
     align-items: center;
     position: fixed;
-    left: 0;
+    right: 0;
     top: 0;
     transition: all 0.7s $animation;
     
@@ -66,11 +65,11 @@ export default defineComponent({
     }
     
     &.--active {
-      transform: translateX(0);
-      right: 0;
-      top: 0;
-      left: auto;
-      transition: all 0.7s $animation;
+      // transform: translateX(0);
+      // right: 0;
+      // top: 0;
+      // left: auto;
+      // transition: all 0.7s $animation;
 
       &::before,
       &::after,

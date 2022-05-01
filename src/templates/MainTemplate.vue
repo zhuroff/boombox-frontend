@@ -1,11 +1,14 @@
 <template>
 
 <div class="container">
-  <Sidebar />
+  <Sidebar
+    :isExpanded="isNavOpened"
+    @burgerClick="navHandler"
+  />
 
   <main
     ref="main"
-    class="main"
+    :class="[{ '--offset' : isNavOpened }, 'main']"
   >
     <router-view v-slot="{ Component }">
       <component :is="Component" />
@@ -35,6 +38,11 @@ export default defineComponent({
 
   setup() {
     const main = ref(null)
+    const isNavOpened = ref(false)
+
+    const navHandler = () => {
+      isNavOpened.value = !isNavOpened.value
+    }
 
     onMounted(() => {
       if (main.value) {
@@ -42,7 +50,11 @@ export default defineComponent({
       }
     })
 
-    return { main }
+    return {
+      main,
+      navHandler,
+      isNavOpened
+    }
   }
 })
 
@@ -60,16 +72,34 @@ export default defineComponent({
   position: relative;
   max-width: $containerWidth;
   margin: 0 auto;
-  background-color: $white;
+
+  @include media('<laptop') {
+    background-color: $accent;
+  }
+
+  @include media('>=laptop') {
+    background-color: $white;
+  }
 }
 
 .main {
   flex: none;
   position: relative;
+  background-color: $white;
 
   @include media('<laptop') {
     width: 100vw;
     height: 100vh;
+    left: 0;
+    clip-path: circle(100%);
+    transition: all 0.75s $animation;
+
+    &.--offset {
+      clip-path: circle(34%);
+      left: -#{$asideWidthMobile};
+      transition: all 0.5s $animation;
+      animation: rotating 5s linear infinite;
+    }
   }
 
   @include media('>=laptop') {

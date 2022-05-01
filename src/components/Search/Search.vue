@@ -72,14 +72,16 @@ export default defineComponent({
     }
 
     const searchBySite = (query: string) => {
-      const payload: SearchPayload = { query }
+      if (query.length) {
+        const payload: SearchPayload = { query }
 
-      SearchServices.search(payload)
-        .then((result) => setSearchResults(result))
-        .catch(_ => {
-          searchResults.isFetching = false
-          searchResults.errorMessage = 'Nothing was found'
-        })
+        SearchServices.search(payload)
+          .then((result) => setSearchResults(result))
+          .catch(_ => {
+            searchResults.isFetching = false
+            searchResults.errorMessage = 'Nothing was found'
+          })
+      }
     }
 
     watch(searchString, (newValue) => {
@@ -115,8 +117,6 @@ export default defineComponent({
 
   &__close {
     position: absolute;
-    right: 14px;
-    top: 8px;
     width: 15px;
     height: 15px;
     outline: none;
@@ -128,16 +128,21 @@ export default defineComponent({
     align-items: center;
     z-index: 10;
 
-    .icon-delete {
-      width: 10px;
-      height: 10px;
-      fill: $pale;
+    @include media('<laptop') {
+      right: 7px;
+      top: 7px;
+      
+      .icon {
+        color: $white;
+      }
     }
 
-    &:hover {
+    @include media('>=laptop') {
+      right: 14px;
+      top: 8px;
 
-      .icon-delete {
-        fill: $dark;
+      .icon {
+        color: $pale;
       }
     }
   }
@@ -159,6 +164,10 @@ export default defineComponent({
     @include media('<laptop') {
       text-align: right;
       color: $white;
+
+      &::placeholder {
+        color: $border;
+      }
     }
 
     &:focus {
