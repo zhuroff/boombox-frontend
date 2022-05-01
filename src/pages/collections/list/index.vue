@@ -7,37 +7,35 @@
       />
     </transition>
 
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <div
-          class="section__heading"
-          key="heading"
-        >
-          <h1 class="section__title">
-            There are {{ collections.data.length }} lists in your collection
-          </h1>
-        </div>
+    <transition-group name="flyUp">
+      <div
+        class="section__heading"
+        key="heading"
+      >
+        <h1 class="section__title">
+          There are {{ collections.data.length }} lists in your collection
+        </h1>
+      </div>
 
-        <ul
-          v-if="collections.isFetched"
-          class="cardlist"
-          key="list"
+      <ul
+        v-if="collections.isFetched"
+        class="cardlist"
+        key="list"
+      >
+        <CardWrapper
+          v-for="album in collections.data"
+          :key="album._id"
+          deletable
+          @deleteItem="deleteCollection(album._id)"
         >
-          <CardWrapper
-            v-for="album in collections.data"
-            :key="album._id"
-            deletable
-            @deleteItem="deleteCollection(album._id)"
-          >
-            <CardCollection
-              :data="album"
-              title="Albums in collection:"
-              slug="collections"
-            />
-          </CardWrapper>
-        </ul>
-      </transition-group>
-    </div>
+          <CardCollection
+            :data="album"
+            title="Albums in collection:"
+            slug="collections"
+          />
+        </CardWrapper>
+      </ul>
+    </transition-group>
   </section>
 </template>
 

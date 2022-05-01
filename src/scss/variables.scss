@@ -21,8 +21,9 @@ $playerHeight: 62px;
 $animation: cubic-bezier(.17,.67,.35,.99);
 
 $breakpoints: (
+  'tablet': 768px,
   'laptop': 1024px,
-  'desktop': 1200px,
+  'desktop': 1198px,
   'landscape': '(orientation: landscape)'
 ) !default;
 

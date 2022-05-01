@@ -1,12 +1,10 @@
 #app {
   background: linear-gradient(to right, #000, #e5e5e5, #000);
-  background: linear-gradient(to right, #0f0c29, #cccbdd, #24243e);
   background: linear-gradient(to right, #0f1e36, #e5e5e5, #0f1e36);
 }
 
 .section {
   overflow: hidden;
-  height: calc(100vh - #{$playerHeight});
   position: relative;
   z-index: 1000;
 
@@ -23,21 +21,13 @@
   }
 }
 
-#scrollspace {
-  height: 100%;
-}
+.simplebar {
 
-.simplebar-content {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - #{$playerHeight});
-}
+  &-wrapper {
+    width: 100%;
+  }
 
-.simplebar-vertical {
-  top: 15px;
-  bottom: 15px;
-
-  .simplebar-scrollbar {
+  &-scrollbar {
 
     &:before {
       background-color: $pale;

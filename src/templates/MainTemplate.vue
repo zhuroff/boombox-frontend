@@ -2,11 +2,16 @@
 
 <div class="container">
   <Sidebar />
-  <main class="main">
+
+  <main
+    ref="main"
+    class="main"
+  >
     <router-view v-slot="{ Component }">
       <component :is="Component" />
     </router-view>
   </main>
+
   <Player />
   <Snackbar />
 </div>
@@ -15,7 +20,8 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import SimpleBar from 'simplebar'
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
 import Player from '~/components/Player/Player.vue'
 import Snackbar from '~/components/Snackbar/Snackbar.vue'
@@ -25,6 +31,18 @@ export default defineComponent({
     Sidebar,
     Player,
     Snackbar
+  },
+
+  setup() {
+    const main = ref(null)
+
+    onMounted(() => {
+      if (main.value) {
+        new SimpleBar(main.value, { autoHide: false })
+      }
+    })
+
+    return { main }
   }
 })
 
@@ -48,14 +66,15 @@ export default defineComponent({
 .main {
   flex: none;
   position: relative;
-  overflow: hidden;
 
   @include media('<laptop') {
     width: 100vw;
+    height: 100vh;
   }
 
   @include media('>=laptop') {
     width: calc(100% - #{$asideWidth});
+    height: calc(100vh - #{$playerHeight});
   }
 }
 

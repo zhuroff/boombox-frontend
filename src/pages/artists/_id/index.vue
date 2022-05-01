@@ -7,32 +7,30 @@
       />
     </transition>
 
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <CategoryHero
-          v-if="category.isFetched"
-          :data="category.data"
-          :description="categoryDescription"
-          slug="artists"
-          @setUploadedImage="setUploadedImage"
-        />
+    <transition-group name="flyUp">
+      <CategoryHero
+        v-if="category.isFetched"
+        :data="category.data"
+        :description="categoryDescription"
+        slug="artists"
+        @setUploadedImage="setUploadedImage"
+      />
 
-        <ul
-          v-if="category.isFetched"
-          class="cardlist"
+      <ul
+        v-if="category.isFetched"
+        class="cardlist"
+      >
+        <CardWrapper
+          v-for="album in category.data.albums"
+          :key="album.folderid"
         >
-          <CardWrapper
-            v-for="album in category.data.albums"
-            :key="album.folderid"
-          >
-            <component
-              :is="album.frame ? 'CardFrame' : 'CardAlbum'"
-              :album="album"
-            />
-          </CardWrapper>
-        </ul>
-      </transition-group>
-    </div>
+          <component
+            :is="album.frame ? 'CardFrame' : 'CardAlbum'"
+            :album="album"
+          />
+        </CardWrapper>
+      </ul>
+    </transition-group>
   </section>
 </template>
 

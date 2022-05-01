@@ -7,31 +7,29 @@
       />
     </transition>
 
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <ul
-          key="videos"
-          class="cardlist"
-          v-if="tracks"
+    <transition-group name="flyUp">
+      <ul
+        key="videos"
+        class="cardlist --yt"
+        v-if="tracks"
+      >
+        <li
+          v-for="id in tracks"
+          :key="id"
+          class="card__youtube"
         >
-          <li
-            v-for="id in tracks"
-            :key="id"
-            class="card__youtube"
-          >
-            <div v-html="`<div id='${id}'></div>`"></div>
-          </li>
-        </ul>
+          <div v-html="`<div id='${id}'></div>`"></div>
+        </li>
+      </ul>
 
-        <Button
-          key="button"
-          v-if="tracks?.length < totalTracks"
-          text="Load more"
-          isFullWidth
-          @click="nextPageLoad"
-        />
-      </transition-group>
-    </div>
+      <Button
+        key="button"
+        v-if="tracks?.length < totalTracks"
+        text="Load more"
+        isFullWidth
+        @click="nextPageLoad"
+      />
+    </transition-group>
   </section>
 </template>
 

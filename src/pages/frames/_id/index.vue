@@ -8,24 +8,22 @@
     />
   </transition>
 
-  <div id="scrollspace">
-    <transition name="flyUp">
+  <transition name="flyUp">
+    <div
+      v-if="album.isFetched"
+      class="album --frame"
+    >
       <div
-        v-if="album.isFetched"
-        class="album --frame"
-      >
-        <div
-          class="album__frame"
-          v-html="album.data.frame"
-        ></div>
+        class="album__frame"
+        v-html="album.data.frame"
+      ></div>
 
-        <AlbumHeading
-          :albumHead="frameHeading"
-          @textInputHandler="saveFrameDescription"
-        />
-      </div>
-    </transition>
-  </div>
+      <AlbumHeading
+        :albumHead="frameHeading"
+        @textInputHandler="saveFrameDescription"
+      />
+    </div>
+  </transition>
 </section>
 
 </template>

@@ -8,62 +8,60 @@
     />
   </transition>
 
-  <div id="scrollspace">
-    <transition-group name="flyUp">
-      <div class="hero" key="hero">
-        <div
-          v-if="isFetched"
-          class="hero__wrapper"
-        >
-          <div class="hero__content">
-            <time class="hero__content-header">
-              {{ topNews.dates }}
-            </time>
-            <div class="hero__content-title">{{ topNews.title }}</div>
-            <div class="hero__content-description">{{ topNews.description }}</div>
-            <a
-              :href="topNews.siteUrl"
-              target="_blank"
-              class="hero__content-link"
-            >Read more</a>
-          </div>
-          
-          <div class="hero__cover">
-            <img
-              :src="topNews.imageUrl"
-              :alt="topNews.title"
-              class="hero__cover-image"
-            >
-          </div>
-        </div>
-      </div>
-
+  <transition-group name="flyUp">
+    <div class="hero" key="hero">
       <div
         v-if="isFetched"
-        class="news"
-        key="events"
+        class="hero__wrapper"
       >
-        <ul
-          v-if="restNews.length"
-          class="news__list"
-        >
-          <CardWrapper
-            v-for="item in restNews"
-            :key="item.id"
+        <div class="hero__content">
+          <time class="hero__content-header">
+            {{ topNews.dates }}
+          </time>
+          <div class="hero__content-title">{{ topNews.title }}</div>
+          <div class="hero__content-description">{{ topNews.description }}</div>
+          <a
+            :href="topNews.siteUrl"
+            target="_blank"
+            class="hero__content-link"
+          >Read more</a>
+        </div>
+        
+        <div class="hero__cover">
+          <img
+            :src="topNews.imageUrl"
+            :alt="topNews.title"
+            class="hero__cover-image"
           >
-            <CardNews :item="item" />
-          </CardWrapper>
-        </ul>
-
-        <Pagination
-          v-if="isFetched && pagination.totalPages > 1"
-          :pagination="pagination"
-          key="pagination"
-          @switchPagination="switchPagination"
-        />
+        </div>
       </div>
-    </transition-group>
-  </div>
+    </div>
+
+    <div
+      v-if="isFetched"
+      class="news"
+      key="events"
+    >
+      <ul
+        v-if="restNews.length"
+        class="news__list"
+      >
+        <CardWrapper
+          v-for="item in restNews"
+          :key="item.id"
+        >
+          <CardNews :item="item" />
+        </CardWrapper>
+      </ul>
+
+      <Pagination
+        v-if="isFetched && pagination.totalPages > 1"
+        :pagination="pagination"
+        key="pagination"
+        @switchPagination="switchPagination"
+      />
+    </div>
+  </transition-group>
 </section>
 
 </template>
@@ -155,20 +153,15 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .hero {
   background-color: $accent;
   display: block;
   overflow: hidden;
 
-  &__placeholder {
-    height: inherit;
-    width: 100%;
-
-    .preloader {
-      height: inherit;
-      position: relative;
-    }
+  @include media('<laptop') {
+    height: 100vh;
   }
 
   &__wrapper {
@@ -260,12 +253,24 @@ export default defineComponent({
 }
 
 .news {
-  padding: 25px 15px;
+  padding: 25px 15px 0;
 
   &__list {
-    column-count: 4;
-    column-gap: 0;
-    margin-bottom: 25px;
+
+    @include media('<tablet', 'landscape') {
+      column-count: 2;
+      column-gap: 0;
+    }
+
+    @include media('>=tablet') {
+      column-count: 2;
+      column-gap: 0;
+      margin-bottom: 25px;
+    }
+
+    @include media('>=desktop') {
+      column-count: 4;
+    }
 
     .card {
       width: auto;

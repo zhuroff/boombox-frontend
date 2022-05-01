@@ -7,34 +7,32 @@
       />
     </transition>
       
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <CategoryHero
-          v-if="collection.isFetched"
-          :data="collection.data"
-          :description="collectionDescription"
-          slug="collections"
-          @setUploadedImage="setUploadedImage"
-        />
+    <transition-group name="flyUp">
+      <CategoryHero
+        v-if="collection.isFetched"
+        :data="collection.data"
+        :description="collectionDescription"
+        slug="collections"
+        @setUploadedImage="setUploadedImage"
+      />
 
-        <VueDraggableNext
-          v-if="collection.isFetched"
-          handle=".--drag"
-          class="cardlist"
-          tag="ul"
-          v-bind="dragOptions"
-          @end="orderChanged"
+      <VueDraggableNext
+        v-if="collection.isFetched"
+        handle=".--drag"
+        class="cardlist"
+        tag="ul"
+        v-bind="dragOptions"
+        @end="orderChanged"
+      >
+        <CardWrapper
+          v-for="album in collection.data.albums"
+          :key="album._id"
+          draggable
         >
-          <CardWrapper
-            v-for="album in collection.data.albums"
-            :key="album._id"
-            draggable
-          >
-            <CardAlbum :album="album.album" />
-          </CardWrapper>
-        </VueDraggableNext>
-      </transition-group>
-    </div>
+          <CardAlbum :album="album.album" />
+        </CardWrapper>
+      </VueDraggableNext>
+    </transition-group>
   </section>
 </template>
 

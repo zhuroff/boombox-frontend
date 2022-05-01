@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import SimpleBar from 'simplebar'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -128,17 +127,6 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
-
-router.afterEach(() => {
-  setTimeout(() => {
-    const scrollSpace = document.getElementById('scrollspace')
-    
-    if (scrollSpace) {
-      const scrollInstance = new SimpleBar(scrollSpace, { autoHide: false })
-      return scrollInstance
-    }
-  }, 1000)
 })
 
 export default router

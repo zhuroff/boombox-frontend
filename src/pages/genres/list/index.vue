@@ -7,31 +7,29 @@
       />
     </transition>
       
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <ul
-          v-if="categories.isFetched"
-          class="cardlist"
+    <transition-group name="flyUp">
+      <ul
+        v-if="categories.isFetched"
+        class="cardlist"
+      >
+        <CardWrapper
+          v-for="genre in categories.data"
+          :key="genre.id"
         >
-          <CardWrapper
-            v-for="genre in categories.data"
-            :key="genre.id"
-          >
-            <CardCategory
-              :category="genre"
-              placeholder="/img/genre.webp"
-              categorySlug="genres"
-            />
-          </CardWrapper>
-        </ul>
+          <CardCategory
+            :category="genre"
+            placeholder="/img/genre.webp"
+            categorySlug="genres"
+          />
+        </CardWrapper>
+      </ul>
 
-        <Pagination
-          v-if="categories.isFetched && categories.pagination.totalPages > 1"
-          :pagination="categories.pagination"
-          @switchPagination="switchPagination"
-        />
-      </transition-group>
-    </div>
+      <Pagination
+        v-if="categories.isFetched && categories.pagination.totalPages > 1"
+        :pagination="categories.pagination"
+        @switchPagination="switchPagination"
+      />
+    </transition-group>
   </section>
 </template>
 

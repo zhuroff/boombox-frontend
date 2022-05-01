@@ -7,47 +7,45 @@
       />
     </transition>
       
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <CategoryHero
-          v-if="playlist.isFetched"
-          key="hero"
-          :data="playlist.data"
-          :description="playlistDescription"
-          slug="playlists"
-          noAvatar
-          isEditable
-          @setUploadedImage="setUploadedImage"
-          @saveTitle="saveTitle"
-        />
+    <transition-group name="flyUp">
+      <CategoryHero
+        v-if="playlist.isFetched"
+        key="hero"
+        :data="playlist.data"
+        :description="playlistDescription"
+        slug="playlists"
+        noAvatar
+        isEditable
+        @setUploadedImage="setUploadedImage"
+        @saveTitle="saveTitle"
+      />
 
-        <div
-          v-if="playlist.isFetched"
-          key="playlist"
-          class="album"
-        >
-          <div class="album__aside">
-            <div class="album__sidebar">
-              <CoverArt
-                :albumCover="albumCover"
-                :isBooklet="false"
-                uploadable
-                @uploadImage="uploadCover"
-              />
-            </div>
-          </div>
-
-          <div class="album__content">
-            <TrackList
-              :tracks="playlist.data.tracks"
-              :albumID="playlist.data._id"
-              isPlaylist
-              @orderChanged="orderChanged"
+      <div
+        v-if="playlist.isFetched"
+        key="playlist"
+        class="album"
+      >
+        <div class="album__aside">
+          <div class="album__sidebar">
+            <CoverArt
+              :albumCover="albumCover"
+              :isBooklet="false"
+              uploadable
+              @uploadImage="uploadCover"
             />
           </div>
         </div>
-      </transition-group>
-    </div>
+
+        <div class="album__content">
+          <TrackList
+            :tracks="playlist.data.tracks"
+            :albumID="playlist.data._id"
+            isPlaylist
+            @orderChanged="orderChanged"
+          />
+        </div>
+      </div>
+    </transition-group>
   </section>
 </template>
 

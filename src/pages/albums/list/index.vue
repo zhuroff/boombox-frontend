@@ -7,38 +7,36 @@
       />
     </transition>
 
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <div
-          class="section__heading"
-          key="heading"
-        >
-          <h1 class="section__title">
-            There are {{ albums.pagination.totalDocs }} albums in your collection
-          </h1>
-        </div>
+    <transition-group name="flyUp">
+      <div
+        class="section__heading"
+        key="heading"
+      >
+        <h1 class="section__title">
+          There are {{ albums.pagination.totalDocs }} albums in your collection
+        </h1>
+      </div>
 
-        <ul
-          v-if="albums.isFetched"
-          class="cardlist"
-          key="list"
+      <ul
+        v-if="albums.isFetched"
+        class="cardlist"
+        key="list"
+      >
+        <CardWrapper
+          v-for="album in albums.data"
+          :key="album._id"
         >
-          <CardWrapper
-            v-for="album in albums.data"
-            :key="album._id"
-          >
-            <CardAlbum :album="album" />
-          </CardWrapper>
-        </ul>
+          <CardAlbum :album="album" />
+        </CardWrapper>
+      </ul>
 
-        <Pagination
-          v-if="albums.isFetched && albums.pagination.totalPages > 1"
-          :pagination="albums.pagination"
-          key="pagination"
-          @switchPagination="switchPagination"
-        />
-      </transition-group>
-    </div>
+      <Pagination
+        v-if="albums.isFetched && albums.pagination.totalPages > 1"
+        :pagination="albums.pagination"
+        key="pagination"
+        @switchPagination="switchPagination"
+      />
+    </transition-group>
   </section>
 </template>
 

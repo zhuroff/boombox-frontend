@@ -7,65 +7,63 @@
       />
     </transition>
 
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <ul
-          key="genres"
-          class="genres"
+    <transition-group name="flyUp">
+      <ul
+        key="genres"
+        class="genres"
+      >
+        <Button
+          v-for="(genre, index) in genres"
+          :key="index"
+          :text="genre"
+          :isFilled="genre === activeGenre"
+          :isDisabled="!stations.isFetched"
+          @onClick="setNewGenre(genre)"
+        />
+      </ul>
+
+      <ul
+        v-if="stations.isFetched"
+        class="stations --saved"
+        key="saved"
+      >
+        <CardWrapper
+          v-for="station in stations.data.get('saved')"
+          :key="station.stationuuid"
         >
-          <Button
-            v-for="(genre, index) in genres"
-            :key="index"
-            :text="genre"
-            :isFilled="genre === activeGenre"
-            :isDisabled="!stations.isFetched"
-            @onClick="setNewGenre(genre)"
+          <CardRadio
+            :station="station"
+            :current="playingTrack"
+            :genre="activeGenre"
+            :isSaved="true"
+            @playStation="playStation"
+            @fetchByGenre="setNewGenre"
+            @removeStationFromDatabase="removeStationFromDatabase"
           />
-        </ul>
+        </CardWrapper>
+      </ul>
 
-        <ul
-          v-if="stations.isFetched"
-          class="stations --saved"
-          key="saved"
+      <ul
+        v-if="stations.isFetched"
+        class="stations"
+        key="all"
+      >
+        <CardWrapper
+          v-for="station in filteredStations"
+          :key="station.stationuuid"
         >
-          <CardWrapper
-            v-for="station in stations.data.get('saved')"
-            :key="station.stationuuid"
-          >
-            <CardRadio
-              :station="station"
-              :current="playingTrack"
-              :genre="activeGenre"
-              :isSaved="true"
-              @playStation="playStation"
-              @fetchByGenre="setNewGenre"
-              @removeStationFromDatabase="removeStationFromDatabase"
-            />
-          </CardWrapper>
-        </ul>
-
-        <ul
-          v-if="stations.isFetched"
-          class="stations"
-          key="all"
-        >
-          <CardWrapper
-            v-for="station in filteredStations"
-            :key="station.stationuuid"
-          >
-            <CardRadio
-              :station="station"
-              :current="playingTrack"
-              :genre="activeGenre"
-              :isSaved="false"
-              @playStation="playStation"
-              @fetchByGenre="setNewGenre"
-              @saveStationToDatabase="saveStationToDatabase"
-            />
-          </CardWrapper>
-        </ul>
-      </transition-group>
-    </div>
+          <CardRadio
+            :station="station"
+            :current="playingTrack"
+            :genre="activeGenre"
+            :isSaved="false"
+            @playStation="playStation"
+            @fetchByGenre="setNewGenre"
+            @saveStationToDatabase="saveStationToDatabase"
+          />
+        </CardWrapper>
+      </ul>
+    </transition-group>
   </section>      
 </template>
 

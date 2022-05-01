@@ -7,72 +7,70 @@
       />
     </transition>
       
-    <div id="scrollspace">
-      <transition name="flyUp">
-        <div
-          v-if="album.isFetched"
-          class="album"
-        >
-          <div class="album__aside">
-            <div class="album__sidebar">
-              <CoverArt
-                :albumCover="album.data.albumCover"
-                :isBooklet="album.data.albumCoverArt !== 0"
-                @coverClick="fetchAlbumBooklet"
-              />
-
-              <Button
-                text="Add to collection"
-                isFullWidth
-                @onClick="callCollectionsModal"
-              />
-
-              <FloatModal
-                v-if="collections.isActive"
-                :isFetched="collections.isFetched"
-                :isEmpty="!collections.data.length"
-                placeholder="Create new collection"
-                @createNewEntry="createNewCollection"
-                @closeFloatModal="closeCollectionsModal"
-              >
-                <template v-slot:empty>
-                  <div class="float-modal__empty">
-                    <strong>You haven't created any collections yet</strong>
-                    <span>To create a collection, use the form below</span>
-                  </div>
-                </template>
-
-                <template v-slot:list>
-                  <ul class="float-modal__list">
-                    <FloatModalItem
-                      v-for="item in collections.data"
-                      :key="item.id"
-                      :item="item"
-                      :itemID="album.data._id"
-                      :isChecked="isCollectionItemChecked(item)"
-                      @checkFloatModalItem="addOrRemoveFromCollection"
-                    />
-                  </ul>
-                </template>
-              </FloatModal>
-            </div>
-          </div>
-
-          <div class="album__content">
-            <AlbumHeading
-              :albumHead="albumHead"
-              @textInputHandler="descriptionHandler"
+    <transition name="flyUp">
+      <div
+        v-if="album.isFetched"
+        class="album"
+      >
+        <div class="album__aside">
+          <div class="album__sidebar">
+            <CoverArt
+              :albumCover="album.data.albumCover"
+              :isBooklet="album.data.albumCoverArt !== 0"
+              @coverClick="fetchAlbumBooklet"
             />
 
-            <TrackList
-              :tracks="album.data.tracks"
-              :albumID="album.data._id"
-              :artist="album.data.artist"
+            <Button
+              text="Add to collection"
+              isFullWidth
+              @onClick="callCollectionsModal"
             />
+
+            <FloatModal
+              v-if="collections.isActive"
+              :isFetched="collections.isFetched"
+              :isEmpty="!collections.data.length"
+              placeholder="Create new collection"
+              @createNewEntry="createNewCollection"
+              @closeFloatModal="closeCollectionsModal"
+            >
+              <template v-slot:empty>
+                <div class="float-modal__empty">
+                  <strong>You haven't created any collections yet</strong>
+                  <span>To create a collection, use the form below</span>
+                </div>
+              </template>
+
+              <template v-slot:list>
+                <ul class="float-modal__list">
+                  <FloatModalItem
+                    v-for="item in collections.data"
+                    :key="item.id"
+                    :item="item"
+                    :itemID="album.data._id"
+                    :isChecked="isCollectionItemChecked(item)"
+                    @checkFloatModalItem="addOrRemoveFromCollection"
+                  />
+                </ul>
+              </template>
+            </FloatModal>
           </div>
         </div>
-      </transition>
-    </div>
+
+        <div class="album__content">
+          <AlbumHeading
+            :albumHead="albumHead"
+            @textInputHandler="descriptionHandler"
+          />
+
+          <TrackList
+            :tracks="album.data.tracks"
+            :albumID="album.data._id"
+            :artist="album.data.artist"
+          />
+        </div>
+      </div>
+    </transition>
 
     <transition name="fade">
       <Modal

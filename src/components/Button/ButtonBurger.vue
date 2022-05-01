@@ -36,6 +36,7 @@ export default defineComponent({
 @import 'include-media';
 
 .burger {
+  outline: none;
 
   @include media('<laptop') {
     transform: translateX(-50px);

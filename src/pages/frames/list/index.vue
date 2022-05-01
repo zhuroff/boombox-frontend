@@ -7,55 +7,51 @@
       />
     </transition>
 
-    <div id="scrollspace">
-      <transition-group name="flyUp">
-        <div
-          key="heading"
-          class="section__heading"
-        >
-          <h1 class="section__title">There are {{ albums.pagination.totalDocs }} frames in your collection</h1>
+    <transition-group name="flyUp">
+      <div
+        key="heading"
+        class="section__heading"
+      >
+        <h1 class="section__title">There are {{ albums.pagination.totalDocs }} frames in your collection</h1>
 
-          <Button
-            text="Add new frame"
-            :onClick="frameModalSwitcher"
-          />
-        </div>
-        
-        <ul
-          key="list"
-          v-if="albums.isFetched"
-          class="cardlist"
-        >
-          <CardWrapper
-            v-for="album in albums.data"
-            :key="album._id"
-            deletable
-            @deleteItem="deleteFrameAlbum(album._id)"
-          >
-            <CardFrame :album="album" />
-          </CardWrapper>
-        </ul>
-
-        <Pagination
-          key="pagination"
-          v-if="albums.isFetched && albums.pagination.totalPages > 1"
-          :pagination="albums.pagination"
-          @switchPagination="switchPagination"
+        <Button
+          text="Add new frame"
+          :onClick="frameModalSwitcher"
         />
-      </transition-group>
-
-      <transition name="fade">
-        <Modal
-          v-if="isCreatingFrameModalActive"
-          :isModalActive="isCreatingFrameModalActive"
-          @closeModal="frameModalSwitcher"
-        >
-          <FrameForm @addNewFrame="addNewFrame" />
-        </Modal>
-      </transition>
-
+      </div>
       
-    </div>
+      <ul
+        key="list"
+        v-if="albums.isFetched"
+        class="cardlist"
+      >
+        <CardWrapper
+          v-for="album in albums.data"
+          :key="album._id"
+          deletable
+          @deleteItem="deleteFrameAlbum(album._id)"
+        >
+          <CardFrame :album="album" />
+        </CardWrapper>
+      </ul>
+
+      <Pagination
+        key="pagination"
+        v-if="albums.isFetched && albums.pagination.totalPages > 1"
+        :pagination="albums.pagination"
+        @switchPagination="switchPagination"
+      />
+    </transition-group>
+
+    <transition name="fade">
+      <Modal
+        v-if="isCreatingFrameModalActive"
+        :isModalActive="isCreatingFrameModalActive"
+        @closeModal="frameModalSwitcher"
+      >
+        <FrameForm @addNewFrame="addNewFrame" />
+      </Modal>
+    </transition>
   </section>
 </template>
 

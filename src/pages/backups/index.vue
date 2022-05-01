@@ -7,35 +7,33 @@
       />
     </transition>
 
-    <div id="scrollspace">
-      <transition name="flyUp">
-        <div
-          v-if="isPageLoaded"
-          class="backups"
-        >
-          <Button
-            text="Create backup"
-            @onClick="createBackups"
-          />
+    <transition name="flyUp">
+      <div
+        v-if="isPageLoaded"
+        class="backups"
+      >
+        <Button
+          text="Create backup"
+          @onClick="createBackups"
+        />
 
-          <ul>
-            <li
-              v-for="item in backups"
-              :key="item.timestamp"
-            >
-              <span>{{ item.dateCreation }}</span>
-              <button @click="backupRestore(item.timestamp)">Restore</button>
-              <button @click="backupDelete(item.timestamp)">Delete</button>
-            </li>
-          </ul>
+        <ul>
+          <li
+            v-for="item in backups"
+            :key="item.timestamp"
+          >
+            <span>{{ item.dateCreation }}</span>
+            <button @click="backupRestore(item.timestamp)">Restore</button>
+            <button @click="backupDelete(item.timestamp)">Delete</button>
+          </li>
+        </ul>
 
-          <Button
-            text="Synchronize"
-            @onClick="synchronizeCollection"
-          />
-        </div>
-      </transition>
-    </div>
+        <Button
+          text="Synchronize"
+          @onClick="synchronizeCollection"
+        />
+      </div>
+    </transition>
   </section>
 </template>
 

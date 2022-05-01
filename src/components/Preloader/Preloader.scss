@@ -1,4 +1,5 @@
 @import '~/scss/variables';
+@import 'include-media';
 
 .preloader {
   position: absolute;
@@ -19,8 +20,15 @@
   }
 
   &.--light {
-    height: calc(100vh - #{$playerHeight});
     background-color: $transLight;
+
+    @include media('<laptop') {
+      height: 100vh
+    }
+
+    @include media('>=laptop') {
+      height: calc(100vh - #{$playerHeight});
+    }
   }
 
   &__icon {
