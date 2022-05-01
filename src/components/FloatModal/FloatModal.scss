@@ -1,4 +1,5 @@
 @import '~/scss/variables';
+@import 'include-media';
 
 .float-modal {
   position: absolute;
@@ -11,28 +12,12 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
   &__content {
-    min-height: inherit;
     display: flex;
     flex-direction: column;
-  }
+    min-height: inherit;
 
-  &__close {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    top: 0;
-    right: 0;
-    border: 0;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .icon {
-      width: 20px;
-      height: 20px;
-      color: $dark;
+    @include media('<laptop') {
+      height: inherit;
     }
   }
 
@@ -85,7 +70,7 @@
 
   &__create {
     display: grid;
-    grid-template-columns: 1fr 30px;
+    grid-template-columns: 1fr 30px 30px;
     padding: 10px 16px 16px;
     margin-top: auto;
   }
@@ -111,14 +96,14 @@
 
   &__submit {
     height: 30px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
     background-color: $dark;
     color: $white;
     border: 1px solid $dark;
     border-left: 0;
     padding: 0;
     cursor: pointer;
+    outline: none;
+    border-radius: 0;
 
     &[disabled] {
       background-color: $border;
@@ -126,6 +111,17 @@
       cursor: default;
       pointer-events: none;
       color: $pale;
+    }
+
+    &:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-left: 1px solid $white;
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
     }
   }
 }

@@ -85,6 +85,7 @@ export default defineComponent({
 .main {
   flex: none;
   position: relative;
+  z-index: 1000;
   background-color: $white;
 
   @include media('<laptop') {
@@ -98,7 +99,38 @@ export default defineComponent({
       clip-path: circle(34%);
       left: -#{$asideWidthMobile};
       transition: all 0.5s $animation;
+      filter: grayscale(1);
       animation: rotating 5s linear infinite;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 100px;
+        background-color: $black;
+        border-radius: 50%;
+        border: 4px solid $pale;
+        z-index: 1;
+        animation: appearance 0.75s $animation;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px;
+        height: 30px;
+        background-color: $white;
+        border-radius: 50%;
+        border: 2px solid $dark;
+        z-index: 2;
+        animation: appearance 0.75s $animation;
+      }
     }
   }
 

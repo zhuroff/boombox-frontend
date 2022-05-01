@@ -1,11 +1,15 @@
 @import '~/scss/variables';
+@import 'include-media';
 
 .album {
 
   &__booklet {
-    width: 230px;
     flex: none;
     z-index: 10;
+
+    @include media('>=laptop') {
+      width: 230px;
+    }
 
     &:hover {
 
@@ -14,15 +18,33 @@
         transition: opacity 0.3s ease;
       }
     }
+
+    & + .button {
+
+      @include media('<laptop') {
+        width: auto;
+        position: absolute;
+        right: 25px;
+        bottom: 25px;
+      }
+    }
   }
 
   &__cover {
     display: block;
     width: inherit;
-    height: 230px;
     object-fit: cover;
-    border-radius: 3px;
     margin-bottom: 10px;
+
+    @include media('<laptop') {
+      width: 100%;
+      height: auto;
+    }
+
+    @include media('>=laptop') {
+      height: 230px;
+      border-radius: 3px;
+    }
 
     &.--booklet {
       cursor: pointer;

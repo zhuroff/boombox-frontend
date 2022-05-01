@@ -1,6 +1,6 @@
 <template>
   
-<div class="tracklist__row_cell --fix">{{ secondsToMinutes }}</div>
+<div class="tracklist__row_cell --fix --duration">{{ secondsToMinutes }}</div>
 
 </template>
 

@@ -4,22 +4,21 @@
 
 .cardlist {
   display: grid;
-  justify-content: center;
   overflow: hidden;
 
   &:not(.--yt) {
     @include media('<tablet') {
-      grid-template-columns: repeat(2, calc(50% - 3px));
-      gap: 3px;
+      grid-template-columns: repeat(2, calc(50% - 5px));
+      gap: 10px;
   
       @include media('landscape') {
-        grid-template-columns: repeat(3, calc(33.3333% - 3px));
+        grid-template-columns: repeat(3, calc(33.3333% - 5px));
       }
     }
   
     @include media('>=tablet') {
-      grid-template-columns: repeat(3, 252px);
-      gap: 3px;
+      grid-template-columns: repeat(3, calc(33.3333% - 5px));
+      gap: 10px;
     }
   
     @include media('>=laptop') {
@@ -28,6 +27,7 @@
   
     @include media('>=desktop') {
       grid-template-columns: repeat(4, 252px);
+      gap: 0;
     }
   }
 
@@ -45,11 +45,11 @@
     }
   }
 
-  @include media('<tablet') {
-    padding: 25px 3px;
+  @include media('<desktop') {
+    padding: 25px;
   }
 
-  @include media('>=tablet') {
+  @include media('>=desktop') {
     padding: 25px 10px;
   }
 }

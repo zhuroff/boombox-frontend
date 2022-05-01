@@ -49,8 +49,8 @@ export default defineComponent({
     flex-direction: column;
     align-items: center;
     position: fixed;
-    right: 0;
-    top: 0;
+    right: 10px;
+    top: 13px;
     transition: all 0.7s $animation;
     
     &::before,
@@ -59,7 +59,7 @@ export default defineComponent({
       content: '';
       width: 18px;
       height: 2px;
-      background-color: $pale;
+      background-color: $white;
       margin: 2px 0;
       transition: all 0.5s cubic-bezier(.17,.67,.35,.99);
     }

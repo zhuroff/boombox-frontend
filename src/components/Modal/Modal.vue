@@ -51,6 +51,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .modal {
   position: fixed;
@@ -69,6 +70,11 @@ export default defineComponent({
 
   &__close {
     @include buttonClose;
+
+    @include media('<laptop') {
+      left: 25px;
+      right: auto
+    }
   }
 }
 

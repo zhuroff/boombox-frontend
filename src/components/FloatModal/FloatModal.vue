@@ -9,14 +9,6 @@
 
     <transition name="flyUp">
       <div class="float-modal__content">
-        <button
-          class="float-modal__close"
-          key="close"
-          @click="closeFloatModal"
-        >
-          <Sprite name="delete" />
-        </button>
-
         <slot
           v-if="isFetched && isEmpty"
           name="empty"
@@ -46,6 +38,14 @@
             :disabled="!listName.length"
           >
             <span>OK</span>
+          </button>
+
+          <button
+            class="float-modal__submit"
+            type="button"
+            @click="closeFloatModal"
+          >
+            <Sprite name="delete" />
           </button>
         </form>
       </div>

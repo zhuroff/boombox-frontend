@@ -160,7 +160,7 @@ export default defineComponent({
   display: block;
   overflow: hidden;
 
-  @include media('<laptop') {
+  @include media('<tablet') {
     height: 100vh;
   }
 
@@ -253,18 +253,29 @@ export default defineComponent({
 }
 
 .news {
-  padding: 25px 15px 0;
+
+  @include media('<desktop') {
+    padding: 25px;
+  }
+
+  @include media('>=desktop') {
+    padding: 25px 15px 0;
+  }
 
   &__list {
 
-    @include media('<tablet', 'landscape') {
-      column-count: 2;
-      column-gap: 0;
+    @include media('<tablet') {
+      column-count: 1;
+
+      @include media('landscape') {
+        column-gap: 25px;
+        column-count: 2;
+      }
     }
 
     @include media('>=tablet') {
       column-count: 2;
-      column-gap: 0;
+      column-gap: 25px;
       margin-bottom: 25px;
     }
 

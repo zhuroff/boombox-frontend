@@ -1,7 +1,7 @@
 <template>
   
 <div
-  class="tracklist__row_cell --pointer"
+  class="tracklist__row_cell --pointer --title"
   @click="callLyricsModal"
 >{{ title }}</div>
 

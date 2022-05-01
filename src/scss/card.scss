@@ -16,18 +16,20 @@
     background-color: $border;
   }
 
-  &:hover {
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    transition: box-shadow 0.3s ease;
+  @include media('>=desktop') {
+    &:hover {
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      transition: box-shadow 0.3s ease;
 
-    .delete {
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
+      .delete {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
 
-    .--drag {
-      opacity: 1;
-      transition: opacity 0.3s ease;
+      .--drag {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
     }
   }
 

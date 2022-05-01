@@ -1,4 +1,5 @@
 @import '~/scss/variables';
+@import 'include-media';
 
 .album {
 
@@ -14,8 +15,17 @@
 
   &__name {
     font-weight: 700;
-    font-size: 50px;
     color: $dark;
+
+    @include media('<laptop') {
+      font-size: 36px;
+      line-height: 42px;
+      margin-bottom: 10px;
+    }
+
+    @include media('>=laptop') {
+      font-size: 50px;
+    }
   }
 
   &__data {

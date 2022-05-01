@@ -7,27 +7,32 @@
   overflow: hidden;
   position: relative;
   z-index: 1000;
+  min-height: calc(100vh - #{$playerHeight});
 
   &__heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 25px 25px 0;
 
-    @include media('<tablet') {
-      background-color: $accent;
+    @include media('<laptop') {
+      background-color: $dark;
       color: $white;
       position: relative;
+      padding: 75px 25px 0;
 
       &:after {
         content: '';
         width: 100vw;
-        height: 40vh;
-        background: linear-gradient(to bottom, #f51e38, #fff);
+        height: 75vh;
+        background: linear-gradient(to bottom, $dark, $white);
         position: absolute;
         left: 0;
         top: 100%;
       }
+    }
+
+    @include media('>=laptop') {
+      padding: 25px 25px 0;
     }
   }
 

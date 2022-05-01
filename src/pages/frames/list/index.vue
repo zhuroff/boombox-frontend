@@ -203,127 +203,20 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
-.frames {
+@include media('<laptop') {
 
-  &__form-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    padding: 50px 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5000;
-    background-color: rgba(0, 0, 0, 0.75);
-  }
+  .section {
 
-  &__form-close {
-    @include buttonClose;
-  }
+    &__heading {
 
-  &__form {
-    background-color: $white;
-    flex: none;
-    width: calc(100vw - 40px);
-    max-width: 500px;
-    border-radius: 5px;
-    padding: 25px;
-    position: relative;
-    overflow: hidden;
-
-    &-button {
-      margin-bottom: 5px;
-      display: block;
-      width: 100%;
-      height: 35px;
-      border: 1px solid $pale;
-      background-color: $border;
-      outline: none;
-    }
-
-    &-submit {
-      height: 35px;
-      border-radius: 3px;
-      border: 1px solid $dark;
-      background-color: $dark;
-      color: $white;
-      outline: none;
-      float: right;
-      padding: 0 20px;
-    }
-  }
-
-  &__categories {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: $white;
-    padding: inherit;
-    
-    &-close {
-      position: absolute;
-      padding: 0;
-      background-color: transparent;
-      border: 0;
-      z-index: 10;
-      width: 15px;
-      height: 15px;
-      top: 15px;
-      right: 15px;
-
-      .icon-delete {
-        fill: $dark;
-      }
-    }
-
-    &-title {
-      font-weight: 600;
-      margin-bottom: 16px;
-
-      &::first-letter {
-        text-transform: uppercase;
-      }
-    }
-
-    &-list {
-      margin-top: 10px;
-    }
-
-    &-item {
-
-      label {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        padding: 10px 10px;
-        position: relative;
-        border-radius: 5px;
-
-        &:hover {
-          background-color: $border;
-        }
-
-        input {
-          opacity: 0;
-          width: 0;
-          height: 0;
-          position: absolute;
-          top: 0;
-          left: 0;
-          outline: none;
-        }
-
-        span {
-          font-weight: 600;
-          font-size: 14px;
-        }
+      .button {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 101px;
+        z-index: 10;
       }
     }
   }
