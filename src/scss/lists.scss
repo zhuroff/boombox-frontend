@@ -34,6 +34,7 @@
   &.--yt {
     @include media('<tablet') {
       grid-template-columns: 1fr;
+      gap: 10px;
   
       @include media('landscape') {
         grid-template-columns: repeat(2, 1fr);
@@ -42,6 +43,7 @@
   
     @include media('>=tablet') {
       grid-template-columns: repeat(2, 2fr);
+      gap: 20px;
     }
   }
 

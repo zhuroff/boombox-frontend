@@ -87,9 +87,41 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 
-.album__heading {
-  flex: 1 1 0;
-  padding-left: 25px;
+@import '~/scss/variables';
+@import 'include-media';
+
+.album {
+
+  &.--frame {
+
+    @include media('<laptop') {
+      background: linear-gradient(to right, #0f1e36, #e5e5e5, #0f1e36);
+
+      @include media('landscape') {
+        padding: 25px 0;
+      }
+    }
+  }
+
+  &__heading {
+
+    @include media('<laptop') {
+      display: none;
+    }
+
+    @include media('>=laptop') {
+      flex: 1 1 0;
+      padding-left: 25px;
+    }
+  }
+
+  &__frame {
+
+    @include media('<laptop', 'landscape') {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
 }
 
 </style>

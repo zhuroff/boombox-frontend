@@ -56,27 +56,44 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .category {
 
   &__link {
-    padding: 0 10px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @include media('>=laptop') {
+      padding: 0 10px;
+    }
   }
 
   &__cover {
-    width: 170px;
     display: block;
-    height: 170px;
     margin-bottom: 7px;
     background-color: $white;
     border-radius: 50%;
     object-fit: cover;
     position: relative;
     z-index: 10;
+
+    @include media('<laptop') {
+      width: 42vw;
+      height: 42vw;
+
+      @include media('landscape') {
+        width: 30.085vw;
+        height: 30.085vw;
+      }
+    }
+
+    @include media('>=laptop') {
+      width: 170px;
+      height: 170px;
+    }
   }
 
   &__title {
