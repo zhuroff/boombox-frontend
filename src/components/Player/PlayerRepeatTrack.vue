@@ -1,7 +1,7 @@
 <template>
   
 <button
-  class="player__repeat"
+  :class="[{ '--mobile' : isMobile }, 'player__repeat']"
   @click="changeRepeatState"
 >
   <Sprite
@@ -27,6 +27,13 @@ import Sprite from '~/components/Sprite/Sprite.vue'
 export default defineComponent({
   components: {
     Sprite
+  },
+
+  props: {
+    isMobile: {
+      type: Boolean,
+      required: false
+    }
   },
 
   setup() {

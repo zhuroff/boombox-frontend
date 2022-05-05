@@ -12,26 +12,43 @@
         v-if="isPageLoaded"
         class="backups"
       >
-        <Button
-          text="Create backup"
-          @onClick="createBackups"
-        />
+        <div class="backups__actions">
+          <Button
+            text="Create backup"
+            @onClick="createBackups"
+          />
 
-        <ul>
-          <li
-            v-for="item in backups"
-            :key="item.timestamp"
-          >
-            <span>{{ item.dateCreation }}</span>
-            <button @click="backupRestore(item.timestamp)">Restore</button>
-            <button @click="backupDelete(item.timestamp)">Delete</button>
-          </li>
-        </ul>
+          <Button
+            text="Synchronize"
+            @onClick="synchronizeCollection"
+          />
+        </div>
 
-        <Button
-          text="Synchronize"
-          @onClick="synchronizeCollection"
-        />
+        <table class="backups__table">
+          <tbody class="backups__table-body">
+            <tr
+              v-for="item in backups"
+              :key="item.timestamp"
+              class="backups__table-row"
+            >
+              <td class="backups__table-cell">{{ item.dateCreation }}</td>
+              <td class="backups__table-cell">
+                <Button
+                  text="Restore"
+                  mode="text"
+                  @onClick="backupRestore(item.timestamp)"
+                />
+              </td>
+              <td class="backups__table-cell">
+                <Button
+                  text="Delete"
+                  mode="text"
+                  @onClick="backupDelete(item.timestamp)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </transition>
   </section>
@@ -136,17 +153,7 @@ export default defineComponent({
       }
     }
 
-    // const cleanAlbums = async () => {
-    //   try {
-    //     const response = await api.post('/api/backup/clean')
-    //     console.log(response)
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // }
-
     fetchBackups()
-    // cleanAlbums()
 
     return {
       isPageLoaded,
@@ -162,3 +169,49 @@ export default defineComponent({
 
 </script>
 
+<style lang="scss" scoped>
+
+@import '~/scss/variables';
+
+.backups {
+  padding: 25px;
+
+  &__actions {
+    margin-bottom: 25px;
+    display: flex;
+
+    .button {
+      margin-right: 10px;
+    }
+  }
+
+  &__table {
+    width: 100%;
+
+    &-row {
+      border-bottom: 1px solid $border;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+
+    &-cell {
+      padding: 5px 10px;
+      border-right: 1px solid $border;
+
+      &:first-child {
+        width: 100%;
+        padding-left: 0;
+        font-weight: 600;
+      }
+
+      &:last-child {
+        padding-right: 0;
+        border-right: 0;
+      }
+    }
+  }
+}
+
+</style>

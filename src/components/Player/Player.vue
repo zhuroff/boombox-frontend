@@ -14,7 +14,7 @@
       <div class="player__title">
         <div class="player__title-track">{{ playingTrack.title }}</div>
         <div class="player__title-artist">
-          {{ playingTrack.artistName }} ({{ playingTrack.albumName }}, {{ playingTrack.year }})
+          {{ playingTrack.artistName }} <br> ({{ playingTrack.albumName }}, {{ playingTrack.year }})
         </div>
       </div>
     </div>
@@ -29,6 +29,7 @@
       <PlayerPlayPause />
       <PlayerNextTrack />
       <PlayerProgressBar />
+      <PlayerRepeatTrack isMobile />
       <PlayerCrackle />
       <PlayerSound />
       <PlayerExternal />

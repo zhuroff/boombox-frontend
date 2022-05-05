@@ -4,16 +4,38 @@
 .player {
   position: fixed;
   bottom: 0;
-  left: 50vw;
-  transform: translateX(-50%);
   width: 100vw;
-  max-width: $containerWidth;
-  height: $playerHeight;
-  display: flex;
   z-index: 2000;
 
   @include media('<laptop') {
-    display: none;
+    height: 100vh;
+    left: 0;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 73vh 27vh;
+
+    @include media('landscape') {
+      grid-template-rows: 65vh 35vh;
+    }
+
+    &:before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 10;
+      background: linear-gradient(to top left, $dark 50%, $accent 50%);
+    }
+  }
+
+  @include media('>=laptop') {
+    max-width: $containerWidth;
+    height: $playerHeight;
+    display: flex;
+    left: 50vw;
+    transform: translateX(-50%);
   }
 
   &.--z-low {
@@ -21,85 +43,219 @@
   }
 
   &__left {
-    background-color: $accent;
     flex: none;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: $asideWidth;
-    height: 100%;
-    padding: 12px 15px 12px 25px;
     transition: all 0.3s ease;
 
-    &-content {
-      display: flex;
-      align-items: center;
+    @include media('<laptop') {
+      position: relative;
+      z-index: 100;
+      padding-top: 70px;
+
+      @include media('landscape') {
+        padding-top: 25px;
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        animation: rotating 5s linear infinite;
+        width: 280px;
+        height: 280px;
+        left: calc(50% - 140px);
+        border-radius: 50%;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        background: 
+          linear-gradient(30deg, transparent 40%, rgba(42, 41, 40, .85) 40%) no-repeat 100% 0,
+          linear-gradient(60deg, rgba(42, 41, 40, .85) 60%, transparent 60%) no-repeat 0 100%,
+          repeating-radial-gradient(#2a2928, #2a2928 4px, #ada9a0 5px, #2a2928 6px);
+        background-size: 50% 100%, 100% 50%, 100% 100%;
+      }
+
+      &:after {
+        content: '';
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: $black;
+        position: absolute;
+        left: 50%;
+        top: calc(50% - 30px);
+        transform: translate(-50%, -50%);
+
+        @include media('landscape') {
+          top: calc(50% - -45px);
+        }
+      }
     }
 
-    &:hover {
-      min-width: $asideWidth;
-      width: 100%;
-      z-index: 20;
-      transition: all 0.3s ease;
+    @include media('>=laptop') {
+      background-color: $accent;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: $asideWidth;
+      height: 100%;
+      padding: 12px 15px 12px 25px;
+
+      &:hover {
+        min-width: $asideWidth;
+        width: 100%;
+        z-index: 20;
+        transition: all 0.3s ease;
+      }
+    }
+
+    &-content {
+
+      @include media('<laptop') {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      @include media('>=laptop') {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 
   &__right {
-    background-color: $dark;
-    width: calc(100% - #{$asideWidth});
-    padding: 0 25px;
-    margin-left: auto;
+    
+    @include media('<laptop') {
+      position: relative;
+      z-index: 100;
+      width: 100%;
+      padding-bottom: 50px;
+    }
+
+    @include media('>=laptop') {
+      background-color: $dark;
+      width: calc(100% - #{$asideWidth});
+      padding: 0 25px;
+      margin-left: auto;
+    }
 
     &-content {
       display: flex;
       align-items: center;
       height: 100%;
+
+      @include media('<laptop') {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
     }
   }
 
   &__cover {
-    width: 40px;
-    height: 40px;
-    border-radius: 3px;
-    flex: none;
+
+    @include media('<laptop') {
+      border-radius: 50%;
+      width: 94px;
+      height: 94px;
+      max-width: 500px;
+      max-height: 500px;
+      display: block;
+      margin: 0 auto;
+      position: relative;
+      top: 93px;
+      animation: rotating 5s linear infinite;
+    }
+
+    @include media('>=laptop') {
+      width: 40px;
+      height: 40px;
+      border-radius: 3px;
+      flex: none;
+    }
   }
 
   &__title {
     color: $white;
-    margin-left: 12px;
-    width: calc(100% - 50px);
+
+    @include media('<laptop') {
+      text-align: center;
+      margin-top: auto;
+      padding: 0 25px 40px;
+    }
+
+    @include media('>=laptop') {
+      margin-left: 12px;
+      width: calc(100% - 50px);
+    }
 
     &-track {
       font-weight: 600;
-      font-size: 14px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+
+      @include media('<laptop') {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      @include media('>=laptop') {
+        font-size: 14px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
 
     &-artist {
-      font-size: 12px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+
+      @include media('<laptop') {
+        font-size: 14px;
+      }
+
+      @include media('>=laptop') {
+        font-size: 12px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        br {
+          display: none;
+        }
+      }
     }
   }
 
   &__repeat {
-    width: 15px;
-    height: 15px;
     background-color: transparent;
     border: 0;
     padding: 0;
     cursor: pointer;
-    margin-right: 50px;
-    display: flex;
     justify-content: center;
     align-items: center;
 
     .icon-repeat {
       width: 100%;
       height: 100%;
+    }
+
+    @include media('<laptop') {
+      display: none;
+    }
+
+    @include media('>=laptop') {
+      display: flex;
+      width: 15px;
+      height: 15px;
+      margin-right: 50px;
+    }
+
+    &.--mobile {
+
+      @include media('<laptop') {
+        display: flex;
+        margin-right: 25px;
+        width: 24px;
+        height: 24px;
+      }
+
+      @include media('>=laptop') {
+        display: none;
+      }
     }
   }
 
@@ -174,16 +330,22 @@
   }
 
   &__next {
-    margin-right: 50px;
+
+    @include media('>=laptop') {
+      margin-right: 50px;
+    }
   }
 
   &__progress {
     display: flex;
     align-items: center;
 
+    @include media('<laptop') {
+      padding: 10px 25px;
+      width: 100vw;
+    }
+
     &-bar {
-      width: 326px;
-      height: 10px;
       appearance: none;
       background-color: $white;
       cursor: pointer;
@@ -191,10 +353,27 @@
       border: 0;
       border-radius: 10px;
 
+      @include media('<laptop') {
+        flex: 1 1 0;
+        height: 5px;
+      }
+
+      @include media('>=laptop') {
+        width: 326px;
+        height: 10px;
+      }
+
       &::-webkit-progress-bar {
         border: 0;
-        height: 10px;
         border-radius: 10px;
+
+        @include media('<laptop') {
+          height: 5px;
+        }
+
+        @include media('>=laptop') {
+          height: 10px;
+        }
       }
 
       &::-webkit-progress-value {
@@ -213,7 +392,6 @@
   }
 
   &__crackle {
-    margin-left: auto;
     height: 24px;
     width: inherit;
     border: 0;
@@ -222,6 +400,10 @@
     position: relative;
     z-index: 10;
     padding: 0;
+
+    @include media('>=laptop') {
+      margin-left: auto;
+    }
 
     .icon-vinyl {
       width: 24px;
@@ -241,11 +423,18 @@
     width: 24px;
     position: relative;
     margin: 0 0 0 25px;
-    height: 100%;
     display: flex;
     align-items: center;
     z-index: 10;
     overflow: hidden;
+
+    @include media('<laptop') {
+      height: auto;
+    }
+
+    @include media('>=laptop') {
+      height: 100%;
+    }
     
     &:hover {
       overflow: inherit;
@@ -336,17 +525,24 @@
   }
 
   &__youtube {
-    margin-left: 23px;
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    border: 0;
-    background-color: transparent;
-    padding: 0;
 
-    .icon {
-      width: 24px;
-      color: $white;
+    @include media('<laptop') {
+      display: none;
+    }
+
+    @include media('>=laptop') {
+      margin-left: 23px;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      border: 0;
+      background-color: transparent;
+      padding: 0;
+
+      .icon {
+        width: 24px;
+        color: $white;
+      }
     }
   }
 }

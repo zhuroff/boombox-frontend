@@ -12,6 +12,16 @@
   padding: 0 20px;
   transition: background-color 0.5s $animation;
 
+  &:hover {
+    background-color: $dark;
+    transition: background-color 0.5s $animation;
+
+    .button__text {
+      color: $white;
+      transition: color 0.5s $animation;
+    }
+  }
+
   &[disabled] {
     pointer-events: none;
     opacity: 0.5;
@@ -38,13 +48,15 @@
     }
   }
 
-  &:hover {
-    background-color: $dark;
-    transition: background-color 0.5s $animation;
+  &.--text {
+    border-color: transparent;
 
-    .button__text {
-      color: $white;
-      transition: color 0.5s $animation;
+    &:hover {
+      background-color: $border;
+
+      .button__text {
+        color: $black;
+      }
     }
   }
 }
