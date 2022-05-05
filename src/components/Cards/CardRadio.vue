@@ -132,6 +132,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .station {
   position: relative;
@@ -223,6 +224,10 @@ export default defineComponent({
     font-size: 14px;
     z-index: 1;
     margin: 0 0 3px 7px;
+
+    @include media('<desktop') {
+      padding-right: 20px;
+    }
   }
 
   &__country {
@@ -251,8 +256,11 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
     transition: opacity 0.3s $animation;
+
+    @include media('>=desktop') {
+      opacity: 0;
+    }
 
     .icon {
       width: 17px;

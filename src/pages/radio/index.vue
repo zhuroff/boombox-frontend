@@ -218,11 +218,20 @@ export default defineComponent({
 <style lang="scss" scoped>
 
 @import '~/scss/variables';
+@import 'include-media';
 
 .genres {
   display: flex;
-  flex-wrap: wrap;
   padding: 25px;
+
+  @include media('<laptop') {
+    width: 100%;
+    overflow: auto;
+  }
+
+  @include media('>=laptop') {
+    flex-wrap: wrap;
+  }
 
   .button {
     margin-right: 5px;
@@ -230,14 +239,30 @@ export default defineComponent({
 }
 
 .stations {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
   padding: 25px;
+  display: grid;
+  gap: 15px;
+
+  @include media('>=tablet') {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @include media('>=laptop') {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 
   &.--saved {
     min-height: auto;
-    padding-bottom: 10px;
     background-color: $border;
+
+    @include media('<desktop') {
+      padding-bottom: 25px;
+    }
+
+    @include media('>=desktop') {
+      padding-bottom: 10px;
+    }
   }
 
   .card {
