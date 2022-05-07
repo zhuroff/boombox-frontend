@@ -32,6 +32,7 @@ export default defineComponent({
     const closeModal = () => {
       document.querySelector('.aside')?.classList.remove('--z-low')
       document.querySelector('.player')?.classList.remove('--z-low')
+      document.querySelector('.section')?.classList.remove('--z-low')
       emit('closeModal')
     }
 
@@ -39,6 +40,7 @@ export default defineComponent({
       if (props.isModalActive) {
         document.querySelector('.aside')?.classList.add('--z-low')
         document.querySelector('.player')?.classList.add('--z-low')
+        document.querySelector('.section')?.classList.add('--z-low')
       }
     })
 

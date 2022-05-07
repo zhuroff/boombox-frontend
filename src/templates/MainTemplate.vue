@@ -94,6 +94,7 @@ export default defineComponent({
     left: 0;
     clip-path: circle(100%);
     transition: all 0.75s $animation;
+    padding-bottom: 60px;
 
     &.--offset {
       clip-path: circle(34%);

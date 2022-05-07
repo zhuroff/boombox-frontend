@@ -28,6 +28,10 @@ const mutations: MutationTree<AppStateInterface> = {
     state.snackbar.splice(index, 1)
   },
 
+  expandPlayer: (state: AppStateInterface) => {
+    state.isPlayerExpanded = !state.isPlayerExpanded
+  },
+
   setPlayerPlaylist: <T extends AlbumPage & PlaylistPage>(state: AppStateInterface, data: T) => {
     const playlist = { ...data, tracks: data.tracks }
 

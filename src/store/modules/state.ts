@@ -7,17 +7,16 @@ export interface AppStateInterface {
   reservedPlaylist: PlayerPlaylist
   playingTrack: PlayingTrack
   snackbar: TSnackbar[]
+  isPlayerExpanded: boolean
 }
 
 function state(): AppStateInterface {
   return {
     currentPlaylist: { ...initPlaylist },
-
     reservedPlaylist: { ...initPlaylist },
-
     playingTrack: { ...playingTrackInitial },
-
-    snackbar: []
+    snackbar: [],
+    isPlayerExpanded: false
   }
 }
 

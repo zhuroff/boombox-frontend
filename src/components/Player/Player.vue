@@ -1,11 +1,14 @@
 <template>
   
-<section class="player">
-  <div class="player__left">
-    <div
-      v-if="playingTrack.fileid"
-      class="player__left-content"
-    >
+<section
+  v-if="playingTrack.fileid"
+  :class="[{ '--expanded' : isPlayerExpanded }, 'player']"
+>
+  <div
+    class="player__left"
+    @click="collapseExpandPlayer"
+  >
+    <div class="player__left-content">
       <img
         :src="playingTrack.cover"
         :alt="playingTrack.title"
@@ -20,10 +23,7 @@
     </div>
   </div>
   <div class="player__right">
-    <div
-      v-if="playingTrack.fileid"
-      class="player__right-content"
-    >
+    <div class="player__right-content">
       <PlayerRepeatTrack />
       <PlayerPrevTrack />
       <PlayerPlayPause />
@@ -68,18 +68,21 @@ export default defineComponent({
   },
 
   setup() {
-    const { playingTrack } = usePlayer()
+    const {
+      isPlayerExpanded,
+      collapseExpandPlayer,
+      playingTrack,
+      switchToPrevTrack,
+      switchToNextTrack,
+      store
+    } = usePlayer()
 
     const playOrPause = () => {
-      console.log('Play or pause!')
-    }
-
-    const switchToPrevTrack = () => {
-      console.log('Play prev track!')
-    }
-
-    const switchToNextTrack = () => {
-      console.log('Play next track!')
+      if (playingTrack.value.isOnPause) {
+        store.commit('continuePlay')
+      } else {
+        store.commit('setTrackOnPause')
+      }
     }
 
     const volumeUp = () => {
@@ -90,13 +93,13 @@ export default defineComponent({
       console.log('Volume down!')
     }
 
-    const keyboardPlayerKeys = reactive({
+    const keyboardPlayerKeys = {
       Space: playOrPause,
       ArrowLeft: switchToPrevTrack,
       ArrowRight: switchToNextTrack,
       ArrowUp: volumeUp,
       ArrowDown: volumeDown
-    })
+    }
 
     const keyboardNavHandler = () => {
       document.addEventListener('keyup', (event) => {
@@ -118,7 +121,11 @@ export default defineComponent({
 
     onUnmounted(() => keyboardNavHandlerDestroy())
 
-    return { playingTrack }
+    return {
+      isPlayerExpanded,
+      collapseExpandPlayer,
+      playingTrack
+    }
   }
 })
 

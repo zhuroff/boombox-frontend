@@ -48,6 +48,10 @@
       font-weight: 700;
     }
   }
+
+  &.--z-low {
+    height: calc(100vh - 62px);
+  }
 }
 
 .simplebar {

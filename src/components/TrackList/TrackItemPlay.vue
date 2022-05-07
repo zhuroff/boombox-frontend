@@ -82,6 +82,7 @@ export default defineComponent({
 
     const playTrack = () => {
       store.dispatch('playTrack', props.fileid)
+      store.commit('expandPlayer')
     }
 
     const playingStateSplitter = () => {
