@@ -15,12 +15,12 @@
         />
 
         <slot
-          v-if="isFetched && !isEmpty"
+          v-else-if="isFetched && !isEmpty"
           name="list"
         />
 
         <form
-          v-if="isFetched"
+          v-if="isFetched && placeholder"
           class="float-modal__create"
           key="form"
           @submit.prevent="createNewEntry"
@@ -81,7 +81,7 @@ export default defineComponent({
 
     placeholder: {
       type: String,
-      required: true
+      required: false
     }
   },
 

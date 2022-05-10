@@ -29,6 +29,10 @@
         left: 0;
         top: 100%;
       }
+
+      .dropdown {
+        display: none;
+      }
     }
 
     @include media('>=laptop') {

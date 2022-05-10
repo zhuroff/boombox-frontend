@@ -1,0 +1,44 @@
+@import '~/scss/variables';
+
+.dropdown {
+  position: relative;
+
+  &__list {
+    padding: 5px 0;
+  }
+
+  &__item {
+    position: relative;
+
+    &-label {
+      display: block;
+    }
+
+    &-check {
+      opacity: 0;
+      outline: none;
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      &:checked + .dropdown__item-title {
+        background-color: $border;
+      }
+    }
+
+    &-title {
+      white-space: nowrap;
+      padding: 5px 15px;
+      cursor: pointer;
+      display: block;
+      transition: background-color 0.2s $animation;
+
+      &:hover {
+        background-color: $border;
+        transition: background-color 0.2s $animation;
+      }
+    }
+  }
+}

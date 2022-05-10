@@ -15,6 +15,11 @@
         <h1 class="section__title">
           There are {{ albums.pagination.totalDocs }} albums in your collection
         </h1>
+
+        <Dropdown
+          :options="sortOptions"
+          @chooseItem="setSorting"
+        />
       </div>
 
       <ul
@@ -42,11 +47,12 @@
 
 <script lang="ts">
 
-import { defineComponent, reactive, onMounted } from 'vue'
+import { defineComponent, reactive, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { AlbumPageResponse, AlbumItemProps } from '~/types/Album'
-import { TPagination, RequestConfig } from '~/types/Global'
+import { TPagination, RequestConfig, DropdownOption, SortingValue } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Dropdown from '~/components/Dropdown/Dropdown.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardAlbum from '~/components/Cards/CardAlbum.vue'
 import Pagination from '~/components/Pagination/Pagination.vue'
@@ -55,6 +61,7 @@ import AlbumServices from '~/services/AlbumServices'
 export default defineComponent({
   components: {
     AppPreloader,
+    Dropdown,
     CardWrapper,
     CardAlbum,
     Pagination
@@ -75,6 +82,43 @@ export default defineComponent({
       data: [],
       pagination: {} as TPagination
     })
+
+    let sortOptions = ref<DropdownOption<SortingValue>[]>([
+      {
+        title: 'Title ASC',
+        value: { title: 1 },
+        isActive: true
+      },
+
+      {
+        title: 'Title DESC',
+        value: { title: -1 },
+        isActive: false
+      },
+
+      {
+        title: 'Created ASC',
+        value: { dateCreated: 1 },
+        isActive: false
+      },
+
+      {
+        title: 'Created DESC',
+        value: { dateCreated: -1 },
+        isActive: false
+      }
+    ])
+
+    const setSorting = (value: SortingValue) => {
+      sortOptions.value = sortOptions.value.map((option) => (
+        { ...option, isActive: JSON.stringify(option.value) === JSON.stringify(value) }
+      ))
+
+      pageConfig.sort = value
+      
+      clearfyAlbumList()
+      fetchAlbums()
+    }
 
     const clearfyAlbumList = () => {
       albums.isFetched = false
@@ -115,6 +159,8 @@ export default defineComponent({
 
     return {
       albums,
+      sortOptions,
+      setSorting,
       switchPagination
     }
   }

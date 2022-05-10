@@ -6,6 +6,16 @@ type TPagination = {
   page: number
 }
 
+type DropdownOption<T> = {
+  title: string,
+  value: T,
+  isActive: boolean
+}
+
+type SortingValue = {
+  [key: string]: 1 | -1
+}
+
 type DraggableEvent = {
   newIndex: number
   oldIndex: number
@@ -32,7 +42,7 @@ type TSnackbar = {
 
 type RequestConfig = {
   page: number
-  sort: { [index: string]: number },
+  sort: SortingValue,
   limit: number
 }
 
@@ -54,6 +64,8 @@ type ResponseMessage = {
 
 export {
   TPagination,
+  DropdownOption,
+  SortingValue,
   DraggableEvent,
   ReorderPayload,
   FloatModalCheckAction,
