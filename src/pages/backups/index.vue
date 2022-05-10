@@ -56,7 +56,7 @@
 
 <script lang="ts">
 
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import Button from '~/components/Button/Button.vue'
@@ -102,36 +102,60 @@ export default defineComponent({
 
         if (response) setBackups(response.data)
       } catch (error) {
-        console.error(error)
+        console.dir(error)
       }
     }
 
     const createBackups = async () => {
       try {
         const response = await api.post('/api/backup/save')
-        if (response) fetchBackups()
+        
+        if (response.status === 201) {
+          store.commit('setSnackbarMessage', {
+            message: response.data.message,
+            type: 'success'
+          })
+
+          fetchBackups()
+        }
       } catch (error) {
-        console.error(error)
+        console.dir(error)
       }
     }
 
     const backupRestore = async (timestamp: number) => {
       try {
         const response = await api.post(`/api/backup/restore/${timestamp}`)
-        console.log(response.data)
+        
+        if (response.status === 201) {
+          store.commit('setSnackbarMessage', {
+            message: response.data.message,
+            type: 'success'
+          })
+
+          fetchBackups()
+        }
       } catch (error) {
-        console.error(error)
+        console.dir(error)
       }
     }
 
     const backupDelete = async (timestamp: number) => {
-      // try {
-      //   const response = await api.delete(`/api/backup/${timestamp}`)
-      //   console.log(response.data)
-      //   fetchBackups()
-      // } catch (error) {
-      //   console.error(error)
-      // }
+      try {
+        const response = await api.delete(`/api/backup/${timestamp}`)
+
+        if (response.status === 201) {
+          store.commit('setSnackbarMessage', {
+            message: response.data.message,
+            type: 'success'
+          })
+
+          fetchBackups()
+        }
+
+      } catch (error) {
+        console.dir(error)
+      }
     }
 
     const synchronizeCollection = async () => {
@@ -153,7 +177,7 @@ export default defineComponent({
       }
     }
 
-    fetchBackups()
+    onMounted(() => fetchBackups())
 
     return {
       isPageLoaded,
