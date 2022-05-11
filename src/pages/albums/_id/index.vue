@@ -89,6 +89,49 @@
         />
       </Modal>
     </transition>
+
+    <transition name="fade">
+      <OTable
+        v-if="discogs.isFetched && discogs.results.length"
+        :data="discogs.results"
+      >
+        <OTableColumn
+          field="title"
+          label="Title"
+          v-slot="props"
+        >
+          <a
+            :href="`https://discogs.com${props.row.uri}`"
+            target="_blank"
+          >{{ props.row.title }}</a>
+          ({{ props.row.format?.join(', ') }})
+        </OTableColumn>
+
+        <OTableColumn
+          field="label"
+          label="Label"
+          v-slot="props"
+        >{{ props.row.label[0] || '' }}</OTableColumn>
+
+        <OTableColumn
+          field="catno"
+          label="Cat#"
+          v-slot="props"
+        >{{ props.row.catno }}</OTableColumn>
+
+        <OTableColumn
+          field="country"
+          label="Country"
+          v-slot="props"
+        >{{ props.row.country }}</OTableColumn>
+
+        <OTableColumn
+          field="year"
+          label="Year"
+          v-slot="props"
+        >{{ props.row.year }}</OTableColumn>
+      </OTable>
+    </transition>
   </section>
 </template>
 
@@ -106,7 +149,7 @@ import {
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { AlbumPage, AlbumPageProps, AlbumHeadProps } from '~/types/Album'
+import { AlbumPage, AlbumPageProps, AlbumHeadProps, DiscogsResponse } from '~/types/Album'
 import { CollectionListItem } from '~/types/Collection'
 import { FloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -144,6 +187,17 @@ export default defineComponent({
     const album = reactive<AlbumPageProps>({
       isFetched: false,
       data: {} as AlbumPage
+    })
+
+    const discogs = reactive<DiscogsResponse & { isFetched: boolean }>({
+      pagination: {
+        items: 0,
+        page: 1,
+        pages: 0,
+        per_page: 100
+      },
+      results: [],
+      isFetched: false
     })
 
     const collections = reactive({
@@ -237,12 +291,25 @@ export default defineComponent({
       album.isFetched = true
     }
 
+    const setDiscogsData = (data: DiscogsResponse) => {
+      discogs.pagination = data.pagination
+      discogs.results = data.results
+      discogs.isFetched = true
+    }
+
+    const fetchDiscogsData = () => {
+      AlbumServices.discogs(album.data, 1)
+        .then((response) => setDiscogsData(response))
+        .catch((error) => console.dir(error))
+    }
+
     const fetchAlbumEntry = () => {
       AlbumServices.album(String(route.params.id))
         .then((data) => {
           setAlbumState(data)
           store.commit('setPlayerPlaylist', data)
         })
+        .then(_ => fetchDiscogsData())
         .catch((ignore) => ignore)
     }
     
@@ -260,7 +327,8 @@ export default defineComponent({
       createNewCollection,
       closeCollectionsModal,
       addOrRemoveFromCollection,
-      isCollectionItemChecked
+      isCollectionItemChecked,
+      discogs
     }
   }
 })

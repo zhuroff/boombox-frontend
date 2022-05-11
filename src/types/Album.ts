@@ -43,11 +43,38 @@ type AlbumHeadProps = {
   description: string
 }
 
+type DiscogsPagination = {
+  items: number
+  page: number
+  pages: number
+  per_page: number
+}
+
+type DiscogsItem = {
+  id: number
+  catno: string
+  country: string
+  format: string[]
+  label: string[]
+  resource_url: string
+  title: string
+  uri: string
+  year: string
+}
+
+type DiscogsResponse = {
+  pagination: DiscogsPagination
+  results: DiscogsItem[]
+}
+
 export {
   AlbumItem,
   AlbumPage,
   AlbumHeadProps,
   AlbumItemProps,
   AlbumPageProps,
-  AlbumPageResponse
+  AlbumPageResponse,
+  DiscogsPagination,
+  DiscogsItem,
+  DiscogsResponse
 }

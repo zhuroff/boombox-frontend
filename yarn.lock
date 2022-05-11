@@ -1003,6 +1003,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@oruga-ui/oruga-next@^0.5.5":
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/@oruga-ui/oruga-next/-/oruga-next-0.5.5.tgz#b7b5e6a54e663bb0cab6c35f5bece4697ae003bf"
+  integrity sha512-LmieX0fo0hbhJQRaKf4rfUlyDUwGVYkjGmSNfbontRKfKrEmmr1w1mxraF2Orxc894gkwi64NQh/SRSm4pIE5g==
+
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@soda/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.8.1.tgz#4d4fbb1108993aaa362116247c3d18188a2c6c85"
