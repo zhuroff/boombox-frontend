@@ -67,6 +67,69 @@ type DiscogsResponse = {
   results: DiscogsItem[]
 }
 
+type DiscogsData = {
+  results: Map<number, DiscogsItem>
+  isFetched: boolean
+}
+
+type DiscogsCompanies = {
+  id: number
+  catno: string
+  entity_type_name: string
+  name: string
+}
+
+type DiscogsArtists = {
+  id: number
+  name: string
+  role: string
+  tracks: string
+}
+
+type DiscogaIdentifiers = {
+  description: string
+  type: string
+  value: string
+}
+
+type DiscogsLabels = {
+  id: number
+  catno: string
+  entity_type_name: string
+  name: string
+}
+
+type DiscogsTracklist = {
+  position: string
+  duration: string
+  title: string
+  type_: string
+}
+
+type DiscogsVideos = {
+  description: string
+  duration: number
+  embed: boolean
+  title: string
+  uri: string
+}
+
+type DiscogsDetails = {
+  id: number
+  notes: string
+  thumb: string
+  uri: string
+  year?: number
+  released?: string
+  styles: string[]
+  companies: DiscogsCompanies[]
+  extraartists: DiscogsArtists[]
+  identifiers: DiscogaIdentifiers[]
+  labels: DiscogsLabels[]
+  tracklist: DiscogsTracklist[]
+  videos: DiscogsVideos[]
+}
+
 export {
   AlbumItem,
   AlbumPage,
@@ -76,5 +139,7 @@ export {
   AlbumPageResponse,
   DiscogsPagination,
   DiscogsItem,
-  DiscogsResponse
+  DiscogsResponse,
+  DiscogsData,
+  DiscogsDetails
 }

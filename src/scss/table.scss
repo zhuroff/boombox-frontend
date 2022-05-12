@@ -1,0 +1,92 @@
+.o-table {
+
+  &__root {
+    padding: 25px;
+  }
+
+  tbody {
+
+    tr {
+      transition: background-color 0.2s $animation;
+
+      &:last-child {
+
+        .o-table__td {
+          border-bottom: 0;
+        }
+      }
+
+      &:hover {
+        background-color: $border;
+        transition: background-color 0.2s $animation;
+      }
+    }
+  }
+
+  &__th {
+    color: $black;
+    padding: 10px;
+
+    &--sortable {
+      cursor: pointer;
+    }
+  }
+
+  &__td {
+    padding: 5px 10px;
+    border-bottom: 1px solid $border;
+    border-right: 1px solid $border;
+    vertical-align: top;
+    color: $black;
+
+    &:last-child {
+      border-right: 0;
+    }
+
+    .o-icon {
+      display: block;
+      transition: transform 0.2s $animation;
+    }
+
+    &-chevron {
+      width: 20px;
+      padding: 5px 0;
+      border-right: 0;
+      cursor: pointer;
+
+      .mdi {
+        width: 20px;
+        height: 20px;
+        display: block;
+        position: relative;
+
+        &:before {
+          content: '';
+          border-style: solid;
+	        border-width: 2px 2px 0 0;
+          border-color: $black;
+          display: inline-block;
+          position: absolute;
+          top: 50%;
+          vertical-align: top;
+          width: 7px;
+          height: 7px;
+          left: 0;
+	        transform: rotate(45deg) translateY(-50%);
+        }
+      }
+    }
+  }
+
+  &__link {
+    color: $info;
+  }
+
+  &__details {
+    background-color: $border;
+
+    &-content {
+      padding: 25px;
+    }
+  }
+}

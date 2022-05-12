@@ -91,46 +91,10 @@
     </transition>
 
     <transition name="fade">
-      <OTable
-        v-if="discogs.isFetched && discogs.results.length"
-        :data="discogs.results"
-      >
-        <OTableColumn
-          field="title"
-          label="Title"
-          v-slot="props"
-        >
-          <a
-            :href="`https://discogs.com${props.row.uri}`"
-            target="_blank"
-          >{{ props.row.title }}</a>
-          ({{ props.row.format?.join(', ') }})
-        </OTableColumn>
-
-        <OTableColumn
-          field="label"
-          label="Label"
-          v-slot="props"
-        >{{ props.row.label[0] || '' }}</OTableColumn>
-
-        <OTableColumn
-          field="catno"
-          label="Cat#"
-          v-slot="props"
-        >{{ props.row.catno }}</OTableColumn>
-
-        <OTableColumn
-          field="country"
-          label="Country"
-          v-slot="props"
-        >{{ props.row.country }}</OTableColumn>
-
-        <OTableColumn
-          field="year"
-          label="Year"
-          v-slot="props"
-        >{{ props.row.year }}</OTableColumn>
-      </OTable>
+      <DiscogsTable
+        v-if="discogs.isFetched && discogs.results.size > 0"
+        :table="Array.from(discogs.results).map((item) => item[1])"
+      />
     </transition>
   </section>
 </template>
@@ -149,7 +113,7 @@ import {
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { AlbumPage, AlbumPageProps, AlbumHeadProps, DiscogsResponse } from '~/types/Album'
+import { AlbumPage, AlbumPageProps, AlbumHeadProps, DiscogsResponse, DiscogsData } from '~/types/Album'
 import { CollectionListItem } from '~/types/Collection'
 import { FloatModalCheckAction } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -161,7 +125,9 @@ import FloatModal from '~/components/FloatModal/FloatModal.vue'
 import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import Slider from '~/components/Slider/Slider.vue'
+import DiscogsTable from '~/components/Table/DiscogsTable.vue'
 import AlbumServices from '~/services/AlbumServices'
+import DiscogsServices from '~/services/DiscogsServices'
 import CollectionServices from '~/services/CollectionServices'
 
 export default defineComponent({
@@ -174,7 +140,8 @@ export default defineComponent({
     FloatModal,
     FloatModalItem,
     Modal,
-    Slider
+    Slider,
+    DiscogsTable
   },
 
   setup() {
@@ -189,14 +156,8 @@ export default defineComponent({
       data: {} as AlbumPage
     })
 
-    const discogs = reactive<DiscogsResponse & { isFetched: boolean }>({
-      pagination: {
-        items: 0,
-        page: 1,
-        pages: 0,
-        per_page: 100
-      },
-      results: [],
+    const discogs = reactive<DiscogsData>({
+      results: new Map(),
       isFetched: false
     })
 
@@ -292,14 +253,22 @@ export default defineComponent({
     }
 
     const setDiscogsData = (data: DiscogsResponse) => {
-      discogs.pagination = data.pagination
-      discogs.results = data.results
-      discogs.isFetched = true
+      data.results.forEach((item) => {
+        discogs.results.set(item.id, item)
+      })
     }
 
-    const fetchDiscogsData = () => {
-      AlbumServices.discogs(album.data, 1)
-        .then((response) => setDiscogsData(response))
+    const fetchDiscogsData = (page = 1) => {
+      DiscogsServices.discogs(album.data, page)
+        .then((response) => {
+          setDiscogsData(response)
+          
+          if (response.pagination.pages > page) {
+            fetchDiscogsData(page + 1)
+          } else {
+            discogs.isFetched = true
+          }
+        })
         .catch((error) => console.dir(error))
     }
 
