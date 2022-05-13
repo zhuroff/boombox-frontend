@@ -116,10 +116,8 @@ type DiscogsVideos = {
 
 type DiscogsDetails = {
   id: number
-  notes: string
-  thumb: string
-  uri: string
-  year?: number
+  notes?: string
+  thumb?: string
   released?: string
   styles: string[]
   companies: DiscogsCompanies[]

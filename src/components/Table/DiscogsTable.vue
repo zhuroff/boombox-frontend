@@ -57,8 +57,34 @@
             v-if="details.has(props.row.id)"
             class="o-table__details-content"
           >
-            {{ details.get(props.row.id).country }},
-            {{ details.get(props.row.id).lowest_price }}
+            <img
+              v-if="details.get(props.row.id).thumb"
+              :src="details.get(props.row.id).thumb"
+              class="o-table__details-thumb"
+            />
+
+            <div class="o-table__details-data">
+              <p>{{ details.get(props.row.id).notes }}</p>
+              <p>{{ details.get(props.row.id).released }}</p>
+              <p>{{ details.get(props.row.id).styles.join(', ') }}</p>
+              <ul>
+                <li
+                  v-for="video in details.get(props.row.id).videos"
+                  :key="video.uri"
+                >
+                  <iframe
+                    width="560"
+                    height="315"
+                    :src="`https://www.youtube.com/embed/${video.uri.split('v=')[1]}`"
+                    :title="video.title"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                  <span>{{ video.description }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div
@@ -106,3 +132,26 @@ export default defineComponent({
 })
 
 </script>
+
+<style lang="scss" scoped>
+
+.o-table {
+
+  &__details {
+
+    &-content {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 25px;
+    }
+
+    &-thumb {
+      border-radius: 5px;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+}
+
+</style>
