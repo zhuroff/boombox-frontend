@@ -26,6 +26,15 @@
               @onClick="callCollectionsModal"
             />
 
+            <Button
+              id="discogs"
+              text="Get Discogs"
+              isFullWidth
+              :isLoading="isDiscogsLoading"
+              :isDisabled="discogs.isFetched && discogs.results.size > 0"
+              @onClick="fetchDiscogsData"
+            />
+
             <FloatModal
               v-if="collections.isActive"
               :isFetched="collections.isFetched"
@@ -54,6 +63,7 @@
                 </ul>
               </template>
             </FloatModal>
+
           </div>
         </div>
 
@@ -113,6 +123,7 @@ import {
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
+import { stringEqual } from '~/shared/stringifier'
 import { AlbumPage, AlbumPageProps, AlbumHeadProps, DiscogsResponse, DiscogsData } from '~/types/Album'
 import { CollectionListItem } from '~/types/Collection'
 import { FloatModalCheckAction } from '~/types/Global'
@@ -150,6 +161,7 @@ export default defineComponent({
 
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
     const isBookletModalActive = ref(false)
+    const isDiscogsLoading = ref(false)
 
     const album = reactive<AlbumPageProps>({
       isFetched: false,
@@ -254,11 +266,15 @@ export default defineComponent({
 
     const setDiscogsData = (data: DiscogsResponse) => {
       data.results.forEach((item) => {
-        discogs.results.set(item.id, item)
+        if (stringEqual(album.data.title, item.title.split(' - ')[1])) {
+          discogs.results.set(item.id, item)
+        }
       })
     }
 
     const fetchDiscogsData = (page = 1) => {
+      isDiscogsLoading.value = true
+
       DiscogsServices.discogs(album.data, page)
         .then((response) => {
           setDiscogsData(response)
@@ -267,6 +283,7 @@ export default defineComponent({
             fetchDiscogsData(page + 1)
           } else {
             discogs.isFetched = true
+            isDiscogsLoading.value = false
           }
         })
         .catch((error) => console.dir(error))
@@ -278,7 +295,6 @@ export default defineComponent({
           setAlbumState(data)
           store.commit('setPlayerPlaylist', data)
         })
-        .then(_ => fetchDiscogsData())
         .catch((ignore) => ignore)
     }
     
@@ -297,6 +313,8 @@ export default defineComponent({
       closeCollectionsModal,
       addOrRemoveFromCollection,
       isCollectionItemChecked,
+      isDiscogsLoading,
+      fetchDiscogsData,
       discogs
     }
   }

@@ -23,7 +23,7 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, provide, ref } from 'vue'
 import SimpleBar from 'simplebar'
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
 import Player from '~/components/Player/Player.vue'
@@ -39,6 +39,9 @@ export default defineComponent({
   setup() {
     const main = ref(null)
     const isNavOpened = ref(false)
+    const simplebar = ref<any>(null)
+
+    provide('simplebar', simplebar)
 
     const navHandler = () => {
       isNavOpened.value = !isNavOpened.value
@@ -46,7 +49,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (main.value) {
-        new SimpleBar(main.value, { autoHide: false })
+        simplebar.value = new SimpleBar(main.value, { autoHide: false })
       }
     })
 

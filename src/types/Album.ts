@@ -86,17 +86,10 @@ type DiscogsArtists = {
   tracks: string
 }
 
-type DiscogaIdentifiers = {
+type DiscogsIdentifiers = {
   description: string
   type: string
   value: string
-}
-
-type DiscogsLabels = {
-  id: number
-  catno: string
-  entity_type_name: string
-  name: string
 }
 
 type DiscogsTracklist = {
@@ -116,16 +109,18 @@ type DiscogsVideos = {
 
 type DiscogsDetails = {
   id: number
+  title: string
   notes?: string
   thumb?: string
   released?: string
-  styles: string[]
+  styles?: string[]
   companies: DiscogsCompanies[]
   extraartists: DiscogsArtists[]
-  identifiers: DiscogaIdentifiers[]
-  labels: DiscogsLabels[]
+  identifiers: DiscogsIdentifiers[]
+  labels: DiscogsCompanies[]
   tracklist: DiscogsTracklist[]
-  videos: DiscogsVideos[]
+  videos?: DiscogsVideos[]
+  isInvalid?: true
 }
 
 export {
@@ -139,5 +134,6 @@ export {
   DiscogsItem,
   DiscogsResponse,
   DiscogsData,
+  DiscogsCompanies,
   DiscogsDetails
 }

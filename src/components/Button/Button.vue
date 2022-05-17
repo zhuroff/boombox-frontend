@@ -1,26 +1,41 @@
 <template>
   <button
+    :id="id || null"
     :class="[{ '--fullwidth' : isFullWidth }, { '--filled' : isFilled }, `--${mode} button`]"
     :type="type"
-    :disabled="isDisabled"
+    :disabled="isDisabled || isLoading"
     @click="emitButtonClick"
   >
     <span class="button__text">{{ text }}</span>
+    <Preloader
+      mode="dark"
+      v-if="isLoading"
+    />
   </button>
 </template>
 
 <script lang="ts">
 
 import { defineComponent } from 'vue'
+import Preloader from '~/components/Preloader/Preloader.vue'
 import './Button.scss'
 
 export default defineComponent({
   name: 'Button',
 
+  components: {
+    Preloader
+  },
+
   props: {
     text: {
       type: String,
       required: true
+    },
+
+    id: {
+      type: String,
+      required: false
     },
 
     type: {
@@ -48,6 +63,12 @@ export default defineComponent({
     },
 
     isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    isLoading: {
       type: Boolean,
       required: false,
       default: false

@@ -1,14 +1,14 @@
 <template>
   
-<section
-  v-if="playingTrack.fileid"
-  :class="[{ '--expanded' : isPlayerExpanded }, 'player']"
->
+<section :class="[{ '--expanded' : isPlayerExpanded }, 'player']">
   <div
     class="player__left"
     @click="collapseExpandPlayer"
   >
-    <div class="player__left-content">
+    <div
+      v-if="playingTrack.fileid"
+      class="player__left-content"
+    >
       <img
         :src="playingTrack.cover"
         :alt="playingTrack.title"
@@ -23,7 +23,10 @@
     </div>
   </div>
   <div class="player__right">
-    <div class="player__right-content">
+    <div
+      v-if="playingTrack.fileid"
+      class="player__right-content"
+    >
       <PlayerRepeatTrack />
       <PlayerPrevTrack />
       <PlayerPlayPause />

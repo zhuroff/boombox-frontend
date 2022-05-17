@@ -1,6 +1,4 @@
 import axios from 'axios'
-// import { useStore } from 'vuex'
-// import { key } from '~/store'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_DEV_HOST,

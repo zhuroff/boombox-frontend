@@ -42,7 +42,7 @@
       }
 
       @include media('>=laptop') {
-        top: calc(100% + 15px);
+        top: calc(100% - 40px);
         min-height: $albumAsideWidth;
         max-height: calc(100vh - 420px);
       }
@@ -60,9 +60,19 @@
   
   &__sidebar {
 
+    @include media('<laptop') {
+
+      #discogs {
+        display: none;
+      }
+    }
+
     @include media('>=laptop') {
-      position: sticky;
-      top: 25px;
+      position: relative;
+
+      #discogs {
+        margin-top: 10px;
+      }
     }
   }
 
@@ -246,6 +256,13 @@
         height: 50px;
         color: $white;
       }
+    }
+  }
+
+  & + .o-table__root {
+
+    @include media('<laptop') {
+      display: none;
     }
   }
 }

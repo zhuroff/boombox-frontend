@@ -32,9 +32,14 @@ const albumCover = (cover: string | undefined) => {
   return '/img/album.webp'
 }
 
+const stringEqual = (a: string, b: string) => {
+  return a.replace(/\s+/g, '').toLowerCase() === b.replace(/\s+/g, '').toLowerCase()
+}
+
 export {
   artistName,
   albumName,
   periodName,
-  albumCover
+  albumCover,
+  stringEqual
 }

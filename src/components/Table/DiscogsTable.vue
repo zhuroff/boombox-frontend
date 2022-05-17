@@ -3,12 +3,13 @@
     :data="table"
     :custom-detail-row="true"
     :show-detail-icon="true"
-    @details-open="detailsOpen"
+    ref="discogsTable"
     detail-key="id"
     default-sort-direction="asc"
     default-sort="year"
     detailed
     hoverable
+    @details-open="detailsOpen"
   >
     <OTableColumn
       field="title"
@@ -54,7 +55,17 @@
       <tr class="o-table__details">
         <td colspan="6">
           <div
-            v-if="details.has(props.row.id)"
+            v-if="!details.has(props.row.id)"
+            class="o-table__details-content"
+          >Loading...</div>
+
+          <div
+            v-if="details.has(props.row.id) && details.get(props.row.id).isInvalid"
+            class="o-table__details-content"
+          >Invalid data</div>
+
+          <div
+            v-if="details.has(props.row.id) && !details.get(props.row.id).isInvalid"
             class="o-table__details-content"
           >
             <img
@@ -64,33 +75,102 @@
             />
 
             <div class="o-table__details-data">
-              <p>{{ details.get(props.row.id).notes }}</p>
-              <p>{{ details.get(props.row.id).released }}</p>
-              <p>{{ details.get(props.row.id).styles.join(', ') }}</p>
-              <ul>
+              <p
+                v-if="details.get(props.row.id).notes"
+                class="o-table__details-item"
+              >
+                {{ details.get(props.row.id).notes }}
+              </p>
+
+              <p
+                v-if="details.get(props.row.id).released"
+                class="o-table__details-item"
+              >
+                <strong>Released:</strong> {{ details.get(props.row.id).released }}
+              </p>
+
+              <p
+                v-if="details.get(props.row.id).styles"
+                class="o-table__details-item"
+              >
+                <strong>Styles:</strong> {{ details.get(props.row.id).styles.join(', ') }}
+              </p>
+
+              <ul
+                v-if="details.get(props.row.id).companies.length || details.get(props.row.id).labels.length"
+                class="o-table__details-list"
+              >
+                <li
+                  v-for="item in releaseCompanies(details.get(props.row.id).companies, details.get(props.row.id).labels)"
+                  :key="item.id"
+                >
+                  <span v-if="item.entity_type_name">{{ item.entity_type_name }}:&nbsp;</span>
+                  <span v-if="item.name">{{ item.name }}&nbsp;</span>
+                  <span v-if="item.catno">{{ item.catno }}</span>
+                </li>
+              </ul>
+
+              <ul
+                v-if="details.get(props.row.id).extraartists.length"
+                class="o-table__details-list"
+              >
+                <li
+                  v-for="item in details.get(props.row.id).extraartists"
+                  :key="item.id"
+                >
+                  <span v-if="item.name">{{ item.name }}</span>
+                  <span v-if="item.role"> - {{ item.role }}&nbsp;</span>
+                  <span v-if="item.tracks">({{ item.tracks }})</span>
+                </li>
+              </ul>
+
+              <ul
+                v-if="details.get(props.row.id).identifiers.length"
+                class="o-table__details-list"
+              >
+                <li
+                  v-for="item in details.get(props.row.id).identifiers"
+                  :key="item.id"
+                >
+                  <span v-if="item.type">{{ item.type }}&nbsp;</span>
+                  <span v-if="item.value">{{ item.value }}&nbsp;</span>
+                  <span v-if="item.description">{{ item.description }}</span>
+                </li>
+              </ul>
+
+              <ul
+                v-if="details.get(props.row.id).tracklist.length"
+                class="o-table__details-list"
+              >
+                <li
+                  v-for="item in details.get(props.row.id).tracklist"
+                  :key="item.id"
+                >
+                  <span v-if="item.position">{{ item.position }}.&nbsp;</span>
+                  <span v-if="item.title"> {{ item.title }}&nbsp;</span>
+                  <span v-if="item.duration">{{ item.duration }}</span>
+                </li>
+              </ul>
+
+              <ul
+                v-if="details.get(props.row.id).videos"
+                class="o-table__details-cards"
+              >
                 <li
                   v-for="video in details.get(props.row.id).videos"
                   :key="video.uri"
                 >
                   <iframe
-                    width="560"
-                    height="315"
                     :src="`https://www.youtube.com/embed/${video.uri.split('v=')[1]}`"
                     :title="video.title"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
                   />
-                  <span>{{ video.description }}</span>
                 </li>
               </ul>
             </div>
           </div>
-
-          <div
-            v-else
-            class="o-table__details-content"
-          >Loading...</div>
         </td>
       </tr>
     </template>
@@ -99,8 +179,9 @@
 
 <script lang="ts">
 
-import { defineComponent, PropType, reactive } from 'vue'
-import { DiscogsDetails, DiscogsItem } from '~/types/Album'
+import { defineComponent, onMounted, PropType, inject, reactive, ref } from 'vue'
+import { DiscogsCompanies, DiscogsDetails, DiscogsItem } from '~/types/Album'
+import { stringEqual } from '~/shared/stringifier'
 import DiscogsServices from '~/services/DiscogsServices'
 
 export default defineComponent({
@@ -114,19 +195,39 @@ export default defineComponent({
   },
 
   setup() {
+    const simplebar = inject<any>('simplebar')
+    const discogsTable = ref(null)
     const details = reactive(new Map<number, DiscogsDetails>())
 
-    const detailsOpen = ({ id }: { id: number }) => {
+    const checkAndSetDetails = (id: number, data: DiscogsDetails, title: string) => {
+      console.log(title.split(' - ')[1], '/', data.title)
+      details.set(id, stringEqual(title.split(' - ')[1], data.title) ? data : { ...data, isInvalid: true })
+    }
+
+    const detailsOpen = ({ id, title }: { id: number, title: string }) => {
       if (!details.has(id)) {
         DiscogsServices.discogsDetails(id)
-          .then((response) => details.set(id, response))
+          .then((response) => checkAndSetDetails(id, response, title))
           .catch((error) => console.dir(error))
       }
     }
 
+    const releaseCompanies = (a: DiscogsCompanies[], b: DiscogsCompanies[]) => {
+      return [...a, ...b]
+    }
+
+    onMounted(() => {
+      setTimeout(() => {
+        // @ts-ignore
+        simplebar.value.getScrollElement().scrollTop = Number(discogsTable.value?.$el.offsetTop)
+      }, 1000)
+    })
+
     return {
+      discogsTable,
       details,
-      detailsOpen
+      detailsOpen,
+      releaseCompanies
     }
   }
 })
