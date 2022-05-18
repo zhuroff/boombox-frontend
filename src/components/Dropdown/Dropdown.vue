@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown">
     <Button
-      text="Sort"
+      :text="triggerText"
       @click="dropdownTrigger"
     />
 
@@ -46,6 +46,12 @@ export default defineComponent({
     options: {
       type: Array as PropType<DropdownOption<any>[]>,
       required: true
+    },
+
+    triggerText: {
+      type: String,
+      required: false,
+      default: 'Sort'
     }
   },
 
@@ -58,6 +64,7 @@ export default defineComponent({
 
     const chooseItem = (value: any) => {
       emit('chooseItem', value)
+      isActive.value = false
     }
 
     return {
