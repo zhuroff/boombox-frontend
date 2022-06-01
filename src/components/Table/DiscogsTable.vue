@@ -1,6 +1,13 @@
 <template>
   <div class="table">
     <div class="table__heading">
+      <InputCheck
+        type="checkbox"
+        label="Official only"
+        :isChecked="isOfficialsOnly"
+        @checkInputChange="switchOfficials"
+      />
+
       <Dropdown
         :options="Array.from(discogsFormats.values())"
         :triggerText="currentFormat"
@@ -191,15 +198,17 @@
 
 import { defineComponent, onMounted, PropType, inject, reactive, ref, computed } from 'vue'
 import { DiscogsCompanies, DiscogsDetails, DiscogsItem } from '~/types/Album'
+import { DropdownOption } from '~/types/Global'
 import { stringEqual } from '~/shared/stringifier'
+import InputCheck from '~/components/Inputs/InputCheck.vue'
 import Dropdown from '~/components/Dropdown/Dropdown.vue'
 import DiscogsServices from '~/services/DiscogsServices'
-import { DropdownOption } from '~/types/Global'
 
 export default defineComponent({
   name: 'DiscogsTable',
 
   components: {
+    InputCheck,
     Dropdown
   },
 
@@ -213,22 +222,34 @@ export default defineComponent({
   setup(props) {
     const simplebar = inject<any>('simplebar')
     const discogsTableRef = ref(null)
-    const discogsFormats = reactive(new Map<string, DropdownOption<string>>())
+    const isOfficialsOnly = ref(false)
     const currentFormat = ref('All formats')
+    const discogsFormats = reactive(new Map<string, DropdownOption<string>>())
     const details = reactive(new Map<number, DiscogsDetails>())
 
     const filteredTable = computed(() => {
       if (currentFormat.value === 'All formats') {
-        return props.table
+        if (!isOfficialsOnly.value) {
+          return props.table
+        } else {
+          return props.table.filter((row) => (
+            !row.format.includes('Unofficial Release')
+          ))
+        }
       }
 
-      return props.table.filter((row) => (
-        !row.format?.length || row.format[0] === currentFormat.value
-      ))
+      return props.table.filter((row) => {
+        const isRightFormat = !row.format?.length || row.format[0] === currentFormat.value
+        const isOfficialMatter = isOfficialsOnly.value ? !row.format.includes('Unofficial Release') : true
+        return isRightFormat && isOfficialMatter
+      })
     })
 
+    const switchOfficials = () => {
+      isOfficialsOnly.value = !isOfficialsOnly.value
+    }
+
     const checkAndSetDetails = (id: number, data: DiscogsDetails, title: string) => {
-      console.log(title.split(' - ')[1], '/', data.title)
       details.set(id, stringEqual(title.split(' - ')[1], data.title) ? data : { ...data, isInvalid: true })
     }
 
@@ -283,6 +304,8 @@ export default defineComponent({
     })
 
     return {
+      switchOfficials,
+      isOfficialsOnly,
       discogsFormats,
       setFormatFilter,
       discogsTableRef,
