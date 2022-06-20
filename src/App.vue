@@ -1,8 +1,8 @@
 <template>
 
-<component :is="layout">
-  <router-view />
-</component>
+  <component :is="layout">
+    <router-view />
+  </component>
 
 </template>
 
@@ -35,7 +35,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
 @import '~/scss/app.scss';
-
 </style>

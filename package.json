@@ -5,7 +5,9 @@
   "description": "",
   "scripts": {
     "dev": "vue-cli-service serve",
+    "dev:docs": "cd ./.docs && yarn dev",
     "build": "vue-cli-service build",
+    "build:docs": "cd ./.docs && yarn build",
     "test:unit": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint"
   },
