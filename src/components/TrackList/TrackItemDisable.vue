@@ -1,13 +1,10 @@
 <template>
-  
-<div class="tracklist__row_cell --pointer --fix">
-  <button
-    class="tracklist__row_action"
-    @click="disableTrack"
-  >
-    <Sprite name="disable" />
-  </button>
-</div>
+
+  <div class="tracklist__row_cell --pointer --fix">
+    <button class="tracklist__row_action" @click="disableTrack">
+      <Sprite name="disable" />
+    </button>
+  </div>
 
 </template>
 
@@ -25,7 +22,7 @@ export default defineComponent({
 
   props: {
     fileid: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -44,7 +41,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 
 .tracklist__row {
@@ -57,5 +53,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

@@ -1,24 +1,12 @@
-<template>  
-  <div :class="[{ '--current' : current.fileid === station.stationuuid }, 'station']">
+<template>
+  <div :class="[{ '--current': current._id === station.stationuuid }, 'station']">
     <div class="station__cover">
-      <button
-        class="station__play"
-        @click="playStation"
-      >
-        <Sprite
-          v-if="isOnPlay"
-          name="playing"
-        />
+      <button class="station__play" @click="playStation">
+        <Sprite v-if="isOnPlay" name="playing" />
 
-        <Sprite
-          v-else-if="current.fileid !== station.stationuuid || current.isOnPause"
-          name="play"
-        />
+        <Sprite v-else-if="current._id !== station.stationuuid || current.isOnPause" name="play" />
 
-        <Sprite
-          v-else
-          name="pause"
-        />
+        <Sprite v-else name="pause" />
       </button>
     </div>
 
@@ -26,29 +14,16 @@
       <div class="station__name">{{ station.name }}</div>
       <div class="station__country">{{ station.country }}</div>
       <ul class="station__tags">
-        <CardRadioGenre
-          v-for="(tag, index) in stationTags"
-          :key="index"
-          :genre="tag"
-          :isActive="tag === genre"
-          @click="$emit('fetchByGenre', tag)"
-        />
+        <CardRadioGenre v-for="(tag, index) in stationTags" :key="index" :genre="tag" :isActive="tag === genre"
+          @click="$emit('fetchByGenre', tag)" />
       </ul>
     </div>
 
-    <button
-      v-if="isSaved"
-      class="station__save"
-      @click="removeStationFromDatabase"
-    >
+    <button v-if="isSaved" class="station__save" @click="removeStationFromDatabase">
       <Sprite name="remove" />
     </button>
 
-    <button
-      v-else
-      class="station__save"
-      @click="saveStationToDatabase"
-    >
+    <button v-else class="station__save" @click="saveStationToDatabase">
       <Sprite name="plus" />
     </button>
   </div>
@@ -102,7 +77,7 @@ export default defineComponent({
     )))
 
     const isOnPlay = computed(() => (
-      store.getters.playingTrack.fileid === props.station.stationuuid
+      store.getters.playingTrack._id === props.station.stationuuid
       && !store.getters.playingTrack.isOnPause
       && !store.getters.playingTrack.isOnLoading
     ))
@@ -130,7 +105,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 @import 'include-media';
 
@@ -158,7 +132,7 @@ export default defineComponent({
   }
 
   &.--current {
-    
+
     &:after {
       content: '';
       position: absolute;
@@ -268,5 +242,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

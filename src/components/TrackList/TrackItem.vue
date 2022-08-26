@@ -1,55 +1,40 @@
 <template>
-  
-<div :class="[
-  { '--playing' : isPlayingTrack },
-  { '--disabled' : track.isDisabled },
-  'tracklist__row'
-]">
-  <div class="tracklist__row_cell --drag">
-    <button class="tracklist__row_action">
-      <Sprite name="burger" />
-    </button>
+
+  <div :class="[
+    { '--playing': isPlayingTrack },
+    { '--disabled': track.isDisabled },
+    'tracklist__row'
+  ]">
+    <div class="tracklist__row_cell --drag">
+      <button class="tracklist__row_action">
+        <Sprite name="burger" />
+      </button>
+    </div>
+
+    <div class="tracklist__row_cell --order">
+      {{ track.order || index + 1 }}
+    </div>
+
+    <TrackItemPlay :fileid="track._id" :trackid="track._id" :index="index" />
+
+    <TrackItemTitle :title="track.title" :id="track._id" @callLyricsModal="lyricsModalSwitcher" />
+
+    <TrackItemDuration :duration="track.duration" />
+
+    <TrackItemPlaylist :trackID="track._id" />
+
+    <TrackItemDisable :fileid="track._id" />
+
+    <div class="tracklist__row_cell --fix">
+      {{ track.listened }}
+    </div>
+
+    <transition name="fade">
+      <Modal v-if="isModalActive" :isModalActive="isModalActive" @closeModal="lyricsModalSwitcher">
+        <TrackLyrics :heading="trackArtistAndTitle" :id="track._id" />
+      </Modal>
+    </transition>
   </div>
-
-  <div class="tracklist__row_cell --order">
-    {{ track.order || index + 1 }}
-  </div>
-
-  <TrackItemPlay
-    :fileid="track.fileid"
-    :trackid="track._id"
-    :index="index"
-  />
-
-  <TrackItemTitle
-    :title="track.title"
-    :id="track._id"
-    @callLyricsModal="lyricsModalSwitcher"
-  />
-
-  <TrackItemDuration :duration="track.duration" />
-
-  <TrackItemPlaylist :trackID="track._id" />
-
-  <TrackItemDisable :fileid="track.fileid" />
-
-  <div class="tracklist__row_cell --fix">
-    {{ track.listened }}
-  </div>
-  
-  <transition name="fade">
-    <Modal
-      v-if="isModalActive"
-      :isModalActive="isModalActive"
-      @closeModal="lyricsModalSwitcher"
-    >
-      <TrackLyrics
-        :heading="trackArtistAndTitle"
-        :id="track._id"
-      />
-    </Modal>
-  </transition>
-</div>
 
 </template>
 
@@ -102,7 +87,7 @@ export default defineComponent({
     ))
 
     const isPlayingTrack = computed(() => (
-      store.getters.playingTrack.fileid === props.track.fileid
+      store.getters.playingTrack._id === props.track._id
     ))
 
     const lyricsModalSwitcher = () => {

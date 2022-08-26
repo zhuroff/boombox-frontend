@@ -4,14 +4,14 @@ import { AppStateInterface } from './state'
 import { StateInterface } from '..'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
-  playTrack: ({ commit, dispatch }, fileid: number) => {
-    commit('checkOrReplacePlaylists', fileid)
-    commit('preparePlayerTrack', fileid)
+  playTrack: ({ commit, dispatch }, _id: String) => {
+    commit('checkOrReplacePlaylists', _id)
+    commit('preparePlayerTrack', _id)
     commit('createAudioContext')
-    dispatch('playAudioTrack', fileid)
+    dispatch('playAudioTrack', _id)
   },
 
-  playAudioTrack: ({ commit, dispatch, state }, fileid: number) =>  {
+  playAudioTrack: ({ commit, dispatch, state }, _id: string) => {
     const playingTrack = state.playingTrack
     const playingAudio = playingTrack.audio
 
@@ -29,18 +29,18 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
 
           if (progressLine >= 1) {
             if (playingTrack.isOnRepeat) {
-              dispatch('playAudioTrack', fileid)
+              dispatch('playAudioTrack', _id)
             } else {
               const activePlaylist = state.currentPlaylist.tracks
                 .filter((track) => !track.isDisabled)
 
               const currentTrackIndex = activePlaylist
-                .findIndex((track) => track.fileid === fileid)
-              
+                .findIndex((track) => track._id === _id)
+
               const nextTrack = activePlaylist[currentTrackIndex + 1]
 
               if (nextTrack) {
-                dispatch('playTrack', nextTrack.fileid)
+                dispatch('playTrack', nextTrack._id)
               } else {
                 commit('nullifyPlayerTrack')
               }

@@ -14,8 +14,8 @@ import {
 } from '~/shared/stringifier'
 import { RadioStationResponse } from '~/types/Radio'
 
-const getChosenTrack = (playlist: PlayerPlaylist, fileid: number) => (
-  playlist.tracks.find((el) => el.fileid === fileid)
+const getChosenTrack = (playlist: PlayerPlaylist, _id: string) => (
+  playlist.tracks.find((el) => el._id === _id)
 )
 
 const mutations: MutationTree<AppStateInterface> = {
@@ -43,7 +43,7 @@ const mutations: MutationTree<AppStateInterface> = {
   },
 
   setPlayingStation: (state: AppStateInterface, station: RadioStationResponse) => {
-    if (state.playingTrack.fileid === station.stationuuid) {
+    if (state.playingTrack._id === station.stationuuid) {
       if (state.playingTrack.isOnPause) {
         state.playingTrack.isOnPause = false
         state.playingTrack.audio.play()
@@ -56,7 +56,7 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.artistName = station.name
       state.playingTrack.audio.src = station.url_resolved
       state.playingTrack.duration = '--'
-      state.playingTrack.fileid = station.stationuuid
+      state.playingTrack._id = station.stationuuid
       state.playingTrack.isOnPause = false
       state.playingTrack.isOnRepeat = false
       state.playingTrack.title = station.name
@@ -66,8 +66,8 @@ const mutations: MutationTree<AppStateInterface> = {
     }
   },
 
-  checkOrReplacePlaylists: (state: AppStateInterface, fileid: number) => {
-    let chosenTrack = getChosenTrack(state.currentPlaylist, fileid)
+  checkOrReplacePlaylists: (state: AppStateInterface, _id: string) => {
+    let chosenTrack = getChosenTrack(state.currentPlaylist, _id)
 
     if (!chosenTrack) {
       state.currentPlaylist = { ...state.reservedPlaylist }
@@ -75,13 +75,13 @@ const mutations: MutationTree<AppStateInterface> = {
     }
   },
 
-  preparePlayerTrack: (state: AppStateInterface, fileid: number) => {
-    const chosenTrack = getChosenTrack(state.currentPlaylist, fileid)
+  preparePlayerTrack: (state: AppStateInterface, _id: string) => {
+    const chosenTrack = getChosenTrack(state.currentPlaylist, _id)
 
     if (chosenTrack) {
       state.playingTrack.isOnPause = false
       state.playingTrack.isOnRepeat = false
-      state.playingTrack.fileid = fileid
+      state.playingTrack._id = _id
       state.playingTrack._id = chosenTrack._id
       state.playingTrack.title = chosenTrack.title
       state.playingTrack.source = chosenTrack.link
@@ -151,9 +151,9 @@ const mutations: MutationTree<AppStateInterface> = {
     }
   },
 
-  disableOrEnableTrack: (state: AppStateInterface, fileid) => {
-    const targetTrack = state.currentPlaylist.tracks.find((el) => el.fileid === fileid)
-      || state.reservedPlaylist.tracks.find((el) => el.fileid === fileid)
+  disableOrEnableTrack: (state: AppStateInterface, _id) => {
+    const targetTrack = state.currentPlaylist.tracks.find((el) => el._id === _id)
+      || state.reservedPlaylist.tracks.find((el) => el._id === _id)
 
     if (targetTrack) {
       targetTrack.isDisabled = !targetTrack.isDisabled
@@ -169,7 +169,7 @@ const mutations: MutationTree<AppStateInterface> = {
       payload.newOrder, 0,
       targetPlaylistTracks.splice(payload.oldOrder, 1)[0]
     )
-    
+
     /* eslint no-param-reassign: 0 */
     targetPlaylistTracks.forEach((el, index) => {
       el.order = index + 1

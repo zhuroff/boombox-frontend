@@ -16,7 +16,6 @@ type PlayerPlaylist = {
 }
 
 type PlayingTrack = TrackProgress & {
-  fileid: number | string
   duration: number | string | null
   isOnPause: boolean
   isOnRepeat: boolean

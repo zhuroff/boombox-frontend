@@ -1,30 +1,18 @@
 <template>
 
-<div
-  v-if="isOnPlay"
-  class="tracklist__row_cell --pointer --fix"
->
-  <button
-    class="tracklist__row_action"
-    @click="pauseTrack"
-  >
-    <Sprite name="playing" />
-  </button>
-</div>
-  
-<div
-  v-else
-  :class="[{ '--disabled' : isOnLoading }, 'tracklist__row_cell --pointer --fix']"
->
-  <button
-    class="tracklist__row_action"
-    @click="playingStateSplitter"
-  >
-    <Sprite v-if="isOnLoading" name="spinner" />
-    <Sprite v-else-if="isOnPause" name="pause" />
-    <Sprite v-else name="play" />
-  </button>
-</div>
+  <div v-if="isOnPlay" class="tracklist__row_cell --pointer --fix">
+    <button class="tracklist__row_action" @click="pauseTrack">
+      <Sprite name="playing" />
+    </button>
+  </div>
+
+  <div v-else :class="[{ '--disabled': isOnLoading }, 'tracklist__row_cell --pointer --fix']">
+    <button class="tracklist__row_action" @click="playingStateSplitter">
+      <Sprite v-if="isOnLoading" name="spinner" />
+      <Sprite v-else-if="isOnPause" name="pause" />
+      <Sprite v-else name="play" />
+    </button>
+  </div>
 
 </template>
 
@@ -42,7 +30,7 @@ export default defineComponent({
 
   props: {
     fileid: {
-      type: Number,
+      type: String,
       required: true
     },
 
@@ -61,18 +49,18 @@ export default defineComponent({
     const store = useStore(key)
 
     const isOnPlay = computed(() => (
-      store.getters.playingTrack.fileid === props.fileid
+      store.getters.playingTrack._id === props.fileid
       && !store.getters.playingTrack.isOnPause
       && !store.getters.playingTrack.isOnLoading
     ))
 
     const isOnPause = computed(() => (
-      store.getters.playingTrack.fileid === props.fileid
+      store.getters.playingTrack._id === props.fileid
       && store.getters.playingTrack.isOnPause
     ))
 
     const isOnLoading = computed(() => (
-      store.getters.playingTrack.fileid === props.fileid
+      store.getters.playingTrack._id === props.fileid
       && store.getters.playingTrack.isOnLoading
     ))
 
@@ -86,9 +74,9 @@ export default defineComponent({
     }
 
     const playingStateSplitter = () => {
-      if (store.getters.playingTrack.fileid === 0) {
+      if (store.getters.playingTrack._id === 0) {
         playTrack()
-      } else if (store.getters.playingTrack.fileid === props.fileid) {
+      } else if (store.getters.playingTrack._id === props.fileid) {
         if (!store.getters.playingTrack.isOnPause) {
           playTrack()
         } else {

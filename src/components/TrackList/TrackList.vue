@@ -1,17 +1,8 @@
-<template>  
+<template>
   <div class="tracklist">
-    <VueDraggableNext
-      handle=".--drag"
-      v-bind="dragOptions"
-      @end="orderChanged"
-    >
+    <VueDraggableNext handle=".--drag" v-bind="dragOptions" @end="orderChanged">
       <transition-group>
-        <TrackItem
-          v-for="(track, index) in tracks"
-          :key="track.fileid"
-          :track="track"
-          :index="index"
-        />
+        <TrackItem v-for="(track, index) in tracks" :key="track._id" :track="track" :index="index" />
       </transition-group>
     </VueDraggableNext>
   </div>

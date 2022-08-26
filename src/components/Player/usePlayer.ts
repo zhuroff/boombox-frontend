@@ -28,39 +28,39 @@ const usePlayer = () => {
     store.commit('expandPlayer')
   }
 
-  const isNextTrackExist = computed(() => {     
+  const isNextTrackExist = computed(() => {
     const playingTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track.fileid === playingTrack.value.fileid)
+      .findIndex((track) => track._id === playingTrack.value._id)
 
     return playingTrackIndex < activePlaylistTracks.value.length - 1
   })
 
   const switchToNextTrack = () => {
     const currentTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track.fileid === playingTrack.value.fileid)
+      .findIndex((track) => track._id === playingTrack.value._id)
 
     const nextTrack = activePlaylistTracks.value[currentTrackIndex + 1]
 
     if (nextTrack) {
-      store.dispatch('playTrack', nextTrack.fileid)
+      store.dispatch('playTrack', nextTrack._id)
     }
   }
 
   const isPrevTrackExist = computed(() => {
     const playingTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track.fileid === playingTrack.value.fileid)
-    
+      .findIndex((track) => track._id === playingTrack.value._id)
+
     return playingTrackIndex > 0
   })
 
   const switchToPrevTrack = () => {
     const currentTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track.fileid === playingTrack.value.fileid)
+      .findIndex((track) => track._id === playingTrack.value._id)
 
     const prevTrack = activePlaylistTracks.value[currentTrackIndex - 1]
 
     if (prevTrack) {
-      store.dispatch('playTrack', prevTrack.fileid)
+      store.dispatch('playTrack', prevTrack._id)
     }
   }
 

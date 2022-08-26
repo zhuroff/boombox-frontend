@@ -11,7 +11,6 @@ const initPlaylist: PlayerPlaylist = {
 
 const playingTrackInitial: PlayingTrack = {
   isOnPause: false,
-  fileid: 0,
   duration: null,
   isOnRepeat: false,
   artistName: '',

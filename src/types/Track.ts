@@ -14,7 +14,6 @@ type TrackLyricsData = {
 
 type Track = {
   _id: string
-  fileid: number
   link: string
   listened: number
   title: string
