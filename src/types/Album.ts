@@ -9,11 +9,10 @@ type AlbumItem = {
   artist: CategoryBasic
   genre: CategoryBasic
   period: CategoryBasic
-  folderid?: number
 }
 
 type AlbumPage = AlbumItem & {
-  albumCoverArt: number | string[]
+  albumCoverArt: string | string[]
   description: string
   tracks: Track[]
   isLoaded: boolean

@@ -1,48 +1,24 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
-        v-if="!album.isFetched"
-        mode="light"
-      />
+      <AppPreloader v-if="!album.isFetched" mode="light" />
     </transition>
-      
+
     <transition name="flyUp">
-      <div
-        v-if="album.isFetched"
-        class="album"
-      >
+      <div v-if="album.isFetched" class="album">
         <div class="album__aside">
           <div class="album__sidebar">
-            <CoverArt
-              :albumCover="album.data.albumCover"
-              :isBooklet="album.data.albumCoverArt !== 0"
-              @coverClick="fetchAlbumBooklet"
-            />
+            <CoverArt :albumCover="album.data.albumCover" :isBooklet="album.data.albumCoverArt?.length > 9"
+              @coverClick="fetchAlbumBooklet" />
 
-            <Button
-              text="Add to collection"
-              isFullWidth
-              @onClick="callCollectionsModal"
-            />
+            <Button text="Add to collection" isFullWidth @onClick="callCollectionsModal" />
 
-            <Button
-              id="discogs"
-              text="Get Discogs"
-              isFullWidth
-              :isLoading="isDiscogsLoading"
-              :isDisabled="discogs.isFetched && discogs.results.size > 0"
-              @onClick="fetchDiscogsData"
-            />
+            <Button id="discogs" text="Get Discogs" isFullWidth :isLoading="isDiscogsLoading"
+              :isDisabled="discogs.isFetched && discogs.results.size > 0" @onClick="fetchDiscogsData" />
 
-            <FloatModal
-              v-if="collections.isActive"
-              :isFetched="collections.isFetched"
-              :isEmpty="!collections.data.length"
-              placeholder="Create new collection"
-              @createNewEntry="createNewCollection"
-              @closeFloatModal="closeCollectionsModal"
-            >
+            <FloatModal v-if="collections.isActive" :isFetched="collections.isFetched"
+              :isEmpty="!collections.data.length" placeholder="Create new collection"
+              @createNewEntry="createNewCollection" @closeFloatModal="closeCollectionsModal">
               <template v-slot:empty>
                 <div class="float-modal__empty">
                   <strong>You haven't created any collections yet</strong>
@@ -52,14 +28,8 @@
 
               <template v-slot:list>
                 <ul class="float-modal__list">
-                  <FloatModalItem
-                    v-for="item in collections.data"
-                    :key="item.id"
-                    :item="item"
-                    :itemID="album.data._id"
-                    :isChecked="isCollectionItemChecked(item)"
-                    @checkFloatModalItem="addOrRemoveFromCollection"
-                  />
+                  <FloatModalItem v-for="item in collections.data" :key="item.id" :item="item" :itemID="album.data._id"
+                    :isChecked="isCollectionItemChecked(item)" @checkFloatModalItem="addOrRemoveFromCollection" />
                 </ul>
               </template>
             </FloatModal>
@@ -68,43 +38,24 @@
         </div>
 
         <div class="album__content">
-          <AlbumHeading
-            :albumHead="albumHead"
-            @textInputHandler="descriptionHandler"
-          />
+          <AlbumHeading :albumHead="albumHead" @textInputHandler="descriptionHandler" />
 
-          <TrackList
-            :tracks="album.data.tracks"
-            :albumID="album.data._id"
-            :artist="album.data.artist"
-          />
+          <TrackList :tracks="album.data.tracks" :albumID="album.data._id" :artist="album.data.artist" />
         </div>
       </div>
     </transition>
 
     <transition name="fade">
-      <Modal
-        v-if="isBookletModalActive"
-        :isModalActive="isBookletModalActive"
-        @closeModal="closeBookletModal"
-      >
-        <AppPreloader
-          v-if="!Array.isArray(album.data.albumCoverArt)"
-          mode="dark"
-        />
-        
-        <Slider
-          v-else
-          :data="album.data.albumCoverArt"
-        />
+      <Modal v-if="isBookletModalActive" :isModalActive="isBookletModalActive" @closeModal="closeBookletModal">
+        <AppPreloader v-if="!Array.isArray(album.data.albumCoverArt)" mode="dark" />
+
+        <Slider v-else :data="album.data.albumCoverArt" />
       </Modal>
     </transition>
 
     <transition name="fade">
-      <DiscogsTable
-        v-if="discogs.isFetched && discogs.results.size > 0"
-        :table="Array.from(discogs.results).map((item) => item[1])"
-      />
+      <DiscogsTable v-if="discogs.isFetched && discogs.results.size > 0"
+        :table="Array.from(discogs.results).map((item) => item[1])" />
     </transition>
   </section>
 </template>
@@ -217,7 +168,7 @@ export default defineComponent({
     const fetchAlbumBooklet = () => {
       if (Array.isArray(album.data.albumCoverArt)) {
         isBookletModalActive.value = true
-      } else if (album.data.albumCoverArt > 0) {
+      } else if (album.data.albumCoverArt?.length) {
         isBookletModalActive.value = true
 
         AlbumServices.booklet(album.data._id, album.data.albumCoverArt)
@@ -278,7 +229,7 @@ export default defineComponent({
       DiscogsServices.discogs(album.data, page)
         .then((response) => {
           setDiscogsData(response)
-          
+
           if (response.pagination.pages > page) {
             fetchDiscogsData(page + 1)
           } else {
@@ -297,7 +248,7 @@ export default defineComponent({
         })
         .catch((ignore) => ignore)
     }
-    
+
     onMounted(() => fetchAlbumEntry())
 
     return {

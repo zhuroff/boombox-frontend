@@ -27,8 +27,8 @@ export default class AlbumServices {
     await api.patch(`/api/albums/${id}/description`, { description })
   }
 
-  static async booklet(id: string, booklet: number): Promise<string[]> {
-    const response = await api.get(`/api/albums/${id}/${booklet}`)
+  static async booklet(id: string, path: string): Promise<string[]> {
+    const response = await api.get(`/api/albums/${id}/${path}`)
 
     if (response?.status === 200) {
       return response.data
