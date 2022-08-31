@@ -45,7 +45,7 @@ const useCategories = (apiQuery: string) => {
       categories.data = data.docs
     }
   }
-  
+
   const fetchCategoryList = async () => {
     try {
       const response = await api.post(apiQuery, pageConfig)
@@ -102,14 +102,14 @@ const useCategory = (apiQuery: string) => {
   const setCategory = (data: any) => {
     category.data = {
       ...data,
-      albums: sortAlbumsByYears([...data.albums, ...data.frames])
+      albums: sortAlbumsByYears([...data.albums, ...data.framesAlbums])
     }
 
-    delete category.data.frames
+    // delete category.data.framesAlbums
 
     category.isFetched = true
   }
-  
+
   const fetchCategoryEntry = async () => {
     try {
       const response = await api.get(`${apiQuery}/${route.params.id}`)
@@ -118,7 +118,7 @@ const useCategory = (apiQuery: string) => {
       throw error
     }
   }
-  
+
   onMounted(() => fetchCategoryEntry())
 
   return {

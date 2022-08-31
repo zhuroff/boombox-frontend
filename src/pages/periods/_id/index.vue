@@ -1,33 +1,16 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
-        v-if="!category.isFetched"
-        mode="light"
-      />
+      <AppPreloader v-if="!category.isFetched" mode="light" />
     </transition>
 
     <transition-group name="flyUp">
-      <CategoryHero
-        v-if="category.isFetched"
-        :data="category.data"
-        :description="categoryDescription"
-        slug="periods"
-        @setUploadedImage="setUploadedImage"
-      />
+      <CategoryHero v-if="category.isFetched" :data="category.data" :description="categoryDescription" slug="periods"
+        @setUploadedImage="setUploadedImage" />
 
-      <ul
-        v-if="category.isFetched"
-        class="cardlist"
-      >
-        <CardWrapper
-          v-for="album in category.data.albums"
-          :key="album.folderid"
-        >
-          <component
-            :is="album.frame ? 'CardFrame' : 'CardAlbum'"
-            :album="album"
-          />
+      <ul v-if="category.isFetched" class="cardlist">
+        <CardWrapper v-for="album in category.data.albums" :key="album._id">
+          <component :is="album.frame ? 'CardFrame' : 'CardAlbum'" :album="album" />
         </CardWrapper>
       </ul>
     </transition-group>
