@@ -1,15 +1,8 @@
 <template>
-  <aside :class="[{ '--opened' : isExpanded }, 'aside']">
-    <ButtonBurger
-      :isActive="isExpanded"
-      @burgerClick="burgerClick"
-    />
+  <aside :class="[{ '--opened': isExpanded }, 'aside']">
+    <ButtonBurger :isActive="isExpanded" @burgerClick="burgerClick" />
 
-    <router-link
-      class="aside__homelink"
-      to="/"
-      @click="burgerClick"
-    >
+    <router-link class="aside__homelink" to="/" @click="burgerClick">
       <Sprite name="vinyl" />
       <span>BoomBox</span>
     </router-link>
@@ -18,16 +11,9 @@
 
     <nav class="aside__nav">
       <ul class="aside__nav-list">
-        <li
-          v-for="(item, index) in navbar"
-          :key="index"
-          class="aside__nav-item"
-        >
-          <router-link
-            :to="`/${item.route}`"
-            class="aside__nav-link"
-            @click="burgerClick"
-          >{{ item.title }}</router-link>
+        <li v-for="(item, index) in navbar" :key="index" class="aside__nav-item">
+          <router-link :to="`/${item.route}`" class="aside__nav-link" @click="burgerClick">{{ item.title }}
+          </router-link>
         </li>
       </ul>
     </nav>
@@ -104,6 +90,11 @@ export default defineComponent({
       },
 
       {
+        title: 'Movies',
+        route: 'movies'
+      },
+
+      {
         title: 'Backups',
         route: 'backups'
       }
@@ -112,7 +103,7 @@ export default defineComponent({
     const burgerClick = () => {
       emit('burgerClick')
     }
-  
+
     return {
       navbar,
       burgerClick

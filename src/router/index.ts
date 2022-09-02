@@ -111,6 +111,19 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
+    path: '/movies',
+    name: 'Movies',
+    component: () => import(/* webpackChunkName: 'movies' */ '~/pages/movies/index.vue'),
+    children: [
+      {
+        path: '/movies/:id',
+        name: 'Movie',
+        component: () => import(/* webpackChunkName: 'movies' */ '~/pages/movies/index.vue')
+      }
+    ]
+  },
+
+  {
     path: '/backups',
     name: 'Backups',
     component: () => import(/* webpackChunkName: 'radio' */ '~/pages/backups/index.vue')

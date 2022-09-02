@@ -19,6 +19,7 @@
     "simplebar": "^5.3.8",
     "vue": "^3.2.36",
     "vue-draggable-next": "^2.1.1",
+    "vue-plyr": "^7.0.0",
     "vue-router": "^4.0.0-0",
     "vue3-carousel": "^0.1.40",
     "vuex": "^4.0.0-0"
