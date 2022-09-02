@@ -12,7 +12,8 @@
     <nav class="aside__nav">
       <ul class="aside__nav-list">
         <li v-for="(item, index) in navbar" :key="index" class="aside__nav-item">
-          <router-link :to="`/${item.route}`" class="aside__nav-link" @click="burgerClick">{{ item.title }}
+          <router-link :to="`/${item.route}`" class="aside__nav-link" @click="burgerClick"
+            >{{ item.title }}
           </router-link>
         </li>
       </ul>
@@ -21,94 +22,53 @@
 </template>
 
 <script lang="ts">
-
-import { defineComponent, reactive, ref } from 'vue'
-import ButtonBurger from '~/components/Button/ButtonBurger.vue'
-import Sprite from '~/components/Sprite/Sprite.vue'
-import Search from '~/components/Search/Search.vue'
-import './Sidebar.scss'
+import { defineComponent, onMounted, reactive, ref } from "vue";
+import router from "~/router";
+import ButtonBurger from "~/components/Button/ButtonBurger.vue";
+import Sprite from "~/components/Sprite/Sprite.vue";
+import Search from "~/components/Search/Search.vue";
+import { RouteRecordName } from "vue-router";
+import "./Sidebar.scss";
 
 export default defineComponent({
   components: {
     ButtonBurger,
     Sprite,
-    Search
+    Search,
   },
 
   props: {
     isExpanded: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
 
   setup(_, { emit }) {
-    const navbar = reactive([
+    const navbar = reactive<
       {
-        title: 'Albums',
-        route: 'albums'
-      },
-
-      {
-        title: 'Frames',
-        route: 'frames'
-      },
-
-      {
-        title: 'Artists',
-        route: 'artists'
-      },
-
-      {
-        title: 'Genres',
-        route: 'genres'
-      },
-
-      {
-        title: 'Periods',
-        route: 'periods'
-      },
-
-      {
-        title: 'Collections',
-        route: 'collections'
-      },
-
-      {
-        title: 'Playlists',
-        route: 'playlists'
-      },
-
-      {
-        title: 'YouTube',
-        route: 'youtube'
-      },
-
-      {
-        title: 'Radio',
-        route: 'radio'
-      },
-
-      {
-        title: 'Movies',
-        route: 'movies'
-      },
-
-      {
-        title: 'Backups',
-        route: 'backups'
-      }
-    ])
+        title: RouteRecordName | undefined;
+        route: string;
+      }[]
+    >([]);
 
     const burgerClick = () => {
-      emit('burgerClick')
-    }
+      emit("burgerClick");
+    };
+
+    onMounted(() => {
+      navbar.push(
+        ...router
+          .getRoutes()
+          .filter(({ path }) => !path.includes(":id") && path !== "/")
+          .map(({ name, path }) => ({ title: name, route: path.replace("/", "") }))
+      );
+    });
 
     return {
       navbar,
-      burgerClick
-    }
-  }
-})
-
+      burgerClick,
+    };
+  },
+});
 </script>

@@ -1654,7 +1654,7 @@
 
 "@vue/compiler-core@3.2.38":
   version "3.2.38"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.2.38.tgz#0a2a7bffd2280ac19a96baf5301838a2cf1964d7"
+  resolved "https://npm.netvision-internal.ru/@vue%2fcompiler-core/-/compiler-core-3.2.38.tgz#0a2a7bffd2280ac19a96baf5301838a2cf1964d7"
   integrity sha512-/FsvnSu7Z+lkd/8KXMa4yYNUiqQrI22135gfsQYVGuh5tqEgOB0XqrUdb/KnCLa5+TmQLPwvyUnKMyCpu+SX3Q==
   dependencies:
     "@babel/parser" "^7.16.4"
@@ -1672,7 +1672,7 @@
 
 "@vue/compiler-dom@3.2.38":
   version "3.2.38"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.2.38.tgz#53d04ed0c0c62d1ef259bf82f9b28100a880b6fd"
+  resolved "https://npm.netvision-internal.ru/@vue%2fcompiler-dom/-/compiler-dom-3.2.38.tgz#53d04ed0c0c62d1ef259bf82f9b28100a880b6fd"
   integrity sha512-zqX4FgUbw56kzHlgYuEEJR8mefFiiyR3u96498+zWPsLeh1WKvgIReoNE+U7gG8bCUdvsrJ0JRmev0Ky6n2O0g==
   dependencies:
     "@vue/compiler-core" "3.2.38"
@@ -1703,9 +1703,9 @@
     postcss "^8.1.10"
     source-map "^0.6.1"
 
-"@vue/compiler-sfc@^3.26.3":
+"@vue/compiler-sfc@^3.2.38":
   version "3.2.38"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.2.38.tgz#9e763019471a535eb1fceeaac9d4d18a83f0940f"
+  resolved "https://npm.netvision-internal.ru/@vue%2fcompiler-sfc/-/compiler-sfc-3.2.38.tgz#9e763019471a535eb1fceeaac9d4d18a83f0940f"
   integrity sha512-KZjrW32KloMYtTcHAFuw3CqsyWc5X6seb8KbkANSWt3Cz9p2qA8c1GJpSkksFP9ABb6an0FLCFl46ZFXx3kKpg==
   dependencies:
     "@babel/parser" "^7.16.4"
@@ -1729,7 +1729,7 @@
 
 "@vue/compiler-ssr@3.2.38":
   version "3.2.38"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-ssr/-/compiler-ssr-3.2.38.tgz#933b23bf99e667e5078eefc6ba94cb95fd765dfe"
+  resolved "https://npm.netvision-internal.ru/@vue%2fcompiler-ssr/-/compiler-ssr-3.2.38.tgz#933b23bf99e667e5078eefc6ba94cb95fd765dfe"
   integrity sha512-bm9jOeyv1H3UskNm4S6IfueKjUNFmi2kRweFIGnqaGkkRePjwEcfCVqyS3roe7HvF4ugsEkhf4+kIvDhip6XzQ==
   dependencies:
     "@vue/compiler-dom" "3.2.38"
@@ -1788,7 +1788,7 @@
 
 "@vue/reactivity-transform@3.2.38":
   version "3.2.38"
-  resolved "https://registry.yarnpkg.com/@vue/reactivity-transform/-/reactivity-transform-3.2.38.tgz#a856c217b2ead99eefb6fddb1d61119b2cb67984"
+  resolved "https://npm.netvision-internal.ru/@vue%2freactivity-transform/-/reactivity-transform-3.2.38.tgz#a856c217b2ead99eefb6fddb1d61119b2cb67984"
   integrity sha512-3SD3Jmi1yXrDwiNJqQ6fs1x61WsDLqVk4NyKVz78mkaIRh6d3IqtRnptgRfXn+Fzf+m6B1KxBYWq1APj6h4qeA==
   dependencies:
     "@babel/parser" "^7.16.4"
@@ -1836,7 +1836,7 @@
 
 "@vue/shared@3.2.38":
   version "3.2.38"
-  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.38.tgz#e823f0cb2e85b6bf43430c0d6811b1441c300f3c"
+  resolved "https://npm.netvision-internal.ru/@vue%2fshared/-/shared-3.2.38.tgz#e823f0cb2e85b6bf43430c0d6811b1441c300f3c"
   integrity sha512-dTyhTIRmGXBjxJE+skC8tTWCGLCVc4wQgRRLt8+O9p5ewBAjoBwtCAkLPrtToSr1xltoe3st21Pv953aOZ7alg==
 
 "@vue/vue-loader-v15@npm:vue-loader@^15.9.7":

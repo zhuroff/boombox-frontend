@@ -124,6 +124,19 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
+    path: '/undisposed',
+    name: 'Undisposed',
+    component: () => import(/* webpackChunkName: 'undisposed' */ '~/pages/undisposed/index.vue'),
+    children: [
+      {
+        path: '/undisposed/:id',
+        name: 'Undisposed Album',
+        component: () => import(/* webpackChunkName: 'undisposed' */ '~/pages/undisposed/index.vue')
+      }
+    ]
+  },
+
+  {
     path: '/backups',
     name: 'Backups',
     component: () => import(/* webpackChunkName: 'radio' */ '~/pages/backups/index.vue')

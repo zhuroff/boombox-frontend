@@ -41,7 +41,6 @@ export default defineComponent({
     });
 
     const setMovieState = (data: any) => {
-      console.log(data);
       moviePage.data = data;
       moviePage.isFetched = true;
     };
@@ -60,4 +59,3 @@ export default defineComponent({
   },
 });
 </script>
-

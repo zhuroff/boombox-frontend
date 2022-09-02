@@ -36,4 +36,14 @@ export default class AlbumServices {
 
     throw new Error('Failed request')
   }
+
+  static async undisposedList(path: string = 'Music&Movies/undisposed', id?: string) {
+    const response = await api.post<any>('/api/albums/undisposed', { path, id })
+    
+    if (response?.status === 200) {
+      return response.data
+    }
+
+    throw new Error('Failed request')
+  }
 }
