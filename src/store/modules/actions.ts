@@ -18,9 +18,8 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
     playingAudio.play()
       .then(() => commit('deleteLoadingState'))
       .then(() => dispatch('incrementListeningCounter'))
-      .then(() => {
-        dispatch('saveTrackDuration', playingAudio.duration)
-
+      .then(() => dispatch('saveTrackDuration', playingAudio.duration))
+      .finally(() => {
         playingAudio.ontimeupdate = () => {
           const progressLine = playingAudio.currentTime / playingAudio.duration
           const progressTime = playingAudio.currentTime

@@ -82,7 +82,6 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.isOnPause = false
       state.playingTrack.isOnRepeat = false
       state.playingTrack._id = _id
-      state.playingTrack._id = chosenTrack._id
       state.playingTrack.title = chosenTrack.title
       state.playingTrack.source = chosenTrack.link
       state.playingTrack.duration = chosenTrack?.duration || null
@@ -101,7 +100,6 @@ const mutations: MutationTree<AppStateInterface> = {
 
   createAudioContext: (state: AppStateInterface) => {
     if (state.playingTrack.progressHandler) {
-      // state.playingTrack.audio.removeEventListener('timeupdate', state.playingTrack.progressHandler)
       state.playingTrack.progressHandler = null
     }
 
