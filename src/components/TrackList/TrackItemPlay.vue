@@ -1,5 +1,4 @@
 <template>
-
   <div v-if="isOnPlay" class="tracklist__row_cell --pointer --fix">
     <button class="tracklist__row_action" @click="pauseTrack">
       <Sprite name="playing" />
@@ -13,88 +12,85 @@
       <Sprite v-else name="play" />
     </button>
   </div>
-
 </template>
 
 <script lang="ts">
-
-import { defineComponent, computed } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import { defineComponent, computed } from "vue";
+import { useStore } from "vuex";
+import { key } from "~/store";
+import Sprite from "~/components/Sprite/Sprite.vue";
 
 export default defineComponent({
   components: {
-    Sprite
+    Sprite,
   },
 
   props: {
     fileid: {
       type: String,
-      required: true
+      required: true,
     },
 
     trackid: {
       type: String,
-      required: true
+      required: true,
     },
 
     index: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
 
   setup(props, { emit }) {
-    const store = useStore(key)
+    const store = useStore(key);
 
-    const isOnPlay = computed(() => (
-      store.getters.playingTrack._id === props.fileid
-      && !store.getters.playingTrack.isOnPause
-      && !store.getters.playingTrack.isOnLoading
-    ))
+    const isOnPlay = computed(
+      () =>
+        store.getters.playingTrack._id === props.fileid &&
+        !store.getters.playingTrack.isOnPause &&
+        !store.getters.playingTrack.isOnLoading
+    );
 
-    const isOnPause = computed(() => (
-      store.getters.playingTrack._id === props.fileid
-      && store.getters.playingTrack.isOnPause
-    ))
+    const isOnPause = computed(
+      () => store.getters.playingTrack._id === props.fileid && store.getters.playingTrack.isOnPause
+    );
 
-    const isOnLoading = computed(() => (
-      store.getters.playingTrack._id === props.fileid
-      && store.getters.playingTrack.isOnLoading
-    ))
+    const isOnLoading = computed(
+      () =>
+        store.getters.playingTrack._id === props.fileid && store.getters.playingTrack.isOnLoading
+    );
 
     const pauseTrack = () => {
-      store.commit('setTrackOnPause')
-    }
+      store.commit("setTrackOnPause");
+    };
 
     const playTrack = () => {
-      store.dispatch('playTrack', props.fileid)
-      store.commit('expandPlayer')
-    }
+      store.dispatch("playTrack", props.fileid);
+      store.commit("expandPlayer");
+    };
 
     const playingStateSplitter = () => {
       if (store.getters.playingTrack._id === 0) {
-        playTrack()
+        playTrack();
       } else if (store.getters.playingTrack._id === props.fileid) {
         if (!store.getters.playingTrack.isOnPause) {
-          playTrack()
+          playTrack();
         } else {
-          store.commit('continuePlay')
+          store.commit("continuePlay");
         }
       } else {
-        playTrack()
+        playTrack();
       }
-    }
+    };
 
     return {
       isOnPlay,
       isOnPause,
       isOnLoading,
       pauseTrack,
-      playingStateSplitter
-    }
-  }
-})
-
+      playingStateSplitter,
+    };
+  },
+});
 </script>
