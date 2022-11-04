@@ -1,52 +1,31 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
-        v-if="!albums.isFetched"
-        mode="light"
-      />
+      <AppPreloader v-if="!albums.isFetched" mode="light" />
     </transition>
 
     <transition-group name="flyUp">
-      <div
-        class="section__heading"
-        key="heading"
-      >
+      <div class="section__heading" key="heading">
         <h1 class="section__title">
           There are {{ albums.pagination.totalDocs }} albums in your collection
         </h1>
 
-        <Dropdown
-          :options="sortOptions"
-          @chooseItem="setSorting"
-        />
+        <Dropdown :options="sortOptions" @chooseItem="setSorting" />
       </div>
 
-      <ul
-        v-if="albums.isFetched"
-        class="cardlist"
-        key="list"
-      >
-        <CardWrapper
-          v-for="album in albums.data"
-          :key="album._id"
-        >
+      <ul v-if="albums.isFetched" class="cardlist" key="list">
+        <CardWrapper v-for="album in albums.data" :key="album._id">
           <CardAlbum :album="album" />
         </CardWrapper>
       </ul>
 
-      <Pagination
-        v-if="albums.isFetched && albums.pagination.totalPages > 1"
-        :pagination="albums.pagination"
-        key="pagination"
-        @switchPagination="switchPagination"
-      />
+      <Pagination v-if="albums.isFetched && albums.pagination.totalPages > 1" :pagination="albums.pagination"
+        key="pagination" @switchPagination="switchPagination" />
     </transition-group>
   </section>
 </template>
 
 <script lang="ts">
-
 import { defineComponent, reactive, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { AlbumPageResponse, AlbumItemProps } from '~/types/Album'
@@ -115,7 +94,7 @@ export default defineComponent({
       ))
 
       pageConfig.sort = value
-      
+
       clearfyAlbumList()
       fetchAlbums()
     }
@@ -165,5 +144,4 @@ export default defineComponent({
     }
   }
 })
-
 </script>

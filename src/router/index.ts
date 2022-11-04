@@ -21,6 +21,26 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
+    path: '/toy',
+    name: 'TOY',
+    component: () => import(/* webpackChunkName: 'albums' */ '~/pages/toy/index.vue'),
+    children: [
+      {
+        path: '/toy/:genre',
+        name: 'TOYGenre',
+        component: () => import(/* webpackChunkName: 'albums' */ '~/pages/toy/index.vue'),
+        children: [
+          {
+            path: '/toy/:genre/:year',
+            name: 'TOYYear',
+            component: () => import(/* webpackChunkName: 'albums' */ '~/pages/toy/index.vue')
+          }
+        ]
+      }
+    ]
+  },
+
+  {
     path: '/frames',
     name: 'Frames',
     component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/index.vue'),
