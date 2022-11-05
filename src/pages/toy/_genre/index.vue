@@ -6,7 +6,7 @@
 
     <transition name="flyUp">
       <div>
-        <div v-if="isGenreRoute">
+        <div v-if="isGenreRoute" class="wellwell">
           <ul v-if="toyGenre.isFetched" class="cardlist" key="list">
             <li v-for="year in toyGenre.data" :key="year.resource_id">
               <router-link :to="{ path: `/toy/${genre?.route}/${year.route}` }">{{ year.name }}</router-link>
@@ -70,9 +70,14 @@ export default defineComponent({
       route.name === 'TOYGenre'
     ))
 
-    const yearProps = computed(() => toyGenre.data.find((year) => (
-      year.route === route.params?.year
-    )))
+    const yearProps = computed(() => {
+      return {
+        ...toyGenre.data.find((year) => (
+          year.route === route.params?.year
+        )),
+        genre: props.genre?.name
+      }
+    })
 
     watchEffect(() => {
       toyGenre.isFetched = false
@@ -87,3 +92,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+.wellwell {
+  padding: 0 15px;
+}
+</style>

@@ -5,8 +5,19 @@
     </transition>
 
     <transition name="flyUp">
-      <div>
-        <h1>{{ year?.name }}</h1>
+      <div v-if="toyYear.isFetched" class="album">
+        <div class="album__aside">
+          <div class="album__sidebar">
+            <CoverArt :albumCover="toyYear.data.albumCover" :isBooklet="toyYear.data.albumCoverArt?.length > 0"
+              @coverClick="fetchAlbumBooklet" />
+          </div>
+        </div>
+
+        <div class="album__content">
+          <AlbumHeading :albumHead="albumHead" @textInputHandler="descriptionHandler" />
+
+          <TrackList :tracks="toyYear.data.tracks" :albumID="toyYear.data._id" :artist="toyYear.data.artist" />
+        </div>
       </div>
     </transition>
   </section>
@@ -14,23 +25,34 @@
 
 <script lang="ts">
 import api from '~/api'
-import { PropType, defineComponent, reactive, watchEffect } from 'vue'
+import { PropType, defineComponent, reactive, watchEffect, ComputedRef, computed } from 'vue'
+import { useStore } from "vuex"
+import { key } from "~/store"
 import { TTOYEntity } from '~/types/TOY'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
+import CoverArt from "~/components/CoverArt/CoverArt.vue"
+import AlbumHeading from "~/components/AlbumHeading/AlbumHeading.vue"
+import TrackList from "~/components/TrackList/TrackList.vue"
+import { AlbumHeadProps } from '~/types/Album'
 
 export default defineComponent({
   components: {
-    AppPreloader
+    AppPreloader,
+    CoverArt,
+    AlbumHeading,
+    TrackList
   },
 
   props: {
     year: {
-      type: Object as PropType<TTOYEntity>,
-      required: false
+      type: Object as PropType<Partial<TTOYEntity & { genre: string }>>,
+      required: true
     },
   },
 
   setup(props) {
+    const store = useStore(key);
+
     const toyYear = reactive<any>({
       isFetched: false,
       data: {}
@@ -41,13 +63,65 @@ export default defineComponent({
         const response = await api.post<any[]>('/api/toy', { path: props.year?.path, dirOnly: false })
 
         if (response?.status === 200) {
-          toyYear.data = response?.data
+          toyYear.data = {
+            _id: props.year.resource_id,
+            title: `${props.year.genre} - ${props.year.name}`,
+            albumCover: response.data.find(({ name }) => name === 'cover.webp')?.file || '/img/album.webp',
+            inCollections: [],
+            artist: {
+              _id: `artist-${props.year.resource_id}`,
+              title: 'Various Artists'
+            },
+            genre: {
+              _id: `genre-${props.year.resource_id}`,
+              title: props.year.genre
+            },
+            period: {
+              _id: `period-${props.year.resource_id}`,
+              title: props.year.name
+            },
+            albumCoverArt: response.data.find(({ name }) => name === 'booklet')?.path,
+            description: '',
+            tracks: response.data.reduce((acc, next) => {
+              if (next.media_type === 'audio') {
+                acc.push({
+                  _id: next.resource_id,
+                  title: next.name.replace(/^\d+\.\s/g, ''),
+                  link: next.file,
+                  // "artist": {
+                  //     "_id": "630a97b2bb05f204d7d90a97",
+                  //     "title": "Metallica"
+                  // },
+                  // "inAlbum": {
+                  //     "_id": "630a97acf7b94ac644bd8ec0",
+                  //     "title": "...And Justice For All"
+                  // },
+                  // "inPlaylists": []
+                })
+              }
+
+              return acc
+            }, [] as any[])
+          }
           toyYear.isFetched = true
-          console.log(toyYear.data)
+          store.commit("setPlayerPlaylist", toyYear.data);
         }
       } catch (error) {
         throw error
       }
+    }
+
+    const albumHead: ComputedRef<AlbumHeadProps> = computed(() => {
+      const { title, artist, period, genre, description } = toyYear.data;
+      return { title, artist, period, genre, description };
+    });
+
+    const fetchAlbumBooklet = async () => {
+      console.log('fetch booklet')
+    }
+
+    const descriptionHandler = async () => {
+      console.log('save description')
     }
 
     watchEffect(() => {
@@ -56,8 +130,17 @@ export default defineComponent({
     })
 
     return {
-      toyYear
+      toyYear,
+      albumHead,
+      fetchAlbumBooklet,
+      descriptionHandler
     }
   }
 })
 </script>
+
+<style lang="scss">
+.tototo {
+  padding: 25px;
+}
+</style>

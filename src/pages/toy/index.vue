@@ -11,21 +11,18 @@
         </h1>
       </div>
 
-      <!-- <ul v-if="toyGenres.isFetched" class="genrelist" key="list">
-        <li v-for="genre in toyGenres.data" :key="genre.resource_id">
-          <router-link :to="{ path: `/toy/${genre.route}` }">{{ genre.name }}</router-link>
-        </li>
-      </ul> -->
       <div class="well">
-        <table v-if="toyGenres.isFetched" key="table" class="genretable">
-          <thead>
-            <tr>
-              <th v-for="genre in toyGenres.data" :key="genre.resource_id">
-                <router-link :to="{ path: `/toy/${genre.route}` }">{{ genre.name }}</router-link>
-              </th>
-            </tr>
-          </thead>
-        </table>
+        <div ref="genresRef">
+          <table key="table" class="genretable">
+            <thead>
+              <tr>
+                <th v-for="genre in toyGenres.data" :key="genre.resource_id">
+                  <router-link :to="{ path: `/toy/${genre.route}` }">{{ genre.name }}</router-link>
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
 
       <TOYGenre v-if="isGenreRoute" :genre="genreProps" :extractFields="extractFields" />
@@ -35,10 +32,11 @@
 
 <script lang="ts">
 import api from '~/api'
-import { defineComponent, reactive, computed, onMounted } from 'vue'
+import { defineComponent, reactive, computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { slugify } from '~/shared/slugify'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
+import SimpleBar from 'simplebar'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import TOYGenre from './_genre/index.vue'
 
@@ -50,14 +48,18 @@ export default defineComponent({
 
   setup() {
     const route = useRoute()
+    const genresRef = ref(null)
+    const simplebar = ref<any>(null)
 
     const toyGenres = reactive<TTOYData>({
       isFetched: false,
       data: []
     })
 
+    const folderKeys: Array<keyof TTOYFolder> = ['name', 'path', 'resource_id']
+
     const extractFields = (row: TTOYFolder) => (
-      ['name', 'path', 'resource_id']
+      folderKeys
         .reduce((acc, next) => {
           acc[next] = row[next]
           acc.route = slugify(row.name)
@@ -72,7 +74,6 @@ export default defineComponent({
         if (response?.status === 200) {
           // @ts-ignore
           toyGenres.data = response?.data.map<TTOYEntity[]>(extractFields)
-          toyGenres.data.push(...toyGenres.data)
           toyGenres.isFetched = true
         }
       } catch (error) {
@@ -90,7 +91,14 @@ export default defineComponent({
 
     onMounted(() => fetchTOYTable())
 
+    onMounted(() => {
+      if (genresRef.value) {
+        simplebar.value = new SimpleBar(genresRef.value, { autoHide: false })
+      }
+    })
+
     return {
+      genresRef,
       toyGenres,
       genreProps,
       extractFields,
@@ -103,9 +111,10 @@ export default defineComponent({
 
 <style lang="scss">
 .well {
-  width: 100%;
-  overflow: auto;
+  min-width: 100%;
+  overflow: hidden;
   position: relative;
+  padding: 0 25px;
 }
 
 .genretable {
@@ -127,18 +136,4 @@ export default defineComponent({
     }
   }
 }
-
-// .genrelist {
-//   display: flex;
-//   justify-content: space-between;
-//   padding: 25px;
-
-//   a {
-//     color: #828c9b;
-
-//     &.router-link-active {
-//       color: #f51e38;
-//     }
-//   }
-// }
 </style>

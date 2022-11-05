@@ -12,8 +12,7 @@
     <nav class="aside__nav">
       <ul class="aside__nav-list">
         <li v-for="(item, index) in navbar" :key="index" class="aside__nav-item">
-          <router-link :to="`/${item.route}`" class="aside__nav-link" @click="burgerClick"
-            >{{ item.title }}
+          <router-link :to="`/${item.route}`" class="aside__nav-link" @click="burgerClick">{{ item.title }}
           </router-link>
         </li>
       </ul>
@@ -60,7 +59,8 @@ export default defineComponent({
       navbar.push(
         ...router
           .getRoutes()
-          .filter(({ path }) => !path.includes(":id") && path !== "/")
+          // .filter(({ path }) => !path.includes(":id") && path !== "/")
+          .filter(({ path }) => ![':id', ':genre'].some((slug) => path.includes(slug)) && path !== "/")
           .map(({ name, path }) => ({ title: name, route: path.replace("/", "") }))
       );
     });

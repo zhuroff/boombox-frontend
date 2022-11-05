@@ -8,35 +8,17 @@
       <div v-if="album.isFetched" class="album">
         <div class="album__aside">
           <div class="album__sidebar">
-            <CoverArt
-              :albumCover="album.data.albumCover"
-              :isBooklet="album.data.albumCoverArt?.length > 0"
-              @coverClick="fetchAlbumBooklet"
-            />
+            <CoverArt :albumCover="album.data.albumCover" :isBooklet="album.data.albumCoverArt?.length > 0"
+              @coverClick="fetchAlbumBooklet" />
 
-            <Button
-              text="Add to collection"
-              isFullWidth
-              @onClick="callCollectionsModal"
-            />
+            <Button text="Add to collection" isFullWidth @onClick="callCollectionsModal" />
 
-            <Button
-              id="discogs"
-              text="Get Discogs"
-              isFullWidth
-              :isLoading="isDiscogsLoading"
-              :isDisabled="discogs.isFetched && discogs.results.size > 0"
-              @onClick="fetchDiscogsData"
-            />
+            <Button id="discogs" text="Get Discogs" isFullWidth :isLoading="isDiscogsLoading"
+              :isDisabled="discogs.isFetched && discogs.results.size > 0" @onClick="fetchDiscogsData" />
 
-            <FloatModal
-              v-if="collections.isActive"
-              :isFetched="collections.isFetched"
-              :isEmpty="!collections.data.length"
-              placeholder="Create new collection"
-              @createNewEntry="createNewCollection"
-              @closeFloatModal="closeCollectionsModal"
-            >
+            <FloatModal v-if="collections.isActive" :isFetched="collections.isFetched"
+              :isEmpty="!collections.data.length" placeholder="Create new collection"
+              @createNewEntry="createNewCollection" @closeFloatModal="closeCollectionsModal">
               <template v-slot:empty>
                 <div class="float-modal__empty">
                   <strong>You haven't created any collections yet</strong>
@@ -46,14 +28,8 @@
 
               <template v-slot:list>
                 <ul class="float-modal__list">
-                  <FloatModalItem
-                    v-for="item in collections.data"
-                    :key="item.id"
-                    :item="item"
-                    :itemID="album.data._id"
-                    :isChecked="isCollectionItemChecked(item)"
-                    @checkFloatModalItem="addOrRemoveFromCollection"
-                  />
+                  <FloatModalItem v-for="item in collections.data" :key="item.id" :item="item" :itemID="album.data._id"
+                    :isChecked="isCollectionItemChecked(item)" @checkFloatModalItem="addOrRemoveFromCollection" />
                 </ul>
               </template>
             </FloatModal>
@@ -61,40 +37,24 @@
         </div>
 
         <div class="album__content">
-          <AlbumHeading
-            :albumHead="albumHead"
-            @textInputHandler="descriptionHandler"
-          />
+          <AlbumHeading :albumHead="albumHead" @textInputHandler="descriptionHandler" />
 
-          <TrackList
-            :tracks="album.data.tracks"
-            :albumID="album.data._id"
-            :artist="album.data.artist"
-          />
+          <TrackList :tracks="album.data.tracks" :albumID="album.data._id" :artist="album.data.artist" />
         </div>
       </div>
     </transition>
 
     <transition name="fade">
-      <Modal
-        v-if="isBookletModalActive"
-        :isModalActive="isBookletModalActive"
-        @closeModal="closeBookletModal"
-      >
-        <AppPreloader
-          v-if="!Array.isArray(album.data.albumCoverArt)"
-          mode="dark"
-        />
+      <Modal v-if="isBookletModalActive" :isModalActive="isBookletModalActive" @closeModal="closeBookletModal">
+        <AppPreloader v-if="!Array.isArray(album.data.albumCoverArt)" mode="dark" />
 
         <Slider v-else :data="album.data.albumCoverArt" />
       </Modal>
     </transition>
 
     <transition name="fade">
-      <DiscogsTable
-        v-if="discogs.isFetched && discogs.results.size > 0"
-        :table="Array.from(discogs.results).map((item) => item[1])"
-      />
+      <DiscogsTable v-if="discogs.isFetched && discogs.results.size > 0"
+        :table="Array.from(discogs.results).map((item) => item[1])" />
     </transition>
   </section>
 </template>
