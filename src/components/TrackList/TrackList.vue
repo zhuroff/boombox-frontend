@@ -2,7 +2,8 @@
   <div class="tracklist">
     <VueDraggableNext handle=".--drag" v-bind="dragOptions" @end="orderChanged">
       <transition-group>
-        <TrackItem v-for="(track, index) in tracks" :key="track._id" :track="track" :index="index" />
+        <TrackItem v-for="(track, index) in tracks" :key="track._id" :track="track" :isTOY="isTOY" :index="index"
+          @saveToyInfo="saveToyInfo" />
       </transition-group>
     </VueDraggableNext>
   </div>
@@ -40,6 +41,12 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+
+    isTOY: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 
@@ -65,9 +72,12 @@ export default defineComponent({
       }
     }
 
+    const saveToyInfo = (payload: any) => emit('saveToyInfo', payload)
+
     return {
       dragOptions,
-      orderChanged
+      orderChanged,
+      saveToyInfo
     }
   }
 })

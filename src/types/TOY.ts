@@ -2,6 +2,8 @@ export type TTOYFolder = {
   name: string;
   path: string;
   resource_id: string;
+  type?: string;
+  file?: string
 }
 
 export type TTOYEntity = TTOYFolder & {

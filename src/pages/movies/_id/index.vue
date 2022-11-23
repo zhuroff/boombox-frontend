@@ -7,7 +7,7 @@
     <transition-group name="flyUp">
       <div v-if="moviePage.isFetched">
         <h1>{{ moviePage.data.name }} {{ moviePage.data.mime_type }}</h1>
-        <VuePlyr>
+        <!-- <VuePlyr>
           <video
             controls
             crossorigin
@@ -15,7 +15,7 @@
             :src="moviePage.data.file"
             :type="moviePage.data.mime_type"
           />
-        </VuePlyr>
+        </VuePlyr> -->
       </div>
     </transition-group>
   </section>

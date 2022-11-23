@@ -8,6 +8,8 @@
   position: relative;
   z-index: 1000;
   min-height: calc(100vh - #{$playerHeight});
+  display: flex;
+  flex-direction: column;
 
   &__heading {
     display: flex;

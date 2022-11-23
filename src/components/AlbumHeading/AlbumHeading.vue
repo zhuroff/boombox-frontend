@@ -1,39 +1,22 @@
-<template>  
+<template>
   <div class="album__heading">
     <h1 class="album__name">{{ albumHead.title }}</h1>
 
-    <div
-      class="album__data"
-      v-if="albumHead.artist"
-    >
-      <router-link
-        :to="`/artists/${albumHead.artist._id}`"
-        class="album__data-link"
-      >
+    <div class="album__data" v-if="albumHead.artist">
+      <router-link :to="`/artists/${albumHead.artist._id}`" class="album__data-link" :disabled="isTOY">
         {{ albumHead.artist.title }}
       </router-link>,
 
-      <router-link
-        :to="`/periods/${albumHead.period._id}`"
-        class="album__data-link"
-      >
+      <router-link :to="`/periods/${albumHead.period._id}`" class="album__data-link" :disabled="isTOY">
         {{ albumHead.period.title }}
       </router-link> /
 
-      <router-link
-        :to="`/genres/${albumHead.genre._id}`"
-        class="album__data-link"
-      >
+      <router-link :to="`/genres/${albumHead.genre._id}`" class="album__data-link" :disabled="isTOY">
         {{ albumHead.genre.title }}
       </router-link>
 
-      <Textarea
-        :rows="2"
-        :content="albumDescription"
-        classname="album__description"
-        placeholder="Type some description..."
-        @setTextareaValue="textInputHandler"
-      />
+      <Textarea :rows="2" :content="albumDescription" classname="album__description"
+        placeholder="Type some description..." @setTextareaValue="textInputHandler" />
     </div>
   </div>
 </template>
@@ -56,6 +39,11 @@ export default defineComponent({
     albumHead: {
       type: Object as PropType<AlbumHeadProps>,
       required: true
+    },
+    isTOY: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 

@@ -19,7 +19,7 @@ module.exports = {
     'no-trailing-spaces': ['error', { ignoreComments: true, skipBlankLines: true }],
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'arrow-body-style': [2, 'as-needed'],
-    'max-len': ['error', { code: 150 }],
+    'max-len': ['error', { code: 120 }],
     'no-use-before-define': ['error', { functions: false }]
   }
 }

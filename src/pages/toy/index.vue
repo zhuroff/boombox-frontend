@@ -4,29 +4,17 @@
       <AppPreloader v-if="!toyGenres.isFetched" mode="light" />
     </transition>
 
-    <transition-group name="flyUp">
-      <div class="section__heading" key="heading">
-        <h1 class="section__title">
-          Tracks of the Years
-        </h1>
-      </div>
+    <div class="section__heading" key="heading">
+      <h1 class="section__title">
+        Tracks of the Years
+      </h1>
+    </div>
 
-      <div class="well">
-        <div ref="genresRef">
-          <table key="table" class="genretable">
-            <thead>
-              <tr>
-                <th v-for="genre in toyGenres.data" :key="genre.resource_id">
-                  <router-link :to="{ path: `/toy/${genre.route}` }">{{ genre.name }}</router-link>
-                </th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
+    <ul :class="[{ '--small': isGenreRoute }, 'toylist']">
+      <TOYGenreCard v-for="genre in toyGenres.data" :key="genre.resource_id" :content="genre" />
+    </ul>
 
-      <TOYGenre v-if="isGenreRoute" :genre="genreProps" :extractFields="extractFields" />
-    </transition-group>
+    <TOYGenre v-if="isGenreRoute" :genre="genreProps" :folderKeys="folderKeys" />
   </section>
 </template>
 
@@ -38,12 +26,14 @@ import { slugify } from '~/shared/slugify'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
 import SimpleBar from 'simplebar'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
+import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
 import TOYGenre from './_genre/index.vue'
 
 export default defineComponent({
   components: {
     AppPreloader,
-    TOYGenre
+    TOYGenre,
+    TOYGenreCard
   },
 
   setup() {
@@ -56,24 +46,39 @@ export default defineComponent({
       data: []
     })
 
-    const folderKeys: Array<keyof TTOYFolder> = ['name', 'path', 'resource_id']
+    const folderKeys: Array<keyof TTOYFolder> = ['name', 'path', 'resource_id', 'file']
 
-    const extractFields = (row: TTOYFolder) => (
-      folderKeys
-        .reduce((acc, next) => {
-          acc[next] = row[next]
-          acc.route = slugify(row.name)
+    const buildTOYContent = (data: TTOYFolder[]) => {
+      const folders: TTOYFolder[] = []
+      const images: Partial<TTOYFolder>[] = []
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].type === 'dir') {
+          folders.push(data[i])
+        } else {
+          images.push(data[i])
+        }
+      }
+
+      // @ts-ignore
+      toyGenres.data = folders.map<TTOYEntity[]>((folder) => {
+        const t = folderKeys.reduce((acc, next) => {
+          // @ts-ignore
+          acc[next] = folder[next]
+          acc.route = slugify(folder.name)
+          acc.file = images.find(({ name }) => name?.replace(/\.[^.]+$/, "") === folder.name)?.file
           return acc
         }, {} as TTOYEntity)
-    )
+        return t
+      })
+    }
 
     const fetchTOYTable = async () => {
       try {
         const response = await api.get<TTOYFolder[]>('/api/toy')
 
         if (response?.status === 200) {
-          // @ts-ignore
-          toyGenres.data = response?.data.map<TTOYEntity[]>(extractFields)
+          buildTOYContent(response.data)
           toyGenres.isFetched = true
         }
       } catch (error) {
@@ -101,8 +106,8 @@ export default defineComponent({
       genresRef,
       toyGenres,
       genreProps,
-      extractFields,
-      isGenreRoute
+      isGenreRoute,
+      folderKeys
     }
   }
 })
@@ -110,30 +115,26 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.well {
-  min-width: 100%;
-  overflow: hidden;
-  position: relative;
-  padding: 0 25px;
-}
+@import '~/scss/variables';
 
-.genretable {
-  border-collapse: collapse;
-  table-layout: fixed;
-  min-width: 100%;
+.toylist {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 25px;
+  flex: 1 1 0;
 
-  th {
-    text-align: center;
-    padding: 25px 10px;
+  &.--small {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    flex: initial;
+    padding-bottom: 12px;
+  }
 
-    a {
-      color: #828c9b;
-      white-space: nowrap;
-
-      &.router-link-active {
-        color: #f51e38;
-      }
-    }
+  &.--inner {
+    padding: 12px 0 0;
+    margin: 0 25px;
+    border-top: 1px solid $pale;
   }
 }
 </style>

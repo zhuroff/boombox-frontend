@@ -1,21 +1,14 @@
 <template>
   <div class="table">
     <div class="table__heading">
-      <InputCheck
-        type="checkbox"
-        label="Official only"
-        :isChecked="isOfficialsOnly"
-        @checkInputChange="switchOfficials"
-      />
+      <InputCheck type="checkbox" label="Official only" :isChecked="isOfficialsOnly"
+        @checkInputChange="switchOfficials" />
 
-      <Dropdown
-        :options="Array.from(discogsFormats.values())"
-        :triggerText="currentFormat"
-        @chooseItem="setFormatFilter"
-      />
+      <Dropdown :options="Array.from(discogsFormats.values())" :triggerText="currentFormat"
+        @chooseItem="setFormatFilter" />
     </div>
 
-    <OTable
+    <!-- <OTable
       :data="filteredTable"
       :custom-detail-row="true"
       :show-detail-icon="true"
@@ -190,7 +183,7 @@
           </td>
         </tr>
       </template>
-    </OTable>
+    </OTable> -->
   </div>
 </template>
 
@@ -321,7 +314,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 .o-table {
 
   &__details {
@@ -340,5 +332,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

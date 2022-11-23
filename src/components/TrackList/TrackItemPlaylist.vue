@@ -1,42 +1,27 @@
 <template>
-  
-<div class="tracklist__row_cell --pointer --fix">
-  <button
-    class="tracklist__row_action"
-    @click="callPlaylistsModal"
-  >
-    <Sprite name="plus" />
-  </button>
 
-  <FloatModal
-    v-if="playlists.isActive"
-    :isFetched="playlists.isFetched"
-    :isEmpty="!playlists.data.length"
-    placeholder="Create new playlist"
-    @createNewEntry="createNewPlaylist"
-    @closeFloatModal="closePlaylistModal"
-  >
-    <template v-slot:empty>
-      <div class="float-modal__empty">
-        <strong>You haven't created any playlists yet</strong>
-        <span>To create a playlist, use the form below</span>
-      </div>
-    </template>
+  <div class="tracklist__row_cell --pointer --fix">
+    <button class="tracklist__row_action" @click="callPlaylistsModal">
+      <Sprite name="plus" />
+    </button>
 
-    <template v-slot:list>
-      <ul class="float-modal__list">
-        <FloatModalItem
-          v-for="item in playlists.data"
-          :key="item.id"
-          :item="item"
-          :itemID="trackID"
-          :isChecked="isItemChecked(item)"
-          @checkFloatModalItem="playlistItemAction"
-        />
-      </ul>
-    </template>
-  </FloatModal>
-</div>
+    <FloatModal v-if="playlists.isActive" :isFetched="playlists.isFetched" :isEmpty="!playlists.data.length"
+      placeholder="Create new playlist" @createNewEntry="createNewPlaylist" @closeFloatModal="closePlaylistModal">
+      <template v-slot:empty>
+        <div class="float-modal__empty">
+          <strong>You haven't created any playlists yet</strong>
+          <span>To create a playlist, use the form below</span>
+        </div>
+      </template>
+
+      <template v-slot:list>
+        <ul class="float-modal__list">
+          <FloatModalItem v-for="item in playlists.data" :key="item._id" :item="item" :itemID="trackID"
+            :isChecked="isItemChecked(item)" @checkFloatModalItem="playlistItemAction" />
+        </ul>
+      </template>
+    </FloatModal>
+  </div>
 
 </template>
 
@@ -123,7 +108,7 @@ export default defineComponent({
             message: response.data.message,
             type: 'success'
           })
-          
+
           fetchPlaylists()
         }
       } catch (error) {

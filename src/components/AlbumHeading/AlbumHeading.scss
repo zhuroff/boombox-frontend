@@ -42,6 +42,11 @@
         color: $dark;
         transition: color 0.2s ease;
       }
+
+      &[disabled="true"] {
+        pointer-events: none;
+        cursor: default;
+      }
     }
   }
 

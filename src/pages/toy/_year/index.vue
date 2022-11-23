@@ -4,22 +4,19 @@
       <AppPreloader v-if="!toyYear.isFetched" mode="light" />
     </transition>
 
-    <transition name="flyUp">
-      <div v-if="toyYear.isFetched" class="album">
-        <div class="album__aside">
-          <div class="album__sidebar">
-            <CoverArt :albumCover="toyYear.data.albumCover" :isBooklet="toyYear.data.albumCoverArt?.length > 0"
-              @coverClick="fetchAlbumBooklet" />
-          </div>
-        </div>
-
-        <div class="album__content">
-          <AlbumHeading :albumHead="albumHead" @textInputHandler="descriptionHandler" />
-
-          <TrackList :tracks="toyYear.data.tracks" :albumID="toyYear.data._id" :artist="toyYear.data.artist" />
+    <div v-if="toyYear.isFetched" class="album">
+      <div class="album__aside">
+        <div class="album__sidebar">
+          <CoverArt :albumCover="toyYear.data.albumCover" :isBooklet="toyYear.data.albumCoverArt?.length > 0"
+            @coverClick="fetchAlbumBooklet" />
         </div>
       </div>
-    </transition>
+
+      <div class="album__content">
+        <AlbumHeading :albumHead="albumHead" @textInputHandler="descriptionHandler" :isTOY="true" />
+        <TrackList :tracks="toyYear.data.tracks" :albumID="toyYear.data._id" :isTOY="true" @saveToyInfo="saveToyInfo" />
+      </div>
+    </div>
   </section>
 </template>
 
@@ -47,7 +44,7 @@ export default defineComponent({
     year: {
       type: Object as PropType<Partial<TTOYEntity & { genre: string }>>,
       required: true
-    },
+    }
   },
 
   setup(props) {
@@ -86,7 +83,7 @@ export default defineComponent({
               if (next.media_type === 'audio') {
                 acc.push({
                   _id: next.resource_id,
-                  title: next.name.replace(/^\d+\.\s/g, ''),
+                  title: next.name.replace(/^\d+\.\s/g, '').replace(/\.[^.]+$/, ""),
                   link: next.file,
                   // "artist": {
                   //     "_id": "630a97b2bb05f204d7d90a97",
@@ -106,9 +103,16 @@ export default defineComponent({
           toyYear.isFetched = true
           store.commit("setPlayerPlaylist", toyYear.data);
         }
+
+        fetchDBContent()
       } catch (error) {
         throw error
       }
+    }
+
+    const fetchDBContent = async () => {
+      const response = await api.get(`/api/toy/${props.year.resource_id?.replace(/[^a-z0-9]+/g, '')}`)
+      console.log(response?.data)
     }
 
     const albumHead: ComputedRef<AlbumHeadProps> = computed(() => {
@@ -124,6 +128,11 @@ export default defineComponent({
       console.log('save description')
     }
 
+    const saveToyInfo = (payload: any) => {
+      console.log(props.year)
+      console.log(payload)
+    }
+
     watchEffect(() => {
       toyYear.isFetched = false
       fetchYearContent()
@@ -133,7 +142,8 @@ export default defineComponent({
       toyYear,
       albumHead,
       fetchAlbumBooklet,
-      descriptionHandler
+      descriptionHandler,
+      saveToyInfo
     }
   }
 })

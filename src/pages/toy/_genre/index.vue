@@ -1,22 +1,21 @@
 <template>
-  <section class="section">
+  <div class="toycontent">
     <transition name="fade">
       <AppPreloader v-if="!toyGenre.isFetched" mode="light" />
     </transition>
 
-    <transition name="flyUp">
-      <div>
-        <div v-if="isGenreRoute" class="wellwell">
-          <ul v-if="toyGenre.isFetched" class="cardlist" key="list">
-            <li v-for="year in toyGenre.data" :key="year.resource_id">
-              <router-link :to="{ path: `/toy/${genre?.route}/${year.route}` }">{{ year.name }}</router-link>
-            </li>
-          </ul>
-        </div>
-        <TOYYear v-if="!isGenreRoute && toyGenre.isFetched" :year="yearProps" />
+    <div>
+      <div v-if="isGenreRoute">
+        <ul v-if="toyGenre.isFetched" class="toylist --small --inner">
+          <li v-for="year in toyGenre.data" :key="year.resource_id" class="toylist__item --light">
+            <router-link :to="{ path: `/toy/${genre?.route}/${year.route}` }" class="toylist__year">{{ year.name }}
+            </router-link>
+          </li>
+        </ul>
       </div>
-    </transition>
-  </section>
+      <TOYYear v-if="!isGenreRoute && toyGenre.isFetched" :year="yearProps" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,6 +23,7 @@ import api from '~/api'
 import { PropType, defineComponent, reactive, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
+import { slugify } from '~/shared/slugify'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import TOYYear from '../_year/index.vue'
 
@@ -38,9 +38,8 @@ export default defineComponent({
       type: Object as PropType<TTOYEntity>,
       required: false
     },
-
-    extractFields: {
-      type: Function as PropType<(row: TTOYFolder) => TTOYEntity>,
+    folderKeys: {
+      type: Array as PropType<Array<keyof TTOYFolder>>,
       required: true
     }
   },
@@ -53,12 +52,24 @@ export default defineComponent({
       data: []
     })
 
+    const buildTOYYears = (data: TTOYFolder[]) => {
+      // @ts-ignore
+      toyGenre.data = data.map<TTOYEntity[]>((folder) => (
+        props.folderKeys.reduce((acc, next) => {
+          // @ts-ignore
+          acc[next] = folder[next]
+          acc.route = slugify(folder.name)
+          return acc
+        }, {} as TTOYEntity)
+      ))
+    }
+
     const fetchGenreYears = async () => {
       try {
         const response = await api.post<any[]>('/api/toy', { path: props.genre?.path })
 
         if (response?.status === 200) {
-          toyGenre.data = response?.data.map(props.extractFields)
+          buildTOYYears(response.data)
           toyGenre.isFetched = true
         }
       } catch (error) {
@@ -94,7 +105,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.wellwell {
-  padding: 0 15px;
+@import '~/scss/variables';
+
+.toylist {
+
+  &__year {
+    padding: 10px;
+    font-size: 0.875rem;
+    display: block;
+    text-align: center;
+    color: $black;
+  }
 }
 </style>
