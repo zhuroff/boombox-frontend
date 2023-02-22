@@ -14,19 +14,22 @@ $transDark: rgba(15, 30, 54, 0.9);
 $transLight: rgba(255, 255, 255, 0.9);
 
 $containerWidth: 1198px;
-$asideWidth: 170px;
+$asideWidth: 250px;
 $asideWidthMobile: 110px;
 $albumAsideWidth: 230px;
 $playerHeight: 62px;
 
-$animation: cubic-bezier(.17,.67,.35,.99);
+$animation: cubic-bezier(.17, .67, .35, .99);
 
 $breakpoints: (
   'tablet': 768px,
   'laptop': 1024px,
-  'desktop': 1198px,
+  'desktop': 1280px,
+  'desktop-md': 1536px,
+  'desktop-lg': 1780px,
+  'desktop-hg': 2048px,
   'landscape': '(orientation: landscape)'
-) !default;
+  ) !default;
 
 @mixin buttonClose {
   position: absolute;

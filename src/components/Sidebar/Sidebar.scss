@@ -5,6 +5,7 @@
   flex: none;
   background-color: $white;
   z-index: 2000;
+  background-color: $dark;
 
   @include media('<laptop') {
     position: relative;
@@ -24,7 +25,8 @@
   }
 
   @include media('>=laptop') {
-    border-right: 1px solid $border;
+    // border-right: 1px solid $border;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     position: relative;
     width: $asideWidth;
   }
@@ -70,14 +72,14 @@
   }
 
   &__nav {
-    padding: 0 25px;
 
     &-link {
       font-size: 14px;
       line-height: 3;
       font-weight: 600;
       display: block;
-      transition: color 0.2s ease;
+      padding: 0 25px;
+      transition: all 0.2s ease;
 
       @include media('<laptop') {
         text-align: right;
@@ -90,7 +92,8 @@
 
       &:hover,
       &.router-link-active {
-        transition: color 0.2s ease;
+        transition: all 0.2s ease;
+        background-color: $pale;
         color: $dark;
       }
     }

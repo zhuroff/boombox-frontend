@@ -125,7 +125,7 @@ export default defineComponent({
   flex: 1 1 0;
 
   &.--small {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0.5rem;
     flex: initial;
     padding-bottom: 12px;

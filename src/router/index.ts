@@ -6,7 +6,6 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Home',
     component: import(/* webpackChunkName: 'home' */ '~/pages/index.vue')
   },
-
   {
     path: '/albums',
     name: 'Albums',
@@ -19,7 +18,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/toy',
     name: 'TOY',
@@ -39,7 +37,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/frames',
     name: 'Frames',
@@ -52,7 +49,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/artists',
     name: 'Artists',
@@ -65,7 +61,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/genres',
     name: 'Genres',
@@ -78,7 +73,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/periods',
     name: 'Periods',
@@ -91,7 +85,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/collections',
     name: 'Collections',
@@ -104,7 +97,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/playlists',
     name: 'Playlists',
@@ -117,51 +109,21 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/youtube',
     name: 'YouTube',
     component: () => import(/* webpackChunkName: 'youtube' */ '~/pages/youtube/index.vue')
   },
-
   {
     path: '/radio',
     name: 'Radio',
     component: () => import(/* webpackChunkName: 'radio' */ '~/pages/radio/index.vue')
   },
-
-  {
-    path: '/movies',
-    name: 'Movies',
-    component: () => import(/* webpackChunkName: 'movies' */ '~/pages/movies/index.vue'),
-    children: [
-      {
-        path: '/movies/:id',
-        name: 'Movie',
-        component: () => import(/* webpackChunkName: 'movies' */ '~/pages/movies/index.vue')
-      }
-    ]
-  },
-
-  {
-    path: '/undisposed',
-    name: 'Undisposed',
-    component: () => import(/* webpackChunkName: 'undisposed' */ '~/pages/undisposed/index.vue'),
-    children: [
-      {
-        path: '/undisposed/:id',
-        name: 'Undisposed Album',
-        component: () => import(/* webpackChunkName: 'undisposed' */ '~/pages/undisposed/index.vue')
-      }
-    ]
-  },
-
   {
     path: '/backups',
     name: 'Backups',
     component: () => import(/* webpackChunkName: 'radio' */ '~/pages/backups/index.vue')
   }
-
   // {
   //   path: '/login',
   //   name: 'Login',

@@ -1,23 +1,17 @@
 <template>
 
-<div class="container">
-  <Sidebar
-    :isExpanded="isNavOpened"
-    @burgerClick="navHandler"
-  />
+  <div class="container">
+    <Sidebar :isExpanded="isNavOpened" @burgerClick="navHandler" />
 
-  <main
-    ref="main"
-    :class="[{ '--offset' : isNavOpened }, 'main']"
-  >
-    <router-view v-slot="{ Component }">
-      <component :is="Component" />
-    </router-view>
-  </main>
+    <main ref="main" :class="[{ '--offset': isNavOpened }, 'main']">
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
+    </main>
 
-  <Player />
-  <Snackbar />
-</div>
+    <Player />
+    <Snackbar />
+  </div>
 
 </template>
 
@@ -64,7 +58,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 @import 'include-media';
 
@@ -73,8 +66,6 @@ export default defineComponent({
   display: flex;
   overflow: hidden;
   position: relative;
-  max-width: $containerWidth;
-  margin: 0 auto;
 
   @include media('<laptop') {
     background-color: $accent;
@@ -143,5 +134,4 @@ export default defineComponent({
     height: calc(100vh - #{$playerHeight});
   }
 }
-
 </style>

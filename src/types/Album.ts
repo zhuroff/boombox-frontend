@@ -26,7 +26,7 @@ type AlbumPageResponse = {
 type AlbumItemProps = {
   isFetched: boolean
   data: AlbumItem[]
-  pagination: TPagination
+  pagination?: TPagination
 }
 
 type AlbumPageProps = {

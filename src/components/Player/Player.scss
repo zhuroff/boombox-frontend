@@ -4,16 +4,16 @@
 .player {
   position: fixed;
   bottom: 0;
-  width: 100vw;
   z-index: 2000;
 
   @include media('<laptop') {
     left: 0;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     display: grid;
+    width: 100vw;
 
     &.--expanded {
-      height: 100vh;      
+      height: 100vh;
       grid-template-columns: 100%;
       grid-template-rows: 73vh 27vh;
 
@@ -95,7 +95,7 @@
 
         &-artist {
           white-space: nowrap;
-          
+
           br {
             display: none;
           }
@@ -113,11 +113,10 @@
   }
 
   @include media('>=laptop') {
-    max-width: $containerWidth;
     height: $playerHeight;
     display: flex;
-    left: 50vw;
-    transform: translateX(-50%);
+    width: calc(100vw - #{$asideWidth});
+    left: $asideWidth;
   }
 
   &.--z-low {
@@ -146,7 +145,7 @@
         left: calc(50% - 140px);
         border-radius: 50%;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        background: 
+        background:
           linear-gradient(30deg, transparent 40%, rgba(42, 41, 40, .85) 40%) no-repeat 100% 0,
           linear-gradient(60deg, rgba(42, 41, 40, .85) 60%, transparent 60%) no-repeat 0 100%,
           repeating-radial-gradient(#2a2928, #2a2928 4px, #ada9a0 5px, #2a2928 6px);
@@ -203,7 +202,7 @@
   }
 
   &__right {
-    
+
     @include media('<laptop') {
       position: relative;
       z-index: 100;
@@ -517,7 +516,7 @@
     @include media('>=laptop') {
       height: 100%;
     }
-    
+
     &:hover {
       overflow: inherit;
 
