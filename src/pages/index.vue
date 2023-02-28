@@ -12,7 +12,11 @@
       </div>
 
       <div v-if="albums.isFetched" key="events">
-        CONTENT SECTION
+        <ul>
+          <li v-for="item in albums.data" :key="item._id">
+            <img :src="item.albumCover" alt="Well">
+          </li>
+        </ul>
       </div>
     </transition-group>
   </section>
@@ -22,11 +26,11 @@
 
 import { defineComponent, onMounted, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { AlbumItemProps } from '~/types/Album'
 import AlbumServices from '../services/IndexServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import Pagination from '~/components/Pagination/Pagination.vue'
-import { AlbumItemProps } from '~/types/Album'
 
 export default defineComponent({
   components: {
