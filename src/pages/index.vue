@@ -3,14 +3,12 @@
     <transition name="fade">
       <AppPreloader v-if="!albums.isFetched" mode="light" />
     </transition>
-
     <transition-group name="flyUp">
       <div class="hero" key="hero">
         <div v-if="albums.isFetched" class="hero__wrapper">
           HERO SECTION
         </div>
       </div>
-
       <div v-if="albums.isFetched" key="events">
         <ul class="masonry">
           <li v-for="album in albums.data" :key="album._id" class="masonry__item">
@@ -33,7 +31,6 @@
 <script lang="ts">
 
 import { defineComponent, onMounted, reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { AlbumItemProps } from '~/types/Album'
 import AlbumServices from '../services/IndexServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -48,9 +45,6 @@ export default defineComponent({
   },
 
   setup() {
-    const route = useRoute()
-    const router = useRouter()
-
     const albums = reactive<AlbumItemProps>({
       isFetched: false,
       data: []
@@ -65,9 +59,7 @@ export default defineComponent({
         .catch((error) => console.error(error))
     }
 
-    onMounted(() => {
-      getRandomAlbums()
-    })
+    onMounted(getRandomAlbums)
 
     return {
       albums

@@ -1,22 +1,17 @@
 <template>
-
   <div class="container">
     <Sidebar :isExpanded="isNavOpened" @burgerClick="navHandler" />
-
     <main ref="main" :class="[{ '--offset': isNavOpened }, 'main']">
       <router-view v-slot="{ Component }">
         <component :is="Component" />
       </router-view>
     </main>
-
     <Player />
     <Snackbar />
   </div>
-
 </template>
 
 <script lang="ts">
-
 import { defineComponent, onMounted, provide, ref } from 'vue'
 import SimpleBar from 'simplebar'
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
@@ -24,6 +19,7 @@ import Player from '~/components/Player/Player.vue'
 import Snackbar from '~/components/Snackbar/Snackbar.vue'
 
 export default defineComponent({
+  name: 'MainTemplate',
   components: {
     Sidebar,
     Player,
@@ -54,7 +50,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>

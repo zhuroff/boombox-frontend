@@ -20,7 +20,7 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import { useCategory } from '~/shared/categories'
+import { useCategory } from '~/hooks/useCategories'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CategoryHero from '~/components/Hero/CategoryHero.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
