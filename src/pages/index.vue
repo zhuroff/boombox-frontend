@@ -1,27 +1,18 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader v-if="!albums.isFetched" mode="light" />
+      <AppPreloader v-if="!isDataFetched" mode="light" />
     </transition>
     <transition-group name="flyUp">
-      <div class="hero" key="hero">
-        <div v-if="albums.isFetched" class="hero__wrapper">
-          HERO SECTION
-        </div>
-      </div>
-      <div v-if="albums.isFetched" key="events">
+      <div v-if="isDataFetched" key="events">
         <ul class="masonry">
-          <li v-for="album in albums.data" :key="album._id" class="masonry__item">
-            <router-link class="masonry__link" :to="{ path: `/albums/${album._id}` }">
-              <img class="masonry__image" :src="album.albumCover" :alt="album.title">
-              <div class="masonry__caption">
-                <div class="masonry__caption-heading">{{ album.title }}</div>
-                <div class="masonry__caption-description">
-                  by {{ album.artist.title }}, {{ album.period.title }}. {{ album.genre.title }}
-                </div>
-              </div>
-            </router-link>
-          </li>
+          <Card
+            v-for="card in tileList"
+            :key="card._id"
+            :card="card"
+            type="CardTile"
+            rootPath="albums"
+          />
         </ul>
       </div>
     </transition-group>
@@ -29,44 +20,58 @@
 </template>
   
 <script lang="ts">
-
-import { defineComponent, onMounted, reactive } from 'vue'
-import { AlbumItemProps } from '~/types/Album'
-import AlbumServices from '../services/IndexServices'
+import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
+import { AlbumItem, AlbumPageResponse } from '~/types/Album'
+import { CardTile, RequestConfig } from '~/types/Global'
+import DBApiService from '~/services/DBApiService'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import Pagination from '~/components/Pagination/Pagination.vue'
+import Card from '~/components/Cards/Card.vue'
 
 export default defineComponent({
   components: {
     AppPreloader,
-    CardWrapper,
-    Pagination
+    Card
   },
 
   setup() {
-    const albums = reactive<AlbumItemProps>({
-      isFetched: false,
-      data: []
+    const albums = reactive<AlbumItem[]>([])
+    const isDataFetched = ref(false)
+
+    const requestConfig = reactive<RequestConfig>({
+      page: 1,
+      limit: 11,
+      isRandom: true,
+      sort: { title: 1 }
     })
 
+    const tileList = computed<CardTile[]>(() => (
+      albums.map((album) => ({
+        _id: album._id,
+        title: album.title,
+        coverURL: `${album.albumCover}`,
+        caption: `${album.artist.title } / ${album.period.title} / ${album.genre.title}`,
+      }))
+    ))
+
+    const setAlbumsData = (docs: AlbumItem[]) => {
+      albums.push(...docs)
+      isDataFetched.value = true
+    }
+
     const getRandomAlbums = () => {
-      AlbumServices.getRandomAlbums()
-        .then((data) => {
-          albums.data = data
-          albums.isFetched = true
-        })
-        .catch((error) => console.error(error))
+      DBApiService.getEntityList<AlbumPageResponse>(requestConfig)
+        .then(({ docs }) => setAlbumsData(docs))
+        .catch(console.error)
     }
 
     onMounted(getRandomAlbums)
 
     return {
-      albums
+      tileList,
+      isDataFetched
     }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
@@ -77,7 +82,7 @@ export default defineComponent({
   display: grid;
   grid-template-columns: 50% 25% 12.5% 12.5%;
 
-  &__item {
+  .tile {
 
     &:nth-child(1) {
       grid-row: 1 / span 4;
@@ -136,73 +141,6 @@ export default defineComponent({
     &:nth-child(11) {
       grid-row: 4;
       grid-column: 4;
-    }
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  &__link {
-    position: relative;
-    overflow: hidden;
-    display: block;
-
-    &:hover {
-      .masonry__caption {
-        opacity: 1;
-        transform: translateY(0);
-        transition: all 0.5s $animation;
-
-        &-heading {
-          opacity: 1;
-          transform: translateY(0);
-          transition: all 0.75s $animation;
-        }
-
-        &-description {
-          opacity: 1;
-          transform: translateY(0);
-          transition: all 0.75s $animation;
-        }
-      }
-    }
-  }
-
-  &__caption {
-    position: absolute;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    bottom: 0;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 5% 5%;
-    opacity: 0;
-    transform: translateY(25%);
-    transition: all 0.5s $animation;
-    background: linear-gradient(to top, $dark 25%, transparent 100%);
-
-    &-heading {
-      font-weight: 600;
-      color: $white;
-      opacity: 0;
-      transform: translateY(50%);
-      transition: all 0.75s $animation;
-    }
-
-    &-description {
-      font-size: 70%;
-      color: $border;
-      opacity: 0;
-      transform: translateY(10%);
-      transition: all 0.75s $animation;
     }
   }
 }

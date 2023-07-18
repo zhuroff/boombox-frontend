@@ -1,5 +1,10 @@
 import { CategoryImagesKeys } from "./Category"
 
+type BasicEntity = {
+  _id: string;
+  title: string;
+}
+
 type TPagination = {
   totalDocs: number
   totalPages: number
@@ -44,6 +49,7 @@ type RequestConfig = {
   page: number
   sort: SortingValue,
   limit: number
+  isRandom?: true
 }
 
 type ImagePayload = {
@@ -60,6 +66,11 @@ type UploadImageResult = {
 
 type ResponseMessage = {
   message: string | number
+}
+
+export type CardTile = BasicEntity & {
+  coverURL: string
+  caption: string
 }
 
 export {
