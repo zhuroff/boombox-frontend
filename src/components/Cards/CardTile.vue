@@ -1,31 +1,25 @@
 <template>
-  <li :class="`tile ${className}`">
-    <router-link class="tile__link" :to="{ path: `/${rootPath}/${card._id}` }">
-      <img class="tile__cover" :src="card.coverURL" :alt="card.title">
-      <div class="tile__caption">
-        <div class="tile__caption-heading">{{ card.title }}</div>
-        <div class="tile__caption-description">{{ card.caption }}</div>
-      </div>
-    </router-link>
-  </li>
+  <router-link class="card-tile__link" :to="{ path: `/${rootPath}/${card._id}` }">
+    <img class="card-tile__cover" :src="card.coverURL" :alt="card.title">
+    <div class="card-tile__caption">
+      <div class="card-tile__caption-heading">{{ card.title }}</div>
+      <div class="card-tile__caption-description">{{ card.caption }}</div>
+    </div>
+  </router-link>
 </template>
 
 <script lang="ts">
 import { PropType, defineComponent } from 'vue'
-import { CardTile } from '~/types/Global';
+import { CardBasic } from '~/types/Global';
 
 export default defineComponent({
   name: 'CardTile',
   props: {
     card: {
-      type: Object as PropType<CardTile>,
+      type: Object as PropType<CardBasic>,
       required: true
     },
     rootPath: {
-      type: String,
-      required: true
-    },
-    className: {
       type: String,
       required: true
     }
@@ -37,7 +31,7 @@ export default defineComponent({
 @import '~/scss/variables';
 @import 'include-media';
 
-.tile {
+.card-tile {
 
   &__link {
     position: relative;
@@ -45,7 +39,7 @@ export default defineComponent({
     display: block;
 
     &:hover {
-      .tile__caption {
+      .card-tile__caption {
         opacity: 1;
         transform: translateY(0);
         transition: all 0.5s $animation;

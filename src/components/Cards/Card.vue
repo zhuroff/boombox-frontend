@@ -1,20 +1,23 @@
 <template>
-  <component
-    :is="cardComponent"
-    :card="card"
-    :rootPath="rootPath"
-    className="className"
-  />
+  <li :class="[{ '--active' : isActive }, className]">
+    <component
+      :is="cardComponent"
+      :card="card"
+      :rootPath="rootPath"
+    />
+  </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
 import CardTile from './CardTile.vue';
+import CardBox from './CardBox.vue'
 
 export default defineComponent({
   name: 'Card',
   components: {
-    CardTile
+    CardTile,
+    CardBox
   },
   props: {
     type: {
@@ -31,21 +34,16 @@ export default defineComponent({
     },
     className: {
       type: String,
+      required: true
+    },
+    isActive: {
+      type: Boolean,
       required: false,
-      default: ''
+      default: false
     }
   },
   setup({ type }) {
-    const cardComponent = computed(() => {
-      switch(type) {
-        case 'CardTile':
-          return 'CardTile'
-        default: 
-          return 'CardTile'
-      }
-    })
-
-    return { cardComponent }
+    return { cardComponent: computed(() => type) }
   }
 })
 </script>

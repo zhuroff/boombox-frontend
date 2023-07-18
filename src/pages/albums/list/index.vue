@@ -1,65 +1,75 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader v-if="!albums.isFetched" mode="light" />
+      <AppPreloader
+        v-if="!isDataFetched"
+        mode="light"
+      />
     </transition>
-
     <transition-group name="flyUp">
-      <div class="section__heading" key="heading">
-        <h1 class="section__title">
-          There are {{ albums.pagination.totalDocs }} albums in your collection
-        </h1>
-
-        <Dropdown :options="sortOptions" @chooseItem="setSorting" />
-      </div>
-
-      <ul v-if="albums.isFetched" class="cardlist" key="list">
-        <CardWrapper v-for="album in albums.data" :key="album._id">
-          <CardAlbum :album="album" />
-        </CardWrapper>
-      </ul>
-
-      <Pagination v-if="albums.isFetched && albums.pagination.totalPages > 1" :pagination="albums.pagination"
-        key="pagination" @switchPagination="switchPagination" />
+      <Header :heading="pageHeading">
+        <Dropdown
+          :options="sortOptions"
+          @chooseItem="setSorting"
+        />
+      </Header>
+      <CardList
+        v-if="isDataFetched"
+        key="list"
+      >
+        <Card
+          v-for="card in albumList"
+          :key="card._id"
+          :card="card"
+          type="CardBox"
+          rootPath="albums"
+          className="card-box"
+        />
+      </CardList>
+      <PagePagination
+        v-if="pagePagination?.totalPages > 1"
+        key="pagination"
+        :pagination="pagePagination"
+        @switchPagination="switchPagination"
+      />
     </transition-group>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted, ref } from 'vue'
+import { defineComponent, reactive, onMounted, ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { AlbumPageResponse, AlbumItemProps } from '~/types/Album'
-import { TPagination, RequestConfig, DropdownOption, SortingValue } from '~/types/Global'
+import { AlbumPageResponse, AlbumItem } from '~/types/Album'
+import { Pagination, RequestConfig, DropdownOption, SortingValue, CardBasic } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Header from '~/components/Header/Header.vue'
 import Dropdown from '~/components/Dropdown/Dropdown.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import CardAlbum from '~/components/Cards/CardAlbum.vue'
-import Pagination from '~/components/Pagination/Pagination.vue'
-import AlbumServices from '~/services/AlbumServices'
+import CardList from '~/components/CardList/CardList.vue'
+import Card from '~/components/Cards/Card.vue'
+import PagePagination from '~/components/Pagination/Pagination.vue'
+import DBApiService from '~/services/DBApiService'
 
 export default defineComponent({
   components: {
     AppPreloader,
+    Header,
     Dropdown,
-    CardWrapper,
-    CardAlbum,
-    Pagination
+    CardList,
+    Card,
+    PagePagination
   },
 
   setup() {
     const router = useRouter()
     const route = useRoute()
+    const isDataFetched = ref(false)
+    const albums = reactive<AlbumItem[]>([])
+    const pagePagination = ref<Pagination>(null!)
 
     const pageConfig = reactive<RequestConfig>({
       page: Number(route.query.p) || 1,
       sort: { title: 1 },
       limit: 40
-    })
-
-    const albums = reactive<AlbumItemProps>({
-      isFetched: false,
-      data: [],
-      pagination: {} as TPagination
     })
 
     let sortOptions = ref<DropdownOption<SortingValue>[]>([
@@ -88,6 +98,19 @@ export default defineComponent({
       }
     ])
 
+    const pageHeading = computed(() => (
+      `The collection contains ${pagePagination.value?.totalDocs || 0} albums`
+    ))
+
+    const albumList = computed<CardBasic[]>(() => (
+      albums.map((album) => ({
+        _id: album._id,
+        title: album.title,
+        coverURL: `${album.albumCover}`,
+        caption: `${album.artist.title }, ${album.period.title} / ${album.genre.title}`,
+      }))
+    ))
+
     const setSorting = (value: SortingValue) => {
       sortOptions.value = sortOptions.value.map((option) => (
         { ...option, isActive: JSON.stringify(option.value) === JSON.stringify(value) }
@@ -95,13 +118,13 @@ export default defineComponent({
 
       pageConfig.sort = value
 
-      clearfyAlbumList()
+      cleanPageData()
       fetchAlbums()
     }
 
-    const clearfyAlbumList = () => {
-      albums.isFetched = false
-      albums.data = []
+    const cleanPageData = () => {
+      albums.length = 0
+      isDataFetched.value = false
     }
 
     const changeRoutePage = (value: number) => {
@@ -111,21 +134,19 @@ export default defineComponent({
     const switchPagination = (value: number) => {
       pageConfig.page = value
 
-      clearfyAlbumList()
+      cleanPageData()
       changeRoutePage(value)
       fetchAlbums()
     }
 
-    const setFetchedData = (data: AlbumPageResponse) => {
-      albums.pagination = data.pagination
-      albums.data = data.docs
-      albums.isFetched = true
-    }
-
     const fetchAlbums = () => {
-      AlbumServices.list(pageConfig)
-        .then((data) => setFetchedData(data))
-        .catch((ignore) => ignore)
+      DBApiService.getEntityList<AlbumPageResponse>(pageConfig)
+        .then(({ docs, pagination }) => {
+          albums.push(...docs)
+          pagePagination.value = pagination
+          isDataFetched.value = true
+        })
+        .catch(console.error)
     }
 
     onMounted(() => {
@@ -137,7 +158,10 @@ export default defineComponent({
     })
 
     return {
-      albums,
+      pageHeading,
+      albumList,
+      pagePagination,
+      isDataFetched,
       sortOptions,
       setSorting,
       switchPagination

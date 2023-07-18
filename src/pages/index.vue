@@ -12,6 +12,7 @@
             :card="card"
             type="CardTile"
             rootPath="albums"
+            className="card-tile"
           />
         </ul>
       </div>
@@ -22,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
 import { AlbumItem, AlbumPageResponse } from '~/types/Album'
-import { CardTile, RequestConfig } from '~/types/Global'
+import { CardBasic, RequestConfig } from '~/types/Global'
 import DBApiService from '~/services/DBApiService'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Card from '~/components/Cards/Card.vue'
@@ -44,7 +45,7 @@ export default defineComponent({
       sort: { title: 1 }
     })
 
-    const tileList = computed<CardTile[]>(() => (
+    const tileList = computed<CardBasic[]>(() => (
       albums.map((album) => ({
         _id: album._id,
         title: album.title,
@@ -53,14 +54,12 @@ export default defineComponent({
       }))
     ))
 
-    const setAlbumsData = (docs: AlbumItem[]) => {
-      albums.push(...docs)
-      isDataFetched.value = true
-    }
-
     const getRandomAlbums = () => {
       DBApiService.getEntityList<AlbumPageResponse>(requestConfig)
-        .then(({ docs }) => setAlbumsData(docs))
+        .then(({ docs }) => {
+          albums.push(...docs)
+          isDataFetched.value = true
+        })
         .catch(console.error)
     }
 
@@ -82,7 +81,7 @@ export default defineComponent({
   display: grid;
   grid-template-columns: 50% 25% 12.5% 12.5%;
 
-  .tile {
+  .card-tile {
 
     &:nth-child(1) {
       grid-row: 1 / span 4;

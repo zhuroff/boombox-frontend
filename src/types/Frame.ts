@@ -1,5 +1,5 @@
 import { CategoryBasic } from '~/types/Category'
-import { TPagination } from './Global'
+import { Pagination } from './Global'
 
 type FramePayload = {
   title: string
@@ -15,7 +15,7 @@ type FrameAlbum = FramePayload & {
 
 type FrameAlbumResponse = {
   docs: FrameAlbum[]
-  pagination: TPagination
+  pagination: Pagination
 }
 
 export {

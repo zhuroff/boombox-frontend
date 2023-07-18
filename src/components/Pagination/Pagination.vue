@@ -36,12 +36,12 @@
 <script lang="ts">
 
 import { defineComponent, computed, PropType } from 'vue'
-import { TPagination } from '~/types/Global'
+import { Pagination } from '~/types/Global'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import './Pagination.scss'
 
 export default defineComponent({
-  name: 'Pagination',
+  name: 'PagePagination',
 
   components: {
     Sprite
@@ -49,7 +49,7 @@ export default defineComponent({
 
   props: {
     pagination: {
-      type: Object as PropType<TPagination>,
+      type: Object as PropType<Pagination>,
       required: true
     },
 

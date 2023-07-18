@@ -1,5 +1,5 @@
 import { CategoryBasic } from './Category'
-import { TPagination } from './Global'
+import { Pagination } from './Global'
 import { Track } from './Track'
 
 type AlbumItem = {
@@ -20,13 +20,13 @@ type AlbumPage = AlbumItem & {
 
 type AlbumPageResponse = {
   docs: AlbumItem[]
-  pagination: TPagination
+  pagination: Pagination
 }
 
 type AlbumItemProps = {
   isFetched: boolean
   data: AlbumItem[]
-  pagination?: TPagination
+  pagination?: Pagination
 }
 
 type AlbumPageProps = {

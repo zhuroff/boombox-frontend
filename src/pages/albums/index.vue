@@ -7,7 +7,7 @@
 import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import AlbumsList from './list/index.vue'
-import AlbumPage from './_id/index.vue'
+import AlbumPage from './item/index.vue'
 
 export default defineComponent({
   components: {

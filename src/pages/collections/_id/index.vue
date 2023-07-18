@@ -24,13 +24,13 @@
         v-bind="dragOptions"
         @end="orderChanged"
       >
-        <CardWrapper
+        <!-- <CardWrapper
           v-for="album in collection.data.albums"
           :key="album._id"
           draggable
         >
           <CardAlbum :album="album.album" />
-        </CardWrapper>
+        </CardWrapper> -->
       </VueDraggableNext>
     </transition-group>
   </section>
@@ -48,16 +48,16 @@ import { VueDraggableNext } from 'vue-draggable-next'
 import CollectionServices from '~/services/CollectionServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CategoryHero from '~/components/Hero/CategoryHero.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import CardAlbum from '~/components/Cards/CardAlbum.vue'
+// import CardWrapper from '~/components/Cards/CardWrapper.vue'
+// import CardAlbum from '~/components/Cards/CardAlbum.vue'
 
 export default defineComponent({
   components: {
     AppPreloader,
     VueDraggableNext,
     CategoryHero,
-    CardWrapper,
-    CardAlbum
+    // CardWrapper,
+    // CardAlbum
   },
 
   setup() {

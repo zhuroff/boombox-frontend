@@ -5,7 +5,7 @@ type BasicEntity = {
   title: string;
 }
 
-type TPagination = {
+type Pagination = {
   totalDocs: number
   totalPages: number
   page: number
@@ -68,13 +68,13 @@ type ResponseMessage = {
   message: string | number
 }
 
-export type CardTile = BasicEntity & {
+export type CardBasic = BasicEntity & {
   coverURL: string
   caption: string
 }
 
 export {
-  TPagination,
+  Pagination,
   DropdownOption,
   SortingValue,
   DraggableEvent,

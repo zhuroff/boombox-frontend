@@ -35,7 +35,7 @@
         </CardWrapper>
       </ul>
 
-      <Pagination
+      <PagePagination
         key="pagination"
         v-if="albums.isFetched && albums.pagination.totalPages > 1"
         :pagination="albums.pagination"
@@ -64,7 +64,7 @@ import {
   reactive,
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { TPagination, RequestConfig } from '~/types/Global'
+import { Pagination, RequestConfig } from '~/types/Global'
 import { FrameAlbumResponse, FrameAlbum } from '~/types/Frame'
 import { CategoryKeys } from '~/types/Category'
 import { useStore } from 'vuex'
@@ -73,7 +73,7 @@ import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardFrame from '~/components/Cards/CardFrame.vue'
-import Pagination from '~/components/Pagination/Pagination.vue'
+import PagePagination from '~/components/Pagination/Pagination.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import FrameForm from '~/components/Frame/FrameForm.vue'
 import FrameServices from '~/services/FrameServices'
@@ -84,7 +84,7 @@ export default defineComponent({
     Button,
     CardWrapper,
     CardFrame,
-    Pagination,
+    PagePagination,
     Modal,
     FrameForm
   },
@@ -103,7 +103,7 @@ export default defineComponent({
     const albums = reactive({
       isFetched: false,
       data: [] as FrameAlbum[],
-      pagination: {} as TPagination
+      pagination: {} as Pagination
     })
 
     const isCreatingFrameModalActive = ref(false)

@@ -1,7 +1,7 @@
 import api from '~/api'
 import { reactive, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { TPagination, UploadImageResult } from '~/types/Global'
+import { Pagination, UploadImageResult } from '~/types/Global'
 import { CategoryItem, CategoryPage } from '~/types/Category'
 
 const useCategories = (apiQuery: string) => {
@@ -17,7 +17,7 @@ const useCategories = (apiQuery: string) => {
   const categories = reactive({
     isFetched: false,
     data: [] as CategoryItem[],
-    pagination: {} as TPagination
+    pagination: {} as Pagination
   })
 
   const changeRoutePage = (value: number) => {
@@ -37,7 +37,7 @@ const useCategories = (apiQuery: string) => {
     fetchCategoryList()
   }
 
-  const setFetchedData = (data: { docs: CategoryItem[], pagination: TPagination }) => {
+  const setFetchedData = (data: { docs: CategoryItem[], pagination: Pagination }) => {
     categories.isFetched = true
 
     if (data) {
