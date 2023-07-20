@@ -141,7 +141,7 @@ export default defineComponent({
 
     const fetchAlbums = () => {
       DBApiService.getEntityList<AlbumPageResponse>(pageConfig)
-        .then(({ docs, pagination }) => {
+        .then(async ({ docs, pagination }) => {
           albums.push(...docs)
           pagePagination.value = pagination
           isDataFetched.value = true
