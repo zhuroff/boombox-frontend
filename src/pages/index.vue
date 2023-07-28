@@ -22,8 +22,8 @@
   
 <script lang="ts">
 import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
-import { AlbumItem, AlbumPageResponse } from '~/types/Album'
-import { CardBasic, RequestConfig } from '~/types/Global'
+import { AlbumItem } from '~/types/Album'
+import { CardBasic, ListPageResponse, RequestConfig } from '~/types/Global'
 import DBApiService from '~/services/DBApiService'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Card from '~/components/Cards/Card.vue'
@@ -55,7 +55,7 @@ export default defineComponent({
     ))
 
     const getRandomAlbums = () => {
-      DBApiService.getEntityList<AlbumPageResponse>(requestConfig)
+      DBApiService.getEntityList<ListPageResponse<AlbumItem>>(requestConfig, 'albums')
         .then(({ docs }) => {
           albums.push(...docs)
           isDataFetched.value = true

@@ -1,10 +1,9 @@
 <template>
   <div class="dropdown">
     <Button
-      :text="triggerText"
+      :text="`${triggerLabel}: ${selectedOptionTitle}`"
       @click="dropdownTrigger"
     />
-
     <FloatModal
       v-if="isActive"
       :isFetched="true"
@@ -26,7 +25,7 @@
 
 <script lang="ts">
 
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import { DropdownOption } from '~/types/Global'
 import Button from '~/components/Button/Button.vue'
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
@@ -48,14 +47,14 @@ export default defineComponent({
       required: true
     },
 
-    triggerText: {
+    triggerLabel: {
       type: String,
       required: false,
-      default: 'Sort'
+      default: 'Sorting'
     }
   },
 
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const isActive = ref(false)
 
     const dropdownTrigger = () => {
@@ -67,10 +66,15 @@ export default defineComponent({
       isActive.value = false
     }
 
+    const selectedOptionTitle = computed(() => (
+      props.options.find(({ isActive }) => isActive)?.title || ''
+    ))
+
     return {
       isActive,
       dropdownTrigger,
-      chooseItem
+      chooseItem,
+      selectedOptionTitle
     }
   }
 })

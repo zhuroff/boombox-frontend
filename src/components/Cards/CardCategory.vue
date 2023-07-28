@@ -1,70 +1,58 @@
-<template>
-  
-<router-link
-  class="category__link"
-  :to="`/${categorySlug}/${category._id}`"
-  :disabled="category.preloader"
->
-  <img
-    :src="category.avatar ? host(category.avatar) : placeholder"
-    :alt="category.title"
-    class="category__cover"
+<template>  
+  <router-link
+    class="card-category__link"
+    :to="`/${rootPath}/${card._id}`"
   >
-
-  <div class="category__title">{{ category.title }}</div>
-
-  <div class="category__info">Albums: {{ category.albums }}</div>
-</router-link>
-
+    <img
+      :src="card.avatar ? host(card.avatar) : placeholderImage"
+      :alt="card.title"
+      class="card-category__cover"
+    >
+    <div class="card-category__title">{{ card.title }}</div>
+    <div class="card-category__info">Albums: {{ card.albums }}</div>
+  </router-link>
 </template>
 
 <script lang="ts">
-
 import { defineComponent, PropType } from 'vue'
 import { CategoryItem } from '~/types/Category'
 import { hostString } from '~/shared/media'
 
 export default defineComponent({
   name: 'CardCategory',
-
   props: {
-    category: {
+    card: {
       type: Object as PropType<CategoryItem>,
       required: true
     },
-
-    placeholder: {
+    placeholderImage: {
       type: String,
       required: true
     },
-
-    categorySlug: {
+    rootPath: {
       type: String,
       required: true
     }
   },
-
   setup() {
     const host = (pathname: string) => hostString(pathname)
-
     return { host }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 @import 'include-media';
 
-.category {
+.card-category {
 
   &__link {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 1rem;
 
     @include media('>=laptop') {
       padding: 0 10px;

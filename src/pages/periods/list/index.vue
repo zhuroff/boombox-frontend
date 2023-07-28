@@ -1,52 +1,65 @@
 <template>
-  <section class="section">
-    <transition name="fade">
-      <AppPreloader v-if="!categories.isFetched" mode="light" />
-    </transition>
-
-    <transition-group name="flyUp">
-      <ul v-if="categories.isFetched" class="cardlist">
-        <CardWrapper v-for="period in categories.data" :key="period.id">
-          <CardCategory :category="period" placeholder="/img/period.webp" categorySlug="periods" />
-        </CardWrapper>
-      </ul>
-
-      <PagePagination v-if="categories.isFetched && categories.pagination.totalPages > 1" :pagination="categories.pagination"
-        @switchPagination="switchPagination" />
-    </transition-group>
-  </section>
+  <ListPageTemplate
+    cardType="CardCategory"
+    rootPath="periods"
+    cardClass="card-category"
+    placeholderImage="/img/period.webp"
+    :isDataFetched="isDataFetched"
+    :pageHeading="pageHeading"
+    :dataList="entities"
+    :pagePagination="pagePagination"
+    :switchPagination="switchPagination"
+  >
+    <template v-slot:header>
+      <!-- <Dropdown
+        :options="sortingOptions"
+        @chooseItem="switchSorting"
+      /> -->
+    </template>
+  </ListPageTemplate>
 </template>
 
 <script lang="ts">
-
-import { defineComponent } from 'vue'
-import { useCategories } from '~/hooks/useCategories'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import CardCategory from '~/components/Cards/CardCategory.vue'
-import PagePagination from '~/components/Pagination/Pagination.vue'
+import { defineComponent, onMounted, computed, watch } from 'vue'
+import { CategoryItem } from '~/types/Category'
+import { useListPage } from '~/hooks/useListPage'
+import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import Dropdown from '~/components/Dropdown/Dropdown.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
-    CardWrapper,
-    CardCategory,
-    PagePagination
+    ListPageTemplate,
+    Dropdown,
   },
 
   setup() {
-    const apiQuery = '/api/periods'
-
     const {
-      categories,
-      switchPagination
-    } = useCategories(apiQuery)
+      fetchData,
+      isDataFetched,
+      entities,
+      pagePagination,
+      pageStateConfig,
+      switchPagination,
+      sortingOptions,
+      switchSorting
+    } = useListPage<CategoryItem>()
+
+    const pageHeading = computed(() => (
+      `There are ${pagePagination.value?.totalDocs || 0} periods in collection`
+    ))
+
+    watch(pageStateConfig, () => fetchData('periods'))    
+    onMounted(() => fetchData('periods'))
 
     return {
-      categories,
+      pageHeading,
+      entities,
+      pagePagination,
+      isDataFetched,
+      sortingOptions,
+      switchSorting,
       switchPagination
     }
   }
 })
-
 </script>

@@ -4,6 +4,7 @@
       :is="cardComponent"
       :card="card"
       :rootPath="rootPath"
+      :placeholderImage="placeholderImage"
     />
   </li>
 </template>
@@ -12,12 +13,14 @@
 import { defineComponent, computed, PropType } from 'vue'
 import CardTile from './CardTile.vue';
 import CardBox from './CardBox.vue'
+import CardCategory from './CardCategory.vue';
 
 export default defineComponent({
   name: 'Card',
   components: {
     CardTile,
-    CardBox
+    CardBox,
+    CardCategory
   },
   props: {
     type: {
@@ -40,6 +43,10 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    placeholderImage: {
+      type: String,
+      required: true
     }
   },
   setup({ type }) {

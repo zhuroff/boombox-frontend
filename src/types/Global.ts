@@ -1,6 +1,6 @@
 import { CategoryImagesKeys } from "./Category"
 
-type BasicEntity = {
+export type BasicEntity = {
   _id: string;
   title: string;
 }
@@ -9,6 +9,11 @@ type Pagination = {
   totalDocs: number
   totalPages: number
   page: number
+}
+
+export type ListPageResponse<T> = {
+  docs: T[],
+  pagination: Pagination
 }
 
 type DropdownOption<T> = {

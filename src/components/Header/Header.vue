@@ -1,15 +1,23 @@
 <template>
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
+    <InputText
+      type="search"
+      placeholder="Search..."
+    />
     <slot></slot>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import InputText from '~/components/Inputs/InputText.vue';
 
 export default defineComponent({
   name: 'Header',
+  components: {
+    InputText
+  },
   props: {
     heading: {
       type: String,
@@ -24,9 +32,10 @@ export default defineComponent({
 @import 'include-media';
 
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 2rem;
 
   @include media('<laptop') {
     background-color: $dark;

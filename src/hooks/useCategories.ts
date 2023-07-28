@@ -1,74 +1,8 @@
 import api from '~/api'
 import { reactive, onMounted, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { Pagination, UploadImageResult } from '~/types/Global'
-import { CategoryItem, CategoryPage } from '~/types/Category'
-
-const useCategories = (apiQuery: string) => {
-  const router = useRouter()
-  const route = useRoute()
-
-  const pageConfig = reactive({
-    page: Number(route.query.p) || 1,
-    sort: { title: 1 },
-    limit: 40
-  })
-
-  const categories = reactive({
-    isFetched: false,
-    data: [] as CategoryItem[],
-    pagination: {} as Pagination
-  })
-
-  const changeRoutePage = (value: number) => {
-    router.push({ query: { p: value } })
-  }
-
-  const clearfyCategoryList = () => {
-    categories.isFetched = false
-    categories.data = []
-  }
-
-  const switchPagination = (value: number) => {
-    pageConfig.page = value
-
-    clearfyCategoryList()
-    changeRoutePage(value)
-    fetchCategoryList()
-  }
-
-  const setFetchedData = (data: { docs: CategoryItem[], pagination: Pagination }) => {
-    categories.isFetched = true
-
-    if (data) {
-      categories.pagination = data.pagination
-      categories.data = data.docs
-    }
-  }
-
-  const fetchCategoryList = async () => {
-    try {
-      const response = await api.post(apiQuery, pageConfig)
-
-      if (response?.status === 200) {
-        setFetchedData(response?.data)
-      }
-    } catch (error) {
-      throw error
-    }
-  }
-
-  if (!route.query.p) {
-    changeRoutePage(pageConfig.page)
-  }
-
-  onMounted(() => fetchCategoryList())
-
-  return {
-    categories,
-    switchPagination
-  }
-}
+import { useRoute } from 'vue-router'
+import { UploadImageResult } from '~/types/Global'
+import { CategoryPage } from '~/types/Category'
 
 const useCategory = (apiQuery: string) => {
   const route = useRoute()
@@ -128,4 +62,4 @@ const useCategory = (apiQuery: string) => {
   }
 }
 
-export { useCategories, useCategory }
+export { useCategory }
