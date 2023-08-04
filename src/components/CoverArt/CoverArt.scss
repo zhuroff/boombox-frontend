@@ -35,6 +35,7 @@
     width: inherit;
     object-fit: cover;
     margin-bottom: 10px;
+    cursor: pointer;
 
     @include media('<laptop') {
       width: 100%;
@@ -44,10 +45,6 @@
     @include media('>=laptop') {
       height: 230px;
       border-radius: 3px;
-    }
-
-    &.--booklet {
-      cursor: pointer;
     }
 
     &_upload {

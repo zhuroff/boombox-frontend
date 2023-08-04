@@ -16,6 +16,10 @@ export type ListPageResponse<T> = {
   pagination: Pagination
 }
 
+// export type AlbumPageResponse = {
+
+// }
+
 type DropdownOption<T> = {
   title: string,
   value: T,

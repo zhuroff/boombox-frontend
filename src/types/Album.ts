@@ -12,16 +12,15 @@ type AlbumItem = {
 }
 
 type AlbumPage = AlbumItem & {
-  albumCoverArt: string | string[]
+  folderName: string
   description: string
   tracks: Track[]
-  isLoaded: boolean
 }
 
-type AlbumPageResponse = {
-  docs: AlbumItem[]
-  pagination: Pagination
-}
+// type AlbumPageResponse = {
+//   docs: AlbumItem[]
+//   pagination: Pagination
+// }
 
 type AlbumItemProps = {
   isFetched: boolean
@@ -128,7 +127,7 @@ export {
   AlbumHeadProps,
   AlbumItemProps,
   AlbumPageProps,
-  AlbumPageResponse,
+  // AlbumPageResponse,
   DiscogsPagination,
   DiscogsItem,
   DiscogsResponse,

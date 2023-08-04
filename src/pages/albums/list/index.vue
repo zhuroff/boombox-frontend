@@ -28,11 +28,11 @@ import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Dropdown from '~/components/Dropdown/Dropdown.vue'
 
 export default defineComponent({
+  name: 'AlbumsList',
   components: {
     ListPageTemplate,
     Dropdown,
   },
-
   setup() {
     const {
       fetchData,

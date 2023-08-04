@@ -3,7 +3,7 @@
 <div class="album__booklet">
   <img
     :src="albumCover || '/img/album.webp'"
-    :class="[{ '--booklet' : isBooklet }, 'album__cover']"
+    class="album__cover"
     @click="$emit('coverClick')"
   >
 
@@ -25,35 +25,25 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, ref, Ref } from 'vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import './CoverArt.scss'
 
 export default defineComponent({
   name: 'CoverArt',
-
   components: {
     Sprite
   },
-
   props: {
     albumCover: {
       type: String,
       required: false
     },
-
-    isBooklet: {
-      type: Boolean,
-      required: false
-    },
-
     uploadable: {
       type: Boolean,
       required: false,
       default: false
     },
-
     uploadSlug: {
       type: String,
       required: false

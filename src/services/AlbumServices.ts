@@ -1,10 +1,10 @@
 import api from '~/api'
-import { AlbumPageResponse, AlbumPage } from '~/types/Album'
+import { AlbumPage } from '~/types/Album'
 import { RequestConfig } from '~/types/Global'
 
 export default class AlbumServices {
   static async list(config: RequestConfig) {
-    const response = await api.post<AlbumPageResponse>('/api/albums', config)
+    const response = await api.post<any>('/api/albums', config)
 
     if (response?.status === 200) {
       return response.data

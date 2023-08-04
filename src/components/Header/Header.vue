@@ -2,6 +2,7 @@
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
     <InputText
+      v-if="!noSearch"
       type="search"
       placeholder="Search..."
     />
@@ -22,6 +23,11 @@ export default defineComponent({
     heading: {
       type: String,
       required: true
+    },
+    noSearch: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   }
 })
