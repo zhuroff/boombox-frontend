@@ -3,7 +3,6 @@
     :isDataFetched="isDataFetched"
     :album="entity"
     :getBooklet="() => fetchBooklet(`${entity.folderName}/booklet`)"
-    pageHeading="Hello!"
   ></AlbumPageTemplate>
 
   <!-- <section class="section">

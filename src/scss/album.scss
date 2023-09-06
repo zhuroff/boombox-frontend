@@ -1,12 +1,12 @@
 .album {
-  flex: 1 1 0;
-  position: relative;
+  // flex: 1 1 0;
+  // position: relative;
 
-  @include media('>=laptop') {
-    padding: 25px;
-    display: grid;
-    grid-template-columns: 230px 1fr;
-  }
+  // @include media('>=laptop') {
+  //   padding: 25px;
+  //   display: grid;
+  //   grid-template-columns: 230px 1fr;
+  // }
 
   &.--frame {
 

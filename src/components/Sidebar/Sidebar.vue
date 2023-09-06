@@ -1,19 +1,29 @@
 <template>
   <aside :class="[{ '--opened': isExpanded }, 'aside']">
-    <ButtonBurger :isActive="isExpanded" @burgerClick="burgerClick" />
-
-    <router-link class="aside__homelink" to="/" @click="burgerClick">
+    <ButtonBurger
+      :isActive="isExpanded"
+      @burgerClick="burgerClick"
+    />
+    <router-link
+      class="aside__homelink"
+      to="/"
+      @click="burgerClick"
+    >
       <Sprite name="vinyl" />
-      <span>BoomBox</span>
+      <span>MelodyMap</span>
     </router-link>
-
-    <Search />
-
     <nav class="aside__nav">
       <ul class="aside__nav-list">
-        <li v-for="(item, index) in navbar" :key="index" class="aside__nav-item">
-          <router-link :to="`/${item.route}`" class="aside__nav-link" @click="burgerClick">{{ item.title }}
-          </router-link>
+        <li
+          v-for="(item, index) in navbar"
+          :key="index"
+          class="aside__nav-item"
+        >
+          <router-link
+            :to="`/${item.route}`"
+            class="aside__nav-link"
+            @click="burgerClick"
+          >{{ item.title }}</router-link>
         </li>
       </ul>
     </nav>
@@ -25,7 +35,6 @@ import { defineComponent, onMounted, reactive, ref } from "vue";
 import router from "~/router";
 import ButtonBurger from "~/components/Button/ButtonBurger.vue";
 import Sprite from "~/components/Sprite/Sprite.vue";
-import Search from "~/components/Search/Search.vue";
 import { RouteRecordName } from "vue-router";
 import "./Sidebar.scss";
 
@@ -33,7 +42,6 @@ export default defineComponent({
   components: {
     ButtonBurger,
     Sprite,
-    Search,
   },
 
   props: {
