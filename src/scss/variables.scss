@@ -13,10 +13,12 @@ $info: #3e8ed0;
 $transDark: rgba(15, 30, 54, 0.9);
 $transLight: rgba(255, 255, 255, 0.9);
 
+$borderRadiusSM: 3px;
+
 $containerWidth: 1198px;
 $asideWidth: 250px;
 $asideWidthMobile: 110px;
-$albumAsideWidth: 230px;
+$albumAsideWidth: 500px;
 $playerHeight: 62px;
 
 $animation: cubic-bezier(.17, .67, .35, .99);
@@ -45,4 +47,10 @@ $breakpoints: (
   .icon {
     color: $white;
   }
+}
+
+@mixin serif($size, $weight) {
+  font: $size Oranienbaum, serif;
+  letter-spacing: 1px;
+  font-weight: $weight;
 }

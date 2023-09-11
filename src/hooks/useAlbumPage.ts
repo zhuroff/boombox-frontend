@@ -1,11 +1,13 @@
 import { reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { AlbumPage } from '~/types/Album'
+import { useRoute, useRouter } from 'vue-router'
+import { AlbumItem, AlbumPage } from '~/types/Album'
+import { ListPageResponse, RequestConfig } from '~/types/Global'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
 
 export const useAlbumPage = <T extends object>() => {
   const route = useRoute()
+  const router = useRouter()
   const entity = reactive<T>({} as T)
   const booklet = reactive<string[]>([])
   const isDataFetched = ref(false)
@@ -42,11 +44,31 @@ export const useAlbumPage = <T extends object>() => {
     //   .catch(console.error)
   }
 
+  const requestConfig = reactive<RequestConfig>({
+    page: 1,
+    limit: 1,
+    isRandom: true,
+    sort: { title: 1 }
+  })
+
+  const getRandomAlbum = (entityType: string) => {
+    isDataFetched.value = false
+    DBApiService.getEntityList<ListPageResponse<AlbumItem>>(requestConfig, entityType)
+      .then(({ docs }) => {
+        Object.assign(entity, docs[0])
+        console.log(route)
+        router.push({ params: { id: docs[0]._id } })
+        isDataFetched.value = true
+      })
+      .catch(console.error)
+  }
+
   return {
     fetchData,
     entity,
     isDataFetched,
     fetchBooklet,
+    getRandomAlbum,
     booklet
   }
 }

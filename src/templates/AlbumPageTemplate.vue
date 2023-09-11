@@ -15,9 +15,15 @@
               @coverClick="getBooklet"
             />
           <!-- </div> -->
-          <div class="album__info">
-            
-          </div>
+          <AlbumInfo
+            :title="album.title"
+            :artist="album.artist"
+            :genre="album.genre"
+            :period="album.period"
+            :entityType="entityType"
+            :totalCounts="totalCounts"
+            :getRandomAlbum="getRandomAlbum"
+          />
         </div>
       </div>
     </transition>
@@ -25,16 +31,18 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from 'vue'
+import { PropType, defineComponent, computed } from 'vue'
 import { AlbumPage } from '~/types/Album';
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CoverArt from '~/components/CoverArt/CoverArt.vue';
+import AlbumInfo from '~/components/AlbumInfo.vue';
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
   components: {
     AppPreloader,
-    CoverArt
+    CoverArt,
+    AlbumInfo
   },
   props: {
     isDataFetched: {
@@ -45,10 +53,27 @@ export default defineComponent({
       type: Object as PropType<AlbumPage>,
       required: true
     },
+    entityType: {
+      type: String,
+      required: true
+    },
     getBooklet: {
       type: Function as PropType<() => void>,
       required: true
+    },
+    getRandomAlbum: {
+      type: Function as PropType<() => void>,
+      required: true
     }
+  },
+  setup({ album }) {
+    const totalCounts = computed(() => (
+      `${album.tracks?.length || 0} songs, ${album.tracks?.reduce((acc, next) => (
+        acc + Number(next.duration) || 0
+      ), 0) || '0 min 0 sec'}`
+    ))
+
+    return { totalCounts }
   }
 })
 </script>
@@ -60,6 +85,17 @@ export default defineComponent({
 .album {
   flex: 1 1 0;
   position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 265px;
+    background-color: $dark;
+    left: 0;
+    top: 0;
+    z-index: -1;
+  }
 
   @include media('>=laptop') {
     padding: 25px;
@@ -78,7 +114,7 @@ export default defineComponent({
     @include media('>=laptop') {
       position: relative;
       display: grid;
-      grid-template-columns: 230px 1fr;
+      grid-template-columns: 300px 1fr;
     }
   }
 }

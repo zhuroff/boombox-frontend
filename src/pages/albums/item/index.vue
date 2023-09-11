@@ -2,7 +2,9 @@
   <AlbumPageTemplate
     :isDataFetched="isDataFetched"
     :album="entity"
+    :entityType="entityType"
     :getBooklet="() => fetchBooklet(`${entity.folderName}/booklet`)"
+    :getRandomAlbum="() => getRandomAlbum(entityType)"
   ></AlbumPageTemplate>
 
   <!-- <section class="section">
@@ -116,15 +118,20 @@ export default defineComponent({
       entity,
       isDataFetched,
       fetchBooklet,
+      getRandomAlbum,
       booklet
     } = useAlbumPage<AlbumPage>()
 
-    onMounted(() => fetchData('albums'))
+    const entityType = ref('albums')
+
+    onMounted(() => fetchData(entityType.value))
 
     return {
       isDataFetched,
       entity,
-      fetchBooklet
+      entityType,
+      fetchBooklet,
+      getRandomAlbum
     }
 
     // const route = useRoute();
