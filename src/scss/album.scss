@@ -76,24 +76,6 @@
     }
   }
 
-  &__content {
-    flex: 1 1 0;
-
-    @include media('<laptop') {
-      padding: 25px;
-      border-top-left-radius: 25px;
-      border-top-right-radius: 25px;
-      margin-top: 100vw;
-      background-color: $white;
-      position: relative;
-      z-index: 10;
-    }
-
-    @include media('>=laptop') {
-      padding-left: 25px;
-    }
-  }
-
   &__frame {
     text-align: center;
     position: relative;

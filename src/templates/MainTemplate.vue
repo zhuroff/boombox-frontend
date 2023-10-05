@@ -12,8 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, provide, ref } from 'vue'
-import SimpleBar from 'simplebar'
+import { defineComponent, ref } from 'vue'
 import Sidebar from '~/components/Sidebar/Sidebar.vue'
 import Player from '~/components/Player/Player.vue'
 import Snackbar from '~/components/Snackbar/Snackbar.vue'
@@ -29,19 +28,10 @@ export default defineComponent({
   setup() {
     const main = ref(null)
     const isNavOpened = ref(false)
-    const simplebar = ref<any>(null)
-
-    provide('simplebar', simplebar)
 
     const navHandler = () => {
       isNavOpened.value = !isNavOpened.value
     }
-
-    onMounted(() => {
-      if (main.value) {
-        simplebar.value = new SimpleBar(main.value, { autoHide: false })
-      }
-    })
 
     return {
       main,
@@ -76,6 +66,7 @@ export default defineComponent({
   position: relative;
   z-index: 1000;
   background-color: $white;
+  overflow: auto;
 
   @include media('<laptop') {
     width: 100vw;

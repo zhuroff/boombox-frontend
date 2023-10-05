@@ -70,39 +70,13 @@
 <script lang="ts">
 import {
   defineComponent,
-  onMounted,
-  ComputedRef,
-  computed,
-  reactive,
   ref,
-  Ref,
+  watch,
 } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
-import { key } from "~/store";
-import { stringEqual } from "~/shared/stringifier";
 import {
   AlbumPage,
-  AlbumPageProps,
-  AlbumHeadProps,
-  DiscogsResponse,
-  DiscogsData,
 } from "~/types/Album";
-import { CollectionListItem } from "~/types/Collection";
-import { FloatModalCheckAction } from "~/types/Global";
-import AppPreloader from "~/components/Preloader/Preloader.vue";
-import CoverArt from "~/components/CoverArt/CoverArt.vue";
-import Button from "~/components/Button/Button.vue";
-import AlbumHeading from "~/components/AlbumHeading/AlbumHeading.vue";
-import TrackList from "~/components/TrackList/TrackList.vue";
-import FloatModal from "~/components/FloatModal/FloatModal.vue";
-import FloatModalItem from "~/components/FloatModal/FloatModalItem.vue";
-import Modal from "~/components/Modal/Modal.vue";
-import Slider from "~/components/Slider/Slider.vue";
-import DiscogsTable from "~/components/Table/DiscogsTable.vue";
-import AlbumServices from "~/services/AlbumServices";
-import DiscogsServices from "~/services/DiscogsServices";
-import CollectionServices from "~/services/CollectionServices";
 
 import { useAlbumPage } from "~/hooks/useAlbumPage";
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
@@ -122,9 +96,14 @@ export default defineComponent({
       booklet
     } = useAlbumPage<AlbumPage>()
 
+    const route = useRoute()
     const entityType = ref('albums')
 
-    onMounted(() => fetchData(entityType.value))
+    watch(
+      route,
+      () => fetchData(entityType.value),
+      { immediate: true }
+    )
 
     return {
       isDataFetched,

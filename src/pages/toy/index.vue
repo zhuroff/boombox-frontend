@@ -24,7 +24,6 @@ import { defineComponent, reactive, computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { slugify } from '~/shared/slugify'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
-import SimpleBar from 'simplebar'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
 import TOYGenre from './_genre/index.vue'
@@ -39,7 +38,6 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const genresRef = ref(null)
-    const simplebar = ref<any>(null)
 
     const toyGenres = reactive<TTOYData>({
       isFetched: false,
@@ -95,12 +93,6 @@ export default defineComponent({
     ))
 
     onMounted(() => fetchTOYTable())
-
-    onMounted(() => {
-      if (genresRef.value) {
-        simplebar.value = new SimpleBar(genresRef.value, { autoHide: false })
-      }
-    })
 
     return {
       genresRef,

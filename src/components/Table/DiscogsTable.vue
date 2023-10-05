@@ -213,7 +213,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const simplebar = inject<any>('simplebar')
     const discogsTableRef = ref(null)
     const isOfficialsOnly = ref(false)
     const currentFormat = ref('All formats')
@@ -289,11 +288,6 @@ export default defineComponent({
 
     onMounted(() => {
       createFormatFilter()
-
-      setTimeout(() => {
-        // @ts-ignore
-        simplebar.value.getScrollElement().scrollTop = Number(discogsTableRef.value?.$el.offsetTop)
-      }, 1000)
     })
 
     return {

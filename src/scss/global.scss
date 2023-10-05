@@ -16,20 +16,6 @@
   }
 }
 
-.simplebar {
-
-  &-wrapper {
-    width: 100%;
-  }
-
-  &-scrollbar {
-
-    &:before {
-      background-color: $pale;
-    }
-  }
-}
-
 .hero {
   width: 100%;
   height: 300px;

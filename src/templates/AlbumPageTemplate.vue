@@ -6,15 +6,13 @@
         mode="light"
       />
     </transition>
-    <transition name="flyUp">
+    <transition name="fade">
       <div v-if="isDataFetched" class="album">
-        <div class="album__grid">
-          <!-- <div class="album__sidebar"> -->
-            <CoverArt
-              :albumCover="album.albumCover"
-              @coverClick="getBooklet"
-            />
-          <!-- </div> -->
+        <div class="album__hero">
+          <CoverArt
+            :albumCover="album.albumCover"
+            @coverClick="getBooklet"
+          />
           <AlbumInfo
             :title="album.title"
             :artist="album.artist"
@@ -25,24 +23,69 @@
             :getRandomAlbum="getRandomAlbum"
           />
         </div>
+        <div class="album__content">
+          <div class="album__main">
+            <TrackList
+              :tracks="album.tracks"
+              :albumID="album._id"
+              :artist="album.artist"
+            />
+          </div>
+          <div
+            v-if="relatedAlbums.get('artists')?.length"
+            class="album__related"
+          >
+            <div class="album__related-title">More of {{ album.artist.title }}</div>
+            <Card
+              v-for="item in relatedAlbums.get('artists')"
+              :key="item._id"
+              :card="item"
+              type="CardBox"
+              rootPath="albums"
+              className="card-box"
+              placeholderImage="/img/album.webp"
+            />
+          </div>
+          <div 
+            v-if="relatedAlbums.get('genres')?.length"
+            class="album__related"
+          >
+            <div class="album__related-title">More of {{ album.genre.title }}</div>
+            <Card
+              v-for="item in relatedAlbums.get('genres')"
+              :key="item._id"
+              :card="item"
+              type="CardBox"
+              rootPath="albums"
+              className="card-box"
+              placeholderImage="/img/album.webp"
+            />
+          </div>
+        </div>
       </div>
     </transition>
   </section>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, computed } from 'vue'
-import { AlbumPage } from '~/types/Album';
+import { PropType, defineComponent, computed, watch } from 'vue'
+import { AlbumPage } from '~/types/Album'
+import { RequestFilter } from '~/types/Global'
+import { useAlbumPage } from '~/hooks/useAlbumPage'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CoverArt from '~/components/CoverArt/CoverArt.vue';
-import AlbumInfo from '~/components/AlbumInfo.vue';
+import CoverArt from '~/components/CoverArt/CoverArt.vue'
+import AlbumInfo from '~/components/AlbumInfo.vue'
+import Card from '~/components/Cards/Card.vue'
+import TrackList from '~/components/TrackList/TrackList.vue'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
   components: {
     AppPreloader,
     CoverArt,
-    AlbumInfo
+    AlbumInfo,
+    Card,
+    TrackList
   },
   props: {
     isDataFetched: {
@@ -66,14 +109,50 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ album }) {
+  setup({ album, entityType }) {
+    const {
+      getRelatedAlbums,
+      relatedEntities
+    } = useAlbumPage<AlbumPage>()
+
     const totalCounts = computed(() => (
       `${album.tracks?.length || 0} songs, ${album.tracks?.reduce((acc, next) => (
         acc + Number(next.duration) || 0
       ), 0) || '0 min 0 sec'}`
     ))
 
-    return { totalCounts }
+    watch(
+      album,
+      (newValue) => {
+        const relatedAlbumsConfig: RequestFilter[] = [
+          {
+            from: 'artists',
+            key: 'artist._id',
+            value: newValue.artist._id,
+            excluded: {
+              _id: newValue._id
+            }
+          },
+          {
+            from: 'genres',
+            key: 'genre._id',
+            value: newValue.genre._id,
+            excluded: {
+              _id: newValue._id,
+              'artist._id': newValue.artist._id
+            }
+          }
+        ];
+
+        relatedAlbumsConfig.forEach((config) => {
+          getRelatedAlbums(config, entityType)
+        })
+      }
+    )
+
+    const relatedAlbums = computed(() => relatedEntities)
+
+    return { totalCounts, relatedAlbums }
   }
 })
 </script>
@@ -101,7 +180,7 @@ export default defineComponent({
     padding: 25px;
   }
 
-  &__grid {
+  &__hero {
 
     @include media('<laptop') {
       position: fixed;
@@ -115,6 +194,35 @@ export default defineComponent({
       position: relative;
       display: grid;
       grid-template-columns: 300px 1fr;
+    }
+  }
+
+  &__content {
+    flex: 1 1 0;
+
+    @include media('<laptop') {
+      padding: 25px;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+      margin-top: 100vw;
+      background-color: $white;
+      position: relative;
+      z-index: 10;
+    }
+
+    @include media('>=laptop') {
+      display: grid;
+      grid-template-columns: 1fr 252px 252px;
+      gap: 25px;
+    }
+  }
+
+  &__related {
+
+    &-title {
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1rem;
     }
   }
 }

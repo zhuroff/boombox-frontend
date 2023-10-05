@@ -50,6 +50,7 @@ export default defineComponent({
   position: relative;
   border-radius: 5px;
   transition: all 0.3s ease;
+  list-style: none;
 
   @include media('>=desktop') {
     margin-bottom: 15px;

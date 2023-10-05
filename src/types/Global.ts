@@ -54,11 +54,19 @@ type TSnackbar = {
   order: number
 }
 
+export type RequestFilter = {
+  from: string
+  key: string
+  value: string
+  excluded?: Record<string, string>
+}
+
 type RequestConfig = {
   page: number
-  sort: SortingValue,
+  sort: SortingValue
   limit: number
   isRandom?: true
+  filter?: RequestFilter
 }
 
 type ImagePayload = {

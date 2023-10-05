@@ -74,9 +74,9 @@
   &__nav {
 
     &-link {
-      font-size: 14px;
+      font-size: 1rem;
       line-height: 3;
-      font-weight: 600;
+      // font-weight: 600;
       display: block;
       padding: 0 25px;
       transition: all 0.2s ease;
@@ -87,13 +87,13 @@
       }
 
       @include media('>=laptop') {
-        color: $pale;
+        color: $white;
       }
 
       &:hover,
       &.router-link-active {
         transition: all 0.2s ease;
-        background-color: $pale;
+        background-color: $white;
         color: $dark;
       }
     }

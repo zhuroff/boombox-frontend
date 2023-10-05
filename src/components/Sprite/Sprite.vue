@@ -19,14 +19,6 @@
 </svg>
 
 <svg
-  v-else-if="name === 'play'"
-  viewBox="0 0 24 24"
-  class="icon play"
->
-  <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
-</svg>
-
-<svg
   v-else-if="name === 'pause'"
   viewBox="0 0 24 24"
   class="icon pause"
@@ -288,20 +280,42 @@
   <path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" />
 </svg>
 
+<component :is="IconComponent" />
+
 </template>
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import SpriteEllipsis from './SpriteEllipsis.vue'
+import SpritePlay from './SpritePlay.vue';
 
 export default defineComponent({
   name: 'Sprite',
+
+  components: {
+    SpritePlay,
+    SpriteEllipsis
+  },
 
   props: {
     name: {
       type: String,
       required: true
     }
+  },
+
+  setup({ name }) {
+    const IconsMap = new Map([
+      ['ellipsis', SpriteEllipsis],
+      ['play', SpritePlay]
+    ])
+
+    const IconComponent = computed(() => (
+      IconsMap.get(name) || null
+    ))
+
+    return { IconComponent }
   }
 })
 

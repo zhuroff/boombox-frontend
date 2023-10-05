@@ -32,6 +32,10 @@
         label="Play"
         icon="play"
       />
+      <Button
+        icon="ellipsis"
+        isText
+      />
     </div>
   </div>
 </template>
@@ -120,6 +124,8 @@ export default defineComponent({
 
     &-actions {
       margin-top: auto;
+      display: flex;
+      align-items: center;
     }
   }
 }

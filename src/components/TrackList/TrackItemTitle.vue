@@ -31,10 +31,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
+@import '~/scss/variables';
 .tracklist__row_cell {
   padding-left: 15px;
-  transition: color 0.2s ease;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;

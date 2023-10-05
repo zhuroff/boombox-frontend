@@ -31,8 +31,7 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, PropType } from 'vue'
-import SimpleBar from 'simplebar'
+import { defineComponent, PropType } from 'vue'
 import { SearchResultState } from '~/types/Search'
 import SearchResultsItem from './SearchResultsItem.vue'
 

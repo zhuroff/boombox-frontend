@@ -33,7 +33,7 @@
     <Textarea
       v-if="!isFetching && !fetchedLyrics.length"
       :rows="3"
-      :content="lyrics"
+      :content="lyrics || undefined"
       classname="lyrics__text"
       placeholder="You can add lyrics manually in this field, or use the search button above."
       @setTextareaValue="updateLyrics"
@@ -95,7 +95,6 @@ import { useStore } from 'vuex'
 import { key } from '~/store'
 import { TrackLyricsResponse } from '~/types/Track'
 import Button from '~/components/Button/Button.vue'
-import SimpleBar from 'simplebar'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Preloader from '~/components/Preloader/Preloader.vue'
 import TrackServices from '~/services/TrackServices'
@@ -124,7 +123,6 @@ export default defineComponent({
 
     const lyrics: Ref<null | string> = ref(null)
     const expandedLyrics: Ref<null | number> = ref(null)
-    const scrollspace = ref(null as any)
     const isFetching = ref(false)
     const fetchedLyrics = reactive<TrackLyricsResponse[]>([])
     const updateLyricsTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
@@ -193,12 +191,6 @@ export default defineComponent({
 
     onMounted(() => {
       fetchTrackLyrics(props.id)
-
-      const scrollElement = document.querySelector('.lyrics__content') as HTMLElement
-
-      if (scrollElement) {
-        scrollspace.value = new SimpleBar(scrollElement, { autoHide: false })
-      }
     })
 
     return {
