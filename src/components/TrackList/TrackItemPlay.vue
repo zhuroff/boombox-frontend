@@ -1,16 +1,23 @@
 <template>
-  <div v-if="isOnPlay" class="tracklist__row_cell --pointer --fix">
-    <button class="tracklist__row_action" @click="pauseTrack">
+  <div
+    v-if="isOnPlay"
+    class="tracklist__row-cell --pointer --fix"
+  >
+    <!-- <button class="tracklist__row-action" @click="pauseTrack">
       <Sprite name="playing" />
-    </button>
+    </button> -->
   </div>
-
-  <div v-else :class="[{ '--disabled': isOnLoading }, 'tracklist__row_cell --pointer --fix']">
-    <button class="tracklist__row_action" @click="playingStateSplitter">
-      <Sprite v-if="isOnLoading" name="spinner" />
-      <Sprite v-else-if="isOnPause" name="pause" />
-      <Sprite v-else name="play" />
-    </button>
+  <div
+    v-else
+    :class="[{ '--disabled': isOnLoading }, 'tracklist__row-cell --pointer --fix']"
+  >
+    <Button
+      :icon="isOnLoading ? 'spinner' : isOnPause ? 'pause' : 'play'"
+      size="small"
+      isText
+      className="tracklist__row-action"
+      @click="playingStateSplitter"
+    />
   </div>
 </template>
 
@@ -18,11 +25,11 @@
 import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
 import { key } from "~/store";
-import Sprite from "~/components/Sprite/Sprite.vue";
+import Button from "~/components/Button.vue";
 
 export default defineComponent({
   components: {
-    Sprite,
+    Button,
   },
 
   props: {
@@ -42,7 +49,7 @@ export default defineComponent({
     },
   },
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore(key);
 
     const isOnPlay = computed(
@@ -94,3 +101,18 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+@import '~/scss/variables';
+.tracklist__row {
+
+  &-action {
+
+    &:hover {
+      fill: inherit;
+      stroke: inherit;
+      color: $white;
+    }
+  }
+}
+</style>

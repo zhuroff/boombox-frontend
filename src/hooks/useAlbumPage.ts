@@ -1,7 +1,8 @@
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { AlbumItem, AlbumPage } from '~/types/Album'
 import { CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
+import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
 import DiscogsServices from '~/services/DiscogsServices'
@@ -83,12 +84,7 @@ export const useAlbumPage = <T extends object>() => {
       )
     }
     Object.entries(response).forEach(([key, { docs }]) => {
-      relatedEntities.set(key, docs.map((entity) => ({
-        _id: entity._id,
-        title: entity.title,
-        coverURL: `${entity.albumCover}`,
-        caption: `${entity.artist.title } / ${entity.period.title} / ${entity.genre.title}`,
-      })))
+      relatedEntities.set(key, docs.map((entity) => new AlbumCardBoxDTO(entity)))
     })
   }
 

@@ -1,29 +1,37 @@
 <template>
   <div class="tracklist">
-    <VueDraggableNext handle=".--drag" v-bind="dragOptions" @end="orderChanged">
+    <VueDraggableNext
+      handle=".--drag"
+      v-bind="dragOptions"
+      @end="orderChanged"
+    >
       <transition-group>
-        <TrackItem v-for="(track, index) in tracks" :key="track._id" :track="track" :isTOY="isTOY" :index="index"
-          @saveToyInfo="saveToyInfo" />
+        <TrackListRow
+          v-for="(track, index) in tracks"
+          :key="track._id"
+          :track="track"
+          :isTOY="isTOY"
+          :index="index"
+          @saveToyInfo="saveToyInfo"
+        />
       </transition-group>
     </VueDraggableNext>
   </div>
 </template>
 
 <script lang="ts">
-
 import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { Track } from '~/types/Track'
 import { DraggableEvent, ReorderPayload } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
-import TrackItem from './TrackItem.vue'
-import './TrackList.scss'
+import TrackListRow from './TrackListRow.vue'
 
 export default defineComponent({
   components: {
     VueDraggableNext,
-    TrackItem
+    TrackListRow
   },
 
   props: {
@@ -83,3 +91,12 @@ export default defineComponent({
 })
 
 </script>
+
+<style lang="scss">
+@import '~/scss/variables';
+@import 'include-media';
+
+.tracklist {
+  margin: 20px 0;
+}
+</style>

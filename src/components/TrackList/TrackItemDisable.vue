@@ -1,23 +1,24 @@
 <template>
-
-  <div class="tracklist__row_cell --pointer --fix">
-    <button class="tracklist__row_action" @click="disableTrack">
-      <Sprite name="disable" />
-    </button>
+  <div class="tracklist__row-cell --pointer --fix">
+    <Button
+      icon="disable"
+      size="small"
+      isText
+      className="tracklist__row-action"
+      @click="disableTrack"
+    />
   </div>
-
 </template>
 
 <script lang="ts">
-
 import { defineComponent } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import Button from '~/components/Button.vue'
 
 export default defineComponent({
   components: {
-    Sprite
+    Button
   },
 
   props: {
@@ -37,19 +38,25 @@ export default defineComponent({
     return { disableTrack }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
 @import '~/scss/variables';
-
 .tracklist__row {
 
   &.--playing {
-
-    .tracklist__row_cell {
+    .tracklist__row-cell {
       opacity: 0.25;
       pointer-events: none;
+    }
+  }
+
+  &-action {
+
+    &:hover {
+      fill: inherit;
+      stroke: inherit;
+      color: $white;
     }
   }
 }

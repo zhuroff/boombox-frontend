@@ -23,6 +23,7 @@
 import { defineComponent, onMounted, computed, watch } from 'vue'
 import { AlbumItem } from '~/types/Album'
 import { CardBasic } from '~/types/Global'
+import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { useListPage } from '~/hooks/useListPage'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Dropdown from '~/components/Dropdown/Dropdown.vue'
@@ -50,12 +51,7 @@ export default defineComponent({
     ))
 
     const albumList = computed<CardBasic[]>(() => (
-      entities.map((album) => ({
-        _id: album._id,
-        title: album.title,
-        coverURL: `${album.albumCover}`,
-        caption: `${album.artist.title }, ${album.period.title} / ${album.genre.title}`,
-      }))
+      entities.map((album) => new AlbumCardBoxDTO(album))
     ))    
 
     watch(pageStateConfig, () => fetchData('albums'))    

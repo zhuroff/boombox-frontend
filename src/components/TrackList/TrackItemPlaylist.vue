@@ -1,45 +1,56 @@
 <template>
-
-  <div class="tracklist__row_cell --pointer --fix">
-    <button class="tracklist__row_action" @click="callPlaylistsModal">
-      <Sprite name="plus" />
-    </button>
-
-    <FloatModal v-if="playlists.isActive" :isFetched="playlists.isFetched" :isEmpty="!playlists.data.length"
-      placeholder="Create new playlist" @createNewEntry="createNewPlaylist" @closeFloatModal="closePlaylistModal">
+  <div class="tracklist__row-cell --pointer --fix">
+    <Button
+      icon="plus"
+      size="small"
+      isText
+      className="tracklist__row-action"
+      @click="callPlaylistsModal"
+    />
+    <FloatModal
+      v-if="playlists.isActive"
+      :isFetched="playlists.isFetched"
+      :isEmpty="!playlists.data.length"
+      placeholder="Create new playlist"
+      @createNewEntry="createNewPlaylist"
+      @closeFloatModal="closePlaylistModal"
+    >
       <template v-slot:empty>
         <div class="float-modal__empty">
           <strong>You haven't created any playlists yet</strong>
           <span>To create a playlist, use the form below</span>
         </div>
       </template>
-
       <template v-slot:list>
         <ul class="float-modal__list">
-          <FloatModalItem v-for="item in playlists.data" :key="item._id" :item="item" :itemID="trackID"
-            :isChecked="isItemChecked(item)" @checkFloatModalItem="playlistItemAction" />
+          <FloatModalItem
+            v-for="item in playlists.data"
+            :key="item._id"
+            :item="item"
+            :itemID="trackID"
+            :isChecked="isItemChecked(item)"
+            @checkFloatModalItem="playlistItemAction"
+          />
         </ul>
       </template>
     </FloatModal>
   </div>
-
 </template>
 
 <script lang="ts">
-
 import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { PlaylistPayload, PlayListItem } from '~/types/Playlist'
 import { FloatModalCheckAction } from '~/types/Global'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import Button from "~/components/Button.vue";
 import FloatModal from '~/components/FloatModal/FloatModal.vue'
 import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
 import api from '~/api'
 
 export default defineComponent({
   components: {
-    Sprite,
+    Button,
     FloatModal,
     FloatModalItem
   },
@@ -153,5 +164,19 @@ export default defineComponent({
     }
   }
 })
-
 </script>
+
+<style lang="scss" scoped>
+@import '~/scss/variables';
+.tracklist__row {
+
+  &-action {
+
+    &:hover {
+      fill: inherit;
+      stroke: inherit;
+      color: $white;
+    }
+  }
+}
+</style>

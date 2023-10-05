@@ -7,7 +7,8 @@
         '--inverted': isInverted,
         '--text': isText
       },
-      `--${size}`
+      `--${size}`,
+      className
     ]"
   >
     <span
@@ -45,6 +46,11 @@ export default defineComponent({
       required: false,
       default: 'medium',
       validator: (value: string) => ['small', 'medium', 'large'].includes(value)
+    },
+    className: {
+      type: String,
+      required: false,
+      default: false
     },
     isOutlined: {
       type: Boolean,
@@ -142,7 +148,6 @@ export default defineComponent({
     transition: all 0.2s $animation;
 
     &:hover {
-      // border-color: $warning;
       background-color: $warning;
       color: $black;
       transition: all 0.2s $animation;

@@ -1,8 +1,8 @@
 <template>
   
-<div class="tracklist__row_cell --pointer --fix">
+<div class="tracklist__row-cell --pointer --fix">
   <button
-    class="tracklist__row_action"
+    class="tracklist__row-action"
     @click="removeTrackFromPlaylist"
   >
     <Sprite name="delete" />
@@ -45,7 +45,7 @@ export default {
 
 .tracklist__row {
 
-  &_cell {
+  &-cell {
 
     &:hover {
 

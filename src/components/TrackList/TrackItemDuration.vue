@@ -1,11 +1,10 @@
-<template>
-  
-<div class="tracklist__row_cell --fix --duration">{{ secondsToMinutes }}</div>
-
+<template>  
+  <div class="tracklist__row-cell --fix --duration">
+    {{ secondsToMinutes }}
+  </div>
 </template>
 
 <script>
-
 import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
@@ -30,5 +29,4 @@ export default defineComponent({
     return { secondsToMinutes }
   }
 })
-
 </script>

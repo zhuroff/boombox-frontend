@@ -1,29 +1,13 @@
 <template>
 <!-- eslint-disable -->
 <svg
-  v-if="name === 'plus'"
-  viewBox="0 0 24 24"
-  class="icon"
->
-  <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-</svg>
-
-<svg
-  v-else-if="name === 'vinyl'"
+  v-if="name === 'vinyl'"
   width="24px"
   height="24px"
   viewBox="0 0 24 24"
   class="icon-vinyl"
 >
   <path fill="currentColor" d="M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11M12,16.5C9.5,16.5 7.5,14.5 7.5,12C7.5,9.5 9.5,7.5 12,7.5C14.5,7.5 16.5,9.5 16.5,12C16.5,14.5 14.5,16.5 12,16.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-</svg>
-
-<svg
-  v-else-if="name === 'pause'"
-  viewBox="0 0 24 24"
-  class="icon pause"
->
-  <path fill="currentColor" d="M14,19H18V5H14M6,19H10V5H6V19Z" />
 </svg>
 
 <svg
@@ -189,66 +173,6 @@
 </svg>
 
 <svg
-  width="44"
-  height="44"
-  viewBox="0 0 44 44"
-  stroke="#000000"
-  v-else-if="name === 'spinner'"
-  class="icon spinner"
->
-  <g fill="none" fill-rule="evenodd" stroke-width="2">
-    <circle cx="22" cy="22" r="1">
-      <animate
-        attributeName="r"
-        begin="0s" dur="1.8s"
-        values="1; 20"
-        calcMode="spline"
-        keyTimes="0; 1"
-        keySplines="0.165, 0.84, 0.44, 1"
-        repeatCount="indefinite"
-      />
-      <animate
-        attributeName="stroke-opacity"
-        begin="0s" dur="1.8s"
-        values="1; 0"
-        calcMode="spline"
-        keyTimes="0; 1"
-        keySplines="0.3, 0.61, 0.355, 1"
-        repeatCount="indefinite"
-      />
-    </circle>
-    <circle cx="22" cy="22" r="1">
-      <animate
-        attributeName="r"
-        begin="-0.9s" dur="1.8s"
-        values="1; 20"
-        calcMode="spline"
-        keyTimes="0; 1"
-        keySplines="0.165, 0.84, 0.44, 1"
-        repeatCount="indefinite"
-      />
-      <animate
-        attributeName="stroke-opacity"
-        begin="-0.9s" dur="1.8s"
-        values="1; 0"
-        calcMode="spline"
-        keyTimes="0; 1"
-        keySplines="0.3, 0.61, 0.355, 1"
-        repeatCount="indefinite"
-      />
-    </circle>
-  </g>
-</svg>
-
-<svg
-  v-else-if="name === 'disable'"
-  viewBox="0 0 24 24"
-  class="icon"
->
-  <path fill="currentColor" d="M12 2C17.5 2 22 6.5 22 12S17.5 22 12 22 2 17.5 2 12 6.5 2 12 2M12 4C10.1 4 8.4 4.6 7.1 5.7L18.3 16.9C19.3 15.5 20 13.8 20 12C20 7.6 16.4 4 12 4M16.9 18.3L5.7 7.1C4.6 8.4 4 10.1 4 12C4 16.4 7.6 20 12 20C13.9 20 15.6 19.4 16.9 18.3Z" />
-</svg>
-
-<svg
   v-else-if="name === 'remove'"
   viewBox="0 0 64 58.67"
   class="icon"
@@ -288,14 +212,22 @@
 
 import { computed, defineComponent } from 'vue'
 import SpriteEllipsis from './SpriteEllipsis.vue'
-import SpritePlay from './SpritePlay.vue';
+import SpritePlay from './SpritePlay.vue'
+import SpriteDisable from './SpriteDisable.vue'
+import SpriteSpinner from './SpriteSpinner.vue'
+import SpritePause from './SpritePause.vue'
+import SpritePlus from './SpritePlus.vue'
 
 export default defineComponent({
   name: 'Sprite',
 
   components: {
     SpritePlay,
-    SpriteEllipsis
+    SpriteEllipsis,
+    SpriteDisable,
+    SpriteSpinner,
+    SpritePause,
+    SpritePlus
   },
 
   props: {
@@ -308,7 +240,11 @@ export default defineComponent({
   setup({ name }) {
     const IconsMap = new Map([
       ['ellipsis', SpriteEllipsis],
-      ['play', SpritePlay]
+      ['play', SpritePlay],
+      ['disable', SpriteDisable],
+      ['spinner', SpriteSpinner],
+      ['pause', SpritePause],
+      ['plus', SpritePlus]
     ])
 
     const IconComponent = computed(() => (

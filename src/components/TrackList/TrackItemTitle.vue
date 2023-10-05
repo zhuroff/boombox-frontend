@@ -1,7 +1,7 @@
 <template>
   
 <div
-  class="tracklist__row_cell --pointer --title"
+  class="tracklist__row-cell --pointer --title"
   @click="callLyricsModal"
 >{{ title }}</div>
 
@@ -32,7 +32,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '~/scss/variables';
-.tracklist__row_cell {
+.tracklist__row-cell {
   padding-left: 15px;
   white-space: nowrap;
   text-overflow: ellipsis;
