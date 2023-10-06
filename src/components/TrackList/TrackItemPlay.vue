@@ -22,10 +22,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, PropType } from "vue";
 import { useStore } from "vuex";
 import { key } from "~/store";
 import Button from "~/components/Button.vue";
+import { Track } from "~/types/Track";
 
 export default defineComponent({
   components: {
@@ -33,14 +34,9 @@ export default defineComponent({
   },
 
   props: {
-    fileid: {
-      type: String,
-      required: true,
-    },
-
-    trackid: {
-      type: String,
-      required: true,
+    track: {
+      type: Object as PropType<Track>,
+      required: true
     },
 
     index: {
@@ -52,43 +48,47 @@ export default defineComponent({
   setup(props) {
     const store = useStore(key);
 
-    const isOnPlay = computed(
-      () =>
-        store.getters.playingTrack._id === props.fileid &&
-        !store.getters.playingTrack.isOnPause &&
-        !store.getters.playingTrack.isOnLoading
-    );
+    const isOnPlay = computed(() => (
+      store.getters.playingTrack._id === props.track._id
+      && !store.getters.playingTrack.isOnPause
+      && !store.getters.playingTrack.isOnLoading
+    ));
 
-    const isOnPause = computed(
-      () => store.getters.playingTrack._id === props.fileid && store.getters.playingTrack.isOnPause
-    );
+    const isOnPause = computed(() => (
+      store.getters.playingTrack._id === props.track._id
+      && store.getters.playingTrack.isOnPause
+    ));
 
-    const isOnLoading = computed(
-      () =>
-        store.getters.playingTrack._id === props.fileid && store.getters.playingTrack.isOnLoading
-    );
+    const isOnLoading = computed(() => (
+      store.getters.playingTrack._id === props.track._id
+      && store.getters.playingTrack.isOnLoading
+    ));
 
     const pauseTrack = () => {
       store.commit("setTrackOnPause");
     };
 
     const playTrack = () => {
-      store.dispatch("playTrack", props.fileid);
-      store.commit("expandPlayer");
+      // @ts-ignore
+      store.dispatch('playTrack', props.track.path /* props.track._id */);
+      store.commit('expandPlayer');
     };
 
     const playingStateSplitter = () => {
-      if (store.getters.playingTrack._id === 0) {
-        playTrack();
-      } else if (store.getters.playingTrack._id === props.fileid) {
-        if (!store.getters.playingTrack.isOnPause) {
-          playTrack();
-        } else {
-          store.commit("continuePlay");
-        }
-      } else {
+      if (!store.getters.playingTrack._id) {
         playTrack();
       }
+      // if (store.getters.playingTrack._id === 0) {
+      //   playTrack();
+      // } else if (store.getters.playingTrack._id === props.filePath) {
+      //   if (!store.getters.playingTrack.isOnPause) {
+      //     playTrack();
+      //   } else {
+      //     store.commit("continuePlay");
+      //   }
+      // } else {
+      //   playTrack();
+      // }
     };
 
     return {

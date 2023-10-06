@@ -14,8 +14,7 @@
         {{ track.order || index + 1 }}
       </div>
       <TrackItemPlay
-        :fileid="track._id"
-        :trackid="track._id"
+        :track="track"
         :index="index"
       />
       <TrackItemTitle

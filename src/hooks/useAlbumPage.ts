@@ -1,5 +1,7 @@
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import { AlbumItem, AlbumPage } from '~/types/Album'
 import { CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
@@ -10,6 +12,7 @@ import DiscogsServices from '~/services/DiscogsServices'
 export const useAlbumPage = <T extends object>() => {
   const route = useRoute()
   const router = useRouter()
+  const store = useStore(key)
   const entity = reactive<T>({} as T)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
   const booklet = reactive<string[]>([])
@@ -23,6 +26,7 @@ export const useAlbumPage = <T extends object>() => {
       .then((data) => {
         Object.assign(entity, data)
         isDataFetched.value = true
+        store.commit("setPlayerPlaylist", data);
         fetchDiscogsInfo()
       })
       .catch((error) => {
@@ -92,7 +96,7 @@ export const useAlbumPage = <T extends object>() => {
     // @ts-ignore
     DiscogsServices.discogs(entity, 1)
       .then((response) => {
-        console.log(response)
+        // console.log(response)
         // setDiscogsData(response);
 
         // if (response.pagination.pages > page) {

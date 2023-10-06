@@ -83,7 +83,8 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.isOnRepeat = false
       state.playingTrack._id = _id
       state.playingTrack.title = chosenTrack.title
-      state.playingTrack.source = chosenTrack.link
+      // @ts-ignore
+      state.playingTrack.source = chosenTrack.path
       state.playingTrack.duration = chosenTrack?.duration || null
       state.playingTrack.artistName = artistName(state.currentPlaylist.artist || chosenTrack.artist)
       state.playingTrack.albumName = albumName(chosenTrack.inAlbum?.title || state.currentPlaylist.title)
@@ -92,6 +93,7 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.isOnLoading = true
       state.playingTrack.crackle.loop = true
     }
+    console.log(state.playingTrack)
   },
 
   nullifyPlayerTrack: (state: AppStateInterface) => {

@@ -60,6 +60,11 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const store = useStore(key)
+    console.log(props.tracks.map((track) => ({
+      ...track,
+      // @ts-ignore
+      path: decodeURIComponent(track.path)
+    })))
 
     const dragOptions = reactive({
       animation: 300,

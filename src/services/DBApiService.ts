@@ -19,4 +19,10 @@ export default class DBApiService {
     DBApiService.errorChecker(response.status)
     return response.data
   }
+
+  static async getFile<File>(entityType: string, path: string) {
+    const response = await api.post<File>(`/api/${entityType}`, { path })
+    DBApiService.errorChecker(response.status)
+    return response.data
+  }
 }

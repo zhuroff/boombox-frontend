@@ -2,13 +2,17 @@ import api from '~/api'
 import { ActionTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { StateInterface } from '..'
+import DBApiService from '~/services/DBApiService'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
-  playTrack: ({ commit, dispatch }, _id: String) => {
-    commit('checkOrReplacePlaylists', _id)
-    commit('preparePlayerTrack', _id)
-    commit('createAudioContext')
-    dispatch('playAudioTrack', _id)
+  playTrack: ({ commit, dispatch }, path: string) => {
+    DBApiService.getFile('tracks/audio', path)
+      .then((res) => console.log(res))
+      .catch(console.error)
+    // commit('checkOrReplacePlaylists', _id)
+    // commit('preparePlayerTrack', _id)
+    // commit('createAudioContext')
+    // dispatch('playAudioTrack', _id)
   },
 
   playAudioTrack: ({ commit, dispatch, state }, _id: string) => {
