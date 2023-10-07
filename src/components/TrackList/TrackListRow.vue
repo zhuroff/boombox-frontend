@@ -182,7 +182,10 @@ export default defineComponent({
     font-size: 1rem;
     color: $black;
     height: 3rem;
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    grid-template-columns: repeat(3, auto) 1fr;
 
     &:hover {
       background-color: $dark;

@@ -1,10 +1,10 @@
-<template>
-  
+<template>  
 <div
-  class="tracklist__row-cell --pointer --title"
-  @click="callLyricsModal"
->{{ title }}</div>
-
+    class="tracklist__row-cell --pointer --title"
+    @click="callLyricsModal"
+  >
+    <span class="tracklist__row-title">{{ title }}</span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -32,12 +32,18 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '~/scss/variables';
-.tracklist__row-cell {
-  padding-left: 15px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  flex: 1 1 0;
+.tracklist__row {
+
+  &-cell {
+    padding-left: 15px;    
+    overflow: hidden;
+  }
+
+  &-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }
 
 </style>
