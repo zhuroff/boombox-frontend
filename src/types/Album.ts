@@ -13,7 +13,6 @@ type AlbumItem = {
 
 type AlbumPage = AlbumItem & {
   folderName: string
-  description: string
   tracks: Track[]
 }
 
@@ -35,10 +34,9 @@ type AlbumPageProps = {
 
 type AlbumHeadProps = {
   title: string
-  artist: CategoryBasic,
-  period: CategoryBasic,
-  genre: CategoryBasic,
-  description: string
+  artist: CategoryBasic
+  period: CategoryBasic
+  genre: CategoryBasic
 }
 
 type DiscogsPagination = {

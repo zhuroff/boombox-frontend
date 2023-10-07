@@ -13,7 +13,6 @@
       </div>
 
       <div class="album__content">
-        <AlbumHeading :albumHead="albumHead" @textInputHandler="descriptionHandler" :isTOY="true" />
         <TrackList :tracks="toyYear.data.tracks" :albumID="toyYear.data._id" :isTOY="true" @saveToyInfo="saveToyInfo" />
       </div>
     </div>
@@ -28,7 +27,6 @@ import { key } from "~/store"
 import { TTOYEntity } from '~/types/TOY'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CoverArt from "~/components/CoverArt/CoverArt.vue"
-import AlbumHeading from "~/components/AlbumHeading/AlbumHeading.vue"
 import TrackList from "~/components/TrackList/TrackList.vue"
 import { AlbumHeadProps } from '~/types/Album'
 
@@ -36,7 +34,6 @@ export default defineComponent({
   components: {
     AppPreloader,
     CoverArt,
-    AlbumHeading,
     TrackList
   },
 
@@ -115,17 +112,8 @@ export default defineComponent({
       console.log(response?.data)
     }
 
-    const albumHead: ComputedRef<AlbumHeadProps> = computed(() => {
-      const { title, artist, period, genre, description } = toyYear.data;
-      return { title, artist, period, genre, description };
-    });
-
     const fetchAlbumBooklet = async () => {
       console.log('fetch booklet')
-    }
-
-    const descriptionHandler = async () => {
-      console.log('save description')
     }
 
     const saveToyInfo = (payload: any) => {
@@ -140,9 +128,7 @@ export default defineComponent({
 
     return {
       toyYear,
-      albumHead,
       fetchAlbumBooklet,
-      descriptionHandler,
       saveToyInfo
     }
   }

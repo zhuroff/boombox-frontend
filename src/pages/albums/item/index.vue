@@ -71,8 +71,8 @@ export default defineComponent({
     // });
 
     // const albumHead: ComputedRef<AlbumHeadProps> = computed(() => {
-    //   const { title, artist, period, genre, description } = album.data;
-    //   return { title, artist, period, genre, description };
+    //   const { title, artist, period, genre } = album.data;
+    //   return { title, artist, period, genre };
     // });
 
     // const isCollectionItemChecked = (item: CollectionListItem) =>
@@ -140,16 +140,6 @@ export default defineComponent({
     //     .catch((ignore) => ignore);
     // };
 
-    // const descriptionHandler = (description: string) => {
-    //   if (typeof inputTimer.value === "number") {
-    //     clearTimeout(inputTimer.value);
-    //     inputTimer.value = setTimeout(
-    //       () => AlbumServices.description(String(route.params.id), description),
-    //       1000
-    //     );
-    //   }
-    // };
-
     // const setAlbumState = (data: AlbumPage) => {
     //   album.data = data;
     //   album.isFetched = true;
@@ -195,7 +185,6 @@ export default defineComponent({
     //   album,
     //   fetchAlbumBooklet,
     //   albumHead,
-    //   descriptionHandler,
     //   callCollectionsModal,
     //   isBookletModalActive,
     //   closeBookletModal,

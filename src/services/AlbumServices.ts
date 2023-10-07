@@ -23,10 +23,6 @@ export default class AlbumServices {
     throw new Error('Failed request')
   }
 
-  static async description(id: string, description: string): Promise<void> {
-    await api.patch(`/api/albums/${id}/description`, { description })
-  }
-
   static async booklet(id: string, path: string): Promise<string[]> {
     const response = await api.get(`/api/albums/${id}/${path}`)
 

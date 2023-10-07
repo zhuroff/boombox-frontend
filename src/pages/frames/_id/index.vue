@@ -17,11 +17,6 @@
         class="album__frame"
         v-html="album.data.frame"
       ></div>
-
-      <AlbumHeading
-        :albumHead="frameHeading"
-        @textInputHandler="saveFrameDescription"
-      />
     </div>
   </transition>
 </section>
@@ -30,17 +25,15 @@
 
 <script lang="ts">
 
-import { defineComponent, reactive, computed, onMounted } from 'vue'
+import { defineComponent, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { FrameAlbum } from '~/types/Frame'
 import FrameServices from '~/services/FrameServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import AlbumHeading from '~/components/AlbumHeading/AlbumHeading.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
-    AlbumHeading
+    AppPreloader
   },
 
   setup() {
@@ -50,17 +43,6 @@ export default defineComponent({
       isFetched: false,
       data: {} as FrameAlbum
     })
-
-    const frameHeading = reactive(computed(() => ({
-      title: album.data.title,
-      artist: album.data.artist,
-      period: album.data.period,
-      genre: album.data.genre
-    })))
-
-    const saveFrameDescription = (value: string) => {
-      console.log(value)
-    }
 
     const setAlbumState = (data: FrameAlbum) => {
       album.isFetched = true
@@ -76,9 +58,7 @@ export default defineComponent({
     onMounted(() => fetchFrame())
 
     return {
-      album,
-      frameHeading,
-      saveFrameDescription
+      album
     }
   }
 })
