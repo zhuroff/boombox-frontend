@@ -3,9 +3,13 @@
     v-if="isOnPlay"
     class="tracklist__row-cell --pointer --fix"
   >
-    <!-- <button class="tracklist__row-action" @click="pauseTrack">
-      <Sprite name="playing" />
-    </button> -->
+    <Button
+      icon="playing"
+      size="small"
+      isText
+      className="tracklist__row-action"
+      @click="pauseTrack"
+    />
   </div>
   <div
     v-else
@@ -25,8 +29,8 @@
 import { defineComponent, computed, PropType } from "vue";
 import { useStore } from "vuex";
 import { key } from "~/store";
+import { AlbumTrackDTO } from "~/dto/AlbumTrackDTO";
 import Button from "~/components/Button.vue";
-import { Track } from "~/types/Track";
 
 export default defineComponent({
   components: {
@@ -35,7 +39,7 @@ export default defineComponent({
 
   props: {
     track: {
-      type: Object as PropType<Track>,
+      type: Object as PropType<AlbumTrackDTO>,
       required: true
     },
 
@@ -69,26 +73,22 @@ export default defineComponent({
     };
 
     const playTrack = () => {
-      // @ts-ignore
-      store.dispatch('playTrack', props.track.path /* props.track._id */);
+      store.dispatch('playTrack', props.track);
       store.commit('expandPlayer');
     };
 
     const playingStateSplitter = () => {
       if (!store.getters.playingTrack._id) {
         playTrack();
+      } else if (store.getters.playingTrack._id === props.track._id) {
+        if (!store.getters.playingTrack.isOnPause) {
+          playTrack();
+        } else {
+          store.commit("continuePlay");
+        }
+      } else {
+        playTrack();
       }
-      // if (store.getters.playingTrack._id === 0) {
-      //   playTrack();
-      // } else if (store.getters.playingTrack._id === props.filePath) {
-      //   if (!store.getters.playingTrack.isOnPause) {
-      //     playTrack();
-      //   } else {
-      //     store.commit("continuePlay");
-      //   }
-      // } else {
-      //   playTrack();
-      // }
     };
 
     return {
@@ -105,7 +105,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '~/scss/variables';
 .tracklist__row {
-
   &-action {
 
     &:hover {

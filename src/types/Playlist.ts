@@ -1,44 +1,36 @@
-import { Track } from './Track'
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 
-type PlaylistPayload = {
+export type PlaylistPayload = {
   title: string
   track: string
 }
 
-type PlaylistTrackItem = {
+export type PlaylistTrackItem = {
   order: number
   track: string,
 }
 
-type PlayListItem = {
+export type PlayListItem = {
   _id: string
   title: string
   tracks: PlaylistTrackItem[]
 }
 
-type PlaylistPage = {
+export type PlaylistPage = {
   _id: string
   title: string
   poster?: string
   avatar?: string
   dateCreated: string
-  tracks: Track[]
+  tracks: AlbumTrackDTO[]
 }
 
-type PlaylistItemProps = {
+export type PlaylistItemProps = {
   isFetched: boolean
   data: PlayListItem[] 
 }
 
-type PlaylistPageProps = {
+export type PlaylistPageProps = {
   isFetched: boolean
   data: PlaylistPage
-}
-
-export {
-  PlaylistPayload,
-  PlayListItem,
-  PlaylistPage,
-  PlaylistItemProps,
-  PlaylistPageProps
 }

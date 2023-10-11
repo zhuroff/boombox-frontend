@@ -1,4 +1,6 @@
-import { PlayerPlaylist, PlayingTrack } from '~/types/Player'
+import { PlayerTrackDTO, AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import { CategoryBasic } from '~/types/Category'
+import { PlayerPlaylist } from '~/types/Player'
 
 const initPlaylist: PlayerPlaylist = {
   _id: '',
@@ -9,24 +11,21 @@ const initPlaylist: PlayerPlaylist = {
   tracks: []
 }
 
-const playingTrackInitial: PlayingTrack = {
-  isOnPause: false,
-  duration: null,
-  isOnRepeat: false,
-  artistName: '',
-  albumName: '',
+const playingTrackInitial = new PlayerTrackDTO(new AlbumTrackDTO({
+  _id: '',
   title: '',
-  source: '',
-  year: '',
-  cover: '/img/album.webp',
-  audio: new Audio(),
-  crackle: new Audio('/media/vinyl_01.wav'),
-  progressHandler: null,
-  isOnLoading: false,
-  progressLine: 0,
-  progressTime: 0,
-  _id: ''
-}
+  path: '',
+  listened: 0,
+  inAlbum: {} as CategoryBasic,
+  inPlaylists: [],
+  artist: {} as CategoryBasic,
+  lyrics: '',
+  duration: 0,
+}, 0, '', {} as CategoryBasic))
+
+// const playingTrackInitial: PlayingTrack = {
+//   progressHandler: null,
+// }
 
 export {
   initPlaylist,

@@ -6,17 +6,8 @@ import { TrackProgress, PlayerPlaylist } from '~/types/Player'
 import { PlaylistPage } from '~/types/Playlist'
 import { initPlaylist } from './initStates'
 import { playingTrackInitial } from './initStates'
-import {
-  artistName,
-  albumName,
-  periodName,
-  albumCover
-} from '~/shared/stringifier'
 import { RadioStationResponse } from '~/types/Radio'
-
-const getChosenTrack = (playlist: PlayerPlaylist, _id: string) => (
-  playlist.tracks.find((el) => el._id === _id)
-)
+import { AlbumTrackDTO, PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
 
 const mutations: MutationTree<AppStateInterface> = {
   setSnackbarMessage: (state: AppStateInterface, snackbar: TSnackbar) => {
@@ -33,12 +24,10 @@ const mutations: MutationTree<AppStateInterface> = {
   },
 
   setPlayerPlaylist: <T extends AlbumPage & PlaylistPage>(state: AppStateInterface, data: T) => {
-    const playlist = { ...data, tracks: data.tracks }
-
     if (!state.currentPlaylist._id.length) {
-      state.currentPlaylist = playlist
+      state.currentPlaylist = data
     } else if (state.currentPlaylist._id !== data._id) {
-      state.reservedPlaylist = playlist
+      state.reservedPlaylist = data
     }
   },
 
@@ -55,7 +44,7 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.albumName = station.country
       state.playingTrack.artistName = station.name
       state.playingTrack.audio.src = station.url_resolved
-      state.playingTrack.duration = '--'
+      // state.playingTrack.duration = '--'
       state.playingTrack._id = station.stationuuid
       state.playingTrack.isOnPause = false
       state.playingTrack.isOnRepeat = false
@@ -67,7 +56,7 @@ const mutations: MutationTree<AppStateInterface> = {
   },
 
   checkOrReplacePlaylists: (state: AppStateInterface, _id: string) => {
-    let chosenTrack = getChosenTrack(state.currentPlaylist, _id)
+    let chosenTrack = state.currentPlaylist.tracks.find((el) => el._id === _id)
 
     if (!chosenTrack) {
       state.currentPlaylist = { ...state.reservedPlaylist }
@@ -75,25 +64,8 @@ const mutations: MutationTree<AppStateInterface> = {
     }
   },
 
-  preparePlayerTrack: (state: AppStateInterface, _id: string) => {
-    const chosenTrack = getChosenTrack(state.currentPlaylist, _id)
-
-    if (chosenTrack) {
-      state.playingTrack.isOnPause = false
-      state.playingTrack.isOnRepeat = false
-      state.playingTrack._id = _id
-      state.playingTrack.title = chosenTrack.title
-      // @ts-ignore
-      state.playingTrack.source = chosenTrack.path
-      state.playingTrack.duration = chosenTrack?.duration || null
-      state.playingTrack.artistName = artistName(state.currentPlaylist.artist || chosenTrack.artist)
-      state.playingTrack.albumName = albumName(chosenTrack.inAlbum?.title || state.currentPlaylist.title)
-      state.playingTrack.year = periodName(state.currentPlaylist?.period || chosenTrack.inAlbum?.period)
-      state.playingTrack.cover = albumCover(state.currentPlaylist?.albumCover || chosenTrack.inAlbum?.albumCover)
-      state.playingTrack.isOnLoading = true
-      state.playingTrack.crackle.loop = true
-    }
-    console.log(state.playingTrack)
+  preparePlayerTrack: (state: AppStateInterface, track: AlbumTrackDTO) => {
+    state.playingTrack = new PlayerTrackDTO(track)
   },
 
   nullifyPlayerTrack: (state: AppStateInterface) => {
@@ -101,11 +73,15 @@ const mutations: MutationTree<AppStateInterface> = {
   },
 
   createAudioContext: (state: AppStateInterface) => {
-    if (state.playingTrack.progressHandler) {
-      state.playingTrack.progressHandler = null
-    }
+    // if (state.playingTrack.progressHandler) {
+    //   state.playingTrack.progressHandler = null
+    // }
 
     state.playingTrack.audio.src = state.playingTrack.source
+  },
+
+  setLoadingState: (state: AppStateInterface) => {
+    state.playingTrack.isOnLoading = true
   },
 
   deleteLoadingState: (state: AppStateInterface) => {

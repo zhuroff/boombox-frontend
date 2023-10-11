@@ -1,11 +1,12 @@
 import { TSnackbar } from '~/types/Global'
-import { PlayerPlaylist, PlayingTrack } from '~/types/Player'
+import { PlayerPlaylist } from '~/types/Player'
 import { initPlaylist, playingTrackInitial } from './initStates'
+import { PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
 
 export interface AppStateInterface {
   currentPlaylist: PlayerPlaylist
   reservedPlaylist: PlayerPlaylist
-  playingTrack: PlayingTrack
+  playingTrack: PlayerTrackDTO
   snackbar: TSnackbar[]
   isPlayerExpanded: boolean
 }

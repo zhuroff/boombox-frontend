@@ -1,21 +1,21 @@
 import { CategoryBasic } from '~/types/Category'
-import { Track } from '~/types/Track'
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 
-type TrackProgress = {
+export type TrackProgress = {
   progressLine: number
   progressTime: number
 }
 
-type PlayerPlaylist = {
+export type PlayerPlaylist = {
   _id: string
   title: string
-  tracks: Track[]
+  tracks: AlbumTrackDTO[]
   albumCover?: string
   artist?: CategoryBasic
   period?: CategoryBasic
 }
 
-type PlayingTrack = TrackProgress & {
+export type PlayingTrack = TrackProgress & {
   duration: number | string | null
   isOnPause: boolean
   isOnRepeat: boolean
@@ -30,10 +30,4 @@ type PlayingTrack = TrackProgress & {
   progressHandler: (() => void) | null
   isOnLoading: boolean
   _id: string
-}
-
-export {
-  TrackProgress,
-  PlayerPlaylist,
-  PlayingTrack
 }

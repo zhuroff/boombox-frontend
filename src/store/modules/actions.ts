@@ -2,17 +2,24 @@ import api from '~/api'
 import { ActionTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { StateInterface } from '..'
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import DBApiService from '~/services/DBApiService'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
-  playTrack: ({ commit, dispatch }, path: string) => {
-    DBApiService.getFile('tracks/audio', path)
-      .then((res) => console.log(res))
-      .catch(console.error)
-    // commit('checkOrReplacePlaylists', _id)
-    // commit('preparePlayerTrack', _id)
-    // commit('createAudioContext')
-    // dispatch('playAudioTrack', _id)
+  playTrack: async ({ commit, dispatch }, track: AlbumTrackDTO) => {
+    // commit('setLoadingState')
+    try {
+      const trackSourceLink: string = await DBApiService.getFile('tracks/audio', track.path)
+      if (!trackSourceLink) {
+        throw new Error('Unable to get track source link')
+      }
+      commit('checkOrReplacePlaylists', track._id)
+      commit('preparePlayerTrack', { ...track, path: trackSourceLink })
+      commit('createAudioContext')
+      dispatch('playAudioTrack', track._id)
+    } catch (error) {
+      console.error(error)
+    }
   },
 
   playAudioTrack: ({ commit, dispatch, state }, _id: string) => {
@@ -21,8 +28,8 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
 
     playingAudio.play()
       .then(() => commit('deleteLoadingState'))
-      .then(() => dispatch('incrementListeningCounter'))
-      .then(() => dispatch('saveTrackDuration', playingAudio.duration))
+      // .then(() => dispatch('incrementListeningCounter'))
+      // .then(() => dispatch('saveTrackDuration', playingAudio.duration))
       .finally(() => {
         playingAudio.ontimeupdate = () => {
           const progressLine = playingAudio.currentTime / playingAudio.duration
@@ -43,7 +50,7 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
               const nextTrack = activePlaylist[currentTrackIndex + 1]
 
               if (nextTrack) {
-                dispatch('playTrack', nextTrack._id)
+                dispatch('playTrack', nextTrack)
               } else {
                 commit('nullifyPlayerTrack')
               }

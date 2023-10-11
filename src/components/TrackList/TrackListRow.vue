@@ -86,7 +86,7 @@
 import { defineComponent, ref, computed, PropType } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { Track } from '~/types/Track'
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
@@ -114,7 +114,7 @@ export default defineComponent({
 
   props: {
     track: {
-      type: Object as PropType<Track>,
+      type: Object as PropType<AlbumTrackDTO>,
       required: true
     },
 

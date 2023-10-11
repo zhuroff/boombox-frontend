@@ -8,6 +8,7 @@ import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
 import DiscogsServices from '~/services/DiscogsServices'
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 
 export const useAlbumPage = <T extends object>() => {
   const route = useRoute()
@@ -24,9 +25,15 @@ export const useAlbumPage = <T extends object>() => {
     isDataFetched.value = false
     DBApiService.getEntity<AlbumPage>(entityType, String(route.params.id))
       .then((data) => {
-        Object.assign(entity, data)
+        const preparedData = {
+          ...data,
+          tracks: data.tracks.map((track, index) => (
+            new AlbumTrackDTO(track, index + 1, data.albumCover, data.period)
+          ))
+        }
+        Object.assign(entity, preparedData)
         isDataFetched.value = true
-        store.commit("setPlayerPlaylist", data);
+        store.commit("setPlayerPlaylist", preparedData);
         fetchDiscogsInfo()
       })
       .catch((error) => {

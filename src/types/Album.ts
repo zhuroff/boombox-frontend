@@ -1,8 +1,8 @@
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { CategoryBasic } from './Category'
 import { Pagination } from './Global'
-import { Track } from './Track'
 
-type AlbumItem = {
+export type AlbumItem = {
   _id: string
   albumCover: string
   title: string
@@ -11,42 +11,37 @@ type AlbumItem = {
   period: CategoryBasic
 }
 
-type AlbumPage = AlbumItem & {
+export type AlbumPage = AlbumItem & {
   folderName: string
-  tracks: Track[]
+  tracks: AlbumTrackDTO[]
 }
 
-// type AlbumPageResponse = {
-//   docs: AlbumItem[]
-//   pagination: Pagination
-// }
-
-type AlbumItemProps = {
+export type AlbumItemProps = {
   isFetched: boolean
   data: AlbumItem[]
   pagination?: Pagination
 }
 
-type AlbumPageProps = {
+export type AlbumPageProps = {
   isFetched: boolean
   data: AlbumPage
 }
 
-type AlbumHeadProps = {
+export type AlbumHeadProps = {
   title: string
   artist: CategoryBasic
   period: CategoryBasic
   genre: CategoryBasic
 }
 
-type DiscogsPagination = {
+export type DiscogsPagination = {
   items: number
   page: number
   pages: number
   per_page: number
 }
 
-type DiscogsItem = {
+export type DiscogsItem = {
   id: number
   catno: string
   country: string
@@ -58,44 +53,44 @@ type DiscogsItem = {
   year: string
 }
 
-type DiscogsResponse = {
+export type DiscogsResponse = {
   pagination: DiscogsPagination
   results: DiscogsItem[]
 }
 
-type DiscogsData = {
+export type DiscogsData = {
   results: Map<number, DiscogsItem>
   isFetched: boolean
 }
 
-type DiscogsCompanies = {
+export type DiscogsCompanies = {
   id: number
   catno: string
   entity_type_name: string
   name: string
 }
 
-type DiscogsArtists = {
+export type DiscogsArtists = {
   id: number
   name: string
   role: string
   tracks: string
 }
 
-type DiscogsIdentifiers = {
+export type DiscogsIdentifiers = {
   description: string
   type: string
   value: string
 }
 
-type DiscogsTracklist = {
+export type DiscogsTracklist = {
   position: string
   duration: string
   title: string
   type_: string
 }
 
-type DiscogsVideos = {
+export type DiscogsVideos = {
   description: string
   duration: number
   embed: boolean
@@ -103,7 +98,7 @@ type DiscogsVideos = {
   uri: string
 }
 
-type DiscogsDetails = {
+export type DiscogsDetails = {
   id: number
   title: string
   notes?: string
@@ -117,19 +112,4 @@ type DiscogsDetails = {
   tracklist: DiscogsTracklist[]
   videos?: DiscogsVideos[]
   isInvalid?: true
-}
-
-export {
-  AlbumItem,
-  AlbumPage,
-  AlbumHeadProps,
-  AlbumItemProps,
-  AlbumPageProps,
-  // AlbumPageResponse,
-  DiscogsPagination,
-  DiscogsItem,
-  DiscogsResponse,
-  DiscogsData,
-  DiscogsCompanies,
-  DiscogsDetails
 }
