@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed, watch } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
 import { AlbumItem } from '~/types/Album'
 import { CardBasic } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
@@ -54,8 +54,11 @@ export default defineComponent({
       entities.map((album) => new AlbumCardBoxDTO(album))
     ))    
 
-    watch(pageStateConfig, () => fetchData('albums'))    
-    onMounted(() => fetchData('albums'))
+    watch(
+      pageStateConfig,
+      () => fetchData('albums'),
+      { immediate: true }
+    )    
 
     return {
       pageHeading,

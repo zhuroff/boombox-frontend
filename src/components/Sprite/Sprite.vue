@@ -170,6 +170,7 @@ import SpriteSpinner from './SpriteSpinner.vue'
 import SpritePause from './SpritePause.vue'
 import SpritePlus from './SpritePlus.vue'
 import SpritePlaying from './SpritePlaying.vue'
+import SpriteDrag from './SpriteDrag.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -181,7 +182,8 @@ export default defineComponent({
     SpriteSpinner,
     SpritePause,
     SpritePlus,
-    SpritePlaying
+    SpritePlaying,
+    SpriteDrag
   },
 
   props: {
@@ -199,7 +201,8 @@ export default defineComponent({
       ['spinner', SpriteSpinner],
       ['pause', SpritePause],
       ['plus', SpritePlus],
-      ['playing', SpritePlaying]
+      ['playing', SpritePlaying],
+      ['drag', SpriteDrag]
     ])
 
     const IconComponent = computed(() => (

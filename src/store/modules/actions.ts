@@ -7,13 +7,14 @@ import DBApiService from '~/services/DBApiService'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
   playTrack: async ({ commit, dispatch }, track: AlbumTrackDTO) => {
-    // commit('setLoadingState')
+    commit('setLoadingState', track._id)
+    commit('checkOrReplacePlaylists', track._id)
+    
     try {
       const trackSourceLink: string = await DBApiService.getFile('tracks/audio', track.path)
       if (!trackSourceLink) {
         throw new Error('Unable to get track source link')
       }
-      commit('checkOrReplacePlaylists', track._id)
       commit('preparePlayerTrack', { ...track, path: trackSourceLink })
       commit('createAudioContext')
       dispatch('playAudioTrack', track._id)
@@ -25,17 +26,23 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
   playAudioTrack: ({ commit, dispatch, state }, _id: string) => {
     const playingTrack = state.playingTrack
     const playingAudio = playingTrack.audio
+    let isCounterIncremented = false
 
     playingAudio.play()
-      .then(() => commit('deleteLoadingState'))
-      // .then(() => dispatch('incrementListeningCounter'))
-      // .then(() => dispatch('saveTrackDuration', playingAudio.duration))
+      .then(() => dispatch('saveTrackDuration', playingAudio.duration))
       .finally(() => {
+        commit('removeLoadingState')
         playingAudio.ontimeupdate = () => {
+          
           const progressLine = playingAudio.currentTime / playingAudio.duration
           const progressTime = playingAudio.currentTime
 
           commit('updateListeningProgress', { progressLine, progressTime })
+
+          if (progressLine > 0.75 && !isCounterIncremented) {
+            dispatch('incrementListeningCounter')
+            isCounterIncremented = true
+          }
 
           if (progressLine >= 1) {
             if (playingTrack.isOnRepeat) {

@@ -80,11 +80,13 @@ const mutations: MutationTree<AppStateInterface> = {
     state.playingTrack.audio.src = state.playingTrack.source
   },
 
-  setLoadingState: (state: AppStateInterface) => {
+  setLoadingState: (state: AppStateInterface, _id: string) => {
+    state.playingTrack._id = _id
     state.playingTrack.isOnLoading = true
+    state.playingTrack.audio.src = ''
   },
 
-  deleteLoadingState: (state: AppStateInterface) => {
+  removeLoadingState: (state: AppStateInterface) => {
     state.playingTrack.isOnLoading = false
   },
 

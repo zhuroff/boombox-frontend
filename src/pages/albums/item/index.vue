@@ -9,10 +9,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
-import { useRoute } from 'vue-router'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { AlbumPage } from '~/types/Album'
-import { useAlbumPage } from '~/hooks/useAlbumPage';
+import { useAlbumPage } from '~/hooks/useAlbumPage'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 
 export default defineComponent({
@@ -27,16 +26,22 @@ export default defineComponent({
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
+      route,
       booklet
     } = useAlbumPage<AlbumPage>()
 
-    const route = useRoute()
     const entityType = ref('albums')
+
+    onMounted(() => fetchData(entityType.value))
 
     watch(
       route,
-      () => fetchData(entityType.value),
-      { immediate: true }
+      (newValue) => {
+        if (newValue.params.id && newValue.params.id !== entity._id) {
+          fetchData(entityType.value)
+        }
+      },
+      { immediate: false }
     )
 
     return {

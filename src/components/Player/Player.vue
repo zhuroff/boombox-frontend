@@ -2,7 +2,7 @@
 
   <section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
     <div class="player__left" @click="collapseExpandPlayer">
-      <div v-if="playingTrack._id" class="player__left-content">
+      <div v-if="playingTrack.progressTime > 0" class="player__left-content">
         <img :src="playingTrack.cover" :alt="playingTrack.title" class="player__cover" />
         <div class="player__title">
           <div class="player__title-track">{{ playingTrack.title }}</div>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="player__right">
-      <div v-if="playingTrack._id" class="player__right-content">
+      <div v-if="playingTrack.progressTime > 0" class="player__right-content">
         <PlayerRepeatTrack />
         <PlayerPrevTrack />
         <PlayerPlayPause />
@@ -31,8 +31,8 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, onUnmounted, reactive } from 'vue'
-import usePlayer from './usePlayer'
+import { defineComponent, onMounted, onUnmounted } from 'vue'
+import usePlayer from '~/hooks/usePlayer'
 import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
 import PlayerPrevTrack from './PlayerPrevTrack.vue'
 import PlayerNextTrack from './PlayerNextTrack.vue'
@@ -108,7 +108,6 @@ export default defineComponent({
     }
 
     onMounted(() => keyboardNavHandler())
-
     onUnmounted(() => keyboardNavHandlerDestroy())
 
     return {

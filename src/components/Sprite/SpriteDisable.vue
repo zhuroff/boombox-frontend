@@ -1,7 +1,7 @@
 <template>
   <svg
     viewBox="0 0 24 24"
-    class="icon"
+    class="icon disable"
   >
     <path
       fill="currentColor"

@@ -1,36 +1,44 @@
 <template>
-  <div
-    v-if="isOnPlay"
-    class="tracklist__row-cell --pointer --fix"
-  >
+  <div class="tracklist__row-cell --pointer --fix">
     <Button
+      v-if="isOnLoading"
+      icon="spinner"
+      size="small"
+      isText
+      className="tracklist__row-action"
+    />
+    <Button
+      v-else-if="isPlaying"
       icon="playing"
       size="small"
       isText
       className="tracklist__row-action"
       @click="pauseTrack"
     />
-  </div>
-  <div
-    v-else
-    :class="[{ '--disabled': isOnLoading }, 'tracklist__row-cell --pointer --fix']"
-  >
     <Button
-      :icon="isOnLoading ? 'spinner' : isOnPause ? 'pause' : 'play'"
+      v-else-if="isPaused"
+      icon="pause"
       size="small"
       isText
       className="tracklist__row-action"
-      @click="playingStateSplitter"
+      @click="playFurther"
+    />
+    <Button
+      v-else
+      icon="play"
+      size="small"
+      isText
+      className="tracklist__row-action"
+      @click="playTrack"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from "vue";
-import { useStore } from "vuex";
-import { key } from "~/store";
-import { AlbumTrackDTO } from "~/dto/AlbumTrackDTO";
-import Button from "~/components/Button.vue";
+import { defineComponent, computed, PropType } from 'vue'
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import usePlayer from '~/hooks/usePlayer'
+import Button from '~/components/Button.vue'
 
 export default defineComponent({
   components: {
@@ -45,73 +53,51 @@ export default defineComponent({
 
     index: {
       type: Number,
-      required: true,
+      required: true
     },
   },
 
   setup(props) {
-    const store = useStore(key);
+    const { playingTrack, store } = usePlayer()
 
-    const isOnPlay = computed(() => (
-      store.getters.playingTrack._id === props.track._id
-      && !store.getters.playingTrack.isOnPause
-      && !store.getters.playingTrack.isOnLoading
-    ));
+    const isPlaying = computed(() => (
+      playingTrack.value._id === props.track._id &&
+      !playingTrack.value.isOnPause &&
+      !playingTrack.value.isOnLoading
+    ))
 
-    const isOnPause = computed(() => (
-      store.getters.playingTrack._id === props.track._id
-      && store.getters.playingTrack.isOnPause
-    ));
+    const isPaused = computed(() => (
+      playingTrack.value._id === props.track._id &&
+      playingTrack.value.isOnPause
+    ))
 
     const isOnLoading = computed(() => (
-      store.getters.playingTrack._id === props.track._id
-      && store.getters.playingTrack.isOnLoading
-    ));
-
-    const pauseTrack = () => {
-      store.commit("setTrackOnPause");
-    };
+      playingTrack.value._id === props.track._id &&
+      playingTrack.value.isOnLoading
+    ))
 
     const playTrack = () => {
-      store.dispatch('playTrack', props.track);
-      store.commit('expandPlayer');
-    };
+      store.dispatch('playTrack', props.track)
+      store.commit('expandPlayer')
+    }
 
-    const playingStateSplitter = () => {
-      if (!store.getters.playingTrack._id) {
-        playTrack();
-      } else if (store.getters.playingTrack._id === props.track._id) {
-        if (!store.getters.playingTrack.isOnPause) {
-          playTrack();
-        } else {
-          store.commit("continuePlay");
-        }
-      } else {
-        playTrack();
-      }
-    };
+    const pauseTrack = () => {
+      store.commit('setTrackOnPause')
+    }
+
+    const playFurther = () => {
+      store.commit('continuePlay')
+    }
 
     return {
-      isOnPlay,
-      isOnPause,
+      isPlaying,
+      isPaused,
       isOnLoading,
+      playTrack,
       pauseTrack,
-      playingStateSplitter,
-    };
-  },
-});
-</script>
-
-<style lang="scss" scoped>
-@import '~/scss/variables';
-.tracklist__row {
-  &-action {
-
-    &:hover {
-      fill: inherit;
-      stroke: inherit;
-      color: $white;
+      playFurther,
+      playingTrack
     }
   }
-}
-</style>
+})
+</script>

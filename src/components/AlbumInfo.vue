@@ -25,8 +25,8 @@
         :to="`/genres/${genre._id}`"
         class="album__info-category"
       >{{ genre.title }}</RouterLink><br>
-      <!-- <div>{{ totalCounts }}</div> -->
     </div>
+    <div class="album__info-total">{{ totalCounts }}</div>
     <div class="album__info-actions">
       <Button
         label="Play"
@@ -122,8 +122,14 @@ export default defineComponent({
       color: $warning;
     }
 
-    &-actions {
+    &-total {
+      color: $pale;
       margin-top: auto;
+      font-weight: 600;
+    }
+
+    &-actions {
+      margin-top: 3rem;
       display: flex;
       align-items: center;
     }

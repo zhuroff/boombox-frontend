@@ -6,9 +6,12 @@
       'tracklist__row'
     ]">
       <div class="tracklist__row-cell --drag">
-        <button class="tracklist__row-action">
-          <Sprite name="burger" />
-        </button>
+        <Button
+          icon="drag"
+          size="small"
+          isText
+          className="tracklist__row-action"
+        />
       </div>
       <div class="tracklist__row-cell --order">
         {{ track.order || index + 1 }}
@@ -31,14 +34,14 @@
         :trackID="track._id"
       />
       <TrackItemDisable :fileid="track._id" />
-      <div class="tracklist__row-cell --pointer --fix">
+      <!-- <div class="tracklist__row-cell --pointer --fix">
         <button
           class="tracklist__row-action"
           @click="isTOYEditable = !isTOYEditable"
         >
-          <!-- <Sprite name="disable" /> -->!
+          <Sprite name="disable" />
         </button>
-      </div>
+      </div> -->
       <div
         v-if="!isTOY"
         class="tracklist__row-cell --fix"
@@ -87,7 +90,7 @@ import { defineComponent, ref, computed, PropType } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import Button from '~/components/Button.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
@@ -100,7 +103,7 @@ import Textarea from 'primevue/textarea';
 
 export default defineComponent({
   components: {
-    Sprite,
+    Button,
     TrackItemPlay,
     TrackItemTitle,
     TrackItemDuration,
@@ -188,6 +191,7 @@ export default defineComponent({
     grid-template-columns: repeat(3, auto) 1fr;
 
     &:hover {
+      border-radius: $borderRadiusSM;
       background-color: $dark;
       color: $white;
     }
@@ -207,6 +211,11 @@ export default defineComponent({
       &.--drag {
         flex: none;
         justify-content: flex-start;
+
+        .icon {
+          color: $pale;
+          fill: $pale;
+        }
 
         @include media('<laptop') {
           width: 18px;
@@ -252,10 +261,6 @@ export default defineComponent({
           display: none;
         }
       }
-  
-      &.--disabled {
-        pointer-events: none;
-      }
 
       &:last-child {
 
@@ -288,15 +293,32 @@ export default defineComponent({
       &:hover {
   
         .icon {
-          color: inherit;
+          color: $white;
+          fill: $white;
           transition: fill 0.2s ease;
         }
       }
     }
 
     &.--playing {
-      background-color: $white;
-      color: $dark;
+      background-color: $dark;
+      color: $white;
+      border-radius: $borderRadiusSM;
+
+      .icon {
+
+        &.playing,
+        &.spinner,
+        &.drag,
+        &.plus {
+          fill: $white;
+          color: $white;
+        }
+
+        &.spinner {
+          stroke: $white;
+        }
+      }
     }
   
     &.--disabled {

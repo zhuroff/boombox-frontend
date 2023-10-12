@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, computed, watch } from 'vue'
+import { PropType, defineComponent, computed, watchEffect } from 'vue'
 import { AlbumPage } from '~/types/Album'
 import { RequestFilter } from '~/types/Global'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
@@ -115,42 +115,67 @@ export default defineComponent({
       relatedEntities
     } = useAlbumPage<AlbumPage>()
 
-    const totalCounts = computed(() => (
-      `${album.tracks?.length || 0} songs, ${album.tracks?.reduce((acc, next) => (
-        acc + Number(next.duration) || 0
-      ), 0) || '0 min 0 sec'}`
-    ))
+    const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
+      const totalDurationInSeconds = tracks.reduce((acc, next) => (
+        acc + (Number(next.duration) || 0)
+      ), 0)
 
-    watch(
-      album,
-      (newValue) => {
-        const relatedAlbumsConfig: RequestFilter[] = [
-          {
-            from: 'artists',
-            key: 'artist._id',
-            value: newValue.artist._id,
-            excluded: {
-              _id: newValue._id
-            }
-          },
-          {
-            from: 'genres',
-            key: 'genre._id',
-            value: newValue.genre._id,
-            excluded: {
-              _id: newValue._id,
-              'artist._id': newValue.artist._id
-            }
-          }
-        ];
+      const hours = Math.floor(totalDurationInSeconds / 3600)
+      const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
+      const seconds = Math.floor(totalDurationInSeconds % 60)
 
-        relatedAlbumsConfig.forEach((config) => {
-          getRelatedAlbums(config, entityType)
-        })
-      }
-    )
+      const formattedTime = `
+        ${hours.toString().padStart(2, '0')}:
+        ${minutes.toString().padStart(2, '0')}:
+        ${seconds.toString().padStart(2, '0')}
+      `.replace(/\s+/g, '')
+
+      return formattedTime
+    }
+    
+    const totalCounts = computed(() => {
+      const isAllTracksHaveDuration = album.tracks?.every((track) => (
+        Number(track.duration)
+      ))
+      return `
+        ${album.tracks?.length} tracks:
+        ${isAllTracksHaveDuration ? calcTotalTracksTime(album.tracks) : 'Unknown time'}.
+        Total tracks listened: ${album.tracks.reduce((acc, { listened }) => (
+          acc + (Number(listened) || 0)
+        ), 0)}
+      `.trim()
+    })
 
     const relatedAlbums = computed(() => relatedEntities)
+
+    const getRelated = () => {
+      console.log('related called')
+      const relatedAlbumsConfig: RequestFilter[] = [
+        {
+          from: 'artists',
+          key: 'artist._id',
+          value: album.artist._id,
+          excluded: {
+            _id: album._id
+          }
+        },
+        {
+          from: 'genres',
+          key: 'genre._id',
+          value: album.genre._id,
+          excluded: {
+            _id: album._id,
+            'artist._id': album.artist._id
+          }
+        }
+      ]
+
+      relatedAlbumsConfig.forEach((config) => {
+        getRelatedAlbums(config, entityType)
+      })
+    }
+    
+    watchEffect(() => album._id && getRelated())
 
     return { totalCounts, relatedAlbums }
   }

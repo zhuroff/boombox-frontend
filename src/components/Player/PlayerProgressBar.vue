@@ -18,7 +18,7 @@
 <script lang="ts">
 
 import { defineComponent, computed } from 'vue'
-import usePlayer from './usePlayer'
+import usePlayer from '~/hooks/usePlayer'
 
 export default defineComponent({
   setup() {
@@ -61,3 +61,4 @@ export default defineComponent({
 
 </script>
 
+../../hooks/usePlayer

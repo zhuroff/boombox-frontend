@@ -5,10 +5,10 @@ import { key } from '~/store'
 import { AlbumItem, AlbumPage } from '~/types/Album'
 import { CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
+import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
 import DiscogsServices from '~/services/DiscogsServices'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 
 export const useAlbumPage = <T extends object>() => {
   const route = useRoute()
@@ -21,9 +21,9 @@ export const useAlbumPage = <T extends object>() => {
   const isBookletOpened = ref(false)
   const isBookletAbsent = ref(false)
 
-  const fetchData = (entityType: string) => {
+  const fetchData = (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
-    DBApiService.getEntity<AlbumPage>(entityType, String(route.params.id))
+    DBApiService.getEntity<AlbumPage>(entityType, id)
       .then((data) => {
         const preparedData = {
           ...data,
@@ -34,6 +34,9 @@ export const useAlbumPage = <T extends object>() => {
         Object.assign(entity, preparedData)
         isDataFetched.value = true
         store.commit("setPlayerPlaylist", preparedData);
+        if (id === 'random') {
+          router.push({ params: { id: data._id } })
+        }
         fetchDiscogsInfo()
       })
       .catch((error) => {
@@ -70,21 +73,7 @@ export const useAlbumPage = <T extends object>() => {
   })
 
   const getRandomAlbum = (entityType: string) => {
-    isDataFetched.value = false
-    DBApiService.getEntityList<ListPageResponse<AlbumItem>>(
-      {
-        ...requestConfig,
-        isRandom: true,
-        limit: 1
-      },
-      entityType
-    )
-      .then(({ docs }) => {
-        Object.assign(entity, docs[0])
-        router.push({ params: { id: docs[0]._id } })
-        isDataFetched.value = true
-      })
-      .catch(console.error)
+    fetchData(entityType, 'random')
   }
 
   const getRelatedAlbums = async (filter: RequestFilter, entityType: string) => {
@@ -125,6 +114,7 @@ export const useAlbumPage = <T extends object>() => {
     getRelatedAlbums,
     relatedEntities,
     fetchDiscogsInfo,
-    booklet
+    booklet,
+    route
   }
 }

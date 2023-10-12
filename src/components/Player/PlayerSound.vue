@@ -24,7 +24,7 @@
 <script lang="ts">
 
 import { defineComponent, ref } from 'vue'
-import usePlayer from './usePlayer'
+import usePlayer from '~/hooks/usePlayer'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
@@ -56,3 +56,4 @@ export default defineComponent({
 
 </script>
 
+../../hooks/usePlayer

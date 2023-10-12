@@ -62,7 +62,7 @@ export class PlayerTrackDTO {
     this.cover = track.albumCover
     this.isOnPause = false
     this.isOnRepeat = false
-    this.isOnLoading = false
+    this.isOnLoading = true
     this.progressLine = 0
     this.progressTime = 0
     // this.progressHandler = null

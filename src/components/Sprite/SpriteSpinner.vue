@@ -3,7 +3,6 @@
     width="44"
     height="44"
     viewBox="0 0 44 44"
-    stroke="#000000"
     class="icon spinner"
   >
     <g fill="none" fill-rule="evenodd" stroke-width="2">
