@@ -1,9 +1,10 @@
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumItem, AlbumPage } from '~/types/Album'
-import { CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
+import { DiscogsPayload, DiscogsReleaseRow } from '~/types/Discogs'
+import { CardBasic, ListPageResponse, Pagination, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import DBApiService from '~/services/DBApiService'
@@ -15,11 +16,31 @@ export const useAlbumPage = <T extends object>() => {
   const router = useRouter()
   const store = useStore(key)
   const entity = reactive<T>({} as T)
+  const discogsData = reactive<DiscogsReleaseRow[]>([])
+  const discogsPagination = reactive<Pagination>({} as Pagination)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
   const booklet = reactive<string[]>([])
   const isDataFetched = ref(false)
   const isBookletOpened = ref(false)
   const isBookletAbsent = ref(false)
+  const isDiscogsFetched = ref(false)
+
+  const discogsPayload = computed<DiscogsPayload>(() => ({
+    rows: discogsData,
+    pagination: discogsPagination,
+    isFetched: isDiscogsFetched,
+    // https://json-schema.org/learn/getting-started-step-by-step
+    schema: {
+      columns: [
+        {
+          type: 'String'
+        },
+        {
+          type: 'String'
+        }
+      ]
+    }
+  }))
 
   const fetchData = (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
@@ -89,18 +110,25 @@ export const useAlbumPage = <T extends object>() => {
   }
 
   const fetchDiscogsInfo = async () => {
+    isDiscogsFetched.value = false
+    discogsData.length = 0
+    Object.assign(discogsPagination, null)
     // @ts-ignore
     DiscogsServices.discogs(entity, 1)
       .then((response) => {
-        // console.log(response)
-        // setDiscogsData(response);
-
-        // if (response.pagination.pages > page) {
-        //   fetchDiscogsData(page + 1);
-        // } else {
-        //   discogs.isFetched = true;
-        //   isDiscogsLoading.value = false;
-        // }
+        const isValidResponse = response.data.some(({ title }) => {
+          const dataTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '')
+          // @ts-ignore
+          const entityTitle = entity.title.toLowerCase().replace(/[^a-z0-9]/g, '')
+          return dataTitle.includes(entityTitle)
+        })
+        
+        if (isValidResponse) {
+          discogsData.push(...response.data)
+          Object.assign(discogsPagination, response.pagination)
+        }
+        
+        isDiscogsFetched.value = true
       })
       .catch((error) => console.dir(error));
   };
@@ -114,6 +142,7 @@ export const useAlbumPage = <T extends object>() => {
     getRelatedAlbums,
     relatedEntities,
     fetchDiscogsInfo,
+    discogsPayload,
     booklet,
     route
   }

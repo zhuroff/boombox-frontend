@@ -30,6 +30,9 @@
               :albumID="album._id"
               :artist="album.artist"
             />
+            <Table
+              :tableState="discogsPayload"
+            />
           </div>
           <div
             v-if="relatedAlbums.get('artists')?.length"
@@ -70,6 +73,7 @@
 <script lang="ts">
 import { PropType, defineComponent, computed, watchEffect } from 'vue'
 import { AlbumPage } from '~/types/Album'
+import { DiscogsPayload } from '~/types/Discogs'
 import { RequestFilter } from '~/types/Global'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -77,6 +81,7 @@ import CoverArt from '~/components/CoverArt/CoverArt.vue'
 import AlbumInfo from '~/components/AlbumInfo.vue'
 import Card from '~/components/Cards/Card.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
+import Table from '~/components/Table/Table.vue'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
@@ -85,7 +90,8 @@ export default defineComponent({
     CoverArt,
     AlbumInfo,
     Card,
-    TrackList
+    TrackList,
+    Table
   },
   props: {
     isDataFetched: {
@@ -94,6 +100,10 @@ export default defineComponent({
     },
     album: {
       type: Object as PropType<AlbumPage>,
+      required: true
+    },
+    discogsPayload: {
+      type: Object as PropType<DiscogsPayload>,
       required: true
     },
     entityType: {
@@ -149,7 +159,6 @@ export default defineComponent({
     const relatedAlbums = computed(() => relatedEntities)
 
     const getRelated = () => {
-      console.log('related called')
       const relatedAlbumsConfig: RequestFilter[] = [
         {
           from: 'artists',
@@ -177,7 +186,10 @@ export default defineComponent({
     
     watchEffect(() => album._id && getRelated())
 
-    return { totalCounts, relatedAlbums }
+    return {
+      totalCounts,
+      relatedAlbums
+    }
   }
 })
 </script>

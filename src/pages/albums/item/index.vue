@@ -2,6 +2,7 @@
   <AlbumPageTemplate
     :isDataFetched="isDataFetched"
     :album="entity"
+    :discogsPayload="discogsPayload"
     :entityType="entityType"
     :getBooklet="() => fetchBooklet(`${entity.folderName}/booklet`)"
     :getRandomAlbum="() => getRandomAlbum(entityType)"
@@ -26,6 +27,7 @@ export default defineComponent({
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
+      discogsPayload,
       route,
       booklet
     } = useAlbumPage<AlbumPage>()
@@ -49,7 +51,8 @@ export default defineComponent({
       entity,
       entityType,
       fetchBooklet,
-      getRandomAlbum
+      getRandomAlbum,
+      discogsPayload
     }
 
     // const route = useRoute();

@@ -90,6 +90,14 @@ export type CardBasic = BasicEntity & {
   caption: string
 }
 
+export type TableSchemaColumn = {
+  type: string
+}
+
+export type TableSchema = {
+  columns: TableSchemaColumn[]
+}
+
 export {
   Pagination,
   DropdownOption,

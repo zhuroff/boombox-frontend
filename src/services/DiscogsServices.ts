@@ -1,5 +1,6 @@
 import api from "~/api"
-import { AlbumPage, DiscogsDetails, DiscogsResponse } from "~/types/Album"
+import { AlbumPage } from "~/types/Album"
+import { DiscogsDetails, DiscogsResponse } from "~/types/Discogs"
 
 export default class DiscogsServices {
   static async discogs(album: AlbumPage, page: number) {
