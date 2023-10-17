@@ -1,12 +1,12 @@
 <template>
   <div class="table">
-    <div class="table__heading">
+    <!-- <div class="table__heading">
       <InputCheck type="checkbox" label="Official only" :isChecked="isOfficialsOnly"
         @checkInputChange="switchOfficials" />
 
       <Dropdown :options="Array.from(discogsFormats.values())" :triggerText="currentFormat"
         @chooseItem="setFormatFilter" />
-    </div>
+    </div> -->
 
     <!-- <OTable
       :data="filteredTable"
@@ -189,121 +189,121 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, PropType, inject, reactive, ref, computed } from 'vue'
-import { DiscogsCompanies, DiscogsDetails, DiscogsItem } from '~/types/Album'
-import { DropdownOption } from '~/types/Global'
-import { stringEqual } from '~/shared/stringifier'
-import InputCheck from '~/components/Inputs/InputCheck.vue'
-import Dropdown from '~/components/Dropdown/Dropdown.vue'
-import DiscogsServices from '~/services/DiscogsServices'
+// import { defineComponent, onMounted, PropType, inject, reactive, ref, computed } from 'vue'
+// import { DiscogsCompanies, DiscogsDetails, DiscogsItem } from '~/types/Album'
+// import { DropdownOption } from '~/types/Global'
+// import { stringEqual } from '~/shared/stringifier'
+// import InputCheck from '~/components/Inputs/InputCheck.vue'
+// import Dropdown from '~/components/Dropdown/Dropdown.vue'
+// import DiscogsServices from '~/services/DiscogsServices'
 
-export default defineComponent({
-  name: 'DiscogsTable',
+// export default defineComponent({
+//   name: 'DiscogsTable',
 
-  components: {
-    InputCheck,
-    Dropdown
-  },
+//   components: {
+//     InputCheck,
+//     Dropdown
+//   },
 
-  props: {
-    table: {
-      type: Array as PropType<DiscogsItem[]>,
-      required: true
-    }
-  },
+//   props: {
+//     table: {
+//       type: Array as PropType<DiscogsItem[]>,
+//       required: true
+//     }
+//   },
 
-  setup(props) {
-    const discogsTableRef = ref(null)
-    const isOfficialsOnly = ref(false)
-    const currentFormat = ref('All formats')
-    const discogsFormats = reactive(new Map<string, DropdownOption<string>>())
-    const details = reactive(new Map<number, DiscogsDetails>())
+//   setup(props) {
+//     const discogsTableRef = ref(null)
+//     const isOfficialsOnly = ref(false)
+//     const currentFormat = ref('All formats')
+//     const discogsFormats = reactive(new Map<string, DropdownOption<string>>())
+//     const details = reactive(new Map<number, DiscogsDetails>())
 
-    const filteredTable = computed(() => {
-      if (currentFormat.value === 'All formats') {
-        if (!isOfficialsOnly.value) {
-          return props.table
-        } else {
-          return props.table.filter((row) => (
-            !row.format.includes('Unofficial Release')
-          ))
-        }
-      }
+//     const filteredTable = computed(() => {
+//       if (currentFormat.value === 'All formats') {
+//         if (!isOfficialsOnly.value) {
+//           return props.table
+//         } else {
+//           return props.table.filter((row) => (
+//             !row.format.includes('Unofficial Release')
+//           ))
+//         }
+//       }
 
-      return props.table.filter((row) => {
-        const isRightFormat = !row.format?.length || row.format[0] === currentFormat.value
-        const isOfficialMatter = isOfficialsOnly.value ? !row.format.includes('Unofficial Release') : true
-        return isRightFormat && isOfficialMatter
-      })
-    })
+//       return props.table.filter((row) => {
+//         const isRightFormat = !row.format?.length || row.format[0] === currentFormat.value
+//         const isOfficialMatter = isOfficialsOnly.value ? !row.format.includes('Unofficial Release') : true
+//         return isRightFormat && isOfficialMatter
+//       })
+//     })
 
-    const switchOfficials = () => {
-      isOfficialsOnly.value = !isOfficialsOnly.value
-    }
+//     const switchOfficials = () => {
+//       isOfficialsOnly.value = !isOfficialsOnly.value
+//     }
 
-    const checkAndSetDetails = (id: number, data: DiscogsDetails, title: string) => {
-      details.set(id, stringEqual(title.split(' - ')[1], data.title) ? data : { ...data, isInvalid: true })
-    }
+//     const checkAndSetDetails = (id: number, data: DiscogsDetails, title: string) => {
+//       details.set(id, stringEqual(title.split(' - ')[1], data.title) ? data : { ...data, isInvalid: true })
+//     }
 
-    const detailsOpen = ({ id, title }: { id: number, title: string }) => {
-      if (!details.has(id)) {
-        DiscogsServices.discogsDetails(id)
-          .then((response) => checkAndSetDetails(id, response, title))
-          .catch((error) => console.dir(error))
-      }
-    }
+//     const detailsOpen = ({ id, title }: { id: number, title: string }) => {
+//       if (!details.has(id)) {
+//         DiscogsServices.discogsDetails(id)
+//           .then((response) => checkAndSetDetails(id, response, title))
+//           .catch((error) => console.dir(error))
+//       }
+//     }
 
-    const releaseCompanies = (a: DiscogsCompanies[], b: DiscogsCompanies[]) => {
-      return [...a, ...b]
-    }
+//     const releaseCompanies = (a: DiscogsCompanies[], b: DiscogsCompanies[]) => {
+//       return [...a, ...b]
+//     }
 
-    const createFormatFilter = () => {
-      discogsFormats.set(currentFormat.value, {
-        isActive: true,
-        title: currentFormat.value,
-        value: currentFormat.value
-      })
+//     const createFormatFilter = () => {
+//       discogsFormats.set(currentFormat.value, {
+//         isActive: true,
+//         title: currentFormat.value,
+//         value: currentFormat.value
+//       })
 
-      props.table.forEach((row) => {
-        if (row.format?.length && !discogsFormats.has(row.format[0])) {
-          discogsFormats.set(row.format[0], {
-            isActive: false,
-            title: row.format[0],
-            value: row.format[0]
-          })
-        }
-      })
-    }
+//       props.table.forEach((row) => {
+//         if (row.format?.length && !discogsFormats.has(row.format[0])) {
+//           discogsFormats.set(row.format[0], {
+//             isActive: false,
+//             title: row.format[0],
+//             value: row.format[0]
+//           })
+//         }
+//       })
+//     }
 
-    const setFormatFilter = (value: any) => {
-      for (let item of discogsFormats.values()) {
-        if (item.value === value) {
-          item.isActive = true
-          currentFormat.value = value
-        } else {
-          item.isActive = false
-        }
-      }
-    }
+//     const setFormatFilter = (value: any) => {
+//       for (let item of discogsFormats.values()) {
+//         if (item.value === value) {
+//           item.isActive = true
+//           currentFormat.value = value
+//         } else {
+//           item.isActive = false
+//         }
+//       }
+//     }
 
-    onMounted(() => {
-      createFormatFilter()
-    })
+//     onMounted(() => {
+//       createFormatFilter()
+//     })
 
-    return {
-      switchOfficials,
-      isOfficialsOnly,
-      discogsFormats,
-      setFormatFilter,
-      discogsTableRef,
-      currentFormat,
-      filteredTable,
-      details,
-      detailsOpen,
-      releaseCompanies
-    }
-  }
-})
+//     return {
+//       switchOfficials,
+//       isOfficialsOnly,
+//       discogsFormats,
+//       setFormatFilter,
+//       discogsTableRef,
+//       currentFormat,
+//       filteredTable,
+//       details,
+//       detailsOpen,
+//       releaseCompanies
+//     }
+//   }
+// })
 
 </script>
 

@@ -1,19 +1,20 @@
 import { Ref } from 'vue'
-import { Pagination, TableSchema } from './Global'
+import { JSONSchema4, JSONSchema4TypeName } from 'json-schema'
+import { Pagination } from './Global'
 
 export type DiscogsReleaseRow = {
   id: number
   country: string
   cover: string
-  format: string[]
+  releaseFormat: string[]
   genre: string[]
   style: string[]
   label: string[]
   masterApiUrl: string
   releaseApiUrl: string
   pageURL: string
-  title: string
-  year: string
+  releaseTitle: string
+  releaseYear: string
 }
 
 export type DiscogsData = {
@@ -81,5 +82,65 @@ export type DiscogsPayload = {
   rows: DiscogsReleaseRow[]
   pagination: Pagination
   isFetched: Ref<boolean>
-  schema: TableSchema
+  schema: DiscogsTableSchema
+}
+
+// export class DiscogsTableLocale {
+//   country: string
+//   cover: string
+//   releaseFormat: string
+//   genre: string
+//   style: string
+//   label: string
+// }
+
+export class DiscogsTableSchema implements JSONSchema4 {
+  type: JSONSchema4TypeName
+  title = 'Discogs Schema'
+  properties: JSONSchema4
+  constructor() {
+    this.type = 'object'
+    this.properties = {
+      releaseTitle: {
+        type: 'string',
+        format: 'uri',
+        href: 'pageURL'
+      },
+      releaseYear: {
+        type: 'string'
+      },
+      country: {
+        type: 'string'
+      },
+      cover: {
+        type: 'string',
+        format: 'uri',
+        contentMediaType: 'image/*'
+      },
+      releaseFormat: {
+        type: 'array',
+        items: {
+          type: 'string'
+        }
+      },
+      genre: {
+        type: 'array',
+        items: {
+          type: 'string'
+        }
+      },
+      style: {
+        type: 'array',
+        items: {
+          type: 'string'
+        }
+      },
+      label: {
+        type: 'array',
+        items: {
+          type: 'string'
+        }
+      }
+    }
+  }
 }

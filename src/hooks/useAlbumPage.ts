@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumItem, AlbumPage } from '~/types/Album'
-import { DiscogsPayload, DiscogsReleaseRow } from '~/types/Discogs'
+import { DiscogsPayload, DiscogsReleaseRow, DiscogsTableSchema } from '~/types/Discogs'
 import { CardBasic, ListPageResponse, Pagination, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
@@ -29,17 +29,7 @@ export const useAlbumPage = <T extends object>() => {
     rows: discogsData,
     pagination: discogsPagination,
     isFetched: isDiscogsFetched,
-    // https://json-schema.org/learn/getting-started-step-by-step
-    schema: {
-      columns: [
-        {
-          type: 'String'
-        },
-        {
-          type: 'String'
-        }
-      ]
-    }
+    schema: new DiscogsTableSchema()
   }))
 
   const fetchData = (entityType: string, id = String(route.params.id)) => {
@@ -112,12 +102,11 @@ export const useAlbumPage = <T extends object>() => {
   const fetchDiscogsInfo = async () => {
     isDiscogsFetched.value = false
     discogsData.length = 0
-    Object.assign(discogsPagination, null)
     // @ts-ignore
     DiscogsServices.discogs(entity, 1)
       .then((response) => {
-        const isValidResponse = response.data.some(({ title }) => {
-          const dataTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '')
+        const isValidResponse = response.data.some(({ releaseTitle }) => {
+          const dataTitle = releaseTitle.toLowerCase().replace(/[^a-z0-9]/g, '')
           // @ts-ignore
           const entityTitle = entity.title.toLowerCase().replace(/[^a-z0-9]/g, '')
           return dataTitle.includes(entityTitle)
