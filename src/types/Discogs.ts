@@ -101,29 +101,19 @@ export class DiscogsTableSchema implements JSONSchema4 {
   constructor() {
     this.type = 'object'
     this.properties = {
-      releaseTitle: {
+      cover: {
         type: 'string',
         format: 'uri',
+        contentMediaType: 'image/*',
         href: 'pageURL'
-      },
-      releaseYear: {
-        type: 'string'
       },
       country: {
         type: 'string'
       },
-      cover: {
-        type: 'string',
-        format: 'uri',
-        contentMediaType: 'image/*'
+      releaseYear: {
+        type: 'string'
       },
       releaseFormat: {
-        type: 'array',
-        items: {
-          type: 'string'
-        }
-      },
-      genre: {
         type: 'array',
         items: {
           type: 'string'
@@ -136,10 +126,7 @@ export class DiscogsTableSchema implements JSONSchema4 {
         }
       },
       label: {
-        type: 'array',
-        items: {
-          type: 'string'
-        }
+        type: 'string'
       }
     }
   }

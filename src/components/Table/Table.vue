@@ -10,19 +10,35 @@
           :key="key"
         >
           <a
-            v-if="value.format === 'uri' && value.href"
-            :href="row[value.href as keyof DiscogsReleaseRow]"
+            v-if="
+              value.format === 'uri' &&
+              value.href &&
+              !value.contentMediaType.includes('image')
+            "
+            :href="row[value.href]"
             target="_blank"
           >{{ row[key] }}</a>
-          <img
+          <div
             v-else-if="value.format === 'uri' && value.contentMediaType.includes('image')"
-            :src="row[key]"
             :style="{
-              width: '100px',
-              height: '100px',
-              objectFit: 'cover'
+              width: '70px',
+              height: '70px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }"
-          />
+          >
+            <img              
+              :src="row[key]"
+              :style="{
+                maxWidth: '70px',
+                maxHeight: '70px',
+                objectFit: 'contain',
+                cursor: value.href ? 'pointer' : 'default'
+              }"
+              @click="value.href && openExternalLink(row[value.href])"
+            />
+          </div>
           <span v-else-if="value.type === 'array'">
             {{ row[key].join(', ') }}
           </span>
@@ -36,23 +52,28 @@
 <script lang="ts">
 import { JSONSchema4 } from 'json-schema'
 import { ComputedRef, PropType, computed, defineComponent } from 'vue'
-import { DiscogsPayload } from '~/types/Discogs'
+import { TablePayload } from '~/types/Global'
 
 export default defineComponent({
   name: 'Table',
   props: {
     tableState: {
-      type: Object as PropType<DiscogsPayload>,
+      type: Object as PropType<TablePayload<object>>,
       required: true
     }
   },
   setup({ tableState }) {
     const propMap: ComputedRef<Map<string, JSONSchema4>> = computed(() => (
-      new Map([...Object.entries(tableState.schema.properties)])
+      new Map([...Object.entries(tableState.schema.properties || {})])
     ))
 
+    const openExternalLink = (url: string) => {
+      window.open(url)
+    }
+
     return {
-      propMap 
+      propMap,
+      openExternalLink
     }
   }
 })

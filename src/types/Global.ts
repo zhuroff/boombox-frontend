@@ -1,4 +1,6 @@
+import { Ref } from "vue";
 import { CategoryImagesKeys } from "./Category"
+import { JSONSchema4 } from "json-schema";
 
 export type BasicEntity = {
   _id: string;
@@ -96,6 +98,13 @@ export type TableSchemaColumn = {
 
 export type TableSchema = {
   columns: TableSchemaColumn[]
+}
+
+export type TablePayload<T> = {
+  rows: T[]
+  pagination: Pagination
+  isFetched: Ref<boolean>
+  schema: JSONSchema4
 }
 
 export {
