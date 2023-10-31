@@ -1,16 +1,9 @@
-import api from "~/api"
-import { AlbumPage } from "~/types/Album"
-import { DiscogsDetails, DiscogsResponse } from "~/types/Discogs"
+import api from '~/api'
+import { DiscogsDetails, DiscogsQueryConfig, DiscogsReleaseRow } from '~/types/Discogs'
 
 export default class DiscogsServices {
-  static async discogs(album: AlbumPage, page: number) {
-    const payload = {
-      artist: album.artist.title,
-      album: album.title,
-      page
-    }
-
-    const response = await api.post<DiscogsResponse>(`/api/discogs`, payload)
+  static async discogs(config: DiscogsQueryConfig) {
+    const response = await api.post<DiscogsReleaseRow[]>(`/api/discogs`, config)
 
     if (response?.status === 200) {
       return response.data

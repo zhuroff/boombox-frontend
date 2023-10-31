@@ -3,21 +3,22 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumItem, AlbumPage } from '~/types/Album'
-import { DiscogsPayload, DiscogsReleaseRow, DiscogsTableSchema } from '~/types/Discogs'
-import { CardBasic, ListPageResponse, Pagination, RequestConfig, RequestFilter } from '~/types/Global'
+import { DiscogsTablePayload, DiscogsReleaseRow, DiscogsTableSchema, DiscogsQueryConfig } from '~/types/Discogs'
+import { BasicEntity, CardBasic, ListPageResponse, Pagination, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
 import DiscogsServices from '~/services/DiscogsServices'
 
-export const useAlbumPage = <T extends object>() => {
+export const useAlbumPage = <T extends BasicEntity>() => {
   const route = useRoute()
   const router = useRouter()
   const store = useStore(key)
   const entity = reactive<T>({} as T)
   const discogsData = reactive<DiscogsReleaseRow[]>([])
-  const discogsPagination = reactive<Pagination>({} as Pagination)
+  const discogsPagination = reactive<Pagination>({ page: 1 } as Pagination)
+  const discogsRowsLimit = ref(30)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
   const booklet = reactive<string[]>([])
   const isDataFetched = ref(false)
@@ -25,35 +26,40 @@ export const useAlbumPage = <T extends object>() => {
   const isBookletAbsent = ref(false)
   const isDiscogsFetched = ref(false)
 
-  const discogsPayload = computed<DiscogsPayload>(() => ({
+  const discogsTablePayload = computed<DiscogsTablePayload>(() => ({
     rows: discogsData,
     pagination: discogsPagination,
     isFetched: isDiscogsFetched,
     schema: new DiscogsTableSchema()
   }))
 
-  const fetchData = (entityType: string, id = String(route.params.id)) => {
+  const fetchData = async (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
-    DBApiService.getEntity<AlbumPage>(entityType, id)
-      .then((data) => {
-        const preparedData = {
-          ...data,
-          tracks: data.tracks.map((track, index) => (
-            new AlbumTrackDTO(track, index + 1, data.albumCover, data.period)
-          ))
-        }
-        Object.assign(entity, preparedData)
-        isDataFetched.value = true
-        store.commit("setPlayerPlaylist", preparedData);
-        if (id === 'random') {
-          router.push({ params: { id: data._id } })
-        }
-        fetchDiscogsInfo()
-      })
-      .catch((error) => {
-        console.error(error)
-        isDataFetched.value = true
-      })
+    try {
+      const data = await DBApiService.getEntity<AlbumPage>(entityType, id)
+      const preparedData = {
+        ...data,
+        tracks: data.tracks.map((track, index) => (
+          new AlbumTrackDTO(track, index + 1, data.albumCover, data.period)
+        ))
+      }
+      Object.assign(entity, preparedData)
+      isDataFetched.value = true
+      store.commit("setPlayerPlaylist", preparedData)
+
+      if (id === 'random') {
+        router.push({ params: { id: data._id } })
+      }
+
+      return {
+        artist: preparedData.artist.title,
+        album: preparedData.title
+      }
+    } catch (error) {
+      console.error(error)
+      isDataFetched.value = true
+      return null
+    }
   }
 
   const fetchBooklet = (path: string) => {
@@ -99,27 +105,26 @@ export const useAlbumPage = <T extends object>() => {
     })
   }
 
-  const fetchDiscogsInfo = async () => {
+  const setDiscogsPagination = (data: DiscogsReleaseRow[]) => {
+    discogsPagination.totalDocs = data.length
+    discogsPagination.totalPages = Math.ceil(data.length / discogsRowsLimit.value)
+    discogsPagination.page = 1
+  }
+
+  const fetchDiscogsInfo = async (config: Omit<DiscogsQueryConfig, 'page'>) => {
     isDiscogsFetched.value = false
     discogsData.length = 0
-    // @ts-ignore
-    DiscogsServices.discogs(entity, 1)
-      .then((response) => {
-        const isValidResponse = response.data.some(({ releaseTitle }) => {
-          const dataTitle = releaseTitle.toLowerCase().replace(/[^a-z0-9]/g, '')
-          // @ts-ignore
-          const entityTitle = entity.title.toLowerCase().replace(/[^a-z0-9]/g, '')
-          return dataTitle.includes(entityTitle)
-        })
-        
-        if (isValidResponse) {
-          discogsData.push(...response.data)
-          Object.assign(discogsPagination, response.pagination)
-        }
-        
-        isDiscogsFetched.value = true
-      })
-      .catch((error) => console.dir(error));
+
+    try {
+      const data = await DiscogsServices.discogs({ ...config, page: 1 })
+      discogsData.push(...data)
+      isDiscogsFetched.value = true
+      setDiscogsPagination(data)
+      console.log(discogsPagination)
+    } catch (error) {
+      console.error(error)
+      isDiscogsFetched.value = true
+    }
   };
 
   return {
@@ -131,7 +136,7 @@ export const useAlbumPage = <T extends object>() => {
     getRelatedAlbums,
     relatedEntities,
     fetchDiscogsInfo,
-    discogsPayload,
+    discogsTablePayload,
     booklet,
     route
   }

@@ -78,11 +78,17 @@ export type DiscogsResponse = {
   data: DiscogsReleaseRow[]
 }
 
-export type DiscogsPayload = {
+export type DiscogsTablePayload = {
   rows: DiscogsReleaseRow[]
   pagination: Pagination
   isFetched: Ref<boolean>
   schema: DiscogsTableSchema
+}
+
+export type DiscogsQueryConfig = {
+  artist: string
+  album: string
+  page: number
 }
 
 // export class DiscogsTableLocale {

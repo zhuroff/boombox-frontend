@@ -31,7 +31,7 @@
               :artist="album.artist"
             />
             <Table
-              :tableState="discogsPayload"
+              :tableState="discogsTablePayload"
             />
           </div>
           <div
@@ -73,7 +73,7 @@
 <script lang="ts">
 import { PropType, defineComponent, computed, watchEffect } from 'vue'
 import { AlbumPage } from '~/types/Album'
-import { DiscogsPayload } from '~/types/Discogs'
+import { DiscogsTablePayload } from '~/types/Discogs'
 import { RequestFilter } from '~/types/Global'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
@@ -102,8 +102,8 @@ export default defineComponent({
       type: Object as PropType<AlbumPage>,
       required: true
     },
-    discogsPayload: {
-      type: Object as PropType<DiscogsPayload>,
+    discogsTablePayload: {
+      type: Object as PropType<DiscogsTablePayload>,
       required: true
     },
     entityType: {

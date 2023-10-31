@@ -2,7 +2,7 @@
   <AlbumPageTemplate
     :isDataFetched="isDataFetched"
     :album="entity"
-    :discogsPayload="discogsPayload"
+    :discogsTablePayload="discogsTablePayload"
     :entityType="entityType"
     :getBooklet="() => fetchBooklet(`${entity.folderName}/booklet`)"
     :getRandomAlbum="() => getRandomAlbum(entityType)"
@@ -27,20 +27,25 @@ export default defineComponent({
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
-      discogsPayload,
+      discogsTablePayload,
+      fetchDiscogsInfo,
       route,
       booklet
     } = useAlbumPage<AlbumPage>()
 
     const entityType = ref('albums')
 
-    onMounted(() => fetchData(entityType.value))
+    onMounted(() => {
+      fetchData(entityType.value)
+        .then((payload) => payload && fetchDiscogsInfo(payload))
+    })
 
     watch(
       route,
       (newValue) => {
         if (newValue.params.id && newValue.params.id !== entity._id) {
           fetchData(entityType.value)
+            .then((payload) => payload && fetchDiscogsInfo(payload))
         }
       },
       { immediate: false }
@@ -52,7 +57,7 @@ export default defineComponent({
       entityType,
       fetchBooklet,
       getRandomAlbum,
-      discogsPayload
+      discogsTablePayload
     }
 
     // const route = useRoute();
