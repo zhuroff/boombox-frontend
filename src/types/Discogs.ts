@@ -83,6 +83,7 @@ export type DiscogsTablePayload = {
   pagination: Pagination
   isFetched: Ref<boolean>
   schema: DiscogsTableSchema
+  set: (payload: Partial<Pagination>) => void
 }
 
 export type DiscogsQueryConfig = {

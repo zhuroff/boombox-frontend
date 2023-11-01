@@ -24,24 +24,26 @@
           :placeholderImage="placeholderImage"
         />
       </CardList>
-      <PagePagination
+      <Paginator
         v-if="pagePagination && pagePagination.totalPages > 1"
         key="pagination"
+        :config="paginationConfig"
         :pagination="pagePagination"
         @switchPagination="switchPagination"
+        @changeLimit="setEntitiesLimit"
       />
     </transition-group>
   </section>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from 'vue'
-import { BasicEntity, Pagination } from '~/types/Global'
+import { PropType, defineComponent, ref } from 'vue'
+import { BasicEntity, Pagination, PaginationConfig } from '~/types/Global'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Header from '~/components/Header/Header.vue'
 import CardList from '~/components/CardList/CardList.vue'
 import Card from '~/components/Cards/Card.vue'
-import PagePagination from '~/components/Pagination/Pagination.vue'
+import Paginator from '~/components/Paginator.vue'
 
 export default defineComponent({
   name: 'ListPageTemplate',
@@ -50,7 +52,7 @@ export default defineComponent({
     Header,
     CardList,
     Card,
-    PagePagination
+    Paginator
   },
   props: {
     isDataFetched: {
@@ -88,7 +90,22 @@ export default defineComponent({
     switchPagination: {
       type: Function as PropType<(page: number) => void>,
       required: false
+    },
+    setEntitiesLimit: {
+      type: Function as PropType<(limit: number) => void>,
+      required: false
     }
+  },
+  setup({ pagePagination }) {
+    const paginationConfig = ref<PaginationConfig>({
+      view: 'buttons',
+      limiter: [15, 30, 45, 60, 75, 100],
+      increment: true,
+      decrement: true,
+      selected: pagePagination?.limit || 15
+    })
+
+    return { paginationConfig }
   }
 })
 </script>

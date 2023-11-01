@@ -1,4 +1,4 @@
-import { onMounted, reactive, ref } from 'vue'
+import { ComputedRef, Ref, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { DropdownOption, ListPageResponse, Pagination, RequestConfig, SortingValue } from '~/types/Global'
 import DBApiService from '~/services/DBApiService'
@@ -7,15 +7,18 @@ export const useListPage = <T>() => {
   const { query } = useRoute()
   const router = useRouter()
   const isDataFetched = ref(false)
-
-  const pageStateConfig = reactive<RequestConfig>({
+  const entities = ref<T[]>([]) as Ref<T[]>
+  const pageSorting = ref<SortingValue>({ title: 1 })
+  const pagePagination = ref<Pagination>({
     page: Number(query.page) || 1,
-    sort: { title: 1 },
-    limit: 40
-  })
+    limit: 15
+  } as Pagination)
 
-  const entities = reactive<T[]>([])
-  const pagePagination = ref<Pagination>(null!)
+  const pageStateConfig: ComputedRef<RequestConfig> = computed(() => ({
+    page: pagePagination.value.page,
+    limit: pagePagination.value.limit,
+    sort: { ...pageSorting.value }
+  }))
 
   const sortingOptions = ref<DropdownOption<SortingValue>[]>([
     {
@@ -51,9 +54,16 @@ export const useListPage = <T>() => {
   }
 
   const switchPagination = (page: number) => {
-    pageStateConfig.page = page
+    pagePagination.value.page = page
     isDataFetched.value = false
     changeRouteQuery({ page })
+  }
+
+  const setEntitiesLimit = (limit: number) => {
+    pagePagination.value.limit = limit
+    pagePagination.value.page = 1
+    isDataFetched.value = false
+    changeRouteQuery({ page: 1 })
   }
 
   const switchSorting = (value: SortingValue) => {
@@ -63,12 +73,10 @@ export const useListPage = <T>() => {
   }
 
   const fetchData = (entityType: string) => {
-    DBApiService.getEntityList<ListPageResponse<T>>(pageStateConfig, entityType)
+    DBApiService.getEntityList<ListPageResponse<T>>(pageStateConfig.value, entityType)
       .then(({ docs, pagination }) => {
-        entities.length = 0
-        // @ts-ignore
-        entities.push(...docs)
-        pagePagination.value = pagination
+        entities.value = docs
+        pagePagination.value = Object.assign(pagePagination.value, pagination)
         isDataFetched.value = true
       })
       .catch(console.error)
@@ -78,7 +86,7 @@ export const useListPage = <T>() => {
     const { page } = query
 
     if (!page) {
-      changeRouteQuery({ page: pageStateConfig.page })
+      changeRouteQuery({ page: pagePagination.value.page })
     }
   })
 
@@ -89,6 +97,7 @@ export const useListPage = <T>() => {
     pagePagination,
     sortingOptions,
     switchPagination,
+    setEntitiesLimit,
     pageStateConfig,
     switchSorting
   }

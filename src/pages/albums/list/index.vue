@@ -9,6 +9,7 @@
     :dataList="albumList"
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
+    :setEntitiesLimit="setEntitiesLimit"
   >
     <template v-slot:header>
       <!-- <Dropdown
@@ -20,11 +21,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch } from 'vue'
+import { defineComponent, computed, watch, ref } from 'vue'
 import { AlbumItem } from '~/types/Album'
 import { CardBasic } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { useListPage } from '~/hooks/useListPage'
+import { isObjectsEquals } from '~/shared/checker'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Dropdown from '~/components/Dropdown/Dropdown.vue'
 
@@ -42,6 +44,7 @@ export default defineComponent({
       pagePagination,
       pageStateConfig,
       switchPagination,
+      setEntitiesLimit,
       sortingOptions,
       switchSorting
     } = useListPage<AlbumItem>()
@@ -51,14 +54,16 @@ export default defineComponent({
     ))
 
     const albumList = computed<CardBasic[]>(() => (
-      entities.map((album) => new AlbumCardBoxDTO(album))
-    ))    
-
+      entities.value.map((album) => new AlbumCardBoxDTO(album))
+    )) 
+    
     watch(
       pageStateConfig,
-      () => fetchData('albums'),
+      (newVal, oldVal) => {
+        !isObjectsEquals(newVal, oldVal) && fetchData('albums')
+      },
       { immediate: true }
-    )    
+    )
 
     return {
       pageHeading,
@@ -67,7 +72,8 @@ export default defineComponent({
       isDataFetched,
       sortingOptions,
       switchSorting,
-      switchPagination
+      switchPagination,
+      setEntitiesLimit
     }
   }
 })

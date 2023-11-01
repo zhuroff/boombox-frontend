@@ -31,7 +31,9 @@
               :artist="album.artist"
             />
             <Table
+              v-if="discogsTablePayload.isFetched"
               :tableState="discogsTablePayload"
+              @switchPagination="(page) => discogsTablePayload.set({ page })"
             />
           </div>
           <div
@@ -122,7 +124,7 @@ export default defineComponent({
   setup({ album, entityType }) {
     const {
       getRelatedAlbums,
-      relatedEntities
+      relatedEntities,
     } = useAlbumPage<AlbumPage>()
 
     const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
@@ -150,7 +152,7 @@ export default defineComponent({
       return `
         ${album.tracks?.length} tracks:
         ${isAllTracksHaveDuration ? calcTotalTracksTime(album.tracks) : 'Unknown time'}.
-        Total tracks listened: ${album.tracks.reduce((acc, { listened }) => (
+        Total tracks listened: ${album.tracks?.reduce((acc, { listened }) => (
           acc + (Number(listened) || 0)
         ), 0)}
       `.trim()
@@ -214,7 +216,7 @@ export default defineComponent({
   }
 
   @include media('>=laptop') {
-    padding: 25px;
+    padding: 25px 25px 0;
   }
 
   &__hero {

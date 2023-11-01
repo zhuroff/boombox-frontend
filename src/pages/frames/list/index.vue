@@ -6,7 +6,6 @@
         mode="light"
       />
     </transition>
-
     <transition-group name="flyUp">
       <div
         key="heading"
@@ -18,8 +17,7 @@
           text="Add new frame"
           :onClick="frameModalSwitcher"
         />
-      </div>
-      
+      </div>      
       <ul
         key="list"
         v-if="albums.isFetched"
@@ -34,15 +32,14 @@
           <CardFrame :album="album" />
         </CardWrapper>
       </ul>
-
-      <PagePagination
+      <Paginator
         key="pagination"
         v-if="albums.isFetched && albums.pagination.totalPages > 1"
         :pagination="albums.pagination"
+        :config="{}"
         @switchPagination="switchPagination"
       />
     </transition-group>
-
     <transition name="fade">
       <Modal
         v-if="isCreatingFrameModalActive"
@@ -73,7 +70,7 @@ import AppPreloader from '~/components/Preloader/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardFrame from '~/components/Cards/CardFrame.vue'
-import PagePagination from '~/components/Pagination/Pagination.vue'
+import Paginator from '~/components/Paginator.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import FrameForm from '~/components/Frame/FrameForm.vue'
 import FrameServices from '~/services/FrameServices'
@@ -84,7 +81,7 @@ export default defineComponent({
     Button,
     CardWrapper,
     CardFrame,
-    PagePagination,
+    Paginator,
     Modal,
     FrameForm
   },

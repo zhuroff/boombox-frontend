@@ -152,15 +152,8 @@ input[type="tel"],
 input[type="search"],
 textarea,
 select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   box-shadow: none !important;
   margin: 0;
-}
-
-input[type='number'] {
-  -moz-appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,
@@ -193,7 +186,6 @@ button,
 [type="button"],
 [type="reset"],
 [type="submit"] {
-  -webkit-appearance: button;
   font-family: $font;
   cursor: pointer;
 }

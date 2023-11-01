@@ -16,9 +16,8 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   const router = useRouter()
   const store = useStore(key)
   const entity = reactive<T>({} as T)
-  const discogsData = reactive<DiscogsReleaseRow[]>([])
-  const discogsPagination = reactive<Pagination>({ page: 1 } as Pagination)
-  const discogsRowsLimit = ref(30)
+  const discogsData = ref<DiscogsReleaseRow[]>([])
+  const discogsPagination = ref<Pagination>({ page: 1, limit: 30 } as Pagination)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
   const booklet = reactive<string[]>([])
   const isDataFetched = ref(false)
@@ -26,11 +25,26 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   const isBookletAbsent = ref(false)
   const isDiscogsFetched = ref(false)
 
+  /**
+   * Aggregate filters by:
+   * - country
+   * - releaseYear
+   * - releaseFormat
+   * - label
+   * - exclude unofficial
+   * - Do not forget to change discogsPagination
+   */
+  const preparedDiscogsData = computed(() => (
+    [...discogsData.value]
+      .splice((discogsPagination.value.page - 1) * discogsPagination.value.limit, discogsPagination.value.limit)
+  ))
+
   const discogsTablePayload = computed<DiscogsTablePayload>(() => ({
-    rows: discogsData,
-    pagination: discogsPagination,
+    rows: preparedDiscogsData.value,
+    pagination: discogsPagination.value,
     isFetched: isDiscogsFetched,
-    schema: new DiscogsTableSchema()
+    schema: new DiscogsTableSchema(),
+    set: setDiscogsPagination
   }))
 
   const fetchData = async (entityType: string, id = String(route.params.id)) => {
@@ -105,22 +119,22 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     })
   }
 
-  const setDiscogsPagination = (data: DiscogsReleaseRow[]) => {
-    discogsPagination.totalDocs = data.length
-    discogsPagination.totalPages = Math.ceil(data.length / discogsRowsLimit.value)
-    discogsPagination.page = 1
+  const setDiscogsPagination = (payload: Partial<Pagination>) => {
+    discogsPagination.value = Object.assign(discogsPagination.value, payload)
   }
 
   const fetchDiscogsInfo = async (config: Omit<DiscogsQueryConfig, 'page'>) => {
     isDiscogsFetched.value = false
-    discogsData.length = 0
+    discogsData.value = []
 
     try {
       const data = await DiscogsServices.discogs({ ...config, page: 1 })
-      discogsData.push(...data)
+      discogsData.value = data
       isDiscogsFetched.value = true
-      setDiscogsPagination(data)
-      console.log(discogsPagination)
+      setDiscogsPagination({
+        totalDocs: data.length,
+        totalPages: Math.ceil(data.length / discogsPagination.value.limit)
+      })
     } catch (error) {
       console.error(error)
       isDiscogsFetched.value = true
@@ -137,6 +151,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     relatedEntities,
     fetchDiscogsInfo,
     discogsTablePayload,
+    setDiscogsPagination,
     booklet,
     route
   }

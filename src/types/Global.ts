@@ -11,6 +11,15 @@ type Pagination = {
   totalDocs: number
   totalPages: number
   page: number
+  limit: number
+}
+
+export type PaginationConfig = {
+  view?: 'buttons' | 'select'
+  limiter?: number[]
+  increment?: true
+  decrement?: true
+  selected?: number
 }
 
 export type ListPageResponse<T> = {
