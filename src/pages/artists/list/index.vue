@@ -40,8 +40,7 @@ export default defineComponent({
       pagePagination,
       pageStateConfig,
       switchPagination,
-      sortingOptions,
-      switchSorting
+      sortingOptions
     } = useListPage<CategoryItem>()
 
     const pageHeading = computed(() => (
@@ -57,7 +56,6 @@ export default defineComponent({
       pagePagination,
       isDataFetched,
       sortingOptions,
-      switchSorting,
       switchPagination
     }
   }

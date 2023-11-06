@@ -29,6 +29,7 @@
         key="pagination"
         :config="paginationConfig"
         :pagination="pagePagination"
+        :style="{ marginTop: 'auto' }"
         @switchPagination="switchPagination"
         @changeLimit="setEntitiesLimit"
       />
@@ -99,7 +100,7 @@ export default defineComponent({
   setup({ pagePagination }) {
     const paginationConfig = ref<PaginationConfig>({
       view: 'buttons',
-      limiter: [15, 30, 45, 60, 75, 100],
+      limiter: [12, 15, 18, 30, 45, 48, 60, 75, 78, 100, 102],
       increment: true,
       decrement: true,
       selected: pagePagination?.limit || 15

@@ -137,16 +137,6 @@
 </svg>
 
 <svg
-  v-else-if="name === 'angle'"
-  width="24px"
-  height="24px"
-  viewBox="0 0 24 24"
-  class="icon"
->
-  <path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
-</svg>
-
-<svg
   v-else-if="name === 'camera'"
   viewBox="0 0 24 24"
   width="24px"
@@ -171,6 +161,10 @@ import SpritePause from './SpritePause.vue'
 import SpritePlus from './SpritePlus.vue'
 import SpritePlaying from './SpritePlaying.vue'
 import SpriteDrag from './SpriteDrag.vue'
+import SpriteChevronRight from './SpriteChevronRight.vue'
+import SpriteChevronLeft from './SpriteChevronLeft.vue'
+import SpriteChevronRightDouble from './SpriteChevronRightDouble.vue'
+import SpriteChevronLeftDouble from './SpriteChevronLeftDouble.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -202,7 +196,11 @@ export default defineComponent({
       ['pause', SpritePause],
       ['plus', SpritePlus],
       ['playing', SpritePlaying],
-      ['drag', SpriteDrag]
+      ['drag', SpriteDrag],
+      ['chevron-right', SpriteChevronRight],
+      ['chevron-left', SpriteChevronLeft],
+      ['chevron-right-double', SpriteChevronRightDouble],
+      ['chevron-left-double', SpriteChevronLeftDouble],
     ])
 
     const IconComponent = computed(() => (

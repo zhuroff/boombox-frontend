@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch, ref } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
 import { AlbumItem } from '~/types/Album'
 import { CardBasic } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
@@ -45,8 +45,7 @@ export default defineComponent({
       pageStateConfig,
       switchPagination,
       setEntitiesLimit,
-      sortingOptions,
-      switchSorting
+      sortingOptions
     } = useListPage<AlbumItem>()
 
     const pageHeading = computed(() => (
@@ -71,7 +70,6 @@ export default defineComponent({
       pagePagination,
       isDataFetched,
       sortingOptions,
-      switchSorting,
       switchPagination,
       setEntitiesLimit
     }

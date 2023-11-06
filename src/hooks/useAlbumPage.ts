@@ -105,6 +105,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
 
   const getRandomAlbum = (entityType: string) => {
     fetchData(entityType, 'random')
+      .then((payload) => payload && fetchDiscogsInfo(payload))
   }
 
   const getRelatedAlbums = async (filter: RequestFilter, entityType: string) => {

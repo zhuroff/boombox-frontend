@@ -4,14 +4,16 @@ import { DropdownOption, ListPageResponse, Pagination, RequestConfig, SortingVal
 import DBApiService from '~/services/DBApiService'
 
 export const useListPage = <T>() => {
-  const { query } = useRoute()
+  const { name, query } = useRoute()
   const router = useRouter()
   const isDataFetched = ref(false)
   const entities = ref<T[]>([]) as Ref<T[]>
   const pageSorting = ref<SortingValue>({ title: 1 })
   const pagePagination = ref<Pagination>({
     page: Number(query.page) || 1,
-    limit: 15
+    limit: localStorage.getItem(`entitiesLimit:${name?.toString()}`)
+      ? Number(localStorage.getItem(`entitiesLimit:${name?.toString()}`))
+      : 15
   } as Pagination)
 
   const pageStateConfig: ComputedRef<RequestConfig> = computed(() => ({
@@ -47,12 +49,6 @@ export const useListPage = <T>() => {
     router.push({ query })
   }
 
-  const changeSorting = (value: SortingValue) => {
-    sortingOptions.value = sortingOptions.value.map((option) => (
-      { ...option, isActive: JSON.stringify(option.value) === JSON.stringify(value) }
-    ))
-  }
-
   const switchPagination = (page: number) => {
     pagePagination.value.page = page
     isDataFetched.value = false
@@ -63,13 +59,8 @@ export const useListPage = <T>() => {
     pagePagination.value.limit = limit
     pagePagination.value.page = 1
     isDataFetched.value = false
+    name && localStorage.setItem(`entitiesLimit:${name.toString()}`, limit.toString())
     changeRouteQuery({ page: 1 })
-  }
-
-  const switchSorting = (value: SortingValue) => {
-    // pageStateConfig.sort = value
-    // isDataFetched.value = false
-    // changeSorting(value)
   }
 
   const fetchData = (entityType: string) => {
@@ -98,7 +89,6 @@ export const useListPage = <T>() => {
     sortingOptions,
     switchPagination,
     setEntitiesLimit,
-    pageStateConfig,
-    switchSorting
+    pageStateConfig
   }
 }

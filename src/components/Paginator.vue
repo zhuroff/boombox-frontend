@@ -16,24 +16,32 @@
       v-if="config.decrement"
       class="paginator__button"
       :disabled="pagination.page === 1"
+      @click="switchPagination(1)"
+    >
+      <Sprite name="chevron-left-double" />
+    </button>
+    <button
+      v-if="config.decrement"
+      class="paginator__button"
+      :disabled="pagination.page === 1"
       @click="switchPagination(pagination.page - 1)"
     >
-      <Sprite name="angle" />
+      <Sprite name="chevron-left" />
     </button>
     <div
       v-if="config.view === 'buttons'"
       class="paginator__switcher"
     >
       <button
-        v-for="option in options"
-        @click="switchPagination(option)"
-        :style="{ backgroundColor: option === pagination.page ? 'yellow' : 'transparent' }"
-      >{{ option }}</button>
+        v-for="button in buttons"
+        @click="switchPagination(button)"
+        :class="[{ '--current' : button === pagination.page }, 'paginator__button']"
+      >{{ button }}</button>
     </div>
     <select
       v-else
       class="paginator__select"
-      v-mode="localPage"
+      v-model="localPage"
     >
       <option
         v-for="option in options"
@@ -48,13 +56,21 @@
       :disabled="pagination.page === pagination.totalPages"
       @click="switchPagination(pagination.page + 1)"
     >
-      <Sprite name="angle" />
+      <Sprite name="chevron-right" />
+    </button>
+    <button
+      v-if="config.increment"
+      class="paginator__button"
+      :disabled="pagination.page === pagination.totalPages"
+      @click="switchPagination(pagination.totalPages)"
+    >
+      <Sprite name="chevron-right-double" />
     </button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType, ref, watchEffect, watch } from 'vue'
+import { defineComponent, computed, PropType, ref, watch } from 'vue'
 import { Pagination, PaginationConfig } from '~/types/Global'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
@@ -83,26 +99,38 @@ export default defineComponent({
       Array.from({ length: pagination.totalPages }, (a, b) => ++b)
     ))
 
+    const buttons = computed(() => {
+      const minButton = Math.max(1, localPage.value - 2)
+      const maxButton = Math.min(minButton + 4, pagination.totalPages)
+      const result = []
+
+      for (let i = minButton; i <= maxButton; i++) {
+        result.push(i)
+      }
+
+      return result
+    })
+
     const switchPagination = (page: number) => {
       localPage.value = page
     }
 
-    // watchEffect(() => {
-    //   if (localLimit.value !== pagination.limit) {
-    //     console.log('localLimit.value', localLimit.value)
-    //     emit('changeLimit', localLimit.value)
-    //   }
-    // })
-
-    // watchEffect(() => {
-    //   if (localPage.value !== pagination.page) {
-    //     console.log('localPage.value', localPage.value)
-    //     emit('switchPagination', localPage.value)
-    //   }
-    // })
+    watch(
+      [localLimit, localPage],
+      ([newLimitValue, newPageValue], [oldLimitValue, oldPageValue]) => {
+        if (newLimitValue !== oldLimitValue) {
+          emit('changeLimit', newLimitValue)
+          localPage.value = 1
+        } else if (newPageValue !== oldPageValue) {
+          emit('switchPagination', newPageValue)
+        }
+      },
+      { immediate: false }
+    )
 
     return {
       options,
+      buttons,
       localLimit,
       localPage,
       switchPagination
@@ -130,19 +158,22 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
-
-    &:first-of-type {
-      transform: rotate(180deg);
-    }
+    font-size: 1rem;
 
     &[disabled] {
       opacity: 0.5;
       pointer-events: none;
     }
 
-    .icon {
-      color: $dark;
+    &.--current {
+      border-radius: $borderRadiusSM;
+      background-color: $dark;
+      color: $white;
     }
+  }
+
+  &__switcher {
+    display: flex;
   }
 
   &__select {
