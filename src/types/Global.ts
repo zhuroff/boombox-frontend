@@ -7,6 +7,17 @@ export type BasicEntity = {
   title: string;
 }
 
+export type LocaleKeys = 'en' | 'by'
+
+export interface LocaleDictionary {
+  [key: string]: string | LocaleDictionary
+}
+
+export interface NavbarItem {
+  title: string
+  route: string
+}
+
 type Pagination = {
   totalDocs: number
   totalPages: number

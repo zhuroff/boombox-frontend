@@ -19,7 +19,7 @@ export default defineComponent({
     const route = useRoute()
 
     const routeComponent = computed(() => {
-      if (route.name === 'Collections') {
+      if (route.name === 'collections') {
         return CollectionList
       }
 

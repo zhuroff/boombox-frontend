@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex'
 import { AppStateInterface } from './state'
-import { TSnackbar, ReorderPayload } from '~/types/Global'
+import { TSnackbar, ReorderPayload, LocaleKeys } from '~/types/Global'
 import { AlbumPage } from '~/types/Album'
 import { TrackProgress, PlayerPlaylist } from '~/types/Player'
 import { PlaylistPage } from '~/types/Playlist'
@@ -17,6 +17,10 @@ const mutations: MutationTree<AppStateInterface> = {
 
   closeSnackbar: (state: AppStateInterface, index: number) => {
     state.snackbar.splice(index, 1)
+  },
+
+  setLocale: (state: AppStateInterface, locale: LocaleKeys) => {
+    state.currentLocale = locale
   },
 
   expandPlayer: (state: AppStateInterface) => {

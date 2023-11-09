@@ -83,7 +83,7 @@ import CoverArt from '~/components/CoverArt/CoverArt.vue'
 import AlbumInfo from '~/components/AlbumInfo.vue'
 import Card from '~/components/Cards/Card.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
-import Table from '~/components/Table/Table.vue'
+import Table from '~/components/Table.vue'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',

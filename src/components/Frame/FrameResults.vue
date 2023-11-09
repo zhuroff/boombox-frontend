@@ -21,7 +21,7 @@
 <script lang="ts">
 
 import { defineComponent, PropType } from 'vue'
-import { hostString } from '~/shared/media'
+import { hostString } from '~/utils'
 import { CategorySearchResult } from '~/types/Category'
 
 export default defineComponent({

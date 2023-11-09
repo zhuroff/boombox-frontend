@@ -3,24 +3,24 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: import(/* webpackChunkName: 'home' */ '~/pages/index.vue')
   },
   {
     path: '/albums',
-    name: 'Albums',
+    name: 'albums',
     component: () => import(/* webpackChunkName: 'albums' */ '~/pages/albums/index.vue'),
     children: [
       {
         path: '/albums/:id',
-        name: 'Album',
+        name: 'album',
         component: () => import(/* webpackChunkName: 'albums' */ '~/pages/albums/index.vue')
       }
     ]
   },
   {
     path: '/toy',
-    name: 'TOY',
+    name: 'toy',
     component: () => import(/* webpackChunkName: 'albums' */ '~/pages/toy/index.vue'),
     children: [
       {
@@ -39,55 +39,55 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/frames',
-    name: 'Frames',
+    name: 'frames',
     component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/index.vue'),
     children: [
       {
         path: '/frames/:id',
-        name: 'Frame',
+        name: 'frame',
         component: () => import(/* webpackChunkName: 'frames' */ '~/pages/frames/index.vue')
       }
     ]
   },
   {
     path: '/artists',
-    name: 'Artists',
+    name: 'artists',
     component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/index.vue'),
     children: [
       {
         path: '/artists/:id',
-        name: 'Artist',
+        name: 'artist',
         component: () => import(/* webpackChunkName: 'artists' */ '~/pages/artists/index.vue')
       }
     ]
   },
   {
     path: '/genres',
-    name: 'Genres',
+    name: 'genres',
     component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/index.vue'),
     children: [
       {
         path: '/genres/:id',
-        name: 'Genre',
+        name: 'genre',
         component: () => import(/* webpackChunkName: 'genres' */ '~/pages/genres/index.vue')
       }
     ]
   },
   {
     path: '/periods',
-    name: 'Periods',
+    name: 'periods',
     component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/index.vue'),
     children: [
       {
         path: '/periods/:id',
-        name: 'Period',
+        name: 'period',
         component: () => import(/* webpackChunkName: 'periods' */ '~/pages/periods/index.vue')
       }
     ]
   },
   {
     path: '/collections',
-    name: 'Collections',
+    name: 'collections',
     component: () => import(/* webpackChunkName: 'lists' */ '~/pages/collections/index.vue'),
     children: [
       {
@@ -99,7 +99,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/playlists',
-    name: 'Playlists',
+    name: 'playlists',
     component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/index.vue'),
     children: [
       {
@@ -111,18 +111,18 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/youtube',
-    name: 'YouTube',
+    name: 'youtube',
     component: () => import(/* webpackChunkName: 'youtube' */ '~/pages/youtube/index.vue')
   },
   {
     path: '/radio',
-    name: 'Radio',
+    name: 'radio',
     component: () => import(/* webpackChunkName: 'radio' */ '~/pages/radio/index.vue')
   },
   {
-    path: '/backups',
-    name: 'Backups',
-    component: () => import(/* webpackChunkName: 'radio' */ '~/pages/backups/index.vue')
+    path: '/settings',
+    name: 'settings',
+    component: () => import(/* webpackChunkName: 'radio' */ '~/pages/settings/index.vue')
   }
   // {
   //   path: '/login',

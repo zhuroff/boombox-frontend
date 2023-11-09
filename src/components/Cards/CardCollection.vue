@@ -30,7 +30,7 @@
 <script lang="ts">
 
 import { defineComponent, PropType } from 'vue'
-import { hostString } from '~/shared/media'
+import { hostString } from '~/utils'
 import { CollectionListItem } from '~/types/Collection'
 import { PlayListItem } from '~/types/Playlist'
 

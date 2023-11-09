@@ -16,7 +16,7 @@ api.interceptors.response.use(
     if (error.response) {
       throw error.response.data
     } else {
-      console.dir(error)
+      console.error(error)
     }
   }
 )

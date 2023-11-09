@@ -117,12 +117,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/variables.scss';
+@import '../scss/variables.scss';
 @import 'include-media';
 
 .table {
   width: 100%;
   margin-bottom: 25px;
+  font-size: 0.875rem;
 
   &__row {
     border-bottom: 1px solid $border;

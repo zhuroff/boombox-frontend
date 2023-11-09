@@ -19,7 +19,7 @@ export default defineComponent({
     const route = useRoute()
 
     const routeComponent = computed(() => {
-      if (route.name === 'Genres') {
+      if (route.name === 'genres') {
         return GenresList
       }
 

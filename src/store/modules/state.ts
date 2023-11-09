@@ -1,4 +1,4 @@
-import { TSnackbar } from '~/types/Global'
+import { TSnackbar, LocaleKeys } from '~/types/Global'
 import { PlayerPlaylist } from '~/types/Player'
 import { initPlaylist, playingTrackInitial } from './initStates'
 import { PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
@@ -9,6 +9,7 @@ export interface AppStateInterface {
   playingTrack: PlayerTrackDTO
   snackbar: TSnackbar[]
   isPlayerExpanded: boolean
+  currentLocale: LocaleKeys
 }
 
 function state(): AppStateInterface {
@@ -17,7 +18,8 @@ function state(): AppStateInterface {
     reservedPlaylist: { ...initPlaylist },
     playingTrack: { ...playingTrackInitial },
     snackbar: [],
-    isPlayerExpanded: false
+    isPlayerExpanded: false,
+    currentLocale: (localStorage.getItem('locale') as LocaleKeys) || 'en'
   }
 }
 

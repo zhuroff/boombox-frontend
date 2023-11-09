@@ -7,6 +7,7 @@
 <script lang="ts">
 
 import { defineComponent, onMounted, computed } from 'vue'
+import { useLocales } from '~/hooks/useLocales'
 import { useAuth } from './hooks/useAuth'
 import api from './api'
 import MainTemplate from '~/templates/MainTemplate.vue'
@@ -19,6 +20,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { checkAndSetLocale } = useLocales()
     const { isAuthenticated, setIsAuthenticated } = useAuth()
     const layout = computed(() => (
       isAuthenticated.value ? 'MainTemplate' : 'MainTemplate' // 'UnauthTemplate'
@@ -41,7 +43,10 @@ export default defineComponent({
       }
     }
 
-    onMounted(checkAuthentication)
+    onMounted(() => {
+      checkAndSetLocale()
+      // checkAuthentication()
+    })
 
     return {
       layout

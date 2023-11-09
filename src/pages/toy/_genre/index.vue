@@ -23,7 +23,7 @@ import api from '~/api'
 import { PropType, defineComponent, reactive, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
-import { slugify } from '~/shared/slugify'
+import { slugify } from '~/utils'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import TOYYear from '../_year/index.vue'
 

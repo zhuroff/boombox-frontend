@@ -29,7 +29,7 @@
 
 import { computed, defineComponent, PropType } from 'vue'
 import { SearchResultData } from '~/types/Search'
-import { hostString } from '~/shared/media'
+import { hostString } from '~/utils'
 
 export default defineComponent({
   name: 'SearchResultsItem',

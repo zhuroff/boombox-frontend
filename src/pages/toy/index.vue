@@ -22,7 +22,7 @@
 import api from '~/api'
 import { defineComponent, reactive, computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { slugify } from '~/shared/slugify'
+import { slugify } from '~/utils'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'

@@ -59,28 +59,6 @@
         </Modal>
       </transition>
     </div>
-    <!-- <div v-if="isTOY && isTOYEditable">
-      <Editor
-        v-model="descriptionValue"
-        editorStyle="height: 150px"
-      >
-        <template #toolbar>
-          <span class="ql-formats">
-            <button class="ql-bold"></button>
-            <button class="ql-italic"></button>
-            <button class="ql-link"></button>
-          </span>
-        </template>
-      </Editor>
-      <Textarea
-        v-model="frameValue"
-        :autoResize="true"
-        rows="5"
-        cols="30"
-        :style="{ width: '100%' }"
-      />
-      <button @click="saveToyInfo">Save</button>
-    </div> -->
   </div>
 </template>
 
@@ -98,8 +76,6 @@ import TrackItemPlaylist from './TrackItemPlaylist.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
 import Modal from '~/components/Modal/Modal.vue'
 import TrackLyrics from './TrackLyrics.vue'
-import Editor from 'primevue/editor';
-import Textarea from 'primevue/textarea';
 
 export default defineComponent({
   components: {
@@ -110,9 +86,7 @@ export default defineComponent({
     TrackItemPlaylist,
     TrackItemDisable,
     Modal,
-    TrackLyrics,
-    Editor,
-    Textarea
+    TrackLyrics
   },
 
   props: {

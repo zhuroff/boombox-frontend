@@ -26,7 +26,8 @@ import { AlbumItem } from '~/types/Album'
 import { CardBasic } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { useListPage } from '~/hooks/useListPage'
-import { isObjectsEquals } from '~/shared/checker'
+import { useLocales } from '~/hooks/useLocales'
+import { isObjectsEquals } from '~/utils'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Dropdown from '~/components/Dropdown/Dropdown.vue'
 
@@ -47,9 +48,11 @@ export default defineComponent({
       setEntitiesLimit,
       sortingOptions
     } = useListPage<AlbumItem>()
+    
+    const { lang } = useLocales()
 
     const pageHeading = computed(() => (
-      `The collection contains ${pagePagination.value?.totalDocs || 0} albums`
+      lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
     ))
 
     const albumList = computed<CardBasic[]>(() => (

@@ -6,21 +6,25 @@
         mode="light"
       />
     </transition>
-
     <transition name="flyUp">
       <div
         v-if="isPageLoaded"
-        class="backups"
+        class="settings"
       >
         <div class="backups__actions">
           <Button
-            text="Create backup"
+            :text="lang('settings.createBackup')"
             @onClick="createBackups"
           />
-
           <Button
-            text="Synchronize"
+            :text="lang('settings.synchronize')"
             @onClick="synchronizeCollection"
+          />
+          <Button
+            v-for="locale in allLocales"
+            :key="locale"
+            :text="lang(`languages.${locale}`)"
+            @onClick="setLocale(locale)"
           />
         </div>
 
@@ -59,6 +63,7 @@
 import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
+import { useLocales } from '~/hooks/useLocales'
 import Button from '~/components/Button/Button.vue'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import api from '~/api'
@@ -75,8 +80,8 @@ export default defineComponent({
   },
 
   setup() {
+    const { allLocales, setLocale, lang } = useLocales()
     const store = useStore(key)
-
     const backups = reactive([]) as unknown as BackupList[]
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
@@ -180,6 +185,9 @@ export default defineComponent({
     onMounted(() => fetchBackups())
 
     return {
+      lang,
+      allLocales,
+      setLocale,
       isPageLoaded,
       backups,
       createBackups,
@@ -197,7 +205,7 @@ export default defineComponent({
 
 @import '~/scss/variables';
 
-.backups {
+.settings {
   padding: 25px;
 
   &__actions {

@@ -16,7 +16,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { CategoryItem } from '~/types/Category'
-import { hostString } from '~/shared/media'
+import { hostString } from '~/utils'
 
 export default defineComponent({
   name: 'CardCategory',

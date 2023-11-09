@@ -97,13 +97,13 @@
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
 import { CategoryKeysPlural, CategorySearchResult, CategoryBasic, CategoryMatcher, CategoryActive } from '~/types/Category'
 import { FramePayload } from '~/types/Frame'
-import { SearchPayload, SearchResultData, SearchResultState } from '~/types/Search'
+import { SearchPayload, SearchResultData } from '~/types/Search'
 import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import FrameResults from './FrameResults.vue'
-import CategoryServices from '~/services/CategoryServices'
+// import CategoryServices from '~/services/CategoryServices'
 import FrameServices from '~/services/FrameServices'
 import SearchServices from '~/services/SearchServices'
 import './FrameForm.scss'
@@ -216,9 +216,9 @@ export default defineComponent({
     }
 
     const createCategory = () => {
-      CategoryServices.create(activeCategory.key, searchQuery.value)
-        .then((result) => selectCategory(result))
-        .catch((error) => console.dir(error))
+      // CategoryServices.create(activeCategory.key, searchQuery.value)
+      //   .then((result) => selectCategory(result))
+      //   .catch((error) => console.dir(error))
     }
 
     return {
