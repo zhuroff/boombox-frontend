@@ -2,7 +2,7 @@
   <div class="album__info">
     <div class="album__info-head">
       <Button
-        label="Random next"
+        :label="lang('getRandomAlbum')"
         size="small"
         isOutlined
         isInverted
@@ -29,7 +29,7 @@
     <div class="album__info-total">{{ totalCounts }}</div>
     <div class="album__info-actions">
       <Button
-        label="Play"
+        :label="lang('playButton')"
         icon="play"
       />
       <Button
@@ -42,8 +42,9 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from 'vue'
-import { CategoryBasic } from '~/types/Category';
-import Button from './Button.vue';
+import { CategoryBasic } from '~/types/Category'
+import { useLocales } from '~/hooks/useLocales'
+import Button from './Button.vue'
 
 export default defineComponent({
   name: 'AlbumInfo',
@@ -79,6 +80,10 @@ export default defineComponent({
       type: Function as PropType<() => void>,
       required: true
     }
+  },
+  setup() {
+    const { lang } = useLocales()
+    return { lang }
   }
 })
 </script>

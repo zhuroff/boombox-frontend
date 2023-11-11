@@ -1,8 +1,5 @@
 <template>
   <div v-if="tableState.rows.length > 0">
-    <div class="table__filters">
-      
-    </div>
     <table class="table">
       <thead>
         <tr class="table__row">
@@ -11,7 +8,21 @@
             :key="key"
             class="table__cell-head"
           >
-            <span class="table__cell-text">{{ key }}</span>
+            <div
+              v-if="tableFilters?.[key]"
+              class="table__cell-filter"
+            >
+              <Select
+                :options="tableFilters[key]"
+                :localeKey="localeKey"
+                :entityKey="key"
+                :style="{ maxWidth: '120px' }"
+              />
+            </div>
+            <span
+              v-else
+              class="table__cell-text"
+            >{{ lang(`${localeKey}.${key}`) }}</span>
           </th>
         </tr>
       </thead>
@@ -73,21 +84,34 @@
 <script lang="ts">
 import { JSONSchema4 } from 'json-schema'
 import { ComputedRef, PropType, computed, defineComponent, ref } from 'vue'
-import { PaginationConfig, TablePayload } from '~/types/Global'
+import { PaginationConfig, TableFilter, TablePayload } from '~/types/Global'
+import { useLocales } from '~/hooks/useLocales'
+import Select from '~/components/Select.vue'
 import Paginator from '~/components/Paginator.vue'
 
 export default defineComponent({
   name: 'Table',
   components: {
+    Select,
     Paginator
   },
   props: {
     tableState: {
       type: Object as PropType<TablePayload<Record<string, any>>>,
       required: true
+    },
+    tableFilters: {
+      type: Object as PropType<TableFilter>,
+      required: false
+    },
+    localeKey: {
+      type: String,
+      required: true
     }
   },
   setup({ tableState }, { emit }) {
+    const { lang } = useLocales()
+
     const propMap: ComputedRef<Map<string, JSONSchema4>> = computed(() => (
       new Map([...Object.entries(tableState.schema.properties || {})])
     ))
@@ -107,6 +131,7 @@ export default defineComponent({
     }
 
     return {
+      lang,
       propMap,
       paginationConfig,
       openExternalLink,
@@ -137,6 +162,17 @@ export default defineComponent({
 
     &-head {
       font-weight: 600;
+
+      &:first-of-type {
+
+        .table__cell-text {
+          padding-left: 0;
+        }
+      }
+    }
+
+    &-filter {
+      padding: 0.5rem 0.75rem;
     }
     
     &-body {

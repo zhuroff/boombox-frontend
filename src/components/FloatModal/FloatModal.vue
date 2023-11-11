@@ -12,12 +12,12 @@
         <slot
           v-if="isFetched && isEmpty"
           name="empty"
-        />
+        ></slot>
 
         <slot
           v-else-if="isFetched && !isEmpty"
           name="list"
-        />
+        ></slot>
 
         <form
           v-if="isFetched && placeholder"

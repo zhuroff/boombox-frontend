@@ -24,5 +24,24 @@ export const localesBY: LocaleDictionary = {
   },
   headings: {
     albumsPage: 'У калекцыi {x} альбомаў'
+  },
+  getRandomAlbum: 'Выпадковы альбом',
+  unknownTime: 'невядомы час',
+  listenedTracks: 'Усяго праслуханых трэкаў:',
+  conjugated: {
+    tracks: {
+      singular: 'трэк',
+      upToFive: 'трэкi',
+      plural: 'трэкаў'
+    }
+  },
+  playButton: 'Граць',
+  discogsTable: {
+    cover: 'Вокладка',
+    country: 'Краiна',
+    releaseYear: 'Год',
+    releaseFormat: 'Фармат',
+    style: 'Стыль',
+    label: 'Лэйбл'
   }
 }

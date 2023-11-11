@@ -27,7 +27,7 @@
         @onClick="deleteItem"
       />
     </div>
-    <slot />
+    <slot></slot>
   </li>
 </template>
 

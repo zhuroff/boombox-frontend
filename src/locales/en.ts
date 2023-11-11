@@ -24,5 +24,24 @@ export const localesEN: LocaleDictionary = {
   },
   headings: {
     albumsPage: 'The collection contains {x} albums'
+  },
+  getRandomAlbum: 'Random album',
+  unknownTime: 'unknown time',
+  listenedTracks: 'Total tracks listened:',
+  conjugated: {
+    tracks: {
+      singular: 'track',
+      upToFive: 'tracks',
+      plural: 'tracks'
+    }
+  },
+  playButton: 'Play',
+  discogsTable: {
+    cover: 'Cover',
+    country: 'Country',
+    releaseYear: 'Year',
+    releaseFormat: 'Format',
+    style: 'Style',
+    label: 'Label'
   }
 }

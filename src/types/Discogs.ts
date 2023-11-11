@@ -1,15 +1,15 @@
 import { Ref } from 'vue'
 import { JSONSchema4, JSONSchema4TypeName } from 'json-schema'
-import { Pagination } from './Global'
+import { Pagination, TableFilter } from './Global'
 
-export type DiscogsReleaseRow = {
+export interface DiscogsReleaseRow {
   id: number
   country: string
   cover: string
   releaseFormat: string[]
   genre: string[]
   style: string[]
-  label: string[]
+  label: string
   masterApiUrl: string
   releaseApiUrl: string
   pageURL: string
@@ -17,39 +17,39 @@ export type DiscogsReleaseRow = {
   releaseYear: string
 }
 
-export type DiscogsData = {
+export interface DiscogsData {
   results: Map<number, DiscogsReleaseRow>
   isFetched: boolean
 }
 
-export type DiscogsCompanies = {
+export interface DiscogsCompanies {
   id: number
   catno: string
   entity_type_name: string
   name: string
 }
 
-export type DiscogsArtists = {
+export interface DiscogsArtists {
   id: number
   name: string
   role: string
   tracks: string
 }
 
-export type DiscogsIdentifiers = {
+export interface DiscogsIdentifiers {
   description: string
   type: string
   value: string
 }
 
-export type DiscogsTracklist = {
+export interface DiscogsTracklist {
   position: string
   duration: string
   title: string
   type_: string
 }
 
-export type DiscogsVideos = {
+export interface DiscogsVideos {
   description: string
   duration: number
   embed: boolean
@@ -57,7 +57,7 @@ export type DiscogsVideos = {
   uri: string
 }
 
-export type DiscogsDetails = {
+export interface DiscogsDetails {
   id: number
   title: string
   notes?: string
@@ -73,12 +73,12 @@ export type DiscogsDetails = {
   isInvalid?: true
 }
 
-export type DiscogsResponse = {
+export interface DiscogsResponse {
   pagination: Pagination
   data: DiscogsReleaseRow[]
 }
 
-export type DiscogsTablePayload = {
+export interface DiscogsTablePayload {
   rows: DiscogsReleaseRow[]
   pagination: Pagination
   isFetched: Ref<boolean>
@@ -86,20 +86,18 @@ export type DiscogsTablePayload = {
   set: (payload: Partial<Pagination>) => void
 }
 
-export type DiscogsQueryConfig = {
+export interface DiscogsQueryConfig {
   artist: string
   album: string
   page: number
 }
 
-// export class DiscogsTableLocale {
-//   country: string
-//   cover: string
-//   releaseFormat: string
-//   genre: string
-//   style: string
-//   label: string
-// }
+export interface DiscogsFilter extends TableFilter {
+  country: Map<string, boolean>
+  releaseYear: Map<string, boolean>
+  releaseFormat: Map<string, boolean>
+  label: Map<string, boolean>
+}
 
 export class DiscogsTableSchema implements JSONSchema4 {
   type: JSONSchema4TypeName

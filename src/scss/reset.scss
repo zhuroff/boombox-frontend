@@ -176,6 +176,7 @@ textarea {
 }
 
 select {
+  font-family: $font;
 
   &::-ms-expand {
     display: none;

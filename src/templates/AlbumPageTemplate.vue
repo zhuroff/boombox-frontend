@@ -13,15 +13,7 @@
             :albumCover="album.albumCover"
             @coverClick="getBooklet"
           />
-          <AlbumInfo
-            :title="album.title"
-            :artist="album.artist"
-            :genre="album.genre"
-            :period="album.period"
-            :entityType="entityType"
-            :totalCounts="totalCounts"
-            :getRandomAlbum="getRandomAlbum"
-          />
+          <slot></slot>
         </div>
         <div class="album__content">
           <div class="album__main">
@@ -33,6 +25,8 @@
             <Table
               v-if="discogsTablePayload.isFetched"
               :tableState="discogsTablePayload"
+              :tableFilters="discogsFilters"
+              localeKey="discogsTable"
               @switchPagination="(page) => discogsTablePayload.set({ page })"
             />
           </div>
@@ -75,12 +69,11 @@
 <script lang="ts">
 import { PropType, defineComponent, computed, watchEffect } from 'vue'
 import { AlbumPage } from '~/types/Album'
-import { DiscogsTablePayload } from '~/types/Discogs'
+import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
 import { RequestFilter } from '~/types/Global'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CoverArt from '~/components/CoverArt/CoverArt.vue'
-import AlbumInfo from '~/components/AlbumInfo.vue'
 import Card from '~/components/Cards/Card.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
@@ -90,7 +83,6 @@ export default defineComponent({
   components: {
     AppPreloader,
     CoverArt,
-    AlbumInfo,
     Card,
     TrackList,
     Table
@@ -108,15 +100,15 @@ export default defineComponent({
       type: Object as PropType<DiscogsTablePayload>,
       required: true
     },
+    discogsFilters: {
+      type: Object as PropType<DiscogsFilter>,
+      required: true
+    },
     entityType: {
       type: String,
       required: true
     },
     getBooklet: {
-      type: Function as PropType<() => void>,
-      required: true
-    },
-    getRandomAlbum: {
       type: Function as PropType<() => void>,
       required: true
     }
@@ -126,37 +118,6 @@ export default defineComponent({
       getRelatedAlbums,
       relatedEntities,
     } = useAlbumPage<AlbumPage>()
-
-    const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
-      const totalDurationInSeconds = tracks.reduce((acc, next) => (
-        acc + (Number(next.duration) || 0)
-      ), 0)
-
-      const hours = Math.floor(totalDurationInSeconds / 3600)
-      const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
-      const seconds = Math.floor(totalDurationInSeconds % 60)
-
-      const formattedTime = `
-        ${hours.toString().padStart(2, '0')}:
-        ${minutes.toString().padStart(2, '0')}:
-        ${seconds.toString().padStart(2, '0')}
-      `.replace(/\s+/g, '')
-
-      return formattedTime
-    }
-    
-    const totalCounts = computed(() => {
-      const isAllTracksHaveDuration = album.tracks?.every((track) => (
-        Number(track.duration)
-      ))
-      return `
-        ${album.tracks?.length} tracks:
-        ${isAllTracksHaveDuration ? calcTotalTracksTime(album.tracks) : 'Unknown time'}.
-        Total tracks listened: ${album.tracks?.reduce((acc, { listened }) => (
-          acc + (Number(listened) || 0)
-        ), 0)}
-      `.trim()
-    })
 
     const relatedAlbums = computed(() => relatedEntities)
 
@@ -189,7 +150,6 @@ export default defineComponent({
     watchEffect(() => album._id && getRelated())
 
     return {
-      totalCounts,
       relatedAlbums
     }
   }

@@ -4,21 +4,35 @@
     :album="entity"
     :entityType="entityType"
     :discogsTablePayload="discogsTablePayload"
+    :discogsFilters="discogsFilters"
     :getBooklet="() => fetchBooklet(`${entity.folderName}/booklet`)"
-    :getRandomAlbum="() => getRandomAlbum(entityType)"
-  />
+  >
+    <AlbumInfo
+      :title="entity.title"
+      :artist="entity.artist"
+      :genre="entity.genre"
+      :period="entity.period"
+      :entityType="entityType"
+      :totalCounts="totalCounts"
+      :getRandomAlbum="() => getRandomAlbum(entityType)"
+    />
+  </AlbumPageTemplate>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { AlbumPage } from '~/types/Album'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
+import { useLocales } from '~/hooks/useLocales'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
+import AlbumInfo from '~/components/AlbumInfo.vue'
+import { conjugate } from '~/utils'
 
 export default defineComponent({
   name: 'AlbumPage',
   components: {
-    AlbumPageTemplate
+    AlbumPageTemplate,
+    AlbumInfo
   },
   setup() {
     const {
@@ -29,10 +43,44 @@ export default defineComponent({
       getRandomAlbum,
       fetchDiscogsInfo,
       discogsTablePayload,
+      discogsFilters,
       route
     } = useAlbumPage<AlbumPage>()
 
+    const { lang } = useLocales()
+
     const entityType = ref('albums')
+
+    const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
+      const totalDurationInSeconds = tracks.reduce((acc, next) => (
+        acc + (Number(next.duration) || 0)
+      ), 0)
+
+      const hours = Math.floor(totalDurationInSeconds / 3600)
+      const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
+      const seconds = Math.floor(totalDurationInSeconds % 60)
+
+      const formattedTime = `
+        ${hours.toString().padStart(2, '0')}:
+        ${minutes.toString().padStart(2, '0')}:
+        ${seconds.toString().padStart(2, '0')}
+      `.replace(/\s+/g, '')
+
+      return formattedTime
+    }
+
+    const totalCounts = computed(() => {
+      const isAllTracksHaveDuration = entity.tracks?.every((track) => (
+        Number(track.duration)
+      ))
+      return `
+        ${entity.tracks?.length} ${conjugate('tracks', entity.tracks?.length)}:
+        ${isAllTracksHaveDuration ? calcTotalTracksTime(entity.tracks) : lang('unknownTime')}.
+        ${lang('listenedTracks')} ${entity.tracks?.reduce((acc, { listened }) => (
+          acc + (Number(listened) || 0)
+        ), 0)}
+      `.trim()
+    })
 
     onMounted(() => {
       fetchData(entityType.value)
@@ -56,7 +104,9 @@ export default defineComponent({
       entityType,
       fetchBooklet,
       getRandomAlbum,
-      discogsTablePayload
+      discogsTablePayload,
+      discogsFilters,
+      totalCounts
     }
   },
 });

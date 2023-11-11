@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumItem, AlbumPage } from '~/types/Album'
-import { DiscogsTablePayload, DiscogsReleaseRow, DiscogsTableSchema, DiscogsQueryConfig } from '~/types/Discogs'
+import { DiscogsTablePayload, DiscogsReleaseRow, DiscogsTableSchema, DiscogsQueryConfig, DiscogsFilter } from '~/types/Discogs'
 import { BasicEntity, CardBasic, ListPageResponse, Pagination, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
@@ -18,6 +18,12 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   const entity = reactive<T>({} as T)
   const discogsData = ref<DiscogsReleaseRow[]>([])
   const discogsPagination = ref<Pagination>({ page: 1, limit: 30 } as Pagination)
+  const discogsFilters = reactive<DiscogsFilter>({
+    country: new Map(),
+    releaseYear: new Map(),
+    releaseFormat: new Map(),
+    label: new Map()
+  })
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
   const booklet = reactive<string[]>([])
   const isDataFetched = ref(false)
@@ -25,19 +31,14 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   const isBookletAbsent = ref(false)
   const isDiscogsFetched = ref(false)
 
-  /**
-   * Aggregate filters by:
-   * - country
-   * - releaseYear
-   * - releaseFormat
-   * - label
-   * - exclude unofficial
-   * - Do not forget to change discogsPagination
-   */
   const preparedDiscogsData = computed(() => (
     [...discogsData.value]
       .splice((discogsPagination.value.page - 1) * discogsPagination.value.limit, discogsPagination.value.limit)
   ))
+
+  const preparedDiscogsFilters = computed(() => ({
+    
+  }))
 
   const discogsTablePayload = computed<DiscogsTablePayload>(() => ({
     rows: preparedDiscogsData.value,
@@ -124,6 +125,19 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     discogsPagination.value = Object.assign(discogsPagination.value, payload)
   }
 
+  const setDiscogsFilters = (data: DiscogsReleaseRow[]) => {
+    for (const item in discogsFilters) {
+      discogsFilters[item].clear()
+    }
+
+    data.forEach((row) => {
+      discogsFilters.country.set(row.country, false)
+      discogsFilters.releaseYear.set(row.releaseYear, false)
+      discogsFilters.releaseFormat.set(row.releaseFormat[0], false),
+      row.label.split(', ').forEach((label) => discogsFilters.label.set(label, false))
+    })
+  }
+
   const fetchDiscogsInfo = async (config: Omit<DiscogsQueryConfig, 'page'>) => {
     isDiscogsFetched.value = false
     discogsData.value = []
@@ -131,6 +145,8 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     try {
       const data = await DiscogsServices.discogs({ ...config, page: 1 })
       discogsData.value = data
+      setDiscogsFilters(data)
+      console.log(discogsFilters)
       isDiscogsFetched.value = true
       setDiscogsPagination({
         totalDocs: data.length,
@@ -152,6 +168,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     relatedEntities,
     fetchDiscogsInfo,
     discogsTablePayload,
+    discogsFilters,
     setDiscogsPagination,
     booklet,
     route

@@ -1,5 +1,5 @@
 import { LocaleDictionary } from '~/types/Global'
-import { CategoryBasic } from './types/Category'
+import { useLocales } from '~/hooks/useLocales'
 
 export const findLocaleLangValue = (path: string[], dict?: LocaleDictionary): string | null => {
   const value = dict?.[path[0]]
@@ -30,3 +30,19 @@ export const slugify = (str: string) => (
     .replace(/[^a-zа-я0-9\s]+/g, '').trim()
     .replace(/\s+/g, '-').trim()
 )
+
+export const conjugate = (key: string, amount: number) => {
+  const { lang } = useLocales()
+  const lastDigit = amount % 10
+  const lastTwoDigits = amount % 100
+  if (lastTwoDigits > 10 && lastTwoDigits < 20) {
+    return lang(`conjugated.${key}.plural`)
+  }
+  if (lastDigit === 1) {
+    return lang(`conjugated.${key}.singular`)
+  }
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return lang(`conjugated.${key}.upToFive`)
+  }
+  return lang(`conjugated.${key}.plural`)
+}
