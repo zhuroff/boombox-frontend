@@ -1,84 +1,92 @@
 <template>
-  <div v-if="tableState.rows.length > 0">
-    <table class="table">
-      <thead>
-        <tr class="table__row">
-          <th
-            v-for="[key] in propMap"
-            :key="key"
-            class="table__cell-head"
-          >
-            <div
-              v-if="tableFilters?.[key]"
-              class="table__cell-filter"
-            >
-              <Select
-                :options="tableFilters[key]"
-                :localeKey="localeKey"
-                :entityKey="key"
-                :style="{ maxWidth: '120px' }"
-              />
-            </div>
-            <span
-              v-else
-              class="table__cell-text"
-            >{{ lang(`${localeKey}.${key}`) }}</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="row in tableState.rows"
-          :key="row.id"
-          class="table__row"
+  <table class="table">
+    <thead>
+      <tr class="table__row">
+        <th
+          v-for="[key] in propMap"
+          :key="key"
+          class="table__cell-head"
         >
-          <td
-            v-for="[key, value] in propMap"
-            :key="key"
-            class="table__cell-body"
+          <div
+            v-if="tableFilters?.[key]"
+            class="table__cell-filter"
           >
-            <a
-              v-if="
-                value.format === 'uri' &&
-                value.href &&
-                !value.contentMediaType.includes('image')
-              "
-              :href="row[value.href]"
-              class="table__cell-link"
-              target="_blank"
-            >{{ row[key] }}</a>
-            <div
-              v-else-if="value.format === 'uri' && value.contentMediaType.includes('image')"
-              class="table__cell-image"
-            >
-              <img              
-                :src="row[key]"
-                :style="{ cursor: value.href ? 'pointer' : 'default' }"
-                @click="value.href && openExternalLink(row[value.href])"
-              />
-            </div>
-            <span
-              v-else-if="value.type === 'array'"
-              class="table__cell-text"
-            >
-              {{ row[key].join(', ') }}
-            </span>
-            <span
-              v-else
-              class="table__cell-text"
-            >{{ row[key] }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <Paginator
-      v-if="tableState.pagination?.totalPages > 1"
-      key="pagination"
-      :config="paginationConfig"
-      :pagination="tableState.pagination"
-      @switchPagination="switchPagination"
-    />
-  </div>
+            <Select
+              :options="tableFilters[key]"
+              :localeKey="localeKey"
+              :entityKey="key"
+              :selected="tableFiltersState[key] || ''"
+              :style="{ maxWidth: '120px' }"
+              @update:select="updateFilterValue"
+            />
+          </div>
+          <span
+            v-else
+            class="table__cell-text"
+          >{{ lang(`${localeKey}.${key}`) }}</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody v-if="tableState.rows.length > 0">
+      <tr
+        v-for="row in tableState.rows"
+        :key="row.id"
+        class="table__row"
+      >
+        <td
+          v-for="[key, value] in propMap"
+          :key="key"
+          class="table__cell-body"
+        >
+          <a
+            v-if="
+              value.format === 'uri' &&
+              value.href &&
+              !value.contentMediaType.includes('image')
+            "
+            :href="row[value.href]"
+            class="table__cell-link"
+            target="_blank"
+          >{{ row[key] }}</a>
+          <div
+            v-else-if="value.format === 'uri' && value.contentMediaType.includes('image')"
+            class="table__cell-image"
+          >
+            <img              
+              :src="row[key]"
+              :style="{ cursor: value.href ? 'pointer' : 'default' }"
+              @click="value.href && openExternalLink(row[value.href])"
+            />
+          </div>
+          <span
+            v-else-if="value.type === 'array'"
+            class="table__cell-text"
+          >
+            {{ row[key].join(', ') }}
+          </span>
+          <span
+            v-else
+            class="table__cell-text"
+          >{{ row[key] }}</span>
+        </td>
+      </tr>
+    </tbody>
+    <tbody v-else>
+      <tr>
+        <td
+          :colspan="propMap.size"
+          class="table__cell-empty"
+        >{{ lang('table.empty') }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <Paginator
+    v-if="tableState.pagination?.totalPages > 1"
+    key="pagination"
+    :config="paginationConfig"
+    :pagination="tableState.pagination"
+    @switchPagination="switchPagination"
+  />
 </template>
 
 <script lang="ts">
@@ -104,6 +112,10 @@ export default defineComponent({
       type: Object as PropType<TableFilter>,
       required: false
     },
+    tableFiltersState: {
+      type: Object as PropType<Record<keyof TableFilter, null | string>>,
+      required: true
+    },
     localeKey: {
       type: String,
       required: true
@@ -122,6 +134,10 @@ export default defineComponent({
       decrement: true
     })
 
+    const updateFilterValue = (payload: [string, string]) => {
+      emit('update:filter', payload)
+    }
+
     const openExternalLink = (url: string) => {
       window.open(url)
     }
@@ -134,6 +150,7 @@ export default defineComponent({
       lang,
       propMap,
       paginationConfig,
+      updateFilterValue,
       openExternalLink,
       switchPagination
     }
@@ -200,6 +217,13 @@ export default defineComponent({
         object-fit: contain;
         border-radius: $borderRadiusSM;
       }
+    }
+
+    &-empty {
+      text-align: center;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
     }
   }
 }

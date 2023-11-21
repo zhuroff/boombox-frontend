@@ -22,13 +22,27 @@
               :albumID="album._id"
               :artist="album.artist"
             />
-            <Table
+            <div
               v-if="discogsTablePayload.isFetched"
-              :tableState="discogsTablePayload"
-              :tableFilters="discogsFilters"
-              localeKey="discogsTable"
-              @switchPagination="(page) => discogsTablePayload.set({ page })"
-            />
+              class="album__discogs"
+            >
+              <div class="album__discogs-header">
+                <Sprite name="discogs" />
+                <Button
+                  v-if="Object.values(discogsFiltersStates).some((filter) => filter)"
+                  label="Reset filters"
+                  @click="resetDiscogsFilters"
+                />
+              </div>
+              <Table
+                :tableState="discogsTablePayload"
+                :tableFilters="discogsFilters"
+                :tableFiltersState="discogsFiltersStates"
+                localeKey="discogsTable"
+                @switchPagination="switchPagination"
+                @update:filter="updateDiscogsFilter"
+              />
+            </div>
           </div>
           <div
             v-if="relatedAlbums.get('artists')?.length"
@@ -77,6 +91,8 @@ import CoverArt from '~/components/CoverArt/CoverArt.vue'
 import Card from '~/components/Cards/Card.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
+import Sprite from '~/components/Sprite/Sprite.vue'
+import Button from '~/components/Button.vue'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
@@ -85,7 +101,9 @@ export default defineComponent({
     CoverArt,
     Card,
     TrackList,
-    Table
+    Table,
+    Sprite,
+    Button
   },
   props: {
     isDataFetched: {
@@ -104,6 +122,10 @@ export default defineComponent({
       type: Object as PropType<DiscogsFilter>,
       required: true
     },
+    discogsFiltersStates: {
+      type: Object as PropType<Record<keyof DiscogsFilter, null | string>>,
+      required: true
+    },
     entityType: {
       type: String,
       required: true
@@ -113,7 +135,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ album, entityType }) {
+  setup({ album, entityType }, { emit }) {
     const {
       getRelatedAlbums,
       relatedEntities,
@@ -146,11 +168,26 @@ export default defineComponent({
         getRelatedAlbums(config, entityType)
       })
     }
+
+    const updateDiscogsFilter = (payload: [keyof DiscogsFilter, string]) => {
+      emit('filter:update', payload)
+    }
+
+    const switchPagination = (page: number) => {
+      emit('switchPagination', page)
+    }
+
+    const resetDiscogsFilters = () => {
+      emit('filter:reset')
+    }
     
     watchEffect(() => album._id && getRelated())
 
     return {
-      relatedAlbums
+      relatedAlbums,
+      updateDiscogsFilter,
+      resetDiscogsFilters,
+      switchPagination
     }
   }
 })
@@ -222,6 +259,21 @@ export default defineComponent({
       font-weight: 600;
       text-align: center;
       margin-bottom: 1rem;
+    }
+  }
+
+  &__discogs {
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+
+      .discogs {
+        width: 100px;
+        height: auto;
+      }
     }
   }
 }

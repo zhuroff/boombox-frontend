@@ -111,6 +111,12 @@ export default defineComponent({
       return result
     })
 
+    // watch(
+    //   buttons,
+    //   (value) => console.log(value),
+    //   { immediate: true }
+    // )
+
     const switchPagination = (page: number) => {
       localPage.value = page
     }

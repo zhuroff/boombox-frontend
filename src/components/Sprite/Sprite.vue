@@ -165,6 +165,7 @@ import SpriteChevronRight from './SpriteChevronRight.vue'
 import SpriteChevronLeft from './SpriteChevronLeft.vue'
 import SpriteChevronRightDouble from './SpriteChevronRightDouble.vue'
 import SpriteChevronLeftDouble from './SpriteChevronLeftDouble.vue'
+import SpriteDiscogs from './SpriteDiscogs.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -177,7 +178,12 @@ export default defineComponent({
     SpritePause,
     SpritePlus,
     SpritePlaying,
-    SpriteDrag
+    SpriteDrag,
+    SpriteChevronRight,
+    SpriteChevronLeft,
+    SpriteChevronRightDouble,
+    SpriteChevronLeftDouble,
+    SpriteDiscogs
   },
 
   props: {
@@ -201,6 +207,7 @@ export default defineComponent({
       ['chevron-left', SpriteChevronLeft],
       ['chevron-right-double', SpriteChevronRightDouble],
       ['chevron-left-double', SpriteChevronLeftDouble],
+      ['discogs', SpriteDiscogs]
     ])
 
     const IconComponent = computed(() => (

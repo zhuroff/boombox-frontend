@@ -1,52 +1,24 @@
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumItem, AlbumPage } from '~/types/Album'
-import { DiscogsTablePayload, DiscogsReleaseRow, DiscogsTableSchema, DiscogsQueryConfig, DiscogsFilter } from '~/types/Discogs'
-import { BasicEntity, CardBasic, ListPageResponse, Pagination, RequestConfig, RequestFilter } from '~/types/Global'
+import { BasicEntity, CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
-import DiscogsServices from '~/services/DiscogsServices'
 
 export const useAlbumPage = <T extends BasicEntity>() => {
   const route = useRoute()
   const router = useRouter()
   const store = useStore(key)
   const entity = reactive<T>({} as T)
-  const discogsData = ref<DiscogsReleaseRow[]>([])
-  const discogsPagination = ref<Pagination>({ page: 1, limit: 30 } as Pagination)
-  const discogsFilters = reactive<DiscogsFilter>({
-    country: new Map(),
-    releaseYear: new Map(),
-    releaseFormat: new Map(),
-    label: new Map()
-  })
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
   const booklet = reactive<string[]>([])
   const isDataFetched = ref(false)
   const isBookletOpened = ref(false)
   const isBookletAbsent = ref(false)
-  const isDiscogsFetched = ref(false)
-
-  const preparedDiscogsData = computed(() => (
-    [...discogsData.value]
-      .splice((discogsPagination.value.page - 1) * discogsPagination.value.limit, discogsPagination.value.limit)
-  ))
-
-  const preparedDiscogsFilters = computed(() => ({
-    
-  }))
-
-  const discogsTablePayload = computed<DiscogsTablePayload>(() => ({
-    rows: preparedDiscogsData.value,
-    pagination: discogsPagination.value,
-    isFetched: isDiscogsFetched,
-    schema: new DiscogsTableSchema(),
-    set: setDiscogsPagination
-  }))
 
   const fetchData = async (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
@@ -87,15 +59,6 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     }
 
     CloudApiService.getFolder(path)
-
-    // DBApiService.getEntity<string[]>(
-    //   entityType,
-    //   `${String(route.params.id)}/${path}`
-    // )
-    //   .then((data) => {
-    //     console.log(data)
-    //   })
-    //   .catch(console.error)
   }
 
   const requestConfig = reactive<RequestConfig>({
@@ -105,8 +68,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   })
 
   const getRandomAlbum = (entityType: string) => {
-    fetchData(entityType, 'random')
-      .then((payload) => payload && fetchDiscogsInfo(payload))
+    return fetchData(entityType, 'random')
   }
 
   const getRelatedAlbums = async (filter: RequestFilter, entityType: string) => {
@@ -121,43 +83,6 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     })
   }
 
-  const setDiscogsPagination = (payload: Partial<Pagination>) => {
-    discogsPagination.value = Object.assign(discogsPagination.value, payload)
-  }
-
-  const setDiscogsFilters = (data: DiscogsReleaseRow[]) => {
-    for (const item in discogsFilters) {
-      discogsFilters[item].clear()
-    }
-
-    data.forEach((row) => {
-      discogsFilters.country.set(row.country, false)
-      discogsFilters.releaseYear.set(row.releaseYear, false)
-      discogsFilters.releaseFormat.set(row.releaseFormat[0], false),
-      row.label.split(', ').forEach((label) => discogsFilters.label.set(label, false))
-    })
-  }
-
-  const fetchDiscogsInfo = async (config: Omit<DiscogsQueryConfig, 'page'>) => {
-    isDiscogsFetched.value = false
-    discogsData.value = []
-
-    try {
-      const data = await DiscogsServices.discogs({ ...config, page: 1 })
-      discogsData.value = data
-      setDiscogsFilters(data)
-      console.log(discogsFilters)
-      isDiscogsFetched.value = true
-      setDiscogsPagination({
-        totalDocs: data.length,
-        totalPages: Math.ceil(data.length / discogsPagination.value.limit)
-      })
-    } catch (error) {
-      console.error(error)
-      isDiscogsFetched.value = true
-    }
-  };
-
   return {
     fetchData,
     entity,
@@ -166,10 +91,6 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     getRandomAlbum,
     getRelatedAlbums,
     relatedEntities,
-    fetchDiscogsInfo,
-    discogsTablePayload,
-    discogsFilters,
-    setDiscogsPagination,
     booklet,
     route
   }

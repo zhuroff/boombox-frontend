@@ -5,7 +5,11 @@
     :entityType="entityType"
     :discogsTablePayload="discogsTablePayload"
     :discogsFilters="discogsFilters"
+    :discogsFiltersStates="discogsFiltersStates"
     :getBooklet="() => fetchBooklet(`${entity.folderName}/booklet`)"
+    @filter:update="setDiscogsFilterValue"
+    @filter:reset="resetDiscogsFilters"
+    @switchPagination="setDiscogsPaginationPage"
   >
     <AlbumInfo
       :title="entity.title"
@@ -14,19 +18,20 @@
       :period="entity.period"
       :entityType="entityType"
       :totalCounts="totalCounts"
-      :getRandomAlbum="() => getRandomAlbum(entityType)"
+      :getRandomAlbum="getRandom"
     />
   </AlbumPageTemplate>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { conjugate } from '~/utils'
 import { AlbumPage } from '~/types/Album'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
+import { useDiscogs } from '~/hooks/useDiscogs'
 import { useLocales } from '~/hooks/useLocales'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import AlbumInfo from '~/components/AlbumInfo.vue'
-import { conjugate } from '~/utils'
 
 export default defineComponent({
   name: 'AlbumPage',
@@ -41,14 +46,20 @@ export default defineComponent({
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
-      fetchDiscogsInfo,
-      discogsTablePayload,
-      discogsFilters,
       route
     } = useAlbumPage<AlbumPage>()
 
-    const { lang } = useLocales()
+    const {
+      fetchDiscogsInfo,
+      discogsTablePayload,
+      discogsFiltersStates,
+      setDiscogsFilterValue,
+      setDiscogsPaginationPage,
+      resetDiscogsFilters,
+      discogsFilters
+    } = useDiscogs()
 
+    const { lang } = useLocales()
     const entityType = ref('albums')
 
     const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
@@ -82,6 +93,11 @@ export default defineComponent({
       `.trim()
     })
 
+    const getRandom = () => {
+      getRandomAlbum(entityType.value)
+        .then((payload) => payload && fetchDiscogsInfo(payload))
+    }
+
     onMounted(() => {
       fetchData(entityType.value)
         .then((payload) => payload && fetchDiscogsInfo(payload))
@@ -105,8 +121,13 @@ export default defineComponent({
       fetchBooklet,
       getRandomAlbum,
       discogsTablePayload,
+      discogsFiltersStates,
+      setDiscogsFilterValue,
+      setDiscogsPaginationPage,
+      resetDiscogsFilters,
       discogsFilters,
-      totalCounts
+      totalCounts,
+      getRandom
     }
   },
 });

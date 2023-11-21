@@ -18,7 +18,7 @@ export interface NavbarItem {
   route: string
 }
 
-export type TableFilter = Record<string, Map<string, boolean>>
+export type TableFilter = Record<string, string[]>
 
 type Pagination = {
   totalDocs: number

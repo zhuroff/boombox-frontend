@@ -41,7 +41,10 @@ export const localesBY: LocaleDictionary = {
     country: 'Краiна',
     releaseYear: 'Год',
     releaseFormat: 'Фармат',
-    style: 'Стыль',
     label: 'Лэйбл'
-  }
+  },
+  table: {
+    empty: 'Няма дадзеных'
+  },
+  unknown: 'Невядома'
 }

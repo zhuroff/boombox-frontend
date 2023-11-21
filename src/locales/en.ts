@@ -41,7 +41,10 @@ export const localesEN: LocaleDictionary = {
     country: 'Country',
     releaseYear: 'Year',
     releaseFormat: 'Format',
-    style: 'Style',
     label: 'Label'
-  }
+  },
+  table: {
+    empty: 'No data'
+  },
+  unknown: 'Unknown'
 }

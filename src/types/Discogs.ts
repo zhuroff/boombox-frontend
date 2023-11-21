@@ -8,8 +8,7 @@ export interface DiscogsReleaseRow {
   cover: string
   releaseFormat: string[]
   genre: string[]
-  style: string[]
-  label: string
+  label: string[]
   masterApiUrl: string
   releaseApiUrl: string
   pageURL: string
@@ -93,10 +92,10 @@ export interface DiscogsQueryConfig {
 }
 
 export interface DiscogsFilter extends TableFilter {
-  country: Map<string, boolean>
-  releaseYear: Map<string, boolean>
-  releaseFormat: Map<string, boolean>
-  label: Map<string, boolean>
+  country: string[]
+  releaseYear: string[]
+  releaseFormat: string[]
+  label: string[]
 }
 
 export class DiscogsTableSchema implements JSONSchema4 {
@@ -124,14 +123,11 @@ export class DiscogsTableSchema implements JSONSchema4 {
           type: 'string'
         }
       },
-      style: {
+      label: {
         type: 'array',
         items: {
           type: 'string'
         }
-      },
-      label: {
-        type: 'string'
       }
     }
   }
