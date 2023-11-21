@@ -15,13 +15,14 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   const store = useStore(key)
   const entity = reactive<T>({} as T)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
-  const booklet = reactive<string[]>([])
+  const booklet = ref<string[]>([])
   const isDataFetched = ref(false)
   const isBookletOpened = ref(false)
-  const isBookletAbsent = ref(false)
 
   const fetchData = async (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
+    booklet.value.length = 0
+
     try {
       const data = await DBApiService.getEntity<AlbumPage>(entityType, id)
       const preparedData = {
@@ -49,16 +50,18 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     }
   }
 
-  const fetchBooklet = (path: string) => {
-    if (booklet.length > 0) {
-      return isBookletOpened.value = true
+  const fetchBooklet = async (folder: string) => {
+    if (booklet.value.length > 0) {
+      isBookletOpened.value = true
     }
 
-    if (isBookletAbsent.value) {
-      return console.log('Booklet is absent')
+    try {
+      const bookletImages = await CloudApiService.getImages(`${folder}/booklet`)
+      booklet.value = bookletImages
+      console.log(bookletImages)
+    } catch (error) {
+      console.error(error)
     }
-
-    CloudApiService.getFolder(path)
   }
 
   const requestConfig = reactive<RequestConfig>({

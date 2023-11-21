@@ -6,7 +6,7 @@
     :discogsTablePayload="discogsTablePayload"
     :discogsFilters="discogsFilters"
     :discogsFiltersStates="discogsFiltersStates"
-    :getBooklet="() => fetchBooklet(`${entity.folderName}/booklet`)"
+    :getBooklet="() => fetchBooklet(entity.folderName)"
     @filter:update="setDiscogsFilterValue"
     @filter:reset="resetDiscogsFilters"
     @switchPagination="setDiscogsPaginationPage"
