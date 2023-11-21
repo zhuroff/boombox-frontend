@@ -28,7 +28,6 @@ type Pagination = {
 }
 
 export type PaginationConfig = {
-  view?: 'buttons' | 'select'
   limiter?: number[]
   increment?: true
   decrement?: true

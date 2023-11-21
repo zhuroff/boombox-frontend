@@ -99,7 +99,6 @@ export default defineComponent({
   },
   setup({ pagePagination }) {
     const paginationConfig = ref<PaginationConfig>({
-      view: 'buttons',
       limiter: [12, 15, 18, 30, 45, 48, 60, 75, 78, 100, 102],
       increment: true,
       decrement: true,

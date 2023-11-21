@@ -1,4 +1,4 @@
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { DiscogsFilter, DiscogsQueryConfig, DiscogsReleaseRow, DiscogsTablePayload, DiscogsTableSchema } from '~/types/Discogs'
 import { Pagination } from '~/types/Global'
 import DiscogsServices from '~/services/DiscogsServices'
@@ -23,12 +23,15 @@ export const useDiscogs = () => {
 
   const filteredDiscogsData = computed(() => (
     [...discogsData.value]
-      .filter((row: DiscogsReleaseRow) => (
-        Object.entries(discogsFiltersStates).every(([key, value]) => (
+      .filter((row: DiscogsReleaseRow) => {
+        return Object.entries(discogsFiltersStates).every(([key, value]) => {
           // @ts-ignore
-          !value ? true : Array.isArray(row[key]) ? row[key].includes(value) : row[key] === value
-        ))
-      ))
+          let rowValue = row[key]
+          if (!value) return true
+          if (!rowValue) rowValue = 'unknown'
+          return Array.isArray(rowValue) ? rowValue.includes(value) : rowValue === value
+        })
+      })
   ))
 
   const filteredDiscogsPagination = computed(() => ({
@@ -38,7 +41,7 @@ export const useDiscogs = () => {
   }))
 
   const preparedDiscogsData = computed(() => (
-    filteredDiscogsData.value
+    [...filteredDiscogsData.value]
       .splice(
         (filteredDiscogsPagination.value.page - 1) * filteredDiscogsPagination.value.limit,
         filteredDiscogsPagination.value.limit
@@ -81,10 +84,10 @@ export const useDiscogs = () => {
     }
 
     data.forEach((row) => {
-      uniqueFilterValues.country.add(row.country)
-      uniqueFilterValues.releaseYear.add(row.releaseYear)
-      uniqueFilterValues.releaseFormat.add(row.releaseFormat[0])
-      row.label.forEach((label) => uniqueFilterValues.label.add(label))
+      uniqueFilterValues.country.add(row.country || 'unknown')
+      uniqueFilterValues.releaseYear.add(row.releaseYear || 'unknown')
+      uniqueFilterValues.releaseFormat.add(row.releaseFormat[0] || 'unknown')
+      row.label.forEach((label) => uniqueFilterValues.label.add(label || 'unknown'))
     })
     
     Object.entries(uniqueFilterValues).forEach(([key, value]) => {

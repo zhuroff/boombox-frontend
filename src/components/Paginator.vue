@@ -28,28 +28,13 @@
     >
       <Sprite name="chevron-left" />
     </button>
-    <div
-      v-if="config.view === 'buttons'"
-      class="paginator__switcher"
-    >
+    <div class="paginator__switcher">
       <button
         v-for="button in buttons"
         @click="switchPagination(button)"
         :class="[{ '--current' : button === pagination.page }, 'paginator__button']"
       >{{ button }}</button>
     </div>
-    <select
-      v-else
-      class="paginator__select"
-      v-model="localPage"
-    >
-      <option
-        v-for="option in options"
-        :key="option"
-        :value="option"
-        :selected="option === pagination.page"
-      >{{ option }} of {{ options.length }}</option>
-    </select>
     <button
       v-if="config.increment"
       class="paginator__button"
@@ -96,7 +81,7 @@ export default defineComponent({
     const localLimit = ref(pagination.limit)
     const localPage = ref(pagination.page)
     const options = computed(() => (
-      Array.from({ length: pagination.totalPages }, (a, b) => ++b)
+      Array.from({ length: pagination.totalPages }, (_, b) => ++b)
     ))
 
     const buttons = computed(() => {
@@ -110,12 +95,6 @@ export default defineComponent({
 
       return result
     })
-
-    // watch(
-    //   buttons,
-    //   (value) => console.log(value),
-    //   { immediate: true }
-    // )
 
     const switchPagination = (page: number) => {
       localPage.value = page

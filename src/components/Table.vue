@@ -15,7 +15,7 @@
               :options="tableFilters[key]"
               :localeKey="localeKey"
               :entityKey="key"
-              :selected="tableFiltersState[key] || ''"
+              :selected="tableFiltersState"
               :style="{ maxWidth: '120px' }"
               @update:select="updateFilterValue"
             />
@@ -91,7 +91,7 @@
 
 <script lang="ts">
 import { JSONSchema4 } from 'json-schema'
-import { ComputedRef, PropType, computed, defineComponent, ref } from 'vue'
+import { ComputedRef, PropType, computed, defineComponent, ref, watch } from 'vue'
 import { PaginationConfig, TableFilter, TablePayload } from '~/types/Global'
 import { useLocales } from '~/hooks/useLocales'
 import Select from '~/components/Select.vue'
@@ -124,15 +124,14 @@ export default defineComponent({
   setup({ tableState }, { emit }) {
     const { lang } = useLocales()
 
-    const propMap: ComputedRef<Map<string, JSONSchema4>> = computed(() => (
-      new Map([...Object.entries(tableState.schema.properties || {})])
-    ))
-
     const paginationConfig = ref<PaginationConfig>({
-      view: 'buttons',
       increment: true,
       decrement: true
     })
+
+    const propMap: ComputedRef<Map<string, JSONSchema4>> = computed(() => (
+      new Map([...Object.entries(tableState.schema.properties || {})])
+    ))
 
     const updateFilterValue = (payload: [string, string]) => {
       emit('update:filter', payload)

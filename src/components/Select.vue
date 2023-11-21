@@ -1,15 +1,17 @@
 <template>
-  <div :class="[{ '--active' : selected }, 'select']">
+  <div :class="[{ '--active' : selected[entityKey] }, 'select']">
     <select
       class="select__input"
-      v-model="selectedOption"
+      v-model="localSelected[entityKey]"
     >
       <option>{{ lang(`${localeKey}.${entityKey}`) }}</option>
       <option
         v-for="option in options"
         :key="option"
         :value="option"
-      >{{ lang(`${localeKey}.${entityKey}`) }}: {{ option || lang('unknown') }}</option>
+      >
+        {{ option === 'unknown' ? lang('unknown') : option }}
+      </option>
     </select>
   </div>
 </template>
@@ -17,6 +19,7 @@
 <script lang="ts">
 import { PropType, defineComponent, ref, watch } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
+import { TableFilter } from '~/types/Global'
 
 export default defineComponent({
   name: 'Select',
@@ -26,7 +29,7 @@ export default defineComponent({
       required: true
     },
     selected: {
-      type: String,
+      type: Object as PropType<Record<keyof TableFilter, null | string>>,
       required: true
     },
     localeKey: {
@@ -41,15 +44,20 @@ export default defineComponent({
   },
   setup({ entityKey, selected, localeKey }, { emit }) {
     const { lang } = useLocales()
-    const selectedOption = ref(selected || lang(`${localeKey}.${entityKey}`))
+    const localSelected = ref({
+      ...selected,
+      [entityKey]: selected[entityKey] || lang(`${localeKey}.${entityKey}`)
+    })
 
     watch(
-      selectedOption,
-      (value) => emit('update:select', [entityKey, value]),
-      { immediate: false }
+      localSelected,
+      (value) => {
+        emit('update:select', [entityKey, value[entityKey]])
+      },
+      { immediate: false, deep: true }
     )
 
-    return { lang, selectedOption }
+    return { lang, localSelected }
   }
 })
 </script>
