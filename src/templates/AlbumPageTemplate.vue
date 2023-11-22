@@ -11,6 +11,7 @@
         <div class="album__hero">
           <CoverArt
             :albumCover="album.albumCover"
+            :albumBooklet="booklet"
             @coverClick="getBooklet"
           />
           <slot></slot>
@@ -85,9 +86,10 @@ import { PropType, defineComponent, computed, watchEffect } from 'vue'
 import { AlbumPage } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
 import { RequestFilter } from '~/types/Global'
+import { BookletStateDTO } from '~/dto/BookletStateDTO'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CoverArt from '~/components/CoverArt/CoverArt.vue'
+import CoverArt from '~/components/CoverArt.vue'
 import Card from '~/components/Cards/Card.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
@@ -112,6 +114,10 @@ export default defineComponent({
     },
     album: {
       type: Object as PropType<AlbumPage>,
+      required: true
+    },
+    booklet: {
+      type: Object as PropType<BookletStateDTO>,
       required: true
     },
     discogsTablePayload: {

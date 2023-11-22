@@ -26,7 +26,7 @@ import { useStore } from "vuex"
 import { key } from "~/store"
 import { TTOYEntity } from '~/types/TOY'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
-import CoverArt from "~/components/CoverArt/CoverArt.vue"
+import CoverArt from "~/components/CoverArt.vue"
 import TrackList from "~/components/TrackList/TrackList.vue"
 import { AlbumHeadProps } from '~/types/Album'
 

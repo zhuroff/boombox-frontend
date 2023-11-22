@@ -2,10 +2,12 @@ import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { AlbumItem, AlbumPage } from '~/types/Album'
+import { CloudFolderResponse } from '~/types/Cloud'
+import { AlbumBooklet, AlbumItem, AlbumPage } from '~/types/Album'
 import { BasicEntity, CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import { BookletStateDTO } from '~/dto/BookletStateDTO'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
 
@@ -15,13 +17,12 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   const store = useStore(key)
   const entity = reactive<T>({} as T)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
-  const booklet = ref<string[]>([])
+  const booklet = ref<BookletStateDTO>(new BookletStateDTO())
   const isDataFetched = ref(false)
-  const isBookletOpened = ref(false)
 
   const fetchData = async (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
-    booklet.value.length = 0
+    booklet.value = new BookletStateDTO()
 
     try {
       const data = await DBApiService.getEntity<AlbumPage>(entityType, id)
@@ -33,7 +34,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
       }
       Object.assign(entity, preparedData)
       isDataFetched.value = true
-      store.commit("setPlayerPlaylist", preparedData)
+      store.commit('setPlayerPlaylist', preparedData)
 
       if (id === 'random') {
         router.push({ params: { id: data._id } })
@@ -51,14 +52,17 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   }
 
   const fetchBooklet = async (folder: string) => {
-    if (booklet.value.length > 0) {
-      isBookletOpened.value = true
+    if (booklet.value.items.length === 0) {
+      booklet.value.isActive = true
     }
 
     try {
-      const bookletImages = await CloudApiService.getImages(`${folder}/booklet`)
-      booklet.value = bookletImages
-      console.log(bookletImages)
+      const bookletContent = await CloudApiService.getImages<CloudFolderResponse<AlbumBooklet>>(
+        `${folder}/booklet`, booklet.value.limit, booklet.value.offset
+      )
+      if (bookletContent) {
+        booklet.value = new BookletStateDTO(bookletContent)
+      }
     } catch (error) {
       console.error(error)
     }

@@ -33,3 +33,13 @@ export type AlbumHeadProps = {
   period: CategoryBasic
   genre: CategoryBasic
 }
+
+export interface AlbumBooklet {
+  id: string
+  created: string
+  mimeType: string
+  modified: string
+  path: string
+  title: string
+  url: string
+}

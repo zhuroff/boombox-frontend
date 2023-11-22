@@ -61,7 +61,7 @@ import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import AppPreloader from '~/components/Preloader/Preloader.vue'
 import CategoryHero from '~/components/Hero/CategoryHero.vue'
-import CoverArt from '~/components/CoverArt/CoverArt.vue'
+import CoverArt from '~/components/CoverArt.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import UploadServices from '~/services/UploadServices'
 

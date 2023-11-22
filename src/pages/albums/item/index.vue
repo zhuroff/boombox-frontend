@@ -2,6 +2,7 @@
   <AlbumPageTemplate
     :isDataFetched="isDataFetched"
     :album="entity"
+    :booklet="booklet"
     :entityType="entityType"
     :discogsTablePayload="discogsTablePayload"
     :discogsFilters="discogsFilters"
@@ -43,6 +44,7 @@ export default defineComponent({
     const {
       fetchData,
       entity,
+      booklet,
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
@@ -117,6 +119,7 @@ export default defineComponent({
     return {
       isDataFetched,
       entity,
+      booklet,
       entityType,
       fetchBooklet,
       getRandomAlbum,
