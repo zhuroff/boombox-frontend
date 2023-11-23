@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!stations.isFetched"
         mode="light"
       />
@@ -74,7 +74,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { RadioPage, RadioStationResponse } from '~/types/Radio'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardRadio from '~/components/Cards/CardRadio.vue'
@@ -82,7 +82,7 @@ import RadioServices from '~/services/RadioServices'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     Button,
     CardWrapper,
     CardRadio

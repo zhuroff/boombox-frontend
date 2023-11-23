@@ -2,7 +2,7 @@
 
 <section class="section">
   <transition name="fade">
-    <AppPreloader
+    <Preloader
       v-if="!album.isFetched"
       mode="light"
     />
@@ -29,11 +29,11 @@ import { defineComponent, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { FrameAlbum } from '~/types/Frame'
 import FrameServices from '~/services/FrameServices'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader
+    Preloader
   },
 
   setup() {

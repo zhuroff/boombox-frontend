@@ -74,7 +74,7 @@ import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
 import TrackItemPlaylist from './TrackItemPlaylist.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
-import Modal from '~/components/Modal/Modal.vue'
+import Modal from '~/components/Modal.vue'
 import TrackLyrics from './TrackLyrics.vue'
 
 export default defineComponent({

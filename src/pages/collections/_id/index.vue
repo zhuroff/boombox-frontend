@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!collection.isFetched"
         mode="light"
       />
@@ -46,14 +46,14 @@ import { CollectionPageItem } from '~/types/Collection'
 import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Global'
 import { VueDraggableNext } from 'vue-draggable-next'
 import CollectionServices from '~/services/CollectionServices'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/Hero/CategoryHero.vue'
 // import CardWrapper from '~/components/Cards/CardWrapper.vue'
 // import CardAlbum from '~/components/Cards/CardAlbum.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     VueDraggableNext,
     CategoryHero,
     // CardWrapper,

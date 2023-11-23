@@ -141,6 +141,22 @@ export default defineComponent({
     }
   }
 
+  &.--large {
+    padding: .75rem 1.25rem;
+    font-size: 1rem;
+
+    .button__label {
+      
+      & + .icon {
+       margin-left: 10px;
+      }
+   }
+
+    .icon {
+      width: 1.75rem;
+    }
+  }
+
   &:not(.--outlined):not(.--text) {
     border-color: $dark;
     background-color: $dark;
@@ -152,6 +168,11 @@ export default defineComponent({
       color: $black;
       transition: all 0.2s $animation;
     }
+  }
+
+  &.--outlined.--text {
+    background-color: transparent;
+    border-color: transparent;
   }
 }
 </style>

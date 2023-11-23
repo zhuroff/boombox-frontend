@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!collections.isFetched"
         mode="light"
       />
@@ -46,7 +46,7 @@ import { useStore } from 'vuex'
 import { key } from '~/store'
 import { CollectionListItem } from '~/types/Collection'
 import CollectionServices from '~/services/CollectionServices'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardCollection from '~/components/Cards/CardCollection.vue'
 
@@ -57,7 +57,7 @@ type CollectionsPage = {
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     CardWrapper,
     CardCollection
   },

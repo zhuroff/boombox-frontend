@@ -7,10 +7,12 @@
     :discogsTablePayload="discogsTablePayload"
     :discogsFilters="discogsFilters"
     :discogsFiltersStates="discogsFiltersStates"
-    :getBooklet="() => fetchBooklet(entity.folderName)"
+    :getBooklet="bookletHandler"
     @filter:update="setDiscogsFilterValue"
     @filter:reset="resetDiscogsFilters"
     @switchPagination="setDiscogsPaginationPage"
+    @closeBookletModal="closeBookletModal"
+    @bookletPageChanged="(data) => bookletPageChanged(data, entity.folderName)"
   >
     <AlbumInfo
       :title="entity.title"
@@ -26,6 +28,8 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '~/store'
 import { conjugate } from '~/utils'
 import { AlbumPage } from '~/types/Album'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
@@ -48,6 +52,8 @@ export default defineComponent({
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
+      closeBookletModal,
+      bookletPageChanged,
       route
     } = useAlbumPage<AlbumPage>()
 
@@ -62,6 +68,7 @@ export default defineComponent({
     } = useDiscogs()
 
     const { lang } = useLocales()
+    const store = useStore(key)
     const entityType = ref('albums')
 
     const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
@@ -100,6 +107,25 @@ export default defineComponent({
         .then((payload) => payload && fetchDiscogsInfo(payload))
     }
 
+    const bookletHandler = async () => {
+      if (booklet.isEmpty) {
+        store.commit('setSnackbarMessage', {
+          message: lang('bookletNotFound'),
+          type: 'success'
+        })
+        return false
+      }
+
+      await fetchBooklet(entity.folderName)
+
+      if (booklet.isEmpty) {
+        store.commit('setSnackbarMessage', {
+          message: lang('bookletNotFound'),
+          type: 'success'
+        })
+      }
+    }
+
     onMounted(() => {
       fetchData(entityType.value)
         .then((payload) => payload && fetchDiscogsInfo(payload))
@@ -121,13 +147,15 @@ export default defineComponent({
       entity,
       booklet,
       entityType,
-      fetchBooklet,
+      bookletHandler,
       getRandomAlbum,
+      closeBookletModal,
       discogsTablePayload,
       discogsFiltersStates,
       setDiscogsFilterValue,
       setDiscogsPaginationPage,
       resetDiscogsFilters,
+      bookletPageChanged,
       discogsFilters,
       totalCounts,
       getRandom

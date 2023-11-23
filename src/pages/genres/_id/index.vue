@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader v-if="!category.isFetched" mode="light" />
+      <Preloader v-if="!category.isFetched" mode="light" />
     </transition>
 
     <transition-group name="flyUp">
@@ -21,7 +21,7 @@
 
 import { defineComponent } from 'vue'
 import { useCategory } from '~/hooks/useCategories'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/Hero/CategoryHero.vue'
 // import CardWrapper from '~/components/Cards/CardWrapper.vue'
 // import CardAlbum from '~/components/Cards/CardAlbum.vue'
@@ -29,7 +29,7 @@ import CardFrame from '~/components/Cards/CardFrame.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     CategoryHero,
     // CardWrapper,
     // CardAlbum,

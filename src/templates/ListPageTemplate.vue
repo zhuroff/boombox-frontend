@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!isDataFetched"
         mode="light"
       />
@@ -40,7 +40,7 @@
 <script lang="ts">
 import { PropType, defineComponent, ref } from 'vue'
 import { BasicEntity, Pagination, PaginationConfig } from '~/types/Global'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header/Header.vue'
 import CardList from '~/components/CardList/CardList.vue'
 import Card from '~/components/Cards/Card.vue'
@@ -49,7 +49,7 @@ import Paginator from '~/components/Paginator.vue'
 export default defineComponent({
   name: 'ListPageTemplate',
   components: {
-    AppPreloader,
+    Preloader,
     Header,
     CardList,
     Card,

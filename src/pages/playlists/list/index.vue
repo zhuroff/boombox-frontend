@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!playlists.isFetched"
         mode="light"
       />
@@ -46,13 +46,13 @@ import { PlaylistItemProps, PlayListItem } from '~/types/Playlist'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import PlaylistServices from '~/services/PlaylistServices'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardCollection from '~/components/Cards/CardCollection.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     CardWrapper,
     CardCollection
   },

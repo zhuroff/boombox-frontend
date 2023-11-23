@@ -17,7 +17,7 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import Preloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import './Button.scss'
 
 export default defineComponent({

@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader v-if="!toyGenres.isFetched" mode="light" />
+      <Preloader v-if="!toyGenres.isFetched" mode="light" />
     </transition>
 
     <div class="section__heading" key="heading">
@@ -24,13 +24,13 @@ import { defineComponent, reactive, computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { slugify } from '~/utils'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
 import TOYGenre from './_genre/index.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     TOYGenre,
     TOYGenreCard
   },

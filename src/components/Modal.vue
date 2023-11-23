@@ -1,11 +1,14 @@
 <template>  
   <div class="modal">
-    <button
+    <Button
       class="modal__close"
+      icon="close"
+      size="large"
+      isOutlined
+      isInverted
+      isText
       @click="closeModal"
-    >
-      <Sprite name="delete" />
-    </button>
+    />
     
     <slot></slot>
   </div>
@@ -14,10 +17,12 @@
 <script lang="ts">
 
 import { defineComponent, watchEffect } from 'vue'
+import Button from '~/components/Button.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
+    Button,
     Sprite
   },
 

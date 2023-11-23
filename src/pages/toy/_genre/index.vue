@@ -1,7 +1,7 @@
 <template>
   <div class="toycontent">
     <transition name="fade">
-      <AppPreloader v-if="!toyGenre.isFetched" mode="light" />
+      <Preloader v-if="!toyGenre.isFetched" mode="light" />
     </transition>
 
     <div>
@@ -24,12 +24,12 @@ import { PropType, defineComponent, reactive, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
 import { slugify } from '~/utils'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import TOYYear from '../_year/index.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     TOYYear
   },
 

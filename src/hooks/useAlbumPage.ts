@@ -3,11 +3,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { CloudFolderResponse } from '~/types/Cloud'
-import { AlbumBooklet, AlbumItem, AlbumPage } from '~/types/Album'
+import { AlbumBooklet, AlbumItem, AlbumPage, BookletSlideState } from '~/types/Album'
 import { BasicEntity, CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import { BookletStateDTO } from '~/dto/BookletStateDTO'
+import { BookletState } from '~/states/BookletState'
 import DBApiService from '~/services/DBApiService'
 import CloudApiService from '~/services/CloudApiService'
 
@@ -17,12 +17,12 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   const store = useStore(key)
   const entity = reactive<T>({} as T)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
-  const booklet = ref<BookletStateDTO>(new BookletStateDTO())
+  const booklet = reactive<BookletState>(new BookletState())
   const isDataFetched = ref(false)
 
   const fetchData = async (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
-    booklet.value = new BookletStateDTO()
+    Object.assign(booklet, new BookletState())
 
     try {
       const data = await DBApiService.getEntity<AlbumPage>(entityType, id)
@@ -52,20 +52,42 @@ export const useAlbumPage = <T extends BasicEntity>() => {
   }
 
   const fetchBooklet = async (folder: string) => {
-    if (booklet.value.items.length === 0) {
-      booklet.value.isActive = true
-    }
+    booklet.isActive = true
+    if (booklet.items.length > booklet.offset) return
 
     try {
       const bookletContent = await CloudApiService.getImages<CloudFolderResponse<AlbumBooklet>>(
-        `${folder}/booklet`, booklet.value.limit, booklet.value.offset
+        `${folder}/booklet`, booklet.limit, booklet.offset
       )
       if (bookletContent) {
-        booklet.value = new BookletStateDTO(bookletContent)
+        booklet.items.push(...bookletContent.items)
+        booklet.total = bookletContent.total
+        
+        if (booklet.items.length === booklet.total) {
+          booklet.isCompleted = true
+        }
       }
     } catch (error) {
       console.error(error)
+      booklet.isActive = false
+      booklet.isEmpty = true
+    } finally {
+      booklet.isFetched = true
     }
+  }
+
+  const bookletPageChanged = (data: BookletSlideState, folder: string) => {
+    if (
+      booklet.items.length !== booklet.total
+      && data.slidingToIndex === booklet.items.length - 5
+    ) {
+      booklet.offset += booklet.limit
+      fetchBooklet(folder)
+    }
+  }
+
+  const closeBookletModal = () => {
+    booklet.isActive = false
   }
 
   const requestConfig = reactive<RequestConfig>({
@@ -98,6 +120,8 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     getRandomAlbum,
     getRelatedAlbums,
     relatedEntities,
+    closeBookletModal,
+    bookletPageChanged,
     booklet,
     route
   }

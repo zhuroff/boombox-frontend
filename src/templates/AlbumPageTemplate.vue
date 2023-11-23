@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!isDataFetched"
         mode="light"
       />
@@ -10,9 +10,11 @@
       <div v-if="isDataFetched" class="album">
         <div class="album__hero">
           <CoverArt
-            :albumCover="album.albumCover"
-            :albumBooklet="booklet"
+            :cover="album.albumCover"
+            :booklet="booklet"
             @coverClick="getBooklet"
+            @closeBookletModal="closeBookletModal"
+            @slideChanged="bookletPageChanged"
           />
           <slot></slot>
         </div>
@@ -49,7 +51,9 @@
             v-if="relatedAlbums.get('artists')?.length"
             class="album__related"
           >
-            <div class="album__related-title">More of {{ album.artist.title }}</div>
+            <div class="album__related-title">
+              {{ lang('moreOf') }} {{ album.artist.title }}
+            </div>
             <Card
               v-for="item in relatedAlbums.get('artists')"
               :key="item._id"
@@ -64,7 +68,9 @@
             v-if="relatedAlbums.get('genres')?.length"
             class="album__related"
           >
-            <div class="album__related-title">More of {{ album.genre.title }}</div>
+            <div class="album__related-title">
+              {{ lang('moreOf') }} {{ album.genre.title }}
+            </div>
             <Card
               v-for="item in relatedAlbums.get('genres')"
               :key="item._id"
@@ -83,12 +89,13 @@
 
 <script lang="ts">
 import { PropType, defineComponent, computed, watchEffect } from 'vue'
-import { AlbumPage } from '~/types/Album'
+import { AlbumPage, BookletSlideState } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
 import { RequestFilter } from '~/types/Global'
-import { BookletStateDTO } from '~/dto/BookletStateDTO'
+import { BookletState } from '~/states/BookletState'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import { useLocales } from '~/hooks/useLocales'
+import Preloader from '~/components/Preloader.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import Card from '~/components/Cards/Card.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
@@ -99,7 +106,7 @@ import Button from '~/components/Button.vue'
 export default defineComponent({
   name: 'AlbumPageTemplate',
   components: {
-    AppPreloader,
+    Preloader,
     CoverArt,
     Card,
     TrackList,
@@ -117,7 +124,7 @@ export default defineComponent({
       required: true
     },
     booklet: {
-      type: Object as PropType<BookletStateDTO>,
+      type: Object as PropType<BookletState>,
       required: true
     },
     discogsTablePayload: {
@@ -146,7 +153,7 @@ export default defineComponent({
       getRelatedAlbums,
       relatedEntities,
     } = useAlbumPage<AlbumPage>()
-
+    const { lang } = useLocales()
     const relatedAlbums = computed(() => relatedEntities)
 
     const getRelated = () => {
@@ -186,6 +193,14 @@ export default defineComponent({
     const resetDiscogsFilters = () => {
       emit('filter:reset')
     }
+
+    const closeBookletModal = () => {
+      emit('closeBookletModal')
+    }
+
+    const bookletPageChanged = (data: BookletSlideState) => {
+      emit('bookletPageChanged', data)
+    }
     
     watchEffect(() => album._id && getRelated())
 
@@ -193,7 +208,10 @@ export default defineComponent({
       relatedAlbums,
       updateDiscogsFilter,
       resetDiscogsFilters,
-      switchPagination
+      switchPagination,
+      closeBookletModal,
+      bookletPageChanged,
+      lang
     }
   }
 })
@@ -284,3 +302,4 @@ export default defineComponent({
   }
 }
 </style>
+~/states/BookletState

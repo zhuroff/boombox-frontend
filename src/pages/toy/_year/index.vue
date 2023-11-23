@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader v-if="!toyYear.isFetched" mode="light" />
+      <Preloader v-if="!toyYear.isFetched" mode="light" />
     </transition>
 
     <div v-if="toyYear.isFetched" class="album">
@@ -25,14 +25,14 @@ import { PropType, defineComponent, reactive, watchEffect, ComputedRef, computed
 import { useStore } from "vuex"
 import { key } from "~/store"
 import { TTOYEntity } from '~/types/TOY'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import CoverArt from "~/components/CoverArt.vue"
 import TrackList from "~/components/TrackList/TrackList.vue"
 import { AlbumHeadProps } from '~/types/Album'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     CoverArt,
     TrackList
   },

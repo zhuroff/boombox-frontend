@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader v-if="!isDataFetched" mode="light" />
+      <Preloader v-if="!isDataFetched" mode="light" />
     </transition>
     <transition-group name="flyUp">
       <div v-if="isDataFetched" key="events">
@@ -25,12 +25,12 @@ import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
 import { AlbumItem } from '~/types/Album'
 import { CardBasic, ListPageResponse, RequestConfig } from '~/types/Global'
 import DBApiService from '~/services/DBApiService'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import Card from '~/components/Cards/Card.vue'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     Card
   },
 

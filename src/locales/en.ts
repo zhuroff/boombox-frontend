@@ -46,5 +46,7 @@ export const localesEN: LocaleDictionary = {
   table: {
     empty: 'No data'
   },
-  unknown: 'Unknown'
+  unknown: 'Unknown',
+  moreOf: 'More of',
+  bookletNotFound: 'Booklet not found',
 }

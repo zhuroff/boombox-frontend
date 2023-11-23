@@ -43,3 +43,10 @@ export interface AlbumBooklet {
   title: string
   url: string
 }
+
+export interface BookletSlideState {
+  currentSlideIndex: number
+  prevSlideIndex: number
+  slidesCount: number
+  slidingToIndex: number
+}

@@ -1,7 +1,7 @@
 <template>  
   <div class="float-modal">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!isFetched"
         mode="light"
       />
@@ -56,7 +56,7 @@
 <script lang="ts">
 
 import { defineComponent, ref } from 'vue'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import './FloatModal.scss'
 
@@ -64,7 +64,7 @@ export default defineComponent({
   name: 'FloatModal',
 
   components: {
-    AppPreloader,
+    Preloader,
     Sprite
   },
 

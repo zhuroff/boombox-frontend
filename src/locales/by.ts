@@ -46,5 +46,7 @@ export const localesBY: LocaleDictionary = {
   table: {
     empty: 'Няма дадзеных'
   },
-  unknown: 'Невядома'
+  unknown: 'Невядома',
+  moreOf: 'Яшчэ альбомы',
+  bookletNotFound: 'Буклет не знойдзены'
 }

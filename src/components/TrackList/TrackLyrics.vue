@@ -96,7 +96,7 @@ import { key } from '~/store'
 import { TrackLyricsResponse } from '~/types/Track'
 import Button from '~/components/Button/Button.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
-import Preloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import TrackServices from '~/services/TrackServices'
 
 export default defineComponent({

@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!playlist.isFetched"
         mode="light"
       />
@@ -59,7 +59,7 @@ import { hostString } from '~/utils'
 import { ImagePayload, ReorderPayload, UploadImageResult } from '~/types/Global'
 import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/Hero/CategoryHero.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
@@ -67,7 +67,7 @@ import UploadServices from '~/services/UploadServices'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     CategoryHero,
     CoverArt,
     TrackList

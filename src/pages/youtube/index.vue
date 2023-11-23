@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!playlist.isFetched"
         mode="light"
       />
@@ -37,13 +37,13 @@
 
 import { defineComponent, ref, nextTick, onMounted, reactive } from 'vue'
 import YouTubeServices from '~/services/YouTubeServices'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import { YTPlaylistResponse, YTPlaylistResponseItem } from '~/types/YouTube'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     Button
   },
 

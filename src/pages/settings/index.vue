@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!isPageLoaded || !isSynchronized"
         mode="light"
       />
@@ -65,7 +65,7 @@ import { useStore } from 'vuex'
 import { key } from '~/store'
 import { useLocales } from '~/hooks/useLocales'
 import Button from '~/components/Button/Button.vue'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import api from '~/api'
 
 interface BackupList {
@@ -76,7 +76,7 @@ interface BackupList {
 export default defineComponent({
   components: {
     Button,
-    AppPreloader
+    Preloader
   },
 
   setup() {

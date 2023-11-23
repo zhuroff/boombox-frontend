@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <AppPreloader
+      <Preloader
         v-if="!albums.isFetched"
         mode="light"
       />
@@ -66,18 +66,18 @@ import { FrameAlbumResponse, FrameAlbum } from '~/types/Frame'
 import { CategoryKeys } from '~/types/Category'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import AppPreloader from '~/components/Preloader/Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardFrame from '~/components/Cards/CardFrame.vue'
 import Paginator from '~/components/Paginator.vue'
-import Modal from '~/components/Modal/Modal.vue'
+import Modal from '~/components/Modal.vue'
 import FrameForm from '~/components/Frame/FrameForm.vue'
 import FrameServices from '~/services/FrameServices'
 
 export default defineComponent({
   components: {
-    AppPreloader,
+    Preloader,
     Button,
     CardWrapper,
     CardFrame,
