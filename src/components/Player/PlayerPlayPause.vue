@@ -1,5 +1,4 @@
-<template>
-  
+<template>  
 <button
   v-if="playingTrack.isOnPause"
   class="player__play"
@@ -7,7 +6,6 @@
 >
   <Sprite name="play" />
 </button>
-
 <button
   v-else
   class="player__pause"

@@ -36,6 +36,7 @@ export const localesBY: LocaleDictionary = {
     }
   },
   playButton: 'Граць',
+  pauseButton: 'Паўза',
   discogsTable: {
     cover: 'Вокладка',
     country: 'Краiна',

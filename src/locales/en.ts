@@ -36,6 +36,7 @@ export const localesEN: LocaleDictionary = {
     }
   },
   playButton: 'Play',
+  pauseButton: 'Pause',
   discogsTable: {
     cover: 'Cover',
     country: 'Country',

@@ -2,10 +2,10 @@
   <div class="album__info">
     <div class="album__info-head">
       <Button
-        :label="lang('getRandomAlbum')"
         size="small"
         isOutlined
         isInverted
+        :label="lang('getRandomAlbum')"
         @click="getRandomAlbum()"
       />
     </div>
@@ -29,27 +29,62 @@
     <div class="album__info-total">{{ totalCounts }}</div>
     <div class="album__info-actions">
       <Button
-        :label="lang('playButton')"
+        v-if="!isPlaying"
         icon="play"
+        :label="lang('playButton')"
+        @click="playAlbum"
       />
       <Button
-        icon="ellipsis"
-        isText
+        v-else-if="!isPaused"
+        icon="pause"
+        :label="lang('pauseButton')"
+        @click="pauseTrack"
       />
+      <div class="album__info-nav">
+        <Button
+          icon="ellipsis"
+          isText
+          @click="isActionsOpens = !isActionsOpens"
+        />
+        <Overlay
+          v-if="isActionsOpens"
+          :style="{ left: '1rem', top: '100%' }"
+        >
+          <ul>
+            <li @click="getWikiInfo">Wiki</li>
+          </ul>
+        </Overlay>
+      </div>
     </div>
+    <Modal
+      v-if="isWikiReady && wikiFrameURL"
+      :isModalActive="isWikiReady"
+      @closeModal="closeWikiModal"
+    >
+      <WikiFrame :frameURL="wikiFrameURL" />
+    </Modal>
   </div>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from 'vue'
+import { PropType, computed, defineComponent, ref } from 'vue'
 import { CategoryBasic } from '~/types/Category'
 import { useLocales } from '~/hooks/useLocales'
+import wiki from 'wikipedia'
+import usePlayer from '~/hooks/usePlayer'
 import Button from './Button.vue'
+import Overlay from './Overlay.vue'
+import Modal from './Modal.vue'
+import WikiFrame from './WikiFrame.vue'
+import { detectLocale } from '~/utils'
 
 export default defineComponent({
   name: 'AlbumInfo',
   components: {
-    Button
+    Button,
+    Overlay,
+    Modal,
+    WikiFrame
   },
   props: {
     title: {
@@ -81,9 +116,75 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup({ artist, title }) {
     const { lang } = useLocales()
-    return { lang }
+    const { playingTrack, store } = usePlayer()
+    const isActionsOpens = ref(false)
+    const isWikiReady = ref(false)
+    const wikiFrameURL = ref<string | null>(null)
+
+    const isPlaying = computed(() => (
+      playingTrack.value._id &&
+      !playingTrack.value.isOnPause &&
+      !playingTrack.value.isOnLoading
+    ))
+
+    const isPaused = computed(() => (
+      playingTrack.value._id &&
+      playingTrack.value.isOnPause
+    ))
+
+    const playAlbum = () => {
+      if (playingTrack.value._id) {
+        store.commit('continuePlay')
+      } else {
+        store.dispatch('playTrack', store.getters.currentPlaylistTracks[0])
+        store.commit('expandPlayer')
+      }
+    }
+
+    const pauseTrack = () => {
+      store.commit('setTrackOnPause')
+    }
+
+    const getWikiInfo = async () => {
+      const albumLang = detectLocale(title)
+      const artistLang = detectLocale(artist.title)
+      let locale = 'en'
+
+      if (albumLang === 'ru' || artistLang === 'ru') {
+        locale = 'ru'
+      }
+
+      wiki.setLang(locale)
+
+      try {
+        const page = await wiki.page(title)
+        wikiFrameURL.value = page.canonicalurl
+      } catch (error) {
+        console.error(error)
+      } finally {
+        isWikiReady.value = true
+      }
+    }
+
+    const closeWikiModal = () => {
+      isWikiReady.value = false
+      wikiFrameURL.value = null
+    }
+
+    return {
+      lang,
+      isPlaying,
+      isPaused,
+      playAlbum,
+      pauseTrack,
+      isActionsOpens,
+      getWikiInfo,
+      isWikiReady,
+      closeWikiModal,
+      wikiFrameURL
+    }
   }
 })
 </script>
@@ -137,6 +238,10 @@ export default defineComponent({
       margin-top: 3rem;
       display: flex;
       align-items: center;
+    }
+
+    &-nav {
+      position: relative;
     }
   }
 }

@@ -46,3 +46,13 @@ export const conjugate = (key: string, amount: number) => {
   }
   return lang(`conjugated.${key}.plural`)
 }
+
+export const detectLocale = (str: string) => {
+  if (str.match(/[a-zA-Z]/g)) {
+    return 'en'
+  } else if (str.match(/[а-яА-Я]/g)) {
+    return 'ru'
+  }
+
+  return 'en'
+}
