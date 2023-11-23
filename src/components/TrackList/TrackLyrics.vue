@@ -1,17 +1,15 @@
-<template>
-  
+<template>  
 <div class="lyrics">
   <header class="lyrics__header">
     <div class="lyrics__heading">{{ heading }}</div>
-
     <Button
-      text="Get lyrics"
+      :label="lang('lyrics.get')"
       isOutlined
-      @onClick="fetchLyrics"
+      isInverted
+      :isDisabled="isFetching"
+      @click="fetchLyrics"
     />
-
   </header>
-
   <div class="lyrics__content">
     <transition name="fade">
       <Preloader
@@ -19,7 +17,6 @@
         mode="light"
       />
     </transition>
-
     <transition
       name="flyUp"
       v-if="!isFetching"
@@ -27,18 +24,16 @@
       <div
         v-if="!lyrics && !fetchedLyrics.length"
         class="lyrics__empty"
-      >No lyrics here yet</div>
+      >{{ lang('lyrics.empty') }}</div>
     </transition>
-
     <Textarea
       v-if="!isFetching && !fetchedLyrics.length"
       :rows="3"
       :content="lyrics || undefined"
       classname="lyrics__text"
-      placeholder="You can add lyrics manually in this field, or use the search button above."
+      :placeholder="lang('lyrics.placeholder')"
       @setTextareaValue="updateLyrics"
     />
-
     <div
       v-if="!isFetching"
       class="lyrics__results"
@@ -56,22 +51,19 @@
             :src="item.thumbnail"
             class="lyrics__item_thumbnail"
           />
-
           <div class="lyrics__item_content">
             <div class="lyrics__item_title">{{ item.artist }} - {{ item.title }}</div>
             <button
               class="lyrics__item_action"
               @click="expandLyrics(index)"
             >
-              <span v-if="!expandedLyrics || expandedLyrics !== index">Expand content</span>
-              <span v-if="expandedLyrics && expandedLyrics === index">Collapse content</span>
+              <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ lang('lyrics.expand') }}</span>
+              <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ lang('lyrics.collapse') }}</span>
             </button>&nbsp;/&nbsp;
-
             <button
               class="lyrics__item_action"
               @click="saveLyrics(item.lyrics)"
-            >Save lyrics</button>
-
+            >{{ lang('lyrics.save') }}</button>
             <Textarea
               v-if="expandedLyrics === index"
               :rows="3"
@@ -93,8 +85,9 @@
 import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
+import { useLocales } from '~/hooks/useLocales'
 import { TrackLyricsResponse } from '~/types/Track'
-import Button from '~/components/Button/Button.vue'
+import Button from '~/components/Button.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Preloader from '~/components/Preloader.vue'
 import TrackServices from '~/services/TrackServices'
@@ -119,8 +112,8 @@ export default defineComponent({
   },
 
   setup(props) {
+    const { lang } = useLocales()
     const store = useStore(key)
-
     const lyrics: Ref<null | string> = ref(null)
     const expandedLyrics: Ref<null | number> = ref(null)
     const isFetching = ref(false)
@@ -165,6 +158,7 @@ export default defineComponent({
         index === expandedLyrics.value
           ? null
           : index
+          console.log(expandedLyrics)
     }
 
     const saveLyrics = (payload: string, isConfirm = true) => {
@@ -194,6 +188,7 @@ export default defineComponent({
     })
 
     return {
+      lang,
       lyrics,
       expandedLyrics,
       isFetching,
@@ -209,7 +204,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 
 .lyrics {
@@ -219,6 +213,8 @@ export default defineComponent({
   max-width: 768px;
   height: calc(100vh - 50px);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   &__header {
     display: flex;
@@ -238,16 +234,21 @@ export default defineComponent({
 
   &__content {
     padding: 25px;
-    height: calc(100% - 75px);
+    position: relative;
+    flex-grow: 1;
+    max-height: 100%;
+    overflow: auto;
 
     .preloader {
       position: absolute;
       background: $white;
       z-index: 100;
       width: 100%;
+      height: 100%;
       top: 0;
       bottom: 0;
       left: 0;
+      right: 0;
     }
   }
 

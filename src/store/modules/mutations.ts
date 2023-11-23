@@ -173,6 +173,7 @@ const mutations: MutationTree<AppStateInterface> = {
   setSoundVolume: (state: AppStateInterface, value: number) => {
     state.playingTrack.audio.volume = value
     state.playingTrack.crackle.volume = value
+    localStorage.setItem('playerVolume', String(value))
   },
 
   switchMuteState: (state: AppStateInterface) => {

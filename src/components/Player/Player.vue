@@ -1,32 +1,40 @@
 <template>
-
-  <section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
-    <div class="player__left" @click="collapseExpandPlayer">
-      <div v-if="playingTrack.progressTime > 0" class="player__left-content">
-        <img :src="playingTrack.cover" :alt="playingTrack.title" class="player__cover" />
-        <div class="player__title">
-          <div class="player__title-track">{{ playingTrack.title }}</div>
-          <div class="player__title-artist">
-            {{ playingTrack.artistName }} <br> ({{ playingTrack.albumName }}, {{ playingTrack.year }})
-          </div>
+<section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
+  <div
+    class="player__left"
+    @click="collapseExpandPlayer"
+  >
+    <div
+      v-if="playingTrack.progressTime > 0"
+      class="player__left-content"
+    >
+      <img
+        :src="playingTrack.cover"
+        :alt="playingTrack.title"
+        class="player__cover"
+      />
+      <div class="player__title">
+        <div class="player__title-track">{{ playingTrack.title }}</div>
+        <div class="player__title-artist">
+          {{ playingTrack.artistName }} <br> ({{ playingTrack.albumName }}, {{ playingTrack.year }})
         </div>
       </div>
     </div>
-    <div class="player__right">
-      <div v-if="playingTrack.progressTime > 0" class="player__right-content">
-        <PlayerRepeatTrack />
-        <PlayerPrevTrack />
-        <PlayerPlayPause />
-        <PlayerNextTrack />
-        <PlayerProgressBar />
-        <PlayerRepeatTrack isMobile />
-        <PlayerCrackle />
-        <PlayerSound />
-        <PlayerExternal />
-      </div>
+  </div>
+  <div class="player__right">
+    <div v-if="playingTrack.progressTime > 0" class="player__right-content">
+      <PlayerRepeatTrack />
+      <PlayerPrevTrack />
+      <PlayerPlayPause />
+      <PlayerNextTrack />
+      <PlayerProgressBar />
+      <PlayerRepeatTrack isMobile />
+      <PlayerCrackle />
+      <PlayerSound />
+      <PlayerExternal />
     </div>
-  </section>
-
+  </div>
+</section>
 </template>
 
 <script lang="ts">

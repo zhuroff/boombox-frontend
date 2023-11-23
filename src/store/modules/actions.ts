@@ -26,6 +26,7 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
   playAudioTrack: ({ commit, dispatch, state }, _id: string) => {
     const playingTrack = state.playingTrack
     const playingAudio = playingTrack.audio
+    playingAudio.volume = Number(localStorage.getItem('playerVolume')) || 1
     let isCounterIncremented = false
 
     playingAudio.play()

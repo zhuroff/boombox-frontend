@@ -10,11 +10,13 @@
       `--${size}`,
       className
     ]"
+    :disabled="isDisabled"
   >
     <span
       v-if="label"
       class="button__label">{{ label }}
     </span>
+    <slot></slot>
     <Sprite
       v-if="icon"
       :name="icon"
@@ -63,6 +65,11 @@ export default defineComponent({
       default: false
     },
     isInverted: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isDisabled: {
       type: Boolean,
       required: false,
       default: false
@@ -173,6 +180,12 @@ export default defineComponent({
   &.--outlined.--text {
     background-color: transparent;
     border-color: transparent;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.5;
   }
 }
 </style>

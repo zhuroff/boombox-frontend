@@ -48,5 +48,13 @@ export const localesBY: LocaleDictionary = {
   },
   unknown: 'Невядома',
   moreOf: 'Яшчэ альбомы',
-  bookletNotFound: 'Буклет не знойдзены'
+  bookletNotFound: 'Буклет не знойдзены',
+  lyrics: {
+    get: 'Знайсцi тэкст',
+    empty: 'Тэкст не ўсталяваны',
+    placeholder: 'Вы можаце дадаць тэкст уручную ў гэтым полі або скарыстацца кнопкай пошуку вышэй',
+    expand: 'Пашырыць змест',
+    collapse: 'Згарнуць змест',
+    save: 'Захаваць тэкст'
+  }
 }

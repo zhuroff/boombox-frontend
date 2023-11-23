@@ -46,7 +46,8 @@
         v-if="!isTOY"
         class="tracklist__row-cell --fix"
       >{{ track.listened }}</div>
-      <transition name="fade">
+    </div>
+    <transition name="fade">
         <Modal
           v-if="isModalActive"
           :isModalActive="isModalActive"
@@ -58,7 +59,6 @@
           />
         </Modal>
       </transition>
-    </div>
   </div>
 </template>
 

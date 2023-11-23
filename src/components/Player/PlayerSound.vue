@@ -6,6 +6,7 @@
         :min="0"
         :max="1"
         :step="0.001"
+        :value="volume"
         class="player__sound-input"
         @input="changeSoundVolume"
       />
@@ -34,10 +35,10 @@ export default defineComponent({
 
   setup() {
     const { store } = usePlayer()
-
+    const volume = ref(Number(localStorage.getItem('playerVolume')) || 1)
     const isMuted = ref(false)
 
-    const changeSoundVolume = (event: PointerEvent) => {
+    const changeSoundVolume = (event: Event) => {
       store.commit('setSoundVolume', Number((event.target as HTMLInputElement).value))
     }
 
@@ -47,6 +48,7 @@ export default defineComponent({
     }
 
     return {
+      volume,
       isMuted,
       changeSoundVolume,
       switchMuteState

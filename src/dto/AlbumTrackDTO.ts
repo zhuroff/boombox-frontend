@@ -68,5 +68,6 @@ export class PlayerTrackDTO {
     // this.progressHandler = null
     this.audio = new Audio()
     this.crackle = new Audio('/media/vinyl_01.wav')
+    this.crackle.loop = true
   }
 }

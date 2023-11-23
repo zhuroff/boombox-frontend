@@ -49,4 +49,12 @@ export const localesEN: LocaleDictionary = {
   unknown: 'Unknown',
   moreOf: 'More of',
   bookletNotFound: 'Booklet not found',
+  lyrics: {
+    get: 'Get lyrics',
+    empty: 'No lyrics yet',
+    placeholder: 'You can add lyrics manually in this field, or use the search button above',
+    expand: 'Expand content',
+    collapse: 'Collapse content',
+    save: 'Save lyrics'
+  }
 }
