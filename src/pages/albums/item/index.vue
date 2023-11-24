@@ -111,7 +111,7 @@ export default defineComponent({
       if (booklet.isEmpty) {
         store.commit('setSnackbarMessage', {
           message: lang('bookletNotFound'),
-          type: 'success'
+          type: 'error'
         })
         return false
       }

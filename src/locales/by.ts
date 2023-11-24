@@ -57,5 +57,13 @@ export const localesBY: LocaleDictionary = {
     expand: 'Пашырыць змест',
     collapse: 'Згарнуць змест',
     save: 'Захаваць тэкст'
+  },
+  wiki: {
+    notFound: 'Нічога не знойдзена ў Вікіпедыі',
+    frameHeading: 'Выберыце артыкул са спісу вышэй',
+    navItem: 'Вікіпедыя'
+  },
+  collections: {
+    add: 'Дадаць у калекцыю'
   }
 }

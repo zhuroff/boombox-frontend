@@ -48,20 +48,37 @@
         />
         <Overlay
           v-if="isActionsOpens"
-          :style="{ left: '1rem', top: '100%' }"
+          :style="{
+            width: '200px',
+            left: 0,
+            top: '100%'
+          }"
+          @closeOverlay="isActionsOpens = false"
         >
-          <ul>
-            <li @click="getWikiInfo">Wiki</li>
+          <ul class="overlay__list">
+            <li
+              class="overlay__list-item"
+              @click="() => searchWikiInfo()"
+            >{{ lang('wiki.navItem') }}</li>
+            <li
+              class="overlay__list-item"
+              @click="openCollectionsModal"
+            >{{ lang('collections.add') }}</li>
           </ul>
         </Overlay>
       </div>
     </div>
     <Modal
-      v-if="isWikiReady && wikiFrameURL"
-      :isModalActive="isWikiReady"
+      v-if="isWikiLoading || isWikiReady"
+      :isModalActive="isWikiLoading"
       @closeModal="closeWikiModal"
     >
-      <WikiFrame :frameURL="wikiFrameURL" />
+      <WikiFrame
+        :frameURL="wikiFrameURL"
+        :isLoading="isWikiLoading"
+        :searchResults="wikiFrameResults"
+        @selectWikiResult="(id) => getWikiInfo(id)"
+      />
     </Modal>
   </div>
 </template>
@@ -70,13 +87,14 @@
 import { PropType, computed, defineComponent, ref } from 'vue'
 import { CategoryBasic } from '~/types/Category'
 import { useLocales } from '~/hooks/useLocales'
+import { detectLocale } from '~/utils'
+import { WikiSearchResult } from '~/types/Global'
 import wiki from 'wikipedia'
 import usePlayer from '~/hooks/usePlayer'
 import Button from './Button.vue'
 import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
-import { detectLocale } from '~/utils'
 
 export default defineComponent({
   name: 'AlbumInfo',
@@ -120,8 +138,10 @@ export default defineComponent({
     const { lang } = useLocales()
     const { playingTrack, store } = usePlayer()
     const isActionsOpens = ref(false)
+    const isWikiLoading = ref(false)
     const isWikiReady = ref(false)
-    const wikiFrameURL = ref<string | null>(null)
+    const wikiFrameURL = ref<string | undefined>(undefined)
+    const wikiFrameResults = ref<WikiSearchResult[] | undefined>(undefined)
 
     const isPlaying = computed(() => (
       playingTrack.value._id &&
@@ -147,7 +167,20 @@ export default defineComponent({
       store.commit('setTrackOnPause')
     }
 
-    const getWikiInfo = async () => {
+    const getWikiInfo = async (searchParam: string | number = title) => {
+      isWikiLoading.value = true
+      try {
+        const page = await wiki.page(String(searchParam))
+        wikiFrameURL.value = page.canonicalurl
+        isWikiReady.value = true
+        isWikiLoading.value = false
+      } catch (error) {
+        wikiErrorHandler(error)
+      }
+    }
+
+    const searchWikiInfo = async () => {
+      resetWikiData()
       const albumLang = detectLocale(title)
       const artistLang = detectLocale(artist.title)
       let locale = 'en'
@@ -157,20 +190,44 @@ export default defineComponent({
       }
 
       wiki.setLang(locale)
+      isWikiLoading.value = true
 
       try {
-        const page = await wiki.page(title)
-        wikiFrameURL.value = page.canonicalurl
-      } catch (error) {
-        console.error(error)
-      } finally {
+        const { results } = await wiki.search(`${artist.title} - ${title}`)
+        if (!results.length) {
+          throw new Error('Nothing was found')
+        }
+        wikiFrameResults.value = results
         isWikiReady.value = true
+      } catch (error) {
+        wikiErrorHandler(error)
+      } finally {
+        isWikiLoading.value = false
       }
+    }
+
+    const wikiErrorHandler = (error: unknown) => {
+      closeWikiModal()
+      store.commit('setSnackbarMessage', {
+        message: lang('wiki.notFound'),
+        type: 'error'
+      })
+      console.error(error)
     }
 
     const closeWikiModal = () => {
       isWikiReady.value = false
-      wikiFrameURL.value = null
+      isWikiLoading.value = false
+      resetWikiData()
+    }
+
+    const resetWikiData = () => {
+      wikiFrameURL.value = undefined
+      wikiFrameResults.value = undefined
+    }
+
+    const openCollectionsModal = () => {
+      console.log('Open collections modal')
     }
 
     return {
@@ -180,10 +237,14 @@ export default defineComponent({
       playAlbum,
       pauseTrack,
       isActionsOpens,
+      searchWikiInfo,
       getWikiInfo,
       isWikiReady,
       closeWikiModal,
-      wikiFrameURL
+      wikiFrameURL,
+      isWikiLoading,
+      wikiFrameResults,
+      openCollectionsModal
     }
   }
 })

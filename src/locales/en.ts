@@ -57,5 +57,13 @@ export const localesEN: LocaleDictionary = {
     expand: 'Expand content',
     collapse: 'Collapse content',
     save: 'Save lyrics'
+  },
+  wiki: {
+    notFound: 'Nothing was found in Wikipedia',
+    frameHeading: 'Select an article from the list above',
+    navItem: 'Wikipedia'
+  },
+  collections: {
+    add: 'Add to collection'
   }
 }

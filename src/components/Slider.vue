@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { BookletSlideState } from '~/types/Album'
 

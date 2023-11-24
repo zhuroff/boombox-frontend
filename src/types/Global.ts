@@ -39,10 +39,6 @@ export type ListPageResponse<T> = {
   pagination: Pagination
 }
 
-// export type AlbumPageResponse = {
-
-// }
-
 type DropdownOption<T> = {
   title: string,
   value: T,
@@ -126,6 +122,16 @@ export type TablePayload<T> = {
   pagination: Pagination
   isFetched: Ref<boolean>
   schema: JSONSchema4
+}
+
+export type WikiSearchResult = {
+  title: string
+  pageid: number
+}
+
+export type AlignmentPosition = {
+  x: 'right' | 'left'
+  y: 'top' | 'bottom'
 }
 
 export {
