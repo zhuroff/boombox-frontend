@@ -41,7 +41,7 @@
 import { PropType, defineComponent, ref } from 'vue'
 import { BasicEntity, Pagination, PaginationConfig } from '~/types/Global'
 import Preloader from '~/components/Preloader.vue'
-import Header from '~/components/Header/Header.vue'
+import Header from '~/components/Header.vue'
 import CardList from '~/components/CardList/CardList.vue'
 import Card from '~/components/Cards/Card.vue'
 import Paginator from '~/components/Paginator.vue'

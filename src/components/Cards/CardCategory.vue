@@ -92,7 +92,7 @@ export default defineComponent({
 
   &__info {
     font-weight: 600;
-    color: $pale;
+    color: $paleDP;
     font-size: 12px;
   }
 }

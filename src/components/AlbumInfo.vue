@@ -1,12 +1,12 @@
 <template>
   <div class="album__info">
     <div class="album__info-head">
-      <Button
-        size="small"
-        isOutlined
+      <InputText
+        type="search"
+        size="medium"
+        :placeholder="lang('search.placeholder')"
         isInverted
-        :label="lang('getRandomAlbum')"
-        @click="getRandomAlbum()"
+        @setInputValue="searchSubmit"
       />
     </div>
     <div class="album__info-heading">
@@ -62,6 +62,10 @@
             >{{ lang('wiki.navItem') }}</li>
             <li
               class="overlay__list-item"
+              @click="getRandomAlbum()"
+            >{{ lang('getRandomAlbum') }}</li>
+            <li
+              class="overlay__list-item"
               @click="openCollectionsModal"
             >{{ lang('collections.add') }}</li>
           </ul>
@@ -87,6 +91,7 @@
 import { PropType, computed, defineComponent, ref } from 'vue'
 import { CategoryBasic } from '~/types/Category'
 import { useLocales } from '~/hooks/useLocales'
+import { useSearch } from '~/hooks/useSearch'
 import { detectLocale } from '~/utils'
 import { WikiSearchResult } from '~/types/Global'
 import wiki from 'wikipedia'
@@ -95,6 +100,7 @@ import Button from './Button.vue'
 import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
+import InputText from '~/components/Inputs/InputText.vue'
 
 export default defineComponent({
   name: 'AlbumInfo',
@@ -102,7 +108,8 @@ export default defineComponent({
     Button,
     Overlay,
     Modal,
-    WikiFrame
+    WikiFrame,
+    InputText
   },
   props: {
     title: {
@@ -137,6 +144,7 @@ export default defineComponent({
   setup({ artist, title }) {
     const { lang } = useLocales()
     const { playingTrack, store } = usePlayer()
+    const { searchSubmit } = useSearch()
     const isActionsOpens = ref(false)
     const isWikiLoading = ref(false)
     const isWikiReady = ref(false)
@@ -244,7 +252,8 @@ export default defineComponent({
       wikiFrameURL,
       isWikiLoading,
       wikiFrameResults,
-      openCollectionsModal
+      openCollectionsModal,
+      searchSubmit
     }
   }
 })
@@ -261,9 +270,17 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
 
+    &-head {
+      display: flex;
+    }
+
+    .input {
+      flex-grow: 1;
+    }
+
     &-heading {
       font-weight: 900;
-      color: $pale;
+      color: $paleDP;
       margin: 0.5rem 0 0.5rem;
     }
 
@@ -290,7 +307,7 @@ export default defineComponent({
     }
 
     &-total {
-      color: $pale;
+      color: $paleDP;
       margin-top: auto;
       font-weight: 600;
     }

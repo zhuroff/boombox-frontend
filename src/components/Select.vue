@@ -86,7 +86,7 @@ export default defineComponent({
   
   &__input {
     padding: 0.5rem;
-    border-color: $border;
+    border-color: $paleLT;
     border-radius: $borderRadiusMD;
     max-width: inherit;
 

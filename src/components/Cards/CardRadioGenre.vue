@@ -46,7 +46,7 @@ export default defineComponent({
     border: 0;
     background-color: transparent;
     outline: none;
-    color: $pale;
+    color: $paleDP;
     font-size: 12px;
     border-radius: 3px;
     transition: all 0.2s ease;

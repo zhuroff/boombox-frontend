@@ -72,7 +72,7 @@ export default defineComponent({
     transition: background-color 0.3s $animation;
 
     &:hover {
-      background-color: $border;
+      background-color: $paleLT;
       transition: background-color 0.3s $animation;
     }
   }

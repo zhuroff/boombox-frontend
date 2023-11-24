@@ -187,8 +187,8 @@ export default defineComponent({
         justify-content: flex-start;
 
         .icon {
-          color: $pale;
-          fill: $pale;
+          color: $paleDP;
+          fill: $paleDP;
         }
 
         @include media('<laptop') {
@@ -260,7 +260,7 @@ export default defineComponent({
       .icon {
         width: 18px;
         height: 18px;
-        color: $pale;
+        color: $paleDP;
         transition: fill 0.2s ease;
       }
   

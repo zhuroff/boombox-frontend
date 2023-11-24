@@ -24,7 +24,7 @@
       }
 
       &:hover {
-        background-color: $border;
+        background-color: $paleLT;
         transition: background-color 0.2s $animation;
       }
     }
@@ -41,8 +41,8 @@
 
   &__td {
     padding: 5px 10px;
-    border-bottom: 1px solid $border;
-    border-right: 1px solid $border;
+    border-bottom: 1px solid $paleLT;
+    border-right: 1px solid $paleLT;
     vertical-align: top;
     color: $black;
 
@@ -90,7 +90,7 @@
   }
 
   &__details {
-    background-color: $border;
+    background-color: $paleLT;
 
     &-content {
       padding: 25px;

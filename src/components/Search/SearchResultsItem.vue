@@ -94,7 +94,7 @@ export default defineComponent({
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: $border;
+      background-color: $paleLT;
       transition: background-color 0.3s ease;
     }
   }
@@ -125,7 +125,7 @@ export default defineComponent({
 
     span {
       font-size: 12px;
-      color: $pale;
+      color: $paleDP;
     }
   }
 }

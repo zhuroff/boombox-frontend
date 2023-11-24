@@ -65,5 +65,8 @@ export const localesEN: LocaleDictionary = {
   },
   collections: {
     add: 'Add to collection'
+  },
+  search: {
+    placeholder: 'Search...'
   }
 }

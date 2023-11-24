@@ -65,5 +65,8 @@ export const localesBY: LocaleDictionary = {
   },
   collections: {
     add: 'Дадаць у калекцыю'
+  },
+  search: {
+    placeholder: 'Пошук...'
   }
 }

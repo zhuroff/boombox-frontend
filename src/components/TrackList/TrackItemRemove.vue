@@ -68,8 +68,8 @@ export default {
   .icon-delete  {
     width: 10px;
     height: 10px;
-    fill: $pale;
-    stroke: $pale;
+    fill: $paleDP;
+    stroke: $paleDP;
     transition: all 0.2s ease;
   }
 }

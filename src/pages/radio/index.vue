@@ -254,7 +254,7 @@ export default defineComponent({
 
   &.--saved {
     min-height: auto;
-    background-color: $border;
+    background-color: $paleLT;
 
     @include media('<desktop') {
       padding-bottom: 25px;

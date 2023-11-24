@@ -93,7 +93,7 @@ export default defineComponent({
   
     &__prev {
       background-color: transparent;
-      color: $pale;
+      color: $paleDP;
       transition: color 0.2s $animation;
 
       &:hover {
@@ -126,7 +126,7 @@ export default defineComponent({
   
     &__next {
       background-color: transparent;
-      color: $pale;
+      color: $paleDP;
       transition: color 0.2s $animation;
 
       &:hover {

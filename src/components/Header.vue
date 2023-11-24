@@ -4,7 +4,7 @@
     <InputText
       v-if="!noSearch"
       type="search"
-      placeholder="Search..."
+      :placeholder="lang('search.placeholder')"
     />
     <slot></slot>
   </header>
@@ -12,7 +12,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import InputText from '~/components/Inputs/InputText.vue';
+import { useLocales } from '~/hooks/useLocales'
+import InputText from '~/components/Inputs/InputText.vue'
 
 export default defineComponent({
   name: 'Header',
@@ -29,6 +30,10 @@ export default defineComponent({
       required: false,
       default: false
     }
+  },
+  setup() {
+    const { lang } = useLocales()
+    return { lang }
   }
 })
 </script>

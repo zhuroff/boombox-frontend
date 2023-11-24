@@ -167,10 +167,10 @@ export default defineComponent({
   font-size: 0.875rem;
 
   &__row {
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid $paleLT;
 
     &:hover {
-      background-color: $border;
+      background-color: $paleLT;
     }
   }
 

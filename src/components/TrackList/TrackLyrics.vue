@@ -300,7 +300,7 @@ export default defineComponent({
       background-color: transparent;
       outline: none;
       border: 0;
-      color: $pale;
+      color: $paleDP;
     }
 
     &_text {

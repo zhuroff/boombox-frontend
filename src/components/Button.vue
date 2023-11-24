@@ -92,8 +92,8 @@ export default defineComponent({
   justify-content: center;
 
   &.--inverted {
-    border-color: $pale;
-    color: $pale;
+    border-color: $paleDP;
+    color: $paleDP;
     transition: all 0.2s $animation;
 
     &:hover {
@@ -108,9 +108,9 @@ export default defineComponent({
     border-color: transparent;
 
     &:hover {
-      color: $pale;
-      stroke: $pale;
-      fill: $pale;
+      color: $paleDP;
+      stroke: $paleDP;
+      fill: $paleDP;
       transition: all 0.2s $animation;
     }
   }
@@ -186,6 +186,10 @@ export default defineComponent({
     pointer-events: none;
     cursor: default;
     opacity: 0.5;
+  }
+
+  &__label {
+    white-space: nowrap;
   }
 }
 </style>

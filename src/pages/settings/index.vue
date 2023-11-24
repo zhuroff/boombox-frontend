@@ -221,7 +221,7 @@ export default defineComponent({
     width: 100%;
 
     &-row {
-      border-bottom: 1px solid $border;
+      border-bottom: 1px solid $paleLT;
 
       &:last-child {
         border-bottom: 0;
@@ -230,7 +230,7 @@ export default defineComponent({
 
     &-cell {
       padding: 5px 10px;
-      border-right: 1px solid $border;
+      border-right: 1px solid $paleLT;
 
       &:first-child {
         width: 100%;

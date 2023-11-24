@@ -142,7 +142,7 @@ export default defineComponent({
       top: 8px;
 
       .icon {
-        color: $pale;
+        color: $paleDP;
       }
     }
   }
@@ -166,12 +166,12 @@ export default defineComponent({
       color: $white;
 
       &::placeholder {
-        color: $border;
+        color: $paleLT;
       }
     }
 
     &:focus {
-      border-color: $border;
+      border-color: $paleLT;
     }
   }
 
@@ -179,7 +179,7 @@ export default defineComponent({
     position: absolute;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
-    border: 1px solid $border;
+    border: 1px solid $paleLT;
     border-top: 0;
     padding: 24px;
     width: 100%;
@@ -200,8 +200,8 @@ export default defineComponent({
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 600;
-    color: $pale;
-    border-bottom: 1px solid $border;
+    color: $paleDP;
+    border-bottom: 1px solid $paleLT;
     padding-bottom: 3px;
     margin-bottom: 10px;
   }

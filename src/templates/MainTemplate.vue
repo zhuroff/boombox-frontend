@@ -93,7 +93,7 @@ export default defineComponent({
         height: 100px;
         background-color: $black;
         border-radius: 50%;
-        border: 4px solid $pale;
+        border: 4px solid $paleDP;
         z-index: 1;
         animation: appearance 0.75s $animation;
       }

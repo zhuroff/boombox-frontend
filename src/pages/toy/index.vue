@@ -126,7 +126,7 @@ export default defineComponent({
   &.--inner {
     padding: 12px 0 0;
     margin: 0 25px;
-    border-top: 1px solid $pale;
+    border-top: 1px solid $paleDP;
   }
 }
 </style>

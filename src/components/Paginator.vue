@@ -172,7 +172,7 @@ export default defineComponent({
     outline: none;
     font-family: inherit;
     font-size: 18px;
-    color: $pale;
+    color: $paleDP;
     background-color: transparent;
   }
 }

@@ -103,7 +103,7 @@ export default defineComponent({
   }
 
   @include media('>=laptop') {
-    // border-right: 1px solid $border;
+    // border-right: 1px solid $paleLT;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     position: relative;
     width: $asideWidth;
@@ -129,7 +129,7 @@ export default defineComponent({
 
     @include media('>=laptop') {
       height: 70px;
-      color: $pale;
+      color: $paleDP;
     }
 
     .icon-vinyl {
@@ -143,8 +143,8 @@ export default defineComponent({
         height: 25px;
         margin-right: 10px;
         flex: none;
-        fill: $pale;
-        stroke: $pale;
+        fill: $paleDP;
+        stroke: $paleDP;
       }
     }
   }

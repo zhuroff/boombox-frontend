@@ -56,3 +56,16 @@ export const detectLocale = (str: string) => {
 
   return 'en'
 }
+
+export function debounce <T extends (...args: any[]) => void>(
+  callback: T,
+  delay: number = 500
+): ((...args: Parameters<T>) => void) {
+  let timerID: ReturnType<typeof setTimeout>
+  return function (this: unknown, ...args: Parameters<T>) {
+    clearTimeout(timerID)
+    timerID = setTimeout(() => {
+      callback.apply(this, args)
+    }, delay)
+  }
+}

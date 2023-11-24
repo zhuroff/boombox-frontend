@@ -159,6 +159,7 @@ import SpriteChevronRightDouble from './SpriteChevronRightDouble.vue'
 import SpriteChevronLeftDouble from './SpriteChevronLeftDouble.vue'
 import SpriteDiscogs from './SpriteDiscogs.vue'
 import SpriteClose from './SpriteClose.vue'
+import SpriteLoupe from './SpriteLoupe.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -177,7 +178,8 @@ export default defineComponent({
     SpriteChevronRightDouble,
     SpriteChevronLeftDouble,
     SpriteDiscogs,
-    SpriteClose
+    SpriteClose,
+    SpriteLoupe
   },
 
   props: {
@@ -202,7 +204,8 @@ export default defineComponent({
       ['chevron-right-double', SpriteChevronRightDouble],
       ['chevron-left-double', SpriteChevronLeftDouble],
       ['discogs', SpriteDiscogs],
-      ['close', SpriteClose]
+      ['close', SpriteClose],
+      ['loupe', SpriteLoupe]
     ])
 
     const IconComponent = computed(() => (

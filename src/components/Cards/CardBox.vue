@@ -139,7 +139,7 @@ export default defineComponent({
 
     @include media('>=desktop') {
       font-weight: 600;
-      color: $pale;
+      color: $paleDP;
       font-size: 12px;
       position: relative;
     }
@@ -164,7 +164,7 @@ export default defineComponent({
   }
 
   &.sortable-chosen {
-    background-color: $border;
+    background-color: $paleLT;
   }
 
   @include media('>=desktop') {

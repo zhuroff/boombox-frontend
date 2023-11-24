@@ -78,7 +78,7 @@ export default defineComponent({
   &__icon {
     
     path {
-      fill: $pale;
+      fill: $paleDP;
     }
   }
 }

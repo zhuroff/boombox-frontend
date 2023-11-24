@@ -96,7 +96,7 @@ export default defineComponent({
 
     &-item {
       font-size: 0.875rem;
-      color: $pale;
+      color: $paleDP;
       cursor: pointer;
       text-align: center;
 

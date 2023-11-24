@@ -93,7 +93,7 @@ export default defineComponent({
 
     &-description {
       font-size: 70%;
-      color: $border;
+      color: $paleLT;
       opacity: 0;
       transform: translateY(10%);
       transition: all 0.75s $animation;

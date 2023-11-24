@@ -62,7 +62,7 @@ export default defineComponent({
     }
 
     &.--light {
-      border: 1px solid $pale;
+      border: 1px solid $paleDP;
 
       &:before {
         content: none;
