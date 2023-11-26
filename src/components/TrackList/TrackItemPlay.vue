@@ -1,5 +1,5 @@
 <template>
-  <div class="tracklist__row-cell --pointer --fix">
+  <div class="tracklist__row-cell --pointer --play">
     <Button
       v-if="isOnLoading"
       icon="spinner"
@@ -87,7 +87,7 @@ export default defineComponent({
         )
 
         store.commit('appendTrackToPlaylist', {
-          index: index !== -1 ? index : 0,
+          order: index !== -1 ? index : 0,
           track: props.track
         })
       }
@@ -115,3 +115,25 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+@import '~/scss/variables';
+
+.tracklist__row {
+
+  &-cell {
+    
+    &.--play {
+
+      .button {
+        width: 30px;
+        padding: 0;
+
+        .icon {
+          width: 1.2rem;
+        }
+      }
+    }
+  }
+}
+</style>

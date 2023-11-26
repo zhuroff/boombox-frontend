@@ -159,6 +159,7 @@ import SpriteDiscogs from './SpriteDiscogs.vue'
 import SpriteClose from './SpriteClose.vue'
 import SpriteLoupe from './SpriteLoupe.vue'
 import SpritePlaylist from './SpritePlaylist.vue'
+import SpritePlaylistRemove from './SpritePlaylistRemove.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -178,7 +179,8 @@ export default defineComponent({
     SpriteDiscogs,
     SpriteClose,
     SpriteLoupe,
-    SpritePlaylist
+    SpritePlaylist,
+    SpritePlaylistRemove
   },
   props: {
     name: {
@@ -203,7 +205,8 @@ export default defineComponent({
       ['discogs', SpriteDiscogs],
       ['close', SpriteClose],
       ['loupe', SpriteLoupe],
-      ['playlist', SpritePlaylist]
+      ['playlist', SpritePlaylist],
+      ['playlist-remove', SpritePlaylistRemove]
     ])
 
     const IconComponent = computed(() => (

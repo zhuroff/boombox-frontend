@@ -42,7 +42,7 @@ export const usePlayer = () => {
     const nextTrack = activePlaylistTracks.value[currentTrackIndex + 1]
 
     if (nextTrack) {
-      store.dispatch('playTrack', nextTrack._id)
+      store.dispatch('playTrack', nextTrack)
     }
   }
 
@@ -60,8 +60,32 @@ export const usePlayer = () => {
     const prevTrack = activePlaylistTracks.value[currentTrackIndex - 1]
 
     if (prevTrack) {
-      store.dispatch('playTrack', prevTrack._id)
+      store.dispatch('playTrack', prevTrack)
     }
+  }
+
+  const playTrackNext = (track: AlbumTrackDTO) => {
+    const index = currentPlaylistTracks.value.findIndex((track) => (
+      track._id === playingTrack.value._id
+    ))
+
+    addTrackToPlaylist(index === -1 ? 1 : index + 1, track)
+  }
+
+  const addToEndOfList = (track: AlbumTrackDTO) => {
+    const index = currentPlaylistTracks.value.length
+    addTrackToPlaylist(index, track)
+  }
+
+  const addTrackToPlaylist = (order: number, track: AlbumTrackDTO) => {
+    store.commit('appendTrackToPlaylist', {
+      order,
+      track
+    })
+  }
+
+  const removeTrackFromPlaylist = (trackID: string) => {
+    store.commit('removeTrackFromPlaylist', trackID)
   }
 
   return {
@@ -74,6 +98,9 @@ export const usePlayer = () => {
     switchToNextTrack,
     isPrevTrackExist,
     switchToPrevTrack,
+    playTrackNext,
+    addToEndOfList,
+    removeTrackFromPlaylist,
     store
   }
 }

@@ -13,7 +13,7 @@
 
 <script>
 
-import { reactive, computed } from 'vue'
+// import { computed } from 'vue'
 import { useStore } from 'vuex'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
@@ -26,11 +26,11 @@ export default {
     const store = useStore()
 
     const removeTrackFromPlaylist = () => {
-      const playlist = reactive(computed(() => store.getters.playlist))
+      // const playlist = computed(() => store.getters.playlist)
 
-      if (playlist) {
-        emit('removeTrackFromPlaylist', { listID: playlist.value._id })
-      }
+      // if (playlist) {
+      //   emit('removeTrackFromPlaylist', { listID: playlist.value._id })
+      // }
     }
 
     return { removeTrackFromPlaylist }

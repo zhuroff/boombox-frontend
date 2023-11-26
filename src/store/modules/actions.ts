@@ -8,7 +8,7 @@ import DBApiService from '~/services/DBApiService'
 const actions: ActionTree<AppStateInterface, StateInterface> = {
   playTrack: async ({ commit, dispatch }, track: AlbumTrackDTO) => {
     commit('setLoadingState', track._id)
-    commit('checkOrReplacePlaylists', track._id)
+    commit('checkOrReplacePlaylists', { commit, track })
     
     try {
       const trackSourceLink: string = await DBApiService.getFile('tracks/audio', track.path)

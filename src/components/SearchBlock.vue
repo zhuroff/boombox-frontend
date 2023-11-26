@@ -41,7 +41,7 @@
         :key="result.key"
         class="input-search__results-block"
       >
-        <div class="input-search__results-title">{{ result.title }}</div>
+        <div class="input-search__results-title">{{ lang(`navigation.${result.key}`) }}</div>
         <ul class="input-search__results-list">
           <li
             v-for="item in result.data"

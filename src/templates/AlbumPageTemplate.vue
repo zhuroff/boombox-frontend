@@ -272,7 +272,7 @@ export default defineComponent({
 
     @include media('>=laptop') {
       display: grid;
-      grid-template-columns: 1fr 252px 252px;
+      grid-template-columns: calc(100% - 252px - 252px - 25px - 25px) 252px 252px;
       gap: 25px;
     }
   }

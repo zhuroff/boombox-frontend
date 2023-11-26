@@ -12,6 +12,7 @@
           :track="track"
           :isTOY="isTOY"
           :index="index"
+          :albumID="albumID"
           @saveToyInfo="saveToyInfo"
         />
       </transition-group>
@@ -29,35 +30,31 @@ import { VueDraggableNext } from 'vue-draggable-next'
 import TrackListRow from './TrackListRow.vue'
 
 export default defineComponent({
+  name: 'TrackList',
   components: {
     VueDraggableNext,
     TrackListRow
   },
-
   props: {
     tracks: {
       type: Array as PropType<AlbumTrackDTO[]>,
       required: true
     },
-
     albumID: {
       type: String,
       required: true
     },
-
     isPlaylist: {
       type: Boolean,
       required: false,
       default: false
     },
-
     isTOY: {
       type: Boolean,
       required: false,
       default: false
     }
   },
-
   setup(props, { emit }) {
     const store = useStore(key)
 

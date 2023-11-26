@@ -1,7 +1,7 @@
 $font: 'Source Sans Pro', sans-serif;
 
 $white: #fff;
-$black: #000;
+$black: #2b2b2b;
 $dark: #0f1e36;
 $paleDP: #828c9b;
 $paleMD: #a5aab3;
@@ -11,6 +11,7 @@ $error: #ff3860;
 $success: #48c78e;
 $warning: #ffe08a;
 $info: #3e8ed0;
+$transBlack: rgba(43, 43, 43, 0.97);
 $transDark: rgba(15, 30, 54, 0.9);
 $transLight: rgba(255, 255, 255, 0.9);
 
@@ -24,7 +25,7 @@ $asideWidthMobile: 110px;
 $albumAsideWidth: 500px;
 $playerHeight: 62px;
 
-$animation: cubic-bezier(.17, .67, .35, .99);
+$animation: cubic-bezier(.06,.28,.26,.81);
 
 $breakpoints: (
   'tablet': 768px,

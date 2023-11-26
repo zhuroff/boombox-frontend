@@ -37,6 +37,10 @@ export default defineComponent({
   &-cell {
     padding-left: 15px;    
     overflow: hidden;
+
+    &.--title {
+      flex-grow: 1;
+    }
   }
 
   &-title {

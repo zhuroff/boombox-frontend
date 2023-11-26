@@ -16,6 +16,10 @@
       <div class="tracklist__row-cell --order">
         {{ track.order || index + 1 }}
       </div>
+      <TrackItemAdd
+        v-if="isNotCurrentPlaylist"
+        :track="track"
+      />
       <TrackItemPlay
         :track="track"
       />
@@ -68,6 +72,7 @@ import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import Button from '~/components/Button.vue'
+import TrackItemAdd from './TrackItemAdd.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
@@ -77,8 +82,10 @@ import Modal from '~/components/Modal.vue'
 import TrackLyrics from './TrackLyrics.vue'
 
 export default defineComponent({
+  name: 'TrackListRow',
   components: {
     Button,
+    TrackItemAdd,
     TrackItemPlay,
     TrackItemTitle,
     TrackItemDuration,
@@ -87,24 +94,24 @@ export default defineComponent({
     Modal,
     TrackLyrics
   },
-
   props: {
     track: {
       type: Object as PropType<AlbumTrackDTO>,
       required: true
     },
-
     index: {
       type: Number,
       required: true
     },
-
+    albumID: {
+      type: String,
+      required: true
+    },
     isTOY: {
       type: Boolean,
       required: true
     }
   },
-
   setup(props, { emit }) {
     const store = useStore(key)
     const descriptionValue = ref('')
@@ -118,6 +125,10 @@ export default defineComponent({
 
     const isPlayingTrack = computed(() => (
       store.getters.playingTrack._id === props.track._id
+    ))
+
+    const isNotCurrentPlaylist = computed(() => (
+      props.albumID !== store.state.instance.currentPlaylist._id
     ))
 
     const lyricsModalSwitcher = () => {
@@ -136,6 +147,7 @@ export default defineComponent({
       isModalActive,
       isPlayingTrack,
       lyricsModalSwitcher,
+      isNotCurrentPlaylist,
       trackArtistAndTitle,
       isTOYEditable,
       descriptionValue,
@@ -158,10 +170,7 @@ export default defineComponent({
     font-size: 1rem;
     color: $black;
     height: 3rem;
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: flex-start;
-    grid-template-columns: repeat(3, auto) 1fr;
+    display: flex;
 
     &:hover {
       border-radius: $borderRadiusSM;
@@ -175,10 +184,10 @@ export default defineComponent({
       position: relative;
   
       &.--order {
-        width: 20px;
+        width: 25px;
         flex: none;
         line-height: 1;
-        justify-content: flex-end;
+        justify-content: center;
       }
   
       &.--drag {

@@ -16,7 +16,8 @@ export const localesBY: LocaleDictionary = {
     youtube: 'YouTube',
     radio: 'Радыё',
     toy: 'TOY',
-    settings: 'Налады'
+    settings: 'Налады',
+    tracks: 'Трэкi'
   },
   settings: {
     createBackup: 'Стварыць рэзервовую копію',
@@ -68,5 +69,11 @@ export const localesBY: LocaleDictionary = {
   },
   search: {
     placeholder: 'Пошук...'
+  },
+  player: {
+    playNow: 'Граць зараз',
+    playNext: 'Граць наступным',
+    addToList: 'Дадаць да плэйлiста',
+    removeFromList: 'Выдаліць з плэйлiста'
   }
 }

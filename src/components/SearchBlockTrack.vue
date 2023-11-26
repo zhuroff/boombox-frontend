@@ -8,32 +8,32 @@
     <div class="input-search__results-actions">
       <TrackItemPlay
         :track="trackToPlay"
-        :title="'Play now'"
+        :title="lang('player.playNow')"
         isSearched
       />
-      <Button
+      <Button 
+        v-if="!isOutAlbumAdded"
         icon="chevron-right"
         size="small"
         isOutlined
-        title="Play next"
-        :className="activeKeys.has('next') ? '--active' : ''"
-        @click="() => (
-          !activeKeys.has('next')
-            ? playTrackNext('next')
-            : removeTrackFromPlaylist('next')
-        )"
+        :title="lang('player.playNext')"
+        @click="() => playTrackNext(trackToPlay)"
       />
       <Button
+        v-if="!isOutAlbumAdded"
         icon="chevron-right-double"
         size="small"
         isOutlined
-        title="Add to playlist"
-        :className="activeKeys.has('end') ? '--active' : ''"
-        @click="() => (
-          !activeKeys.has('end')
-            ? addToEndOfList('end')
-            : removeTrackFromPlaylist('end')
-        )"
+        :title="lang('player.addToList')"
+        @click="() => addToEndOfList(trackToPlay)"
+      />
+      <Button
+        v-if="isOutAlbumAdded"
+        icon="playlist-remove"
+        size="small"
+        isOutlined
+        :title="lang('player.removeFromList')"
+        @click="() => removeTrackFromPlaylist(trackToPlay._id)"
       />
     </div>
   </div>
@@ -43,6 +43,7 @@
 import { PropType, computed, defineComponent, ref } from 'vue'
 import { TrackResponse } from '~/types/Track'
 import { usePlayer } from '~/hooks/usePlayer'
+import { useLocales } from '~/hooks/useLocales'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import TrackItemPlay from '~/components/TrackList/TrackItemPlay.vue'
 import Button from '~/components/Button.vue'
@@ -60,45 +61,22 @@ export default defineComponent({
     }
   },
   setup({ track }) {
-    const { currentPlaylistTracks, playingTrack, store } = usePlayer()
-    const activeKeys = ref(new Set())
+    const { lang } = useLocales()
+    const { playTrackNext, addToEndOfList, currentPlaylistTracks, removeTrackFromPlaylist } = usePlayer()
     const trackToPlay = computed(() => (
       new AlbumTrackDTO(track, 0, track.cover || '', track.inAlbum.period, true)
     ))
-
-    const playTrackNext = (key: string) => {
-      activeKeys.value.add(key)
-      const index = currentPlaylistTracks.value.findIndex(
-        (track) => track._id === playingTrack.value._id
-      ) + 1
-
-      addTrackToPlaylist(index)
-    }
-
-    const addToEndOfList = (key: string) => {
-      activeKeys.value.add(key)
-      const index = currentPlaylistTracks.value.length
-      addTrackToPlaylist(index)
-    }
-
-    const addTrackToPlaylist = (index: number) => {
-      store.commit('appendTrackToPlaylist', {
-        index,
-        track: trackToPlay.value
-      })
-    }
-
-    const removeTrackFromPlaylist = (key: string) => {
-      activeKeys.value.delete(key)
-      store.commit('removeTrackFromPlaylist', trackToPlay.value._id)
-    }
+    const isOutAlbumAdded = computed(() => (
+      currentPlaylistTracks.value.some(({ _id }) => _id === trackToPlay.value._id)
+    ))
 
     return {
       trackToPlay,
       playTrackNext,
       addToEndOfList,
+      isOutAlbumAdded,
       removeTrackFromPlaylist,
-      activeKeys
+      lang
     }
   }
 })
@@ -161,8 +139,8 @@ export default defineComponent({
       .button {
         border-radius: 50%;
         padding: 0;
-        width: 2rem;
-        height: 2rem;
+        width: 2rem !important;
+        height: 2rem !important;
         border: 1px solid $paleDP;
         fill: $paleDP;
 

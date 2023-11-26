@@ -1,4 +1,4 @@
-import { MutationTree } from 'vuex'
+import { Commit, MutationTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { TSnackbar, ReorderPayload, LocaleKeys } from '~/types/Global'
 import { AlbumPage } from '~/types/Album'
@@ -28,11 +28,18 @@ const mutations: MutationTree<AppStateInterface> = {
   },
 
   setPlayerPlaylist: <T extends AlbumPage & PlaylistPage>(state: AppStateInterface, data: T) => {
-    if (!state.currentPlaylist._id.length) {
+    if (!state.currentPlaylist._id || !state.playingTrack._id) {
       state.currentPlaylist = data
     } else if (state.currentPlaylist._id !== data._id) {
       state.reservedPlaylist = data
     }
+  },
+
+  addAlbumToPlaylist: (state: AppStateInterface) => {
+    state.currentPlaylist.tracks = [
+      ...state.currentPlaylist.tracks,
+      ...state.reservedPlaylist.tracks
+    ]
   },
 
   setPlayingStation: (state: AppStateInterface, station: RadioStationResponse) => {
@@ -59,20 +66,47 @@ const mutations: MutationTree<AppStateInterface> = {
     }
   },
 
-  appendTrackToPlaylist: (state: AppStateInterface, prop: { track: AlbumTrackDTO, index: number }) => {
-    state.currentPlaylist.tracks.splice(prop.index, 0, prop.track)
+  appendTrackToPlaylist: (state: AppStateInterface, prop: { track: AlbumTrackDTO, order: number }) => {
+    state.currentPlaylist.tracks = state.currentPlaylist.tracks
+      .reduce<AlbumTrackDTO[]>((acc, next, index) => {
+        if (index + 1 === prop.order) {
+          acc.push({ ...next, order: prop.order })
+          acc.push({ ...prop.track, order: prop.order + 1 })
+        } else {
+          acc.push({ ...next, order: (acc.at(-1)?.order || 0) + 1 })
+        }
+        return acc
+      }, [])
   },
 
   removeTrackFromPlaylist: (state: AppStateInterface, _id: string) => {
-    state.currentPlaylist.tracks = state.currentPlaylist.tracks.filter((el) => el._id !== _id)
+    let order = 1
+    state.currentPlaylist.tracks = state.currentPlaylist.tracks
+      .reduce<AlbumTrackDTO[]>((acc, next) => {
+        if (next._id === _id) order--
+        else acc.push({ ...next, order: order })
+        order++
+        return acc
+      }, [])
   },
 
-  checkOrReplacePlaylists: (state: AppStateInterface, _id: string) => {
-    const chosenTrack = state.currentPlaylist.tracks.find((el) => el._id === _id)
+  checkOrReplacePlaylists: (
+    state: AppStateInterface,
+    { commit, track }: { commit: Commit; track: AlbumTrackDTO }
+  ) => {
+    const isFromCurrentPlaylist = state.currentPlaylist.tracks.some((el) => el._id === track._id)
+    const isFromReserverPlaylist = state.reservedPlaylist.tracks.some((el) => el._id === track._id)
 
-    if (!chosenTrack) {
-      state.currentPlaylist = { ...state.reservedPlaylist }
-      state.reservedPlaylist = { ...initPlaylist } as PlayerPlaylist
+    if (!isFromCurrentPlaylist) {
+      if (isFromReserverPlaylist) {
+        state.currentPlaylist = { ...state.reservedPlaylist }
+        state.reservedPlaylist = { ...initPlaylist } as PlayerPlaylist
+      } else {
+        commit('appendTrackToPlaylist', {
+          track,
+          order: track.order === 1 ? 1 : track.order - 1
+        })
+      }
     }
   },
 
@@ -160,10 +194,9 @@ const mutations: MutationTree<AppStateInterface> = {
       targetPlaylistTracks.splice(payload.oldOrder, 1)[0]
     )
 
-    /* eslint no-param-reassign: 0 */
-    targetPlaylistTracks.forEach((el, index) => {
-      el.order = index + 1
-    })
+    for (let i = 0; i < targetPlaylistTracks.length; i++) {
+      targetPlaylistTracks[i].order = i + 1
+    }
   },
 
   changeRepeatState: (state: AppStateInterface) => {

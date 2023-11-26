@@ -69,6 +69,10 @@
               class="overlay__list-item"
               @click="openCollectionsModal"
             >{{ lang('collections.add') }}</li>
+            <li
+              class="overlay__list-item"
+              @click="addAlbumToPlaylist"
+            >{{ lang('player.addToList') }}</li>
           </ul>
         </Overlay>
       </div>
@@ -142,7 +146,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ artist, title }) {
+  setup({ artist, title }, { emit }) {
     const { lang } = useLocales()
     const { playingTrack, store } = usePlayer()
     const { searchSubmit, results } = useSearch()
@@ -239,6 +243,11 @@ export default defineComponent({
       console.log('Open collections modal')
     }
 
+    const addAlbumToPlaylist = () => {
+      store.commit('addAlbumToPlaylist')
+      isActionsOpens.value = false
+    }
+
     return {
       lang,
       isPlaying,
@@ -254,6 +263,7 @@ export default defineComponent({
       isWikiLoading,
       wikiFrameResults,
       openCollectionsModal,
+      addAlbumToPlaylist,
       searchSubmit,
       results
     }

@@ -16,7 +16,8 @@ export const localesEN: LocaleDictionary = {
     youtube: 'YouTube',
     radio: 'Radio',
     toy: 'TOY',
-    settings: 'Settings'
+    settings: 'Settings',
+    tracks: 'Tracks'
   },
   settings: {
     createBackup: 'Create backup',
@@ -68,5 +69,11 @@ export const localesEN: LocaleDictionary = {
   },
   search: {
     placeholder: 'Search...'
+  },
+  player: {
+    playNow: 'Play now',
+    playNext: 'Play next',
+    addToList: 'Add to playlist',
+    removeFromList: 'Remove from playlist'
   }
 }
