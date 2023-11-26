@@ -1,12 +1,13 @@
-import { CategoryBasic } from '~/types/Category';
-import { TrackResponse } from '~/types/Track';
+import { AlbumItem } from '~/types/Album'
+import { CategoryBasic } from '~/types/Category'
+import { TrackResponse } from '~/types/Track'
 
 export class AlbumTrackDTO implements TrackResponse {
   _id: string
   title: string
   path: string
   listened: number
-  inAlbum: CategoryBasic
+  inAlbum: AlbumItem
   inPlaylists: CategoryBasic[]
   artist: CategoryBasic
   period: CategoryBasic
@@ -15,8 +16,15 @@ export class AlbumTrackDTO implements TrackResponse {
   isDisabled: boolean
   order: number
   albumCover: string
+  isOutOfAlbumList: boolean
   
-  constructor(track: TrackResponse, order: number, cover: string, period: CategoryBasic) {
+  constructor(
+    track: TrackResponse,
+    order: number,
+    cover: string,
+    period: CategoryBasic,
+    isOutOfAlbumList = false
+  ) {
     this._id = track._id
     this.title = track.title
     this.path = track.path
@@ -30,6 +38,7 @@ export class AlbumTrackDTO implements TrackResponse {
     this.order = order
     this.period = period
     this.albumCover = cover
+    this.isOutOfAlbumList = isOutOfAlbumList
   }
 }
 

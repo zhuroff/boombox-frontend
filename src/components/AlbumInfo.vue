@@ -1,11 +1,12 @@
 <template>
   <div class="album__info">
     <div class="album__info-head">
-      <InputText
+      <SearchBlock
         type="search"
         size="medium"
-        :placeholder="lang('search.placeholder')"
         isInverted
+        :placeholder="lang('search.placeholder')"
+        :results="results"
         @setInputValue="searchSubmit"
       />
     </div>
@@ -92,15 +93,15 @@ import { PropType, computed, defineComponent, ref } from 'vue'
 import { CategoryBasic } from '~/types/Category'
 import { useLocales } from '~/hooks/useLocales'
 import { useSearch } from '~/hooks/useSearch'
+import { usePlayer } from '~/hooks/usePlayer'
 import { detectLocale } from '~/utils'
 import { WikiSearchResult } from '~/types/Global'
 import wiki from 'wikipedia'
-import usePlayer from '~/hooks/usePlayer'
 import Button from './Button.vue'
 import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
-import InputText from '~/components/Inputs/InputText.vue'
+import SearchBlock from '~/components/SearchBlock.vue'
 
 export default defineComponent({
   name: 'AlbumInfo',
@@ -109,7 +110,7 @@ export default defineComponent({
     Overlay,
     Modal,
     WikiFrame,
-    InputText
+    SearchBlock
   },
   props: {
     title: {
@@ -144,7 +145,7 @@ export default defineComponent({
   setup({ artist, title }) {
     const { lang } = useLocales()
     const { playingTrack, store } = usePlayer()
-    const { searchSubmit } = useSearch()
+    const { searchSubmit, results } = useSearch()
     const isActionsOpens = ref(false)
     const isWikiLoading = ref(false)
     const isWikiReady = ref(false)
@@ -253,7 +254,8 @@ export default defineComponent({
       isWikiLoading,
       wikiFrameResults,
       openCollectionsModal,
-      searchSubmit
+      searchSubmit,
+      results
     }
   }
 })

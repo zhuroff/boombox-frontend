@@ -1,4 +1,5 @@
 import { PlayerTrackDTO, AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import { AlbumItem } from '~/types/Album'
 import { CategoryBasic } from '~/types/Category'
 import { PlayerPlaylist } from '~/types/Player'
 
@@ -16,7 +17,7 @@ const playingTrackInitial = new PlayerTrackDTO(new AlbumTrackDTO({
   title: '',
   path: '',
   listened: 0,
-  inAlbum: {} as CategoryBasic,
+  inAlbum: {} as AlbumItem,
   inPlaylists: [],
   artist: {} as CategoryBasic,
   lyrics: '',

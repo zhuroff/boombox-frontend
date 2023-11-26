@@ -18,7 +18,6 @@
       </div>
       <TrackItemPlay
         :track="track"
-        :index="index"
       />
       <TrackItemTitle
         :title="track.title"

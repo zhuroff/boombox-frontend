@@ -1,24 +1,22 @@
 <template>
+  <div class="player__progress">
+    <time class="player__progress-time">{{ leftTimeToMinutes }}</time>
 
-<div class="player__progress">
-  <time class="player__progress-time">{{ leftTimeToMinutes }}</time>
+    <progress
+      :max="1"
+      :value="playingTrack.progressLine || 0"
+      class="player__progress-bar"
+      @click="setTrackPosition"
+    ></progress>
 
-  <progress
-    :max="1"
-    :value="playingTrack.progressLine || 0"
-    class="player__progress-bar"
-    @click="setTrackPosition"
-  ></progress>
-
-  <time class="player__progress-time">{{ fullTimeToMinutes }}</time>
-</div>
-
+    <time class="player__progress-time">{{ fullTimeToMinutes }}</time>
+  </div>
 </template>
 
 <script lang="ts">
 
 import { defineComponent, computed } from 'vue'
-import usePlayer from '~/hooks/usePlayer'
+import { usePlayer } from '~/hooks/usePlayer'
 
 export default defineComponent({
   setup() {

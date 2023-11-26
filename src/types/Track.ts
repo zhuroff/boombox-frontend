@@ -1,3 +1,4 @@
+import { AlbumItem } from './Album'
 import { CategoryBasic } from './Category'
 
 export type TrackLyricsResponse = {
@@ -16,9 +17,10 @@ export type TrackResponse = {
   title: string
   path: string
   listened: number
-  inAlbum: CategoryBasic
+  inAlbum: AlbumItem
   inPlaylists: CategoryBasic[]
   artist: CategoryBasic
   lyrics?: string
   duration?: number
+  cover?: string
 }

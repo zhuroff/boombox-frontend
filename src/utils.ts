@@ -25,6 +25,21 @@ export const hostString = (pathname: string) => {
   return `${host}${pathname}`
 }
 
+export const coverPlaceholders = (slug: string) => {
+  switch(slug) {
+    case 'artists':
+      return '/img/artist.webp'
+    case 'genres':
+      return '/img/genre.webp'
+    case 'periods':
+      return '/img/period.webp'
+    case 'frames':
+      return '/img/frame.webp'
+    default:
+      return '/img/album.webp'
+  }
+}
+
 export const slugify = (str: string) => (
   str.toLowerCase()
     .replace(/[^a-zа-я0-9\s]+/g, '').trim()
@@ -68,4 +83,15 @@ export function debounce <T extends (...args: any[]) => void>(
       callback.apply(this, args)
     }, delay)
   }
+}
+
+export const secondsToMinutes = (duration?: number) => {
+  if (!duration) {
+    return '--/--'
+  }
+
+  const minutes = Math.floor(duration / 60)
+  const seconds = Math.floor(duration - minutes * 60)
+
+  return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
 }

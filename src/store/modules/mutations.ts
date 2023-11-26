@@ -59,8 +59,16 @@ const mutations: MutationTree<AppStateInterface> = {
     }
   },
 
+  appendTrackToPlaylist: (state: AppStateInterface, prop: { track: AlbumTrackDTO, index: number }) => {
+    state.currentPlaylist.tracks.splice(prop.index, 0, prop.track)
+  },
+
+  removeTrackFromPlaylist: (state: AppStateInterface, _id: string) => {
+    state.currentPlaylist.tracks = state.currentPlaylist.tracks.filter((el) => el._id !== _id)
+  },
+
   checkOrReplacePlaylists: (state: AppStateInterface, _id: string) => {
-    let chosenTrack = state.currentPlaylist.tracks.find((el) => el._id === _id)
+    const chosenTrack = state.currentPlaylist.tracks.find((el) => el._id === _id)
 
     if (!chosenTrack) {
       state.currentPlaylist = { ...state.reservedPlaylist }

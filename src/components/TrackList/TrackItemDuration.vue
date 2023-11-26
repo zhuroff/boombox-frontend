@@ -1,11 +1,12 @@
 <template>  
   <div class="tracklist__row-cell --fix --duration">
-    {{ secondsToMinutes }}
+    {{ trackTime }}
   </div>
 </template>
 
 <script>
 import { defineComponent, computed } from 'vue'
+import { secondsToMinutes } from '@/utils'
 
 export default defineComponent({
   props: {
@@ -15,18 +16,8 @@ export default defineComponent({
   },
 
   setup(props) {
-    const secondsToMinutes = computed(() => {
-      if (!props.duration) {
-        return '--/--'
-      }
-
-      const minutes = Math.floor(props.duration / 60)
-      const seconds = Math.floor(props.duration - minutes * 60)
-
-      return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
-    })
-
-    return { secondsToMinutes }
+    const trackTime = computed(() => secondsToMinutes(props.duration))
+    return { trackTime }
   }
 })
 </script>

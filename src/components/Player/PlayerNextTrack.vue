@@ -13,7 +13,7 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import usePlayer from '~/hooks/usePlayer'
+import { usePlayer } from '~/hooks/usePlayer'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({

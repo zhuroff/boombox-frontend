@@ -7,7 +7,7 @@
     >
       <transition-group>
         <TrackListRow
-          v-for="(track, index) in tracks"
+          v-for="(track, index) in albumTracksOnly"
           :key="track._id"
           :track="track"
           :isTOY="isTOY"
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, PropType } from 'vue'
+import { defineComponent, reactive, PropType, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
@@ -66,6 +66,10 @@ export default defineComponent({
       disabled: false
     })
 
+    const albumTracksOnly = computed(() => (
+      props.tracks.filter(({ isOutOfAlbumList }) => !isOutOfAlbumList)
+    ))
+
     const orderChanged = (event: DraggableEvent) => {
       const payload: ReorderPayload = {
         oldOrder: event.oldIndex,
@@ -85,7 +89,8 @@ export default defineComponent({
     return {
       dragOptions,
       orderChanged,
-      saveToyInfo
+      saveToyInfo,
+      albumTracksOnly
     }
   }
 })

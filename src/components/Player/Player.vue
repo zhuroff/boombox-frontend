@@ -32,6 +32,7 @@
       <PlayerCrackle />
       <PlayerSound />
       <PlayerExternal />
+      <PlayerList />
     </div>
   </div>
 </section>
@@ -40,7 +41,7 @@
 <script lang="ts">
 
 import { defineComponent, onMounted, onUnmounted } from 'vue'
-import usePlayer from '~/hooks/usePlayer'
+import { usePlayer } from '~/hooks/usePlayer'
 import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
 import PlayerPrevTrack from './PlayerPrevTrack.vue'
 import PlayerNextTrack from './PlayerNextTrack.vue'
@@ -49,6 +50,7 @@ import PlayerProgressBar from './PlayerProgressBar.vue'
 import PlayerCrackle from './PlayerCrackle.vue'
 import PlayerSound from './PlayerSound.vue'
 import PlayerExternal from './PlayerExternal.vue'
+import PlayerList from './PlayerList.vue'
 import './Player.scss'
 
 type PlayerKeyNav = 'Space' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown'
@@ -62,7 +64,8 @@ export default defineComponent({
     PlayerProgressBar,
     PlayerCrackle,
     PlayerSound,
-    PlayerExternal
+    PlayerExternal,
+    PlayerList
   },
 
   setup() {

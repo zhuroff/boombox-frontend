@@ -1,5 +1,6 @@
 import api from '~/api'
 import { RequestConfig } from '~/types/Global'
+import { SearchPayload, SearchResultState } from '~/types/Search'
 import CommonService from './CommonService'
 
 export default class DBApiService {
@@ -17,6 +18,12 @@ export default class DBApiService {
 
   static async getFile<File>(entityType: string, path: string) {
     const response = await api.post<File>(`/api/${entityType}`, { path })
+    CommonService.errorChecker(response.status)
+    return response.data
+  }
+
+  static async search(payload: SearchPayload) {
+    const response = await api.post<SearchResultState[]>(`/api/search`, payload)
     CommonService.errorChecker(response.status)
     return response.data
   }

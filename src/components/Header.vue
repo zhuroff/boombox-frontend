@@ -1,10 +1,12 @@
 <template>
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
-    <InputText
+    <SearchBlock
       v-if="!noSearch"
       type="search"
+      :results="results"
       :placeholder="lang('search.placeholder')"
+      @setInputValue="searchSubmit"
     />
     <slot></slot>
   </header>
@@ -13,12 +15,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
-import InputText from '~/components/Inputs/InputText.vue'
+import { useSearch } from '~/hooks/useSearch'
+import SearchBlock from '~/components/SearchBlock.vue'
 
 export default defineComponent({
   name: 'Header',
   components: {
-    InputText
+    SearchBlock
   },
   props: {
     heading: {
@@ -33,7 +36,8 @@ export default defineComponent({
   },
   setup() {
     const { lang } = useLocales()
-    return { lang }
+    const { searchSubmit, results } = useSearch()
+    return { lang, results, searchSubmit }
   }
 })
 </script>
@@ -74,14 +78,13 @@ export default defineComponent({
   }
 
   &__heading {
+
     @include media('<tablet') {
-      font-size: 1.25rem;
-      font-weight: 600;
+      @include serif(1.25rem, 600);
     }
 
     @include media('>=tablet') {
-      font-size: 1.5rem;
-      font-weight: 700;
+      @include serif(1.5rem, 600);
     }
   }
 }

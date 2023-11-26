@@ -1,13 +1,14 @@
 import { AlbumItem } from './Album'
 import { FrameAlbum } from '~/types/Frame'
 import { CategorySearchResult } from './Category'
+import { TrackResponse } from './Track'
 
 type SearchPayload = {
   query: string
   key?: string
 }
 
-type SearchResultData = (CategorySearchResult | AlbumItem | Partial<FrameAlbum>)
+type SearchResultData = (CategorySearchResult | AlbumItem | TrackResponse | Partial<FrameAlbum>)
 
 type SearchResultState = {
   title: string

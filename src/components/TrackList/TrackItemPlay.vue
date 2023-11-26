@@ -29,6 +29,7 @@
       size="small"
       isText
       className="tracklist__row-action"
+      :title="title"
       @click="playTrack"
     />
   </div>
@@ -37,28 +38,31 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import usePlayer from '~/hooks/usePlayer'
+import { usePlayer } from '~/hooks/usePlayer'
 import Button from '~/components/Button.vue'
 
 export default defineComponent({
+  name: 'TrackItemPlay',
   components: {
     Button,
   },
-
   props: {
     track: {
       type: Object as PropType<AlbumTrackDTO>,
       required: true
     },
-
-    index: {
-      type: Number,
-      required: true
+    title: {
+      type: String,
+      required: false
     },
+    isSearched: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
-
   setup(props) {
-    const { playingTrack, store } = usePlayer()
+    const { currentPlaylistTracks, playingTrack, store } = usePlayer()
 
     const isPlaying = computed(() => (
       playingTrack.value._id === props.track._id &&
@@ -77,6 +81,16 @@ export default defineComponent({
     ))
 
     const playTrack = () => {
+      if (props.isSearched) {
+        const index = currentPlaylistTracks.value.findIndex(
+          (track) => track._id === playingTrack.value._id
+        )
+
+        store.commit('appendTrackToPlaylist', {
+          index: index !== -1 ? index : 0,
+          track: props.track
+        })
+      }
       store.dispatch('playTrack', props.track)
       store.commit('expandPlayer')
     }

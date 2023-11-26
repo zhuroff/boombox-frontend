@@ -4,11 +4,11 @@
     @submit.prevent="saveNewFrame"
   >
     <div class="form-frame__row">
-      <InputText
+      <!-- <InputText
         type="text"
         placeholder="Frame album title"
         @setInputValue="setFrameTitle"
-      />
+      /> -->
     </div>
 
     <div class="form-frame__row">
@@ -64,19 +64,19 @@
       </button>
 
       <div class="form-frame__row">
-        <InputText
+        <!-- <InputText
           type="text"
           placeholder="Search..."
           @setInputValue="searchByQuery"
-        />
+        /> -->
       </div>
       
-      <FrameResults
+      <!-- <FrameResults
         v-if="activeCategory.results.length"
         :items="activeCategory.results"
         :defaultAvatar="keysMatcher[activeCategory.key]"
         @selectCategory="selectCategory"
-      />
+      /> -->
 
       <div
         v-if="isNotFound"
@@ -98,7 +98,7 @@ import { defineComponent, Ref, ref, reactive, computed } from 'vue'
 import { CategoryKeysPlural, CategorySearchResult, CategoryBasic, CategoryMatcher, CategoryActive } from '~/types/Category'
 import { FramePayload } from '~/types/Frame'
 import { SearchPayload, SearchResultData } from '~/types/Search'
-import InputText from '~/components/Inputs/InputText.vue'
+// import InputText from '~/components/Inputs/InputText.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from '~/components/Button/Button.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
@@ -112,7 +112,7 @@ export default defineComponent({
   name: 'FrameForm',
 
   components: {
-    InputText,
+    // InputText,
     Textarea,
     Button,
     Sprite,

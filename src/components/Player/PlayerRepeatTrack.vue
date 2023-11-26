@@ -1,20 +1,17 @@
-<template>
-  
-<button
-  :class="[{ '--mobile' : isMobile }, 'player__repeat']"
-  @click="changeRepeatState"
->
-  <Sprite
-    v-if="!isTrackRepeat"
-    name="repeat"
-  />
-
-  <Sprite
-    v-else
-    name="repeat-active"
-  />
-</button>
-
+<template>  
+  <button
+    :class="[{ '--mobile' : isMobile }, 'player__repeat']"
+    @click="changeRepeatState"
+  >
+    <Sprite
+      v-if="!isTrackRepeat"
+      name="repeat"
+    />
+    <Sprite
+      v-else
+      name="repeat-active"
+    />
+  </button>
 </template>
 
 <script lang="ts">

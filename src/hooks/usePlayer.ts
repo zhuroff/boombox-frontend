@@ -4,7 +4,7 @@ import { key } from '~/store'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { PlayingTrack } from '~/types/Player'
 
-const usePlayer = () => {
+export const usePlayer = () => {
   const store = useStore(key)
 
   const isPlayerExpanded: ComputedRef<boolean> = computed(() => (
@@ -77,5 +77,3 @@ const usePlayer = () => {
     store
   }
 }
-
-export default usePlayer
