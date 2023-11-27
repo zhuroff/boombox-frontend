@@ -29,7 +29,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
       const preparedData = {
         ...data,
         tracks: data.tracks.map((track, index) => (
-          new AlbumTrackDTO(track, index + 1, data.albumCover, data.period)
+          new AlbumTrackDTO(track, index + 1, data.coverURL, data.period)
         ))
       }
       Object.assign(entity, preparedData)

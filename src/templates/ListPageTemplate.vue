@@ -7,7 +7,10 @@
       />
     </transition>
     <transition-group name="flyUp">
-      <Header :heading="pageHeading">
+      <Header
+        :heading="pageHeading"
+        :withSearch="withSearch"
+      >
         <slot name="header"></slot>
       </Header>
       <CardList
@@ -95,6 +98,11 @@ export default defineComponent({
     setEntitiesLimit: {
       type: Function as PropType<(limit: number) => void>,
       required: false
+    },
+    withSearch: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   setup({ pagePagination }) {

@@ -158,7 +158,6 @@ export default defineComponent({
         index === expandedLyrics.value
           ? null
           : index
-          console.log(expandedLyrics)
     }
 
     const saveLyrics = (payload: string, isConfirm = true) => {

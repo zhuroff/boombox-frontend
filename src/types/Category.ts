@@ -1,37 +1,31 @@
 import { AlbumItem } from '~/types/Album'
 import { FrameAlbum } from '~/types/Frame'
 import { SearchResultData } from './Search'
+import { BasicEntity } from './Global'
 
 type CategoryImagesKeys = 'poster' | 'avatar'
 type CategoryKeysSingular = 'artist' | 'genre' | 'period'
 type CategoryKeysPlural = 'artists' | 'genres' | 'periods'
 
-type CategoryKeys = {
-  [K in CategoryKeysSingular] : string
-}
+export type CategoryKeys = Record<CategoryKeysSingular, string>
 
 type CategoryMatcher = {
   [K in CategoryKeysPlural]: CategoryKeysSingular
 }
 
-type CategoryBasic = {
-  _id: string
-  title: string
-}
-
-type CategoryItem = CategoryBasic & {
+type CategoryItem = BasicEntity & {
   albums: number
   avatar: string | undefined
 }
 
-type CategoryPage = CategoryBasic & {
+type CategoryPage = BasicEntity & {
   poster: string
-  albums: AlbumItem[] | FrameAlbum[]
+  albums: AlbumItem[]
   frames?: FrameAlbum[]
   avatar: string | undefined
 }
 
-type CategorySearchResult = CategoryBasic & {
+type CategorySearchResult = BasicEntity & {
   avatar: string
 }
 
@@ -47,8 +41,6 @@ export {
   CategoryMatcher,
   CategoryKeysSingular,
   CategoryKeysPlural,
-  CategoryKeys,
-  CategoryBasic,
   CategoryItem,
   CategoryPage,
   CategorySearchResult,

@@ -1,37 +1,26 @@
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import { CategoryBasic } from './Category'
-import { Pagination } from './Global'
+import { BasicEntity, Pagination } from './Global'
 
-export type AlbumItem = {
+export interface AlbumItem {
   _id: string
+  coverURL: string
   albumCover: string
   title: string
-  artist: CategoryBasic
-  genre: CategoryBasic
-  period: CategoryBasic
+  artist: BasicEntity
+  genre: BasicEntity
+  period: BasicEntity
 }
 
-export type AlbumPage = AlbumItem & {
+export interface AlbumPage extends AlbumItem {
   folderName: string
   tracks: AlbumTrackDTO[]
 }
 
-export type AlbumItemProps = {
-  isFetched: boolean
-  data: AlbumItem[]
-  pagination?: Pagination
-}
-
-export type AlbumPageProps = {
-  isFetched: boolean
-  data: AlbumPage
-}
-
-export type AlbumHeadProps = {
+export interface AlbumHeadProps {
   title: string
-  artist: CategoryBasic
-  period: CategoryBasic
-  genre: CategoryBasic
+  artist: BasicEntity
+  period: BasicEntity
+  genre: BasicEntity
 }
 
 export interface AlbumBooklet {

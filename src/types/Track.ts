@@ -1,5 +1,5 @@
 import { AlbumItem } from './Album'
-import { CategoryBasic } from './Category'
+import { BasicEntity } from './Global'
 
 export type TrackLyricsResponse = {
   artist: string
@@ -18,8 +18,8 @@ export type TrackResponse = {
   path: string
   listened: number
   inAlbum: AlbumItem
-  inPlaylists: CategoryBasic[]
-  artist: CategoryBasic
+  inPlaylists: BasicEntity[]
+  artist: BasicEntity
   lyrics?: string
   duration?: number
   cover?: string

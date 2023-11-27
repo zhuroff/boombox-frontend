@@ -2,7 +2,7 @@
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
     <SearchBlock
-      v-if="!noSearch"
+      v-if="withSearch"
       type="search"
       :results="results"
       :placeholder="lang('search.placeholder')"
@@ -28,10 +28,10 @@ export default defineComponent({
       type: String,
       required: true
     },
-    noSearch: {
+    withSearch: {
       type: Boolean,
       required: false,
-      default: false
+      default: true
     }
   },
   setup() {

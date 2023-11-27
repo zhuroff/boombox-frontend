@@ -8,7 +8,7 @@
     </transition>
       
     <transition-group name="flyUp">
-      <CategoryHero
+      <!-- <CategoryHero
         v-if="playlist.isFetched"
         key="hero"
         :data="playlist.data"
@@ -18,7 +18,7 @@
         isEditable
         @setUploadedImage="setUploadedImage"
         @saveTitle="saveTitle"
-      />
+      /> -->
 
       <div
         v-if="playlist.isFetched"
@@ -60,7 +60,7 @@ import { ImagePayload, ReorderPayload, UploadImageResult } from '~/types/Global'
 import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import Preloader from '~/components/Preloader.vue'
-import CategoryHero from '~/components/Hero/CategoryHero.vue'
+import CategoryHero from '~/components/CategoryHero.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import UploadServices from '~/services/UploadServices'

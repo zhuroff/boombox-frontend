@@ -5,11 +5,10 @@
         v-if="data.poster"
         :src="host(data.poster)"
         :alt="data.title"
-        class="hero__poster_image"
+        class="hero__poster-image"
       >
-
-      <form class="hero__poster_form">
-        <label class="hero__poster_label">
+      <form class="hero__poster-form">
+        <label class="hero__poster-label">
           <input
             type="file"
             ref="posterElement"
@@ -19,7 +18,6 @@
         </label>
       </form>
     </div>
-
     <div class="hero__info">
       <div
         v-if="!noAvatar"
@@ -29,11 +27,10 @@
           v-if="data.avatar"
           :src="host(data.avatar)"
           :alt="data.title"
-          class="hero__avatar_image"
+          class="hero__avatar-image"
         >
-
-        <form class="hero__avatar_form">
-          <label class="hero__avatar_label">
+        <form class="hero__avatar-form">
+          <label class="hero__avatar-label">
             <input
               type="file"
               ref="avatarElement"
@@ -43,14 +40,17 @@
           </label>
         </form>
       </div>
-
       <div class="hero__content">
         <input
+          v-if="isEditable"
           type="text"
           class="hero__title"
           v-model="heroTitle"
-          :readonly="!isEditable"
         >
+        <div
+          v-else
+          class="hero__title"
+        >{{ heroTitle }}</div>
         <div class="hero__description">{{ description }}</div>
       </div>
     </div>
@@ -66,47 +66,38 @@ import { CategoryPage } from '~/types/Category'
 import { hostString } from '~/utils'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import UploadServices from '~/services/UploadServices'
-import './Hero.scss'
 
 export default defineComponent({
   name: 'CategoryHero',
-
   components: {
     Sprite
   },
-
   props: {
     data: {
       type: Object as PropType<CategoryPage>,
       required: true
     },
-
-    slug: {
+    entity: {
       type: String,
       required: true
     },
-
     description: {
       type: String,
       required: true
     },
-
     noAvatar: {
       type: Boolean,
       required: false,
       default: false
     },
-
     isEditable: {
       type: Boolean,
       required: false,
       default: false
     }
   },
-
   setup(props, { emit }) {
     const route = useRoute()
-
     const posterElement: Ref<null | HTMLInputElement> = ref(null)
     const avatarElement: Ref<null | HTMLInputElement> = ref(null)
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
@@ -117,7 +108,7 @@ export default defineComponent({
         const payload: ImagePayload = {
           file: posterElement.value.files[0],
           type: 'poster',
-          slug: props.slug,
+          slug: props.entity,
           id: String(route.params.id)
         }
 
@@ -126,7 +117,7 @@ export default defineComponent({
             key: payload.type,
             url: data.poster
           }))
-          .catch((error) => console.dir(error))
+          .catch(console.error)
       }
     }
 
@@ -135,7 +126,7 @@ export default defineComponent({
         const payload: ImagePayload = {
           file: avatarElement.value.files[0],
           type: 'avatar',
-          slug: props.slug,
+          slug: props.entity,
           id: String(route.params.id)
         }
 
@@ -144,7 +135,7 @@ export default defineComponent({
             key: payload.type,
             url: data.avatar
           }))
-          .catch((error) => console.dir(error))
+          .catch(console.error)
       }
     }
 
@@ -172,3 +163,183 @@ export default defineComponent({
 })
 
 </script>
+
+<style lang="scss">
+@import '../scss/variables';
+@import 'include-media';
+
+.hero {
+
+  &__poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    &:before {
+      content: '';
+      background-color: $transBlack;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover {
+
+      .hero__poster-label {
+        opacity: 1;
+        transition: opacity 0.3s $animation;
+      }
+    }
+
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &-form {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    &-label {
+      width: 78px;
+      height: 78px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s $animation;
+      
+      input {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        outline: none;
+      }
+
+      .icon {
+        color: $white;
+      }
+    }
+  }
+
+  &__info {
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    width: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__avatar {
+    margin: 0 25px;
+    position: relative;
+    z-index: 3;
+
+    @include media('<tablet') {
+      display: none;
+    }
+
+    @include media('>=tablet') {
+      width: 10rem;
+      height: 10rem;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      flex: none;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+
+      & + .hero__avatar-form {
+        opacity: 0;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    &-form {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: $black;
+      opacity: 1;
+      transition: opacity 0.3s $animation;
+    }
+
+    &-label {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      input {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        outline: none;
+      }
+
+      .icon {
+        color: $white;
+      }
+    }
+  }
+
+  &__content {
+    padding: 0.5rem 25px 1rem 13rem;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: $transBlack;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+  &__title {
+    color: $warning;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+
+    @include media('<tablet') {
+      @include serif(2rem, 600);
+    }
+
+    @include media('>=tablet') {
+      @include serif(3rem, 600);
+    }
+  }
+
+  &__description {
+    font-weight: 600;
+    font-size: 1rem;
+    color: $white;
+  }
+}
+</style>

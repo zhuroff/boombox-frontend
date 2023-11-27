@@ -95,7 +95,7 @@
 <script lang="ts">
 
 import { defineComponent, Ref, ref, reactive, computed } from 'vue'
-import { CategoryKeysPlural, CategorySearchResult, CategoryBasic, CategoryMatcher, CategoryActive } from '~/types/Category'
+import { CategoryKeysPlural, CategorySearchResult, CategoryMatcher, CategoryActive } from '~/types/Category'
 import { FramePayload } from '~/types/Frame'
 import { SearchPayload, SearchResultData } from '~/types/Search'
 // import InputText from '~/components/Inputs/InputText.vue'
@@ -107,6 +107,7 @@ import FrameResults from './FrameResults.vue'
 import FrameServices from '~/services/FrameServices'
 import SearchServices from '~/services/SearchServices'
 import './FrameForm.scss'
+import { BasicEntity } from '~/types/Global'
 
 export default defineComponent({
   name: 'FrameForm',
@@ -206,7 +207,7 @@ export default defineComponent({
         .catch((error) => console.dir(error))
     }
 
-    const selectCategory = (category: CategorySearchResult | CategoryBasic) => {
+    const selectCategory = (category: CategorySearchResult | BasicEntity) => {
       newFrame[keysMatcher[activeCategory.key]] = {
         _id: category._id,
         title: category.title

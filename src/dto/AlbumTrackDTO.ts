@@ -1,5 +1,5 @@
 import { AlbumItem } from '~/types/Album'
-import { CategoryBasic } from '~/types/Category'
+import { BasicEntity } from '~/types/Global'
 import { TrackResponse } from '~/types/Track'
 
 export class AlbumTrackDTO implements TrackResponse {
@@ -8,9 +8,9 @@ export class AlbumTrackDTO implements TrackResponse {
   path: string
   listened: number
   inAlbum: AlbumItem
-  inPlaylists: CategoryBasic[]
-  artist: CategoryBasic
-  period: CategoryBasic
+  inPlaylists: BasicEntity[]
+  artist: BasicEntity
+  period: BasicEntity
   lyrics: string
   duration: number
   isDisabled: boolean
@@ -22,7 +22,7 @@ export class AlbumTrackDTO implements TrackResponse {
     track: TrackResponse,
     order: number,
     cover: string,
-    period: CategoryBasic,
+    period: BasicEntity,
     isOutOfAlbumList = false
   ) {
     this._id = track._id
@@ -49,6 +49,7 @@ export class PlayerTrackDTO {
   duration: number | null
   artistName: string
   albumName: string
+  albumID: string
   year: string
   cover: string
   isOnLoading: boolean  
@@ -56,7 +57,6 @@ export class PlayerTrackDTO {
   isOnRepeat: boolean
   progressLine: number
   progressTime: number
-  // progressHandler: (() => void) | null
   audio: HTMLAudioElement
   crackle: HTMLAudioElement
 
@@ -67,6 +67,7 @@ export class PlayerTrackDTO {
     this.duration = track.duration || null
     this.artistName = track.artist.title || ''
     this.albumName = track.inAlbum.title || ''
+    this.albumID = track.inAlbum._id
     this.year = track.period.title || ''
     this.cover = track.albumCover
     this.isOnPause = false
@@ -74,7 +75,6 @@ export class PlayerTrackDTO {
     this.isOnLoading = true
     this.progressLine = 0
     this.progressTime = 0
-    // this.progressHandler = null
     this.audio = new Audio()
     this.crackle = new Audio('/media/vinyl_01.wav')
     this.crackle.loop = true

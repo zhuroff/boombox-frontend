@@ -1,8 +1,7 @@
 import { ComputedRef, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import { PlayingTrack } from '~/types/Player'
+import { AlbumTrackDTO, PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
 
 export const usePlayer = () => {
   const store = useStore(key)
@@ -15,7 +14,7 @@ export const usePlayer = () => {
     store.getters.currentPlaylistTracks
   ))
 
-  const playingTrack: ComputedRef<PlayingTrack> = computed(() => (
+  const playingTrack: ComputedRef<PlayerTrackDTO> = computed(() => (
     store.getters.playingTrack
   ))
 

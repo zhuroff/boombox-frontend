@@ -2,6 +2,7 @@
   <div class="album__info">
     <div class="album__info-head">
       <SearchBlock
+        v-if="withSearch"
         type="search"
         size="medium"
         isInverted
@@ -94,7 +95,7 @@
 
 <script lang="ts">
 import { PropType, computed, defineComponent, ref } from 'vue'
-import { CategoryBasic } from '~/types/Category'
+import { BasicEntity } from '~/types/Global'
 import { useLocales } from '~/hooks/useLocales'
 import { useSearch } from '~/hooks/useSearch'
 import { usePlayer } from '~/hooks/usePlayer'
@@ -108,7 +109,7 @@ import WikiFrame from './WikiFrame.vue'
 import SearchBlock from '~/components/SearchBlock.vue'
 
 export default defineComponent({
-  name: 'AlbumInfo',
+  name: 'AlbumHero',
   components: {
     Button,
     Overlay,
@@ -122,15 +123,15 @@ export default defineComponent({
       required: true
     },
     artist: {
-      type: Object as PropType<CategoryBasic>,
+      type: Object as PropType<BasicEntity>,
       required: true
     },
     genre: {
-      type: Object as PropType<CategoryBasic>,
+      type: Object as PropType<BasicEntity>,
       required: true
     },
     period: {
-      type: Object as PropType<CategoryBasic>,
+      type: Object as PropType<BasicEntity>,
       required: true
     },
     entityType: {
@@ -144,6 +145,11 @@ export default defineComponent({
     getRandomAlbum: {
       type: Function as PropType<() => void>,
       required: true
+    },
+    withSearch: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   setup({ artist, title }, { emit }) {
@@ -241,6 +247,7 @@ export default defineComponent({
 
     const openCollectionsModal = () => {
       console.log('Open collections modal')
+      isActionsOpens.value = false
     }
 
     const addAlbumToPlaylist = () => {

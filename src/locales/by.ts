@@ -75,5 +75,6 @@ export const localesBY: LocaleDictionary = {
     playNext: 'Граць наступным',
     addToList: 'Дадаць да плэйлiста',
     removeFromList: 'Выдаліць з плэйлiста'
-  }
+  },
+  totalAlbums: 'Усяго альбомаў',
 }

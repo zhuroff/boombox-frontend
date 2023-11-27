@@ -14,7 +14,7 @@
     @closeBookletModal="closeBookletModal"
     @bookletPageChanged="(data) => bookletPageChanged(data, entity.folderName)"
   >
-    <AlbumInfo
+    <AlbumHero
       :title="entity.title"
       :artist="entity.artist"
       :genre="entity.genre"
@@ -36,13 +36,13 @@ import { useAlbumPage } from '~/hooks/useAlbumPage'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useLocales } from '~/hooks/useLocales'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
-import AlbumInfo from '~/components/AlbumInfo.vue'
+import AlbumHero from '~/components/AlbumHero.vue'
 
 export default defineComponent({
   name: 'AlbumPage',
   components: {
     AlbumPageTemplate,
-    AlbumInfo
+    AlbumHero
   },
   setup() {
     const {

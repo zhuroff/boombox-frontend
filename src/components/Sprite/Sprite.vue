@@ -127,17 +127,6 @@
       </g>
     </g>
   </svg>
-
-  <svg
-    v-else-if="name === 'camera'"
-    viewBox="0 0 24 24"
-    width="24px"
-    height="24px"
-    class="icon"
-  >
-    <path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" />
-  </svg>
-
   <component :is="IconComponent" />
 </template>
 
@@ -160,6 +149,7 @@ import SpriteClose from './SpriteClose.vue'
 import SpriteLoupe from './SpriteLoupe.vue'
 import SpritePlaylist from './SpritePlaylist.vue'
 import SpritePlaylistRemove from './SpritePlaylistRemove.vue'
+import SpriteCamera from './SpriteCamera.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -180,7 +170,8 @@ export default defineComponent({
     SpriteClose,
     SpriteLoupe,
     SpritePlaylist,
-    SpritePlaylistRemove
+    SpritePlaylistRemove,
+    SpriteCamera
   },
   props: {
     name: {
@@ -206,7 +197,8 @@ export default defineComponent({
       ['close', SpriteClose],
       ['loupe', SpriteLoupe],
       ['playlist', SpritePlaylist],
-      ['playlist-remove', SpritePlaylistRemove]
+      ['playlist-remove', SpritePlaylistRemove],
+      ['camera', SpriteCamera]
     ])
 
     const IconComponent = computed(() => (

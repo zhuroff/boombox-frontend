@@ -37,7 +37,6 @@ export default defineComponent({
       }
       try {
         const res = await api.get('users/refresh')
-        console.log(res)
       } catch (error) {
         console.error(error)
       }

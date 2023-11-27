@@ -8,13 +8,13 @@
     </transition>
       
     <transition-group name="flyUp">
-      <CategoryHero
+      <!-- <CategoryHero
         v-if="collection.isFetched"
         :data="collection.data"
         :description="collectionDescription"
         slug="collections"
         @setUploadedImage="setUploadedImage"
-      />
+      /> -->
 
       <VueDraggableNext
         v-if="collection.isFetched"
@@ -47,7 +47,7 @@ import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Globa
 import { VueDraggableNext } from 'vue-draggable-next'
 import CollectionServices from '~/services/CollectionServices'
 import Preloader from '~/components/Preloader.vue'
-import CategoryHero from '~/components/Hero/CategoryHero.vue'
+import CategoryHero from '~/components/CategoryHero.vue'
 // import CardWrapper from '~/components/Cards/CardWrapper.vue'
 // import CardAlbum from '~/components/Cards/CardAlbum.vue'
 

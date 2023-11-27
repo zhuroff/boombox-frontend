@@ -1,11 +1,10 @@
-import { CategoryBasic } from '~/types/Category'
-import { Pagination } from './Global'
+import { BasicEntity, Pagination } from './Global'
 
 type FramePayload = {
   title: string
-  artist: CategoryBasic
-  genre: CategoryBasic
-  period: CategoryBasic
+  artist: BasicEntity
+  genre: BasicEntity
+  period: BasicEntity
   frame: string
 }
 

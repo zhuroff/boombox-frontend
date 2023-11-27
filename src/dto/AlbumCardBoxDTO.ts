@@ -9,7 +9,7 @@ export class AlbumCardBoxDTO {
   constructor(data: AlbumItem) {
     this._id = data._id
     this.title = data.title
-    this.coverURL = data.albumCover
+    this.coverURL = data.coverURL
     this.caption = `${data.artist.title } / ${data.period.title} / ${data.genre.title}`
   }
 }

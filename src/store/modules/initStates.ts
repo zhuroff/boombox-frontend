@@ -1,6 +1,6 @@
 import { PlayerTrackDTO, AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { AlbumItem } from '~/types/Album'
-import { CategoryBasic } from '~/types/Category'
+import { BasicEntity } from '~/types/Global'
 import { PlayerPlaylist } from '~/types/Player'
 
 const initPlaylist: PlayerPlaylist = {
@@ -19,14 +19,10 @@ const playingTrackInitial = new PlayerTrackDTO(new AlbumTrackDTO({
   listened: 0,
   inAlbum: {} as AlbumItem,
   inPlaylists: [],
-  artist: {} as CategoryBasic,
+  artist: {} as BasicEntity,
   lyrics: '',
   duration: 0,
-}, 0, '', {} as CategoryBasic))
-
-// const playingTrackInitial: PlayingTrack = {
-//   progressHandler: null,
-// }
+}, 0, '', {} as BasicEntity))
 
 export {
   initPlaylist,

@@ -87,7 +87,6 @@ export default defineComponent({
     }
 
     const onPlayerStateChange = ($event: any) => {
-      console.log($event)
       if ($event.data === 1) {
         const startedTrack = $event.target.m.id
 

@@ -75,5 +75,6 @@ export const localesEN: LocaleDictionary = {
     playNext: 'Play next',
     addToList: 'Add to playlist',
     removeFromList: 'Remove from playlist'
-  }
+  },
+  totalAlbums: 'Total albums'
 }

@@ -1,56 +1,68 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <Preloader v-if="!category.isFetched" mode="light" />
+      <Preloader
+        v-if="!isDataFetched"
+        mode="light"
+      />
     </transition>
-
     <transition-group name="flyUp">
-      <CategoryHero v-if="category.isFetched" :data="category.data" :description="categoryDescription" slug="artists"
-        @setUploadedImage="setUploadedImage" />
-
-      <ul v-if="category.isFetched" class="cardlist">
-        <!-- <CardWrapper v-for="album in category.data.albums" :key="album._id">
-          <component :is="album.frame ? 'CardFrame' : 'CardAlbum'" :album="album" />
-        </CardWrapper> -->
-      </ul>
+      <CategoryHero
+        v-if="isDataFetched && data"
+        :entity="entityType"
+        :data="data"
+        :description="totalCounts"
+        @setUploadedImage="setUploadedImage"
+      />
+      <ListPageTemplate
+        cardType="CardBox"
+        rootPath="albums"
+        cardClass="card-box"
+        placeholderImage="/img/album.webp"
+        :isDataFetched="isDataFetched"
+        :pageHeading="''"
+        :dataList="albumList"
+        :withSearch="false"
+      />
     </transition-group>
   </section>
 </template>
 
 <script lang="ts">
-
-import { defineComponent } from 'vue'
-import { useCategory } from '~/hooks/useCategories'
+import { computed, defineComponent } from 'vue'
+import { useCategory } from '~/hooks/useCategory'
 import Preloader from '~/components/Preloader.vue'
-import CategoryHero from '~/components/Hero/CategoryHero.vue'
-// import CardWrapper from '~/components/Cards/CardWrapper.vue'
-// import CardAlbum from '~/components/Cards/CardAlbum.vue'
-import CardFrame from '~/components/Cards/CardFrame.vue'
+import CategoryHero from '~/components/CategoryHero.vue'
+import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 
 export default defineComponent({
+  name: 'ArtistPage',
   components: {
     Preloader,
     CategoryHero,
-    // CardWrapper,
-    // CardAlbum,
-    CardFrame
+    ListPageTemplate
   },
-
   setup() {
-    const apiQuery = '/api/artists'
+    const entityType = 'artists'
     const {
-      category,
+      data,
+      isDataFetched,
       setUploadedImage,
-      categoryDescription
-    } = useCategory(apiQuery)
-    console.log(category)
+      totalCounts
+    } = useCategory(entityType)
+
+    const albumList = computed(() => (
+      data.value?.albums || []
+    ))
 
     return {
-      category,
+      data,
+      isDataFetched,
       setUploadedImage,
-      categoryDescription
+      totalCounts,
+      entityType,
+      albumList
     }
   }
 })
-
 </script>

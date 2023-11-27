@@ -10,7 +10,7 @@
       <div v-if="isDataFetched" class="album">
         <div class="album__hero">
           <CoverArt
-            :cover="album.albumCover"
+            :cover="album.coverURL"
             :booklet="booklet"
             @coverClick="getBooklet"
             @closeBookletModal="closeBookletModal"

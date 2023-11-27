@@ -109,7 +109,6 @@ export default defineComponent({
 
     const fetchDBContent = async () => {
       const response = await api.get(`/api/toy/${props.year.resource_id?.replace(/[^a-z0-9]+/g, '')}`)
-      console.log(response?.data)
     }
 
     const fetchAlbumBooklet = async () => {

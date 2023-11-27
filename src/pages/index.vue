@@ -49,7 +49,7 @@ export default defineComponent({
       albums.map((album) => ({
         _id: album._id,
         title: album.title,
-        coverURL: `${album.albumCover}`,
+        coverURL: `${album.coverURL}`,
         caption: `${album.artist.title } / ${album.period.title} / ${album.genre.title}`,
       }))
     ))
