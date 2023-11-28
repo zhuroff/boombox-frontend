@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent, ref } from 'vue'
-import { BasicEntity, Pagination, PaginationConfig } from '~/types/Global'
+import { BasicEntity, Pagination, PaginationConfig } from '~/types/Common'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
 import CardList from '~/components/CardList/CardList.vue'

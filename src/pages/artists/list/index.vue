@@ -10,12 +10,7 @@
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
   >
-    <template v-slot:header>
-      <!-- <Dropdown
-        :options="sortingOptions"
-        @chooseItem="switchSorting"
-      /> -->
-    </template>
+    <!-- <template v-slot:header></template> -->
   </ListPageTemplate>
 </template>
 
@@ -24,12 +19,10 @@ import { defineComponent, onMounted, computed, watch } from 'vue'
 import { CategoryItem } from '~/types/Category'
 import { useListPage } from '~/hooks/useListPage'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
-import Dropdown from '~/components/Dropdown/Dropdown.vue'
 
 export default defineComponent({
   components: {
-    ListPageTemplate,
-    Dropdown,
+    ListPageTemplate
   },
 
   setup() {
@@ -39,8 +32,7 @@ export default defineComponent({
       entities,
       pagePagination,
       pageStateConfig,
-      switchPagination,
-      sortingOptions
+      switchPagination
     } = useListPage<CategoryItem>()
 
     const pageHeading = computed(() => (
@@ -55,7 +47,6 @@ export default defineComponent({
       entities,
       pagePagination,
       isDataFetched,
-      sortingOptions,
       switchPagination
     }
   }

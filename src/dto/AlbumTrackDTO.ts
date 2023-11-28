@@ -1,5 +1,5 @@
 import { AlbumItem } from '~/types/Album'
-import { BasicEntity } from '~/types/Global'
+import { BasicEntity } from '~/types/Common'
 import { TrackResponse } from '~/types/Track'
 
 export class AlbumTrackDTO implements TrackResponse {

@@ -11,31 +11,24 @@
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
   >
-    <template v-slot:header>
-      <!-- <Dropdown
-        :options="sortingOptions"
-        @chooseItem="switchSorting"
-      /> -->
-    </template>
+    <!-- <template v-slot:header></template> -->
   </ListPageTemplate>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, watch } from 'vue'
 import { AlbumItem } from '~/types/Album'
-import { CardBasic } from '~/types/Global'
+import { CardBasic } from '~/types/Common'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { isObjectsEquals } from '~/utils'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
-import Dropdown from '~/components/Dropdown/Dropdown.vue'
 
 export default defineComponent({
   name: 'AlbumsList',
   components: {
-    ListPageTemplate,
-    Dropdown,
+    ListPageTemplate
   },
   setup() {
     const {
@@ -45,8 +38,7 @@ export default defineComponent({
       pagePagination,
       pageStateConfig,
       switchPagination,
-      setEntitiesLimit,
-      sortingOptions
+      setEntitiesLimit
     } = useListPage<AlbumItem>()
     
     const { lang } = useLocales()
@@ -72,7 +64,6 @@ export default defineComponent({
       albumList,
       pagePagination,
       isDataFetched,
-      sortingOptions,
       switchPagination,
       setEntitiesLimit
     }

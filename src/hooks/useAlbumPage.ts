@@ -4,7 +4,7 @@ import { useStore } from 'vuex'
 import { key } from '~/store'
 import { CloudFolderResponse } from '~/types/Cloud'
 import { AlbumBooklet, AlbumItem, AlbumPage, BookletSlideState } from '~/types/Album'
-import { BasicEntity, CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Global'
+import { BasicEntity, CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Common'
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { BookletState } from '~/states/BookletState'
@@ -33,7 +33,6 @@ export const useAlbumPage = <T extends BasicEntity>() => {
         ))
       }
       Object.assign(entity, preparedData)
-      isDataFetched.value = true
       store.commit('setPlayerPlaylist', preparedData)
 
       if (id === 'random') {
@@ -46,8 +45,9 @@ export const useAlbumPage = <T extends BasicEntity>() => {
       }
     } catch (error) {
       console.error(error)
-      isDataFetched.value = true
       return null
+    } finally {
+      isDataFetched.value = true
     }
   }
 

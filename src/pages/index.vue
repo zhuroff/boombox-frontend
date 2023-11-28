@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
 import { AlbumItem } from '~/types/Album'
-import { CardBasic, ListPageResponse, RequestConfig } from '~/types/Global'
+import { CardBasic, ListPageResponse, RequestConfig } from '~/types/Common'
 import DBApiService from '~/services/DBApiService'
 import Preloader from '~/components/Preloader.vue'
 import Card from '~/components/Cards/Card.vue'

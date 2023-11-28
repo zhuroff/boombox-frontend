@@ -25,7 +25,7 @@ import { defineComponent, reactive, PropType, computed } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import { DraggableEvent, ReorderPayload } from '~/types/Global'
+import { DraggableEvent, ReorderPayload } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import TrackListRow from './TrackListRow.vue'
 

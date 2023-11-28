@@ -23,7 +23,7 @@
 <script lang="ts">
 
 import { defineComponent, PropType } from 'vue'
-import { CardBasic } from '~/types/Global'
+import { CardBasic } from '~/types/Common'
 
 export default defineComponent({
   name: 'CardBox',

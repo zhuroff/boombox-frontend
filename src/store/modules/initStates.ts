@@ -1,6 +1,6 @@
 import { PlayerTrackDTO, AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { AlbumItem } from '~/types/Album'
-import { BasicEntity } from '~/types/Global'
+import { BasicEntity } from '~/types/Common'
 import { PlayerPlaylist } from '~/types/Player'
 
 const initPlaylist: PlayerPlaylist = {

@@ -90,23 +90,36 @@
         @selectWikiResult="(id) => getWikiInfo(id)"
       />
     </Modal>
+    <Modal
+      v-if="isCollectionLoading || isCollectionFetched"
+      :isModalActive="isCollectionLoading"
+      @closeModal="closeCollectionModal"
+    >
+      <EntityTabs
+        :isLoading="isCollectionLoading"
+        :results="collections"
+        :pagination="collectionsPagination"
+      />
+    </Modal>
   </div>
 </template>
 
 <script lang="ts">
 import { PropType, computed, defineComponent, ref } from 'vue'
-import { BasicEntity } from '~/types/Global'
+import { BasicEntity, WikiSearchResult } from '~/types/Common'
+import { Compilation } from '~/types/Compilation'
 import { useLocales } from '~/hooks/useLocales'
 import { useSearch } from '~/hooks/useSearch'
 import { usePlayer } from '~/hooks/usePlayer'
+import { useListPage } from '~/hooks/useListPage'
 import { detectLocale } from '~/utils'
-import { WikiSearchResult } from '~/types/Global'
 import wiki from 'wikipedia'
 import Button from './Button.vue'
 import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
 import SearchBlock from '~/components/SearchBlock.vue'
+import EntityTabs from './EntityTabs.vue'
 
 export default defineComponent({
   name: 'AlbumHero',
@@ -115,7 +128,8 @@ export default defineComponent({
     Overlay,
     Modal,
     WikiFrame,
-    SearchBlock
+    SearchBlock,
+    EntityTabs
   },
   props: {
     title: {
@@ -152,12 +166,14 @@ export default defineComponent({
       default: true
     }
   },
-  setup({ artist, title }, { emit }) {
+  setup({ artist, title }) {
     const { lang } = useLocales()
     const { playingTrack, store } = usePlayer()
     const { searchSubmit, results } = useSearch()
+    const { fetchData, isDataFetched, entities, pagePagination } = useListPage<Compilation>()
     const isActionsOpens = ref(false)
     const isWikiLoading = ref(false)
+    const isCollectionLoading = ref(false)
     const isWikiReady = ref(false)
     const wikiFrameURL = ref<string | undefined>(undefined)
     const wikiFrameResults = ref<WikiSearchResult[] | undefined>(undefined)
@@ -240,14 +256,21 @@ export default defineComponent({
       resetWikiData()
     }
 
+    const closeCollectionModal = () => {
+      isCollectionLoading.value = false
+      isDataFetched.value = false
+    }
+
     const resetWikiData = () => {
       wikiFrameURL.value = undefined
       wikiFrameResults.value = undefined
     }
 
-    const openCollectionsModal = () => {
-      console.log('Open collections modal')
+    const openCollectionsModal = async () => {
+      isCollectionLoading.value = true
       isActionsOpens.value = false
+      await fetchData('collections')
+      isCollectionLoading.value = false
     }
 
     const addAlbumToPlaylist = () => {
@@ -272,7 +295,12 @@ export default defineComponent({
       openCollectionsModal,
       addAlbumToPlaylist,
       searchSubmit,
-      results
+      results,
+      isCollectionLoading,
+      closeCollectionModal,
+      isCollectionFetched: isDataFetched,
+      collectionsPagination: pagePagination,
+      collections: entities
     }
   }
 })

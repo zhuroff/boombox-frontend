@@ -1,5 +1,5 @@
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import { BasicEntity, Pagination } from './Global'
+import { BasicEntity } from './Common'
 
 export interface AlbumItem {
   _id: string

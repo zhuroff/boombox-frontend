@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent, ref } from 'vue'
-import { WikiSearchResult } from '~/types/Global'
+import { WikiSearchResult } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import Preloader from './Preloader.vue'
 

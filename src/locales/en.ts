@@ -1,4 +1,4 @@
-import { LocaleDictionary } from '~/types/Global'
+import { LocaleDictionary } from '~/types/Common'
 
 export const localesEN: LocaleDictionary = {
   languages: {

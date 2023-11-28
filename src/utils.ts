@@ -1,4 +1,4 @@
-import { LocaleDictionary } from '~/types/Global'
+import { LocaleDictionary } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 
 export const findLocaleLangValue = (path: string[], dict?: LocaleDictionary): string | null => {

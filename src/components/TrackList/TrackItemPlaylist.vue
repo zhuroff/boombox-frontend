@@ -23,14 +23,14 @@
       </template>
       <template v-slot:list>
         <ul class="float-modal__list">
-          <FloatModalItem
+          <!-- <FloatModalItem
             v-for="item in playlists.data"
             :key="item._id"
             :item="item"
             :itemID="trackID"
             :isChecked="isItemChecked(item)"
             @checkFloatModalItem="playlistItemAction"
-          />
+          /> -->
         </ul>
       </template>
     </FloatModal>
@@ -42,17 +42,12 @@ import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { PlaylistPayload, PlayListItem } from '~/types/Playlist'
-import { FloatModalCheckAction } from '~/types/Global'
 import Button from "~/components/Button.vue";
-import FloatModal from '~/components/FloatModal/FloatModal.vue'
-import FloatModalItem from '~/components/FloatModal/FloatModalItem.vue'
 import api from '~/api'
 
 export default defineComponent({
   components: {
-    Button,
-    FloatModal,
-    FloatModalItem
+    Button
   },
 
   props: {
@@ -127,40 +122,12 @@ export default defineComponent({
       }
     }
 
-    const playlistItemAction = async (payload: FloatModalCheckAction) => {
-      const targetPlaylist = playlists.data.find((playlist) => (
-        playlist._id === payload.listID
-      ))
-
-      if (targetPlaylist) {
-        payload.order = Math.max(...targetPlaylist.tracks.map((track) => (
-          track.order
-        ))) + 1
-
-        try {
-          const response = await api.patch(`/api/playlists/${payload.listID}`, payload)
-
-          if (response?.status === 201) {
-            store.commit('setSnackbarMessage', {
-              message: response.data.message,
-              type: 'success'
-            })
-
-            fetchPlaylists()
-          }
-        } catch (error) {
-          throw error
-        }
-      }
-    }
-
     return {
       playlists,
       isItemChecked,
       callPlaylistsModal,
       closePlaylistModal,
-      createNewPlaylist,
-      playlistItemAction
+      createNewPlaylist
     }
   }
 })
@@ -180,3 +147,4 @@ export default defineComponent({
   }
 }
 </style>
+~/types/Common

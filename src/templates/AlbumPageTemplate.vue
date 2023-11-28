@@ -91,7 +91,7 @@
 import { PropType, defineComponent, computed, watchEffect } from 'vue'
 import { AlbumPage, BookletSlideState } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
-import { RequestFilter } from '~/types/Global'
+import { RequestFilter } from '~/types/Common'
 import { BookletState } from '~/states/BookletState'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
 import { useLocales } from '~/hooks/useLocales'
@@ -302,4 +302,3 @@ export default defineComponent({
   }
 }
 </style>
-~/states/BookletState

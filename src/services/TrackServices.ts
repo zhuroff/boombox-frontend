@@ -1,5 +1,5 @@
 import api from '~/api'
-import { ResponseMessage } from '~/types/Global'
+import { ResponseMessage } from '~/types/Common'
 import { TrackLyricsData, TrackLyricsResponse } from '~/types/Track'
 
 export default class TrackServices {

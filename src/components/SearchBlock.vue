@@ -163,7 +163,7 @@ export default defineComponent({
             [
               h(
                 'img',
-                { src: 'avatar' in data ? hostString(data.avatar) : coverPlaceholders(key) },
+                { src: 'avatar' in data ? hostString(String(data.avatar)) : coverPlaceholders(key) },
               ),
               h(
                 'strong',

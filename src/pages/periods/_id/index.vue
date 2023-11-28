@@ -14,33 +14,34 @@
         :description="totalCounts"
         @setUploadedImage="setUploadedImage"
       />
-      <!-- <ul v-if="category.isFetched" class="cardlist">
-        <CardWrapper v-for="album in category.data.albums" :key="album._id">
-          <component :is="album.frame ? 'CardFrame' : 'CardAlbum'" :album="album" />
-        </CardWrapper>
-      </ul> -->
+      <ListPageTemplate
+        cardType="CardBox"
+        rootPath="albums"
+        cardClass="card-box"
+        placeholderImage="/img/album.webp"
+        :isDataFetched="isDataFetched"
+        :pageHeading="''"
+        :dataList="albumList"
+        :withSearch="false"
+      />
     </transition-group>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useCategory } from '~/hooks/useCategory'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
-// import CardWrapper from '~/components/Cards/CardWrapper.vue'
-// import CardAlbum from '~/components/Cards/CardAlbum.vue'
-import CardFrame from '~/components/Cards/CardFrame.vue'
+import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 
 export default defineComponent({
+  name: 'PeriodPage',
   components: {
     Preloader,
     CategoryHero,
-    // CardWrapper,
-    // CardAlbum,
-    CardFrame
+    ListPageTemplate
   },
-
   setup() {
     const entityType = 'periods'
     const {
@@ -50,12 +51,17 @@ export default defineComponent({
       totalCounts
     } = useCategory(entityType)
 
+    const albumList = computed(() => (
+      data.value?.albums || []
+    ))
+
     return {
       data,
       isDataFetched,
       setUploadedImage,
       totalCounts,
-      entityType
+      entityType,
+      albumList
     }
   }
 })

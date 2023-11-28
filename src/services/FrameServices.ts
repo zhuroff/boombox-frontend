@@ -1,6 +1,6 @@
 import { CategoryKeys } from '~/types/Category'
 import { FrameAlbum, FrameAlbumResponse, FramePayload } from '~/types/Frame'
-import { RequestConfig, ResponseMessage } from '~/types/Global'
+import { RequestConfig, ResponseMessage } from '~/types/Common'
 import api from '~/api'
 
 export default class FrameServices {

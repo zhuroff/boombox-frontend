@@ -42,8 +42,8 @@ import { computed, defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { CollectionPageItem } from '~/types/Collection'
-import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Global'
+// import { CollectionPageItem } from '~/types/Collection'
+import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import CollectionServices from '~/services/CollectionServices'
 import Preloader from '~/components/Preloader.vue'
@@ -66,7 +66,7 @@ export default defineComponent({
 
     const collection = reactive({
       isFetched: false,
-      data: {} as CollectionPageItem
+      data: {} as any // CollectionPageItem
     })
 
     const dragOptions = reactive({
@@ -90,7 +90,7 @@ export default defineComponent({
         .catch((error) => console.dir(error))
     }
 
-    const setCollection = (data: CollectionPageItem) => {
+    const setCollection = (data: any /* CollectionPageItem */) => {
       collection.data = data
       collection.isFetched = true
     }
@@ -118,3 +118,4 @@ export default defineComponent({
 })
 
 </script>
+~/types/Common

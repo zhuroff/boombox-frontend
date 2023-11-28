@@ -19,7 +19,7 @@
 <script lang="ts">
 import { PropType, defineComponent, ref, watch } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
-import { TableFilter } from '~/types/Global'
+import { TableFilter } from '~/types/Common'
 
 export default defineComponent({
   name: 'Select',

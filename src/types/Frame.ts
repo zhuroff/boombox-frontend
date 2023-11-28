@@ -1,4 +1,4 @@
-import { BasicEntity, Pagination } from './Global'
+import { BasicEntity, Pagination } from './Common'
 
 type FramePayload = {
   title: string

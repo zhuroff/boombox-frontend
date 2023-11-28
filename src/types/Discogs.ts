@@ -1,6 +1,6 @@
 import { Ref } from 'vue'
 import { JSONSchema4, JSONSchema4TypeName } from 'json-schema'
-import { Pagination, TableFilter } from './Global'
+import { Pagination, TableFilter } from './Common'
 
 export interface DiscogsReleaseRow {
   id: number

@@ -1,6 +1,6 @@
 import api from '~/api'
 import CommonService from './CommonService'
-import { ImagePayload } from '~/types/Global'
+import { ImagePayload } from '~/types/Common'
 
 export default class UploadServices {
   static async uploadImage<T>({ file, type, slug, id }: ImagePayload): Promise<T> {

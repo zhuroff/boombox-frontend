@@ -28,11 +28,11 @@
           deletable
           @deleteItem="deletePlaylist(playlist._id)"
         >
-          <CardCollection
+          <!-- <CardCollection
             :data="playlist"
             title="Tracks in playlist:"
             slug="playlists"
-          />
+          /> -->
         </CardWrapper>
       </ul>
     </transition-group>
@@ -48,13 +48,13 @@ import { key } from '~/store'
 import PlaylistServices from '~/services/PlaylistServices'
 import Preloader from '~/components/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import CardCollection from '~/components/Cards/CardCollection.vue'
+// import CardCollection from '~/components/Cards/CardCollection.vue'
 
 export default defineComponent({
   components: {
     Preloader,
     CardWrapper,
-    CardCollection
+    // CardCollection
   },
 
   setup() {

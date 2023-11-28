@@ -1,15 +1,14 @@
-import { CollectionListItem, CollectionPageItem } from '~/types/Collection';
-import { FloatModalCheckAction, ResponseMessage, ReorderPayload } from '~/types/Global';
+import { ResponseMessage, ReorderPayload } from '~/types/Common'
 import api from '~/api'
 
 export default class CollectionServices {
-  static async addRemove(collections: CollectionListItem[], payload: FloatModalCheckAction) {
-    const targetCollection = collections.find((collection) => (
+  static async addRemove(collections: any /* CollectionListItem[]*/, payload: any /* FloatModalCheckAction */) {
+    const targetCollection = collections.find((collection: any) => (
         collection._id === payload.listID
       ))
 
     if (targetCollection) {
-      payload.order = Math.max(...targetCollection.albums.map((album) => (
+      payload.order = Math.max(...targetCollection.albums.map((album: any) => (
         album.order
       ))) + 1
 
@@ -41,8 +40,8 @@ export default class CollectionServices {
     throw new Error('Request failed')
   }
 
-  static async list(): Promise<CollectionListItem[]> {
-    const response = await api.get<CollectionListItem[]>('/api/collections')
+  static async list(): Promise<any /* CollectionListItem[] */> {
+    const response = await api.get<any /* CollectionListItem[] */>('/api/collections')
 
     if (response.status === 200) {
       return response.data
@@ -52,7 +51,7 @@ export default class CollectionServices {
   }
 
   static async single(id: string) {
-    const response = await api.get<CollectionPageItem>(`/api/collections/${id}`)
+    const response = await api.get<any /* CollectionPageItem*/>(`/api/collections/${id}`)
     
     if (response?.status === 200) {
       return response.data

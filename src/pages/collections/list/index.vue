@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <!-- <section class="section">
     <transition name="fade">
       <Preloader
         v-if="!collections.isFetched"
@@ -36,7 +36,8 @@
         </CardWrapper>
       </ul>
     </transition-group>
-  </section>
+  </section> -->
+  <section class="section"></section>
 </template>
 
 <script lang="ts">
@@ -44,65 +45,76 @@
 import { defineComponent, onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
-import { CollectionListItem } from '~/types/Collection'
+// import { CollectionListItem } from '~/types/Collection'
 import CollectionServices from '~/services/CollectionServices'
 import Preloader from '~/components/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import CardCollection from '~/components/Cards/CardCollection.vue'
+// import CardCollection from '~/components/Cards/CardCollection.vue'
+import { useListPage } from '~/hooks/useListPage'
+import { Compilation } from '~/types/Compilation'
 
-type CollectionsPage = {
-  isFetched: boolean
-  data: CollectionListItem[] 
-}
+// type CollectionsPage = {
+//   isFetched: boolean
+//   data: CollectionListItem[] 
+// }
 
 export default defineComponent({
   components: {
     Preloader,
     CardWrapper,
-    CardCollection
+    // CardCollection
   },
 
   setup() {
-    const store = useStore(key)
+    const {
+      fetchData,
+      isDataFetched,
+      entities,
+      pagePagination,
+      pageStateConfig,
+      switchPagination
+    } = useListPage<Compilation>()
 
-    const collections = reactive<CollectionsPage>({
-      isFetched: false,
-      data: []
-    })
+    onMounted(() => fetchData('collections'))
 
-    const setCollectionList = (data: CollectionListItem[]) => {
-      collections.data = data
-      collections.isFetched = true
-    }
+    // const collections = reactive<CollectionsPage>({
+    //   isFetched: false,
+    //   data: []
+    // })
 
-    const spliceCollection = (id: string) => {
-      const deletedCollectionIndex = collections.data.findIndex((collection) => (
-        collection._id === id
-      ))
+    // const setCollectionList = (data: CollectionListItem[]) => {
+    //   collections.data = data
+    //   collections.isFetched = true
+    // }
 
-      if (deletedCollectionIndex > -1) {
-        collections.data.splice(deletedCollectionIndex, 1)
-      }
-    }
+    // const spliceCollection = (id: string) => {
+    //   const deletedCollectionIndex = collections.data.findIndex((collection) => (
+    //     collection._id === id
+    //   ))
 
-    const fetchCollections = () => {
-      CollectionServices.list()
-        .then((data) => setCollectionList(data))
-        .catch((error) => console.dir(error))
-    }
+    //   if (deletedCollectionIndex > -1) {
+    //     collections.data.splice(deletedCollectionIndex, 1)
+    //   }
+    // }
 
-    const deleteCollection = (id: string) => {
-      CollectionServices.remove(id)
-        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-        .then(_ => spliceCollection(id))
-        .catch((error) => console.dir(error))
-    }
+    // const fetchCollections = () => {
+    //   CollectionServices.list()
+    //     .then((data) => setCollectionList(data))
+    //     .catch((error) => console.dir(error))
+    // }
 
-    onMounted(() => fetchCollections())
+    // const deleteCollection = (id: string) => {
+    //   CollectionServices.remove(id)
+    //     .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+    //     .then(_ => spliceCollection(id))
+    //     .catch((error) => console.dir(error))
+    // }
+
+    // onMounted(() => fetchCollections())
 
     return {
-      collections,
-      deleteCollection
+      // collections,
+      // deleteCollection
     }
   }
 })

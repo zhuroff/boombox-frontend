@@ -12,7 +12,7 @@
           <input
             type="file"
             ref="posterElement"
-            @change="setPoster"
+            @change="() => saveImage('poster', posterElement)"
           >
           <Sprite name="camera" />
         </label>
@@ -34,7 +34,7 @@
             <input
               type="file"
               ref="avatarElement"
-              @change="setAvatar"
+              @change="() => saveImage('avatar', avatarElement)"
             >
             <Sprite name="camera" />
           </label>
@@ -61,7 +61,7 @@
 
 import { defineComponent, PropType, Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { ImagePayload } from '~/types/Global'
+import { ImagePayload, EntityImagesKeys } from '~/types/Common'
 import { CategoryPage } from '~/types/Category'
 import { hostString } from '~/utils'
 import Sprite from '~/components/Sprite/Sprite.vue'
@@ -103,38 +103,22 @@ export default defineComponent({
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
     const heroTitle = ref(props.data.title)
 
-    const setPoster = () => {
-      if (posterElement.value?.files?.length) {
+    const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => {
+      if (element?.files?.length) {
         const payload: ImagePayload = {
-          file: posterElement.value.files[0],
-          type: 'poster',
+          file: element.files[0],
+          type,
           slug: props.entity,
           id: String(route.params.id)
         }
 
         UploadServices.uploadImage<CategoryPage>(payload)
-          .then((data) => emit('setUploadedImage', {
-            key: payload.type,
-            url: data.poster
-          }))
-          .catch(console.error)
-      }
-    }
-
-    const setAvatar = () => {
-      if (avatarElement.value?.files?.length) {
-        const payload: ImagePayload = {
-          file: avatarElement.value.files[0],
-          type: 'avatar',
-          slug: props.entity,
-          id: String(route.params.id)
-        }
-
-        UploadServices.uploadImage<CategoryPage>(payload)
-          .then((data) => emit('setUploadedImage', {
-            key: payload.type,
-            url: data.avatar
-          }))
+          .then((data) => {
+            emit('setUploadedImage', {
+              key: payload.type,
+              url: data[type]
+            })
+          })
           .catch(console.error)
       }
     }
@@ -155,8 +139,7 @@ export default defineComponent({
       posterElement,
       avatarElement,
       heroTitle,
-      setPoster,
-      setAvatar,
+      saveImage,
       host
     }
   }

@@ -1,5 +1,5 @@
 import { AlbumItem } from './Album'
-import { BasicEntity } from './Global'
+import { BasicEntity } from './Common'
 
 export type TrackLyricsResponse = {
   artist: string

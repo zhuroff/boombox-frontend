@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from 'vue'
-import { CardBasic } from '~/types/Global';
+import { CardBasic } from '~/types/Common'
 
 export default defineComponent({
   name: 'CardTile',

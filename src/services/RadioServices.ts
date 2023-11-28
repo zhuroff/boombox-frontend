@@ -1,5 +1,5 @@
 import api from '~/api'
-import { ResponseMessage } from '~/types/Global'
+import { ResponseMessage } from '~/types/Common'
 import { RadioConfig, RadioSavePayload, RadioStationResponse } from '~/types/Radio'
 
 export default class RadioServices {

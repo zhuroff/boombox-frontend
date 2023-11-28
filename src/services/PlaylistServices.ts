@@ -1,4 +1,4 @@
-import { ReorderPayload, ResponseMessage } from '~/types/Global'
+import { ReorderPayload, ResponseMessage } from '~/types/Common'
 import { PlayListItem, PlaylistPage } from '~/types/Playlist'
 import api from '~/api'
 

@@ -46,7 +46,7 @@
         :isModalActive="isCreatingFrameModalActive"
         @closeModal="frameModalSwitcher"
       >
-        <FrameForm @addNewFrame="addNewFrame" />
+        <!-- <FrameForm @addNewFrame="addNewFrame" /> -->
       </Modal>
     </transition>
   </section>
@@ -61,7 +61,7 @@ import {
   reactive,
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { Pagination, RequestConfig } from '~/types/Global'
+import { Pagination, RequestConfig } from '~/types/Common'
 import { FrameAlbumResponse, FrameAlbum } from '~/types/Frame'
 import { CategoryKeys } from '~/types/Category'
 import { useStore } from 'vuex'
@@ -72,8 +72,6 @@ import CardWrapper from '~/components/Cards/CardWrapper.vue'
 import CardFrame from '~/components/Cards/CardFrame.vue'
 import Paginator from '~/components/Paginator.vue'
 import Modal from '~/components/Modal.vue'
-import FrameForm from '~/components/Frame/FrameForm.vue'
-import FrameServices from '~/services/FrameServices'
 
 export default defineComponent({
   components: {
@@ -82,8 +80,7 @@ export default defineComponent({
     CardWrapper,
     CardFrame,
     Paginator,
-    Modal,
-    FrameForm
+    Modal
   },
 
   setup() {
@@ -145,9 +142,9 @@ export default defineComponent({
     }
 
     const fetchFrameAlbums = async () => {
-      FrameServices.list(pageConfig)
-        .then((data) => setFramesAlbums(data))
-        .catch((error) => console.dir(error))
+      // FrameServices.list(pageConfig)
+      //   .then((data) => setFramesAlbums(data))
+      //   .catch((error) => console.dir(error))
     }
 
     const deleteFrameAlbum = async (id: string) => {
@@ -165,14 +162,14 @@ export default defineComponent({
           period: deletedFrame[0].period._id
         }
 
-        FrameServices.remove(id, payload)
-          .then((response) => {
-            store.commit('setSnackbarMessage', {
-              message: response.message,
-              type: 'success'
-            })
-          })
-          .catch((error) => console.dir(error))
+        // FrameServices.remove(id, payload)
+        //   .then((response) => {
+        //     store.commit('setSnackbarMessage', {
+        //       message: response.message,
+        //       type: 'success'
+        //     })
+        //   })
+        //   .catch((error) => console.dir(error))
       }
     }
 

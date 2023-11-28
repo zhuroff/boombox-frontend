@@ -1,4 +1,4 @@
-import { BasicEntity } from '~/types/Global'
+import { BasicEntity } from '~/types/Common'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 
 export type TrackProgress = {

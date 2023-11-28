@@ -1,6 +1,6 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { DiscogsFilter, DiscogsQueryConfig, DiscogsReleaseRow, DiscogsTablePayload, DiscogsTableSchema } from '~/types/Discogs'
-import { Pagination } from '~/types/Global'
+import { Pagination } from '~/types/Common'
 import DiscogsServices from '~/services/DiscogsServices'
 
 export const useDiscogs = () => {

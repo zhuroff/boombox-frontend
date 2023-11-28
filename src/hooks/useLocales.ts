@@ -1,4 +1,4 @@
-import { LocaleKeys } from '~/types/Global'
+import { LocaleKeys } from '~/types/Common'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import locales from '~/locales'

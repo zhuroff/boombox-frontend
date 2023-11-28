@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType, ref, watch } from 'vue'
-import { Pagination, PaginationConfig } from '~/types/Global'
+import { Pagination, PaginationConfig } from '~/types/Common'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({

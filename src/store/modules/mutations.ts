@@ -1,6 +1,6 @@
 import { Commit, MutationTree } from 'vuex'
 import { AppStateInterface } from './state'
-import { TSnackbar, ReorderPayload, LocaleKeys } from '~/types/Global'
+import { Snackbar, ReorderPayload, LocaleKeys } from '~/types/Common'
 import { AlbumPage } from '~/types/Album'
 import { TrackProgress, PlayerPlaylist } from '~/types/Player'
 import { PlaylistPage } from '~/types/Playlist'
@@ -10,7 +10,7 @@ import { RadioStationResponse } from '~/types/Radio'
 import { AlbumTrackDTO, PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
 
 const mutations: MutationTree<AppStateInterface> = {
-  setSnackbarMessage: (state: AppStateInterface, snackbar: TSnackbar) => {
+  setSnackbarMessage: (state: AppStateInterface, snackbar: Snackbar) => {
     state.snackbar.push(snackbar)
     setTimeout(() => state.snackbar.splice(0, 1), 5000)
   },

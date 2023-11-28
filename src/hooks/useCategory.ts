@@ -1,7 +1,7 @@
 import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLocales } from './useLocales'
-import { UploadImageResult } from '~/types/Global'
+import { UploadImageResult } from '~/types/Common'
 import { CategoryPage } from '~/types/Category'
 import { AlbumItem } from '~/types/Album'
 import DBApiService from '~/services/DBApiService'
@@ -13,7 +13,6 @@ export const useCategory = (entityType: string) => {
   const isDataFetched = ref(false)
 
   const setUploadedImage = (payload: UploadImageResult) => {
-    console.log(payload)
     if (data.value) {
       data.value[payload.key] = payload.url
     }
@@ -42,7 +41,7 @@ export const useCategory = (entityType: string) => {
         ...category,
         albums: sortAlbumsByYears(category.albums.map((album) => ({
           ...album,
-          caption: `${album.artist.title}/${album.period.title}/${album.genre.title}`
+          caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`
         })))
       }
       isDataFetched.value = true

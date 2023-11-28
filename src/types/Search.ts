@@ -1,30 +1,16 @@
 import { AlbumItem } from './Album'
-import { FrameAlbum } from '~/types/Frame'
-import { CategorySearchResult } from './Category'
+import { CategoryItem } from './Category'
 import { TrackResponse } from './Track'
 
-type SearchPayload = {
+export interface SearchPayload {
   query: string
   key?: string
 }
 
-type SearchResultData = (CategorySearchResult | AlbumItem | TrackResponse | Partial<FrameAlbum>)
+export type SearchResultData = CategoryItem | AlbumItem | TrackResponse
 
-type SearchResultState = {
+export interface SearchResultState {
   title: string
   key: string
   data: SearchResultData[]
-}
-
-type SearchedResult = {
-  isFetching: boolean
-  data: SearchResultState[],
-  errorMessage: string | null
-}
-
-export {
-  SearchPayload,
-  SearchResultData,
-  SearchResultState,
-  SearchedResult
 }

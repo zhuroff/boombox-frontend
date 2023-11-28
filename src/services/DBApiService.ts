@@ -1,5 +1,5 @@
 import api from '~/api'
-import { RequestConfig } from '~/types/Global'
+import { RequestConfig } from '~/types/Common'
 import { SearchPayload, SearchResultState } from '~/types/Search'
 import CommonService from './CommonService'
 

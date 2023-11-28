@@ -1,4 +1,4 @@
-import { TSnackbar, LocaleKeys } from '~/types/Global'
+import { Snackbar, LocaleKeys } from '~/types/Common'
 import { PlayerPlaylist } from '~/types/Player'
 import { initPlaylist, playingTrackInitial } from './initStates'
 import { PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
@@ -7,7 +7,7 @@ export interface AppStateInterface {
   currentPlaylist: PlayerPlaylist
   reservedPlaylist: PlayerPlaylist
   playingTrack: PlayerTrackDTO
-  snackbar: TSnackbar[]
+  snackbar: Snackbar[]
   isPlayerExpanded: boolean
   currentLocale: LocaleKeys
 }

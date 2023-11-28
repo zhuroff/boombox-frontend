@@ -56,7 +56,7 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { hostString } from '~/utils'
-import { ImagePayload, ReorderPayload, UploadImageResult } from '~/types/Global'
+import { ImagePayload, ReorderPayload, UploadImageResult } from '~/types/Common'
 import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import Preloader from '~/components/Preloader.vue'
@@ -165,3 +165,4 @@ export default defineComponent({
 }
 
 </style>
+~/types/Common

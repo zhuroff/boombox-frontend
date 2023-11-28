@@ -84,7 +84,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { usePlayer } from '~/hooks/usePlayer'
-import { DraggableEvent, ReorderPayload } from '~/types/Global'
+import { DraggableEvent, ReorderPayload } from '~/types/Common'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { secondsToMinutes } from '~/utils'
