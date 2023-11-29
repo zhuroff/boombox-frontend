@@ -65,7 +65,11 @@ export const localesBY: LocaleDictionary = {
     navItem: 'Вікіпедыя'
   },
   collections: {
-    add: 'Дадаць у калекцыю'
+    add: 'Дадаць у калекцыю',
+    namePlaceholder: 'Увядзіце назву калекцыі',
+    exists: 'Калекцыя з такой назвай ужо існуе',
+    removed: 'Альбом паспяхова выдалены з калекцыі',
+    added: 'Альбом паспяхова дададзены ў калекцыю'
   },
   search: {
     placeholder: 'Пошук...'

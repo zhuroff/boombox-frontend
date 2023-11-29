@@ -65,7 +65,11 @@ export const localesEN: LocaleDictionary = {
     navItem: 'Wikipedia'
   },
   collections: {
-    add: 'Add to collection'
+    add: 'Add to collection',
+    namePlaceholder: 'Enter collection name',
+    exists: 'Collection with this name already exists',
+    removed: 'Album successfully removed from collection',
+    added: 'Album successfully added to collection'
   },
   search: {
     placeholder: 'Search...'

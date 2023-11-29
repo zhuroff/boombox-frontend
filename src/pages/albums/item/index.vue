@@ -15,6 +15,7 @@
     @bookletPageChanged="(data) => bookletPageChanged(data, entity.folderName)"
   >
     <AlbumHero
+      :id="entity._id"
       :title="entity.title"
       :artist="entity.artist"
       :genre="entity.genre"

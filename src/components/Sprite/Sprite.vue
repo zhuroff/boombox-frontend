@@ -106,17 +106,6 @@
   </svg>
 
   <svg
-    v-else-if="name === 'save'"
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    class="icon-save"
-  >
-    <path fill="none" d="M0 0h24v24H0z"/>
-    <path d="M4 3h14l2.707 2.707a1 1 0 0 1 .293.707V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm3 1v5h9V4H7zm-1 8v7h12v-7H6zm7-7h2v3h-2V5z" fill="#000"/>
-  </svg>
-
-  <svg
     v-else-if="name === 'remove'"
     viewBox="0 0 64 58.67"
     class="icon"
@@ -150,6 +139,7 @@ import SpriteLoupe from './SpriteLoupe.vue'
 import SpritePlaylist from './SpritePlaylist.vue'
 import SpritePlaylistRemove from './SpritePlaylistRemove.vue'
 import SpriteCamera from './SpriteCamera.vue'
+import SpriteSave from './SpriteSave.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -171,7 +161,8 @@ export default defineComponent({
     SpriteLoupe,
     SpritePlaylist,
     SpritePlaylistRemove,
-    SpriteCamera
+    SpriteCamera,
+    SpriteSave
   },
   props: {
     name: {
@@ -198,7 +189,8 @@ export default defineComponent({
       ['loupe', SpriteLoupe],
       ['playlist', SpritePlaylist],
       ['playlist-remove', SpritePlaylistRemove],
-      ['camera', SpriteCamera]
+      ['camera', SpriteCamera],
+      ['save', SpriteSave]
     ])
 
     const IconComponent = computed(() => (

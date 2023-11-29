@@ -87,7 +87,7 @@
         :frameURL="wikiFrameURL"
         :isLoading="isWikiLoading"
         :searchResults="wikiFrameResults"
-        @selectWikiResult="(id) => getWikiInfo(id)"
+        @selectWikiResult="(wikiID) => getWikiInfo(wikiID)"
       />
     </Modal>
     <Modal
@@ -95,10 +95,13 @@
       :isModalActive="isCollectionLoading"
       @closeModal="closeCollectionModal"
     >
-      <EntityTabs
+      <CompilationsTabs
         :isLoading="isCollectionLoading"
         :results="collections"
         :pagination="collectionsPagination"
+        :entityID="id"
+        placeholderImage="/img/album.webp"
+        entityType="collections"
       />
     </Modal>
   </div>
@@ -119,7 +122,7 @@ import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
 import SearchBlock from '~/components/SearchBlock.vue'
-import EntityTabs from './EntityTabs.vue'
+import CompilationsTabs from './CompilationsTabs.vue'
 
 export default defineComponent({
   name: 'AlbumHero',
@@ -129,9 +132,13 @@ export default defineComponent({
     Modal,
     WikiFrame,
     SearchBlock,
-    EntityTabs
+    CompilationsTabs
   },
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     title: {
       type: String,
       required: true
