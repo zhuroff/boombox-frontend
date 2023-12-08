@@ -48,7 +48,7 @@
             :key="item._id"
             class="input-search__results-item"
           >
-            <component :is="getRowTitle(result.key, item)" />
+            <component :is="getRowComponent(result.key, item)" />
           </li>
         </ul>
       </div>
@@ -122,7 +122,7 @@ export default defineComponent({
       emit('setInputValue', value)
     })
 
-    const getRowTitle = (key: string, data: SearchResultData) => {
+    const getRowComponent = (key: string, data: SearchResultData) => {
       switch(key) {
         case 'albums':
           return h(
@@ -131,7 +131,7 @@ export default defineComponent({
             [
               h(
                 'img',
-                { src: (data as AlbumItem).albumCover },
+                { src: (data as AlbumItem).coverURL },
               ),
               h(
                 'div',
@@ -186,7 +186,7 @@ export default defineComponent({
       searchInput,
       isFocused,
       localValue,
-      getRowTitle
+      getRowComponent
     }
   },
 })
