@@ -16,7 +16,7 @@ export default class DBApiService {
     return response.data
   }
 
-  static async updateEntity<T, U>(entityType: string, payload: U): Promise<T> {
+  static async updateEntity<T, U>(entityType: string, payload?: U): Promise<T> {
     const response = await api.patch<T>(`/api/${entityType}/update`, payload)
     CommonService.errorChecker(response.status)
     return response.data

@@ -6,13 +6,13 @@ export interface AlbumItem {
   coverURL: string
   albumCover: string
   title: string
+  folderName: string
   artist: BasicEntity
   genre: BasicEntity
   period: BasicEntity
 }
 
 export interface AlbumPage extends AlbumItem {
-  folderName: string
   tracks: AlbumTrackDTO[]
 }
 

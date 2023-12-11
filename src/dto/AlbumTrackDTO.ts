@@ -46,10 +46,11 @@ export class PlayerTrackDTO {
   _id: string
   title: string  
   source: string
-  duration: number | null
+  duration: number
   artistName: string
   albumName: string
   albumID: string
+  albumFolder: string
   year: string
   cover: string
   isOnLoading: boolean  
@@ -64,10 +65,11 @@ export class PlayerTrackDTO {
     this._id = track._id
     this.title = track.title
     this.source = track.path
-    this.duration = track.duration || null
+    this.duration = track.duration || 0
     this.artistName = track.artist.title || ''
     this.albumName = track.inAlbum.title || ''
     this.albumID = track.inAlbum._id
+    this.albumFolder = track.inAlbum.folderName
     this.year = track.period.title || ''
     this.cover = track.albumCover
     this.isOnPause = false
@@ -75,8 +77,11 @@ export class PlayerTrackDTO {
     this.isOnLoading = true
     this.progressLine = 0
     this.progressTime = 0
-    this.audio = new Audio()
+    this.audio = new Audio(track.path || '')
     this.crackle = new Audio('/media/vinyl_01.wav')
+
     this.crackle.loop = true
+    this.audio.volume = Number(localStorage.getItem('playerVolume')) || 1
+    this.crackle.volume = Number(localStorage.getItem('playerVolume')) || 1
   }
 }

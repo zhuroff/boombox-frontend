@@ -43,7 +43,7 @@ export default defineComponent({
       return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
     })
 
-    const setTrackPosition = (event: PointerEvent) => {
+    const setTrackPosition = (event: MouseEvent) => {
       const value = event.offsetX / (event.target as HTMLElement).offsetWidth
       store.commit('setPosition', value)
     }

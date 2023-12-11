@@ -55,7 +55,6 @@ const mutations: MutationTree<AppStateInterface> = {
       state.playingTrack.albumName = station.country
       state.playingTrack.artistName = station.name
       state.playingTrack.audio.src = station.url_resolved
-      // state.playingTrack.duration = '--'
       state.playingTrack._id = station.stationuuid
       state.playingTrack.isOnPause = false
       state.playingTrack.isOnRepeat = false
@@ -116,14 +115,6 @@ const mutations: MutationTree<AppStateInterface> = {
 
   nullifyPlayerTrack: (state: AppStateInterface) => {
     state.playingTrack = { ...playingTrackInitial }
-  },
-
-  createAudioContext: (state: AppStateInterface) => {
-    // if (state.playingTrack.progressHandler) {
-    //   state.playingTrack.progressHandler = null
-    // }
-
-    state.playingTrack.audio.src = state.playingTrack.source
   },
 
   setLoadingState: (state: AppStateInterface, _id: string) => {
@@ -205,7 +196,7 @@ const mutations: MutationTree<AppStateInterface> = {
 
   setPosition: (state: AppStateInterface, value: number) => {
     try {
-      state.playingTrack.audio.currentTime = value * state.playingTrack.audio.duration
+      state.playingTrack.audio.currentTime = value * state.playingTrack.duration
     } catch (ignore) {
       ignore
     }

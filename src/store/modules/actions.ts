@@ -1,9 +1,9 @@
-import api from '~/api'
 import { ActionTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { StateInterface } from '..'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import DBApiService from '~/services/DBApiService'
+import CloudApiService from '~/services/CloudApiService'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
   playTrack: async ({ commit, dispatch }, track: AlbumTrackDTO) => {
@@ -16,80 +16,107 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
         throw new Error('Unable to get track source link')
       }
       commit('preparePlayerTrack', { ...track, path: trackSourceLink })
-      commit('createAudioContext')
-      dispatch('playAudioTrack', track._id)
+      dispatch('playAudioTrack', track)
     } catch (error) {
       console.error(error)
     }
   },
 
-  playAudioTrack: ({ commit, dispatch, state }, _id: string) => {
-    const playingTrack = state.playingTrack
-    const playingAudio = playingTrack.audio
-    playingAudio.volume = Number(localStorage.getItem('playerVolume')) || 1
-    let isCounterIncremented = false
-
-    playingAudio.play()
-      .then(() => dispatch('saveTrackDuration', playingAudio.duration))
-      .finally(() => {
+  playAudioTrack: ({ commit, dispatch, state }, track: AlbumTrackDTO) => {
+    const { audio } = state.playingTrack
+    audio.play()
+      .then(() => {
         commit('removeLoadingState')
-        playingAudio.ontimeupdate = () => {
-          
-          const progressLine = playingAudio.currentTime / playingAudio.duration
-          const progressTime = playingAudio.currentTime
+        dispatch('checkAndSetDuration', track)
+        dispatch('timeProgressHandler')
+      })
+      .catch(console.error)
+  },
 
-          commit('updateListeningProgress', { progressLine, progressTime })
+  timeProgressHandler({ state, commit, dispatch }) {
+    const { isOnRepeat, audio, _id } = state.playingTrack
+    let isCounterIncremented = false
+    audio.ontimeupdate = () => {
+      if (state.playingTrack.duration) {
+        const progressLine = audio.currentTime / state.playingTrack.duration
+        const progressTime = audio.currentTime
 
-          if (progressLine > 0.75 && !isCounterIncremented) {
-            dispatch('incrementListeningCounter')
-            isCounterIncremented = true
-          }
+        commit('updateListeningProgress', { progressLine, progressTime })
 
-          if (progressLine >= 1) {
-            if (playingTrack.isOnRepeat) {
-              dispatch('playAudioTrack', _id)
+        if (progressLine > 0.75 && !isCounterIncremented) {
+          dispatch('incrementListeningCounter')
+          isCounterIncremented = true
+        }
+
+        if (progressLine >= 1) {
+          if (isOnRepeat) {
+            dispatch('playAudioTrack', _id)
+          } else {
+            const activePlaylist = state.currentPlaylist.tracks
+              .filter((t) => !t.isDisabled)
+
+            const currentTrackIndex = activePlaylist
+              .findIndex((t) => t._id === _id)
+
+            const nextTrack = activePlaylist[currentTrackIndex + 1]
+
+            if (nextTrack) {
+              dispatch('playTrack', nextTrack)
             } else {
-              const activePlaylist = state.currentPlaylist.tracks
-                .filter((track) => !track.isDisabled)
-
-              const currentTrackIndex = activePlaylist
-                .findIndex((track) => track._id === _id)
-
-              const nextTrack = activePlaylist[currentTrackIndex + 1]
-
-              if (nextTrack) {
-                dispatch('playTrack', nextTrack)
-              } else {
-                commit('nullifyPlayerTrack')
-              }
+              commit('nullifyPlayerTrack')
             }
           }
         }
-      })
+      }
+    }
+  },
+
+  checkAndSetDuration({ state, commit, dispatch }, track: AlbumTrackDTO) {
+    const { audio, _id } = state.playingTrack
+
+    if (state.playingTrack.duration) {
+      commit('setTrackDuration', { trackID: _id, duration: state.playingTrack.duration })
+    } else if (!audio.duration || audio.duration === Infinity) {
+      dispatch('getTrackDuration', { track, audio })
+    } else {
+      commit('setTrackDuration', { trackID: _id, duration: audio.duration })
+      dispatch('saveTrackDuration', audio.duration)
+    }
   },
 
   incrementListeningCounter: async ({ commit, state }) => {
     const trackID = state.playingTrack._id
 
     try {
-      await api.patch(`/api/tracks/${trackID}/listened`)
+      await DBApiService.updateEntity(`tracks/${trackID}/listened`)
       commit('updateListeningCounter', trackID)
     } catch (error) {
       throw error
     }
   },
 
+  getTrackDuration: async ({ dispatch, commit }, { audio, track }: { audio: HTMLAudioElement, track: AlbumTrackDTO }) => {
+    if (audio.duration !== Infinity) {
+      dispatch('saveTrackDuration', audio.duration)
+    } else {
+      const audioLink = await CloudApiService.getTrackDuration(track.path)
+      const pureAudio = new Audio(audioLink)
+      pureAudio.onloadedmetadata = function() {
+        commit('setTrackDuration', { trackID: track._id, duration: pureAudio.duration })
+        dispatch('saveTrackDuration', pureAudio.duration)
+      }
+    }
+  },
+
   saveTrackDuration: async ({ commit, state }, duration: number) => {
-    const fileDuration = state.playingTrack.duration
+    if (duration === Infinity) return
     const trackID = state.playingTrack._id
 
-    if (!fileDuration) {
-      try {
-        await api.patch(`/api/tracks/${trackID}/duration`, { duration })
-        commit('setTrackDuration', { trackID, duration })
-      } catch (error) {
-        throw error
-      }
+    try {
+      await DBApiService.updateEntity(`tracks/${trackID}/duration`, { duration })
+      commit('setTrackDuration', { trackID, duration })
+    } catch (error) {
+      throw error
     }
   },
 

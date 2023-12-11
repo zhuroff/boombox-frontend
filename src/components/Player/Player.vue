@@ -204,11 +204,6 @@ export default defineComponent({
       document.removeEventListener('keyup', keyboardNavHandler, false)
     }
 
-    watch(
-      playingTrack,
-      (val) => console.log(val)
-    )
-
     onMounted(() => keyboardNavHandler())
     onUnmounted(() => keyboardNavHandlerDestroy())
 
