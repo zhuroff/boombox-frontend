@@ -13,6 +13,7 @@
             type="CardTile"
             rootPath="albums"
             className="card-tile"
+            placeholderImage="/img/album.webp"
           />
         </ul>
       </div>
@@ -22,9 +23,9 @@
   
 <script lang="ts">
 import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
-import { AlbumItem } from '~/types/Album'
 import { CardBasic, ListPageResponse, RequestConfig } from '~/types/Common'
-import DBApiService from '~/services/DBApiService'
+import { AlbumItem } from '~/types/Album'
+import dbServices from '~/services/database.services'
 import Preloader from '~/components/Preloader.vue'
 import Card from '~/components/Cards/Card.vue'
 
@@ -55,7 +56,7 @@ export default defineComponent({
     ))
 
     const getRandomAlbums = () => {
-      DBApiService.getEntityList<ListPageResponse<AlbumItem>>(requestConfig, 'albums')
+      dbServices.getEntityList<ListPageResponse<AlbumItem>>(requestConfig, 'albums')
         .then(({ docs }) => {
           albums.push(...docs)
           isDataFetched.value = true
@@ -144,3 +145,4 @@ export default defineComponent({
   }
 }
 </style>
+~/services/database.services

@@ -14,6 +14,7 @@ const initPlaylist: PlayerPlaylist = {
 
 const playingTrackInitial = new PlayerTrackDTO(new AlbumTrackDTO({
   _id: '',
+  cloudURL: '',
   title: '',
   path: '',
   listened: 0,

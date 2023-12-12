@@ -1,7 +1,7 @@
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { DiscogsFilter, DiscogsQueryConfig, DiscogsReleaseRow, DiscogsTablePayload, DiscogsTableSchema } from '~/types/Discogs'
 import { Pagination } from '~/types/Common'
-import DiscogsServices from '~/services/DiscogsServices'
+import discogsServices from '~/services/discogs.services'
 
 export const useDiscogs = () => {
   const isDiscogsFetched = ref(false)
@@ -103,7 +103,7 @@ export const useDiscogs = () => {
     setDiscogsPaginationPage(1)
 
     try {
-      const data = await DiscogsServices.discogs({ ...config, page: 1 })
+      const data = await discogsServices.getData({ ...config, page: 1 })
       discogsData.value = data
       setDiscogsFilters(data)
       isDiscogsFetched.value = true

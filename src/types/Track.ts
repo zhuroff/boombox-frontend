@@ -16,6 +16,7 @@ export type TrackResponse = {
   _id: string
   title: string
   path: string
+  cloudURL: string
   listened: number
   inAlbum: AlbumItem
   inPlaylists: BasicEntity[]

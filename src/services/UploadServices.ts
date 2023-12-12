@@ -1,5 +1,5 @@
 import api from '~/api'
-import CommonService from './CommonService'
+import commonServices from './common.services'
 import { ImagePayload } from '~/types/Common'
 
 export default class UploadServices {
@@ -13,7 +13,7 @@ export default class UploadServices {
         'Content-Type': 'multipart/form-data'
       }
     })
-    CommonService.errorChecker(response.status)
+    commonServices.errorChecker(response.status)
     return response.data
   }
 }

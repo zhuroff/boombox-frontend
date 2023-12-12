@@ -4,6 +4,7 @@ import { JSONSchema4 } from 'json-schema'
 export interface BasicEntity {
   _id: string
   title: string
+  cloudURL?: string
 }
 
 export type LocaleKeys = 'en' | 'by'

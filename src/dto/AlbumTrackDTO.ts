@@ -6,6 +6,7 @@ export class AlbumTrackDTO implements TrackResponse {
   _id: string
   title: string
   path: string
+  cloudURL: string
   listened: number
   inAlbum: AlbumItem
   inPlaylists: BasicEntity[]
@@ -28,6 +29,7 @@ export class AlbumTrackDTO implements TrackResponse {
     this._id = track._id
     this.title = track.title
     this.path = track.path
+    this.cloudURL = track.cloudURL
     this.listened = track.listened
     this.inAlbum = track.inAlbum
     this.inPlaylists = track.inPlaylists
@@ -46,6 +48,7 @@ export class PlayerTrackDTO {
   _id: string
   title: string  
   source: string
+  cloudURL: string
   duration: number
   artistName: string
   albumName: string
@@ -65,6 +68,7 @@ export class PlayerTrackDTO {
     this._id = track._id
     this.title = track.title
     this.source = track.path
+    this.cloudURL = track.cloudURL
     this.duration = track.duration || 0
     this.artistName = track.artist.title || ''
     this.albumName = track.inAlbum.title || ''

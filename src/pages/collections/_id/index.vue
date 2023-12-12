@@ -45,7 +45,6 @@ import { key } from '~/store'
 // import { CollectionPageItem } from '~/types/Collection'
 import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
-import CollectionServices from '~/services/CollectionServices'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
 // import CardWrapper from '~/components/Cards/CardWrapper.vue'
@@ -85,9 +84,9 @@ export default defineComponent({
         newOrder: event.newIndex
       }
 
-      CollectionServices.reorder(payload)
-        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-        .catch((error) => console.dir(error))
+      // collectionServices.reorder(payload)
+      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+      //   .catch((error) => console.dir(error))
     }
 
     const setCollection = (data: any /* CollectionPageItem */) => {
@@ -100,9 +99,9 @@ export default defineComponent({
     }
 
     const fetchCollection = () => {
-      CollectionServices.single(String(route.params.id))
-        .then((response) => setCollection(response))
-        .catch((error) => console.dir(error))
+      // collectionServices.single(String(route.params.id))
+      //   .then((response) => setCollection(response))
+      //   .catch((error) => console.dir(error))
     }
 
     onMounted(() => fetchCollection())
@@ -118,4 +117,3 @@ export default defineComponent({
 })
 
 </script>
-~/types/Common

@@ -4,7 +4,7 @@ import { useLocales } from './useLocales'
 import { UploadImageResult } from '~/types/Common'
 import { CategoryPage } from '~/types/Category'
 import { AlbumItem } from '~/types/Album'
-import DBApiService from '~/services/DBApiService'
+import dbServices from '~/services/database.services'
 
 export const useCategory = (entityType: string) => {
   const { lang } = useLocales()
@@ -36,7 +36,7 @@ export const useCategory = (entityType: string) => {
 
   const fetchCategoryEntry = async () => {
     try {
-      const category = await DBApiService.getEntity<CategoryPage>(entityType, String(route.params.id))
+      const category = await dbServices.getEntity<CategoryPage>(entityType, String(route.params.id))
       data.value = {
         ...category,
         albums: sortAlbumsByYears(category.albums.map((album) => ({

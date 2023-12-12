@@ -8,8 +8,8 @@ import { BasicEntity, CardBasic, ListPageResponse, RequestConfig, RequestFilter 
 import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { BookletState } from '~/states/BookletState'
-import DBApiService from '~/services/DBApiService'
-import CloudApiService from '~/services/CloudApiService'
+import dbServices from '~/services/database.services'
+import cloudServices from '~/services/cloud.services'
 
 export const useAlbumPage = <T extends BasicEntity>() => {
   const route = useRoute()
@@ -25,7 +25,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     Object.assign(booklet, new BookletState())
 
     try {
-      const data = await DBApiService.getEntity<AlbumPage>(entityType, id)
+      const data = await dbServices.getEntity<AlbumPage>(entityType, id)
       const preparedData = {
         ...data,
         tracks: data.tracks.map((track, index) => (
@@ -53,11 +53,11 @@ export const useAlbumPage = <T extends BasicEntity>() => {
 
   const fetchBooklet = async (folder: string) => {
     booklet.isActive = true
-    if (booklet.items.length > booklet.offset) return
+    if (booklet.items.length > booklet.offset || !entity.cloudURL) return
 
     try {
-      const bookletContent = await CloudApiService.getImages<CloudFolderResponse<AlbumBooklet>>(
-        `${folder}/booklet`, booklet.limit, booklet.offset
+      const bookletContent = await cloudServices.getImages<CloudFolderResponse<AlbumBooklet>>(
+        `${folder}/booklet`, booklet.limit, booklet.offset, entity.cloudURL
       )
       if (bookletContent) {
         booklet.items.push(...bookletContent.items)
@@ -102,7 +102,7 @@ export const useAlbumPage = <T extends BasicEntity>() => {
 
   const getRelatedAlbums = async (filter: RequestFilter, entityType: string) => {
     const response = {
-      [filter.from]: await DBApiService.getEntityList<ListPageResponse<AlbumItem>>(
+      [filter.from]: await dbServices.getEntityList<ListPageResponse<AlbumItem>>(
         { ...requestConfig, filter, isRandom: true, },
         entityType
       )

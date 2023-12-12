@@ -56,22 +56,6 @@ export interface DiscogsVideos {
   uri: string
 }
 
-export interface DiscogsDetails {
-  id: number
-  title: string
-  notes?: string
-  thumb?: string
-  released?: string
-  styles?: string[]
-  companies: DiscogsCompanies[]
-  extraartists: DiscogsArtists[]
-  identifiers: DiscogsIdentifiers[]
-  labels: DiscogsCompanies[]
-  tracklist: DiscogsTracklist[]
-  videos?: DiscogsVideos[]
-  isInvalid?: true
-}
-
 export interface DiscogsResponse {
   pagination: Pagination
   data: DiscogsReleaseRow[]

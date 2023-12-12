@@ -2,8 +2,8 @@ import { ActionTree } from 'vuex'
 import { AppStateInterface } from './state'
 import { StateInterface } from '..'
 import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import DBApiService from '~/services/DBApiService'
-import CloudApiService from '~/services/CloudApiService'
+import dbServices from '~/services/database.services'
+import cloudServices from '~/services/cloud.services'
 
 const actions: ActionTree<AppStateInterface, StateInterface> = {
   playTrack: async ({ commit, dispatch }, track: AlbumTrackDTO) => {
@@ -11,7 +11,7 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
     commit('checkOrReplacePlaylists', { commit, track })
     
     try {
-      const trackSourceLink: string = await DBApiService.getFile('tracks/audio', track.path)
+      const trackSourceLink: string = await dbServices.getFile('tracks/audio', track.path, track.cloudURL)
       if (!trackSourceLink) {
         throw new Error('Unable to get track source link')
       }
@@ -88,7 +88,7 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
     const trackID = state.playingTrack._id
 
     try {
-      await DBApiService.updateEntity(`tracks/${trackID}/listened`)
+      await dbServices.updateEntity(`tracks/${trackID}/listened`)
       commit('updateListeningCounter', trackID)
     } catch (error) {
       throw error
@@ -99,7 +99,7 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
     if (audio.duration !== Infinity) {
       dispatch('saveTrackDuration', audio.duration)
     } else {
-      const audioLink = await CloudApiService.getTrackDuration(track.path)
+      const audioLink = await cloudServices.getTrackDuration(track.path, track.cloudURL)
       const pureAudio = new Audio(audioLink)
       pureAudio.onloadedmetadata = function() {
         commit('setTrackDuration', { trackID: track._id, duration: pureAudio.duration })
@@ -113,7 +113,7 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
     const trackID = state.playingTrack._id
 
     try {
-      await DBApiService.updateEntity(`tracks/${trackID}/duration`, { duration })
+      await dbServices.updateEntity(`tracks/${trackID}/duration`, { duration })
       commit('setTrackDuration', { trackID, duration })
     } catch (error) {
       throw error

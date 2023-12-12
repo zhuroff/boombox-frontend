@@ -1,8 +1,8 @@
 import { ResponseMessage, ReorderPayload } from '~/types/Common'
 import api from '~/api'
 
-export default class CollectionServices {
-  static async addRemove(collections: any /* CollectionListItem[]*/, payload: any /* FloatModalCheckAction */) {
+export default {
+  async addRemove(collections: any /* CollectionListItem[]*/, payload: any /* FloatModalCheckAction */) {
     const targetCollection = collections.find((collection: any) => (
         collection._id === payload.listID
       ))
@@ -25,9 +25,9 @@ export default class CollectionServices {
     }
 
     throw new Error('There is no such collection')
-  }
+  },
 
-  static async create(title: string, album: string) {
+  async create(title: string, album: string) {
     const response = await api.post<ResponseMessage>('/api/collections/create', { title, album })
 
     if (response?.status === 201) {
@@ -38,9 +38,9 @@ export default class CollectionServices {
     }
 
     throw new Error('Request failed')
-  }
+  },
 
-  static async list(): Promise<any /* CollectionListItem[] */> {
+  async list(): Promise<any /* CollectionListItem[] */> {
     const response = await api.get<any /* CollectionListItem[] */>('/api/collections')
 
     if (response.status === 200) {
@@ -48,9 +48,9 @@ export default class CollectionServices {
     }
 
     throw new Error('Request failed')
-  }
+  },
 
-  static async single(id: string) {
+  async single(id: string) {
     const response = await api.get<any /* CollectionPageItem*/>(`/api/collections/${id}`)
     
     if (response?.status === 200) {
@@ -58,9 +58,9 @@ export default class CollectionServices {
     }
 
     throw new Error('Request failed')
-  }
+  },
 
-  static async remove(id: string) {
+  async remove(id: string) {
     const response = await api.delete<ResponseMessage>(`/api/collections/${id}`)
 
     if (response?.status === 201) {
@@ -68,9 +68,9 @@ export default class CollectionServices {
     }
 
     throw new Error('Request failed')
-  }
+  },
 
-  static async reorder(payload: ReorderPayload) {
+  async reorder(payload: ReorderPayload) {
     const response = await api.patch<ResponseMessage>(`/api/collections/${payload.entityID}/reorder`, payload)
 
     if (response?.status === 201) {

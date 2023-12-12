@@ -3,7 +3,7 @@ import { Compilation, CompilationCreating, CompilationPayloadCreate, Compilation
 import { useStore } from 'vuex'
 import { key } from '~/store'
 import { useLocales } from './useLocales'
-import DBApiService from '~/services/DBApiService'
+import dbServices from '~/services/database.services'
 import { ResponseMessage } from '~/types/Common'
 
 export const useCompilation = () => {
@@ -16,7 +16,7 @@ export const useCompilation = () => {
       title: compilationName.value
     }
     try {
-      const response = await DBApiService.createEntity<Compilation, CompilationPayloadCreate>(entityType, payload)
+      const response = await dbServices.createEntity<Compilation, CompilationPayloadCreate>(entityType, payload)
       results.push(response)
       compilationName.value = ''
     } catch (error) {
@@ -39,7 +39,7 @@ export const useCompilation = () => {
       order: targetCompilation.albums.length + 1
     }
     try {
-      const response = await DBApiService.updateEntity<ResponseMessage, CompilationPayloadUpdate>(entityType, payload)
+      const response = await dbServices.updateEntity<ResponseMessage, CompilationPayloadUpdate>(entityType, payload)
       targetCompilation.albums.push(entityID)
       store.commit('setSnackbarMessage', {
         message: lang(response.message),

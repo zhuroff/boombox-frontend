@@ -1,7 +1,7 @@
 import { ComputedRef, Ref, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ListPageResponse, Pagination, RequestConfig, SortingValue } from '~/types/Common'
-import DBApiService from '~/services/DBApiService'
+import dbServices from '~/services/database.services'
 
 export const useListPage = <T>() => {
   const { name, query } = useRoute()
@@ -67,7 +67,7 @@ export const useListPage = <T>() => {
     isDataFetched.value = false
 
     try {
-      const { docs, pagination } = await DBApiService.getEntityList<ListPageResponse<T>>(
+      const { docs, pagination } = await dbServices.getEntityList<ListPageResponse<T>>(
         pageStateConfig.value, entityType
       )
       entities.value = docs

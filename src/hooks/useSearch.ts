@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { SearchResultState } from '~/types/Search'
-import DBApiService from '~/services/DBApiService'
+import dbServices from '~/services/database.services'
 
 export const useSearch = () => {
   const results = ref<SearchResultState[]>([])
@@ -11,7 +11,7 @@ export const useSearch = () => {
     }
 
     if (query.length > 2) {
-      const data = await DBApiService.search({ query, key })
+      const data = await dbServices.search({ query, key })
       results.value = data
     }
   }

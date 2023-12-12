@@ -46,7 +46,7 @@ import { defineComponent, onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '~/store'
 // import { CollectionListItem } from '~/types/Collection'
-import CollectionServices from '~/services/CollectionServices'
+// import collectionServices from '~/services/collection.services'
 import Preloader from '~/components/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
 // import CardCollection from '~/components/Cards/CardCollection.vue'
@@ -98,13 +98,13 @@ export default defineComponent({
     // }
 
     // const fetchCollections = () => {
-    //   CollectionServices.list()
+    //   collectionServices.list()
     //     .then((data) => setCollectionList(data))
     //     .catch((error) => console.dir(error))
     // }
 
     // const deleteCollection = (id: string) => {
-    //   CollectionServices.remove(id)
+    //   collectionServices.remove(id)
     //     .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
     //     .then(_ => spliceCollection(id))
     //     .catch((error) => console.dir(error))
