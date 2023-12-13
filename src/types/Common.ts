@@ -52,6 +52,7 @@ export interface Snackbar {
   message: string
   type: 'warning' | 'success' | 'error' | 'info'
   order: number
+  time?: number
 }
 
 export interface RequestFilter {
@@ -113,4 +114,11 @@ export interface WikiSearchResult {
 export interface AlignmentPosition {
   x: 'right' | 'left'
   y: 'top' | 'bottom'
+}
+
+export interface SyncResponse {
+  added: number
+  updated: number
+  deleted: number
+  invalid: Record<string, string>[] | 0
 }

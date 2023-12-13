@@ -15,7 +15,7 @@
 import { defineComponent, ref } from 'vue'
 import Sidebar from '~/components/Sidebar.vue'
 import Player from '~/components/Player/Player.vue'
-import Snackbar from '~/components/Snackbar/Snackbar.vue'
+import Snackbar from '~/components/Snackbar.vue'
 
 export default defineComponent({
   name: 'MainTemplate',

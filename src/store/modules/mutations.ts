@@ -12,7 +12,7 @@ import { AlbumTrackDTO, PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
 const mutations: MutationTree<AppStateInterface> = {
   setSnackbarMessage: (state: AppStateInterface, snackbar: Snackbar) => {
     state.snackbar.push(snackbar)
-    setTimeout(() => state.snackbar.splice(0, 1), 5000)
+    setTimeout(() => state.snackbar.splice(0, 1), snackbar.time || 5000)
   },
 
   closeSnackbar: (state: AppStateInterface, index: number) => {
@@ -161,9 +161,10 @@ const mutations: MutationTree<AppStateInterface> = {
     ))
 
     if (targetTrack) {
-      state.playingTrack.duration = duration
       targetTrack.duration = duration
     }
+
+    state.playingTrack.duration = duration
   },
 
   disableOrEnableTrack: (state: AppStateInterface, _id) => {

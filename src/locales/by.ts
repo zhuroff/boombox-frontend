@@ -81,4 +81,18 @@ export const localesBY: LocaleDictionary = {
     removeFromList: 'Выдаліць з плэйлiста'
   },
   totalAlbums: 'Усяго альбомаў',
+  syncResponse: {
+    added: 'Дададзеныя альбомы',
+    updated: 'Абноўленыя альбомы',
+    deleted: 'Выдаленыя альбомы',
+    invalid: 'Альбомы, якія не прайшлі валiдацыю',
+    invalidValue: {
+      album: 'Альбом',
+      cloud: 'URL воблака',
+      reason: 'Прычына',
+      invalid_folder_name: 'Назва папкі не адпавядае патэрну: \'Iмя артыста [год выдання] Назва альбома #Жанр\'',
+      invalid_tracks_names: 'Назва трэкаў не адпавядае патэрну: \'Нумар. Назва трэка.пашырэнне файла\'',
+      no_tracks: 'Альбом не змяшчае ніводнага трэка'
+    }
+  }
 }

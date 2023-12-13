@@ -80,5 +80,19 @@ export const localesEN: LocaleDictionary = {
     addToList: 'Add to playlist',
     removeFromList: 'Remove from playlist'
   },
-  totalAlbums: 'Total albums'
+  totalAlbums: 'Total albums',
+  syncResponse: {
+    added: 'Added albums',
+    updated: 'Updated albums',
+    deleted: 'Deleted albums',
+    invalid: 'Albums that didn\'t pass validation',
+    invalidValue: {
+      album: 'Album',
+      cloud: 'Cloud URL',
+      reason: 'Reason',
+      invalid_folder_name: 'The folder name does not match the pattern: \'Artist name [release year] Album title #Genre\'',
+      invalid_tracks_names: 'The tracks names doesn\'t match the pattern: \'Number. Track title.file extension\'',
+      no_tracks: 'Album doesn\'t contain any track'
+    }
+  }
 }

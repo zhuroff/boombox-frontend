@@ -18,7 +18,7 @@
           />
           <Button
             :text="lang('settings.synchronize')"
-            @onClick="synchronizeCollection"
+            @onClick="syncCollection"
           />
           <Button
             v-for="locale in allLocales"
@@ -67,6 +67,7 @@ import { useLocales } from '~/hooks/useLocales'
 import Button from '~/components/Button/Button.vue'
 import Preloader from '~/components/Preloader.vue'
 import api from '~/api'
+import { SyncResponse } from '~/types/Common'
 
 interface BackupList {
   timestamp: number
@@ -163,17 +164,53 @@ export default defineComponent({
       }
     }
 
-    const synchronizeCollection = async () => {
+    const getSyncReport = (data: SyncResponse) => {
+      return Object.entries(data)
+        .reduce((acc, [key, value], index, arr) => {
+          if (!Array.isArray(value)) {
+            acc += `<li>${lang(`syncResponse.${key}`)}: ${value}</li>`
+          } else {
+            if (!value.length) {
+              acc += `<li>${lang(`syncResponse.${key}`)}: 0</li>`
+            } else {
+              acc += `
+                <li>
+                  <span style="display: block">${lang(`syncResponse.${key}`)}:</span>  
+                  ${value.map((row) => (
+                    `<ul style="margin: 5px 0">
+                      <li>${lang('syncResponse.invalidValue.album')}: ${row.album}</li>
+                      <li>${lang('syncResponse.invalidValue.cloud')}: ${row.cloud}</li>
+                      <li>${lang('syncResponse.invalidValue.reason')}: ${lang(`syncResponse.invalidValue.${row.reason}`)}</li>
+                    <ul>`
+                  ))}
+                </li>
+              `
+            }
+          }
+
+          if (index === arr.length - 1) {
+            acc += '</ul>'
+          }
+          return acc
+        }, '<ul>')
+    }
+
+    const syncCollection = async () => {
       isSynchronized.value = false
 
       try {
-        const response = await api.post('/api/sync')
+        const response = await api.post<SyncResponse>('/api/sync')
         isSynchronized.value = true
 
         if (response.status === 200) {
+          Object.entries(response.data)
+            .forEach(([key, value]) => {
+              console.log(lang(`syncResponse.${key}`), value)
+            })
           store.commit('setSnackbarMessage', {
-            message: response.data.message,
-            type: 'success'
+            message: getSyncReport(response.data),
+            type: 'success',
+            time: 10000
           })
         }
       } catch (error) {
@@ -193,7 +230,7 @@ export default defineComponent({
       createBackups,
       backupRestore,
       backupDelete,
-      synchronizeCollection,
+      syncCollection,
       isSynchronized
     }
   }

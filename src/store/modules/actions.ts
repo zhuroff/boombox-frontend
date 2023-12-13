@@ -28,7 +28,6 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
       .then(() => {
         commit('removeLoadingState')
         dispatch('checkAndSetDuration', track)
-        dispatch('timeProgressHandler')
       })
       .catch(console.error)
   },
@@ -37,34 +36,32 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
     const { isOnRepeat, audio, _id } = state.playingTrack
     let isCounterIncremented = false
     audio.ontimeupdate = () => {
-      if (state.playingTrack.duration) {
-        const progressLine = audio.currentTime / state.playingTrack.duration
-        const progressTime = audio.currentTime
+      const progressLine = audio.currentTime / state.playingTrack.duration
+      const progressTime = audio.currentTime
 
-        commit('updateListeningProgress', { progressLine, progressTime })
+      commit('updateListeningProgress', { progressLine, progressTime })
 
-        if (progressLine > 0.75 && !isCounterIncremented) {
-          dispatch('incrementListeningCounter')
-          isCounterIncremented = true
-        }
+      if (progressLine > 0.75 && !isCounterIncremented) {
+        dispatch('incrementListeningCounter')
+        isCounterIncremented = true
+      }
 
-        if (progressLine >= 1) {
-          if (isOnRepeat) {
-            dispatch('playAudioTrack', _id)
+      if (progressLine >= 1) {
+        if (isOnRepeat) {
+          dispatch('playAudioTrack', _id)
+        } else {
+          const activePlaylist = state.currentPlaylist.tracks
+            .filter((t) => !t.isDisabled)
+
+          const currentTrackIndex = activePlaylist
+            .findIndex((t) => t._id === _id)
+
+          const nextTrack = activePlaylist[currentTrackIndex + 1]
+
+          if (nextTrack) {
+            dispatch('playTrack', nextTrack)
           } else {
-            const activePlaylist = state.currentPlaylist.tracks
-              .filter((t) => !t.isDisabled)
-
-            const currentTrackIndex = activePlaylist
-              .findIndex((t) => t._id === _id)
-
-            const nextTrack = activePlaylist[currentTrackIndex + 1]
-
-            if (nextTrack) {
-              dispatch('playTrack', nextTrack)
-            } else {
-              commit('nullifyPlayerTrack')
-            }
+            commit('nullifyPlayerTrack')
           }
         }
       }
@@ -76,10 +73,12 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
 
     if (state.playingTrack.duration) {
       commit('setTrackDuration', { trackID: _id, duration: state.playingTrack.duration })
+      dispatch('timeProgressHandler')
     } else if (!audio.duration || audio.duration === Infinity) {
       dispatch('getTrackDuration', { track, audio })
     } else {
       commit('setTrackDuration', { trackID: _id, duration: audio.duration })
+      dispatch('timeProgressHandler')
       dispatch('saveTrackDuration', audio.duration)
     }
   },
@@ -98,11 +97,13 @@ const actions: ActionTree<AppStateInterface, StateInterface> = {
   getTrackDuration: async ({ dispatch, commit }, { audio, track }: { audio: HTMLAudioElement, track: AlbumTrackDTO }) => {
     if (audio.duration !== Infinity) {
       dispatch('saveTrackDuration', audio.duration)
+      dispatch('timeProgressHandler')
     } else {
       const audioLink = await cloudServices.getTrackDuration(track.path, track.cloudURL)
       const pureAudio = new Audio(audioLink)
       pureAudio.onloadedmetadata = function() {
         commit('setTrackDuration', { trackID: track._id, duration: pureAudio.duration })
+        dispatch('timeProgressHandler')
         dispatch('saveTrackDuration', pureAudio.duration)
       }
     }
