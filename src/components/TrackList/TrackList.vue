@@ -22,11 +22,10 @@
 
 <script lang="ts">
 import { defineComponent, reactive, PropType, computed } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { DraggableEvent, ReorderPayload } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
+import store from '~/store'
+import AlbumTrack from '~/classes/AlbumTrack'
 import TrackListRow from './TrackListRow.vue'
 
 export default defineComponent({
@@ -37,7 +36,7 @@ export default defineComponent({
   },
   props: {
     tracks: {
-      type: Array as PropType<AlbumTrackDTO[]>,
+      type: Array as PropType<AlbumTrack[]>,
       required: true
     },
     albumID: {
@@ -56,7 +55,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const store = useStore(key)
+    const { actions } = store
 
     const dragOptions = reactive({
       animation: 300,
@@ -74,7 +73,7 @@ export default defineComponent({
         entityID: props.albumID
       }
 
-      store.commit('changePlaylistOrder', payload)
+      actions.changePlaylistOrder(payload)
 
       if (props.isPlaylist) {
         emit('orderChanged', payload)
@@ -91,7 +90,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="scss">

@@ -37,8 +37,8 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
-import { usePlayer } from '~/hooks/usePlayer'
+import store from '~/store'
+import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
 export default defineComponent({
@@ -48,7 +48,7 @@ export default defineComponent({
   },
   props: {
     track: {
-      type: Object as PropType<AlbumTrackDTO>,
+      type: Object as PropType<AlbumTrack>,
       required: true
     },
     title: {
@@ -62,45 +62,47 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { currentPlaylistTracks, playingTrack, store } = usePlayer()
+    // const { currentPlaylistTracks, playingTrack, store } = usePlayer()
+    const { actions, getters } = store
 
     const isPlaying = computed(() => (
-      playingTrack.value._id === props.track._id &&
-      !playingTrack.value.isOnPause &&
-      !playingTrack.value.isOnLoading
+      getters.playingTrack.value?._id === props.track._id &&
+      !getters.playingTrack.value.isOnPause &&
+      !getters.playingTrack.value.isOnLoading
     ))
 
     const isPaused = computed(() => (
-      playingTrack.value._id === props.track._id &&
-      playingTrack.value.isOnPause
+      getters.playingTrack.value?._id === props.track._id &&
+      getters.playingTrack.value.isOnPause
     ))
 
     const isOnLoading = computed(() => (
-      playingTrack.value._id === props.track._id &&
-      playingTrack.value.isOnLoading
+      getters.playingTrack.value?._id === props.track._id &&
+      getters.playingTrack.value.isOnLoading
     ))
 
     const playTrack = () => {
       if (props.isSearched) {
-        const index = currentPlaylistTracks.value.findIndex(
-          (track) => track._id === playingTrack.value._id
+        const index = getters.currentPlaylistTracks.value.findIndex(
+          (track) => track._id === getters.playingTrack.value?._id
         )
 
-        store.commit('appendTrackToPlaylist', {
+        actions.addTrackToPlaylist({
           order: index !== -1 ? index : 0,
           track: props.track
         })
       }
-      store.dispatch('playTrack', props.track)
-      store.commit('expandPlayer')
+
+      actions.playTrack(props.track)
+      actions.togglePlayerVisibility()
     }
 
     const pauseTrack = () => {
-      store.commit('setTrackOnPause')
+      actions.setTrackOnPause()
     }
 
     const playFurther = () => {
-      store.commit('continuePlay')
+      actions.continuePlay()
     }
 
     return {
@@ -109,8 +111,7 @@ export default defineComponent({
       isOnLoading,
       playTrack,
       pauseTrack,
-      playFurther,
-      playingTrack
+      playFurther
     }
   }
 })

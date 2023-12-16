@@ -11,7 +11,6 @@
         @input="changeSoundVolume"
       />
     </div>
-
     <button
       :class="[{ '--muted' : isMuted }, 'player__sound_button']"
       @click="switchMuteState"
@@ -23,9 +22,8 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, ref } from 'vue'
-import { usePlayer } from '~/hooks/usePlayer'
+import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
@@ -34,17 +32,17 @@ export default defineComponent({
   },
 
   setup() {
-    const { store } = usePlayer()
+    const { actions } = store
     const volume = ref(Number(localStorage.getItem('playerVolume')) || 1)
     const isMuted = ref(false)
 
     const changeSoundVolume = (event: Event) => {
-      store.commit('setSoundVolume', Number((event.target as HTMLInputElement).value))
+      actions.setSoundVolume(Number((event.target as HTMLInputElement).value))
     }
 
     const switchMuteState = () => {
       isMuted.value = !isMuted.value
-      store.commit('switchMuteState')
+      actions.switchMuteState()
     }
 
     return {
@@ -57,5 +55,3 @@ export default defineComponent({
 })
 
 </script>
-
-../../hooks/usePlayer

@@ -15,33 +15,29 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, computed } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   components: {
     Sprite
   },
-
   props: {
     isMobile: {
       type: Boolean,
       required: false
     }
   },
-
   setup() {
-    const store = useStore(key)
+    const { actions, getters } = store
 
     const isTrackRepeat = computed(() => (
-      store.getters.playingTrack.isOnRepeat
+      getters.playingTrack.value?.isOnRepeat
     ))
 
     const changeRepeatState = () => {
-      store.commit('changeRepeatState')
+      actions.changeRepeatState()
     }
 
     return {
@@ -50,6 +46,5 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 

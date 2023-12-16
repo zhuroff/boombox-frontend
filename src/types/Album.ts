@@ -1,5 +1,5 @@
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { BasicEntity } from './Common'
+import AlbumTrack from '~/classes/AlbumTrack'
 
 export interface AlbumItem {
   _id: string
@@ -13,7 +13,7 @@ export interface AlbumItem {
 }
 
 export interface AlbumPage extends AlbumItem {
-  tracks: AlbumTrackDTO[]
+  tracks: AlbumTrack[]
 }
 
 export interface AlbumHeadProps {

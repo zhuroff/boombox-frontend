@@ -1,9 +1,9 @@
-import { AlbumItem } from '~/types/Album'
+import AlbumItem from './AlbumItem'
 
-export class AlbumCardBoxDTO {
+export default class AlbumCardBox {
   _id: string
   title: string
-  coverURL: string
+  coverURL?: string
   caption: string
 
   constructor(data: AlbumItem) {

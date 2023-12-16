@@ -10,7 +10,7 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import { usePlayer } from '~/hooks/usePlayer'
+import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
@@ -19,10 +19,14 @@ export default defineComponent({
   },
 
   setup() {
-    const { playingTrack } = usePlayer()
+    const { getters } = store
 
     const proceedToYouTube = () => {
-      const url = `https://www.youtube.com/results?search_query=${playingTrack.value.artistName} ${playingTrack.value.title}`.replaceAll(' ', '+')
+      if (!getters.playingTrack.value) {
+        throw new Error('No track is playing')
+      }
+      const { artistName, title } = getters.playingTrack.value
+      const url = `https://www.youtube.com/results?search_query=${artistName} ${title}`.replaceAll(' ', '+')
 
       window.open(url)
     }
@@ -32,5 +36,3 @@ export default defineComponent({
 })
 
 </script>
-
-../../hooks/usePlayer

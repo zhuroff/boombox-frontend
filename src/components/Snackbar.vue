@@ -9,7 +9,7 @@
         <div class="snackbar__text" v-html="item.message" />
         <button
           :class="`snackbar__action --${item.type}`"
-          @click="closeSnackbar(index)"
+          @click="() => closeSnackbar(index)"
         >OK</button>
       </div>
     </transition-group>
@@ -18,26 +18,23 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import store from '~/store'
 
 export default defineComponent({
   setup() {
-    const store = useStore(key)
+    const { actions, getters } = store
 
-    const snackbarItems = computed(() => (
-      store.getters.snackbarItems
-    ))
+    const snackbarItems = computed(() => getters.snackbarItems.value)
 
     const closeSnackbar = (index: number) => {
-      store.commit('closeSnackbar', index)
+      actions.closeSnackbar(index)
     }
 
     return {
       snackbarItems,
       closeSnackbar
     }
-  },
+  }
 })
 </script>
 

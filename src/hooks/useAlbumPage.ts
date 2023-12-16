@@ -1,21 +1,21 @@
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import { useState } from '~/hooks/useState'
 import { CloudFolderResponse } from '~/types/Cloud'
 import { AlbumBooklet, AlbumItem, AlbumPage, BookletSlideState } from '~/types/Album'
-import { BasicEntity, CardBasic, ListPageResponse, RequestConfig, RequestFilter } from '~/types/Common'
-import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import { BasicEntity, CardBasic, RequestConfig, RequestFilter } from '~/types/Common'
+import { AlbumCardBoxDTO } from '~/classes/AlbumCardBox'
+import { ListPageResponse } from '~/types/ReqRes'
+import AlbumTrack from '~/classes/AlbumTrack'
 import { BookletState } from '~/states/BookletState'
 import dbServices from '~/services/database.services'
 import cloudServices from '~/services/cloud.services'
 
-export const useAlbumPage = <T extends BasicEntity>() => {
+export const useAlbumPage = <T extends BasicEntity, C>(Class: new (prop: T) => C) => {
   const route = useRoute()
   const router = useRouter()
-  const store = useStore(key)
-  const entity = reactive<T>({} as T)
+  const store = useState()
+  const entity = ref<C>({} as C)
   const relatedEntities = reactive<Map<string, CardBasic[]>>(new Map())
   const booklet = reactive<BookletState>(new BookletState())
   const isDataFetched = ref(false)
@@ -25,15 +25,16 @@ export const useAlbumPage = <T extends BasicEntity>() => {
     Object.assign(booklet, new BookletState())
 
     try {
-      const data = await dbServices.getEntity<AlbumPage>(entityType, id)
-      const preparedData = {
-        ...data,
-        tracks: data.tracks.map((track, index) => (
-          new AlbumTrackDTO(track, index + 1, data.coverURL, data.period)
-        ))
-      }
-      Object.assign(entity, preparedData)
-      store.commit('setPlayerPlaylist', preparedData)
+      const data = await dbServices.getEntity<T>(entityType, id)
+      console.log(data)
+      // const preparedData = {
+      //   ...data,
+      //   tracks: data.tracks.map((track, index) => (
+      //     new AlbumTrack(track, index + 1, data.period, data.coverURL)
+      //   ))
+      // }
+      // Object.assign(entity, preparedData)
+      // store.commit('setPlayerPlaylist', preparedData)
 
       if (id === 'random') {
         router.push({ params: { id: data._id } })

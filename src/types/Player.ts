@@ -1,15 +1,15 @@
 import { BasicEntity } from '~/types/Common'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import AlbumTrack from '~/classes/AlbumTrack'
 
 export type TrackProgress = {
   progressLine: number
   progressTime: number
 }
 
-export type PlayerPlaylist = {
+export interface Playlist {
   _id: string
   title: string
-  tracks: AlbumTrackDTO[]
+  tracks: AlbumTrack[]
   albumCover?: string
   artist?: BasicEntity
   period?: BasicEntity

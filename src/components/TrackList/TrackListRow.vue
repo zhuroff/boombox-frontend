@@ -68,9 +68,8 @@
 <script lang="ts">
 
 import { defineComponent, ref, computed, PropType } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import store from '~/store'
+import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 import TrackItemAdd from './TrackItemAdd.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
@@ -96,7 +95,7 @@ export default defineComponent({
   },
   props: {
     track: {
-      type: Object as PropType<AlbumTrackDTO>,
+      type: Object as PropType<AlbumTrack>,
       required: true
     },
     index: {
@@ -113,7 +112,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const store = useStore(key)
+    const { getters } = store
     const descriptionValue = ref('')
     const frameValue = ref('')
     const isModalActive = ref(false)
@@ -124,11 +123,11 @@ export default defineComponent({
     ))
 
     const isPlayingTrack = computed(() => (
-      store.getters.playingTrack._id === props.track._id
+      getters.playingTrack.value?._id === props.track._id
     ))
 
     const isNotCurrentPlaylist = computed(() => (
-      props.albumID !== store.state.instance.currentPlaylist._id
+      props.albumID !== getters.playlists.value.current?._id
     ))
 
     const lyricsModalSwitcher = () => {
@@ -156,7 +155,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="scss">

@@ -6,7 +6,7 @@
     placeholderImage="/img/album.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
-    :dataList="albumList"
+    :dataList="entities"
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
@@ -17,13 +17,14 @@
 
 <script lang="ts">
 import { defineComponent, computed, watch } from 'vue'
-import { AlbumItem } from '~/types/Album'
 import { CardBasic } from '~/types/Common'
-import { AlbumCardBoxDTO } from '~/dto/AlbumCardBoxDTO'
+import { AlbumItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { isObjectsEquals } from '~/utils'
+import AlbumCardBox from '~/classes/AlbumCardBox'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import AlbumItem from '~/classes/AlbumItem'
 
 export default defineComponent({
   name: 'AlbumsList',
@@ -39,17 +40,13 @@ export default defineComponent({
       pageStateConfig,
       switchPagination,
       setEntitiesLimit
-    } = useListPage<AlbumItem>()
+    } = useListPage<AlbumItemRes, AlbumItem>(AlbumItem)
     
     const { lang } = useLocales()
 
     const pageHeading = computed(() => (
       lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
     ))
-
-    const albumList = computed<CardBasic[]>(() => (
-      entities.value.map((album) => new AlbumCardBoxDTO(album))
-    )) 
     
     watch(
       pageStateConfig,
@@ -61,7 +58,7 @@ export default defineComponent({
 
     return {
       pageHeading,
-      albumList,
+      entities,
       pagePagination,
       isDataFetched,
       switchPagination,
@@ -70,3 +67,4 @@ export default defineComponent({
   }
 })
 </script>
+~/classes/AlbumCardBox

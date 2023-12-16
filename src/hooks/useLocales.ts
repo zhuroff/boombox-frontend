@@ -1,15 +1,15 @@
 import { LocaleKeys } from '~/types/Common'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import { useState } from '~/hooks/useState'
 import locales from '~/locales'
 
 export const useLocales = () => {
-  const store = useStore(key)
+  const { actions, getters } = useState()
   const allLocales = Array.from(locales.keys())
   
   const setLocale = (locale: LocaleKeys) => {
     localStorage.setItem('locale', locale)
-    store.commit('setLocale', locale)
+    // store.commit('setLocale', locale)
+    actions.setLocale(locale)
   }
 
   const checkAndSetLocale = () => {
@@ -21,7 +21,7 @@ export const useLocales = () => {
     }
   }
 
-  const lang = store.getters.getLocaleValue
+  const lang = getters.getLocaleValue
 
   return {
     checkAndSetLocale,

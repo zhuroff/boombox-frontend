@@ -30,11 +30,6 @@ export interface PaginationConfig {
   selected?: number
 }
 
-export interface ListPageResponse<T> {
-  docs: T[],
-  pagination: Pagination
-}
-
 export type SortingValue = Record<string, 1 | -1>
 
 export interface DraggableEvent {
@@ -51,7 +46,7 @@ export interface ReorderPayload {
 export interface Snackbar {
   message: string
   type: 'warning' | 'success' | 'error' | 'info'
-  order: number
+  // order: number
   time?: number
 }
 

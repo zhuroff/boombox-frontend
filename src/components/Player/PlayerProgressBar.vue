@@ -4,7 +4,7 @@
 
     <progress
       :max="1"
-      :value="playingTrack.progressLine || 0"
+      :value="playingTrack?.progressLine || 0"
       class="player__progress-bar"
       @click="setTrackPosition"
     ></progress>
@@ -16,18 +16,17 @@
 <script lang="ts">
 
 import { defineComponent, computed } from 'vue'
-import { usePlayer } from '~/hooks/usePlayer'
+import store from '~/store'
 
 export default defineComponent({
   setup() {
-    const {
-      playingTrack,
-      store
-    } = usePlayer()
+    const { actions, getters } = store
 
     const leftTimeToMinutes = computed(() => {
-      const minutes = Math.floor(playingTrack.value.progressTime / 60)
-      const seconds = Math.floor(playingTrack.value.progressTime - minutes * 60)
+      if (!getters.playingTrack.value) return '0:00'
+
+      const minutes = Math.floor(getters.playingTrack.value.progressTime / 60)
+      const seconds = Math.floor(getters.playingTrack.value.progressTime - minutes * 60)
 
       if (Number.isNaN(minutes)) return '0:00'
 
@@ -35,8 +34,10 @@ export default defineComponent({
     })
 
     const fullTimeToMinutes = computed(() => {
-      const minutes = Math.floor(Number(playingTrack.value.duration) / 60)
-      const seconds = Math.floor(Number(playingTrack.value.duration) - minutes * 60)
+      if (!getters.playingTrack.value) return '0:00'
+
+      const minutes = Math.floor(Number(getters.playingTrack.value.duration) / 60)
+      const seconds = Math.floor(Number(getters.playingTrack.value.duration) - minutes * 60)
 
       if (Number.isNaN(minutes)) return '0:00'
 
@@ -45,18 +46,17 @@ export default defineComponent({
 
     const setTrackPosition = (event: MouseEvent) => {
       const value = event.offsetX / (event.target as HTMLElement).offsetWidth
-      store.commit('setPosition', value)
+      // store.commit('setPosition', value)
+      actions.setPosition(value)
     }
 
     return {
       leftTimeToMinutes,
       fullTimeToMinutes,
       setTrackPosition,
-      playingTrack
+      playingTrack: getters.playingTrack.value
     }
   },
 })
 
 </script>
-
-../../hooks/usePlayer

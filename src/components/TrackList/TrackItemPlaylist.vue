@@ -39,9 +39,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 import { PlaylistPayload, PlayListItem } from '~/types/Playlist'
+import store from '~/store'
 import Button from "~/components/Button.vue";
 import api from '~/api'
 
@@ -57,8 +56,8 @@ export default defineComponent({
     }
   },
 
-  setup(props, { emit }) {
-    const store = useStore(key)
+  setup(props) {
+    const { actions } = store
 
     const playlists = reactive({
       isFetched: false,
@@ -110,7 +109,7 @@ export default defineComponent({
         const response = await api.post('/api/playlists', payload)
 
         if (response?.status === 201) {
-          store.commit('setSnackbarMessage', {
+          actions.setSnackbarMessage({
             message: response.data.message,
             type: 'success'
           })

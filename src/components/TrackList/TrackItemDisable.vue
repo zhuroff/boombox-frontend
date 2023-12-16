@@ -12,27 +12,24 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import store from '~/store'
 import Button from '~/components/Button.vue'
 
 export default defineComponent({
   components: {
     Button
   },
-
   props: {
     fileid: {
       type: String,
       required: true
     }
   },
-
   setup(props) {
-    const store = useStore(key)
+    const { actions } = store
 
     const disableTrack = () => {
-      store.commit('disableOrEnableTrack', props.fileid)
+      actions.disableOrEnableTrack(props.fileid)
     }
 
     return { disableTrack }

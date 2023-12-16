@@ -12,7 +12,7 @@
 <script lang="ts">
 
 import { defineComponent, ref } from 'vue'
-import { usePlayer } from '~/hooks/usePlayer'
+import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
@@ -21,12 +21,11 @@ export default defineComponent({
   },
 
   setup() {
-    const { store } = usePlayer()
-
+    const { actions } = store
     const isCrackled = ref(false)
 
     const crackleSwitch = () => {
-      store.dispatch('crackleSwitch')
+      actions.crackleSwitch()
       isCrackled.value = !isCrackled.value
     }
 
@@ -38,5 +37,3 @@ export default defineComponent({
 })
 
 </script>
-
-../../hooks/usePlayer

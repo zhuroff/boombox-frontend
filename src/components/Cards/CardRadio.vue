@@ -3,13 +3,10 @@
     <div class="station__cover">
       <button class="station__play" @click="playStation">
         <Sprite v-if="isOnPlay" name="playing" />
-
         <Sprite v-else-if="current._id !== station.stationuuid || current.isOnPause" name="play" />
-
         <Sprite v-else name="pause" />
       </button>
     </div>
-
     <div class="station__content">
       <div class="station__name">{{ station.name }}</div>
       <div class="station__country">{{ station.country }}</div>
@@ -18,11 +15,9 @@
           @click="$emit('fetchByGenre', tag)" />
       </ul>
     </div>
-
     <button v-if="isSaved" class="station__save" @click="removeStationFromDatabase">
       <Sprite name="remove" />
     </button>
-
     <button v-else class="station__save" @click="saveStationToDatabase">
       <Sprite name="plus" />
     </button>
@@ -30,56 +25,48 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, computed, reactive, PropType } from 'vue'
 import { RadioStationResponse } from '~/types/Radio'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
-import CardRadioGenre from '@/components/Cards/CardRadioGenre.vue'
+import CardRadioGenre from '~/components/Cards/CardRadioGenre.vue'
 
 export default defineComponent({
   name: 'CardRadio',
-
   components: {
     Sprite,
     CardRadioGenre
   },
-
   props: {
     station: {
       type: Object as PropType<RadioStationResponse>,
       required: true
     },
-
     genre: {
       type: String,
       required: true
     },
-
     current: {
       type: Object,
       required: false
     },
-
     isSaved: {
       type: Boolean,
       required: false,
       default: false
     }
   },
-
   setup(props, { emit }) {
-    const store = useStore(key)
+    const { actions, getters } = store
 
     const stationTags = reactive(computed(() => (
       props.station?.tags?.split(',')
     )))
 
     const isOnPlay = computed(() => (
-      store.getters.playingTrack._id === props.station.stationuuid
-      && !store.getters.playingTrack.isOnPause
-      && !store.getters.playingTrack.isOnLoading
+      getters.playingTrack.value?._id === props.station.stationuuid
+      && !getters.playingTrack.value.isOnPause
+      && !getters.playingTrack.value.isOnLoading
     ))
 
     const playStation = () => emit('playStation', props.station)
@@ -101,7 +88,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>

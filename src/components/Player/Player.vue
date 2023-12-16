@@ -1,5 +1,6 @@
 <template>
-  <section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
+  <div v-if="!playingTrack">No playing track</div>
+  <section v-else :class="[{ '--expanded': isPlayerExpanded }, 'player']">
     <!-- <div
       class="player__left"
       @click="collapseExpandPlayer"
@@ -83,11 +84,11 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
-import { usePlayer } from '~/hooks/usePlayer'
 import { DraggableEvent, ReorderPayload } from '~/types/Common'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { secondsToMinutes } from '~/utils'
+import store from '~/store'
+import AlbumTrack from '~/classes/AlbumTrack'
 import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
 import PlayerPrevTrack from './PlayerPrevTrack.vue'
 import PlayerNextTrack from './PlayerNextTrack.vue'
@@ -121,16 +122,7 @@ export default defineComponent({
   },
 
   setup() {
-    const {
-      isPlayerExpanded,
-      collapseExpandPlayer,
-      currentPlaylistTracks,
-      removeTrackFromPlaylist,
-      playingTrack,
-      switchToPrevTrack,
-      switchToNextTrack,
-      store
-    } = usePlayer()
+    const { actions, getters } = store
     const isPlaylistOpen = ref(false)
     const dragOptions = reactive({
       animation: 300,
@@ -138,23 +130,23 @@ export default defineComponent({
     })
 
     const trackTime = (duration: number) => secondsToMinutes(duration)
-    const isPlaying = (id: string) => id === playingTrack.value._id
+    const isPlaying = (id: string) => id === getters.playingTrack.value?._id
 
     const orderChanged = (event: DraggableEvent) => {
       const payload: ReorderPayload = {
         oldOrder: event.oldIndex,
         newOrder: event.newIndex,
-        entityID: store.state.instance.currentPlaylist._id
+        entityID: getters.playlists.value.current?._id!
       }
 
-      store.commit('changePlaylistOrder', payload)
+      actions.changePlaylistOrder(payload)
     }
 
     const playOrPause = () => {
-      if (playingTrack.value.isOnPause) {
-        store.commit('continuePlay')
+      if (getters.playingTrack.value?.isOnPause) {
+        actions.continuePlay()
       } else {
-        store.commit('setTrackOnPause')
+        actions.setTrackOnPause()
       }
     }
 
@@ -170,20 +162,20 @@ export default defineComponent({
       isPlaylistOpen.value = !isPlaylistOpen.value
     }
 
-    const playTrack = (track: AlbumTrackDTO) => {
-      store.dispatch('playTrack', track)
-      store.commit('expandPlayer')
+    const playTrack = (track: AlbumTrack) => {
+      actions.playTrack(track)
+      actions.togglePlayerVisibility()
     }
 
     const removeFromPlaylist = (event: Event, id: string) => {
       event.stopPropagation()
-      removeTrackFromPlaylist(id)
+      actions.removeTrackFromPlaylist(id)
     }
 
     const keyboardPlayerKeys = {
       Space: playOrPause,
-      ArrowLeft: switchToPrevTrack,
-      ArrowRight: switchToNextTrack,
+      ArrowLeft: actions.switchToPrevTrack,
+      ArrowRight: actions.switchToNextTrack,
       ArrowUp: volumeUp,
       ArrowDown: volumeDown
     }
@@ -194,7 +186,7 @@ export default defineComponent({
         const inputTags = ['TEXTAREA', 'INPUT', 'BUTTON']
         const isInputTags = inputTags.includes((event.target as HTMLInputElement).tagName)
 
-        if (keyboardPlayerKeys[keyCode] && !isInputTags && playingTrack.value._id) {
+        if (keyboardPlayerKeys[keyCode] && !isInputTags && getters.playingTrack.value?._id) {
           keyboardPlayerKeys[keyCode]()
         }
       })
@@ -208,14 +200,13 @@ export default defineComponent({
     onUnmounted(() => keyboardNavHandlerDestroy())
 
     return {
-      isPlayerExpanded,
-      collapseExpandPlayer,
-      currentPlaylistTracks,
+      playingTrack: getters.playingTrack,
+      isPlayerExpanded: getters.isPlayerExpanded,
+      currentPlaylistTracks: getters.currentPlaylistTracks,
       togglePlaylistState,
       removeFromPlaylist,
       playTrack,
       trackTime,
-      playingTrack,
       isPlaylistOpen,
       isPlaying,
       dragOptions,

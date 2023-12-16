@@ -1,6 +1,6 @@
 <template>  
   <button
-    v-if="playingTrack.isOnPause"
+    v-if="playingTrack?.isOnPause"
     class="player__play"
     @click="continuePlay"  
   >
@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { usePlayer } from '~/hooks/usePlayer'
+import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
@@ -26,18 +26,18 @@ export default defineComponent({
   },
 
   setup() {
-    const { playingTrack, store } = usePlayer()
+    const { actions, getters } = store
 
     const setTrackOnPause = () => {
-      store.commit('setTrackOnPause')
+      actions.setTrackOnPause()
     }
 
     const continuePlay = () => {
-      store.commit('continuePlay')
+      actions.continuePlay()
     }
 
     return {
-      playingTrack,
+      playingTrack: getters.playingTrack.value,
       setTrackOnPause,
       continuePlay
     }

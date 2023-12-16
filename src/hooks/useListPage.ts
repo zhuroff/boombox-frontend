@@ -1,13 +1,14 @@
 import { ComputedRef, Ref, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ListPageResponse, Pagination, RequestConfig, SortingValue } from '~/types/Common'
+import { Pagination, RequestConfig, SortingValue } from '~/types/Common'
 import dbServices from '~/services/database.services'
+import { ListPageResponse } from '~/types/ReqRes'
 
-export const useListPage = <T>() => {
+export const useListPage = <T, C>(Class: new (prop: T) => C) => {
   const { name, query } = useRoute()
   const router = useRouter()
   const isDataFetched = ref(false)
-  const entities = ref<T[]>([]) as Ref<T[]>
+  const entities = ref<C[]>([]) as Ref<C[]>
   const pageSorting = ref<SortingValue>({ title: 1 })
   const pagePagination = ref<Pagination>({
     page: Number(query.page) || 1,
@@ -70,7 +71,7 @@ export const useListPage = <T>() => {
       const { docs, pagination } = await dbServices.getEntityList<ListPageResponse<T>>(
         pageStateConfig.value, entityType
       )
-      entities.value = docs
+      entities.value = docs.map((doc) => new Class(doc))
       pagePagination.value = Object.assign(pagePagination.value, pagination)
     } catch (error) {
       console.error(error)

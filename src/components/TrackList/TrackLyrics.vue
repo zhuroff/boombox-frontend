@@ -83,10 +83,9 @@
 <script lang="ts">
 
 import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 import { useLocales } from '~/hooks/useLocales'
 import { TrackLyricsResponse } from '~/types/Track'
+import store from '~/store'
 import Button from '~/components/Button.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Preloader from '~/components/Preloader.vue'
@@ -113,7 +112,7 @@ export default defineComponent({
 
   setup(props) {
     const { lang } = useLocales()
-    const store = useStore(key)
+    const { actions } = store
     const lyrics: Ref<null | string> = ref(null)
     const expandedLyrics: Ref<null | number> = ref(null)
     const isFetching = ref(false)
@@ -139,7 +138,7 @@ export default defineComponent({
     const setNotFoundLyricsError = (error: { message: string }) => {
       isFetching.value = false
 
-      store.commit('setSnackbarMessage', {
+      actions.setSnackbarMessage({
         message: error.message,
         type: 'error'
       })
@@ -167,8 +166,8 @@ export default defineComponent({
       TrackServices.saveLyrics(props.id, payload)
         .then((message) => {
           if (isConfirm) {
-            store.commit('setSnackbarMessage', {
-              message,
+            actions.setSnackbarMessage({
+              message: String(message),
               type: 'success'
             })
           }
@@ -199,7 +198,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
@@ -312,5 +310,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

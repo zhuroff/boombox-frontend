@@ -35,10 +35,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
-import { usePlayer } from '~/hooks/usePlayer'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import store from '~/store'
+import AlbumTrack from 'classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
 export default defineComponent({
@@ -48,28 +48,29 @@ export default defineComponent({
   },
   props: {
     track: {
-      type: Object as PropType<AlbumTrackDTO>,
+      type: Object as PropType<AlbumTrack>,
       required: true
     },
   },
   setup(props) {
     const { lang } = useLocales()
-    const { playTrackNext, addToEndOfList, removeTrackFromPlaylist, currentPlaylistTracks } = usePlayer()
+    const { actions, getters } = store
+    
     const isOutAlbumAdded = computed(() => (
-      currentPlaylistTracks.value.some(({ _id }) => _id === props.track._id)
+      getters.currentPlaylistTracks.value.some(({ _id }) => _id === props.track._id)
     ))
 
     const excludeTrack = () => {
-      removeTrackFromPlaylist(props.track._id)
+      actions.removeTrackFromPlaylist(props.track._id)
     }
 
     return {
       lang,
       excludeTrack,
-      playTrackNext,
-      addToEndOfList,
       isOutAlbumAdded,
-      removeTrackFromPlaylist
+      playTrackNext: actions.playTrackNext,
+      addToEndOfList: actions.addToEndOfList,
+      removeTrackFromPlaylist: actions.removeTrackFromPlaylist
     }
   }
 })

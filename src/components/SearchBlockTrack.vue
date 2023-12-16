@@ -1,6 +1,6 @@
 <template>
   <div class="input-search__results-track">
-    <img :src="track.cover" :alt="track.inAlbum.title">
+    <img :src="track?.coverURL || '/img/album.webp'" :alt="track.inAlbum.title">
     <div>
       <strong>{{ track.title }}</strong>
       <span>{{ track.artist.title }} - {{ track.inAlbum.title }}</span>
@@ -41,12 +41,12 @@
 
 <script lang="ts">
 import { PropType, computed, defineComponent, ref } from 'vue'
-import { TrackResponse } from '~/types/Track'
-import { usePlayer } from '~/hooks/usePlayer'
 import { useLocales } from '~/hooks/useLocales'
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import store from '~/store'
+import AlbumTrack from '~/classes/AlbumTrack'
 import TrackItemPlay from '~/components/TrackList/TrackItemPlay.vue'
 import Button from '~/components/Button.vue'
+import { TrackRes } from '~/types/ReqRes'
 
 export default defineComponent({
   name: 'SearchBlockTrack',
@@ -56,27 +56,27 @@ export default defineComponent({
   },
   props: {
     track: {
-      type: Object as PropType<TrackResponse>,
+      type: Object as PropType<TrackRes>,
       required: true
     }
   },
   setup({ track }) {
     const { lang } = useLocales()
-    const { playTrackNext, addToEndOfList, currentPlaylistTracks, removeTrackFromPlaylist } = usePlayer()
+    const { actions, getters } = store
     const trackToPlay = computed(() => (
-      new AlbumTrackDTO(track, 0, track.cover || '', track.inAlbum.period, true)
+      new AlbumTrack(track, 0, track.inAlbum.period, track.coverURL, true)
     ))
     const isOutAlbumAdded = computed(() => (
-      currentPlaylistTracks.value.some(({ _id }) => _id === trackToPlay.value._id)
+      getters.currentPlaylistTracks.value.some(({ _id }) => _id === trackToPlay.value._id)
     ))
 
     return {
+      lang,
       trackToPlay,
-      playTrackNext,
-      addToEndOfList,
       isOutAlbumAdded,
-      removeTrackFromPlaylist,
-      lang
+      playTrackNext: actions.playTrackNext,
+      addToEndOfList: actions.addToEndOfList,
+      removeTrackFromPlaylist: actions.removeTrackFromPlaylist
     }
   }
 })

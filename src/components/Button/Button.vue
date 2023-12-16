@@ -1,6 +1,6 @@
 <template>
   <button
-    :id="id || null"
+    :id="id || undefined"
     :class="[{ '--fullwidth' : isFullWidth }, { '--filled' : isFilled }, `--${mode} button`]"
     :type="type"
     :disabled="isDisabled || isLoading"
@@ -41,7 +41,8 @@ export default defineComponent({
     type: {
       type: String,
       required: false,
-      default: 'button'
+      default: 'button',
+      validator: (value: string) => (['button', 'submit', 'reset'].includes(value))
     },
 
     mode: {

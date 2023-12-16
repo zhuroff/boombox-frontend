@@ -109,13 +109,13 @@
 
 <script lang="ts">
 import { PropType, computed, defineComponent, ref } from 'vue'
-import { BasicEntity, WikiSearchResult } from '~/types/Common'
+import { BasicEntity, Pagination, WikiSearchResult } from '~/types/Common'
 import { Compilation } from '~/types/Compilation'
 import { useLocales } from '~/hooks/useLocales'
 import { useSearch } from '~/hooks/useSearch'
-import { usePlayer } from '~/hooks/usePlayer'
 import { useListPage } from '~/hooks/useListPage'
 import { detectLocale } from '~/utils'
+import store from '~/store'
 import wiki from 'wikipedia'
 import Button from './Button.vue'
 import Overlay from './Overlay.vue'
@@ -173,11 +173,11 @@ export default defineComponent({
       default: true
     }
   },
-  setup({ artist, title }) {
+  setup({ id, artist, title }) {
     const { lang } = useLocales()
-    const { playingTrack, store } = usePlayer()
+    const { actions, getters } = store
     const { searchSubmit, results } = useSearch()
-    const { fetchData, isDataFetched, entities, pagePagination } = useListPage<Compilation>()
+    // const { fetchData, isDataFetched, entities, pagePagination } = useListPage<Compilation>()
     const isActionsOpens = ref(false)
     const isWikiLoading = ref(false)
     const isCollectionLoading = ref(false)
@@ -186,27 +186,38 @@ export default defineComponent({
     const wikiFrameResults = ref<WikiSearchResult[] | undefined>(undefined)
 
     const isPlaying = computed(() => (
-      playingTrack.value._id &&
-      !playingTrack.value.isOnPause &&
-      !playingTrack.value.isOnLoading
+      getters.playingTrack.value?._id &&
+      !getters.playingTrack.value.isOnPause &&
+      !getters.playingTrack.value.isOnLoading
     ))
 
     const isPaused = computed(() => (
-      playingTrack.value._id &&
-      playingTrack.value.isOnPause
+      getters.playingTrack.value?._id &&
+      getters.playingTrack.value.isOnPause
     ))
 
     const playAlbum = () => {
-      if (playingTrack.value._id) {
-        store.commit('continuePlay')
-      } else {
-        store.dispatch('playTrack', store.getters.currentPlaylistTracks[0])
-        store.commit('expandPlayer')
+      if (getters.playlists.value.current?._id === id) {
+        if (getters.playingTrack.value) {
+          actions.continuePlay()
+          return
+        }
+      }
+
+      const actualPlaylist = getters.playlists.value.current?._id === id
+        ? getters.playlists.value.current
+        : getters.playlists.value.reserved
+      
+      const trackToPlay = actualPlaylist?.tracks.find(({ isDisabled }) => !isDisabled)
+
+      if (trackToPlay) {
+        actions.playTrack(trackToPlay)
+        actions.togglePlayerVisibility()
       }
     }
 
     const pauseTrack = () => {
-      store.commit('setTrackOnPause')
+      actions.setTrackOnPause()
     }
 
     const getWikiInfo = async (searchParam: string | number = title) => {
@@ -250,7 +261,7 @@ export default defineComponent({
 
     const wikiErrorHandler = (error: unknown) => {
       closeWikiModal()
-      store.commit('setSnackbarMessage', {
+      actions.setSnackbarMessage({
         message: lang('wiki.notFound'),
         type: 'error'
       })
@@ -264,8 +275,8 @@ export default defineComponent({
     }
 
     const closeCollectionModal = () => {
-      isCollectionLoading.value = false
-      isDataFetched.value = false
+      // isCollectionLoading.value = false
+      // isDataFetched.value = false
     }
 
     const resetWikiData = () => {
@@ -274,14 +285,14 @@ export default defineComponent({
     }
 
     const openCollectionsModal = async () => {
-      isCollectionLoading.value = true
-      isActionsOpens.value = false
-      await fetchData('collections')
-      isCollectionLoading.value = false
+      // isCollectionLoading.value = true
+      // isActionsOpens.value = false
+      // await fetchData('collections')
+      // isCollectionLoading.value = false
     }
 
     const addAlbumToPlaylist = () => {
-      store.commit('addAlbumToPlaylist')
+      actions.addAlbumToPlaylist()
       isActionsOpens.value = false
     }
 
@@ -305,9 +316,9 @@ export default defineComponent({
       results,
       isCollectionLoading,
       closeCollectionModal,
-      isCollectionFetched: isDataFetched,
-      collectionsPagination: pagePagination,
-      collections: entities
+      isCollectionFetched: false, // isDataFetched,
+      collectionsPagination: {} as Pagination, // pagePagination,
+      collections: [] // entities
     }
   }
 })

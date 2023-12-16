@@ -1,5 +1,5 @@
 <template>
-  <AlbumPageTemplate
+  <!-- <AlbumPageTemplate
     :isDataFetched="isDataFetched"
     :album="entity"
     :booklet="booklet"
@@ -24,20 +24,21 @@
       :totalCounts="totalCounts"
       :getRandomAlbum="getRandom"
     />
-  </AlbumPageTemplate>
+  </AlbumPageTemplate> -->
+  <div></div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
+import { useState } from '~/hooks/useState'
 import { conjugate } from '~/utils'
-import { AlbumPage } from '~/types/Album'
 import { useAlbumPage } from '~/hooks/useAlbumPage'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useLocales } from '~/hooks/useLocales'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
+import AlbumPage from '~/classes/AlbumPage'
+import { AlbumPageRes } from '~/types/ReqRes'
 
 export default defineComponent({
   name: 'AlbumPage',
@@ -56,7 +57,7 @@ export default defineComponent({
       closeBookletModal,
       bookletPageChanged,
       route
-    } = useAlbumPage<AlbumPage>()
+    } = useAlbumPage<AlbumPageRes, AlbumPage>(AlbumPage)
 
     const {
       fetchDiscogsInfo,
@@ -68,8 +69,8 @@ export default defineComponent({
       discogsFilters
     } = useDiscogs()
 
+    const { actions } = useState()
     const { lang } = useLocales()
-    const store = useStore(key)
     const entityType = ref('albums')
 
     const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
@@ -91,11 +92,11 @@ export default defineComponent({
     }
 
     const totalCounts = computed(() => {
-      const isAllTracksHaveDuration = entity.tracks?.every((track) => (
+      const isAllTracksHaveDuration = entity.value.tracks?.every((track) => (
         Number(track.duration)
       ))
       return `
-        ${entity.tracks?.length} ${conjugate('tracks', entity.tracks?.length)}:
+        ${entity.value.tracks?.length} ${conjugate('tracks', entity.tracks?.length)}:
         ${isAllTracksHaveDuration ? calcTotalTracksTime(entity.tracks) : lang('unknownTime')}.
         ${lang('listenedTracks')} ${entity.tracks?.reduce((acc, { listened }) => (
           acc + (Number(listened) || 0)
@@ -110,19 +111,20 @@ export default defineComponent({
 
     const bookletHandler = async () => {
       if (booklet.isEmpty) {
-        store.commit('setSnackbarMessage', {
+        actions.setSnackbarMessage({
           message: lang('bookletNotFound'),
           type: 'error'
         })
+        useState
         return false
       }
 
       await fetchBooklet(entity.folderName)
 
       if (booklet.isEmpty) {
-        store.commit('setSnackbarMessage', {
+        actions.setSnackbarMessage({
           message: lang('bookletNotFound'),
-          type: 'success'
+          type: 'error'
         })
       }
     }

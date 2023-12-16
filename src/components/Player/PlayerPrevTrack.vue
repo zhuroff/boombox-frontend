@@ -11,7 +11,7 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import { usePlayer } from '~/hooks/usePlayer'
+import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
@@ -20,18 +20,13 @@ export default defineComponent({
   },
 
   setup() {
-    const {
-      isPrevTrackExist,
-      switchToPrevTrack
-    } = usePlayer()    
+    const { actions, getters } = store
 
     return {
-      isPrevTrackExist,
-      switchToPrevTrack
+      isPrevTrackExist: getters.isPrevTrackExists,
+      switchToPrevTrack: actions.switchToPrevTrack
     }
   },
 })
 
 </script>
-
-../../hooks/usePlayer

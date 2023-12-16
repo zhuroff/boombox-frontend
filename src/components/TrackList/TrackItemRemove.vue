@@ -14,7 +14,6 @@
 <script>
 
 // import { computed } from 'vue'
-import { useStore } from 'vuex'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default {
@@ -23,8 +22,6 @@ export default {
   },
 
   setup(props, { emit }) {
-    const store = useStore()
-
     const removeTrackFromPlaylist = () => {
       // const playlist = computed(() => store.getters.playlist)
 

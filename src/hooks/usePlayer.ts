@@ -1,105 +1,104 @@
-import { ComputedRef, computed } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
-import { AlbumTrackDTO, PlayerTrackDTO } from '~/dto/AlbumTrackDTO'
+// import { ComputedRef, computed } from 'vue'
+// import { useState } from './useState'
 
-export const usePlayer = () => {
-  const store = useStore(key)
 
-  const isPlayerExpanded: ComputedRef<boolean> = computed(() => (
-    store.getters.isPlayerExpanded
-  ))
+// export const usePlayer = () => {
+//   const store = useState()
 
-  const currentPlaylistTracks: ComputedRef<AlbumTrackDTO[]> = computed(() => (
-    store.getters.currentPlaylistTracks
-  ))
+//   const isPlayerExpanded: ComputedRef<boolean> = computed(() => (
+//     store.getters.isPlayerExpanded
+//   ))
 
-  const playingTrack: ComputedRef<PlayerTrackDTO> = computed(() => (
-    store.getters.playingTrack
-  ))
+//   const currentPlaylistTracks: ComputedRef<AlbumTrackDTO[]> = computed(() => (
+//     store.getters.currentPlaylistTracks
+//   ))
 
-  const activePlaylistTracks = computed(() => (
-    currentPlaylistTracks.value
-      .filter((track) => !track.isDisabled)
-  ))
+//   const playingTrack: ComputedRef<PlayerTrackDTO> = computed(() => (
+//     store.getters.playingTrack
+//   ))
 
-  const collapseExpandPlayer = () => {
-    store.commit('expandPlayer')
-  }
+//   const activePlaylistTracks = computed(() => (
+//     currentPlaylistTracks.value
+//       .filter((track) => !track.isDisabled)
+//   ))
 
-  const isNextTrackExist = computed(() => {
-    const playingTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track._id === playingTrack.value._id)
+//   const collapseExpandPlayer = () => {
+//     store.commit('expandPlayer')
+//   }
 
-    return playingTrackIndex < activePlaylistTracks.value.length - 1
-  })
+//   const isNextTrackExist = computed(() => {
+//     const playingTrackIndex = activePlaylistTracks.value
+//       .findIndex((track) => track._id === playingTrack.value._id)
 
-  const switchToNextTrack = () => {
-    const currentTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track._id === playingTrack.value._id)
+//     return playingTrackIndex < activePlaylistTracks.value.length - 1
+//   })
 
-    const nextTrack = activePlaylistTracks.value[currentTrackIndex + 1]
+//   const switchToNextTrack = () => {
+//     const currentTrackIndex = activePlaylistTracks.value
+//       .findIndex((track) => track._id === playingTrack.value._id)
 
-    if (nextTrack) {
-      store.dispatch('playTrack', nextTrack)
-    }
-  }
+//     const nextTrack = activePlaylistTracks.value[currentTrackIndex + 1]
 
-  const isPrevTrackExist = computed(() => {
-    const playingTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track._id === playingTrack.value._id)
+//     if (nextTrack) {
+//       store.dispatch('playTrack', nextTrack)
+//     }
+//   }
 
-    return playingTrackIndex > 0
-  })
+//   const isPrevTrackExist = computed(() => {
+//     const playingTrackIndex = activePlaylistTracks.value
+//       .findIndex((track) => track._id === playingTrack.value._id)
 
-  const switchToPrevTrack = () => {
-    const currentTrackIndex = activePlaylistTracks.value
-      .findIndex((track) => track._id === playingTrack.value._id)
+//     return playingTrackIndex > 0
+//   })
 
-    const prevTrack = activePlaylistTracks.value[currentTrackIndex - 1]
+//   const switchToPrevTrack = () => {
+//     const currentTrackIndex = activePlaylistTracks.value
+//       .findIndex((track) => track._id === playingTrack.value._id)
 
-    if (prevTrack) {
-      store.dispatch('playTrack', prevTrack)
-    }
-  }
+//     const prevTrack = activePlaylistTracks.value[currentTrackIndex - 1]
 
-  const playTrackNext = (track: AlbumTrackDTO) => {
-    const index = currentPlaylistTracks.value.findIndex((track) => (
-      track._id === playingTrack.value._id
-    ))
+//     if (prevTrack) {
+//       store.dispatch('playTrack', prevTrack)
+//     }
+//   }
 
-    addTrackToPlaylist(index === -1 ? 1 : index + 1, track)
-  }
+//   const playTrackNext = (track: AlbumTrackDTO) => {
+//     const index = currentPlaylistTracks.value.findIndex((track) => (
+//       track._id === playingTrack.value._id
+//     ))
 
-  const addToEndOfList = (track: AlbumTrackDTO) => {
-    const index = currentPlaylistTracks.value.length
-    addTrackToPlaylist(index, track)
-  }
+//     addTrackToPlaylist(index === -1 ? 1 : index + 1, track)
+//   }
 
-  const addTrackToPlaylist = (order: number, track: AlbumTrackDTO) => {
-    store.commit('appendTrackToPlaylist', {
-      order,
-      track
-    })
-  }
+//   const addToEndOfList = (track: AlbumTrackDTO) => {
+//     const index = currentPlaylistTracks.value.length
+//     addTrackToPlaylist(index, track)
+//   }
 
-  const removeTrackFromPlaylist = (trackID: string) => {
-    store.commit('removeTrackFromPlaylist', trackID)
-  }
+//   const addTrackToPlaylist = (order: number, track: AlbumTrackDTO) => {
+//     store.commit('appendTrackToPlaylist', {
+//       order,
+//       track
+//     })
+//   }
 
-  return {
-    isPlayerExpanded,
-    currentPlaylistTracks,
-    activePlaylistTracks,
-    playingTrack,
-    collapseExpandPlayer,
-    isNextTrackExist,
-    switchToNextTrack,
-    isPrevTrackExist,
-    switchToPrevTrack,
-    playTrackNext,
-    addToEndOfList,
-    removeTrackFromPlaylist,
-    store
-  }
-}
+//   const removeTrackFromPlaylist = (trackID: string) => {
+//     store.commit('removeTrackFromPlaylist', trackID)
+//   }
+
+//   return {
+//     isPlayerExpanded,
+//     currentPlaylistTracks,
+//     activePlaylistTracks,
+//     playingTrack,
+//     collapseExpandPlayer,
+//     isNextTrackExist,
+//     switchToNextTrack,
+//     isPrevTrackExist,
+//     switchToPrevTrack,
+//     playTrackNext,
+//     addToEndOfList,
+//     removeTrackFromPlaylist,
+//     store
+//   }
+// }
