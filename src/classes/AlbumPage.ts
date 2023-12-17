@@ -8,7 +8,7 @@ export default class AlbumPage extends AlbumItem {
   constructor(album: AlbumPageRes) {
     super(album)
     this.tracks = album.tracks.map((track, i) => (
-      new AlbumTrack(track, i + 1, album.period, album.coverURL)
+      new AlbumTrack(track, i + 1, album.period.title, album.coverURL)
     ))
   }
 }

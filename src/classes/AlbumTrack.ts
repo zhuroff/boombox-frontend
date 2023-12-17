@@ -3,26 +3,26 @@ import { TrackRes } from '~/types/ReqRes'
 import AlbumItem from './AlbumItem'
 
 export default class AlbumTrack {
-  _id: string
-  title: string
-  path: string
-  cloudURL: string
-  listened: number
-  inAlbum: Pick<AlbumItem, '_id' | 'title' | 'cloudURL' | 'folderName'>
-  inPlaylists: BasicEntity[]
-  artist: BasicEntity
-  period: BasicEntity
+  readonly _id: string
+  readonly title: string
+  readonly path: string
+  readonly cloudURL: string
+  readonly inAlbum: Pick<AlbumItem, '_id' | 'title' | 'cloudURL' | 'folderName'>
+  readonly artist: BasicEntity
+  readonly period: string
+  readonly albumCover?: string
   lyrics: string
   duration: number
   isDisabled: boolean
   order: number
-  albumCover?: string
+  listened: number
   isOutOfAlbumList: boolean
+  inPlaylists: BasicEntity[]
   
   constructor(
     track: TrackRes,
     order: number,
-    period: BasicEntity,
+    period: string,
     cover?: string,
     isOutOfAlbumList = false
   ) {

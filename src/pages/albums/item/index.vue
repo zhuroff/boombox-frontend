@@ -1,44 +1,46 @@
 <template>
-  <!-- <AlbumPageTemplate
+  <AlbumPageTemplate
     :isDataFetched="isDataFetched"
-    :album="entity"
+    :album="album"
     :booklet="booklet"
-    :entityType="entityType"
+    :relatedAlbums="relatedEntities"
     :discogsTablePayload="discogsTablePayload"
     :discogsFilters="discogsFilters"
     :discogsFiltersStates="discogsFiltersStates"
     :getBooklet="bookletHandler"
+    :getRelated="getRelated"
     @filter:update="setDiscogsFilterValue"
     @filter:reset="resetDiscogsFilters"
     @switchPagination="setDiscogsPaginationPage"
     @closeBookletModal="closeBookletModal"
-    @bookletPageChanged="(data) => bookletPageChanged(data, entity.folderName)"
+    @bookletPageChanged="(data) => bookletPageChanged(data, album.folderName)"
   >
     <AlbumHero
-      :id="entity._id"
-      :title="entity.title"
-      :artist="entity.artist"
-      :genre="entity.genre"
-      :period="entity.period"
+      :id="album._id"
+      :title="album.title"
+      :artist="album.artist"
+      :genre="album.genre"
+      :period="album.period"
       :entityType="entityType"
       :totalCounts="totalCounts"
       :getRandomAlbum="getRandom"
     />
-  </AlbumPageTemplate> -->
+  </AlbumPageTemplate>
   <div></div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
-import { useState } from '~/hooks/useState'
+import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { conjugate } from '~/utils'
-import { useAlbumPage } from '~/hooks/useAlbumPage'
+import { useSinglePage } from '~/hooks/useSinglePage'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useLocales } from '~/hooks/useLocales'
+import store from '~/store'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 import AlbumPage from '~/classes/AlbumPage'
 import { AlbumPageRes } from '~/types/ReqRes'
+import { RequestFilter } from '~/types/Common'
 
 export default defineComponent({
   name: 'AlbumPage',
@@ -49,15 +51,16 @@ export default defineComponent({
   setup() {
     const {
       fetchData,
-      entity,
       booklet,
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
+      relatedEntities,
+      getRelatedAlbums,
       closeBookletModal,
       bookletPageChanged,
       route
-    } = useAlbumPage<AlbumPageRes, AlbumPage>(AlbumPage)
+    } = useSinglePage<AlbumPageRes, AlbumPage>(AlbumPage)
 
     const {
       fetchDiscogsInfo,
@@ -69,8 +72,9 @@ export default defineComponent({
       discogsFilters
     } = useDiscogs()
 
-    const { actions } = useState()
     const { lang } = useLocales()
+    const { actions } = store
+    const album = reactive<AlbumPage>({} as AlbumPage)
     const entityType = ref('albums')
 
     const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
@@ -92,13 +96,13 @@ export default defineComponent({
     }
 
     const totalCounts = computed(() => {
-      const isAllTracksHaveDuration = entity.value.tracks?.every((track) => (
+      const isAllTracksHaveDuration = album.tracks?.every((track) => (
         Number(track.duration)
       ))
       return `
-        ${entity.value.tracks?.length} ${conjugate('tracks', entity.tracks?.length)}:
-        ${isAllTracksHaveDuration ? calcTotalTracksTime(entity.tracks) : lang('unknownTime')}.
-        ${lang('listenedTracks')} ${entity.tracks?.reduce((acc, { listened }) => (
+        ${album.tracks?.length} ${conjugate('tracks', album.tracks?.length)}:
+        ${isAllTracksHaveDuration ? calcTotalTracksTime(album.tracks) : lang('unknownTime')}.
+        ${lang('listenedTracks')} ${album.tracks?.reduce((acc, { listened }) => (
           acc + (Number(listened) || 0)
         ), 0)}
       `.trim()
@@ -109,17 +113,42 @@ export default defineComponent({
         .then((payload) => payload && fetchDiscogsInfo(payload))
     }
 
+    const getRelated = () => {
+      const relatedAlbumsConfig: RequestFilter[] = [
+        {
+          from: 'artists',
+          key: 'artist._id',
+          value: album.artist._id,
+          excluded: {
+            _id: album._id
+          }
+        },
+        {
+          from: 'genres',
+          key: 'genre._id',
+          value: album.genre._id,
+          excluded: {
+            _id: album._id,
+            'artist._id': album.artist._id
+          }
+        }
+      ]
+
+      relatedAlbumsConfig.forEach((config) => {
+        getRelatedAlbums(config, entityType.value)
+      })
+    }
+
     const bookletHandler = async () => {
       if (booklet.isEmpty) {
         actions.setSnackbarMessage({
           message: lang('bookletNotFound'),
           type: 'error'
         })
-        useState
         return false
       }
 
-      await fetchBooklet(entity.folderName)
+      await fetchBooklet(album.folderName)
 
       if (booklet.isEmpty) {
         actions.setSnackbarMessage({
@@ -131,13 +160,18 @@ export default defineComponent({
 
     onMounted(() => {
       fetchData(entityType.value)
-        .then((payload) => payload && fetchDiscogsInfo(payload))
+        .then((payload) => {
+          if (payload) {
+            Object.assign(album, payload)
+            fetchDiscogsInfo(payload)
+          }
+        })
     })
 
     watch(
       route,
       (newValue) => {
-        if (newValue.params.id && newValue.params.id !== entity._id) {
+        if (newValue.params.id && newValue.params.id !== album._id) {
           fetchData(entityType.value)
             .then((payload) => payload && fetchDiscogsInfo(payload))
         }
@@ -147,11 +181,13 @@ export default defineComponent({
 
     return {
       isDataFetched,
-      entity,
+      album,
       booklet,
       entityType,
+      getRelated,
       bookletHandler,
       getRandomAlbum,
+      relatedEntities,
       closeBookletModal,
       discogsTablePayload,
       discogsFiltersStates,

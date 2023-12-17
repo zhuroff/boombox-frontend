@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <!-- <transition name="fade">
+    <transition name="fade">
       <Preloader
         v-if="!isDataFetched"
         mode="light"
@@ -48,7 +48,7 @@
             </div>
           </div>
           <div
-            v-if="relatedAlbums.get('artists')?.length"
+            v-if="relatedAlbums?.get('artists')?.length"
             class="album__related"
           >
             <div class="album__related-title">
@@ -65,7 +65,7 @@
             />
           </div>
           <div 
-            v-if="relatedAlbums.get('genres')?.length"
+            v-if="relatedAlbums?.get('genres')?.length"
             class="album__related"
           >
             <div class="album__related-title">
@@ -83,18 +83,17 @@
           </div>
         </div>
       </div>
-    </transition> -->
+    </transition>
   </section>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, computed, watchEffect } from 'vue'
-import { AlbumPage, BookletSlideState } from '~/types/Album'
+import { PropType, defineComponent, watchEffect } from 'vue'
+import { BookletSlideState } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
-import { RequestFilter } from '~/types/Common'
 import { BookletState } from '~/states/BookletState'
-import { useAlbumPage } from '~/hooks/useAlbumPage'
 import { useLocales } from '~/hooks/useLocales'
+import AlbumPage from '~/classes/AlbumPage'
 import Preloader from '~/components/Preloader.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import Card from '~/components/Cards/Card.vue'
@@ -102,6 +101,7 @@ import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
+import AlbumCardBox from '~/classes/AlbumCardBox'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
@@ -139,8 +139,12 @@ export default defineComponent({
       type: Object as PropType<Record<keyof DiscogsFilter, null | string>>,
       required: true
     },
-    entityType: {
-      type: String,
+    relatedAlbums: {
+      type: Map as PropType<Map<string, AlbumCardBox[]>>,
+      requried: false
+    },
+    getRelated: {
+      type: Function as PropType<() => void>,
       required: true
     },
     getBooklet: {
@@ -148,39 +152,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ album, entityType }, { emit }) {
-    const {
-      getRelatedAlbums,
-      relatedEntities,
-    } = useAlbumPage<AlbumPage>()
-    const { lang } = useLocales()
-    const relatedAlbums = computed(() => relatedEntities)
-
-    const getRelated = () => {
-      const relatedAlbumsConfig: RequestFilter[] = [
-        {
-          from: 'artists',
-          key: 'artist._id',
-          value: album.artist._id,
-          excluded: {
-            _id: album._id
-          }
-        },
-        {
-          from: 'genres',
-          key: 'genre._id',
-          value: album.genre._id,
-          excluded: {
-            _id: album._id,
-            'artist._id': album.artist._id
-          }
-        }
-      ]
-
-      relatedAlbumsConfig.forEach((config) => {
-        getRelatedAlbums(config, entityType)
-      })
-    }
+  setup({ album, getRelated }, { emit }) {
+    const { lang } = useLocales()    
 
     const updateDiscogsFilter = (payload: [keyof DiscogsFilter, string]) => {
       emit('filter:update', payload)
@@ -205,7 +178,6 @@ export default defineComponent({
     watchEffect(() => album._id && getRelated())
 
     return {
-      relatedAlbums,
       updateDiscogsFilter,
       resetDiscogsFilters,
       switchPagination,

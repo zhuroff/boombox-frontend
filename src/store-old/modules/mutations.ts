@@ -22,20 +22,20 @@ export default {
   //   state.isPlayerExpanded = !state.isPlayerExpanded
   // },
 
-  setPlayerPlaylist: <T extends AlbumPage & PlaylistPage>(state: any /* AppStateInterface */, data: T) => {
-    if (!state.currentPlaylist._id || !state.playingTrack._id) {
-      state.currentPlaylist = data
-    } else if (state.currentPlaylist._id !== data._id) {
-      state.reservedPlaylist = data
-    }
-  },
+  // setPlayerPlaylist: <T extends AlbumPage & PlaylistPage>(state: any /* AppStateInterface */, data: T) => {
+  //   if (!state.currentPlaylist._id || !state.playingTrack._id) {
+  //     state.currentPlaylist = data
+  //   } else if (state.currentPlaylist._id !== data._id) {
+  //     state.reservedPlaylist = data
+  //   }
+  // },
 
-  addAlbumToPlaylist: (state: any /* AppStateInterface */) => {
-    state.currentPlaylist.tracks = [
-      ...state.currentPlaylist.tracks,
-      ...state.reservedPlaylist.tracks
-    ]
-  },
+  // addAlbumToPlaylist: (state: any /* AppStateInterface */) => {
+  //   state.currentPlaylist.tracks = [
+  //     ...state.currentPlaylist.tracks,
+  //     ...state.reservedPlaylist.tracks
+  //   ]
+  // },
 
   setPlayingStation: (state: any /* AppStateInterface */, station: RadioStationResponse) => {
     if (state.playingTrack._id === station.stationuuid) {

@@ -8,7 +8,6 @@ export const useListPage = <T, C>(Class: new (prop: T) => C) => {
   const { name, query } = useRoute()
   const router = useRouter()
   const isDataFetched = ref(false)
-  const entities = ref<C[]>([]) as Ref<C[]>
   const pageSorting = ref<SortingValue>({ title: 1 })
   const pagePagination = ref<Pagination>({
     page: Number(query.page) || 1,
@@ -71,8 +70,10 @@ export const useListPage = <T, C>(Class: new (prop: T) => C) => {
       const { docs, pagination } = await dbServices.getEntityList<ListPageResponse<T>>(
         pageStateConfig.value, entityType
       )
-      entities.value = docs.map((doc) => new Class(doc))
+      // entities.value = docs.map((doc) => new Class(doc))
+
       pagePagination.value = Object.assign(pagePagination.value, pagination)
+      return docs.map((doc) => new Class(doc))
     } catch (error) {
       console.error(error)
     } finally {
@@ -91,7 +92,6 @@ export const useListPage = <T, C>(Class: new (prop: T) => C) => {
   return {
     fetchData,
     isDataFetched,
-    entities,
     pagePagination,
     // sortingOptions,
     switchPagination,

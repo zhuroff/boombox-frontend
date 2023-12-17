@@ -4,6 +4,8 @@ import { usePlayerActions } from './private.player';
 import databaseServices from '~/services/database.services';
 import AlbumTrack from '~/classes/AlbumTrack';
 import PlayerTrack from '~/classes/PlayerTrack';
+import AlbumPage from '~/classes/AlbumPage';
+import CompilationEntity from '~/classes/CompilationEntity'
 
 export const useActions = (state: AppStateInterface) => {
   const {
@@ -49,6 +51,14 @@ export const useActions = (state: AppStateInterface) => {
 
   const addTrackToPlaylist = (prop: { track: AlbumTrack, order: number }) => {
     appendTrackToPlaylist(prop)
+  }
+
+  const setPlayerPlaylist = (data: AlbumPage | CompilationEntity<AlbumTrack>) => {
+    if (!state.currentPlaylist || !state.playingTrack) {
+      state.currentPlaylist = data
+    } else if (state.currentPlaylist._id !== data._id) {
+      state.reservedPlaylist = data
+    }
   }
 
   const addAlbumToPlaylist = () => {
@@ -205,6 +215,7 @@ export const useActions = (state: AppStateInterface) => {
     continuePlay,
     setPosition,
     addTrackToPlaylist,
+    setPlayerPlaylist,
     addAlbumToPlaylist,
     removeTrackFromPlaylist,
     setSnackbarMessage,

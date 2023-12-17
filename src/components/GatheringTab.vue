@@ -1,8 +1,8 @@
 <template>
   <li
-    v-if="compilations && id"
+    v-if="gathering && id"
     :class="[{ '--selected' : isSelected }, 'entity-tabs__item']"
-    @click="addToCompilation"
+    @click="addToGathering"
   >
     <div class="entity-tabs__tab">
       <img
@@ -36,14 +36,15 @@
 
 <script lang="ts">
 import { PropType, computed, defineComponent } from 'vue'
-import { Compilation } from '~/types/Compilation'
 import { useLocales } from '~/hooks/useLocales'
 import { hostString } from '~/utils'
 import TextInput from './TextInput.vue'
 import Button from './Button.vue'
+import CollectionEntity from '~/classes/CollectionEntity'
+import CompilationEntity from '~/classes/CompilationEntity'
 
 export default defineComponent({
-  name: 'CompilationTab',
+  name: 'GatheringTab',
   components: {
     TextInput,
     Button
@@ -53,8 +54,8 @@ export default defineComponent({
       type: String,
       required: false
     },
-    compilations: {
-      type: Array as PropType<Compilation[]>,
+    gathering: {
+      type: Array as PropType<(CollectionEntity<string> | CompilationEntity<string>)[]>,
       required: false
     },
     avatar: {
@@ -74,16 +75,18 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ compilations, id, entityID }, { emit }) {
+  setup({ gathering, id, entityID }, { emit }) {
     const { lang } = useLocales()
     const isSelected = computed(() => (
-      compilations && compilations.some(({ _id, albums }) => (
-        _id === id && albums.includes(entityID)
-      ))
+      gathering && gathering.some((el) => {
+        const isIdsEquals = el._id === id
+        const entities = el instanceof CompilationEntity ? el.tracks : el.albums
+        return isIdsEquals && entities.includes(entityID)
+      })
     ))
 
     const host = (pathname: string) => hostString(pathname)
-    const addToCompilation = () => emit('addToCompilation')
+    const addToGathering = () => emit('addToGathering')
     const createCompilation = () => emit('createNewCompilation')
     const setCompilationName = (value: string) => emit('setCompilationName', value)
 
@@ -93,7 +96,7 @@ export default defineComponent({
       isSelected,
       createCompilation,
       setCompilationName,
-      addToCompilation
+      addToGathering
     }
   }
 })
@@ -143,4 +146,4 @@ export default defineComponent({
     display: flex;
   }
 }
-</style>
+</style>~/classes/CompilationEntity~/classes/CollectionEntity

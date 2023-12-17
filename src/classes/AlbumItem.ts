@@ -2,15 +2,15 @@ import { BasicEntity } from '~/types/Common'
 import { AlbumItemRes } from '~/types/ReqRes'
 
 export default class AlbumItem {
-  _id: string
-  title: string
-  cloudURL: string
-  folderName: string
-  inCollections: BasicEntity[]
-  artist: BasicEntity
-  genre: BasicEntity
-  period: BasicEntity
-  coverURL?: string
+  readonly _id: string
+  readonly title: string
+  readonly cloudURL: string
+  readonly folderName: string
+  readonly inCollections: BasicEntity[]
+  readonly artist: BasicEntity
+  readonly genre: BasicEntity
+  readonly period: BasicEntity
+  readonly coverURL?: string
 
   constructor(album: AlbumItemRes) {
     this._id = album._id

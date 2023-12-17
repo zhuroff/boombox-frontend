@@ -2,6 +2,7 @@ import { computed, reactive, ref } from 'vue'
 import { DiscogsFilter, DiscogsQueryConfig, DiscogsReleaseRow, DiscogsTablePayload, DiscogsTableSchema } from '~/types/Discogs'
 import { Pagination } from '~/types/Common'
 import discogsServices from '~/services/discogs.services'
+import AlbumPage from '~/classes/AlbumPage'
 
 export const useDiscogs = () => {
   const isDiscogsFetched = ref(false)
@@ -96,13 +97,17 @@ export const useDiscogs = () => {
     })
   }
 
-  const fetchDiscogsInfo = async (config: Omit<DiscogsQueryConfig, 'page'>) => {
+  const fetchDiscogsInfo = async (entity: AlbumPage) => {
     isDiscogsFetched.value = false
     discogsData.value = []
     resetDiscogsFilters()
     setDiscogsPaginationPage(1)
 
     try {
+      const config = {
+        artist: entity.artist.title,
+        album: entity.title
+      }
       const data = await discogsServices.getData({ ...config, page: 1 })
       discogsData.value = data
       setDiscogsFilters(data)
