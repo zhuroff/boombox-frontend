@@ -60,10 +60,10 @@ import { Pagination, PaginationConfig } from '~/types/Common'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
-  name: 'Paginator',  components: {
+  name: 'Paginator', 
+  components: {
     Sprite
   },
-
   props: {
     pagination: {
       type: Object as PropType<Pagination>,

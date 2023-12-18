@@ -3,17 +3,18 @@
     :isDataFetched="isDataFetched"
     :album="album"
     :booklet="booklet"
-    :relatedAlbums="relatedEntities"
+    :relatedAlbums="relatedAlbums"
     :discogsTablePayload="discogsTablePayload"
     :discogsFilters="discogsFilters"
     :discogsFiltersStates="discogsFiltersStates"
     :getBooklet="bookletHandler"
-    :getRelated="getRelated"
     @filter:update="setDiscogsFilterValue"
     @filter:reset="resetDiscogsFilters"
     @switchPagination="setDiscogsPaginationPage"
     @closeBookletModal="closeBookletModal"
-    @bookletPageChanged="(data) => bookletPageChanged(data, album.folderName)"
+    @bookletPageChanged="(data) => {
+      bookletPageChanged(data, album.folderName, album.cloudURL)
+    }"
   >
     <AlbumHero
       v-if="album._id"
@@ -31,7 +32,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { AlbumPageRes } from '~/types/ReqRes'
+import { RequestFilter } from '~/types/Common'
+import { RelatedAlbums } from '~/types/Album'
 import { conjugate } from '~/utils'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useDiscogs } from '~/hooks/useDiscogs'
@@ -40,8 +44,7 @@ import store from '~/store'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 import AlbumPage from '~/classes/AlbumPage'
-import { AlbumPageRes } from '~/types/ReqRes'
-import { RequestFilter } from '~/types/Common'
+import AlbumItem from '~/classes/AlbumItem'
 
 export default defineComponent({
   name: 'AlbumPage',
@@ -56,7 +59,6 @@ export default defineComponent({
       isDataFetched,
       fetchBooklet,
       getRandomAlbum,
-      relatedEntities,
       getRelatedAlbums,
       closeBookletModal,
       bookletPageChanged,
@@ -74,8 +76,9 @@ export default defineComponent({
     } = useDiscogs()
 
     const { lang } = useLocales()
-    const { actions } = store
-    const album = reactive<AlbumPage>({} as AlbumPage)
+    const { actions, getters } = store
+    const album = ref<AlbumPage>({} as AlbumPage)
+    const relatedAlbums = ref<RelatedAlbums[]>([])
     const entityType = ref('albums')
 
     const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
@@ -97,13 +100,13 @@ export default defineComponent({
     }
 
     const totalCounts = computed(() => {
-      const isAllTracksHaveDuration = album.tracks?.every((track) => (
+      const isAllTracksHaveDuration = album.value.tracks?.every((track) => (
         Number(track.duration)
       ))
       return `
-        ${album.tracks?.length} ${conjugate('tracks', album.tracks?.length)}:
-        ${isAllTracksHaveDuration ? calcTotalTracksTime(album.tracks) : lang('unknownTime')}.
-        ${lang('listenedTracks')} ${album.tracks?.reduce((acc, { listened }) => (
+        ${album.value.tracks?.length} ${conjugate('tracks', album.value.tracks?.length)}:
+        ${isAllTracksHaveDuration ? calcTotalTracksTime(album.value.tracks) : lang('unknownTime')}.
+        ${lang('listenedTracks')} ${album.value.tracks?.reduce((acc, { listened }) => (
           acc + (Number(listened) || 0)
         ), 0)}
       `.trim()
@@ -114,34 +117,43 @@ export default defineComponent({
         .then((payload) => payload && fetchDiscogsInfo(payload))
     }
 
-    const getRelated = () => {
+    const getRelated = async () => {
       const relatedAlbumsConfig: RequestFilter[] = [
         {
           from: 'artists',
           key: 'artist._id',
-          value: album.artist._id,
+          name: album.value.artist.title,
+          value: album.value.artist._id,
           excluded: {
-            _id: album._id
+            _id: album.value._id
           }
         },
         {
           from: 'genres',
           key: 'genre._id',
-          value: album.genre._id,
+          name: album.value.genre.title,
+          value: album.value.genre._id,
           excluded: {
-            _id: album._id,
-            'artist._id': album.artist._id
+            _id: album.value._id,
+            'artist._id': album.value.artist._id
           }
         }
       ]
 
-      relatedAlbumsConfig.forEach((config) => {
-        getRelatedAlbums(config, entityType.value)
-      })
+      try {
+        relatedAlbums.value = []
+        const response = await Promise.all(relatedAlbumsConfig.map(async (config) => (
+          await getRelatedAlbums(config, entityType.value)
+        )))
+        
+        relatedAlbums.value = response
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     const bookletHandler = async () => {
-      if (booklet.isEmpty) {
+      if (booklet.value.isEmpty) {
         actions.setSnackbarMessage({
           message: lang('bookletNotFound'),
           type: 'error'
@@ -149,9 +161,9 @@ export default defineComponent({
         return false
       }
 
-      await fetchBooklet(album.folderName)
+      await fetchBooklet(album.value.folderName, album.value.cloudURL)
 
-      if (booklet.isEmpty) {
+      if (booklet.value.isEmpty) {
         actions.setSnackbarMessage({
           message: lang('bookletNotFound'),
           type: 'error'
@@ -163,7 +175,9 @@ export default defineComponent({
       fetchData(entityType.value)
         .then((payload) => {
           if (payload) {
-            Object.assign(album, payload)
+            album.value = payload
+            actions.setPlayerPlaylist(payload)
+            getRelated()
             fetchDiscogsInfo(payload)
           }
         })
@@ -172,9 +186,17 @@ export default defineComponent({
     watch(
       route,
       (newValue) => {
-        if (newValue.params.id && newValue.params.id !== album._id) {
+        if (newValue.params.id && newValue.params.id !== album.value._id) {
+          album.value = {} as AlbumPage
           fetchData(entityType.value)
-            .then((payload) => payload && fetchDiscogsInfo(payload))
+            .then((payload) => {
+              if (payload) {
+                album.value = payload
+                actions.setPlayerPlaylist(payload)
+                getRelated()
+                fetchDiscogsInfo(payload)
+              }
+            })
         }
       },
       { immediate: false }
@@ -188,7 +210,7 @@ export default defineComponent({
       getRelated,
       bookletHandler,
       getRandomAlbum,
-      relatedEntities,
+      relatedAlbums,
       closeBookletModal,
       discogsTablePayload,
       discogsFiltersStates,
@@ -200,6 +222,6 @@ export default defineComponent({
       totalCounts,
       getRandom
     }
-  },
-});
+  }
+})
 </script>

@@ -1,7 +1,7 @@
-import { CloudContent } from './CloudContent'
 import { AlbumBooklet } from '~/types/Album'
+import CloudContent from './CloudContent'
 
-export class BookletState extends CloudContent<AlbumBooklet> {
+export default class BookletState extends CloudContent<AlbumBooklet> {
   isActive: boolean = false
   isCompleted: boolean = false
   isEmpty: boolean = false

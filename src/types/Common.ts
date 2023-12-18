@@ -46,13 +46,13 @@ export interface ReorderPayload {
 export interface Snackbar {
   message: string
   type: 'warning' | 'success' | 'error' | 'info'
-  // order: number
   time?: number
 }
 
 export interface RequestFilter {
   from: string
   key: string
+  name: string
   value: string
   excluded?: Record<string, string>
 }

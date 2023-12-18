@@ -66,7 +66,8 @@ export interface GatheringUpdateReq {
   gatheringID: string
   entityType: string
   entityID: string
-  order?: number
+  order: number
+  isInList: boolean
 }
 
 export interface GatheringUpdateRes {

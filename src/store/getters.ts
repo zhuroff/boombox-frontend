@@ -35,16 +35,6 @@ export const useGetters = (state: AppStateInterface) => {
     return playingTrackIndex > 0
   })
 
-  // const getLocaleValue = (path: string, ...vars: Array<string | number>) => computed(() => {
-  //   const parsedPath = path.split('.')
-  //   const dict = locales.get(currentLocale.value)
-  //   const value = findLocaleLangValue(parsedPath, dict)
-
-  //   if (!value) return `{${path}}`
-  //   if (!vars.length) return value
-    
-  //   return value.replace(/{x}/g, () => String(vars.shift() ?? '{...}'))
-  // })
   const getLocaleValue = (path: string, ...vars: Array<string | number>) => {
     const parsedPath = path.split('.')
     const dict = locales.get(currentLocale.value)
@@ -56,6 +46,8 @@ export const useGetters = (state: AppStateInterface) => {
     return value.replace(/{x}/g, () => String(vars.shift() ?? '{...}'))
   }
 
+  const showState = computed(() => state)
+
   return {
     playingTrack,
     playlists,
@@ -65,6 +57,7 @@ export const useGetters = (state: AppStateInterface) => {
     snackbarItems,
     isPlayerExpanded,
     currentLocale,
-    getLocaleValue
+    getLocaleValue,
+    showState
   }
 }

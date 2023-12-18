@@ -9,9 +9,8 @@
     :dataList="genres"
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
-  >
-    <!-- <template v-slot:header></template> -->
-  </ListPageTemplate>
+    :setEntitiesLimit="setEntitiesLimit"
+  />
 </template>
 
 <script lang="ts">
@@ -32,7 +31,8 @@ export default defineComponent({
       isDataFetched,
       pagePagination,
       pageStateConfig,
-      switchPagination
+      switchPagination,
+      setEntitiesLimit
     } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem)
 
     const genres = ref<CategoryItem[]>([])
@@ -56,7 +56,8 @@ export default defineComponent({
       pageHeading,
       pagePagination,
       isDataFetched,
-      switchPagination
+      switchPagination,
+      setEntitiesLimit
     }
   }
 })

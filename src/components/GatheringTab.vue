@@ -2,7 +2,9 @@
   <li
     v-if="gathering && id"
     :class="[{ '--selected' : isSelected }, 'entity-tabs__item']"
-    @click="addToGathering"
+    @click="() => {
+      isSelected ? removeFromGathering() : addToGathering()
+    }"
   >
     <div class="entity-tabs__tab">
       <img
@@ -87,6 +89,7 @@ export default defineComponent({
 
     const host = (pathname: string) => hostString(pathname)
     const addToGathering = () => emit('addToGathering')
+    const removeFromGathering = () => emit('removeFromGathering')
     const createCompilation = () => emit('createNewCompilation')
     const setCompilationName = (value: string) => emit('setCompilationName', value)
 
@@ -96,7 +99,8 @@ export default defineComponent({
       isSelected,
       createCompilation,
       setCompilationName,
-      addToGathering
+      addToGathering,
+      removeFromGathering
     }
   }
 })
@@ -118,7 +122,6 @@ export default defineComponent({
     justify-content: center;
 
     &.--selected {
-      pointer-events: none;
       background-color: $paleLT;
       box-shadow: rgb(200, 208, 231) 3.2px 3.2px 8px 0px inset, rgb(255, 255, 255) -3.2px -3.2px 8px 0px inset;
     }
@@ -146,4 +149,4 @@ export default defineComponent({
     display: flex;
   }
 }
-</style>~/classes/CompilationEntity~/classes/CollectionEntity
+</style>

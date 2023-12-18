@@ -10,9 +10,7 @@
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
-  >
-    <!-- <template v-slot:header></template> -->
-  </ListPageTemplate>
+  />
 </template>
 
 <script lang="ts">

@@ -10,9 +10,7 @@
       <Header
         :heading="pageHeading"
         :withSearch="withSearch"
-      >
-        <slot name="header"></slot>
-      </Header>
+      />
       <CardList
         v-if="isDataFetched"
         key="list"

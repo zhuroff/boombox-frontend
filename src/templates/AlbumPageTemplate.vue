@@ -48,31 +48,14 @@
             </div>
           </div>
           <div
-            v-if="relatedAlbums?.get('artists')?.length"
+            v-for="{ name, docs } in relatedAlbums"
             class="album__related"
           >
             <div class="album__related-title">
-              {{ lang('moreOf') }} {{ album.artist.title }}
+              {{ lang('moreOf') }} {{ name }}
             </div>
             <Card
-              v-for="item in relatedAlbums.get('artists')"
-              :key="item._id"
-              :card="item"
-              type="CardBox"
-              rootPath="albums"
-              className="card-box"
-              placeholderImage="/img/album.webp"
-            />
-          </div>
-          <div 
-            v-if="relatedAlbums?.get('genres')?.length"
-            class="album__related"
-          >
-            <div class="album__related-title">
-              {{ lang('moreOf') }} {{ album.genre.title }}
-            </div>
-            <Card
-              v-for="item in relatedAlbums.get('genres')"
+              v-for="item in docs"
               :key="item._id"
               :card="item"
               type="CardBox"
@@ -88,11 +71,11 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, watchEffect } from 'vue'
-import { BookletSlideState } from '~/types/Album'
+import { PropType, defineComponent } from 'vue'
+import { BookletSlideState, RelatedAlbums } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
-import { BookletState } from '~/states/BookletState'
 import { useLocales } from '~/hooks/useLocales'
+import BookletState from '~/classes/BookletState'
 import AlbumPage from '~/classes/AlbumPage'
 import Preloader from '~/components/Preloader.vue'
 import CoverArt from '~/components/CoverArt.vue'
@@ -101,7 +84,7 @@ import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
-import AlbumCardBox from '~/classes/AlbumCardBox'
+import AlbumItem from '~/classes/AlbumItem'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
@@ -140,19 +123,15 @@ export default defineComponent({
       required: true
     },
     relatedAlbums: {
-      type: Map as PropType<Map<string, AlbumCardBox[]>>,
+      type: Array as PropType<RelatedAlbums[]>,
       requried: false
-    },
-    getRelated: {
-      type: Function as PropType<() => void>,
-      required: true
     },
     getBooklet: {
       type: Function as PropType<() => void>,
       required: true
     }
   },
-  setup({ album, getRelated }, { emit }) {
+  setup(_, { emit }) {
     const { lang } = useLocales()    
 
     const updateDiscogsFilter = (payload: [keyof DiscogsFilter, string]) => {
@@ -174,8 +153,6 @@ export default defineComponent({
     const bookletPageChanged = (data: BookletSlideState) => {
       emit('bookletPageChanged', data)
     }
-    
-    watchEffect(() => album._id && getRelated())
 
     return {
       updateDiscogsFilter,
@@ -274,3 +251,4 @@ export default defineComponent({
   }
 }
 </style>
+~/classes/BookletState

@@ -1,23 +1,22 @@
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { CloudFolderResponse } from '~/types/Cloud'
 import { AlbumBooklet, BookletSlideState } from '~/types/Album'
-import { BasicEntity, CardBasic, RequestConfig, RequestFilter } from '~/types/Common'
-import { ListPageResponse } from '~/types/ReqRes'
-import AlbumCardBox from '~/classes/AlbumCardBox'
-import { BookletState } from '~/states/BookletState'
+import { BasicEntity, RequestConfig, RequestFilter } from '~/types/Common'
+import { AlbumItemRes, ListPageResponse } from '~/types/ReqRes'
+import BookletState from '~/classes/BookletState'
 import dbServices from '~/services/database.services'
-import AlbumItem from '~/classes/AlbumItem'
+import cloudServices from '~/services/cloud.services'
 
-export const useSinglePage = <T extends BasicEntity, C extends BasicEntity>(Class: new (prop: T) => C) => {
+export const useSinglePage = <T extends BasicEntity, C>(Class: new (prop: T) => C) => {
   const route = useRoute()
   const router = useRouter()
-  const relatedEntities = reactive<Map<string, AlbumCardBox[]>>(new Map())
-  const booklet = reactive<BookletState>(new BookletState())
+  const booklet = ref<BookletState>(new BookletState())
   const isDataFetched = ref(false)
 
   const fetchData = async (entityType: string, id = String(route.params.id)) => {
     isDataFetched.value = false
-    Object.assign(booklet, new BookletState())
+    booklet.value = new BookletState()
 
     try {
       const data = await dbServices.getEntity<T>(entityType, id)
@@ -36,43 +35,43 @@ export const useSinglePage = <T extends BasicEntity, C extends BasicEntity>(Clas
     }
   }
 
-  const fetchBooklet = async (folder: string) => {
-    // booklet.isActive = true
-    // if (booklet.items.length > booklet.offset || !entity.cloudURL) return
+  const fetchBooklet = async (folder: string, cloud: string) => {
+    booklet.value.isActive = true
+    if (booklet.value.items.length > booklet.value.offset || !cloud) return
 
-    // try {
-    //   const bookletContent = await cloudServices.getImages<CloudFolderResponse<AlbumBooklet>>(
-    //     `${folder}/booklet`, booklet.limit, booklet.offset, entity.cloudURL
-    //   )
-    //   if (bookletContent) {
-    //     booklet.items.push(...bookletContent.items)
-    //     booklet.total = bookletContent.total
+    try {
+      const bookletContent = await cloudServices.getImages<CloudFolderResponse<AlbumBooklet>>(
+        `${folder}/booklet`, booklet.value.limit, booklet.value.offset, cloud
+      )
+      if (bookletContent) {
+        booklet.value.items.push(...bookletContent.items)
+        booklet.value.total = bookletContent.total
         
-    //     if (booklet.items.length === booklet.total) {
-    //       booklet.isCompleted = true
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.error(error)
-    //   booklet.isActive = false
-    //   booklet.isEmpty = true
-    // } finally {
-    //   booklet.isFetched = true
-    // }
+        if (booklet.value.items.length === booklet.value.total) {
+          booklet.value.isCompleted = true
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      booklet.value.isActive = false
+      booklet.value.isEmpty = true
+    } finally {
+      booklet.value.isFetched = true
+    }
   }
 
-  const bookletPageChanged = (data: BookletSlideState, folder: string) => {
+  const bookletPageChanged = (data: BookletSlideState, folder: string, cloud: string) => {
     if (
-      booklet.items.length !== booklet.total
-      && data.slidingToIndex === booklet.items.length - 5
+      booklet.value.items.length !== booklet.value.total
+      && data.slidingToIndex === booklet.value.items.length - 5
     ) {
-      booklet.offset += booklet.limit
-      fetchBooklet(folder)
+      booklet.value.offset += booklet.value.limit
+      fetchBooklet(folder, cloud)
     }
   }
 
   const closeBookletModal = () => {
-    booklet.isActive = false
+    booklet.value.isActive = false
   }
 
   const requestConfig = reactive<RequestConfig>({
@@ -86,15 +85,18 @@ export const useSinglePage = <T extends BasicEntity, C extends BasicEntity>(Clas
   }
 
   const getRelatedAlbums = async (filter: RequestFilter, entityType: string) => {
-    const response = {
-      [filter.from]: await dbServices.getEntityList<ListPageResponse<AlbumItem>>(
-        { ...requestConfig, filter, isRandom: true, },
-        entityType
-      )
+    try {
+      const response = {
+        [filter.from]: await dbServices.getEntityList<ListPageResponse<AlbumItemRes>>(
+          { ...requestConfig, filter, isRandom: true, },
+          entityType
+        )
+      }  
+      return Object.values(response).map((data) => ({ ...data, name: filter.name }))[0]
+    } catch (error) {
+      console.error(error)
+      throw error
     }
-    Object.entries(response).forEach(([key, { docs }]) => {
-      relatedEntities.set(key, docs.map((doc) => new AlbumCardBox(new AlbumItem(doc))))
-    })
   }
 
   return {
@@ -103,7 +105,6 @@ export const useSinglePage = <T extends BasicEntity, C extends BasicEntity>(Clas
     fetchBooklet,
     getRandomAlbum,
     getRelatedAlbums,
-    relatedEntities,
     closeBookletModal,
     bookletPageChanged,
     booklet,

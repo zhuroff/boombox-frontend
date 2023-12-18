@@ -18,15 +18,8 @@
           :avatar="tab.avatar"
           :title="tab.title"
           :entityID="entityID"
-          @addToGathering="() => (
-            addToGathering({
-              entityType,
-              entityID,
-              order: getOrder(tab._id),
-              gatheringID: tab._id
-            })
-              .then(() => addNewGathering(tab._id))
-          )"
+          @addToGathering="() => addEntityToGathering(tab._id, results)"
+          @removeFromGathering="() => removeEntityFromGathering(tab._id, results)"
         />
         <GatheringTab
           :title="gatheringName"
@@ -82,7 +75,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ results, entityID }) {
+  setup({ results, entityType, entityID }) {
     const {
       createNewGathering,
       setGatheringName,
@@ -90,20 +83,35 @@ export default defineComponent({
       addToGathering
     } = useGathering()
 
-    const getTargetEntities = (gatheringID: string) => {
-      const target = results.find(({ _id }) => gatheringID === _id)
+    const addEntityToGathering = (gatheringID: string, gatherings: typeof results) => {
+      addToGathering({
+        entityID,
+        entityType,
+        gatheringID,
+        order: getOrder(gatheringID, gatherings) || 1,
+        isInList: true
+      })
+        .then(() => addNewGathering(gatheringID, gatherings))
+    }
+
+    const removeEntityFromGathering = (gatheringID: string, gatherings: typeof results) => {
+      console.log('remove entity from gathering')
+    }
+
+    const getTargetEntities = (gatheringID: string, gatherings: typeof results) => {
+      const target = gatherings.find(({ _id }) => gatheringID === _id)
       if (target) {
         return target instanceof CollectionEntity ? target.albums : target.tracks
       }
     }
 
-    const getOrder = (gatheringID: string) => {
-      const entities = getTargetEntities(gatheringID)
+    const getOrder = (gatheringID: string, gatherings: typeof results) => {
+      const entities = getTargetEntities(gatheringID, gatherings)
       return entities && entities.length + 1
     }
 
-    const addNewGathering = (gatheringID: string) => {
-      const entities = getTargetEntities(gatheringID)
+    const addNewGathering = (gatheringID: string, gatherings: typeof results) => {
+      const entities = getTargetEntities(gatheringID, gatherings)
       entities?.push(entityID)
     }
 
@@ -112,7 +120,8 @@ export default defineComponent({
       setGatheringName,
       gatheringName,
       addToGathering,
-      addNewGathering,
+      addEntityToGathering,
+      removeEntityFromGathering,
       getOrder
     }
   }

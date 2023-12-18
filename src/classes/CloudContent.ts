@@ -1,4 +1,4 @@
-export class CloudContent<T> {
+export default class CloudContent<T> {
   items: T[] = []
   limit: number = 10
   offset: number = 0

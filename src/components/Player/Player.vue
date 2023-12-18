@@ -1,13 +1,17 @@
 <template>
-  <div v-if="!playingTrack">No playing track</div>
-  <section v-else :class="[{ '--expanded': isPlayerExpanded }, 'player']">
+  <section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
     <!-- <div
       class="player__left"
       @click="collapseExpandPlayer"
     > -->
-    <RouterLink
+    <div
       class="player__left"
-      :to="{ path: `/albums/${playingTrack.albumID}` }"
+      v-if="!playingTrack"
+    />
+    <RouterLink
+      v-else
+      class="player__left"
+      :to="{ path: `/albums/${playingTrack?.albumID}` }"
     >
       <div
         v-if="playingTrack.progressTime > 0"
@@ -27,7 +31,7 @@
       </div>
     </RouterLink>
     <div class="player__right">
-      <div v-if="playingTrack.progressTime > 0" class="player__right-content">
+      <div v-if="playingTrack?.progressTime" class="player__right-content">
         <PlayerRepeatTrack />
         <PlayerPrevTrack />
         <PlayerPlayPause />

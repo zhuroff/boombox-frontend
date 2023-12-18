@@ -43,10 +43,10 @@ export const useGathering = <T>() => {
       order: payload.order,
       isInList: false
     }
+    console.log(reqPayload)
 
     try {
       const response = await dbServices.updateEntity<ResponseMessage, GatheringUpdateRes>(payload.entityType, reqPayload)
-      // targetCompilation.albums.push(payload.entityID)
       actions.setSnackbarMessage({
         message: String(response.message),
         type: 'success'

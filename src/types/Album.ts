@@ -1,3 +1,4 @@
+import AlbumItem from '~/classes/AlbumItem'
 import { BasicEntity } from './Common'
 // import AlbumTrack from '~/classes/AlbumTrack'
 
@@ -38,4 +39,9 @@ export interface BookletSlideState {
   prevSlideIndex: number
   slidesCount: number
   slidingToIndex: number
+}
+
+export interface RelatedAlbums {
+  name: string
+  docs: AlbumItem[]
 }

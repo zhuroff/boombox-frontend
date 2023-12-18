@@ -40,8 +40,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, Ref, watch } from 'vue'
-import { BookletState } from '~/states/BookletState'
 import { BookletSlideState } from '~/types/Album'
+import BookletState from '~/classes/BookletState'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Modal from '~/components/Modal.vue'
 import Preloader from '~/components/Preloader.vue'
@@ -206,4 +206,4 @@ export default defineComponent({
   }
 }
 </style>
-~/states/BookletState
+~/states/BookletState~/classes/BookletState

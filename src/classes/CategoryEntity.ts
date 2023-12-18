@@ -3,7 +3,7 @@ import { CategoryEntityRes } from '~/types/ReqRes'
 export default class CategoryEntity {
   _id: string
   title: string
-  cloudURL?: string
+  cloudURL: string
   avatar?: string
 
   constructor(category: CategoryEntityRes) {

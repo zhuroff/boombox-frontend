@@ -53,6 +53,21 @@ export const useActions = (state: AppStateInterface) => {
     appendTrackToPlaylist(prop)
   }
 
+  const removeTrackFromPlaylist = (id: string) => {
+    if (!state.currentPlaylist) {
+      throw new Error('No current playlist defined')
+    }
+
+    let order = 1
+    state.currentPlaylist.tracks = state.currentPlaylist.tracks
+      .reduce<AlbumTrack[]>((acc, next) => {
+        if (next._id === id) order--
+        else acc.push({ ...next, order: order })
+        order++
+        return acc
+      }, [])
+  }
+
   const setPlayerPlaylist = (data: AlbumPage | CompilationEntity<AlbumTrack>) => {
     if (!state.currentPlaylist || !state.playingTrack) {
       state.currentPlaylist = data
@@ -70,21 +85,6 @@ export const useActions = (state: AppStateInterface) => {
       ...state.currentPlaylist.tracks,
       ...(state.reservedPlaylist?.tracks || [])
     ]
-  }
-
-  const removeTrackFromPlaylist = (id: string) => {
-    if (!state.currentPlaylist) {
-      throw new Error('No current playlist defined')
-    }
-
-    let order = 1
-    state.currentPlaylist.tracks = state.currentPlaylist.tracks
-      .reduce<AlbumTrack[]>((acc, next) => {
-        if (next._id === id) order--
-        else acc.push({ ...next, order: order })
-        order++
-        return acc
-      }, [])
   }
 
   const setSnackbarMessage = (snackbar: Snackbar) => {
@@ -234,3 +234,27 @@ export const useActions = (state: AppStateInterface) => {
     crackleSwitch
   }
 }
+
+// setPlayingStation: (state: any /* AppStateInterface */, station: RadioStationResponse) => {
+//   if (state.playingTrack._id === station.stationuuid) {
+//     if (state.playingTrack.isOnPause) {
+//       state.playingTrack.isOnPause = false
+//       state.playingTrack.audio.play()
+//     } else {
+//       state.playingTrack.isOnPause = true
+//       state.playingTrack.audio.pause()
+//     }
+//   } else {
+//     state.playingTrack.albumName = station.country
+//     state.playingTrack.artistName = station.name
+//     state.playingTrack.audio.src = station.url_resolved
+//     state.playingTrack._id = station.stationuuid
+//     state.playingTrack.isOnPause = false
+//     state.playingTrack.isOnRepeat = false
+//     state.playingTrack.title = station.name
+//     state.playingTrack.cover = '/img/album.webp'
+//     // state.currentPlaylist = { ...initPlaylist }
+//     state.currentPlaylist = {}
+//     state.playingTrack.audio.play()
+//   }
+// }
