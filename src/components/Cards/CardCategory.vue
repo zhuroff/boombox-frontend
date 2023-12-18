@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { CategoryItem } from '~/types/Category'
+import CategoryItem from '~/classes/CategoryItem'
 import { hostString } from '~/utils'
 
 export default defineComponent({

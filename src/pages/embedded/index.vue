@@ -6,13 +6,13 @@
 
 import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import FramesList from './list/index.vue'
-import FramePage from './_id/index.vue'
+import EmbeddedList from './list/index.vue'
+import EmbeddedPage from './_id/index.vue'
 
 export default defineComponent({
   components: {
-    FramesList,
-    FramePage
+    EmbeddedList,
+    EmbeddedPage
   },
 
   setup() {
@@ -20,10 +20,10 @@ export default defineComponent({
 
     const routeComponent = computed(() => {
       if (route.name === 'frames') {
-        return FramesList
+        return EmbeddedList
       }
 
-      return FramePage
+      return EmbeddedPage
     })
 
     return { routeComponent }

@@ -66,7 +66,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, ref, computed, PropType } from 'vue'
 import store from '~/store'
 import AlbumTrack from '~/classes/AlbumTrack'

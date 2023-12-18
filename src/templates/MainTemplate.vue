@@ -1,7 +1,13 @@
 <template>
   <div class="container">
-    <Sidebar :isExpanded="isNavOpened" @burgerClick="navHandler" />
-    <main ref="main" :class="[{ '--offset': isNavOpened }, 'main']">
+    <Sidebar
+      :isExpanded="isNavOpened"
+      @burgerClick="navHandler"
+    />
+    <main
+      ref="main"
+      :class="[{ '--offset': isNavOpened }, 'main']"
+    >
       <router-view v-slot="{ Component }">
         <component :is="Component" />
       </router-view>

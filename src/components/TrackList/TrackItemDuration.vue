@@ -14,7 +14,6 @@ export default defineComponent({
       required: false
     }
   },
-
   setup(props) {
     const trackTime = computed(() => secondsToMinutes(props.duration))
     return { trackTime }

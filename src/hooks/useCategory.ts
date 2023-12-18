@@ -2,8 +2,8 @@ import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLocales } from './useLocales'
 import { UploadImageResult } from '~/types/Common'
-import { CategoryPage } from '~/types/Category'
-import { AlbumItem } from '~/types/Album'
+import AlbumItem from '~/classes/AlbumItem'
+import CategoryPage from '~/classes/CategoryPage'
 import dbServices from '~/services/database.services'
 
 export const useCategory = (entityType: string) => {

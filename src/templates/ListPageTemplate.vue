@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <!-- <transition name="fade">
+    <transition name="fade">
       <Preloader
         v-if="!isDataFetched"
         mode="light"
@@ -36,7 +36,7 @@
         @switchPagination="switchPagination"
         @changeLimit="setEntitiesLimit"
       />
-    </transition-group> -->
+    </transition-group>
   </section>
 </template>
 

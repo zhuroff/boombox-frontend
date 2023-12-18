@@ -60,9 +60,7 @@ import { Pagination, PaginationConfig } from '~/types/Common'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
-  name: 'Paginator',
-
-  components: {
+  name: 'Paginator',  components: {
     Sprite
   },
 
@@ -76,7 +74,6 @@ export default defineComponent({
       required: true
     }
   },
-
   setup({ pagination }, { emit }) {
     const localLimit = ref(pagination.limit)
     const localPage = ref(pagination.page)

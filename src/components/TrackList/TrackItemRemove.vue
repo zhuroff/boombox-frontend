@@ -1,27 +1,24 @@
-<template>
-  
-<div class="tracklist__row-cell --pointer --fix">
-  <button
-    class="tracklist__row-action"
-    @click="removeTrackFromPlaylist"
-  >
-    <Sprite name="delete" />
-  </button>
-</div>
-
+<template>  
+  <div class="tracklist__row-cell --pointer --fix">
+    <button
+      class="tracklist__row-action"
+      @click="removeTrackFromPlaylist"
+    >
+      <Sprite name="delete" />
+    </button>
+  </div>
 </template>
 
-<script>
-
-// import { computed } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default {
+export default defineComponent({
   components: {
     Sprite
   },
 
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const removeTrackFromPlaylist = () => {
       // const playlist = computed(() => store.getters.playlist)
 
@@ -32,12 +29,10 @@ export default {
 
     return { removeTrackFromPlaylist }
   }
-}
-
+})
 </script>
 
 <style lang="scss" scoped>
-
 @import '@/scss/variables';
 
 .tracklist__row {
@@ -70,5 +65,4 @@ export default {
     transition: all 0.2s ease;
   }
 }
-
 </style>

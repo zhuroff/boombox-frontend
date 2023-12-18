@@ -53,8 +53,6 @@
 
 import { computed, defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 import { hostString } from '~/utils'
 import { ImagePayload, ReorderPayload, UploadImageResult } from '~/types/Common'
 import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
@@ -75,7 +73,6 @@ export default defineComponent({
 
   setup() {
     const route = useRoute()
-    const store = useStore(key)
 
     const playlist = reactive<PlaylistPageProps>({
       isFetched: false,
@@ -108,9 +105,9 @@ export default defineComponent({
     }
 
     const orderChanged = (payload: ReorderPayload) => {
-      PlaylistServices.reorder(payload)
-        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-        .catch((error) => console.dir(error))
+      // PlaylistServices.reorder(payload)
+      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+      //   .catch((error) => console.dir(error))
     }
 
     const setPlaylist = (data: PlaylistPage) => {
@@ -122,7 +119,7 @@ export default defineComponent({
       PlaylistServices.single(String(route.params.id))
         .then((response) => {
           setPlaylist(response)
-          store.commit('setPlayerPlaylist', response)
+          // store.commit('setPlayerPlaylist', response)
         })
         .catch((error) => console.dir(error))
     }

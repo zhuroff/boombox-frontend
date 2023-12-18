@@ -40,8 +40,6 @@
 
 import { computed, defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 // import { CollectionPageItem } from '~/types/Collection'
 import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
@@ -61,7 +59,6 @@ export default defineComponent({
 
   setup() {
     const route = useRoute()
-    const store = useStore(key)
 
     const collection = reactive({
       isFetched: false,

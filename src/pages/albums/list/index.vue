@@ -6,7 +6,7 @@
     placeholderImage="/img/album.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
-    :dataList="entities"
+    :dataList="albums"
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
@@ -16,13 +16,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch } from 'vue'
-import { CardBasic } from '~/types/Common'
+import { defineComponent, computed, watch, ref } from 'vue'
 import { AlbumItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { isObjectsEquals } from '~/utils'
-import AlbumCardBox from '~/classes/AlbumCardBox'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import AlbumItem from '~/classes/AlbumItem'
 
@@ -35,7 +33,6 @@ export default defineComponent({
     const {
       fetchData,
       isDataFetched,
-      entities,
       pagePagination,
       pageStateConfig,
       switchPagination,
@@ -43,6 +40,7 @@ export default defineComponent({
     } = useListPage<AlbumItemRes, AlbumItem>(AlbumItem)
     
     const { lang } = useLocales()
+    const albums = ref<AlbumItem[]>([])
 
     const pageHeading = computed(() => (
       lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
@@ -51,14 +49,17 @@ export default defineComponent({
     watch(
       pageStateConfig,
       (newVal, oldVal) => {
-        !isObjectsEquals(newVal, oldVal) && fetchData('albums')
+        if (!isObjectsEquals(newVal, oldVal)) {
+          fetchData('albums')
+            .then((payload) => albums.value = payload || [])
+        }
       },
       { immediate: true }
     )
 
     return {
+      albums,
       pageHeading,
-      entities,
       pagePagination,
       isDataFetched,
       switchPagination,

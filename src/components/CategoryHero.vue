@@ -62,8 +62,8 @@
 import { defineComponent, PropType, Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ImagePayload, EntityImagesKeys } from '~/types/Common'
-import { CategoryPage } from '~/types/Category'
 import { hostString } from '~/utils'
+import CategoryPage from '~/classes/CategoryPage'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import UploadServices from '~/services/UploadServices'
 

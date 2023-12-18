@@ -1,20 +1,17 @@
 <template>
   <div class="player__progress">
     <time class="player__progress-time">{{ leftTimeToMinutes }}</time>
-
     <progress
       :max="1"
       :value="playingTrack?.progressLine || 0"
       class="player__progress-bar"
       @click="setTrackPosition"
     ></progress>
-
     <time class="player__progress-time">{{ fullTimeToMinutes }}</time>
   </div>
 </template>
 
 <script lang="ts">
-
 import { defineComponent, computed } from 'vue'
 import store from '~/store'
 
@@ -46,7 +43,6 @@ export default defineComponent({
 
     const setTrackPosition = (event: MouseEvent) => {
       const value = event.offsetX / (event.target as HTMLElement).offsetWidth
-      // store.commit('setPosition', value)
       actions.setPosition(value)
     }
 
@@ -58,5 +54,4 @@ export default defineComponent({
     }
   },
 })
-
 </script>

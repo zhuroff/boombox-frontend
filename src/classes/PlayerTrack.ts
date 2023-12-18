@@ -30,7 +30,7 @@ export default class PlayerTrack {
     this.albumName = track.inAlbum.title || ''
     this.albumID = track.inAlbum._id
     this.albumFolder = track.inAlbum.folderName
-    this.year = track.period.title || ''
+    this.year = track.period || ''
     this.cover = track.albumCover
     this.isOnPause = false
     this.isOnRepeat = false

@@ -1,4 +1,4 @@
-import { AlbumTrackDTO } from '~/dto/AlbumTrackDTO'
+import AlbumTrack from '~/classes/AlbumTrack'
 
 export type PlaylistPayload = {
   title: string
@@ -22,7 +22,7 @@ export type PlaylistPage = {
   poster?: string
   avatar?: string
   dateCreated: string
-  tracks: AlbumTrackDTO[]
+  tracks: AlbumTrack[]
 }
 
 export type PlaylistItemProps = {

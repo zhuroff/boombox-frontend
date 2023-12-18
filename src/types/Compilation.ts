@@ -1,6 +1,6 @@
-import { AlbumItem } from './Album'
 import { BasicEntity } from './Common'
 import { TrackResponse } from './Track'
+import AlbumItem from '~/classes/AlbumItem'
 
 export interface Compilation extends BasicEntity {
   poster?: string

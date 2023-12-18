@@ -61,10 +61,10 @@ import { PropType, defineComponent, h, ref, watch } from 'vue'
 import { coverPlaceholders, debounce } from '~/utils'
 import { useLocales } from '~/hooks/useLocales'
 import { SearchResultData, SearchResultState } from '~/types/Search'
-import { AlbumItem } from '~/types/Album'
-import { TrackResponse } from '~/types/Track'
+import { TrackRes } from '~/types/ReqRes'
 import { RouterLink } from 'vue-router'
 import { hostString } from '~/utils'
+import AlbumItem from '~/classes/AlbumItem'
 import SearchBlockTrack from './SearchBlockTrack.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
@@ -111,7 +111,6 @@ export default defineComponent({
       )
     }
   },
-
   setup({ value }, { emit }) {
     const { lang } = useLocales()
     const searchInput = ref<HTMLInputElement>(null!)
@@ -154,7 +153,7 @@ export default defineComponent({
         case 'tracks':
           return h(
             SearchBlockTrack,
-            { track: data as TrackResponse }
+            { track: data as TrackRes }
           )
         default:
           return h(

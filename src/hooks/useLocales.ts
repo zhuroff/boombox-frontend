@@ -1,14 +1,13 @@
 import { LocaleKeys } from '~/types/Common'
-import { useState } from '~/hooks/useState'
+import store from '~/store'
 import locales from '~/locales'
 
 export const useLocales = () => {
-  const { actions, getters } = useState()
+  const { actions, getters } = store
   const allLocales = Array.from(locales.keys())
   
   const setLocale = (locale: LocaleKeys) => {
     localStorage.setItem('locale', locale)
-    // store.commit('setLocale', locale)
     actions.setLocale(locale)
   }
 

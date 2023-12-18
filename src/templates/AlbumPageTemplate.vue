@@ -2,12 +2,12 @@
   <section class="section">
     <transition name="fade">
       <Preloader
-        v-if="!isDataFetched"
+        v-if="!isDataFetched || !album._id"
         mode="light"
       />
     </transition>
     <transition name="fade">
-      <div v-if="isDataFetched" class="album">
+      <div v-if="isDataFetched && album._id" class="album">
         <div class="album__hero">
           <CoverArt
             :cover="album.coverURL"

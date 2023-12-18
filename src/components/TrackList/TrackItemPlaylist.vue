@@ -22,16 +22,7 @@
         </div>
       </template>
       <template v-slot:list>
-        <ul class="float-modal__list">
-          <!-- <FloatModalItem
-            v-for="item in playlists.data"
-            :key="item._id"
-            :item="item"
-            :itemID="trackID"
-            :isChecked="isItemChecked(item)"
-            @checkFloatModalItem="playlistItemAction"
-          /> -->
-        </ul>
+        <ul class="float-modal__list"></ul>
       </template>
     </FloatModal>
   </div>
@@ -48,14 +39,12 @@ export default defineComponent({
   components: {
     Button
   },
-
   props: {
     trackID: {
       type: String,
       required: true
     }
   },
-
   setup(props) {
     const { actions } = store
 
@@ -146,4 +135,3 @@ export default defineComponent({
   }
 }
 </style>
-~/types/Common

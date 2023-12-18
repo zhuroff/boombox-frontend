@@ -8,14 +8,12 @@
       isInverted
       isText
       @click="closeModal"
-    />
-    
+    />    
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
-
 import { defineComponent, watchEffect } from 'vue'
 import Button from '~/components/Button.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
@@ -52,11 +50,9 @@ export default defineComponent({
     return { closeModal }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 @import 'include-media';
 
@@ -84,5 +80,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

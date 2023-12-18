@@ -1,11 +1,8 @@
-import AlbumItem from '~/classes/AlbumItem'
 import { BasicEntity, Pagination } from './Common'
+import AlbumItem from '~/classes/AlbumItem'
 
-export interface TrackRes {
-  _id: string
-  title: string
+export interface TrackRes extends BasicEntity {
   path: string
-  cloudURL: string
   coverURL?: string
   duration?: number
   listened?: number
@@ -15,8 +12,14 @@ export interface TrackRes {
   inPlaylists?: BasicEntity[]
 }
 
+export interface EmbeddedItemRes extends Omit<BasicEntity, 'cloudURL'> {
+  frame: string
+  artist: BasicEntity
+  genre: BasicEntity
+  period: BasicEntity
+}
+
 export interface AlbumItemRes extends BasicEntity {
-  cloudURL: string
   folderName: string
   inCollections: BasicEntity[]
   artist: BasicEntity
@@ -71,4 +74,18 @@ export interface GatheringUpdateRes {
   gatheringID: string
   isInList: boolean
   order: number
+}
+
+export interface CategoryEntityRes extends BasicEntity {
+  avatar?: string
+}
+
+export interface CategoryItemRes extends CategoryEntityRes {
+  albums: number  
+}
+
+export interface CategoryPageRes extends CategoryEntityRes {
+  albums: AlbumItemRes[]
+  poster?: string
+  frames?: EmbeddedItemRes[]
 }

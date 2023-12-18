@@ -43,8 +43,6 @@
 
 import { defineComponent, onMounted, reactive } from 'vue'
 import { PlaylistItemProps, PlayListItem } from '~/types/Playlist'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 import PlaylistServices from '~/services/PlaylistServices'
 import Preloader from '~/components/Preloader.vue'
 import CardWrapper from '~/components/Cards/CardWrapper.vue'
@@ -58,8 +56,6 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore(key)
-
     const playlists = reactive<PlaylistItemProps>({
       isFetched: false,
       data: []
@@ -81,10 +77,10 @@ export default defineComponent({
     }
 
     const deletePlaylist = (id: string) => {
-      PlaylistServices.remove(id)
-        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-        .then(_ => splicePlaylist(id))
-        .catch((error) => console.dir(error))
+      // PlaylistServices.remove(id)
+      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+      //   .then(_ => splicePlaylist(id))
+      //   .catch((error) => console.dir(error))
     }
 
     const fetchPlaylists = () => {

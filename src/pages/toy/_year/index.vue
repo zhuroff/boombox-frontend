@@ -22,8 +22,6 @@
 <script lang="ts">
 import api from '~/api'
 import { PropType, defineComponent, reactive, watchEffect, ComputedRef, computed } from 'vue'
-import { useStore } from "vuex"
-import { key } from "~/store"
 import { TTOYEntity } from '~/types/TOY'
 import Preloader from '~/components/Preloader.vue'
 import CoverArt from "~/components/CoverArt.vue"
@@ -45,8 +43,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const store = useStore(key);
-
     const toyYear = reactive<any>({
       isFetched: false,
       data: {}
@@ -98,7 +94,7 @@ export default defineComponent({
             }, [] as any[])
           }
           toyYear.isFetched = true
-          store.commit("setPlayerPlaylist", toyYear.data);
+          // store.commit("setPlayerPlaylist", toyYear.data);
         }
 
         fetchDBContent()

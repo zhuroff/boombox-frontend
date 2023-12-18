@@ -31,7 +31,7 @@
           v-for="station in stations.data.get('saved')"
           :key="station.stationuuid"
         >
-          <CardRadio
+          <!-- <CardRadio
             :station="station"
             :current="playingTrack"
             :genre="activeGenre"
@@ -39,7 +39,7 @@
             @playStation="playStation"
             @fetchByGenre="setNewGenre"
             @removeStationFromDatabase="removeStationFromDatabase"
-          />
+          /> -->
         </CardWrapper>
       </ul>
 
@@ -52,7 +52,7 @@
           v-for="station in filteredStations"
           :key="station.stationuuid"
         >
-          <CardRadio
+          <!-- <CardRadio
             :station="station"
             :current="playingTrack"
             :genre="activeGenre"
@@ -60,7 +60,7 @@
             @playStation="playStation"
             @fetchByGenre="setNewGenre"
             @saveStationToDatabase="saveStationToDatabase"
-          />
+          /> -->
         </CardWrapper>
       </ul>
     </transition-group>
@@ -71,8 +71,6 @@
 
 import { defineComponent, onMounted, ref, reactive, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 import { RadioPage, RadioStationResponse } from '~/types/Radio'
 import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
@@ -89,7 +87,6 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore(key)
     const router = useRouter()
     const route = useRoute()
 
@@ -105,7 +102,7 @@ export default defineComponent({
       'metal', 'classical', 'electronic', 'ambient'
     ])
 
-    const playingTrack = computed(() => store.getters.playingTrack)
+    const playingTrack = computed(() => false /* store.getters.playingTrack */)
 
     const filteredStations = computed(() => {
       if (!stations.data.get('saved')?.length) {
@@ -120,7 +117,7 @@ export default defineComponent({
     })
 
     const playStation = (payload: RadioStationResponse) => {
-      store.commit('setPlayingStation', payload)
+      // store.commit('setPlayingStation', payload)
     }
 
     const setNewGenre = (genre: string) => {
@@ -157,17 +154,17 @@ export default defineComponent({
     const saveStationToDatabase = async (station: RadioStationResponse) => {
       const { stationuuid, name } = station
 
-      RadioServices.save({ stationuuid, name })
-        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-        .then(_ => moveSavedToList(stationuuid))
-        .catch((error) => console.dir(error))
+      // RadioServices.save({ stationuuid, name })
+      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+      //   .then(_ => moveSavedToList(stationuuid))
+      //   .catch((error) => console.dir(error))
     }
 
     const removeStationFromDatabase = async (payload: RadioStationResponse) => {
-      RadioServices.remove(payload.stationuuid)
-        .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-        .then(_ => removeStation(payload.stationuuid))
-        .catch((error) => console.dir(error))
+      // RadioServices.remove(payload.stationuuid)
+      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
+      //   .then(_ => removeStation(payload.stationuuid))
+      //   .catch((error) => console.dir(error))
     }
 
     const radioSetter = (key: 'saved' | 'all', data: RadioStationResponse[]) => {

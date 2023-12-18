@@ -1,20 +1,20 @@
 import { BasicEntity } from './Common'
-import AlbumTrack from '~/classes/AlbumTrack'
+// import AlbumTrack from '~/classes/AlbumTrack'
 
-export interface AlbumItem {
-  _id: string
-  coverURL: string
-  albumCover: string
-  title: string
-  folderName: string
-  artist: BasicEntity
-  genre: BasicEntity
-  period: BasicEntity
-}
+// export interface AlbumItem {
+//   _id: string
+//   coverURL: string
+//   albumCover: string
+//   title: string
+//   folderName: string
+//   artist: BasicEntity
+//   genre: BasicEntity
+//   period: BasicEntity
+// }
 
-export interface AlbumPage extends AlbumItem {
-  tracks: AlbumTrack[]
-}
+// export interface AlbumPage extends AlbumItem {
+//   tracks: AlbumTrack[]
+// }
 
 export interface AlbumHeadProps {
   title: string

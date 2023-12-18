@@ -24,7 +24,6 @@ export default defineComponent({
   components: {
     Sprite
   },
-
   setup() {
     const { actions, getters } = store
 
@@ -41,6 +40,6 @@ export default defineComponent({
       setTrackOnPause,
       continuePlay
     }
-  },
+  }
 })
 </script>

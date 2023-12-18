@@ -1,87 +1,85 @@
 <template>  
-<div class="lyrics">
-  <header class="lyrics__header">
-    <div class="lyrics__heading">{{ heading }}</div>
-    <Button
-      :label="lang('lyrics.get')"
-      isOutlined
-      isInverted
-      :isDisabled="isFetching"
-      @click="fetchLyrics"
-    />
-  </header>
-  <div class="lyrics__content">
-    <transition name="fade">
-      <Preloader
-        v-if="isFetching"
-        mode="light"
+  <div class="lyrics">
+    <header class="lyrics__header">
+      <div class="lyrics__heading">{{ heading }}</div>
+      <Button
+        :label="lang('lyrics.get')"
+        isOutlined
+        isInverted
+        :isDisabled="isFetching"
+        @click="fetchLyrics"
       />
-    </transition>
-    <transition
-      name="flyUp"
-      v-if="!isFetching"
-    >
-      <div
-        v-if="!lyrics && !fetchedLyrics.length"
-        class="lyrics__empty"
-      >{{ lang('lyrics.empty') }}</div>
-    </transition>
-    <Textarea
-      v-if="!isFetching && !fetchedLyrics.length"
-      :rows="3"
-      :content="lyrics || undefined"
-      classname="lyrics__text"
-      :placeholder="lang('lyrics.placeholder')"
-      @setTextareaValue="updateLyrics"
-    />
-    <div
-      v-if="!isFetching"
-      class="lyrics__results"
-    >
-      <ul
-        v-if="fetchedLyrics.length"
-        class="lyrics__list"
+    </header>
+    <div class="lyrics__content">
+      <transition name="fade">
+        <Preloader
+          v-if="isFetching"
+          mode="light"
+        />
+      </transition>
+      <transition
+        name="flyUp"
+        v-if="!isFetching"
       >
-        <li
-          v-for="(item, index) in fetchedLyrics"
-          :key="index"
-          class="lyrics__item"
+        <div
+          v-if="!lyrics && !fetchedLyrics.length"
+          class="lyrics__empty"
+        >{{ lang('lyrics.empty') }}</div>
+      </transition>
+      <Textarea
+        v-if="!isFetching && !fetchedLyrics.length"
+        :rows="3"
+        :content="lyrics || undefined"
+        classname="lyrics__text"
+        :placeholder="lang('lyrics.placeholder')"
+        @setTextareaValue="updateLyrics"
+      />
+      <div
+        v-if="!isFetching"
+        class="lyrics__results"
+      >
+        <ul
+          v-if="fetchedLyrics.length"
+          class="lyrics__list"
         >
-          <img
-            :src="item.thumbnail"
-            class="lyrics__item_thumbnail"
-          />
-          <div class="lyrics__item_content">
-            <div class="lyrics__item_title">{{ item.artist }} - {{ item.title }}</div>
-            <button
-              class="lyrics__item_action"
-              @click="expandLyrics(index)"
-            >
-              <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ lang('lyrics.expand') }}</span>
-              <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ lang('lyrics.collapse') }}</span>
-            </button>&nbsp;/&nbsp;
-            <button
-              class="lyrics__item_action"
-              @click="saveLyrics(item.lyrics)"
-            >{{ lang('lyrics.save') }}</button>
-            <Textarea
-              v-if="expandedLyrics === index"
-              :rows="3"
-              :content="item.lyrics"
-              classname="lyrics__item_text"
-              isDisabled
+          <li
+            v-for="(item, index) in fetchedLyrics"
+            :key="index"
+            class="lyrics__item"
+          >
+            <img
+              :src="item.thumbnail"
+              class="lyrics__item_thumbnail"
             />
-          </div>
-        </li>
-      </ul>
+            <div class="lyrics__item_content">
+              <div class="lyrics__item_title">{{ item.artist }} - {{ item.title }}</div>
+              <button
+                class="lyrics__item_action"
+                @click="expandLyrics(index)"
+              >
+                <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ lang('lyrics.expand') }}</span>
+                <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ lang('lyrics.collapse') }}</span>
+              </button>&nbsp;/&nbsp;
+              <button
+                class="lyrics__item_action"
+                @click="saveLyrics(item.lyrics)"
+              >{{ lang('lyrics.save') }}</button>
+              <Textarea
+                v-if="expandedLyrics === index"
+                :rows="3"
+                :content="item.lyrics"
+                classname="lyrics__item_text"
+                isDisabled
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
-
 </template>
 
 <script lang="ts">
-
 import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
 import { TrackLyricsResponse } from '~/types/Track'
@@ -97,19 +95,16 @@ export default defineComponent({
     Textarea,
     Preloader
   },
-
   props: {
     heading: {
       type: String,
       required: true
     },
-
     id: {
       type: String,
       required: true
     }
   },
-
   setup(props) {
     const { lang } = useLocales()
     const { actions } = store

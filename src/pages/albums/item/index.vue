@@ -16,6 +16,7 @@
     @bookletPageChanged="(data) => bookletPageChanged(data, album.folderName)"
   >
     <AlbumHero
+      v-if="album._id"
       :id="album._id"
       :title="album.title"
       :artist="album.artist"

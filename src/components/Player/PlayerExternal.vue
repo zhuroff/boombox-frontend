@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent } from 'vue'
 import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
@@ -17,7 +16,6 @@ export default defineComponent({
   components: {
     Sprite
   },
-
   setup() {
     const { getters } = store
 
@@ -34,5 +32,4 @@ export default defineComponent({
     return { proceedToYouTube }
   }
 })
-
 </script>

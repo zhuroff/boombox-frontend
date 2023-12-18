@@ -41,10 +41,7 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, onMounted, reactive } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 // import { CollectionListItem } from '~/types/Collection'
 // import collectionServices from '~/services/collection.services'
 import Preloader from '~/components/Preloader.vue'
@@ -52,6 +49,8 @@ import CardWrapper from '~/components/Cards/CardWrapper.vue'
 // import CardCollection from '~/components/Cards/CardCollection.vue'
 import { useListPage } from '~/hooks/useListPage'
 import { Compilation } from '~/types/Compilation'
+import { CollectionEntityRes } from '~/types/ReqRes'
+import CollectionEntity from '~/classes/CollectionEntity'
 
 // type CollectionsPage = {
 //   isFetched: boolean
@@ -64,18 +63,19 @@ export default defineComponent({
     CardWrapper,
     // CardCollection
   },
-
   setup() {
     const {
       fetchData,
       isDataFetched,
-      entities,
       pagePagination,
       pageStateConfig,
       switchPagination
-    } = useListPage<Compilation>()
+    } = useListPage<CollectionEntityRes<string>, CollectionEntity<string>>(CollectionEntity)
 
-    onMounted(() => fetchData('collections'))
+    onMounted(() => {
+      fetchData('collections')
+        .then((payload) => console.log(payload))
+    })
 
     // const collections = reactive<CollectionsPage>({
     //   isFetched: false,

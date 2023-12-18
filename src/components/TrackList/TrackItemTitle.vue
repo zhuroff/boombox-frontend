@@ -1,5 +1,5 @@
 <template>  
-<div
+  <div
     class="tracklist__row-cell --pointer --title"
     @click="callLyricsModal"
   >
@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -27,7 +26,6 @@ export default defineComponent({
     return { callLyricsModal }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
@@ -49,5 +47,4 @@ export default defineComponent({
     overflow: hidden;
   }
 }
-
 </style>

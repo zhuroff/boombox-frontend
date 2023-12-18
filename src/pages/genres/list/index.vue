@@ -3,10 +3,10 @@
     cardType="CardCategory"
     rootPath="genres"
     cardClass="card-category"
-    placeholderImage="/img/genre.webp"
+    placeholderImage="/img/artist.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
-    :dataList="entities"
+    :dataList="genres"
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
   >
@@ -15,10 +15,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed, watch } from 'vue'
-import { CategoryItem } from '~/types/Category'
+import { defineComponent, onMounted, computed, watch, ref } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
+import { CategoryItemRes } from '~/types/ReqRes'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import CategoryItem from '~/classes/CategoryItem'
 
 export default defineComponent({
   components: {
@@ -29,22 +30,30 @@ export default defineComponent({
     const {
       fetchData,
       isDataFetched,
-      entities,
       pagePagination,
       pageStateConfig,
       switchPagination
-    } = useListPage<CategoryItem>()
+    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem)
+
+    const genres = ref<CategoryItem[]>([])
 
     const pageHeading = computed(() => (
       `There are ${pagePagination.value?.totalDocs || 0} genres in collection`
     ))
 
-    watch(pageStateConfig, () => fetchData('genres'))    
-    onMounted(() => fetchData('genres'))
+    watch(pageStateConfig, () => {
+      fetchData('genres')
+        .then((data) => genres.value = data || [])
+    })
+
+    onMounted(() => {
+      fetchData('genres')
+        .then((data) => genres.value = data || [])
+    })
 
     return {
+      genres,
       pageHeading,
-      entities,
       pagePagination,
       isDataFetched,
       switchPagination

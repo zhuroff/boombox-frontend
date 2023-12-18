@@ -23,8 +23,9 @@
   
 <script lang="ts">
 import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
-import { CardBasic, ListPageResponse, RequestConfig } from '~/types/Common'
-import { AlbumItem } from '~/types/Album'
+import { CardBasic, RequestConfig } from '~/types/Common'
+import { ListPageResponse } from '~/types/ReqRes'
+import AlbumItem from '~/classes/AlbumItem'
 import dbServices from '~/services/database.services'
 import Preloader from '~/components/Preloader.vue'
 import Card from '~/components/Cards/Card.vue'
@@ -51,6 +52,7 @@ export default defineComponent({
         _id: album._id,
         title: album.title,
         coverURL: `${album.coverURL}`,
+        cloudURL: `${album.cloudURL}`,
         caption: `${album.artist.title } / ${album.period.title} / ${album.genre.title}`,
       }))
     ))

@@ -62,7 +62,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    // const { currentPlaylistTracks, playingTrack, store } = usePlayer()
     const { actions, getters } = store
 
     const isPlaying = computed(() => (

@@ -6,7 +6,7 @@
     placeholderImage="/img/artist.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
-    :dataList="entities"
+    :dataList="artists"
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
   >
@@ -15,10 +15,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed, watch } from 'vue'
-import { CategoryItem } from '~/types/Category'
+import { defineComponent, onMounted, computed, watch, ref } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
+import { CategoryItemRes } from '~/types/ReqRes'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import CategoryItem from '~/classes/CategoryItem'
 
 export default defineComponent({
   components: {
@@ -29,22 +30,30 @@ export default defineComponent({
     const {
       fetchData,
       isDataFetched,
-      entities,
       pagePagination,
       pageStateConfig,
       switchPagination
-    } = useListPage<CategoryItem>()
+    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem)
+
+    const artists = ref<CategoryItem[]>([])
 
     const pageHeading = computed(() => (
       `There are ${pagePagination.value?.totalDocs || 0} artists in collection`
     ))
 
-    watch(pageStateConfig, () => fetchData('artists'))    
-    onMounted(() => fetchData('artists'))
+    watch(pageStateConfig, () => {
+      fetchData('artists')
+        .then((data) => artists.value = data || [])
+    })
+
+    onMounted(() => {
+      fetchData('artists')
+        .then((data) => artists.value = data || [])
+    })
 
     return {
+      artists,
       pageHeading,
-      entities,
       pagePagination,
       isDataFetched,
       switchPagination

@@ -61,12 +61,11 @@
 <script lang="ts">
 
 import { defineComponent, ref, reactive, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '~/store'
 import { useLocales } from '~/hooks/useLocales'
 import Button from '~/components/Button/Button.vue'
 import Preloader from '~/components/Preloader.vue'
 import api from '~/api'
+import store from '~/store'
 import { SyncResponse } from '~/types/Common'
 
 interface BackupList {
@@ -82,7 +81,7 @@ export default defineComponent({
 
   setup() {
     const { allLocales, setLocale, lang } = useLocales()
-    const store = useStore(key)
+    const { actions } = store
     const backups = reactive([]) as unknown as BackupList[]
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
@@ -117,7 +116,7 @@ export default defineComponent({
         const response = await api.post('/api/backup/save')
         
         if (response.status === 201) {
-          store.commit('setSnackbarMessage', {
+          actions.setSnackbarMessage({
             message: response.data.message,
             type: 'success'
           })
@@ -134,7 +133,7 @@ export default defineComponent({
         const response = await api.post(`/api/backup/restore/${timestamp}`)
         
         if (response.status === 201) {
-          store.commit('setSnackbarMessage', {
+          actions.setSnackbarMessage({
             message: response.data.message,
             type: 'success'
           })
@@ -151,7 +150,7 @@ export default defineComponent({
         const response = await api.delete(`/api/backup/${timestamp}`)
 
         if (response.status === 201) {
-          store.commit('setSnackbarMessage', {
+          actions.setSnackbarMessage({
             message: response.data.message,
             type: 'success'
           })
@@ -207,7 +206,8 @@ export default defineComponent({
             .forEach(([key, value]) => {
               console.log(lang(`syncResponse.${key}`), value)
             })
-          store.commit('setSnackbarMessage', {
+
+          actions.setSnackbarMessage({
             message: getSyncReport(response.data),
             type: 'success',
             time: 10000
