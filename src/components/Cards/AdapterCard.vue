@@ -1,26 +1,24 @@
 <template>
-  <li :class="[{ '--active' : isActive }, className]">
-    <component
-      :is="cardComponent"
-      :card="card"
-      :rootPath="rootPath"
-      :placeholderImage="placeholderImage"
-    />
-  </li>
+  <component
+    :is="cardComponent"
+    :card="card"
+    :rootPath="rootPath"
+    :placeholderImage="placeholderImage"
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
-import CardTile from './CardTile.vue';
-import CardBox from './CardBox.vue'
-import CardCategory from './CardCategory.vue';
+import TileCard from './TileCard.vue'
+import AlbumCard from './AlbumCard.vue'
+import CategoryCard from './CategoryCard.vue'
 
 export default defineComponent({
-  name: 'Card',
+  name: 'AdapterCard',
   components: {
-    CardTile,
-    CardBox,
-    CardCategory
+    TileCard,
+    AlbumCard,
+    CategoryCard
   },
   props: {
     type: {

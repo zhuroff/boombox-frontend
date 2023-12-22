@@ -11,7 +11,7 @@
     </div>
 
     <ul :class="[{ '--small': isGenreRoute }, 'toylist']">
-      <TOYGenreCard v-for="genre in toyGenres.data" :key="genre.resource_id" :content="genre" />
+      <!-- <TOYGenreCard v-for="genre in toyGenres.data" :key="genre.resource_id" :content="genre" /> -->
     </ul>
 
     <TOYGenre v-if="isGenreRoute" :genre="genreProps" :folderKeys="folderKeys" />
@@ -25,14 +25,14 @@ import { useRoute } from 'vue-router'
 import { slugify } from '~/utils'
 import { TTOYFolder, TTOYEntity, TTOYData } from '~/types/TOY'
 import Preloader from '~/components/Preloader.vue'
-import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
+// import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
 import TOYGenre from './_genre/index.vue'
 
 export default defineComponent({
   components: {
     Preloader,
     TOYGenre,
-    TOYGenreCard
+    // TOYGenreCard
   },
 
   setup() {

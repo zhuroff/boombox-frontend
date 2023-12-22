@@ -1,11 +1,20 @@
 <template>
-  <router-link class="card-tile__link" :to="{ path: `/${rootPath}/${card._id}` }">
-    <img class="card-tile__cover" :src="card.coverURL" :alt="card.title">
-    <div class="card-tile__caption">
-      <div class="card-tile__caption-heading">{{ card.title }}</div>
-      <div class="card-tile__caption-description">{{ card.caption }}</div>
-    </div>
-  </router-link>
+  <li class="cards__tile">
+    <router-link
+      class="card-tile__link"
+      :to="{ path: `/${rootPath}/${card._id}` }"
+    >
+      <img
+        class="card-tile__cover"
+        :src="card.coverURL"
+        :alt="card.title"
+      >
+      <div class="card-tile__caption">
+        <div class="card-tile__caption-heading">{{ card.title }}</div>
+        <div class="card-tile__caption-description">{{ card.caption }}</div>
+      </div>
+    </router-link>
+  </li>
 </template>
 
 <script lang="ts">
@@ -13,7 +22,7 @@ import { PropType, defineComponent } from 'vue'
 import { CardBasic } from '~/types/Common'
 
 export default defineComponent({
-  name: 'CardTile',
+  name: 'TileCard',
   props: {
     card: {
       type: Object as PropType<CardBasic>,

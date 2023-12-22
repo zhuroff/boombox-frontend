@@ -1,5 +1,12 @@
 import { Ref } from 'vue'
 import { JSONSchema4 } from 'json-schema'
+import AlbumPage from '~/classes/AlbumPage'
+import CompilationEntity from '~/classes/CompilationEntity'
+import AlbumTrack from '~/classes/AlbumTrack'
+import PlayerTrack from '~/classes/PlayerTrack'
+
+export type LocaleKeys = 'en' | 'by'
+export type EntityImagesKeys = 'poster' | 'avatar'
 
 export interface BasicEntity {
   _id: string
@@ -7,8 +14,14 @@ export interface BasicEntity {
   cloudURL: string
 }
 
-export type LocaleKeys = 'en' | 'by'
-export type EntityImagesKeys = 'poster' | 'avatar'
+export interface AppStateInterface {
+  currentPlaylist: AlbumPage | CompilationEntity<AlbumTrack> | null
+  reservedPlaylist: AlbumPage | CompilationEntity<AlbumTrack> | null
+  playingTrack: PlayerTrack | null
+  snackbar: Snackbar[]
+  isPlayerExpanded: boolean
+  currentLocale: LocaleKeys
+}
 
 export interface LocaleDictionary {
   [key: string]: string | LocaleDictionary

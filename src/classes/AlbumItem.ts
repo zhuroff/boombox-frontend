@@ -4,6 +4,7 @@ import { AlbumItemRes } from '~/types/ReqRes'
 export default class AlbumItem {
   readonly _id: string
   readonly title: string
+  readonly caption: string
   readonly cloudURL: string
   readonly folderName: string
   readonly inCollections: BasicEntity[]
@@ -22,5 +23,6 @@ export default class AlbumItem {
     this.genre = album.genre
     this.period = album.period
     this.coverURL = album.coverURL
+    this.caption = `${album.artist.title } / ${album.period.title} / ${album.genre.title}`
   }
 }

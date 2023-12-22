@@ -17,7 +17,7 @@ export default class AlbumTrack {
   order: number
   listened: number
   isOutOfAlbumList: boolean
-  inPlaylists: BasicEntity[]
+  inCompilations: BasicEntity[]
   
   constructor(
     track: TrackRes,
@@ -32,7 +32,7 @@ export default class AlbumTrack {
     this.cloudURL = track.cloudURL
     this.listened = track.listened || 0
     this.inAlbum = track.inAlbum
-    this.inPlaylists = track.inPlaylists || []
+    this.inCompilations = track.inCompilations || []
     this.artist = track.artist
     this.lyrics = track.lyrics || ''
     this.duration = track.duration || 0

@@ -8,6 +8,7 @@
     :discogsFilters="discogsFilters"
     :discogsFiltersStates="discogsFiltersStates"
     :getBooklet="bookletHandler"
+    cardType="AlbumCard"
     @filter:update="setDiscogsFilterValue"
     @filter:reset="resetDiscogsFilters"
     @switchPagination="setDiscogsPaginationPage"
@@ -76,7 +77,7 @@ export default defineComponent({
     } = useDiscogs()
 
     const { lang } = useLocales()
-    const { actions, getters } = store
+    const { actions } = store
     const album = ref<AlbumPage>({} as AlbumPage)
     const relatedAlbums = ref<RelatedAlbums[]>([])
     const entityType = ref('albums')
@@ -146,7 +147,10 @@ export default defineComponent({
           await getRelatedAlbums(config, entityType.value)
         )))
         
-        relatedAlbums.value = response
+        relatedAlbums.value = response.map(({ docs, name}) => ({
+          name,
+          docs: docs.map<AlbumItem>((album) => new AlbumItem(album))
+        }))
       } catch (error) {
         console.error(error)
       }

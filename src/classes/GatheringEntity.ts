@@ -1,6 +1,6 @@
 import { GatheringEntityRes } from '~/types/ReqRes'
 
-export class GatheringEntity<T extends GatheringEntityRes> {
+export default abstract class GatheringEntity<T extends GatheringEntityRes> {
   readonly _id: string
   readonly title: string
   readonly dateCreated: string

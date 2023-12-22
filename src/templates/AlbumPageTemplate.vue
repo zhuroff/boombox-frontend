@@ -48,17 +48,17 @@
             </div>
           </div>
           <div
-            v-for="{ name, docs } in relatedAlbums"
+            v-for="{ name, docs } in relatedAlbums?.filter(({ docs }) => docs.length)"
             class="album__related"
           >
             <div class="album__related-title">
               {{ lang('moreOf') }} {{ name }}
             </div>
-            <Card
+            <AdapterCard
               v-for="item in docs"
               :key="item._id"
               :card="item"
-              type="CardBox"
+              :type="cardType"
               rootPath="albums"
               className="card-box"
               placeholderImage="/img/album.webp"
@@ -79,19 +79,18 @@ import BookletState from '~/classes/BookletState'
 import AlbumPage from '~/classes/AlbumPage'
 import Preloader from '~/components/Preloader.vue'
 import CoverArt from '~/components/CoverArt.vue'
-import Card from '~/components/Cards/Card.vue'
+import AdapterCard from '~/components/Cards/AdapterCard.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
-import AlbumItem from '~/classes/AlbumItem'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
   components: {
     Preloader,
     CoverArt,
-    Card,
+    AdapterCard,
     TrackList,
     Table,
     Sprite,
@@ -125,6 +124,10 @@ export default defineComponent({
     relatedAlbums: {
       type: Array as PropType<RelatedAlbums[]>,
       requried: false
+    },
+    cardType: {
+      type: String,
+      required: true
     },
     getBooklet: {
       type: Function as PropType<() => void>,

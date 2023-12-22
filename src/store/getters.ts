@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { AppStateInterface } from '.'
+import { AppStateInterface } from '~/types/Common'
 import { findLocaleLangValue } from '~/utils'
 import locales from '~/locales'
 

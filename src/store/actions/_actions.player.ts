@@ -1,10 +1,10 @@
-import AlbumTrack from '~/classes/AlbumTrack';
-import { AppStateInterface } from '..';
-import databaseServices from '~/services/database.services';
-import { TrackProgress } from '~/types/Player';
-import cloudServices from '~/services/cloud.services';
+import { AppStateInterface } from '~/types/Common'
+import { TrackProgress } from '~/types/Player'
+import AlbumTrack from '~/classes/AlbumTrack'
+import cloudServices from '~/services/cloud.services'
+import databaseServices from '~/services/database.services'
 
-export const usePlayerActions = (state: AppStateInterface) => {
+export const useActionsPlayerPrivate = (state: AppStateInterface) => {
   const setLoadingState = (id: string) => {
     if (!state.playingTrack) {
       throw new Error('No playing track defined')

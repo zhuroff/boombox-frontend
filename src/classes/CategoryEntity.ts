@@ -1,6 +1,6 @@
 import { CategoryEntityRes } from '~/types/ReqRes'
 
-export default class CategoryEntity {
+export default abstract class CategoryEntity {
   _id: string
   title: string
   cloudURL: string

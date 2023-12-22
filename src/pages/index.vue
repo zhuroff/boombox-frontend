@@ -6,7 +6,7 @@
     <transition-group name="flyUp">
       <div v-if="isDataFetched" key="events">
         <ul class="masonry">
-          <Card
+          <AdapterCard
             v-for="card in tileList"
             :key="card._id"
             :card="card"
@@ -28,12 +28,12 @@ import { ListPageResponse } from '~/types/ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
 import dbServices from '~/services/database.services'
 import Preloader from '~/components/Preloader.vue'
-import Card from '~/components/Cards/Card.vue'
+import AdapterCard from '~/components/Cards/AdapterCard.vue'
 
 export default defineComponent({
   components: {
     Preloader,
-    Card
+    AdapterCard
   },
 
   setup() {

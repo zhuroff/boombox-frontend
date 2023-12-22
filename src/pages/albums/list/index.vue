@@ -1,6 +1,6 @@
 <template>
   <ListPageTemplate
-    cardType="CardBox"
+    cardType="AlbumCard"
     rootPath="albums"
     cardClass="card-box"
     placeholderImage="/img/album.webp"
@@ -66,4 +66,3 @@ export default defineComponent({
   }
 })
 </script>
-~/classes/AlbumCardBox

@@ -9,7 +9,7 @@ export interface TrackRes extends BasicEntity {
   lyrics?: string
   artist: BasicEntity
   inAlbum: Pick<AlbumItem, '_id' | 'title' | 'cloudURL' | 'folderName' | 'period'>
-  inPlaylists?: BasicEntity[]
+  inCompilations?: BasicEntity[]
 }
 
 export interface EmbeddedItemRes extends Omit<BasicEntity, 'cloudURL'> {

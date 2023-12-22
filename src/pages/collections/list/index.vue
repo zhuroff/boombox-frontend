@@ -45,7 +45,7 @@ import { defineComponent, onMounted, reactive } from 'vue'
 // import { CollectionListItem } from '~/types/Collection'
 // import collectionServices from '~/services/collection.services'
 import Preloader from '~/components/Preloader.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
+// import CardWrapper from '~/components/Cards/CardWrapper.vue'
 // import CardCollection from '~/components/Cards/CardCollection.vue'
 import { useListPage } from '~/hooks/useListPage'
 import { Compilation } from '~/types/Compilation'
@@ -60,7 +60,7 @@ import CollectionEntity from '~/classes/CollectionEntity'
 export default defineComponent({
   components: {
     Preloader,
-    CardWrapper,
+    // CardWrapper,
     // CardCollection
   },
   setup() {

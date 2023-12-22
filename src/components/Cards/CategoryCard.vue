@@ -1,16 +1,18 @@
-<template>  
-  <router-link
-    class="card-category__link"
-    :to="`/${rootPath}/${card._id}`"
-  >
-    <img
-      :src="card.avatar ? host(card.avatar) : placeholderImage"
-      :alt="card.title"
-      class="card-category__cover"
+<template>
+  <li class="cards__category">
+    <router-link
+      class="card-category__link"
+      :to="`/${rootPath}/${card._id}`"
     >
-    <div class="card-category__title">{{ card.title }}</div>
-    <div class="card-category__info">Albums: {{ card.albums }}</div>
-  </router-link>
+      <img
+        :src="card.avatar ? host(card.avatar) : placeholderImage"
+        :alt="card.title"
+        class="card-category__cover"
+      >
+      <div class="card-category__title">{{ card.title }}</div>
+      <div class="card-category__info">Albums: {{ card.albums }}</div>
+    </router-link>
+  </li>
 </template>
 
 <script lang="ts">
@@ -19,7 +21,7 @@ import CategoryItem from '~/classes/CategoryItem'
 import { hostString } from '~/utils'
 
 export default defineComponent({
-  name: 'CardCategory',
+  name: 'CategoryCard',
   props: {
     card: {
       type: Object as PropType<CategoryItem>,

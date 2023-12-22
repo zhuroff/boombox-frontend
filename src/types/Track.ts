@@ -19,7 +19,7 @@ export type TrackResponse = {
   cloudURL: string
   listened: number
   inAlbum: AlbumItem
-  inPlaylists: BasicEntity[]
+  inCompilations: BasicEntity[]
   artist: BasicEntity
   lyrics?: string
   duration?: number

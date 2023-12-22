@@ -22,18 +22,18 @@
         class="cardlist"
         key="list"
       >
-        <CardWrapper
+        <!-- <CardWrapper
           v-for="playlist in playlists.data"
           :key="playlist._id"
           deletable
           @deleteItem="deletePlaylist(playlist._id)"
-        >
+        > -->
           <!-- <CardCollection
             :data="playlist"
             title="Tracks in playlist:"
             slug="playlists"
           /> -->
-        </CardWrapper>
+        <!-- </CardWrapper> -->
       </ul>
     </transition-group>
   </section>
@@ -45,13 +45,13 @@ import { defineComponent, onMounted, reactive } from 'vue'
 import { PlaylistItemProps, PlayListItem } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import Preloader from '~/components/Preloader.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
+// import CardWrapper from '~/components/Cards/CardWrapper.vue'
 // import CardCollection from '~/components/Cards/CardCollection.vue'
 
 export default defineComponent({
   components: {
     Preloader,
-    CardWrapper,
+    // CardWrapper,
     // CardCollection
   },
 

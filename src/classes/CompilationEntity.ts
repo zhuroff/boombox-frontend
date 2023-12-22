@@ -1,5 +1,5 @@
 import { CompilationEntityRes } from '~/types/ReqRes'
-import { GatheringEntity } from './GatheringEntity'
+import GatheringEntity from './GatheringEntity'
 
 export default class CompilationEntity<T> extends GatheringEntity<CompilationEntityRes<T>> {
   tracks: T[]

@@ -12,10 +12,10 @@
         :withSearch="withSearch"
       />
       <CardList
-        v-if="isDataFetched"
+        v-if="isDataFetched && dataList.length"
         key="list"
       >
-        <Card
+        <AdapterCard
           v-for="item in dataList"
           :key="item._id"
           :card="item"
@@ -44,7 +44,7 @@ import { BasicEntity, Pagination, PaginationConfig } from '~/types/Common'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
 import CardList from '~/components/CardList/CardList.vue'
-import Card from '~/components/Cards/Card.vue'
+import AdapterCard from '~/components/Cards/AdapterCard.vue'
 import Paginator from '~/components/Paginator.vue'
 
 export default defineComponent({
@@ -53,7 +53,7 @@ export default defineComponent({
     Preloader,
     Header,
     CardList,
-    Card,
+    AdapterCard,
     Paginator
   },
   props: {

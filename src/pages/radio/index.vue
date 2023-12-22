@@ -27,10 +27,10 @@
         class="stations --saved"
         key="saved"
       >
-        <CardWrapper
+        <!-- <CardWrapper
           v-for="station in stations.data.get('saved')"
           :key="station.stationuuid"
-        >
+        > -->
           <!-- <CardRadio
             :station="station"
             :current="playingTrack"
@@ -40,7 +40,7 @@
             @fetchByGenre="setNewGenre"
             @removeStationFromDatabase="removeStationFromDatabase"
           /> -->
-        </CardWrapper>
+        <!-- </CardWrapper> -->
       </ul>
 
       <ul
@@ -48,10 +48,10 @@
         class="stations"
         key="all"
       >
-        <CardWrapper
+        <!-- <CardWrapper
           v-for="station in filteredStations"
           :key="station.stationuuid"
-        >
+        > -->
           <!-- <CardRadio
             :station="station"
             :current="playingTrack"
@@ -61,7 +61,7 @@
             @fetchByGenre="setNewGenre"
             @saveStationToDatabase="saveStationToDatabase"
           /> -->
-        </CardWrapper>
+        <!-- </CardWrapper> -->
       </ul>
     </transition-group>
   </section>      
@@ -74,16 +74,16 @@ import { useRouter, useRoute } from 'vue-router'
 import { RadioPage, RadioStationResponse } from '~/types/Radio'
 import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button/Button.vue'
-import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import CardRadio from '~/components/Cards/CardRadio.vue'
+// import CardWrapper from '~/components/Cards/CardWrapper.vue'
+import RadioCard from '~/components/Cards/RadioCard.vue'
 import RadioServices from '~/services/RadioServices'
 
 export default defineComponent({
   components: {
     Preloader,
     Button,
-    CardWrapper,
-    CardRadio
+    // CardWrapper,
+    RadioCard
   },
 
   setup() {

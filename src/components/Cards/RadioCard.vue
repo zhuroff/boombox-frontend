@@ -11,8 +11,16 @@
       <div class="station__name">{{ station.name }}</div>
       <div class="station__country">{{ station.country }}</div>
       <ul class="station__tags">
-        <CardRadioGenre v-for="(tag, index) in stationTags" :key="index" :genre="tag" :isActive="tag === genre"
-          @click="$emit('fetchByGenre', tag)" />
+        <li class="station__tag">
+          <button
+            v-for="(tag, index) in stationTags"
+            :key="index"
+            :class="[{ '--active' : tag === genre }, 'station__tag-button']"
+            @click="() => $emit('fetchByGenre', tag)"
+          >{{ genre }}</button>
+        </li>
+        <!-- <CardRadioGenre v-for="(tag, index) in stationTags" :key="index" :genre="tag" :isActive="tag === genre"
+          @click="$emit('fetchByGenre', tag)" /> -->
       </ul>
     </div>
     <button v-if="isSaved" class="station__save" @click="removeStationFromDatabase">
@@ -29,13 +37,13 @@ import { defineComponent, computed, reactive, PropType } from 'vue'
 import { RadioStationResponse } from '~/types/Radio'
 import store from '~/store'
 import Sprite from '~/components/Sprite/Sprite.vue'
-import CardRadioGenre from '~/components/Cards/CardRadioGenre.vue'
+// import CardRadioGenre from '~/components/Cards/CardRadioGenre.vue'
 
 export default defineComponent({
-  name: 'CardRadio',
+  name: 'RadioCard',
   components: {
     Sprite,
-    CardRadioGenre
+    // CardRadioGenre
   },
   props: {
     station: {
@@ -47,7 +55,7 @@ export default defineComponent({
       required: true
     },
     current: {
-      type: Object,
+      type: Object as any,
       required: false
     },
     isSaved: {
