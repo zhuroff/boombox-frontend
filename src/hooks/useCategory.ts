@@ -17,6 +17,7 @@ export const useCategory = (entityType: string) => {
       data.value[payload.key] = payload.url
     }
   }
+  
   const totalCounts = computed(() => (
     lang('totalAlbums') + `: ${data.value?.albums?.length || 0}`
   ))
@@ -37,6 +38,7 @@ export const useCategory = (entityType: string) => {
   const fetchCategoryEntry = async () => {
     try {
       const category = await dbServices.getEntity<CategoryPage>(entityType, String(route.params.id))
+      console.log(category.albums)
       data.value = {
         ...category,
         albums: sortAlbumsByYears(category.albums.map((album) => ({

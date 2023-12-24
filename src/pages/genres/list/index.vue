@@ -1,6 +1,6 @@
 <template>
   <ListPageTemplate
-    cardType="CardCategory"
+    cardType="CategoryCard"
     rootPath="genres"
     cardClass="card-category"
     placeholderImage="/img/artist.webp"

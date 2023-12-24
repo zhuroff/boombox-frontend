@@ -15,7 +15,7 @@
         @setUploadedImage="setUploadedImage"
       />
       <ListPageTemplate
-        cardType="CardBox"
+        cardType="AlbumCard"
         rootPath="albums"
         cardClass="card-box"
         placeholderImage="/img/album.webp"

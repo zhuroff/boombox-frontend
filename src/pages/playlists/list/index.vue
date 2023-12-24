@@ -1,27 +1,27 @@
 <template>
   <section class="section">
-    <transition name="fade">
+    <!-- <transition name="fade">
       <Preloader
         v-if="!playlists.isFetched"
         mode="light"
       />
-    </transition>
+    </transition> -->
 
     <transition-group name="flyUp">
-      <div
+      <!-- <div
         class="section__heading"
         key="heading"
       >
         <h1 class="section__title">
           There are {{ playlists.data.length }} playlists in your collection
         </h1>
-      </div>
+      </div> -->
 
-      <ul
+      <!-- <ul
         v-if="playlists.isFetched"
         class="cardlist"
         key="list"
-      >
+      > -->
         <!-- <CardWrapper
           v-for="playlist in playlists.data"
           :key="playlist._id"
@@ -34,7 +34,7 @@
             slug="playlists"
           /> -->
         <!-- </CardWrapper> -->
-      </ul>
+      <!-- </ul> -->
     </transition-group>
   </section>
 </template>
@@ -42,7 +42,7 @@
 <script lang="ts">
 
 import { defineComponent, onMounted, reactive } from 'vue'
-import { PlaylistItemProps, PlayListItem } from '~/types/Playlist'
+// import { PlaylistItemProps, PlayListItem } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import Preloader from '~/components/Preloader.vue'
 // import CardWrapper from '~/components/Cards/CardWrapper.vue'
@@ -56,25 +56,25 @@ export default defineComponent({
   },
 
   setup() {
-    const playlists = reactive<PlaylistItemProps>({
-      isFetched: false,
-      data: []
-    })
+    // const playlists = reactive<PlaylistItemProps>({
+    //   isFetched: false,
+    //   data: []
+    // })
 
-    const setPlaylist = (data: PlayListItem[]) => {
-      playlists.data = data
-      playlists.isFetched = true
-    }
+    // const setPlaylist = (data: PlayListItem[]) => {
+    //   playlists.data = data
+    //   playlists.isFetched = true
+    // }
 
-    const splicePlaylist = (id: string) => {
-      const deletedPlaylistIndex = playlists.data.findIndex((list) => (
-        list._id === id
-      ))
+    // const splicePlaylist = (id: string) => {
+    //   const deletedPlaylistIndex = playlists.data.findIndex((list) => (
+    //     list._id === id
+    //   ))
 
-      if (deletedPlaylistIndex > -1) {
-        playlists.data.splice(deletedPlaylistIndex, 1)
-      }
-    }
+    //   if (deletedPlaylistIndex > -1) {
+    //     playlists.data.splice(deletedPlaylistIndex, 1)
+    //   }
+    // }
 
     const deletePlaylist = (id: string) => {
       // PlaylistServices.remove(id)
@@ -85,14 +85,14 @@ export default defineComponent({
 
     const fetchPlaylists = () => {
       PlaylistServices.list()
-        .then((data) => setPlaylist(data))
+        .then((data) => console.log(data))
         .catch((error) => console.dir(error))
     }
 
     onMounted(() => fetchPlaylists())
 
     return {
-      playlists,
+      // playlists,
       deletePlaylist
     }
   }

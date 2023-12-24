@@ -10,7 +10,7 @@ export const localesBY: LocaleDictionary = {
     artists: 'Артысты',
     genres: 'Жанры',
     periods: 'Перыяды',
-    frames: 'Фрэймы',
+    embedded: 'Фрэймы',
     collections: 'Калекцыi',
     playlists: 'Спiсы',
     youtube: 'YouTube',
@@ -44,6 +44,14 @@ export const localesBY: LocaleDictionary = {
     releaseYear: 'Год',
     releaseFormat: 'Фармат',
     label: 'Лэйбл'
+  },
+  embeddedForm: {
+    title: 'Назва альбому',
+    artist: 'Артыст',
+    genre: 'Жанр',
+    period: 'Год выдання',
+    frame: 'Код фрэйму',
+    inCollections: 'У калекцыi',
   },
   table: {
     empty: 'Няма дадзеных'

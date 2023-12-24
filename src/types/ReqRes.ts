@@ -1,7 +1,7 @@
 import { BasicEntity, Pagination } from './Common'
 import AlbumItem from '~/classes/AlbumItem'
 
-export interface TrackRes extends BasicEntity {
+export interface TrackRes extends Required<BasicEntity> {
   path: string
   coverURL?: string
   duration?: number
@@ -12,14 +12,14 @@ export interface TrackRes extends BasicEntity {
   inCompilations?: BasicEntity[]
 }
 
-export interface EmbeddedItemRes extends Omit<BasicEntity, 'cloudURL'> {
+export interface EmbeddedItemRes extends BasicEntity {
   frame: string
   artist: BasicEntity
   genre: BasicEntity
   period: BasicEntity
 }
 
-export interface AlbumItemRes extends BasicEntity {
+export interface AlbumItemRes extends Required<BasicEntity> {
   folderName: string
   inCollections: BasicEntity[]
   artist: BasicEntity
@@ -77,7 +77,7 @@ export interface GatheringUpdateRes {
   order: number
 }
 
-export interface CategoryEntityRes extends BasicEntity {
+export interface CategoryEntityRes extends Required<BasicEntity> {
   avatar?: string
 }
 

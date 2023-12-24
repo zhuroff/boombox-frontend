@@ -1,10 +1,10 @@
 import { ReorderPayload, ResponseMessage } from '~/types/Common'
-import { PlayListItem, PlaylistPage } from '~/types/Playlist'
+// import { PlayListItem, PlaylistPage } from '~/types/Playlist'
 import api from '~/api'
 
 export default class PlaylistServices {
   static async list() {
-    const response = await api.get<PlayListItem[]>('/api/playlists')
+    const response = await api.get/*<PlayListItem[]>*/('/api/playlists')
     
     if (response?.status === 200) {
       return response.data
@@ -14,12 +14,12 @@ export default class PlaylistServices {
   }
 
   static async single(id: string) {
-    const response = await api.get<PlaylistPage>(`/api/playlists/${id}`)
+    const response = await api.get/*<PlaylistPage>*/(`/api/playlists/${id}`)
 
     if (response?.status === 200) {
-      const result: PlaylistPage = {
+      const result/*: PlaylistPage */= {
         ...response.data,
-        tracks: response.data.tracks.map((track) => ({
+        tracks: response.data.tracks.map((track: any /* temp */) => ({
           ...track,
           title: `${track.artist.title} - ${track.title}`
         }))

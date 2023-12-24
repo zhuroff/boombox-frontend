@@ -47,10 +47,9 @@ export default defineComponent({
 @import 'include-media';
 
 .header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 2rem;
 
   @include media('<laptop') {
     background-color: $dark;
@@ -81,10 +80,12 @@ export default defineComponent({
 
     @include media('<tablet') {
       @include serif(1.25rem, 600);
+      margin-right: 1rem;
     }
 
     @include media('>=tablet') {
       @include serif(1.5rem, 600);
+      margin-right: 2rem;
     }
   }
 }

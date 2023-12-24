@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import EmbeddedList from './list/index.vue'
@@ -14,12 +13,11 @@ export default defineComponent({
     EmbeddedList,
     EmbeddedPage
   },
-
   setup() {
     const route = useRoute()
 
     const routeComponent = computed(() => {
-      if (route.name === 'frames') {
+      if (route.name === 'embedded') {
         return EmbeddedList
       }
 
@@ -29,5 +27,4 @@ export default defineComponent({
     return { routeComponent }
   }
 })
-
 </script>

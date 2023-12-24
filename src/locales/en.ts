@@ -10,7 +10,7 @@ export const localesEN: LocaleDictionary = {
     artists: 'Artists',
     genres: 'Genres',
     periods: 'Periods',
-    frames: 'Frames',
+    embedded: 'Embedded',
     collections: 'Collections',
     playlists: 'Playlists',
     youtube: 'YouTube',
@@ -44,6 +44,14 @@ export const localesEN: LocaleDictionary = {
     releaseYear: 'Year',
     releaseFormat: 'Format',
     label: 'Label'
+  },
+  embeddedForm: {
+    title: 'Album title',
+    artist: 'Artist',
+    genre: 'Genre',
+    period: 'Period',
+    frame: 'Frame code',
+    inCollections: 'In collections'
   },
   table: {
     empty: 'No data'

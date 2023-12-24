@@ -11,7 +11,7 @@ export type EntityImagesKeys = 'poster' | 'avatar'
 export interface BasicEntity {
   _id: string
   title: string
-  cloudURL: string
+  cloudURL?: string
 }
 
 export interface AppStateInterface {

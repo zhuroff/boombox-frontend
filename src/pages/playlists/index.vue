@@ -1,5 +1,5 @@
 <template>
-  <Component :is="routeComponent" />
+  <!-- <Component :is="routeComponent" /> -->
 </template>
 
 <script lang="ts">
@@ -7,26 +7,26 @@
 import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import PlaylistList from './list/index.vue'
-import PlaylistPage from './_id/index.vue'
+// import PlaylistPage from './_id/index.vue'
 
 export default defineComponent({
   components: {
     PlaylistList,
-    PlaylistPage
+    // PlaylistPage
   },
 
   setup() {
     const route = useRoute()
 
-    const routeComponent = computed(() => {
-      if (route.name === 'playlists') {
-        return PlaylistList
-      }
+    // const routeComponent = computed(() => {
+    //   if (route.name === 'playlists') {
+    //     return PlaylistList
+    //   }
 
-      return PlaylistPage
-    })
+    //   return PlaylistPage
+    // })
 
-    return { routeComponent }
+    // return { routeComponent }
   }
 })
 

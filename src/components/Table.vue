@@ -91,7 +91,7 @@
 
 <script lang="ts">
 import { JSONSchema4 } from 'json-schema'
-import { ComputedRef, PropType, computed, defineComponent, ref, watch } from 'vue'
+import { ComputedRef, PropType, computed, defineComponent, ref } from 'vue'
 import { PaginationConfig, TableFilter, TablePayload } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import Select from '~/components/Select.vue'

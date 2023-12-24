@@ -1,11 +1,11 @@
 <template>
   <section class="section">
-    <transition name="fade">
+    <!-- <transition name="fade">
       <Preloader
         v-if="!playlist.isFetched"
         mode="light"
       />
-    </transition>
+    </transition> -->
       
     <transition-group name="flyUp">
       <!-- <CategoryHero
@@ -20,7 +20,7 @@
         @saveTitle="saveTitle"
       /> -->
 
-      <div
+      <!-- <div
         v-if="playlist.isFetched"
         key="playlist"
         class="album"
@@ -44,7 +44,7 @@
             @orderChanged="orderChanged"
           />
         </div>
-      </div>
+      </div> -->
     </transition-group>
   </section>
 </template>
@@ -55,7 +55,7 @@ import { computed, defineComponent, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { hostString } from '~/utils'
 import { ImagePayload, ReorderPayload, UploadImageResult } from '~/types/Common'
-import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
+// import { PlaylistPage, PlaylistPageProps } from '~/types/Playlist'
 import PlaylistServices from '~/services/PlaylistServices'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
@@ -74,34 +74,34 @@ export default defineComponent({
   setup() {
     const route = useRoute()
 
-    const playlist = reactive<PlaylistPageProps>({
-      isFetched: false,
-      data: {} as PlaylistPage
-    })
+    // const playlist = reactive<PlaylistPageProps>({
+    //   isFetched: false,
+    //   data: {} as PlaylistPage
+    // })
 
-    const playlistDescription = computed(() => (
-      `Tracks in playlist: ${playlist.data.tracks?.length}`
-    ))
+    // const playlistDescription = computed(() => (
+    //   `Tracks in playlist: ${playlist.data.tracks?.length}`
+    // ))
 
-    const albumCover = computed(() => (
-      playlist.data.avatar && host(playlist.data.avatar)
-    ))
+    // const albumCover = computed(() => (
+    //   playlist.data.avatar && host(playlist.data.avatar)
+    // ))
 
-    const setUploadedImage = (payload: UploadImageResult) => {
-      playlist.data[payload.key] = payload.url
-    }
+    // const setUploadedImage = (payload: UploadImageResult) => {
+    //   playlist.data[payload.key] = payload.url
+    // }
 
     const uploadCover = (file: File) => {
-      const payload: ImagePayload = {
-        file,
-        type: 'avatar',
-        slug: 'playlists',
-        id: String(route.params.id)
-      }
+      // const payload: ImagePayload = {
+      //   file,
+      //   type: 'avatar',
+      //   slug: 'playlists',
+      //   id: String(route.params.id)
+      // }
 
-      UploadServices.uploadImage<PlaylistPage>(payload)
-        .then((data) => playlist.data.avatar = data.avatar)
-        .catch((error) => console.dir(error))
+      // UploadServices.uploadImage<PlaylistPage>(payload)
+      //   .then((data) => playlist.data.avatar = data.avatar)
+      //   .catch((error) => console.dir(error))
     }
 
     const orderChanged = (payload: ReorderPayload) => {
@@ -110,25 +110,26 @@ export default defineComponent({
       //   .catch((error) => console.dir(error))
     }
 
-    const setPlaylist = (data: PlaylistPage) => {
-      playlist.data = data
-      playlist.isFetched = true
-    }
+    // const setPlaylist = (data: PlaylistPage) => {
+    //   // playlist.data = data
+    //   // playlist.isFetched = true
+    // }
 
     const fetchPlaylist = () => {
       PlaylistServices.single(String(route.params.id))
         .then((response) => {
-          setPlaylist(response)
+          console.log(response)
+          // setPlaylist(response)
           // store.commit('setPlayerPlaylist', response)
         })
         .catch((error) => console.dir(error))
     }
 
     const saveTitle = (title: string) => {
-      if (title !== playlist.data?.title && title.length > 1) {
-        PlaylistServices.rename(String(route.params.id), title)
-          .catch((error) => console.dir(error))
-      }
+      // if (title !== playlist.data?.title && title.length > 1) {
+      //   PlaylistServices.rename(String(route.params.id), title)
+      //     .catch((error) => console.dir(error))
+      // }
     }
 
     const host = (pathname: string) => hostString(pathname)
@@ -136,12 +137,12 @@ export default defineComponent({
     onMounted(() => fetchPlaylist())
 
     return {
-      playlist,
-      albumCover,
-      setUploadedImage,
+      // playlist,
+      // albumCover,
+      // setUploadedImage,
       uploadCover,
       orderChanged,
-      playlistDescription,
+      // playlistDescription,
       saveTitle
     }
   }

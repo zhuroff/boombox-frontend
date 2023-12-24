@@ -19,6 +19,18 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/embedded',
+    name: 'embedded',
+    component: () => import(/* webpackChunkName: 'embedded' */ '~/pages/embedded/index.vue'),
+    children: [
+      {
+        path: '/embedded/:id',
+        name: 'embed',
+        component: () => import(/* webpackChunkName: 'embedded' */ '~/pages/embedded/index.vue')
+      }
+    ]
+  },
+  {
     path: '/toy',
     name: 'toy',
     component: () => import(/* webpackChunkName: 'albums' */ '~/pages/toy/index.vue'),
@@ -34,18 +46,6 @@ const routes: Array<RouteRecordRaw> = [
             component: () => import(/* webpackChunkName: 'albums' */ '~/pages/toy/_year/index.vue')
           }
         ]
-      }
-    ]
-  },
-  {
-    path: '/embedded',
-    name: 'embedded',
-    component: () => import(/* webpackChunkName: 'embedded' */ '~/pages/embedded/index.vue'),
-    children: [
-      {
-        path: '/embedded/:id',
-        name: 'embed',
-        component: () => import(/* webpackChunkName: 'embedded' */ '~/pages/embedded/index.vue')
       }
     ]
   },

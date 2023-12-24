@@ -32,7 +32,7 @@
         v-if="!isTOY"
         :duration="track.duration"
       />
-      <TrackItemPlaylist
+      <TrackItemCompilation
         v-if="!isTOY"
         :trackID="track._id"
       />
@@ -74,7 +74,7 @@ import TrackItemAdd from './TrackItemAdd.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
-import TrackItemPlaylist from './TrackItemPlaylist.vue'
+import TrackItemCompilation from './TrackItemCompilation.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
 import Modal from '~/components/Modal.vue'
 import TrackLyrics from './TrackLyrics.vue'
@@ -87,7 +87,7 @@ export default defineComponent({
     TrackItemPlay,
     TrackItemTitle,
     TrackItemDuration,
-    TrackItemPlaylist,
+    TrackItemCompilation,
     TrackItemDisable,
     Modal,
     TrackLyrics

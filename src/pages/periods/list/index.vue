@@ -1,6 +1,6 @@
 <template>
   <ListPageTemplate
-    cardType="CardCategory"
+    cardType="CategoryCard"
     rootPath="periods"
     cardClass="card-category"
     placeholderImage="/img/artist.webp"
