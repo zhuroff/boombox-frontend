@@ -85,7 +85,7 @@ import { useLocales } from '~/hooks/useLocales'
 import { TrackLyricsResponse } from '~/types/Track'
 import store from '~/store'
 import Button from '~/components/Button.vue'
-import Textarea from '~/components/Inputs/Textarea.vue'
+import Textarea from '~/components/Textarea.vue'
 import Preloader from '~/components/Preloader.vue'
 import TrackServices from '~/services/TrackServices'
 

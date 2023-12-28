@@ -21,6 +21,8 @@
       <div class="embedded__create">
         <Form
           :schema="formSchema"
+          :refs="formRefsList"
+          @cleanRefsList="() => formRefsList.length = 0"
         />
       </div>
     </template>
@@ -30,10 +32,12 @@
 <script lang="ts">
 import { defineComponent, ref, watch, computed, reactive } from 'vue'
 import { JSONSchema4 } from 'json-schema'
+import { EmbeddedItemRes } from '~/types/ReqRes'
+import { BasicEntity } from '~/types/Common'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
-import { EmbeddedItemRes } from '~/types/ReqRes'
 import { isObjectsEquals } from '~/utils'
+import embeddedFormSchema from '~/schemas/embeddedFormSchema.json'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import EmbeddedItem from '~/classes/EmbeddedItem'
 import Button from '~/components/Button.vue'
@@ -58,65 +62,9 @@ export default defineComponent({
     const { lang } = useLocales()
     const isCreateMode = ref(false)
     const albums = ref<EmbeddedItem[]>([])
+    const formRefsList = reactive<BasicEntity[]>([])
 
-    const formSchema: JSONSchema4 = reactive({
-      type: 'object',
-      title: 'Embedded form',
-      properties: {
-        title: {
-          type: 'string',
-          title: lang('embeddedForm.title'),
-          required: true
-        },
-        artist: {
-          type: 'array',
-          title: lang('embeddedForm.artist'),
-          required: true,
-          maxItems: 1,
-          minItems: 1,
-          $ref: 'artists',
-          items: {
-            type: 'object'
-          }
-        },
-        genre: {
-          type: 'array',
-          title: lang('embeddedForm.genre'),
-          required: true,
-          maxItems: 1,
-          minItems: 1,
-          $ref: 'genres',
-          items: {
-            type: 'object'
-          }
-        },
-        period: {
-          type: 'array',
-          title: lang('embeddedForm.period'),
-          required: true,
-          maxItems: 1,
-          minItems: 1,
-          $ref: 'periods',
-          items: {
-            type: 'object'
-          }
-        },
-        frame: {
-          type: 'string',
-          title: lang('embeddedForm.frame'),
-          required: true,
-          element: 'textarea'
-        },
-        inCollections: {
-          type: 'array',
-          title: lang('embeddedForm.inCollections'),
-          $ref: 'collections',
-          items: {
-            type: 'object'
-          }
-        }
-      }
-    })
+    const formSchema = embeddedFormSchema as JSONSchema4
 
     const pageHeading = computed(() => (
       lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
@@ -128,7 +76,6 @@ export default defineComponent({
         if (!isObjectsEquals(newVal, oldVal)) {
           fetchData('embedded')
             .then((payload) => {
-              console.log(payload)
               albums.value = payload || []
             })
         }
@@ -140,6 +87,7 @@ export default defineComponent({
       albums,
       formSchema,
       pageHeading,
+      formRefsList,
       isCreateMode,
       pagePagination,
       isDataFetched,
@@ -157,7 +105,19 @@ export default defineComponent({
 
 .embedded {
   &__create {
-    width: 100%;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 60%;
+    border-radius: $borderRadiusSM;
+    box-shadow: $shadowLight;
+    padding: 25px;
+
+    .form {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 </style>

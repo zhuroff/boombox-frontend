@@ -51,7 +51,7 @@ export const localesEN: LocaleDictionary = {
     genre: 'Genre',
     period: 'Period',
     frame: 'Frame code',
-    inCollections: 'In collections'
+    collections: 'In collection'
   },
   table: {
     empty: 'No data'

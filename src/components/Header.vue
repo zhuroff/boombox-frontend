@@ -50,6 +50,7 @@ export default defineComponent({
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  position: relative;
 
   @include media('<laptop') {
     background-color: $dark;

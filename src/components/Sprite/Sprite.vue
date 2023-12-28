@@ -133,6 +133,7 @@ import SpriteChevronRight from './SpriteChevronRight.vue'
 import SpriteChevronLeft from './SpriteChevronLeft.vue'
 import SpriteChevronRightDouble from './SpriteChevronRightDouble.vue'
 import SpriteChevronLeftDouble from './SpriteChevronLeftDouble.vue'
+import SpriteChevronDown from './SpriteChevronDown.vue'
 import SpriteDiscogs from './SpriteDiscogs.vue'
 import SpriteClose from './SpriteClose.vue'
 import SpriteLoupe from './SpriteLoupe.vue'
@@ -156,6 +157,7 @@ export default defineComponent({
     SpriteChevronLeft,
     SpriteChevronRightDouble,
     SpriteChevronLeftDouble,
+    SpriteChevronDown,
     SpriteDiscogs,
     SpriteClose,
     SpriteLoupe,
@@ -184,6 +186,7 @@ export default defineComponent({
       ['chevron-left', SpriteChevronLeft],
       ['chevron-right-double', SpriteChevronRightDouble],
       ['chevron-left-double', SpriteChevronLeftDouble],
+      ['chevron-down', SpriteChevronDown],
       ['discogs', SpriteDiscogs],
       ['close', SpriteClose],
       ['loupe', SpriteLoupe],

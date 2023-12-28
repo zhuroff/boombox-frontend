@@ -1,25 +1,38 @@
 <template>
   <div class="text-input">
-    <input
-      :class="[
-        'text-input__element',
-        `--${size}`
-      ]"
-      :placeholder="placeholder"
-      v-model="value"
+    <div class="text-input__wrapper">
+      <input
+        :class="['text-input__element', `--${size}`]"
+        :placeholder="placeholder && `${placeholder}${isRequired ? '*' : ''}`"
+        :style="style"
+        v-model="inputValue"
+        ref="elementRef"
+        @blur="() => $emit('textInputBlur')"
+      />
+    </div>
+    <TextInputRefList
+      v-if="refEntityKey && isRefListActive"
+      :refConfig="refConfig"
+      @selectRefItem="selectRefItem"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { PropType, StyleValue, computed, defineComponent, nextTick, ref, watch } from 'vue'
+import { BasicEntity, RefPayload } from '~/types/Common'
+import TextInputRefList from './TextInputRefList.vue'
 
 export default defineComponent({
   name: 'TextInput',
+  components: {
+    TextInputRefList
+  },
   props: {
     placeholder: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     },
     size: {
       type: String,
@@ -27,24 +40,80 @@ export default defineComponent({
       default: 'medium',
       validator: (value: string) => ['small', 'medium', 'large'].includes(value)
     },
+    style: {
+      type: Object as PropType<StyleValue>,
+      required: false
+    },
     inputValue: {
+      type: String,
+      required: false
+    },
+    isFocused: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isRequired: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    refEntityKey: {
       type: String,
       required: false
     }
   },
-  setup({ inputValue }, { emit }) {
-    const value = ref(inputValue || '')
+  setup(props, { emit }) {
+    const inputValue = ref(props.inputValue || '')
+    const elementRef = ref<HTMLInputElement>(null!)
+    const isRefListActive = ref(false)
 
-    watch(value, (newValue) => {
-      emit('setInputValue', newValue)
+    const refConfig = computed(() => ({
+      refEntityKey: props.refEntityKey || '',
+      refEntityValue: inputValue.value
+    }))
+
+    const selectRefItem = (payload: RefPayload<BasicEntity>) => {
+      isRefListActive.value = false
+      nextTick(() => {
+        inputValue.value = payload.refEntityValue.title
+        emit('setInputValue', payload.refEntityValue._id)
+      })
+    }
+
+    watch(inputValue, (newValue) => {
+      if (!props.refEntityKey) {
+        emit('setInputValue', newValue)
+      }
+
+      if (newValue.length >= 3 && props.refEntityKey) {
+        isRefListActive.value = true
+      }
     })
 
-    return { value }
+    watch(
+      props,
+      (val) => {
+        if (val.isFocused) {
+          elementRef.value.focus()
+        }
+
+        inputValue.value = val.inputValue || ''
+      }
+    )
+
+    return {
+      inputValue,
+      elementRef,
+      refConfig,
+      selectRefItem,
+      isRefListActive
+    }
   }
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../scss/variables.scss';
 @import 'include-media';
 
@@ -54,7 +123,7 @@ export default defineComponent({
 
   &__element {
     border-radius: $borderRadiusSM;
-    border: 1px solid $paleDP;
+    border: 1px solid $paleMD;
     width: 100%;
 
     &.--medium {

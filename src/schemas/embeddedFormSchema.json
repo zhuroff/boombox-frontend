@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "title": "Embedded form",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "embeddedForm.title",
+      "required": true
+    },
+    "artists": {
+      "type": "string",
+      "title": "embeddedForm.artist",
+      "required": true,
+      "$ref": "artists"
+    },
+    "genres": {
+      "type": "string",
+      "title": "embeddedForm.genre",
+      "required": true,
+      "$ref": "genres"
+    },
+    "periods": {
+      "type": "string",
+      "title": "embeddedForm.period",
+      "required": true,
+      "$ref": "periods"
+    },
+    "collections": {
+      "type": "string",
+      "title": "embeddedForm.collections",
+      "$ref": "collections"
+    },
+    "frame": {
+      "type": "string",
+      "title": "embeddedForm.frame",
+      "required": true,
+      "element": "textarea"
+    }
+  }
+}

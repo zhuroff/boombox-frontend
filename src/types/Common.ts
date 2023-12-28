@@ -1,5 +1,5 @@
 import { Ref } from 'vue'
-import { JSONSchema4 } from 'json-schema'
+import { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import AlbumPage from '~/classes/AlbumPage'
 import CompilationEntity from '~/classes/CompilationEntity'
 import AlbumTrack from '~/classes/AlbumTrack'
@@ -129,4 +129,9 @@ export interface SyncResponse {
   updated: number
   deleted: number
   invalid: Record<string, string>[] | 0
+}
+
+export interface RefPayload<T> {
+  refEntityKey: string
+  refEntityValue: T
 }

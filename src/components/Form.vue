@@ -1,18 +1,31 @@
 <template>
-  <form class="form" @submit.prevent="onSubmit">
+  <form
+    class="form"
+    :style="style"
+    @submit.prevent="onSubmit"
+  >
     <div
       v-for="[key, value] in schemaProps"
       class="form__element"
     >
       <TextInput
         v-if="isTextInput(value)"
-        :placeholder="value.title"
+        :isRequired="Boolean(value.required)"
+        :placeholder="value.title && lang(value.title)"
+        :refEntityKey="value.$ref"
         @setInputValue="(value) => formData[key] = value"
+      />
+      <Textarea
+        v-else-if="isTextarea(value)"
+        :rows="1"
+        :isRequired="Boolean(value.required)"
+        :placeholder="value.title && lang(value.title)"
+        @setTextareaValue="(value) => formData[key] = value"
       />
     </div>
     <div class="form__footer">
       <Button
-        label="Submit"
+        label="Отправить"
         type="submit"
       />
     </div>
@@ -20,27 +33,42 @@
 </template>
 
 <script lang="ts">
-import { PropType, computed, defineComponent, reactive } from 'vue'
+import { PropType, StyleValue, computed, defineComponent, reactive } from 'vue'
+import { BasicEntity } from '~/types/Common'
 import { JSONSchema4 } from 'json-schema'
+import { useLocales } from '~/hooks/useLocales'
 import TextInput from './TextInput.vue'
+import Textarea from './Textarea.vue'
 import Button from './Button.vue'
 
 export default defineComponent({
   name: 'form',
   components: {
     TextInput,
+    Textarea,
     Button
   },
   props: {
     schema: {
       type: Object as PropType<JSONSchema4>,
       required: true
+    },
+    refs: {
+      type: Array as PropType<BasicEntity[]>,
+      required: false,
+      default: []
+    },
+    style: {
+      type: Object as PropType<StyleValue>,
+      required: false
     }
   },
   setup({ schema }) {
     if (!schema.properties) {
       throw new Error('No properties in schema')
     }
+
+    const { lang } = useLocales()
 
     const initValues = (value: JSONSchema4) => {
       switch (value.type) {
@@ -62,12 +90,9 @@ export default defineComponent({
     const formData = reactive(
       Object.entries(schema.properties)
         .reduce((acc, [key, value]) => {
-          acc[key] = initValues(value)
-          // acc.set(key, initValues(value))
-          
+          acc[key] = initValues(value)          
           return acc
         }, {} as Record<string, ReturnType<typeof initValues>>)
-        // }, new Map())
     )
     
     const schemaProps = computed(() => (
@@ -75,11 +100,11 @@ export default defineComponent({
     ))
 
     const isTextInput = (value: JSONSchema4) => {
-      return value.type === 'string' && !value.element || value.element === 'text'
+      return (value.type === 'string' || value.$ref) && value.element !== 'textarea'
     }
 
     const isTextarea = (value: JSONSchema4) => {
-      return value.type === 'string' && value.element === 'textarea'
+      return value.type === 'string' && !value.$ref && value.element === 'textarea'
     }
 
     const onSubmit = () => {
@@ -87,6 +112,7 @@ export default defineComponent({
     }
 
     return {
+      lang,
       formData,
       schemaProps,
       isTextInput,

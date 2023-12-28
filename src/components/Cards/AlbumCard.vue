@@ -161,7 +161,7 @@ export default defineComponent({
     }
 
     // &.--active {
-    //   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    //   box-shadow: $shadowMedium;
     // }
 
     // &.sortable-chosen {
@@ -170,7 +170,7 @@ export default defineComponent({
 
     // @include media('>=desktop') {
     //   &:hover {
-    //     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    //     box-shadow: $shadowMedium;
     //     transition: box-shadow 0.3s ease;
 
     //     .delete {

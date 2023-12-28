@@ -184,24 +184,23 @@ export default defineComponent({
       ArrowDown: volumeDown
     }
 
-    const keyboardNavHandler = () => {
-      document.addEventListener('keyup', (event) => {
-        const keyCode = event.code as PlayerKeyNav
-        const inputTags = ['TEXTAREA', 'INPUT', 'BUTTON']
-        const isInputTags = inputTags.includes((event.target as HTMLInputElement).tagName)
+    const keyboardNavHandler = (event: KeyboardEvent) => {
+      const keyCode = event.code as PlayerKeyNav
+      const inputTags = ['TEXTAREA', 'INPUT', 'BUTTON']
+      const isInputTags = inputTags.includes((event.target as HTMLInputElement).tagName)
 
-        if (keyboardPlayerKeys[keyCode] && !isInputTags && getters.playingTrack.value?._id) {
-          keyboardPlayerKeys[keyCode]()
-        }
-      })
+      if (keyboardPlayerKeys[keyCode] && !isInputTags && getters.playingTrack.value?._id) {
+        keyboardPlayerKeys[keyCode]()
+      }
     }
+    
+    onMounted(() => {
+      document.addEventListener('keyup', keyboardNavHandler)
+    })
 
-    const keyboardNavHandlerDestroy = () => {
-      document.removeEventListener('keyup', keyboardNavHandler, false)
-    }
-
-    onMounted(() => keyboardNavHandler())
-    onUnmounted(() => keyboardNavHandlerDestroy())
+    onUnmounted(() => {
+      document.removeEventListener('keyup', keyboardNavHandler)
+    })
 
     return {
       playingTrack: getters.playingTrack,
@@ -232,7 +231,7 @@ export default defineComponent({
 
   @include media('<laptop') {
     left: 0;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: $shadowMedium;
     display: grid;
     width: 100vw;
 
@@ -368,7 +367,7 @@ export default defineComponent({
         height: 280px;
         left: calc(50% - 140px);
         border-radius: 50%;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        box-shadow: $shadowMedium;
         background:
           linear-gradient(30deg, transparent 40%, rgba(42, 41, 40, .85) 40%) no-repeat 100% 0,
           linear-gradient(60deg, rgba(42, 41, 40, .85) 60%, transparent 60%) no-repeat 0 100%,

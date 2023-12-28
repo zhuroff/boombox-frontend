@@ -51,7 +51,7 @@ export const localesBY: LocaleDictionary = {
     genre: 'Жанр',
     period: 'Год выдання',
     frame: 'Код фрэйму',
-    inCollections: 'У калекцыi',
+    collections: 'У калекцыi',
   },
   table: {
     empty: 'Няма дадзеных'
