@@ -7,6 +7,7 @@
     <div
       v-for="[key, value] in schemaProps"
       class="form__element"
+      :style="{ width: value.width || '100%' }"
     >
       <TextInput
         v-if="isTextInput(value)"
@@ -63,7 +64,7 @@ export default defineComponent({
       required: false
     }
   },
-  setup({ schema }) {
+  setup({ schema }, { emit }) {
     if (!schema.properties) {
       throw new Error('No properties in schema')
     }
@@ -108,7 +109,7 @@ export default defineComponent({
     }
 
     const onSubmit = () => {
-      console.log(formData)
+      emit('formSubmit', formData)
     }
 
     return {

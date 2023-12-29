@@ -86,7 +86,6 @@ export default defineComponent({
     watch(
       props,
       ({ refConfig: { refEntityKey, refEntityValue } }) => {
-        console.log(refEntityValue)
         if (refEntityValue.length >= 3) {
           fetchSearchEntities(refEntityValue, refEntityKey)
         } else {

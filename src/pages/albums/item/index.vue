@@ -207,13 +207,13 @@ export default defineComponent({
     )
 
     return {
-      isDataFetched,
       album,
       booklet,
       entityType,
       getRelated,
       bookletHandler,
       getRandomAlbum,
+      isDataFetched,
       relatedAlbums,
       closeBookletModal,
       discogsTablePayload,

@@ -5,36 +5,36 @@
     "title": {
       "type": "string",
       "title": "embeddedForm.title",
-      "required": true
+      "required": true,
+      "width": "calc(50% - 0.5rem)"
     },
-    "artists": {
+    "artist": {
       "type": "string",
       "title": "embeddedForm.artist",
       "required": true,
-      "$ref": "artists"
+      "$ref": "artists",
+      "width": "calc(50% - 0.5rem)"
     },
-    "genres": {
+    "genre": {
       "type": "string",
       "title": "embeddedForm.genre",
       "required": true,
-      "$ref": "genres"
+      "$ref": "genres",
+      "width": "calc(50% - 0.5rem)"
     },
-    "periods": {
+    "period": {
       "type": "string",
       "title": "embeddedForm.period",
       "required": true,
-      "$ref": "periods"
-    },
-    "collections": {
-      "type": "string",
-      "title": "embeddedForm.collections",
-      "$ref": "collections"
+      "$ref": "periods",
+      "width": "calc(50% - 0.5rem)"
     },
     "frame": {
       "type": "string",
       "title": "embeddedForm.frame",
       "required": true,
-      "element": "textarea"
+      "element": "textarea",
+      "width": "100%"
     }
   }
 }

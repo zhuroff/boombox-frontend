@@ -23,6 +23,7 @@
           :schema="formSchema"
           :refs="formRefsList"
           @cleanRefsList="() => formRefsList.length = 0"
+          @formSubmit="createNewEmbedded"
         />
       </div>
     </template>
@@ -37,6 +38,7 @@ import { BasicEntity } from '~/types/Common'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { isObjectsEquals } from '~/utils'
+import dbServices from '~/services/database.services'
 import embeddedFormSchema from '~/schemas/embeddedFormSchema.json'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import EmbeddedItem from '~/classes/EmbeddedItem'
@@ -70,6 +72,11 @@ export default defineComponent({
       lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
     ))
 
+    const createNewEmbedded = async (formData: EmbeddedPayload) => {
+      const response = await dbServices.createEntity<any, EmbeddedPayload>('embedded', formData)
+      console.log(response)
+    }
+
     watch(
       pageStateConfig,
       (newVal, oldVal) => {
@@ -92,7 +99,8 @@ export default defineComponent({
       pagePagination,
       isDataFetched,
       switchPagination,
-      setEntitiesLimit
+      setEntitiesLimit,
+      createNewEmbedded
     }
 
   }
@@ -114,9 +122,10 @@ export default defineComponent({
     padding: 25px;
 
     .form {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
       gap: 1rem;
-      grid-template-columns: repeat(2, 1fr);
     }
   }
 }

@@ -4,3 +4,11 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+interface EmbeddedPayload {
+  artist: string
+  frame: string
+  genre: string
+  period: string
+  title: string
+}
