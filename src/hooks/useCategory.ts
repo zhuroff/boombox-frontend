@@ -2,7 +2,9 @@ import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLocales } from './useLocales'
 import { UploadImageResult } from '~/types/Common'
+import { CategoryPageRes } from '~/types/ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
+import EmbeddedItem from '~/classes/EmbeddedItem'
 import CategoryPage from '~/classes/CategoryPage'
 import dbServices from '~/services/database.services'
 
@@ -22,7 +24,7 @@ export const useCategory = (entityType: string) => {
     lang('totalAlbums') + `: ${data.value?.albums?.length || 0}`
   ))
 
-  const sortAlbumsByYears = (data: AlbumItem[]) => {
+  const sortAlbumsByYears = (data: Array<AlbumItem | EmbeddedItem>) => {
     const sorted = data.sort((a, b) => {
       const aYear = Number(a.period.title)
       const bYear = Number(b.period.title)
@@ -37,15 +39,8 @@ export const useCategory = (entityType: string) => {
 
   const fetchCategoryEntry = async () => {
     try {
-      const category = await dbServices.getEntity<CategoryPage>(entityType, String(route.params.id))
-      console.log(category.albums)
-      data.value = {
-        ...category,
-        albums: sortAlbumsByYears(category.albums.map((album) => ({
-          ...album,
-          caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`
-        })))
-      }
+      const category = await dbServices.getEntity<CategoryPageRes>(entityType, String(route.params.id))
+      data.value = new CategoryPage(category)
       isDataFetched.value = true
     } catch (error) {
       console.error(error)
@@ -58,6 +53,7 @@ export const useCategory = (entityType: string) => {
     data,
     isDataFetched,
     setUploadedImage,
+    sortAlbumsByYears,
     totalCounts
   }
 }

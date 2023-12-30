@@ -1,9 +1,6 @@
 <template>
   <ListPageTemplate
-    cardType="CategoryCard"
-    rootPath="periods"
-    cardClass="card-category"
-    placeholderImage="/img/artist.webp"
+    placeholderImage="/img/period.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
     :dataList="periods"
@@ -33,7 +30,7 @@ export default defineComponent({
       pageStateConfig,
       switchPagination,
       setEntitiesLimit
-    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem)
+    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'periods')
 
     const periods = ref<CategoryItem[]>([])
 

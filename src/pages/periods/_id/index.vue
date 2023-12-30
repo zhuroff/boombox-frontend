@@ -15,12 +15,8 @@
         @setUploadedImage="setUploadedImage"
       />
       <ListPageTemplate
-        cardType="AlbumCard"
-        rootPath="albums"
-        cardClass="card-box"
         placeholderImage="/img/album.webp"
         :isDataFetched="isDataFetched"
-        :pageHeading="''"
         :dataList="albumList"
         :withSearch="false"
       />
@@ -48,11 +44,16 @@ export default defineComponent({
       data,
       isDataFetched,
       setUploadedImage,
+      sortAlbumsByYears,
       totalCounts
     } = useCategory(entityType)
 
     const albumList = computed(() => (
-      data.value?.albums || []
+      sortAlbumsByYears([...(data.value?.albums || []), ...(data.value?.embedded || [])])
+        .map((album) => ({
+          ...album,
+          caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`
+        }))
     ))
 
     return {

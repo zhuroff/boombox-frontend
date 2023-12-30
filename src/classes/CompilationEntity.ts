@@ -4,8 +4,13 @@ import GatheringEntity from './GatheringEntity'
 export default class CompilationEntity<T> extends GatheringEntity<CompilationEntityRes<T>> {
   tracks: T[]
 
-  constructor(compilation: CompilationEntityRes<T>, Class?: new (x: T) => T) {
-    super(compilation)
+  constructor(
+    compilation: CompilationEntityRes<T>,
+    cardType: string,
+    cardPath: string,
+    Class?: new (prop: T) => T
+  ) {
+    super(compilation, cardType, cardPath)
     this.tracks = Class
       ? compilation.tracks.map((track) => new Class(track))
       : compilation.tracks

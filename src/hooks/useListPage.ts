@@ -4,7 +4,11 @@ import { Pagination, RequestConfig, SortingValue } from '~/types/Common'
 import { ListPageResponse } from '~/types/ReqRes'
 import dbServices from '~/services/database.services'
 
-export const useListPage = <T, C>(Class: new (prop: T) => C) => {
+export const useListPage = <T, C>(
+  Class: new (card: T, type: string, path: string) => C,
+  cardType: string,
+  cardPath: string
+) => {
   const { name, query } = useRoute()
   const router = useRouter()
   const isDataFetched = ref(false)
@@ -48,7 +52,7 @@ export const useListPage = <T, C>(Class: new (prop: T) => C) => {
         pageStateConfig.value, entityType
       )
       pagePagination.value = Object.assign(pagePagination.value, pagination)
-      return docs.map((doc) => new Class(doc))
+      return docs.map((doc) => new Class(doc, cardType, cardPath))
     } catch (error) {
       console.error(error)
     } finally {

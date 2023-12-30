@@ -1,7 +1,8 @@
-import { BasicEntity } from '~/types/Common';
-import { EmbeddedItemRes } from '~/types/ReqRes';
+import { BasicEntity } from '~/types/Common'
+import { EmbeddedItemRes } from '~/types/ReqRes'
+import ListCardBasic from './ListCardBasic'
 
-export default class EmbeddedItem {
+export default class EmbeddedItem extends ListCardBasic {
   readonly _id: string
   title: string
   frame: string
@@ -9,12 +10,13 @@ export default class EmbeddedItem {
   genre: BasicEntity
   period: BasicEntity
 
-  constructor(frame: EmbeddedItemRes) {
-    this._id = frame._id
-    this.title = frame.title
-    this.frame = frame.frame
-    this.artist = frame.artist
-    this.genre = frame.genre
-    this.period = frame.period
+  constructor(embedded: EmbeddedItemRes, cardType: string, cardPath: string) {
+    super(cardType, cardPath)
+    this._id = embedded._id
+    this.title = embedded.title
+    this.frame = embedded.frame
+    this.artist = embedded.artist
+    this.genre = embedded.genre
+    this.period = embedded.period
   }
 }

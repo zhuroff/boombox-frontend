@@ -1,8 +1,5 @@
 <template>
   <ListPageTemplate
-    cardType="EmbeddedCard"
-    rootPath="embedded"
-    cardClass="card-box"
     placeholderImage="/img/album.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
@@ -59,7 +56,7 @@ export default defineComponent({
       pageStateConfig,
       switchPagination,
       setEntitiesLimit
-    } = useListPage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem)
+    } = useListPage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem, 'EmbeddedCard', 'embedded')
     
     const { lang } = useLocales()
     const isCreateMode = ref(false)
@@ -73,8 +70,8 @@ export default defineComponent({
     ))
 
     const createNewEmbedded = async (formData: EmbeddedPayload) => {
-      const response = await dbServices.createEntity<any, EmbeddedPayload>('embedded', formData)
-      console.log(response)
+      const response = await dbServices.createEntity<EmbeddedItemRes, EmbeddedPayload>('embedded', formData)
+      albums.value.unshift(new EmbeddedItem(response, 'EmbeddedCard', 'embedded'))
     }
 
     watch(
@@ -110,7 +107,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '~/scss/variables';
 @import 'include-media';
-
 .embedded {
   &__create {
     position: absolute;

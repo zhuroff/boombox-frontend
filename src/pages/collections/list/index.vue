@@ -70,7 +70,10 @@ export default defineComponent({
       pagePagination,
       pageStateConfig,
       switchPagination
-    } = useListPage<CollectionEntityRes<string>, CollectionEntity<string>>(CollectionEntity)
+    } = useListPage<
+      CollectionEntityRes<string>,
+      CollectionEntity<string>
+    >(CollectionEntity, 'CollectionCard', 'collections')
 
     onMounted(() => {
       fetchData('collections')

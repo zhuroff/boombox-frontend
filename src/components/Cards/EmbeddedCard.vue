@@ -54,6 +54,8 @@ export default defineComponent({
 .cards {
   &__album {
     &-cover {
+      overflow: hidden;
+      
       &:before {
         content: '';
         position: absolute;

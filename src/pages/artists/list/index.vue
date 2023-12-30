@@ -1,8 +1,5 @@
 <template>
   <ListPageTemplate
-    cardType="CategoryCard"
-    rootPath="artists"
-    cardClass="card-category"
     placeholderImage="/img/artist.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
@@ -33,7 +30,7 @@ export default defineComponent({
       pageStateConfig,
       switchPagination,
       setEntitiesLimit
-    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem)
+    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'artists')
 
     const artists = ref<CategoryItem[]>([])
 

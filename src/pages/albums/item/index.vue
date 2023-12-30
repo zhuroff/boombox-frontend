@@ -149,7 +149,7 @@ export default defineComponent({
         
         relatedAlbums.value = response.map(({ docs, name}) => ({
           name,
-          docs: docs.map<AlbumItem>((album) => new AlbumItem(album))
+          docs: docs.map<AlbumItem>((album) => new AlbumItem(album, 'AlbumCard', 'albums'))
         }))
       } catch (error) {
         console.error(error)

@@ -2,17 +2,19 @@
   <component
     :is="cardComponent"
     :card="card"
-    :rootPath="rootPath"
+    :rootPath="card.cardPath"
     :placeholderImage="placeholderImage"
   />
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
+import { BasicEntity } from '~/types/Common'
 import TileCard from './TileCard.vue'
 import AlbumCard from './AlbumCard.vue'
 import CategoryCard from './CategoryCard.vue'
 import EmbeddedCard from './EmbeddedCard.vue'
+import ListCardBasic from '~/classes/ListCardBasic'
 
 export default defineComponent({
   name: 'AdapterCard',
@@ -23,34 +25,17 @@ export default defineComponent({
     EmbeddedCard
   },
   props: {
-    type: {
-      type: String,
-      required: true
-    },
     card: {
-      type: Object as PropType<unknown>,
+      type: Object as PropType<BasicEntity & ListCardBasic>,
       required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    },
-    className: {
-      type: String,
-      required: true
-    },
-    isActive: {
-      type: Boolean,
-      required: false,
-      default: false
     },
     placeholderImage: {
       type: String,
       required: true
     }
   },
-  setup({ type }) {
-    return { cardComponent: computed(() => type) }
+  setup({ card }) {
+    return { cardComponent: computed(() => card.cardType) }
   }
 })
 </script>

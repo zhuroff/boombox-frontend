@@ -177,10 +177,18 @@ export default defineComponent({
     }
   },
   setup({ id, artist, title }) {
+    const {
+      fetchData,
+      isDataFetched,
+      pagePagination
+    } = useListPage<
+      CollectionEntityRes<string>,
+      CollectionEntity<string>
+    >(CollectionEntity, '', '')
+    
     const { lang } = useLocales()
     const { actions, getters } = store
     const { searchSubmit, results } = useSearch()
-    const { fetchData, isDataFetched, pagePagination } = useListPage<CollectionEntityRes<string>, CollectionEntity<string>>(CollectionEntity)
     const collections = ref<CollectionEntity<string>[] | undefined>([])
     const isActionsOpens = ref(false)
     const isWikiLoading = ref(false)

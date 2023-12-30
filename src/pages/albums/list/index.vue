@@ -1,8 +1,5 @@
 <template>
   <ListPageTemplate
-    cardType="AlbumCard"
-    rootPath="albums"
-    cardClass="card-box"
     placeholderImage="/img/album.webp"
     :isDataFetched="isDataFetched"
     :pageHeading="pageHeading"
@@ -35,7 +32,7 @@ export default defineComponent({
       pageStateConfig,
       switchPagination,
       setEntitiesLimit
-    } = useListPage<AlbumItemRes, AlbumItem>(AlbumItem)
+    } = useListPage<AlbumItemRes, AlbumItem>(AlbumItem, 'AlbumCard', 'albums')
     
     const { lang } = useLocales()
     const albums = ref<AlbumItem[]>([])

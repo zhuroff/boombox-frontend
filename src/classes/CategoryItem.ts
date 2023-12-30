@@ -5,7 +5,7 @@ export default class CategoryItem extends CategoryEntity {
   albums: number
 
   constructor(category: CategoryItemRes) {
-    super(category)
+    super(category, 'AlbumCard', 'albums')
     this.albums = category.albums
   }
 }

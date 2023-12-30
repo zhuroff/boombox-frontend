@@ -37,6 +37,7 @@ import { useSearch } from '~/hooks/useSearch'
 import { BasicEntity, RefPayload } from '~/types/Common'
 import { debounce } from '~/utils'
 import Button from '~/components/Button.vue'
+import dbServices from '~/services/database.services'
 
 export default defineComponent({
   name: 'TextInputRefList',
@@ -79,8 +80,10 @@ export default defineComponent({
       formRefsList.value = []
     }
 
-    const createNewRefEntity = () => {
+    const createNewRefEntity = async () => {
       console.log(props.refConfig.refEntityKey, newEntityInput.value)
+      // @ts-ignore
+      const response = await dbServices.createEntity()
     }
 
     watch(

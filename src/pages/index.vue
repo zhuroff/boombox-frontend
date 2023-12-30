@@ -7,12 +7,9 @@
       <div v-if="isDataFetched" key="events">
         <ul class="masonry">
           <AdapterCard
-            v-for="card in tileList"
+            v-for="card in albums"
             :key="card._id"
             :card="card"
-            type="CardTile"
-            rootPath="albums"
-            className="card-tile"
             placeholderImage="/img/album.webp"
           />
         </ul>
@@ -23,12 +20,13 @@
   
 <script lang="ts">
 import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
-import { CardBasic, RequestConfig } from '~/types/Common'
-import { ListPageResponse } from '~/types/ReqRes'
+import { BasicEntity, RequestConfig } from '~/types/Common'
+import { AlbumItemRes, ListPageResponse } from '~/types/ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
 import dbServices from '~/services/database.services'
 import Preloader from '~/components/Preloader.vue'
 import AdapterCard from '~/components/Cards/AdapterCard.vue'
+import ListCardBasic from '~/classes/ListCardBasic'
 
 export default defineComponent({
   components: {
@@ -47,20 +45,10 @@ export default defineComponent({
       sort: { title: 1 }
     })
 
-    const tileList = computed<CardBasic[]>(() => (
-      albums.map((album) => ({
-        _id: album._id,
-        title: album.title,
-        coverURL: `${album.coverURL}`,
-        cloudURL: `${album.cloudURL}`,
-        caption: `${album.artist.title } / ${album.period.title} / ${album.genre.title}`,
-      }))
-    ))
-
     const getRandomAlbums = () => {
-      dbServices.getEntityList<ListPageResponse<AlbumItem>>(requestConfig, 'albums')
+      dbServices.getEntityList<ListPageResponse<AlbumItemRes>>(requestConfig, 'albums')
         .then(({ docs }) => {
-          albums.push(...docs)
+          albums.push(...docs.map((doc) => new AlbumItem(doc, 'CardTile', 'albums')))
           isDataFetched.value = true
         })
         .catch(console.error)
@@ -69,7 +57,7 @@ export default defineComponent({
     onMounted(getRandomAlbums)
 
     return {
-      tileList,
+      albums,
       isDataFetched
     }
   }

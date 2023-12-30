@@ -8,6 +8,7 @@
     </transition>
     <transition-group name="flyUp">
       <Header
+        v-if="pageHeading"
         :heading="pageHeading"
         :withSearch="withSearch"
       >
@@ -22,9 +23,6 @@
           v-for="item in dataList"
           :key="item._id"
           :card="item"
-          :type="cardType"
-          :rootPath="rootPath"
-          :className="cardClass"
           :placeholderImage="placeholderImage"
         />
       </CardList>
@@ -49,6 +47,7 @@ import Header from '~/components/Header.vue'
 import CardList from '~/components/CardList/CardList.vue'
 import AdapterCard from '~/components/Cards/AdapterCard.vue'
 import Paginator from '~/components/Paginator.vue'
+import ListCardBasic from '~/classes/ListCardBasic'
 
 export default defineComponent({
   name: 'ListPageTemplate',
@@ -66,22 +65,10 @@ export default defineComponent({
     },
     pageHeading: {
       type: String,
-      required: true
+      required: false
     },
     dataList: {
-      type: Array as PropType<BasicEntity[]>,
-      required: true
-    },
-    cardType: {
-      type: String,
-      required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    },
-    cardClass: {
-      type: String,
+      type: Array as PropType<Array<BasicEntity & ListCardBasic>>,
       required: true
     },
     placeholderImage: {
