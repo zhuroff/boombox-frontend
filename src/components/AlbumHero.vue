@@ -201,14 +201,14 @@ export default defineComponent({
     ))
 
     const playAlbum = () => {
-      if (getters.playlists.value.current?._id === id) {
+      if (getters.playlists.value.current._id === id) {
         if (getters.playingTrack.value) {
           actions.continuePlay()
           return
         }
       }
 
-      const actualPlaylist = getters.playlists.value.current?._id === id
+      const actualPlaylist = getters.playlists.value.current._id === id
         ? getters.playlists.value.current
         : getters.playlists.value.reserved
       

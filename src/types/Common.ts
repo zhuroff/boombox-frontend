@@ -1,5 +1,5 @@
 import { Ref } from 'vue'
-import { JSONSchema4, JSONSchema4Type } from 'json-schema'
+import { JSONSchema4 } from 'json-schema'
 import AlbumPage from '~/classes/AlbumPage'
 import CompilationEntity from '~/classes/CompilationEntity'
 import AlbumTrack from '~/classes/AlbumTrack'
@@ -14,10 +14,12 @@ export interface BasicEntity {
   cloudURL?: string
 }
 
+export type PlayerPlaylist = AlbumPage | CompilationEntity<AlbumTrack>
+
 export interface AppStateInterface {
-  currentPlaylist: AlbumPage | CompilationEntity<AlbumTrack> | null
-  reservedPlaylist: AlbumPage | CompilationEntity<AlbumTrack> | null
-  playingTrack: PlayerTrack | null
+  currentPlaylist: PlayerPlaylist
+  reservedPlaylist: PlayerPlaylist
+  playingTrack: PlayerTrack
   snackbar: Snackbar[]
   isPlayerExpanded: boolean
   currentLocale: LocaleKeys

@@ -1,7 +1,7 @@
 <template>
   <ListPageTemplate
     cardType="EmbeddedCard"
-    rootPath="albums"
+    rootPath="embedded"
     cardClass="card-box"
     placeholderImage="/img/album.webp"
     :isDataFetched="isDataFetched"

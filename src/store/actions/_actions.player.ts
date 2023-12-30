@@ -1,61 +1,38 @@
-import { AppStateInterface } from '~/types/Common'
+import { AppStateInterface, PlayerPlaylist } from '~/types/Common'
 import { TrackProgress } from '~/types/Player'
 import AlbumTrack from '~/classes/AlbumTrack'
 import cloudServices from '~/services/cloud.services'
 import databaseServices from '~/services/database.services'
+import PlayerTrack from '~/classes/PlayerTrack'
 
 export const useActionsPlayerPrivate = (state: AppStateInterface) => {
   const setLoadingState = (id: string) => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
+    state.playingTrack._id === id
+    state.playingTrack.isOnLoading = true
 
-    state.playingTrack!._id === id
-    state.playingTrack!.isOnLoading = true
-    state.playingTrack!.audio.src = ''
+    if (state.playingTrack.audio) {
+      state.playingTrack.audio.src = ''
+    }
   }
 
   const checkOrReplacePlaylists = (track: AlbumTrack) => {
-    if (!state.currentPlaylist) {
-      return console.error('Current playlist is not defined')
+    const isFromCurrentPlaylist = state.currentPlaylist.tracks?.some((el) => el._id === track._id)
+    const isFromReserverPlaylist = state.reservedPlaylist.tracks?.some((el) => el._id === track._id)
+
+    if (!isFromCurrentPlaylist) {
+      if (isFromReserverPlaylist) {
+        state.currentPlaylist = { ...state.reservedPlaylist }
+        state.reservedPlaylist = {} as PlayerPlaylist
+      } else {
+        appendTrackToPlaylist({
+          track,
+          order: track.order === 1 ? 1 : track.order - 1
+        })
+      }
     }
-
-    const isFromCurrentPlaylist = state.currentPlaylist.tracks.some((el) => el._id === track._id)
-    const isFromReserverPlaylist = state.reservedPlaylist?.tracks.some((el) => el._id === track._id)
-
-    if (isFromCurrentPlaylist || !state.reservedPlaylist) {
-      appendTrackToPlaylist({
-        track,
-        order: track.order === 1 ? 1 : track.order - 1
-      })
-    } else if (isFromReserverPlaylist) {
-      state.currentPlaylist = { ...state.reservedPlaylist }
-      state.reservedPlaylist = null
-    }
-
-    // if (!state.reservedPlaylist) {
-    //   appendTrackToPlaylist({
-    //     track,
-    //     order: track.order === 1 ? 1 : track.order - 1
-    //   })
-    // } else if (!isFromCurrentPlaylist) {
-    //   if (isFromReserverPlaylist) {
-    //     state.currentPlaylist = { ...state.reservedPlaylist }
-    //     state.reservedPlaylist = null
-    //   } else {
-    //     appendTrackToPlaylist({
-    //       track,
-    //       order: track.order === 1 ? 1 : track.order - 1
-    //     })
-    //   }
-    // }
   }
 
   const playAudio = (track: AlbumTrack, cb: (track: AlbumTrack) => Promise<void>) => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
-
     const { audio } = state.playingTrack
     audio.play()
       .then(() => {
@@ -83,17 +60,10 @@ export const useActionsPlayerPrivate = (state: AppStateInterface) => {
   }
 
   const removeLoadingState = () => {
-    if (!state.playingTrack) {
-      return console.error('No playing track defined')
-    }
     state.playingTrack.isOnLoading = false
   }
 
   const checkAndSetDuration = (track: AlbumTrack, cb: (track: AlbumTrack) => Promise<void>) => {
-    if (!state.playingTrack) {
-      return console.error('No playing track defined')
-    }
-
     const { audio, _id } = state.playingTrack
 
     if (state.playingTrack.duration) {
@@ -109,10 +79,6 @@ export const useActionsPlayerPrivate = (state: AppStateInterface) => {
   }
 
   const setTrackDuration = (payload: { trackID: string; duration: number }) => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
-
     const { trackID, duration } = payload
     const targetTrack = state.currentPlaylist?.tracks.find((track) => (
       track._id === trackID
@@ -126,10 +92,6 @@ export const useActionsPlayerPrivate = (state: AppStateInterface) => {
   }
 
   const timeProgressHandler = (track: AlbumTrack, cb: (track: AlbumTrack) => Promise<void>) => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
-
     const { isOnRepeat, audio, _id } = state.playingTrack
     let isCounterIncremented = false
     audio.ontimeupdate = () => {
@@ -166,7 +128,7 @@ export const useActionsPlayerPrivate = (state: AppStateInterface) => {
           if (nextTrack) {
             cb(nextTrack)
           } else {
-            state.playingTrack = null
+            state.playingTrack = {} as PlayerTrack
           }
         }
       }
@@ -203,10 +165,6 @@ export const useActionsPlayerPrivate = (state: AppStateInterface) => {
   }
 
   const updateListeningProgress = (payload: TrackProgress) => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
-
     const { progressLine, progressTime } = payload
 
     state.playingTrack.progressLine = progressLine

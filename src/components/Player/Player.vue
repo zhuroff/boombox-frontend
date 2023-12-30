@@ -140,7 +140,7 @@ export default defineComponent({
       const payload: ReorderPayload = {
         oldOrder: event.oldIndex,
         newOrder: event.newIndex,
-        entityID: getters.playlists.value.current?._id!
+        entityID: getters.playlists.value.current._id!
       }
 
       actions.changePlaylistOrder(payload)

@@ -23,7 +23,7 @@ export const useActionsPlayer = (state: AppStateInterface) => {
       if (!trackSourceLink) {
         throw new Error('Unable to get track source link')
       }
-      state.playingTrack = new PlayerTrack(track)
+      state.playingTrack = new PlayerTrack({ ...track, path: trackSourceLink })
       playAudio(track, playTrack)
     } catch (error) {
       console.error(error)
@@ -31,18 +31,18 @@ export const useActionsPlayer = (state: AppStateInterface) => {
   }
 
   const setTrackOnPause = () => {
-    state.playingTrack!.isOnPause = true
-    state.playingTrack!.audio.pause()
+    state.playingTrack.isOnPause = true
+    state.playingTrack.audio.pause()
   }
 
   const continuePlay = () => {
-    state.playingTrack!.isOnPause = false
-    state.playingTrack!.audio.play()
+    state.playingTrack.isOnPause = false
+    state.playingTrack.audio.play()
   }
 
   const setPosition = (value: number) => {
     try {
-      state.playingTrack!.audio.currentTime = value * state.playingTrack!.duration
+      state.playingTrack.audio.currentTime = value * state.playingTrack.duration
     } catch (ignore) {
       ignore
     }
@@ -68,9 +68,9 @@ export const useActionsPlayer = (state: AppStateInterface) => {
   }
 
   const setPlayerPlaylist = (data: AlbumPage | CompilationEntity<AlbumTrack>) => {
-    if (!state.currentPlaylist || !state.playingTrack) {
+    if (!state.playingTrack._id) {
       state.currentPlaylist = data
-    } else if (state.currentPlaylist._id !== data._id) {
+    } else {
       state.reservedPlaylist = data
     }
   }
@@ -92,7 +92,7 @@ export const useActionsPlayer = (state: AppStateInterface) => {
 
   const playTrackNext = (track: AlbumTrack) => {
     const index = state.currentPlaylist?.tracks.findIndex((track) => (
-      track._id === state.playingTrack?._id
+      track._id === state.playingTrack._id
     ))
 
     addTrackToPlaylist({ track, order: index === -1 ? 1 : (index || 0) + 1 })
@@ -109,7 +109,7 @@ export const useActionsPlayer = (state: AppStateInterface) => {
     }
 
     const currentTrackIndex = state.currentPlaylist.tracks
-      .findIndex((track) => track._id === state.playingTrack?._id)
+      .findIndex((track) => track._id === state.playingTrack._id)
 
     const prevTrack = state.currentPlaylist.tracks[currentTrackIndex - 1]
 
@@ -124,7 +124,7 @@ export const useActionsPlayer = (state: AppStateInterface) => {
     }
 
     const currentTrackIndex = state.currentPlaylist.tracks
-      .findIndex((track) => track._id === state.playingTrack?._id)
+      .findIndex((track) => track._id === state.playingTrack._id)
 
     const nextTrack = state.currentPlaylist.tracks[currentTrackIndex + 1]
 
@@ -153,27 +153,16 @@ export const useActionsPlayer = (state: AppStateInterface) => {
   }
 
   const changeRepeatState = () => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
     state.playingTrack.isOnRepeat = !state.playingTrack.isOnRepeat
   }
 
   const setSoundVolume = (value: number) => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
-
     state.playingTrack.audio.volume = value
     state.playingTrack.crackle.volume = value
     localStorage.setItem('playerVolume', String(value))
   }
 
   const switchMuteState = () => {
-    if (!state.playingTrack) {
-      throw new Error('No playing track defined')
-    }
-
     state.playingTrack.audio.muted = !state.playingTrack.audio.muted
     state.playingTrack.crackle.muted = !state.playingTrack.crackle.muted
   }
@@ -188,10 +177,10 @@ export const useActionsPlayer = (state: AppStateInterface) => {
   }
 
   const crackleSwitch = () => {
-    if (state.playingTrack?.crackle.paused) {
+    if (state.playingTrack.crackle?.paused) {
       state.playingTrack.crackle.play()
     } else {
-      state.playingTrack && state.playingTrack.crackle.pause()
+      state.playingTrack.crackle && state.playingTrack.crackle.pause()
     }
   }
 

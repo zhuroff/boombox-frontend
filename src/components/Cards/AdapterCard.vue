@@ -12,13 +12,15 @@ import { defineComponent, computed, PropType } from 'vue'
 import TileCard from './TileCard.vue'
 import AlbumCard from './AlbumCard.vue'
 import CategoryCard from './CategoryCard.vue'
+import EmbeddedCard from './EmbeddedCard.vue'
 
 export default defineComponent({
   name: 'AdapterCard',
   components: {
     TileCard,
     AlbumCard,
-    CategoryCard
+    CategoryCard,
+    EmbeddedCard
   },
   props: {
     type: {

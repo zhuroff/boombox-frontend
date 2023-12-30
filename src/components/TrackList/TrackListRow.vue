@@ -126,7 +126,7 @@ export default defineComponent({
     ))
 
     const isNotCurrentPlaylist = computed(() => (
-      props.albumID !== getters.playlists.value.current?._id
+      getters.playlists.value.current._id && props.albumID !== getters.playlists.value.current._id
     ))
 
     const lyricsModalSwitcher = () => {

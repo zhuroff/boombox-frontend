@@ -1,13 +1,14 @@
 import { reactive } from 'vue'
-import { AppStateInterface, LocaleKeys } from '~/types/Common'
+import { AppStateInterface, LocaleKeys, PlayerPlaylist } from '~/types/Common'
 import { useActions } from './actions'
 import { useGetters } from './getters'
+import PlayerTrack from '~/classes/PlayerTrack'
 
 class State {
   #state = reactive<AppStateInterface>({
-    currentPlaylist: null,
-    reservedPlaylist: null,
-    playingTrack: null,
+    currentPlaylist: {} as PlayerPlaylist,
+    reservedPlaylist: {} as PlayerPlaylist,
+    playingTrack: {} as PlayerTrack,
     snackbar: [],
     isPlayerExpanded: false,
     currentLocale: (localStorage.getItem('locale') as LocaleKeys) || 'en'
