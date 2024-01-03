@@ -190,6 +190,7 @@ export default defineComponent({
   &__frame {
     position: relative;
     margin-bottom: 25px;
+    width: $coverWidth;
   }
 
   &__related {

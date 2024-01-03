@@ -92,6 +92,8 @@ export const localesEN: LocaleDictionary = {
     removeFromList: 'Remove from playlist'
   },
   totalAlbums: 'Total albums',
+  delEmbedded: 'Delete album',
+  deletedEmbeddedMessage: 'Album was successfully deleted',
   syncResponse: {
     added: 'Added albums',
     updated: 'Updated albums',

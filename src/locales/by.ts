@@ -92,6 +92,8 @@ export const localesBY: LocaleDictionary = {
     removeFromList: 'Выдаліць з плэйлiста'
   },
   totalAlbums: 'Усяго альбомаў',
+  delEmbedded: 'Выдаліць альбом',
+  deletedEmbeddedMessage: 'Альбом паспяхова выдалены',
   syncResponse: {
     added: 'Дададзеныя альбомы',
     updated: 'Абноўленыя альбомы',

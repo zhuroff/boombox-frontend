@@ -1,6 +1,6 @@
 <template>
   <div class="album__hero">
-    <div>
+    <div class="album__hero-cover">
       <slot name="hero-cover"></slot>
     </div>
     <div class="album__hero-info">
@@ -311,16 +311,22 @@ export default defineComponent({
 
     @include media('>=laptop') {
       position: relative;
-      display: grid;
-      grid-template-columns: 350px 1fr;
+      display: flex;
       padding: 25px;
       height: 300px;
+    }
+
+    &-cover {
+      width: $coverWidth;
     }
 
     &-info {
       padding-left: 25px;
       position: relative;
       z-index: 2000;
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
     }
 
     &-head {

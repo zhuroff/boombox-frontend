@@ -120,7 +120,7 @@ export default defineComponent({
     z-index: 10;
 
     @include media('>=laptop') {
-      width: 350px;
+      width: $coverWidth;
     }
 
     &:hover {
@@ -154,7 +154,7 @@ export default defineComponent({
     }
 
     @include media('>=laptop') {
-      height: 350px;
+      height: $coverWidth;
       border-radius: $borderRadiusSM;
     }
 

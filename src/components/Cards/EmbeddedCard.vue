@@ -69,6 +69,7 @@ export default defineComponent({
       iframe {
         width: inherit !important;
         height: inherit !important;
+        background-color: $white;
       }
     }
   }

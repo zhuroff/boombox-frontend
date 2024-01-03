@@ -2,17 +2,21 @@ import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { CloudFolderResponse } from '~/types/Cloud'
 import { AlbumBooklet, BookletSlideState } from '~/types/Album'
-import { BasicEntity, RequestConfig, RequestFilter } from '~/types/Common'
+import { BasicEntity, RequestConfig, RequestFilter, ResponseMessage } from '~/types/Common'
 import { AlbumItemRes, ListPageResponse } from '~/types/ReqRes'
+import { useLocales } from './useLocales'
 import BookletState from '~/classes/BookletState'
 import dbServices from '~/services/database.services'
 import cloudServices from '~/services/cloud.services'
+import store from '~/store'
 
 export const useSinglePage = <T extends BasicEntity, C>(
   Class: new (prop: T, cardType: string, cardPath: string) => C,
   cardType: string,
   cardPath: string
 ) => {
+  const { actions } = store
+  const { lang } = useLocales()
   const route = useRoute()
   const router = useRouter()
   const booklet = ref<BookletState>(new BookletState())
@@ -88,6 +92,21 @@ export const useSinglePage = <T extends BasicEntity, C>(
     return fetchData(entityType, 'random')
   }
 
+  const deleteEntry = async (entityType: string, id: string) => {
+    try {
+      const response = await dbServices.deleteEntity<ResponseMessage>(entityType, id)
+      if (response) {
+        actions.setSnackbarMessage({
+          message: lang(String(response.message)),
+          type: 'success'
+        })
+        router.replace(`/${entityType}`)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const getRelatedAlbums = async (filter: RequestFilter, entityType: string) => {
     try {
       const response = {
@@ -105,6 +124,7 @@ export const useSinglePage = <T extends BasicEntity, C>(
 
   return {
     fetchData,
+    deleteEntry,
     isDataFetched,
     fetchBooklet,
     getRandomAlbum,

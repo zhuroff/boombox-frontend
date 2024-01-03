@@ -183,10 +183,10 @@ export default defineComponent({
     }
 
     const totalCounts = computed(() => {
-      if (!('tracks' in album)) return undefined
       const isAllTracksHaveDuration = album.value.tracks?.every((track) => (
         Number(track.duration)
       ))
+      
       return `
         ${album.value.tracks?.length} ${conjugate('tracks', album.value.tracks?.length)}:
         ${isAllTracksHaveDuration ? calcTotalTracksTime(album.value.tracks) : lang('unknownTime')}.

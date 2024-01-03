@@ -19,7 +19,14 @@
         :genre="album.genre"
         :period="album.period"
         @getRandomAlbum="getRandom"
-      />
+      >
+        <template #navlist>
+          <li
+            class="overlay__list-item"
+            @click="deleteEmbedded"
+          >{{ lang('delEmbedded') }}</li>
+        </template>
+      </AlbumHero>
     </template>
     <template #frame>
       <div
@@ -34,6 +41,7 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useSinglePage } from '~/hooks/useSinglePage'
+import { useLocales } from '~/hooks/useLocales'
 import { RelatedAlbums } from '~/types/Album'
 import { RequestFilter } from '~/types/Common'
 import { EmbeddedItemRes } from '~/types/ReqRes'
@@ -50,6 +58,7 @@ export default defineComponent({
   setup() {
     const {
       fetchData,
+      deleteEntry,
       isDataFetched,
       getRandomAlbum,
       getRelatedAlbums
@@ -65,6 +74,7 @@ export default defineComponent({
       discogsFilters
     } = useDiscogs()
 
+    const { lang } = useLocales()
     const album = ref<EmbeddedItem>({} as EmbeddedItem)
     const relatedAlbums = ref<RelatedAlbums[]>([])
 
@@ -111,6 +121,10 @@ export default defineComponent({
       }
     }
 
+    const deleteEmbedded = () => {
+      deleteEntry('embedded', album.value._id)
+    }
+
     onMounted(() => {
       fetchData('embedded')
         .then((payload) => {
@@ -125,6 +139,7 @@ export default defineComponent({
     return {
       isDataFetched,
       relatedAlbums,
+      deleteEmbedded,
       discogsTablePayload,
       discogsFiltersStates,
       setDiscogsFilterValue,
@@ -132,7 +147,8 @@ export default defineComponent({
       resetDiscogsFilters,
       discogsFilters,
       getRandom,
-      album
+      album,
+      lang
     }
   }
 })
