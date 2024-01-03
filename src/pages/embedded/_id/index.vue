@@ -18,6 +18,7 @@
         :artist="album.artist"
         :genre="album.genre"
         :period="album.period"
+        @getRandomAlbum="getRandom"
       />
     </template>
     <template #frame>
@@ -50,6 +51,7 @@ export default defineComponent({
     const {
       fetchData,
       isDataFetched,
+      getRandomAlbum,
       getRelatedAlbums
     } = useSinglePage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem, 'EmbeddedCard', 'embedded')
 
@@ -65,6 +67,11 @@ export default defineComponent({
 
     const album = ref<EmbeddedItem>({} as EmbeddedItem)
     const relatedAlbums = ref<RelatedAlbums[]>([])
+
+    const getRandom = () => {
+      getRandomAlbum('albums')
+        .then((payload) => payload && fetchDiscogsInfo(payload))
+    }
 
     const getRelated = async () => {
       const relatedAlbumsConfig: RequestFilter[] = [
@@ -124,6 +131,7 @@ export default defineComponent({
       setDiscogsPaginationPage,
       resetDiscogsFilters,
       discogsFilters,
+      getRandom,
       album
     }
   }

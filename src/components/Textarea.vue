@@ -1,14 +1,20 @@
 <template>  
-  <textarea
-    :placeholder="placeholder && `${placeholder}${isRequired ? '*' : ''}`"
-    :class="`textarea ${classname}`"
-    :rows="rows"
-    :disabled="isDisabled"
-    v-model="text"
-    ref="textElement"
-    spellcheck="false"
-    @input="emitTextareaValue"
-  ></textarea>
+  <div class="textarea-input">
+    <textarea
+      :placeholder="placeholder && `${placeholder}${isRequired ? '*' : ''}`"
+      :class="['textarea-input__element', errorMessage ? '--error' : '', classname]"
+      :rows="rows"
+      :disabled="isDisabled"
+      v-model="text"
+      ref="textElement"
+      spellcheck="false"
+      @input="emitTextareaValue"
+    ></textarea>
+    <div
+      v-if="errorMessage"
+      class="textarea-input__error"
+    >{{ errorMessage }}</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,6 +52,10 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    errorMessage: {
+      type: String,
+      required: false
     }
   },
   setup(props, { emit }) {
@@ -83,15 +93,26 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../scss/variables.scss';
-.textarea {
-  overflow-y: hidden;
-  font-size: 14px;
-  display: block;
-  width: 100%;
-  border-radius: $borderRadiusSM;
-  border: 1px solid $paleMD;
-  padding: .5rem 1rem;
+.textarea-input {
+  &__element {
+    overflow-y: hidden;
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+    border-radius: $borderRadiusSM;
+    border: 1px solid $paleMD;
+    padding: .5rem 1rem;
+
+    &.--error {
+      border-color: $error;
+    }
+  }
+
+  &__error {
+    color: $error;
+    font-size: 0.75rem;
+  }
 }
 </style>

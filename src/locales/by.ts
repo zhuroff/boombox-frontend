@@ -53,6 +53,9 @@ export const localesBY: LocaleDictionary = {
     frame: 'Код фрэйму',
     collections: 'У калекцыi',
   },
+  formLabels: {
+    errorRequired: 'Гэта поле абавязковае'
+  },
   table: {
     empty: 'Няма дадзеных'
   },

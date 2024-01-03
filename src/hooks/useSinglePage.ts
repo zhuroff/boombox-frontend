@@ -27,7 +27,7 @@ export const useSinglePage = <T extends BasicEntity, C>(
       const entity = new Class(data, cardType, cardPath)
 
       if (id === 'random') {
-        router.push({ params: { id: data._id } })
+        router.replace(`/${entityType}/${data._id}`)
       }
 
       return entity

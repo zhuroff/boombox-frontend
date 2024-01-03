@@ -2,13 +2,15 @@
   <div class="text-input">
     <div class="text-input__wrapper">
       <input
-        :class="['text-input__element', `--${size}`]"
+        :class="['text-input__element', `--${size}`, errorMessage ? '--error' : '']"
         :placeholder="placeholder && `${placeholder}${isRequired ? '*' : ''}`"
         :style="style"
         v-model="inputValue"
-        ref="elementRef"
-        @blur="() => $emit('textInputBlur')"
       />
+      <div
+        v-if="errorMessage"
+        class="text-input__error"
+      >{{ errorMessage }}</div>
     </div>
     <TextInputRefList
       v-if="refEntityKey && isRefListActive"
@@ -48,11 +50,6 @@ export default defineComponent({
       type: String,
       required: false
     },
-    isFocused: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     isRequired: {
       type: Boolean,
       required: false,
@@ -61,11 +58,14 @@ export default defineComponent({
     refEntityKey: {
       type: String,
       required: false
+    },
+    errorMessage: {
+      type: String,
+      required: false
     }
   },
   setup(props, { emit }) {
     const inputValue = ref(props.inputValue || '')
-    const elementRef = ref<HTMLInputElement>(null!)
     const isRefListActive = ref(false)
 
     const refConfig = computed(() => ({
@@ -91,20 +91,8 @@ export default defineComponent({
       }
     })
 
-    watch(
-      props,
-      (val) => {
-        if (val.isFocused) {
-          elementRef.value.focus()
-        }
-
-        inputValue.value = val.inputValue || ''
-      }
-    )
-
     return {
       inputValue,
-      elementRef,
       refConfig,
       selectRefItem,
       isRefListActive
@@ -131,6 +119,15 @@ export default defineComponent({
       font-size: .875rem;
       height: 36px;
     }
+
+    &.--error {
+      border-color: $error;
+    }
+  }
+
+  &__error {
+    color: $error;
+    font-size: 0.75rem;
   }
 }
 </style>

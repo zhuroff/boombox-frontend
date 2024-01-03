@@ -24,7 +24,7 @@
         :genre="album.genre"
         :period="album.period"
         :totalCounts="totalCounts"
-        :getRandomAlbum="getRandom"
+        @getRandomAlbum="getRandom"
       >
         <template #hero-cover>
           <CoverArt
@@ -33,7 +33,6 @@
             @coverClick="() => bookletHandler()"
             @closeBookletModal="closeBookletModal"
             @slideChanged="bookletPageChanged"
-            @getRandomAlbum="getRandomAlbum"
           />
         </template>
         <template #navlist>
@@ -197,18 +196,6 @@ export default defineComponent({
       `.trim()
     })
 
-    onMounted(() => {
-      fetchData(entityType.value)
-        .then((payload) => {
-          if (payload) {
-            album.value = payload
-            actions.setPlayerPlaylist(payload)
-            getRelated()
-            fetchDiscogsInfo(payload)
-          }
-        })
-    })
-
     watch(
       route,
       (newValue) => {
@@ -228,6 +215,18 @@ export default defineComponent({
       { immediate: false }
     )
 
+    onMounted(() => {
+      fetchData(entityType.value)
+        .then((payload) => {
+          if (payload) {
+            album.value = payload
+            actions.setPlayerPlaylist(payload)
+            getRelated()
+            fetchDiscogsInfo(payload)
+          }
+        })
+    })
+
     return {
       lang,
       album,
@@ -236,7 +235,6 @@ export default defineComponent({
       getRelated,
       totalCounts,
       bookletHandler,
-      getRandomAlbum,
       isDataFetched,
       relatedAlbums,
       closeBookletModal,

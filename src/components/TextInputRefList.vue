@@ -38,6 +38,7 @@ import { BasicEntity, RefPayload } from '~/types/Common'
 import { debounce } from '~/utils'
 import Button from '~/components/Button.vue'
 import dbServices from '~/services/database.services'
+import { EmbeddedItemRes } from '~/types/ReqRes'
 
 export default defineComponent({
   name: 'TextInputRefList',
@@ -81,9 +82,15 @@ export default defineComponent({
     }
 
     const createNewRefEntity = async () => {
-      console.log(props.refConfig.refEntityKey, newEntityInput.value)
-      // @ts-ignore
-      const response = await dbServices.createEntity()
+      const response = await dbServices.createEntity<
+        EmbeddedItemRes,
+        { value: string }
+      >(props.refConfig.refEntityKey, { value: newEntityInput.value })
+
+      response && selectRefItem({
+        _id: response._id,
+        title: response.title
+      })
     }
 
     watch(

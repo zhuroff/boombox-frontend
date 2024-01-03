@@ -37,7 +37,7 @@
 .fade-enter-active,
 .fade-leave-active {
   opacity: 0;
-  transition: all 1s $animation;
+  transition: all 0.5s $animation;
 }
 
 .fade-enter-to {

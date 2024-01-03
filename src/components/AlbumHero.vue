@@ -201,8 +201,8 @@ export default defineComponent({
     const getWikiInfo = async (searchParam: string | number = title) => {
       isWikiLoading.value = true
       try {
-        const page = await wiki.page(String(searchParam))
-        wikiFrameURL.value = page.canonicalurl
+        const wikiPage = await wiki.page(String(searchParam))
+        wikiFrameURL.value = wikiPage.canonicalurl
         isWikiReady.value = true
         isWikiLoading.value = false
       } catch (error) {

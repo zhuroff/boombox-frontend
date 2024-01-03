@@ -12,7 +12,7 @@
         <div class="album__content">
           <div
             class="album__main"
-            :style="{ transform: `translateY(${'tracks' in album ? 0 : 'calc(-24% - 1rem)'})` }"
+            :style="{ marginTop: 'tracks' in album ? 0 : '-300px' }"
           >
             <TrackList
               v-if="'tracks' in album"
@@ -181,6 +181,10 @@ export default defineComponent({
       grid-template-columns: calc(100% - 252px - 252px - 25px - 25px) 252px 252px;
       gap: 25px;
     }
+  }
+
+  &__main {
+    position: relative;
   }
 
   &__frame {

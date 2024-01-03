@@ -18,8 +18,6 @@
       <div class="embedded__create">
         <Form
           :schema="formSchema"
-          :refs="formRefsList"
-          @cleanRefsList="() => formRefsList.length = 0"
           @formSubmit="createNewEmbedded"
         />
       </div>
@@ -61,7 +59,6 @@ export default defineComponent({
     const { lang } = useLocales()
     const isCreateMode = ref(false)
     const albums = ref<EmbeddedItem[]>([])
-    const formRefsList = reactive<BasicEntity[]>([])
 
     const formSchema = embeddedFormSchema as JSONSchema4
 
@@ -72,6 +69,7 @@ export default defineComponent({
     const createNewEmbedded = async (formData: EmbeddedPayload) => {
       const response = await dbServices.createEntity<EmbeddedItemRes, EmbeddedPayload>('embedded', formData)
       albums.value.unshift(new EmbeddedItem(response, 'EmbeddedCard', 'embedded'))
+      isCreateMode.value = false
     }
 
     watch(
@@ -91,7 +89,6 @@ export default defineComponent({
       albums,
       formSchema,
       pageHeading,
-      formRefsList,
       isCreateMode,
       pagePagination,
       isDataFetched,
@@ -114,8 +111,10 @@ export default defineComponent({
     right: 0;
     width: 60%;
     border-radius: $borderRadiusSM;
+    background-color: $white;
     box-shadow: $shadowLight;
     padding: 25px;
+    z-index: 1000;
 
     .form {
       display: flex;

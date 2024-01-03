@@ -28,9 +28,9 @@
       </transition>
       <Textarea
         v-if="!isFetching && !fetchedLyrics.length"
+        classname="lyrics__text"
         :rows="3"
         :content="lyrics || undefined"
-        classname="lyrics__text"
         :placeholder="lang('lyrics.placeholder')"
         @setTextareaValue="updateLyrics"
       />
@@ -68,7 +68,7 @@
                 v-if="expandedLyrics === index"
                 :rows="3"
                 :content="item.lyrics"
-                classname="lyrics__item_text"
+                classname="lyrics__text"
                 isDisabled
               />
             </div>
@@ -195,7 +195,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~/scss/variables';
 
 .lyrics {
@@ -245,11 +245,12 @@ export default defineComponent({
   }
 
   &__text {
-    border: 0;
     outline: none;
-    width: 100%;
-    font-size: 16px;
     line-height: 22px;
+    margin-top: 1rem;
+    padding: 0 !important;
+    border: none !important;
+    background-color: $white;
   }
 
   &__empty {
@@ -293,15 +294,6 @@ export default defineComponent({
       outline: none;
       border: 0;
       color: $paleDP;
-    }
-
-    &_text {
-      padding: 0;
-      border: none;
-      width: 100%;
-      font-size: 14px;
-      line-height: 20px;
-      background-color: $white;
     }
   }
 }

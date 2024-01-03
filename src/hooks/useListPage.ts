@@ -9,7 +9,7 @@ export const useListPage = <T, C>(
   cardType: string,
   cardPath: string
 ) => {
-  const { name, query } = useRoute()
+  const { name, query, params } = useRoute()
   const router = useRouter()
   const isDataFetched = ref(false)
   const pageSorting = ref<SortingValue>({ title: 1 })
@@ -63,7 +63,7 @@ export const useListPage = <T, C>(
   onMounted(() => {
     const { page } = query
 
-    if (!page) {
+    if (!page && !params.id) {
       changeRouteQuery({ page: pagePagination.value.page })
     }
   })

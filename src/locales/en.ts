@@ -53,6 +53,9 @@ export const localesEN: LocaleDictionary = {
     frame: 'Frame code',
     collections: 'In collection'
   },
+  formLabels: {
+    errorRequired: 'This field is required'
+  },
   table: {
     empty: 'No data'
   },

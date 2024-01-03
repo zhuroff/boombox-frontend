@@ -11,6 +11,7 @@
     >
       <TextInput
         v-if="isTextInput(value)"
+        :errorMessage="errorInputs.has(key) ? lang('formLabels.errorRequired') : undefined"
         :isRequired="Boolean(value.required)"
         :placeholder="value.title && lang(value.title)"
         :refEntityKey="value.$ref"
@@ -19,6 +20,7 @@
       <Textarea
         v-else-if="isTextarea(value)"
         :rows="1"
+        :errorMessage="errorInputs.has(key) ? lang('formLabels.errorRequired') : undefined"
         :isRequired="Boolean(value.required)"
         :placeholder="value.title && lang(value.title)"
         @setTextareaValue="(value) => formData[key] = value"
@@ -34,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, StyleValue, computed, defineComponent, reactive } from 'vue'
+import { PropType, StyleValue, ref, computed, defineComponent, reactive } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import { JSONSchema4 } from 'json-schema'
 import { useLocales } from '~/hooks/useLocales'
@@ -54,11 +56,6 @@ export default defineComponent({
       type: Object as PropType<JSONSchema4>,
       required: true
     },
-    refs: {
-      type: Array as PropType<BasicEntity[]>,
-      required: false,
-      default: []
-    },
     style: {
       type: Object as PropType<StyleValue>,
       required: false
@@ -70,6 +67,7 @@ export default defineComponent({
     }
 
     const { lang } = useLocales()
+    const errorInputs = ref<Set<string>>(new Set())
 
     const initValues = (value: JSONSchema4) => {
       switch (value.type) {
@@ -109,7 +107,17 @@ export default defineComponent({
     }
 
     const onSubmit = () => {
-      emit('formSubmit', formData)
+      for (const [key, value] of schemaProps.value) {
+        if (value.required && !formData[key]) {
+          errorInputs.value.add(key)
+        } else {
+          errorInputs.value.delete(key)
+        }
+      }
+      
+      if (!errorInputs.value.size) {
+        emit('formSubmit', formData)
+      }
     }
 
     return {
@@ -117,6 +125,7 @@ export default defineComponent({
       formData,
       schemaProps,
       isTextInput,
+      errorInputs,
       isTextarea,
       onSubmit
     }
