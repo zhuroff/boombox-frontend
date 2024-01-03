@@ -49,7 +49,7 @@ export default defineComponent({
     } = useCategory(entityType)
 
     const albumList = computed(() => (
-      sortAlbumsByYears([...(data.value?.albums || []), ...(data.value?.embedded || [])])
+      sortAlbumsByYears([...(data.value?.albums || []), ...(data.value?.embeddedAlbums || [])])
         .map((album) => ({
           ...album,
           caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`

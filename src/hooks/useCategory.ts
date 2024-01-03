@@ -21,7 +21,7 @@ export const useCategory = (entityType: string) => {
   }
   
   const totalCounts = computed(() => (
-    lang('totalAlbums') + `: ${data.value?.albums?.length || 0}`
+    lang('totalAlbums') + `: ${(data.value?.albums?.length || 0) + (data.value?.embeddedAlbums?.length || 0)}`
   ))
 
   const sortAlbumsByYears = (data: Array<AlbumItem | EmbeddedItem>) => {

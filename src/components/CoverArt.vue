@@ -1,41 +1,39 @@
-<template>
-  
-<div class="album__booklet">
-  <img
-    :src="cover || '/img/album.webp'"
-    class="album__cover"
-    @click="$emit('coverClick')"
-  >
-  <transition name="fade">
-    <Modal
-      v-if="booklet?.isActive"
-      :isModalActive="booklet?.isActive"
-      @closeModal="closeBookletModal"
+<template>  
+  <div class="album__booklet">
+    <img
+      :src="cover || '/img/album.webp'"
+      class="album__cover"
+      @click="$emit('coverClick')"
     >
-      <Preloader v-if="!booklet.isFetched" mode="dark" />
-      <Slider
-        v-else
-        :data="booklet.items.map(({ url }) => url)"
-        :isFullSlideSet="isFullSlideSet"
-        @slideChanged="slideChanged"
-      />
-    </Modal>
-    </transition>
-  <form
-    v-if="uploadable"
-    class="album__cover_upload"
-  >
-    <label class="album__cover_label">
-      <input
-        type="file"
-        ref="coverElement"
-        @change="setCover"
+    <transition name="fade">
+      <Modal
+        v-if="booklet?.isActive"
+        :isModalActive="booklet?.isActive"
+        @closeModal="closeBookletModal"
       >
-      <Sprite name="camera" />
-    </label>
-  </form>
-</div>
-
+        <Preloader v-if="!booklet.isFetched" mode="dark" />
+        <Slider
+          v-else
+          :data="booklet.items.map(({ url }) => url)"
+          :isFullSlideSet="isFullSlideSet"
+          @slideChanged="slideChanged"
+        />
+      </Modal>
+      </transition>
+    <form
+      v-if="uploadable"
+      class="album__cover_upload"
+    >
+      <label class="album__cover_label">
+        <input
+          type="file"
+          ref="coverElement"
+          @change="setCover"
+        >
+        <Sprite name="camera" />
+      </label>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
@@ -74,7 +72,6 @@ export default defineComponent({
       required: false
     }
   },
-
   setup({ booklet }, { emit }) {
     const coverElement: Ref<null | HTMLInputElement> = ref(null)
     const isFullSlideSet = ref(false)
@@ -111,7 +108,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="scss">
@@ -119,13 +115,12 @@ export default defineComponent({
 @import 'include-media';
 
 .album {
-
   &__booklet {
     flex: none;
     z-index: 10;
 
     @include media('>=laptop') {
-      width: 300px;
+      width: 350px;
     }
 
     &:hover {
@@ -151,7 +146,6 @@ export default defineComponent({
     display: block;
     width: inherit;
     object-fit: cover;
-    // margin-bottom: 10px;
     cursor: pointer;
 
     @include media('<laptop') {
@@ -160,8 +154,8 @@ export default defineComponent({
     }
 
     @include media('>=laptop') {
-      height: 300px;
-      border-radius: 3px;
+      height: 350px;
+      border-radius: $borderRadiusSM;
     }
 
     &_upload {
@@ -172,7 +166,7 @@ export default defineComponent({
       height: 100%;
       cursor: pointer;
       opacity: 0;
-      border-radius: 3px;
+      border-radius: $borderRadiusSM;
       overflow: hidden;
       transition: opacity 0.3s ease;
 
@@ -206,4 +200,3 @@ export default defineComponent({
   }
 }
 </style>
-~/states/BookletState~/classes/BookletState

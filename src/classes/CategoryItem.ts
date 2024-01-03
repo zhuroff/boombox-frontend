@@ -4,8 +4,8 @@ import CategoryEntity from './CategoryEntity'
 export default class CategoryItem extends CategoryEntity {
   albums: number
 
-  constructor(category: CategoryItemRes) {
-    super(category, 'AlbumCard', 'albums')
+  constructor(category: CategoryItemRes, cardType: string, cardPath: string) {
+    super(category, cardType, cardPath)
     this.albums = category.albums
   }
 }

@@ -100,17 +100,25 @@ export default defineComponent({
       border-color: $white;
       color: $white;
       transition: all 0.2s $animation;
+
+      .icon {
+        fill: $white;
+      }
+    }
+
+    .icon {
+      fill: $paleDP;
     }
   }
 
   &.--text {
     background-color: transparent;
-    border-color: transparent;
+    border-color: transparent !important;
 
     &:hover {
       color: $paleDP;
-      stroke: $paleDP;
-      fill: $paleDP;
+      // stroke: $paleDP;
+      // fill: $paleDP;
       transition: all 0.2s $animation;
     }
   }

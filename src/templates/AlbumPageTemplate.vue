@@ -8,23 +8,22 @@
     </transition>
     <transition name="fade">
       <div v-if="isDataFetched && album._id" class="album">
-        <div class="album__hero">
-          <CoverArt
-            :cover="album.coverURL"
-            :booklet="booklet"
-            @coverClick="getBooklet"
-            @closeBookletModal="closeBookletModal"
-            @slideChanged="bookletPageChanged"
-          />
-          <slot></slot>
-        </div>
+        <slot name="hero"></slot>
         <div class="album__content">
-          <div class="album__main">
+          <div
+            class="album__main"
+            :style="{ transform: `translateY(${'tracks' in album ? 0 : 'calc(-24% - 1rem)'})` }"
+          >
             <TrackList
+              v-if="'tracks' in album"
               :tracks="album.tracks"
               :albumID="album._id"
               :artist="album.artist"
             />
+            <slot
+              v-else
+              name="frame"
+            ></slot>
             <div
               v-if="discogsTablePayload.isFetched"
               class="album__discogs"
@@ -58,9 +57,6 @@
               v-for="item in docs"
               :key="item._id"
               :card="item"
-              :type="cardType"
-              rootPath="albums"
-              className="card-box"
               placeholderImage="/img/album.webp"
             />
           </div>
@@ -77,8 +73,8 @@ import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
 import { useLocales } from '~/hooks/useLocales'
 import BookletState from '~/classes/BookletState'
 import AlbumPage from '~/classes/AlbumPage'
+import EmbeddedItem from '~/classes/EmbeddedItem'
 import Preloader from '~/components/Preloader.vue'
-import CoverArt from '~/components/CoverArt.vue'
 import AdapterCard from '~/components/Cards/AdapterCard.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
@@ -89,7 +85,6 @@ export default defineComponent({
   name: 'AlbumPageTemplate',
   components: {
     Preloader,
-    CoverArt,
     AdapterCard,
     TrackList,
     Table,
@@ -102,12 +97,12 @@ export default defineComponent({
       required: true
     },
     album: {
-      type: Object as PropType<AlbumPage>,
+      type: Object as PropType<AlbumPage | EmbeddedItem>,
       required: true
     },
     booklet: {
       type: Object as PropType<BookletState>,
-      required: true
+      required: false
     },
     discogsTablePayload: {
       type: Object as PropType<DiscogsTablePayload>,
@@ -124,14 +119,6 @@ export default defineComponent({
     relatedAlbums: {
       type: Array as PropType<RelatedAlbums[]>,
       requried: false
-    },
-    cardType: {
-      type: String,
-      required: true
-    },
-    getBooklet: {
-      type: Function as PropType<() => void>,
-      required: true
     }
   },
   setup(_, { emit }) {
@@ -177,49 +164,16 @@ export default defineComponent({
   flex: 1 1 0;
   position: relative;
 
-  &:after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 265px;
-    background-color: $dark;
-    left: 0;
-    top: 0;
-    z-index: -1;
-  }
-
-  @include media('>=laptop') {
-    padding: 25px 25px 0;
-  }
-
-  &__hero {
-
-    @include media('<laptop') {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vw;
-    }
-
-    @include media('>=laptop') {
-      position: relative;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-    }
-  }
-
   &__content {
     flex: 1 1 0;
+    padding: 25px;
+    position: relative;
 
     @include media('<laptop') {
-      padding: 25px;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
       margin-top: 100vw;
       background-color: $white;
-      position: relative;
-      z-index: 10;
     }
 
     @include media('>=laptop') {
@@ -227,6 +181,11 @@ export default defineComponent({
       grid-template-columns: calc(100% - 252px - 252px - 25px - 25px) 252px 252px;
       gap: 25px;
     }
+  }
+
+  &__frame {
+    position: relative;
+    margin-bottom: 25px;
   }
 
   &__related {
@@ -254,4 +213,3 @@ export default defineComponent({
   }
 }
 </style>
-~/classes/BookletState

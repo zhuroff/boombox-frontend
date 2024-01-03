@@ -88,5 +88,5 @@ export interface CategoryItemRes extends CategoryEntityRes {
 export interface CategoryPageRes extends CategoryEntityRes {
   poster?: string
   albums: AlbumItemRes[]
-  frames?: EmbeddedItemRes[]
+  embeddedAlbums?: EmbeddedItemRes[]
 }

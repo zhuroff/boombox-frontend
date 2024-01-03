@@ -1,82 +1,79 @@
 <template>
-  <div class="album__info">
-    <div class="album__info-head">
-      <SearchBlock
-        v-if="withSearch"
-        type="search"
-        size="medium"
-        isInverted
-        :placeholder="lang('search.placeholder')"
-        :results="results"
-        @setInputValue="searchSubmit"
-      />
+  <div class="album__hero">
+    <div>
+      <slot name="hero-cover"></slot>
     </div>
-    <div class="album__info-heading">
-      <RouterLink
-        :to="`/artists/${artist._id}`"
-        class="album__info-category"
-      >{{ artist.title }}</RouterLink>&nbsp;
-      <span class="album__info-divisor">\</span>&nbsp;
-      <strong class="album__info-title">{{ title }}</strong>&nbsp;
-      <span class="album__info-divisor">\</span>&nbsp;
-      <RouterLink
-        :to="`/periods/${period._id}`"
-        class="album__info-category"
-      >{{ period.title }}</RouterLink>,
-      <RouterLink
-        :to="`/genres/${genre._id}`"
-        class="album__info-category"
-      >{{ genre.title }}</RouterLink><br>
-    </div>
-    <div class="album__info-total">{{ totalCounts }}</div>
-    <div class="album__info-actions">
-      <Button
-        v-if="!isPlaying"
-        icon="play"
-        :label="lang('playButton')"
-        @click="playAlbum"
-      />
-      <Button
-        v-else-if="!isPaused"
-        icon="pause"
-        :label="lang('pauseButton')"
-        @click="pauseTrack"
-      />
-      <div class="album__info-nav">
-        <Button
-          icon="ellipsis"
-          isText
-          @click="isActionsOpens = !isActionsOpens"
+    <div class="album__hero-info">
+      <div class="album__hero-head">
+        <SearchBlock
+          v-if="withSearch"
+          type="search"
+          size="medium"
+          isInverted
+          :placeholder="lang('search.placeholder')"
+          :results="results"
+          @setInputValue="searchSubmit"
         />
-        <Overlay
-          v-if="isActionsOpens"
-          :style="{
-            width: '200px',
-            left: 0,
-            top: '100%'
-          }"
-          @closeOverlay="isActionsOpens = false"
-        >
-          <ul class="overlay__list">
-            <li
-              class="overlay__list-item"
-              @click="() => searchWikiInfo()"
-            >{{ lang('wiki.navItem') }}</li>
-            <li
-              class="overlay__list-item"
-              @click="getRandomAlbum()"
-            >{{ lang('getRandomAlbum') }}</li>
-            <li
-              class="overlay__list-item"
-              @click="openCollectionsModal"
-            >{{ lang('collections.add') }}</li>
-            <li
-              class="overlay__list-item"
-              @click="addAlbumToPlaylist"
-            >{{ lang('player.addToList') }}</li>
-          </ul>
-        </Overlay>
+        <div class="album__hero-actions">
+          <div class="album__hero-nav">
+            <Button
+              icon="ellipsis"
+              isText
+              isInverted
+              @click="isActionsOpens = !isActionsOpens"
+            />
+            <Overlay
+              v-if="isActionsOpens"
+              :style="{
+                width: '200px',
+                right: 0,
+                top: '100%'
+              }"
+              @closeOverlay="isActionsOpens = false"
+            >
+              <ul
+                class="overlay__list"
+                @click="isActionsOpens = false"
+              >
+                <li
+                  class="overlay__list-item"
+                  @click="searchWikiInfo"
+                >{{ lang('wiki.navItem') }}</li>
+                <li
+                  class="overlay__list-item"
+                  @click="() => $emit('getRandomAlbum')"
+                >{{ lang('getRandomAlbum') }}</li>
+                <li
+                  class="overlay__list-item"
+                  @click="openCollectionsModal"
+                >{{ lang('collections.add') }}</li>
+                <slot name="navlist"></slot>
+              </ul>
+            </Overlay>
+          </div>
+        </div>
       </div>
+      <div class="album__hero-heading">
+        <RouterLink
+          :to="`/artists/${artist._id}`"
+          class="album__hero-category"
+        >{{ artist.title }}</RouterLink>&nbsp;
+        <span class="album__hero-divisor">\</span>&nbsp;
+        <strong class="album__hero-title">{{ title }}</strong>&nbsp;
+        <span class="album__hero-divisor">\</span>&nbsp;
+        <RouterLink
+          :to="`/periods/${period._id}`"
+          class="album__hero-category"
+        >{{ period.title }}</RouterLink>,
+        <RouterLink
+          :to="`/genres/${genre._id}`"
+          class="album__hero-category"
+        >{{ genre.title }}</RouterLink><br>
+      </div>
+      <div
+        v-if="totalCounts"
+        class="album__hero-total"
+      >{{ totalCounts }}</div>
     </div>
     <Modal
       v-if="isWikiLoading || isWikiReady"
@@ -110,26 +107,27 @@
 
 <script lang="ts">
 import { PropType, computed, defineComponent, ref } from 'vue'
-import { BasicEntity, Pagination, WikiSearchResult } from '~/types/Common'
-import { Compilation } from '~/types/Compilation'
+import { BasicEntity, WikiSearchResult } from '~/types/Common'
+import { CollectionEntityRes } from '~/types/ReqRes'
 import { useLocales } from '~/hooks/useLocales'
 import { useSearch } from '~/hooks/useSearch'
 import { useListPage } from '~/hooks/useListPage'
 import { detectLocale } from '~/utils'
 import store from '~/store'
 import wiki from 'wikipedia'
+import CoverArt from '~/components/CoverArt.vue'
 import Button from './Button.vue'
 import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
 import SearchBlock from '~/components/SearchBlock.vue'
 import GatheringTabs from './GatheringTabs.vue'
-import { CollectionEntityRes } from '~/types/ReqRes'
 import CollectionEntity from '~/classes/CollectionEntity'
 
 export default defineComponent({
   name: 'AlbumHero',
   components: {
+    CoverArt,
     Button,
     Overlay,
     Modal,
@@ -158,17 +156,9 @@ export default defineComponent({
       type: Object as PropType<BasicEntity>,
       required: true
     },
-    entityType: {
-      type: String,
-      required: true
-    },
     totalCounts: {
       type: String,
-      required: true
-    },
-    getRandomAlbum: {
-      type: Function as PropType<() => void>,
-      required: true
+      required: false
     },
     withSearch: {
       type: Boolean,
@@ -176,7 +166,7 @@ export default defineComponent({
       default: true
     }
   },
-  setup({ id, artist, title }) {
+  setup({ artist, title }) {
     const {
       fetchData,
       isDataFetched,
@@ -207,30 +197,6 @@ export default defineComponent({
       getters.playingTrack.value?._id &&
       getters.playingTrack.value.isOnPause
     ))
-
-    const playAlbum = () => {
-      if (getters.playlists.value.current._id === id) {
-        if (getters.playingTrack.value) {
-          actions.continuePlay()
-          return
-        }
-      }
-
-      const actualPlaylist = getters.playlists.value.current._id === id
-        ? getters.playlists.value.current
-        : getters.playlists.value.reserved
-      
-      const trackToPlay = actualPlaylist?.tracks.find(({ isDisabled }) => !isDisabled)
-
-      if (trackToPlay) {
-        actions.playTrack(trackToPlay)
-        actions.togglePlayerVisibility()
-      }
-    }
-
-    const pauseTrack = () => {
-      actions.setTrackOnPause()
-    }
 
     const getWikiInfo = async (searchParam: string | number = title) => {
       isWikiLoading.value = true
@@ -298,22 +264,14 @@ export default defineComponent({
 
     const openCollectionsModal = async () => {
       isCollectionLoading.value = true
-      isActionsOpens.value = false
       collections.value = await fetchData('collections')
       isCollectionLoading.value = false
-    }
-
-    const addAlbumToPlaylist = () => {
-      actions.addAlbumToPlaylist()
-      isActionsOpens.value = false
     }
 
     return {
       lang,
       isPlaying,
       isPaused,
-      playAlbum,
-      pauseTrack,
       isActionsOpens,
       searchWikiInfo,
       getWikiInfo,
@@ -323,7 +281,6 @@ export default defineComponent({
       isWikiLoading,
       wikiFrameResults,
       openCollectionsModal,
-      addAlbumToPlaylist,
       searchSubmit,
       results,
       collections,
@@ -339,13 +296,32 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '../scss/variables.scss';
 @import 'include-media';
-
 .album {
 
-  &__info {
-    padding-left: 25px;
-    display: flex;
-    flex-direction: column;
+  &__hero {
+    background-color:  $dark;
+
+    @include media('<laptop') {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vw;
+    }
+
+    @include media('>=laptop') {
+      position: relative;
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      padding: 25px;
+      height: 300px;
+    }
+
+    &-info {
+      padding-left: 25px;
+      position: relative;
+      z-index: 2000;
+    }
 
     &-head {
       display: flex;
@@ -390,9 +366,13 @@ export default defineComponent({
     }
 
     &-actions {
-      margin-top: 3rem;
+      margin-left: 1rem;
       display: flex;
       align-items: center;
+
+      .button {
+        transform: rotate(90deg);
+      }
     }
 
     &-nav {
@@ -401,4 +381,3 @@ export default defineComponent({
   }
 }
 </style>
-~/classes/CollectionEntity

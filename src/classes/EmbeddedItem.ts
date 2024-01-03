@@ -4,7 +4,7 @@ import ListCardBasic from './ListCardBasic'
 
 export default class EmbeddedItem extends ListCardBasic {
   readonly _id: string
-  title: string
+  readonly title: string
   frame: string
   artist: BasicEntity
   genre: BasicEntity

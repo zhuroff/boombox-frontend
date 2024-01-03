@@ -1,103 +1,143 @@
 <template>
-  <section class="section">
-    <!-- <transition name="fade">
-      <Preloader
-        v-if="!album.isFetched"
-        mode="light"
+  <AlbumPageTemplate
+    :isDataFetched="isDataFetched"
+    :album="album"
+    :relatedAlbums="relatedAlbums"
+    :discogsTablePayload="discogsTablePayload"
+    :discogsFilters="discogsFilters"
+    :discogsFiltersStates="discogsFiltersStates"
+    @filter:update="setDiscogsFilterValue"
+    @filter:reset="resetDiscogsFilters"
+    @switchPagination="setDiscogsPaginationPage"
+  >
+    <template #hero>
+      <AlbumHero
+        v-if="album._id"
+        :id="album._id"
+        :title="album.title"
+        :artist="album.artist"
+        :genre="album.genre"
+        :period="album.period"
       />
-    </transition>
-    <transition name="flyUp">
+    </template>
+    <template #frame>
       <div
-        v-if="album.isFetched"
-        class="album --frame"
-      >
-        <div
-          class="album__frame"
-          v-html="album.data.frame"
-        ></div>
-      </div>
-    </transition> -->
-  </section>
+        v-html="album.frame"
+        class="album__frame"
+      />
+    </template>
+  </AlbumPageTemplate>
 </template>
 
 <script lang="ts">
-
-import { defineComponent, reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-// import { FrameAlbum } from '~/types/Frame'
-// import FrameServices from '~/services/FrameServices'
-// import Preloader from '~/components/Preloader.vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useDiscogs } from '~/hooks/useDiscogs'
+import { useSinglePage } from '~/hooks/useSinglePage'
+import { RelatedAlbums } from '~/types/Album'
+import { RequestFilter } from '~/types/Common'
+import { EmbeddedItemRes } from '~/types/ReqRes'
+import AlbumItem from '~/classes/AlbumItem'
+import EmbeddedItem from '~/classes/EmbeddedItem'
+import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
+import AlbumHero from '~/components/AlbumHero.vue'
 
 export default defineComponent({
-  // components: {
-  //   Preloader
-  // },
+  components: {
+    AlbumPageTemplate,
+    AlbumHero
+  },
   setup() {
-    const route = useRoute()
+    const {
+      fetchData,
+      isDataFetched,
+      getRelatedAlbums
+    } = useSinglePage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem, 'EmbeddedCard', 'embedded')
 
-    // const album = reactive({
-    //   isFetched: false,
-    //   data: {} as FrameAlbum
-    // })
+    const {
+      fetchDiscogsInfo,
+      discogsTablePayload,
+      discogsFiltersStates,
+      setDiscogsFilterValue,
+      setDiscogsPaginationPage,
+      resetDiscogsFilters,
+      discogsFilters
+    } = useDiscogs()
 
-    // const setAlbumState = (data: FrameAlbum) => {
-    //   album.isFetched = true
-    //   album.data = data
-    // }
+    const album = ref<EmbeddedItem>({} as EmbeddedItem)
+    const relatedAlbums = ref<RelatedAlbums[]>([])
 
-    // const fetchFrame = async () => {
-    //   FrameServices.single(String(route.params.id))
-    //     .then((frame) => setAlbumState(frame))
-    //     .catch((error) => console.dir(error))
-    // }
+    const getRelated = async () => {
+      const relatedAlbumsConfig: RequestFilter[] = [
+        {
+          from: 'artists',
+          key: 'artist._id',
+          name: album.value.artist.title,
+          value: album.value.artist._id,
+          excluded: {
+            _id: album.value._id
+          }
+        },
+        {
+          from: 'genres',
+          key: 'genre._id',
+          name: album.value.genre.title,
+          value: album.value.genre._id,
+          excluded: {
+            _id: album.value._id,
+            'artist._id': album.value.artist._id
+          }
+        }
+      ]
 
-    // onMounted(() => fetchFrame())
+      try {
+        relatedAlbums.value = []
+        const response = await Promise.all(relatedAlbumsConfig.map(async (config) => (
+          await getRelatedAlbums(config, 'albums')
+        )))
+        
+        relatedAlbums.value = response.map(({ docs, name}) => ({
+          name,
+          docs: docs.map<AlbumItem>((album) => new AlbumItem(album, 'AlbumCard', 'albums'))
+        }))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    onMounted(() => {
+      fetchData('embedded')
+        .then((payload) => {
+          if (payload) {
+            album.value = payload
+            getRelated()
+            fetchDiscogsInfo(payload)
+          }
+        })
+    })
 
     return {
-      // album
+      isDataFetched,
+      relatedAlbums,
+      discogsTablePayload,
+      discogsFiltersStates,
+      setDiscogsFilterValue,
+      setDiscogsPaginationPage,
+      resetDiscogsFilters,
+      discogsFilters,
+      album
     }
   }
 })
-
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
 @import '~/scss/variables';
 @import 'include-media';
 
 .album {
 
-  &.--frame {
-
-    @include media('<laptop') {
-      background: linear-gradient(to right, #0f1e36, #e5e5e5, #0f1e36);
-
-      @include media('landscape') {
-        padding: 25px 0;
-      }
-    }
-  }
-
-  &__heading {
-
-    @include media('<laptop') {
-      display: none;
-    }
-
-    @include media('>=laptop') {
-      flex: 1 1 0;
-      padding-left: 25px;
-    }
-  }
-
-  &__frame {
-
-    @include media('<laptop', 'landscape') {
-      max-width: 400px;
-      margin: 0 auto;
-    }
+  iframe {
+    border-radius: $borderRadiusSM;
   }
 }
-
 </style>

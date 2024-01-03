@@ -1,8 +1,9 @@
 import { computed, reactive, ref } from 'vue'
-import { DiscogsFilter, DiscogsQueryConfig, DiscogsReleaseRow, DiscogsTablePayload, DiscogsTableSchema } from '~/types/Discogs'
+import { DiscogsFilter, DiscogsReleaseRow, DiscogsTablePayload, DiscogsTableSchema } from '~/types/Discogs'
 import { Pagination } from '~/types/Common'
 import discogsServices from '~/services/discogs.services'
 import AlbumPage from '~/classes/AlbumPage'
+import EmbeddedItem from '~/classes/EmbeddedItem'
 
 export const useDiscogs = () => {
   const isDiscogsFetched = ref(false)
@@ -97,7 +98,7 @@ export const useDiscogs = () => {
     })
   }
 
-  const fetchDiscogsInfo = async (entity: AlbumPage) => {
+  const fetchDiscogsInfo = async (entity: AlbumPage | EmbeddedItem) => {
     isDiscogsFetched.value = false
     discogsData.value = []
     resetDiscogsFilters()

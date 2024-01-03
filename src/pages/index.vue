@@ -19,14 +19,13 @@
 </template>
   
 <script lang="ts">
-import { defineComponent, onMounted, reactive, computed, ref } from 'vue'
-import { BasicEntity, RequestConfig } from '~/types/Common'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { RequestConfig } from '~/types/Common'
 import { AlbumItemRes, ListPageResponse } from '~/types/ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
 import dbServices from '~/services/database.services'
 import Preloader from '~/components/Preloader.vue'
 import AdapterCard from '~/components/Cards/AdapterCard.vue'
-import ListCardBasic from '~/classes/ListCardBasic'
 
 export default defineComponent({
   components: {
@@ -67,7 +66,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '~/scss/variables';
 @import 'include-media';
-
 .masonry {
   display: grid;
   grid-template-columns: 50% 25% 12.5% 12.5%;
@@ -135,4 +133,3 @@ export default defineComponent({
   }
 }
 </style>
-~/services/database.services

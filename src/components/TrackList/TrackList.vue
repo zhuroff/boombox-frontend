@@ -97,6 +97,6 @@ export default defineComponent({
 @import 'include-media';
 
 .tracklist {
-  margin: 20px 0;
+  margin: 75px 0 25px;
 }
 </style>

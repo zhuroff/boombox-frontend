@@ -8,7 +8,11 @@ import BookletState from '~/classes/BookletState'
 import dbServices from '~/services/database.services'
 import cloudServices from '~/services/cloud.services'
 
-export const useSinglePage = <T extends BasicEntity, C>(Class: new (prop: T) => C) => {
+export const useSinglePage = <T extends BasicEntity, C>(
+  Class: new (prop: T, cardType: string, cardPath: string) => C,
+  cardType: string,
+  cardPath: string
+) => {
   const route = useRoute()
   const router = useRouter()
   const booklet = ref<BookletState>(new BookletState())
@@ -20,7 +24,7 @@ export const useSinglePage = <T extends BasicEntity, C>(Class: new (prop: T) => 
 
     try {
       const data = await dbServices.getEntity<T>(entityType, id)
-      const entity = new Class(data)
+      const entity = new Class(data, cardType, cardPath)
 
       if (id === 'random') {
         router.push({ params: { id: data._id } })

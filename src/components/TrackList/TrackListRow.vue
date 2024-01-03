@@ -161,7 +161,6 @@ export default defineComponent({
 @import 'include-media';
 
 .tracklist {
-  margin: 20px 0;
 
   &__row {
     font-size: 1rem;

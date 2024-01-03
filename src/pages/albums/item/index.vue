@@ -7,8 +7,6 @@
     :discogsTablePayload="discogsTablePayload"
     :discogsFilters="discogsFilters"
     :discogsFiltersStates="discogsFiltersStates"
-    :getBooklet="bookletHandler"
-    cardType="AlbumCard"
     @filter:update="setDiscogsFilterValue"
     @filter:reset="resetDiscogsFilters"
     @switchPagination="setDiscogsPaginationPage"
@@ -17,32 +15,50 @@
       bookletPageChanged(data, album.folderName, album.cloudURL)
     }"
   >
-    <AlbumHero
-      v-if="album._id"
-      :id="album._id"
-      :title="album.title"
-      :artist="album.artist"
-      :genre="album.genre"
-      :period="album.period"
-      :entityType="entityType"
-      :totalCounts="totalCounts"
-      :getRandomAlbum="getRandom"
-    />
+    <template #hero>
+      <AlbumHero
+        v-if="album._id"
+        :id="album._id"
+        :title="album.title"
+        :artist="album.artist"
+        :genre="album.genre"
+        :period="album.period"
+        :totalCounts="totalCounts"
+        :getRandomAlbum="getRandom"
+      >
+        <template #hero-cover>
+          <CoverArt
+            :cover="album.coverURL"
+            :booklet="booklet"
+            @coverClick="() => bookletHandler()"
+            @closeBookletModal="closeBookletModal"
+            @slideChanged="bookletPageChanged"
+            @getRandomAlbum="getRandomAlbum"
+          />
+        </template>
+        <template #navlist>
+          <li
+            class="overlay__list-item"
+            @click="addAlbumToPlaylist"
+          >{{ lang('player.addToList') }}</li>
+        </template>
+      </AlbumHero>
+    </template>
   </AlbumPageTemplate>
-  <div></div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { defineComponent, onMounted, computed, ref, watch } from 'vue'
 import { AlbumPageRes } from '~/types/ReqRes'
 import { RequestFilter } from '~/types/Common'
 import { RelatedAlbums } from '~/types/Album'
-import { conjugate } from '~/utils'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useLocales } from '~/hooks/useLocales'
+import { conjugate } from '~/utils'
 import store from '~/store'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
+import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 import AlbumPage from '~/classes/AlbumPage'
 import AlbumItem from '~/classes/AlbumItem'
@@ -51,7 +67,8 @@ export default defineComponent({
   name: 'AlbumPage',
   components: {
     AlbumPageTemplate,
-    AlbumHero
+    AlbumHero,
+    CoverArt
   },
   setup() {
     const {
@@ -64,7 +81,7 @@ export default defineComponent({
       closeBookletModal,
       bookletPageChanged,
       route
-    } = useSinglePage<AlbumPageRes, AlbumPage>(AlbumPage)
+    } = useSinglePage<AlbumPageRes, AlbumPage>(AlbumPage, 'AlbumCard', 'albums')
 
     const {
       fetchDiscogsInfo,
@@ -81,37 +98,6 @@ export default defineComponent({
     const album = ref<AlbumPage>({} as AlbumPage)
     const relatedAlbums = ref<RelatedAlbums[]>([])
     const entityType = ref('albums')
-
-    const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
-      const totalDurationInSeconds = tracks.reduce((acc, next) => (
-        acc + (Number(next.duration) || 0)
-      ), 0)
-
-      const hours = Math.floor(totalDurationInSeconds / 3600)
-      const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
-      const seconds = Math.floor(totalDurationInSeconds % 60)
-
-      const formattedTime = `
-        ${hours.toString().padStart(2, '0')}:
-        ${minutes.toString().padStart(2, '0')}:
-        ${seconds.toString().padStart(2, '0')}
-      `.replace(/\s+/g, '')
-
-      return formattedTime
-    }
-
-    const totalCounts = computed(() => {
-      const isAllTracksHaveDuration = album.value.tracks?.every((track) => (
-        Number(track.duration)
-      ))
-      return `
-        ${album.value.tracks?.length} ${conjugate('tracks', album.value.tracks?.length)}:
-        ${isAllTracksHaveDuration ? calcTotalTracksTime(album.value.tracks) : lang('unknownTime')}.
-        ${lang('listenedTracks')} ${album.value.tracks?.reduce((acc, { listened }) => (
-          acc + (Number(listened) || 0)
-        ), 0)}
-      `.trim()
-    })
 
     const getRandom = () => {
       getRandomAlbum(entityType.value)
@@ -175,6 +161,42 @@ export default defineComponent({
       }
     }
 
+    const addAlbumToPlaylist = () => {
+      actions.addAlbumToPlaylist()
+    }
+
+    const calcTotalTracksTime = (tracks: AlbumPage['tracks']): string => {
+      const totalDurationInSeconds = tracks.reduce((acc, next) => (
+        acc + (Number(next.duration) || 0)
+      ), 0)
+
+      const hours = Math.floor(totalDurationInSeconds / 3600)
+      const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
+      const seconds = Math.floor(totalDurationInSeconds % 60)
+
+      const formattedTime = `
+        ${hours.toString().padStart(2, '0')}:
+        ${minutes.toString().padStart(2, '0')}:
+        ${seconds.toString().padStart(2, '0')}
+      `.replace(/\s+/g, '')
+
+      return formattedTime
+    }
+
+    const totalCounts = computed(() => {
+      if (!('tracks' in album)) return undefined
+      const isAllTracksHaveDuration = album.value.tracks?.every((track) => (
+        Number(track.duration)
+      ))
+      return `
+        ${album.value.tracks?.length} ${conjugate('tracks', album.value.tracks?.length)}:
+        ${isAllTracksHaveDuration ? calcTotalTracksTime(album.value.tracks) : lang('unknownTime')}.
+        ${lang('listenedTracks')} ${album.value.tracks?.reduce((acc, { listened }) => (
+          acc + (Number(listened) || 0)
+        ), 0)}
+      `.trim()
+    })
+
     onMounted(() => {
       fetchData(entityType.value)
         .then((payload) => {
@@ -207,15 +229,18 @@ export default defineComponent({
     )
 
     return {
+      lang,
       album,
       booklet,
       entityType,
       getRelated,
+      totalCounts,
       bookletHandler,
       getRandomAlbum,
       isDataFetched,
       relatedAlbums,
       closeBookletModal,
+      addAlbumToPlaylist,
       discogsTablePayload,
       discogsFiltersStates,
       setDiscogsFilterValue,
@@ -223,7 +248,6 @@ export default defineComponent({
       resetDiscogsFilters,
       bookletPageChanged,
       discogsFilters,
-      totalCounts,
       getRandom
     }
   }
