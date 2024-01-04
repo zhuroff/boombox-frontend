@@ -23,7 +23,7 @@
         <template #navlist>
           <li
             class="overlay__list-item"
-            @click="deleteEmbedded"
+            @click="isDelConfirm = true"
           >{{ lang('delEmbedded') }}</li>
         </template>
       </AlbumHero>
@@ -33,6 +33,19 @@
         v-html="album.frame"
         class="album__frame"
       />
+    </template>
+    <template #modal>
+      <Modal
+        v-if="isDelConfirm"
+        :isModalActive="isDelConfirm"
+        @closeModal="delReject"
+      >
+        <Confirmation
+          :message="lang('embeddedDelConfirm')"
+          @confirm="deleteEmbedded"
+          @reject="delReject"
+        />
+      </Modal>
     </template>
   </AlbumPageTemplate>
 </template>
@@ -49,12 +62,16 @@ import AlbumItem from '~/classes/AlbumItem'
 import EmbeddedItem from '~/classes/EmbeddedItem'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
+import Confirmation from '~/components/Confirmation.vue'
+import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
   components: {
     AlbumPageTemplate,
-    AlbumHero
-  },
+    Confirmation,
+    AlbumHero,
+    Modal
+},
   setup() {
     const {
       fetchData,
@@ -77,6 +94,7 @@ export default defineComponent({
     const { lang } = useLocales()
     const album = ref<EmbeddedItem>({} as EmbeddedItem)
     const relatedAlbums = ref<RelatedAlbums[]>([])
+    const isDelConfirm = ref(false)
 
     const getRandom = () => {
       getRandomAlbum('albums')
@@ -121,6 +139,10 @@ export default defineComponent({
       }
     }
 
+    const delReject = () => {
+      isDelConfirm.value = false
+    }
+
     const deleteEmbedded = () => {
       deleteEntry('embedded', album.value._id)
     }
@@ -146,7 +168,9 @@ export default defineComponent({
       setDiscogsPaginationPage,
       resetDiscogsFilters,
       discogsFilters,
+      isDelConfirm,
       getRandom,
+      delReject,
       album,
       lang
     }

@@ -6,7 +6,7 @@
     >
       <div class="cards__album-image">
         <img
-          :src="card.coverURL"
+          :src="card.coverURL || placeholderImage"
           :alt="card.title"
           class="cards__album-cover"
         />
@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import AlbumItem from '~/classes/AlbumItem';
+import AlbumItem from '~/classes/AlbumItem'
 
 export default defineComponent({
   name: 'AlbumCard',
@@ -34,6 +34,10 @@ export default defineComponent({
       required: true
     },
     rootPath: {
+      type: String,
+      required: true
+    },
+    placeholderImage: {
       type: String,
       required: true
     }
@@ -92,13 +96,15 @@ export default defineComponent({
       object-fit: cover;
 
       @include media('>=desktop') {
-        &:hover {
-          transform: translateX(-10px);
-          transition: transform 0.3s $animation;
-
-          & + .cards__album-vinyl {
-            transform: translateX(20px);
+        &:not(.--fixed) {
+          &:hover {
+            transform: translateX(-10px);
             transition: transform 0.3s $animation;
+
+            & + .cards__album-vinyl {
+              transform: translateX(20px);
+              transition: transform 0.3s $animation;
+            }
           }
         }
       }

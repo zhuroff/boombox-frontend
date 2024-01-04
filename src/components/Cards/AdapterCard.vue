@@ -14,6 +14,7 @@ import TileCard from './TileCard.vue'
 import AlbumCard from './AlbumCard.vue'
 import CategoryCard from './CategoryCard.vue'
 import EmbeddedCard from './EmbeddedCard.vue'
+import CollectionCard from './CollectionCard.vue'
 import ListCardBasic from '~/classes/ListCardBasic'
 
 export default defineComponent({
@@ -22,7 +23,8 @@ export default defineComponent({
     TileCard,
     AlbumCard,
     CategoryCard,
-    EmbeddedCard
+    EmbeddedCard,
+    CollectionCard
   },
   props: {
     card: {

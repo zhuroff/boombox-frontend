@@ -5,6 +5,9 @@ export const localesEN: LocaleDictionary = {
     en: 'English',
     by: 'Belarusian'
   },
+  cancel: 'Cancel',
+  delete: 'Delete',
+  embeddedDelConfirm: 'Are you sure you want to delete this entity?',
   navigation: {
     albums: 'Albums',
     artists: 'Artists',

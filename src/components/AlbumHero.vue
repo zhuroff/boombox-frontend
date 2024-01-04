@@ -1,7 +1,7 @@
 <template>
   <div class="album__hero">
     <div class="album__hero-cover">
-      <slot name="hero-cover"></slot>
+      <slot name="cover"></slot>
     </div>
     <div class="album__hero-info">
       <div class="album__hero-head">
@@ -43,10 +43,6 @@
                   class="overlay__list-item"
                   @click="() => $emit('getRandomAlbum')"
                 >{{ lang('getRandomAlbum') }}</li>
-                <li
-                  class="overlay__list-item"
-                  @click="openCollectionsModal"
-                >{{ lang('collections.add') }}</li>
                 <slot name="navlist"></slot>
               </ul>
             </Overlay>
@@ -87,31 +83,14 @@
         @selectWikiResult="(wikiID) => getWikiInfo(wikiID)"
       />
     </Modal>
-    <Modal
-      v-if="isCollectionLoading || isCollectionFetched"
-      :isModalActive="isCollectionLoading"
-      @closeModal="closeCollectionModal"
-    >
-      <GatheringTabs
-        v-if="collections"
-        :isLoading="isCollectionLoading"
-        :results="collections"
-        :pagination="collectionsPagination"
-        :entityID="id"
-        placeholderImage="/img/album.webp"
-        entityType="collections"
-      />
-    </Modal>
   </div>
 </template>
 
 <script lang="ts">
 import { PropType, computed, defineComponent, ref } from 'vue'
 import { BasicEntity, WikiSearchResult } from '~/types/Common'
-import { CollectionEntityRes } from '~/types/ReqRes'
 import { useLocales } from '~/hooks/useLocales'
 import { useSearch } from '~/hooks/useSearch'
-import { useListPage } from '~/hooks/useListPage'
 import { detectLocale } from '~/utils'
 import store from '~/store'
 import wiki from 'wikipedia'
@@ -121,8 +100,6 @@ import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
 import SearchBlock from '~/components/SearchBlock.vue'
-import GatheringTabs from './GatheringTabs.vue'
-import CollectionEntity from '~/classes/CollectionEntity'
 
 export default defineComponent({
   name: 'AlbumHero',
@@ -132,8 +109,7 @@ export default defineComponent({
     Overlay,
     Modal,
     WikiFrame,
-    SearchBlock,
-    GatheringTabs
+    SearchBlock
   },
   props: {
     id: {
@@ -167,22 +143,12 @@ export default defineComponent({
     }
   },
   setup({ artist, title }) {
-    const {
-      fetchData,
-      isDataFetched,
-      pagePagination
-    } = useListPage<
-      CollectionEntityRes<string>,
-      CollectionEntity<string>
-    >(CollectionEntity, '', '')
-    
     const { lang } = useLocales()
     const { actions, getters } = store
     const { searchSubmit, results } = useSearch()
-    const collections = ref<CollectionEntity<string>[] | undefined>([])
     const isActionsOpens = ref(false)
     const isWikiLoading = ref(false)
-    const isCollectionLoading = ref(false)
+    
     const isWikiReady = ref(false)
     const wikiFrameURL = ref<string | undefined>(undefined)
     const wikiFrameResults = ref<WikiSearchResult[] | undefined>(undefined)
@@ -252,21 +218,10 @@ export default defineComponent({
       resetWikiData()
     }
 
-    const closeCollectionModal = () => {
-      isCollectionLoading.value = false
-      isDataFetched.value = false
-    }
-
     const resetWikiData = () => {
       wikiFrameURL.value = undefined
       wikiFrameResults.value = undefined
-    }
-
-    const openCollectionsModal = async () => {
-      isCollectionLoading.value = true
-      collections.value = await fetchData('collections')
-      isCollectionLoading.value = false
-    }
+    }    
 
     return {
       lang,
@@ -280,14 +235,8 @@ export default defineComponent({
       wikiFrameURL,
       isWikiLoading,
       wikiFrameResults,
-      openCollectionsModal,
       searchSubmit,
-      results,
-      collections,
-      isCollectionLoading,
-      closeCollectionModal,
-      isCollectionFetched: isDataFetched,
-      collectionsPagination: pagePagination
+      results
     }
   }
 })

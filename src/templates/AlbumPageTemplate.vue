@@ -63,6 +63,7 @@
         </div>
       </div>
     </transition>
+    <slot name="modal"></slot>
   </section>
 </template>
 

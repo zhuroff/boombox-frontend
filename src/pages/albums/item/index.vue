@@ -26,7 +26,7 @@
         :totalCounts="totalCounts"
         @getRandomAlbum="getRandom"
       >
-        <template #hero-cover>
+        <template #cover>
           <CoverArt
             :cover="album.coverURL"
             :booklet="booklet"
@@ -40,34 +40,61 @@
             class="overlay__list-item"
             @click="addAlbumToPlaylist"
           >{{ lang('player.addToList') }}</li>
+          <li
+            class="overlay__list-item"
+            @click="openCollectionsModal"
+          >{{ lang('collections.add') }}</li>
         </template>
       </AlbumHero>
+    </template>
+    <template #modal>
+      <Modal
+        v-if="isCollectionLoading || collections"
+        :isModalActive="isCollectionLoading"
+        @closeModal="closeCollectionModal"
+      >
+        <GatheringTabs
+          v-if="!isCollectionLoading && collections"
+          :isLoading="isCollectionLoading"
+          :results="collections"
+          :pagination="collectionsPagination"
+          :entityID="album._id"
+          placeholderImage="/img/album.webp"
+          entityType="collections"
+        />
+      </Modal>
     </template>
   </AlbumPageTemplate>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, computed, ref, watch } from 'vue'
-import { AlbumPageRes } from '~/types/ReqRes'
+import { AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
 import { RequestFilter } from '~/types/Common'
 import { RelatedAlbums } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
+import { useListPage } from '~/hooks/useListPage'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useLocales } from '~/hooks/useLocales'
 import { conjugate } from '~/utils'
 import store from '~/store'
+import AlbumPage from '~/classes/AlbumPage'
+import AlbumItem from '~/classes/AlbumItem'
+import CollectionEntity from '~/classes/CollectionEntity'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
-import AlbumPage from '~/classes/AlbumPage'
-import AlbumItem from '~/classes/AlbumItem'
+import GatheringTabs from '~/components/GatheringTabs.vue'
+import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
   name: 'AlbumPage',
   components: {
     AlbumPageTemplate,
+    GatheringTabs,
     AlbumHero,
-    CoverArt
+    CoverArt,
+    Modal
   },
   setup() {
     const {
@@ -83,6 +110,14 @@ export default defineComponent({
     } = useSinglePage<AlbumPageRes, AlbumPage>(AlbumPage, 'AlbumCard', 'albums')
 
     const {
+      fetchData: fetchCollections,
+      pagePagination: collectionsPagination
+    } = useListPage<
+      CollectionEntityRes<string>,
+      CollectionEntity<string>
+    >(CollectionEntity, '', '')
+
+    const {
       fetchDiscogsInfo,
       discogsTablePayload,
       discogsFiltersStates,
@@ -96,6 +131,8 @@ export default defineComponent({
     const { actions } = store
     const album = ref<AlbumPage>({} as AlbumPage)
     const relatedAlbums = ref<RelatedAlbums[]>([])
+    const isCollectionLoading = ref(false)
+    const collections = ref<CollectionEntity<string>[] | undefined>(undefined)
     const entityType = ref('albums')
 
     const getRandom = () => {
@@ -182,6 +219,17 @@ export default defineComponent({
       return formattedTime
     }
 
+    const openCollectionsModal = async () => {
+      isCollectionLoading.value = true
+      collections.value = await fetchCollections('collections')
+      isCollectionLoading.value = false
+    }
+
+    const closeCollectionModal = () => {
+      isCollectionLoading.value = false
+      collections.value = undefined
+    }
+
     const totalCounts = computed(() => {
       const isAllTracksHaveDuration = album.value.tracks?.every((track) => (
         Number(track.duration)
@@ -234,14 +282,19 @@ export default defineComponent({
       entityType,
       getRelated,
       totalCounts,
+      collections,
       bookletHandler,
       isDataFetched,
       relatedAlbums,
       closeBookletModal,
       addAlbumToPlaylist,
       discogsTablePayload,
+      isCollectionLoading,
       discogsFiltersStates,
       setDiscogsFilterValue,
+      openCollectionsModal,
+      closeCollectionModal,
+      collectionsPagination,
       setDiscogsPaginationPage,
       resetDiscogsFilters,
       bookletPageChanged,

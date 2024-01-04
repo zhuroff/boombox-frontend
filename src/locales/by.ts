@@ -5,6 +5,9 @@ export const localesBY: LocaleDictionary = {
     en: 'Англiйская',
     by: 'Беларуская'
   },
+  cancel: 'Скасаваць',
+  delete: 'Выдалiць',
+  embeddedDelConfirm: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
   navigation: {
     albums: 'Альбомы',
     artists: 'Артысты',

@@ -17,8 +17,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import CategoryItem from '~/classes/CategoryItem'
 import { hostString } from '~/utils'
+import CategoryItem from '~/classes/CategoryItem'
 
 export default defineComponent({
   name: 'CategoryCard',
@@ -98,5 +98,4 @@ export default defineComponent({
     font-size: 12px;
   }
 }
-
 </style>
