@@ -54,7 +54,6 @@ export default defineComponent({
           caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`
         }))
     ))
-    console.log(albumList)
 
     return {
       data,

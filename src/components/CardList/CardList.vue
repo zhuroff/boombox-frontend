@@ -1,21 +1,38 @@
 <template>
-  <ul class="cardlist">
+  <VueDraggableNext
+    handle=".--drag"
+    tag="ul"
+    class="cardlist"
+    :animation="300"
+    :disabled="isDisabled"
+    @end="(event) => $emit('orderChanged', event)"
+  >
     <slot></slot>
-  </ul>
+  </VueDraggableNext>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { VueDraggableNext } from 'vue-draggable-next'
 
 export default defineComponent({
-  name: 'CardList'
+  name: 'CardList',
+  components: {
+    VueDraggableNext
+  },
+  props: {
+    isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  }
 })
 </script>
 
 <style lang="scss" scoped>
 @import '~/scss/variables';
 @import 'include-media';
-
 .cardlist {
   display: grid;
   overflow: hidden;

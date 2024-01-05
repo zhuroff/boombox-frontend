@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { ResponseMessage } from '~/types/Common'
-import { GatheringCreateReq, GatheringCreateRes, GatheringEntityRes, GatheringUpdateReq, GatheringUpdateRes } from '~/types/ReqRes'
+import { ReorderPayload, ResponseMessage } from '~/types/Common'
+import { GatheringCreateReq, GatheringCreateRes, GatheringUpdateReq, GatheringUpdateRes } from '~/types/ReqRes'
 import { useLocales } from './useLocales'
 import dbServices from '~/services/database.services'
 import store from '~/store'
@@ -43,12 +43,23 @@ export const useGathering = <T>() => {
       order: payload.order,
       isInList: false
     }
-    console.log(reqPayload)
 
     try {
       const response = await dbServices.updateEntity<ResponseMessage, GatheringUpdateRes>(payload.entityType, reqPayload)
       actions.setSnackbarMessage({
-        message: String(response.message),
+        message: lang(String(response.message)),
+        type: 'success'
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const reorder = async (entityType: string, payload: ReorderPayload) => {
+    try {
+      const response = await dbServices.reorderEntities<ResponseMessage, ReorderPayload>(entityType, payload.entityID, payload)
+      actions.setSnackbarMessage({
+        message: lang(String(response.message)),
         type: 'success'
       })
     } catch (error) {
@@ -60,6 +71,7 @@ export const useGathering = <T>() => {
     createNewGathering,
     setGatheringName,
     gatheringName,
-    addToGathering
+    addToGathering,
+    reorder
   }
 }

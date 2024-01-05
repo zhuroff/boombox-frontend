@@ -18,11 +18,14 @@
       <CardList
         v-if="isDataFetched && dataList.length"
         key="list"
+        :isDisabled="!isDraggable"
+        @orderChanged="(event) => $emit('orderChanged', event)"
       >
         <AdapterCard
           v-for="item in dataList"
           :key="item._id"
           :card="item"
+          :isDraggable="isDraggable"
           :placeholderImage="placeholderImage"
         />
       </CardList>
@@ -42,12 +45,12 @@
 <script lang="ts">
 import { PropType, defineComponent, ref } from 'vue'
 import { BasicEntity, Pagination, PaginationConfig } from '~/types/Common'
+import ListCardBasic from '~/classes/ListCardBasic'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
 import CardList from '~/components/CardList/CardList.vue'
 import AdapterCard from '~/components/Cards/AdapterCard.vue'
 import Paginator from '~/components/Paginator.vue'
-import ListCardBasic from '~/classes/ListCardBasic'
 
 export default defineComponent({
   name: 'ListPageTemplate',
@@ -91,6 +94,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: true
+    },
+    isDraggable: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   setup({ pagePagination }) {

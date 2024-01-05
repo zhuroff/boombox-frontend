@@ -19,15 +19,26 @@
       <div class="cards__album-title">{{ card.title }}</div>
       <div class="cards__album-info">{{ card.caption }}</div>
     </router-link>
+    <Button
+      v-if="isDraggable"
+      icon="drag"
+      size="small"
+      className="--drag"
+      isText
+    />
   </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import AlbumItem from '~/classes/AlbumItem'
+import Button from '~/components/Button.vue'
 
 export default defineComponent({
   name: 'AlbumCard',
+  components: {
+    Button
+  },
   props: {
     card: {
       type: Object as PropType<AlbumItem>,
@@ -39,6 +50,10 @@ export default defineComponent({
     },
     placeholderImage: {
       type: String,
+      required: true
+    },
+    isDraggable: {
+      type: Boolean,
       required: true
     }
   }
@@ -60,6 +75,15 @@ export default defineComponent({
     @include media('>=desktop') {
       margin-bottom: 15px;
       padding: 10px;
+    }
+
+    .--drag {
+      position: absolute;
+      top: 1rem;
+      left: 1.65rem;
+      z-index: 2000;
+      background-color: $white;
+      cursor: move;
     }
 
     &-link {

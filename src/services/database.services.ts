@@ -19,6 +19,11 @@ export default {
     commonServices.errorChecker(response.status)
     return response.data
   },
+  async reorderEntities<T, U>(entityType: string, id: string, payload: U): Promise<T> {
+    const response = await api.patch<T>(`/api/${entityType}/${id}/reorder`, payload)
+    commonServices.errorChecker(response.status)
+    return response.data
+  },
   async deleteEntity<T>(entityType: string, id: string) {
     const response = await api.delete<T>(`/api/${entityType}/delete/${id}`)
     commonServices.errorChecker(response.status)

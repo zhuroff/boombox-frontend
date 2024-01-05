@@ -12,19 +12,22 @@
         />
       </div>
       <div class="cards__album-title">{{ card.title }}</div>
+      <div class="cards__album-info">{{ cardCaption }}</div>
     </router-link>
   </li>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, computed } from 'vue'
+import { useLocales } from '~/hooks/useLocales'
 import CollectionEntity from '~/classes/CollectionEntity'
+import { BasicEntity } from '~/types/Common'
 
 export default defineComponent({
   name: 'CollectionCard',
   props: {
     card: {
-      type: Object as PropType<CollectionEntity<number>>,
+      type: Object as PropType<CollectionEntity<BasicEntity>>,
       required: true
     },
     rootPath: {
@@ -35,6 +38,15 @@ export default defineComponent({
       type: String,
       required: true
     }
+  },
+  setup({ card }) {
+    const { lang } = useLocales()
+
+    const cardCaption = computed(() => (
+      `${lang('collections.cardCaption')}: ${card.albums.length}`
+    ))
+
+    return { cardCaption }
   }
 })
 </script>

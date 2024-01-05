@@ -83,7 +83,9 @@ export const localesBY: LocaleDictionary = {
     namePlaceholder: 'Увядзіце назву калекцыі',
     exists: 'Калекцыя з такой назвай ужо існуе',
     removed: 'Альбом паспяхова выдалены з калекцыі',
-    added: 'Альбом паспяхова дададзены ў калекцыю'
+    added: 'Альбом паспяхова дададзены ў калекцыю',
+    reordered: 'Парадак альбомаў паспяхова зменены',
+    cardCaption: 'Альбомаў у калекцыі'
   },
   search: {
     placeholder: 'Пошук...'

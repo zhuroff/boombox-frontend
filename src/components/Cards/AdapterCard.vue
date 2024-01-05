@@ -2,6 +2,7 @@
   <component
     :is="cardComponent"
     :card="card"
+    :isDraggable="isDraggable"
     :rootPath="card.cardPath"
     :placeholderImage="placeholderImage"
   />
@@ -33,6 +34,10 @@ export default defineComponent({
     },
     placeholderImage: {
       type: String,
+      required: true
+    },
+    isDraggable: {
+      type: Boolean,
       required: true
     }
   },

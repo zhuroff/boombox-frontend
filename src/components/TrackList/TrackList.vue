@@ -5,17 +5,15 @@
       v-bind="dragOptions"
       @end="orderChanged"
     >
-      <transition-group>
-        <TrackListRow
-          v-for="(track, index) in albumTracksOnly"
-          :key="track._id"
-          :track="track"
-          :isTOY="isTOY"
-          :index="index"
-          :albumID="albumID"
-          @saveToyInfo="saveToyInfo"
-        />
-      </transition-group>
+      <TrackListRow
+        v-for="(track, index) in albumTracksOnly"
+        :key="track._id"
+        :track="track"
+        :isTOY="isTOY"
+        :index="index"
+        :albumID="albumID"
+        @saveToyInfo="saveToyInfo"
+      />
     </VueDraggableNext>
   </div>
 </template>

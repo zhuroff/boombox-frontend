@@ -2,115 +2,84 @@
   <section class="section">
     <transition name="fade">
       <Preloader
-        v-if="!collection.isFetched"
+        v-if="!isDataFetched"
         mode="light"
       />
     </transition>
-      
     <transition-group name="flyUp">
-      <!-- <CategoryHero
-        v-if="collection.isFetched"
-        :data="collection.data"
-        :description="collectionDescription"
-        slug="collections"
+      <CategoryHero
+        v-if="isDataFetched && data"
+        :entity="entityType"
+        :data="data"
+        :description="totalCounts"
         @setUploadedImage="setUploadedImage"
-      /> -->
-
-      <VueDraggableNext
-        v-if="collection.isFetched"
-        handle=".--drag"
-        class="cardlist"
-        tag="ul"
-        v-bind="dragOptions"
-        @end="orderChanged"
-      >
-        <!-- <CardWrapper
-          v-for="album in collection.data.albums"
-          :key="album._id"
-          draggable
-        >
-          <CardAlbum :album="album.album" />
-        </CardWrapper> -->
-      </VueDraggableNext>
+      />
+      <ListPageTemplate
+        placeholderImage="/img/album.webp"
+        :isDataFetched="isDataFetched"
+        :dataList="albumList"
+        isDraggable
+        @orderChanged="changeAlbumsOrder"
+      />
     </transition-group>
   </section>
 </template>
 
 <script lang="ts">
-
-import { computed, defineComponent, onMounted, reactive } from 'vue'
-import { useRoute } from 'vue-router'
-// import { CollectionPageItem } from '~/types/Collection'
-import { DraggableEvent, ReorderPayload, UploadImageResult } from '~/types/Common'
-import { VueDraggableNext } from 'vue-draggable-next'
+import { computed, defineComponent } from 'vue'
+import { useCategory } from '~/hooks/useCategory'
+import { DraggableEvent, ReorderPayload } from '~/types/Common'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
-// import CardWrapper from '~/components/Cards/CardWrapper.vue'
-// import CardAlbum from '~/components/Cards/CardAlbum.vue'
+import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import { useGathering } from '~/hooks/useGathering'
 
 export default defineComponent({
+  name: 'CollectionPage',
   components: {
     Preloader,
-    VueDraggableNext,
     CategoryHero,
-    // CardWrapper,
-    // CardAlbum
+    ListPageTemplate
   },
-
   setup() {
-    const route = useRoute()
+    const entityType = 'collections'
+    const {
+      data,
+      isDataFetched,
+      setUploadedImage,
+      totalCounts
+    } = useCategory(entityType)
 
-    const collection = reactive({
-      isFetched: false,
-      data: {} as any // CollectionPageItem
-    })
+    const { reorder } = useGathering()
 
-    const dragOptions = reactive({
-      animation: 300,
-      disabled: false
-    })
-
-    const collectionDescription = computed(() => (
-      `Albums in collection: ${collection.data.albums?.length}`
+    const albumList = computed(() => (
+      (data.value?.albums || [])
+        .map((album) => ({
+          ...album,
+          caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`
+        }))
     ))
 
-    const orderChanged = (event: DraggableEvent) => {
+    const changeAlbumsOrder = (event: DraggableEvent) => {
+      if (!data.value) return false
       const payload: ReorderPayload = {
-        entityID: collection.data._id,
         oldOrder: event.oldIndex,
-        newOrder: event.newIndex
+        newOrder: event.newIndex,
+        entityID: data.value._id
       }
 
-      // collectionServices.reorder(payload)
-      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-      //   .catch((error) => console.dir(error))
+      reorder('collections', payload)
     }
-
-    const setCollection = (data: any /* CollectionPageItem */) => {
-      collection.data = data
-      collection.isFetched = true
-    }
-
-    const setUploadedImage = (payload: UploadImageResult) => {
-      collection.data[payload.key] = payload.url
-    }
-
-    const fetchCollection = () => {
-      // collectionServices.single(String(route.params.id))
-      //   .then((response) => setCollection(response))
-      //   .catch((error) => console.dir(error))
-    }
-
-    onMounted(() => fetchCollection())
 
     return {
-      collection,
-      dragOptions,
-      orderChanged,
+      data,
+      isDataFetched,
       setUploadedImage,
-      collectionDescription
+      changeAlbumsOrder,
+      totalCounts,
+      entityType,
+      albumList
     }
   }
 })
-
 </script>

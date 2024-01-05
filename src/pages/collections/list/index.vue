@@ -15,6 +15,7 @@ import { defineComponent, computed, ref, watch } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { CollectionEntityRes } from '~/types/ReqRes'
+import { BasicEntity } from '~/types/Common'
 import { isObjectsEquals } from '~/utils'
 import CollectionEntity from '~/classes/CollectionEntity'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
@@ -33,12 +34,12 @@ export default defineComponent({
       switchPagination,
       setEntitiesLimit
     } = useListPage<
-      CollectionEntityRes<number>,
-      CollectionEntity<number>
+      CollectionEntityRes<BasicEntity>,
+      CollectionEntity<BasicEntity>
     >(CollectionEntity, 'CollectionCard', 'collections')
 
     const { lang } = useLocales()
-    const collections = ref<CollectionEntity<number>[]>([])
+    const collections = ref<CollectionEntity<BasicEntity>[]>([])
 
     const pageHeading = computed(() => (
       lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)

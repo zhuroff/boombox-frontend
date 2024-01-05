@@ -83,7 +83,9 @@ export const localesEN: LocaleDictionary = {
     namePlaceholder: 'Enter collection name',
     exists: 'Collection with this name already exists',
     removed: 'Album successfully removed from collection',
-    added: 'Album successfully added to collection'
+    added: 'Album successfully added to collection',
+    reordered: 'Albums order successfully changed',
+    cardCaption: 'Albums in collection'
   },
   search: {
     placeholder: 'Search...'
