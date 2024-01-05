@@ -304,7 +304,7 @@ export default defineComponent({
     border-bottom-left-radius: $borderRadiusLG;
     border-bottom-right-radius: $borderRadiusLG;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+    z-index: 3000;
     overflow: auto;
     max-height: calc(100vh - 150px);
 

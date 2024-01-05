@@ -14,17 +14,28 @@
       <div class="cards__album-title">{{ card.title }}</div>
       <div class="cards__album-info">{{ cardCaption }}</div>
     </router-link>
+    <Button
+      icon="delete"
+      size="small"
+      className="--delete"
+      isText
+      @click="() => $emit('deleteEntity', card._id)"
+    />
   </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
+import { BasicEntity } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import CollectionEntity from '~/classes/CollectionEntity'
-import { BasicEntity } from '~/types/Common'
+import Button from '~/components/Button.vue'
 
 export default defineComponent({
   name: 'CollectionCard',
+  components: {
+    Button
+  },
   props: {
     card: {
       type: Object as PropType<CollectionEntity<BasicEntity>>,
@@ -39,7 +50,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ card }) {
+  setup({ card }, { emit }) {
     const { lang } = useLocales()
 
     const cardCaption = computed(() => (
@@ -50,3 +61,20 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+@import '~/scss/variables';
+
+.cards {
+  &__album {
+    .--delete {
+      position: absolute;
+      top: 1rem;
+      left: 1.65rem;
+      z-index: 2000;
+      background-color: $white;
+      cursor: pointer;
+    }
+  }
+}
+</style>

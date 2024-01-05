@@ -7,6 +7,7 @@
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
+    @deleteEntity="deleteCollection"
   />
 </template>
 
@@ -32,7 +33,8 @@ export default defineComponent({
       pagePagination,
       pageStateConfig,
       switchPagination,
-      setEntitiesLimit
+      setEntitiesLimit,
+      deleteEntity
     } = useListPage<
       CollectionEntityRes<BasicEntity>,
       CollectionEntity<BasicEntity>
@@ -42,8 +44,16 @@ export default defineComponent({
     const collections = ref<CollectionEntity<BasicEntity>[]>([])
 
     const pageHeading = computed(() => (
-      lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
+      lang(`headings.collectionsPage`, pagePagination.value?.totalDocs || 0)
     ))
+
+    const deleteCollection = (id: string) => {
+      deleteEntity('collections', id)
+        .then(() => {
+          fetchData('collections')
+            .then((payload) => collections.value = payload || [])
+        })
+    }
 
     watch(
       pageStateConfig,
@@ -61,6 +71,7 @@ export default defineComponent({
       pagePagination,
       switchPagination,
       setEntitiesLimit,
+      deleteCollection,
       pageHeading,
       collections
     }

@@ -104,18 +104,6 @@
   >
     <path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
   </svg>
-
-  <svg
-    v-else-if="name === 'remove'"
-    viewBox="0 0 64 58.67"
-    class="icon"
-  >
-    <g id="Layer_2" data-name="Layer 2">
-      <g id="Layer_1-2" data-name="Layer 1"><path class="cls-1" d="M61.33,5.33H48V2.67A2.66,2.66,0,0,0,45.33,0H18.67A2.66,2.66,0,0,0,16,2.67V5.33H2.67a2.67,2.67,0,0,0,0,5.34H8v40a8,8,0,0,0,8,8H48a8,8,0,0,0,8-8v-40h5.33a2.67,2.67,0,1,0,0-5.34ZM50.67,50.67A2.67,2.67,0,0,1,48,53.33H16a2.67,2.67,0,0,1-2.67-2.66v-40H50.67Z"/><path class="cls-1" d="M24,45.33a2.67,2.67,0,0,0,2.67-2.66V21.33a2.67,2.67,0,0,0-5.34,0V42.67A2.67,2.67,0,0,0,24,45.33Z"/>
-        <path class="cls-1" d="M40,45.33a2.67,2.67,0,0,0,2.67-2.66V21.33a2.67,2.67,0,0,0-5.34,0V42.67A2.67,2.67,0,0,0,40,45.33Z"/>
-      </g>
-    </g>
-  </svg>
   <component :is="IconComponent" />
 </template>
 
@@ -141,6 +129,7 @@ import SpritePlaylist from './SpritePlaylist.vue'
 import SpritePlaylistRemove from './SpritePlaylistRemove.vue'
 import SpriteCamera from './SpriteCamera.vue'
 import SpriteSave from './SpriteSave.vue'
+import SpriteDelete from './SpriteDelete.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -164,7 +153,8 @@ export default defineComponent({
     SpritePlaylist,
     SpritePlaylistRemove,
     SpriteCamera,
-    SpriteSave
+    SpriteSave,
+    SpriteDelete
   },
   props: {
     name: {
@@ -193,7 +183,8 @@ export default defineComponent({
       ['playlist', SpritePlaylist],
       ['playlist-remove', SpritePlaylistRemove],
       ['camera', SpriteCamera],
-      ['save', SpriteSave]
+      ['save', SpriteSave],
+      ['delete', SpriteDelete]
     ])
 
     const IconComponent = computed(() => (

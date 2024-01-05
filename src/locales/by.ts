@@ -27,7 +27,8 @@ export const localesBY: LocaleDictionary = {
     synchronize: 'Сінхранізаваць',
   },
   headings: {
-    albumsPage: 'У калекцыi {x} альбомаў'
+    albumsPage: 'У калекцыi {x} альбомаў',
+    collectionsPage: 'Усяго калекцый: {x}'
   },
   getRandomAlbum: 'Выпадковы альбом',
   unknownTime: 'невядомы час',
@@ -85,7 +86,8 @@ export const localesBY: LocaleDictionary = {
     removed: 'Альбом паспяхова выдалены з калекцыі',
     added: 'Альбом паспяхова дададзены ў калекцыю',
     reordered: 'Парадак альбомаў паспяхова зменены',
-    cardCaption: 'Альбомаў у калекцыі'
+    cardCaption: 'Альбомаў у калекцыі',
+    drop: 'Калекцыя паспяхова выдалена'
   },
   search: {
     placeholder: 'Пошук...'

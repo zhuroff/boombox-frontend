@@ -27,7 +27,8 @@ export const localesEN: LocaleDictionary = {
     synchronize: 'Synchronize',
   },
   headings: {
-    albumsPage: 'The collection contains {x} albums'
+    albumsPage: 'The collection contains {x} albums',
+    collectionsPage: 'Total collections: {x}'
   },
   getRandomAlbum: 'Random album',
   unknownTime: 'unknown time',
@@ -85,7 +86,8 @@ export const localesEN: LocaleDictionary = {
     removed: 'Album successfully removed from collection',
     added: 'Album successfully added to collection',
     reordered: 'Albums order successfully changed',
-    cardCaption: 'Albums in collection'
+    cardCaption: 'Albums in collection',
+    drop: 'Collection successfully deleted'
   },
   search: {
     placeholder: 'Search...'

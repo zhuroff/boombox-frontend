@@ -1,14 +1,18 @@
 import { ComputedRef, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Pagination, RequestConfig, SortingValue } from '~/types/Common'
+import { Pagination, RequestConfig, ResponseMessage, SortingValue } from '~/types/Common'
 import { ListPageResponse } from '~/types/ReqRes'
+import { useLocales } from './useLocales'
 import dbServices from '~/services/database.services'
+import store from '~/store'
 
 export const useListPage = <T, C>(
   Class: new (card: T, type: string, path: string) => C,
   cardType: string,
   cardPath: string
 ) => {
+  const { lang } = useLocales()
+  const { actions } = store
   const { name, query, params } = useRoute()
   const router = useRouter()
   const isDataFetched = ref(false)
@@ -64,6 +68,21 @@ export const useListPage = <T, C>(
     }
   }
 
+  const deleteEntity = async (entityType: string, entityID: string) => {
+    try {
+      const response = await dbServices.deleteEntity<ResponseMessage>(entityType, entityID)
+      if (response) {
+        actions.setSnackbarMessage({
+          message: lang(String(response.message)),
+          type: 'success'
+        })
+        pagePagination.value.page = 1
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   onMounted(() => {
     const { page } = query
 
@@ -78,6 +97,7 @@ export const useListPage = <T, C>(
     pagePagination,
     switchPagination,
     setEntitiesLimit,
-    pageStateConfig
+    pageStateConfig,
+    deleteEntity
   }
 }

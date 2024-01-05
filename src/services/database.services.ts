@@ -24,8 +24,8 @@ export default {
     commonServices.errorChecker(response.status)
     return response.data
   },
-  async deleteEntity<T>(entityType: string, id: string) {
-    const response = await api.delete<T>(`/api/${entityType}/delete/${id}`)
+  async deleteEntity<T>(entityType: string, id: string): Promise<T> {
+    const response = await api.delete<T>(`/api/${entityType}/${id}`)
     commonServices.errorChecker(response.status)
     return response.data
   },

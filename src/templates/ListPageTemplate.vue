@@ -27,6 +27,7 @@
           :card="item"
           :isDraggable="isDraggable"
           :placeholderImage="placeholderImage"
+          @deleteEntity="(payload: unknown) => $emit('deleteEntity', payload)"
         />
       </CardList>
       <Paginator
@@ -48,7 +49,7 @@ import { BasicEntity, Pagination, PaginationConfig } from '~/types/Common'
 import ListCardBasic from '~/classes/ListCardBasic'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
-import CardList from '~/components/CardList/CardList.vue'
+import CardList from '~/components/Cards/CardList.vue'
 import AdapterCard from '~/components/Cards/AdapterCard.vue'
 import Paginator from '~/components/Paginator.vue'
 
