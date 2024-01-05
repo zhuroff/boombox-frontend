@@ -38,6 +38,7 @@
 
 <script lang="ts">
 import { PropType, computed, defineComponent } from 'vue'
+import { BasicEntity } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import { hostString } from '~/utils'
 import TextInput from './TextInput.vue'
@@ -57,7 +58,7 @@ export default defineComponent({
       required: false
     },
     gathering: {
-      type: Array as PropType<(CollectionEntity<string> | CompilationEntity<string>)[]>,
+      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationEntity<BasicEntity>)[]>,
       required: false
     },
     avatar: {
@@ -83,7 +84,7 @@ export default defineComponent({
       gathering && gathering.some((el) => {
         const isIdsEquals = el._id === id
         const entities = el instanceof CompilationEntity ? el.tracks : el.albums
-        return isIdsEquals && entities.includes(entityID)
+        return isIdsEquals && entities.some(({ _id }) => _id === entityID)
       })
     ))
 
@@ -109,7 +110,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '../scss/variables.scss';
 @import 'include-media';
-
 .entity-tabs {
 
   &__item {

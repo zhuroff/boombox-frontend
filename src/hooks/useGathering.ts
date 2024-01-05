@@ -55,6 +55,18 @@ export const useGathering = <T>() => {
     }
   }
 
+  const removeFromGathering = async (payload: GatheringUpdateReq) => {
+    try {
+      const response = await dbServices.updateEntity<ResponseMessage, GatheringUpdateRes>(payload.entityType, payload)
+      actions.setSnackbarMessage({
+        message: lang(String(response.message)),
+        type: 'success'
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const reorder = async (entityType: string, payload: ReorderPayload) => {
     try {
       const response = await dbServices.reorderEntities<ResponseMessage, ReorderPayload>(entityType, payload.entityID, payload)
@@ -72,6 +84,7 @@ export const useGathering = <T>() => {
     setGatheringName,
     gatheringName,
     addToGathering,
+    removeFromGathering,
     reorder
   }
 }

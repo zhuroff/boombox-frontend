@@ -18,7 +18,7 @@
           :avatar="tab.avatar"
           :title="tab.title"
           :entityID="entityID"
-          @addToGathering="() => addEntityToGathering(tab._id, results)"
+          @addToGathering="() => addEntityToGathering(tab, results)"
           @removeFromGathering="() => removeEntityFromGathering(tab._id, results)"
         />
         <GatheringTab
@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from 'vue'
-import { Pagination } from '~/types/Common'
+import { BasicEntity, Pagination } from '~/types/Common'
 import { useGathering } from '~/hooks/useGathering'
 import GatheringTab from './GatheringTab.vue'
 import Preloader from './Preloader.vue'
@@ -55,7 +55,7 @@ export default defineComponent({
       required: true
     },
     results: {
-      type: Array as PropType<(CollectionEntity<string> | CompilationEntity<string>)[]>,
+      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationEntity<BasicEntity>)[]>,
       required: true
     },
     pagination: {
@@ -77,25 +77,32 @@ export default defineComponent({
   },
   setup({ results, entityType, entityID }) {
     const {
+      removeFromGathering,
       createNewGathering,
       setGatheringName,
       gatheringName,
       addToGathering
     } = useGathering()
 
-    const addEntityToGathering = (gatheringID: string, gatherings: typeof results) => {
+    const addEntityToGathering = (gathering: typeof results[0], gatherings: typeof results) => {
       addToGathering({
         entityID,
         entityType,
-        gatheringID,
-        order: getOrder(gatheringID, gatherings) || 1,
-        isInList: true
+        gatheringID: gathering._id,
+        order: getOrder(gathering._id, gatherings) || 1,
+        isInList: false
       })
-        .then(() => addNewGathering(gatheringID, gatherings))
+        .then(() => addNewGathering(gathering, gatherings))
     }
 
     const removeEntityFromGathering = (gatheringID: string, gatherings: typeof results) => {
-      console.log('remove entity from gathering')
+      removeFromGathering({
+        entityID,
+        entityType,
+        gatheringID,
+        isInList: true
+      })
+        .then(() => deleteEntityFromGathering(gatheringID, gatherings))
     }
 
     const getTargetEntities = (gatheringID: string, gatherings: typeof results) => {
@@ -110,9 +117,17 @@ export default defineComponent({
       return entities && entities.length + 1
     }
 
-    const addNewGathering = (gatheringID: string, gatherings: typeof results) => {
+    const addNewGathering = (gathering: typeof results[0], gatherings: typeof results) => {
+      const entities = getTargetEntities(gathering._id, gatherings)
+      entities?.push({ _id: entityID, title: '' })
+    }
+
+    const deleteEntityFromGathering = (gatheringID: string, gatherings: typeof results) => {
       const entities = getTargetEntities(gatheringID, gatherings)
-      entities?.push(entityID)
+      if (entities) {
+        const index = entities.findIndex(({ _id }) => _id === entityID)
+        entities.splice(index, 1)
+      }
     }
 
     return {
@@ -131,7 +146,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '../scss/variables.scss';
 @import 'include-media';
-
 .entity-tabs {
   width: calc(100vw - 20px);
   max-width: 1200px;

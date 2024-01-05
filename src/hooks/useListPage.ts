@@ -51,7 +51,11 @@ export const useListPage = <T, C>(
       const { docs, pagination } = await dbServices.getEntityList<ListPageResponse<T>>(
         pageStateConfig.value, entityType
       )
-      pagePagination.value = Object.assign(pagePagination.value, pagination)
+      
+      if (pagination) {
+        pagePagination.value = Object.assign(pagePagination.value, pagination)
+      }
+
       return docs.map((doc) => new Class(doc, cardType, cardPath))
     } catch (error) {
       console.error(error)

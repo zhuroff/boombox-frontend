@@ -66,15 +66,15 @@ export interface GatheringUpdateReq {
   gatheringID: string
   entityType: string
   entityID: string
-  order: number
   isInList: boolean
+  order?: number
 }
 
 export interface GatheringUpdateRes {
   entityID: string
   gatheringID: string
   isInList: boolean
-  order: number
+  order?: number
 }
 
 export interface CategoryEntityRes extends Required<BasicEntity> {
