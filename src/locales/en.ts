@@ -15,7 +15,7 @@ export const localesEN: LocaleDictionary = {
     periods: 'Periods',
     embedded: 'Embedded',
     collections: 'Collections',
-    playlists: 'Playlists',
+    compilations: 'Compilations',
     youtube: 'YouTube',
     radio: 'Radio',
     toy: 'TOY',
@@ -28,7 +28,8 @@ export const localesEN: LocaleDictionary = {
   },
   headings: {
     albumsPage: 'The collection contains {x} albums',
-    collectionsPage: 'Total collections: {x}'
+    collectionsPage: 'Total collections: {x}',
+    compilationsPage: 'Total compilations: {x}'
   },
   getRandomAlbum: 'Random album',
   unknownTime: 'unknown time',
@@ -88,6 +89,16 @@ export const localesEN: LocaleDictionary = {
     reordered: 'Albums order successfully changed',
     cardCaption: 'Albums in collection',
     drop: 'Collection successfully deleted'
+  },
+  compilations: {
+    add: 'Add to compilation',
+    namePlaceholder: 'Enter compilation name',
+    exists: 'Compilation with this name already exists',
+    removed: 'Track successfully removed from compilation',
+    added: 'Track successfully added to compilation',
+    reordered: 'Tracks order successfully changed',
+    cardCaption: 'Tracks in compilation',
+    drop: 'Compilation successfully deleted'
   },
   search: {
     placeholder: 'Search...'

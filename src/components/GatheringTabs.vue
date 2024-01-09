@@ -24,6 +24,7 @@
         <GatheringTab
           :title="gatheringName"
           :entityID="entityID"
+          :entityType="entityType"
           @createNewCompilation="() => (
             createNewGathering({ entityType, entityID, results })
           )"

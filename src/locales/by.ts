@@ -15,7 +15,7 @@ export const localesBY: LocaleDictionary = {
     periods: 'Перыяды',
     embedded: 'Фрэймы',
     collections: 'Калекцыi',
-    playlists: 'Спiсы',
+    compilations: 'Кампіляцыi',
     youtube: 'YouTube',
     radio: 'Радыё',
     toy: 'TOY',
@@ -28,7 +28,8 @@ export const localesBY: LocaleDictionary = {
   },
   headings: {
     albumsPage: 'У калекцыi {x} альбомаў',
-    collectionsPage: 'Усяго калекцый: {x}'
+    collectionsPage: 'Усяго калекцый: {x}',
+    compilationsPage: 'Усяго компіляцый: {x}'
   },
   getRandomAlbum: 'Выпадковы альбом',
   unknownTime: 'невядомы час',
@@ -88,6 +89,16 @@ export const localesBY: LocaleDictionary = {
     reordered: 'Парадак альбомаў паспяхова зменены',
     cardCaption: 'Альбомаў у калекцыі',
     drop: 'Калекцыя паспяхова выдалена'
+  },
+  compilations: {
+    add: 'Дадаць у компіляцыю',
+    namePlaceholder: 'Увядзіце назву компіляцыі',
+    exists: 'Компіляцыя з такой назвай ужо існуе',
+    removed: 'Трэк паспяхова выдалены з компіляцыі',
+    added: 'Трэк паспяхова дададзены ў компіляцыю',
+    reordered: 'Парадак трэкаў паспяхова зменены',
+    cardCaption: 'Трэкаў у компіляцыі',
+    drop: 'Компіляцыя паспяхова выдалена'
   },
   search: {
     placeholder: 'Пошук...'

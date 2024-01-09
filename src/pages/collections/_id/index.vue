@@ -29,10 +29,10 @@
 import { computed, defineComponent } from 'vue'
 import { useCategory } from '~/hooks/useCategory'
 import { DraggableEvent, ReorderPayload } from '~/types/Common'
+import { useGathering } from '~/hooks/useGathering'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
-import { useGathering } from '~/hooks/useGathering'
 
 export default defineComponent({
   name: 'CollectionPage',

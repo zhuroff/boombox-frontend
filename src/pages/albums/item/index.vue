@@ -70,7 +70,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, computed, ref, watch } from 'vue'
 import { AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
-import { RequestFilter } from '~/types/Common'
+import { BasicEntity, RequestFilter } from '~/types/Common'
 import { RelatedAlbums } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useListPage } from '~/hooks/useListPage'
@@ -113,8 +113,8 @@ export default defineComponent({
       fetchData: fetchCollections,
       pagePagination: collectionsPagination
     } = useListPage<
-      CollectionEntityRes<string>,
-      CollectionEntity<string>
+      CollectionEntityRes<BasicEntity>,
+      CollectionEntity<BasicEntity>
     >(CollectionEntity, '', '')
 
     const {
@@ -132,7 +132,7 @@ export default defineComponent({
     const album = ref<AlbumPage>({} as AlbumPage)
     const relatedAlbums = ref<RelatedAlbums[]>([])
     const isCollectionLoading = ref(false)
-    const collections = ref<CollectionEntity<string>[] | undefined>(undefined)
+    const collections = ref<CollectionEntity<BasicEntity>[] | undefined>(undefined)
     const entityType = ref('albums')
 
     const getRandom = () => {

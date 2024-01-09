@@ -98,14 +98,14 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/playlists',
-    name: 'playlists',
-    component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/index.vue'),
+    path: '/compilations',
+    name: 'compilations',
+    component: () => import(/* webpackChunkName: 'compilations' */ '~/pages/compilations/index.vue'),
     children: [
       {
-        path: '/playlists/:id',
-        name: 'Playlist',
-        component: () => import(/* webpackChunkName: 'playlists' */ '~/pages/playlists/index.vue')
+        path: '/compilations/:id',
+        name: 'Compilation',
+        component: () => import(/* webpackChunkName: 'compilations' */ '~/pages/compilations/index.vue')
       }
     ]
   },

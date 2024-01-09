@@ -25,7 +25,7 @@
               name="frame"
             ></slot>
             <div
-              v-if="discogsTablePayload.isFetched"
+              v-if="discogsTablePayload?.isFetched && discogsFiltersStates"
               class="album__discogs"
             >
               <div class="album__discogs-header">
@@ -57,6 +57,7 @@
               v-for="item in docs"
               :key="item._id"
               :card="item"
+              :isDraggable="false"
               placeholderImage="/img/album.webp"
             />
           </div>
@@ -107,15 +108,15 @@ export default defineComponent({
     },
     discogsTablePayload: {
       type: Object as PropType<DiscogsTablePayload>,
-      required: true
+      required: false
     },
     discogsFilters: {
       type: Object as PropType<DiscogsFilter>,
-      required: true
+      required: false
     },
     discogsFiltersStates: {
       type: Object as PropType<Record<keyof DiscogsFilter, null | string>>,
-      required: true
+      required: false
     },
     relatedAlbums: {
       type: Array as PropType<RelatedAlbums[]>,

@@ -23,7 +23,7 @@
       @submit.prevent="createCompilation"
     >
       <TextInput
-        :placeholder="lang('collections.namePlaceholder')"
+        :placeholder="lang(`${entityType}.namePlaceholder`)"
         :inputValue="title"
         @setInputValue="setCompilationName"
       />
@@ -76,6 +76,10 @@ export default defineComponent({
     entityID: {
       type: String,
       required: true
+    },
+    entityType: {
+      type: String,
+      required: false
     }
   },
   setup({ gathering, id, entityID }, { emit }) {
@@ -141,7 +145,8 @@ export default defineComponent({
     }
 
     span {
-      @include serif(1rem, 600)
+      @include serif(1rem, 600);
+      color: $black;
     }
   }
 

@@ -8,7 +8,12 @@
         <img
           :src="card.avatar || placeholderImage"
           :alt="card.title"
-          class="cards__album-cover --fixed"
+          class="cards__album-cover"
+        />
+        <img
+          src="/img/vinyl.png"
+          alt="vinyl placeholder"
+          class="cards__album-vinyl"
         />
       </div>
       <div class="cards__album-title">{{ card.title }}</div>
@@ -28,8 +33,8 @@
 import { defineComponent, PropType, computed } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
-import CollectionEntity from '~/classes/CollectionEntity'
 import Button from '~/components/Button.vue'
+import CompilationEntity from '~/classes/CompilationEntity'
 
 export default defineComponent({
   name: 'CollectionCard',
@@ -38,7 +43,7 @@ export default defineComponent({
   },
   props: {
     card: {
-      type: Object as PropType<CollectionEntity<BasicEntity>>,
+      type: Object as PropType<CompilationEntity<BasicEntity>>,
       required: true
     },
     rootPath: {
@@ -54,7 +59,7 @@ export default defineComponent({
     const { lang } = useLocales()
 
     const cardCaption = computed(() => (
-      `${lang('collections.cardCaption')}: ${card.albums.length}`
+      `${lang('compilations.cardCaption')}: ${card.tracks.length}`
     ))
 
     return { cardCaption }

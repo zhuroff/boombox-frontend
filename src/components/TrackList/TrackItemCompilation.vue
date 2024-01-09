@@ -5,40 +5,42 @@
       size="small"
       isText
       className="tracklist__row-action"
-      @click="callCompilationModal"
+      @click="openCompilationsModal"
     />
-    <!-- <FloatModal
-      v-if="compilations.isActive"
-      :isFetched="compilations.isFetched"
-      :isEmpty="!compilations.data.length"
-      placeholder="Create new playlist"
-      @createNewEntry="createNewCompilation"
-      @closeFloatModal="closeCompilationsModal"
+    <Modal
+      v-if="isCompilationLoading || compilations"
+      :isModalActive="isCompilationLoading"
+      @closeModal="closeCollectionModal"
     >
-      <template v-slot:empty>
-        <div class="float-modal__empty">
-          <strong>You haven't created any compilations yet</strong>
-          <span>To create a playlist, use the form below</span>
-        </div>
-      </template>
-      <template v-slot:list>
-        <ul class="float-modal__list"></ul>
-      </template>
-    </FloatModal> -->
+      <GatheringTabs
+        v-if="!isCompilationLoading && compilations"
+        :isLoading="isCompilationLoading"
+        :results="compilations"
+        :pagination="pagePagination"
+        :entityID="trackID"
+        placeholderImage="/img/album.webp"
+        entityType="compilations"
+      />
+    </Modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
-// import { PlaylistPayload, PlayListItem } from '~/types/Compilation'
-import store from '~/store'
-import Button from "~/components/Button.vue";
-import api from '~/api'
+import { defineComponent, ref } from 'vue'
+import { BasicEntity } from '~/types/Common'
+import { useListPage } from '~/hooks/useListPage'
+import { CompilationEntityRes } from '~/types/ReqRes'
+import CompilationEntity from '~/classes/CompilationEntity'
+import Button from '~/components/Button.vue'
+import GatheringTabs from '~/components/GatheringTabs.vue'
+import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
   name: 'TrackItemCompilation',
   components: {
-    Button
+    Modal,
+    Button,
+    GatheringTabs
   },
   props: {
     trackID: {
@@ -46,78 +48,31 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
-    const { actions } = store
+  setup() {
+    const { fetchData, pagePagination } = useListPage<
+      CompilationEntityRes<BasicEntity>,
+      CompilationEntity<BasicEntity>
+    >(CompilationEntity, '', '')
+    const isCompilationLoading = ref(false)
+    const compilations = ref<CompilationEntity<BasicEntity>[] | undefined>(undefined)
 
-    // const compilations = reactive({
-    //   isFetched: false,
-    //   isActive: false,
-    //   data: [] as PlayListItem[]
-    // })
-
-    // const isItemChecked = (item: PlayListItem) => (
-    //   item.tracks.some((el) => el.track === props.trackID)
-    // )
-
-    // const setCompilations = (data: PlayListItem[]) => {
-    //   compilations.data = data
-    //   compilations.isFetched = true
-    // }
-
-    const fetchCompilations = async () => {
-      try {
-        const response = await api.get('/api/compilations')
-
-        if (response.status === 200) {
-          console.log(response)
-          // setCompilations(response.data)
-        }
-      } catch (error) {
-        throw error
-      }
+    const openCompilationsModal = async () => {
+      isCompilationLoading.value = true
+      compilations.value = await fetchData('compilations')
+      isCompilationLoading.value = false
     }
 
-    const callCompilationModal = () => {
-      // compilations.isActive = true
-      fetchCompilations()
+    const closeCollectionModal = () => {
+      isCompilationLoading.value = false
+      compilations.value = undefined
     }
-
-    // const closeCompilationsModal = () => {
-    //   compilations.data = []
-    //   compilations.isFetched = false
-    //   compilations.isActive = false
-    // }
-
-    // const createNewCompilation = async (title: string) => {
-    //   compilations.isFetched = false
-
-    //   const payload: PlaylistPayload = {
-    //     title,
-    //     track: props.trackID
-    //   }
-
-    //   try {
-    //     const response = await api.post('/api/compilations', payload)
-
-    //     if (response?.status === 201) {
-    //       actions.setSnackbarMessage({
-    //         message: response.data.message,
-    //         type: 'success'
-    //       })
-
-    //       fetchCompilations()
-    //     }
-    //   } catch (error) {
-    //     throw error
-    //   }
-    // }
 
     return {
-      // compilations,
-      // isItemChecked,
-      callCompilationModal,
-      // closeCompilationsModal,
-      // createNewCompilation
+      openCompilationsModal,
+      closeCollectionModal,
+      isCompilationLoading,
+      pagePagination,
+      compilations
     }
   }
 })
