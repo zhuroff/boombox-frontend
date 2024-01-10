@@ -18,7 +18,7 @@ import { useLocales } from '~/hooks/useLocales'
 import { CompilationEntityRes } from '~/types/ReqRes'
 import { BasicEntity } from '~/types/Common'
 import { isObjectsEquals } from '~/utils'
-import CompilationEntity from '~/classes/CompilationEntity'
+import CompilationItem from '~/classes/CompilationItem'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 
 export default defineComponent({
@@ -37,11 +37,11 @@ export default defineComponent({
       deleteEntity
     } = useListPage<
       CompilationEntityRes<BasicEntity>,
-      CompilationEntity<BasicEntity>
-    >(CompilationEntity, 'CompilationCard', 'compilations')
+      CompilationItem<BasicEntity>
+    >(CompilationItem, 'CompilationCard', 'compilations')
 
     const { lang } = useLocales()
-    const compilations = ref<CompilationEntity<BasicEntity>[]>([])
+    const compilations = ref<CompilationItem<BasicEntity>[]>([])
 
     const pageHeading = computed(() => (
       lang(`headings.compilationsPage`, pagePagination.value?.totalDocs || 0)
@@ -78,3 +78,4 @@ export default defineComponent({
   }
 })
 </script>
+~/classes/CompilationItem

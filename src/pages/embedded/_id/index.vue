@@ -56,8 +56,8 @@ import { useDiscogs } from '~/hooks/useDiscogs'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useLocales } from '~/hooks/useLocales'
 import { RelatedAlbums } from '~/types/Album'
-import { RequestFilter } from '~/types/Common'
-import { EmbeddedItemRes } from '~/types/ReqRes'
+import { RelatedAlbumsReqFilter } from '~/types/Common'
+import { AlbumItemRes, EmbeddedItemRes } from '~/types/ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
 import EmbeddedItem from '~/classes/EmbeddedItem'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
@@ -79,7 +79,7 @@ export default defineComponent({
       isDataFetched,
       getRandomAlbum,
       getRelatedAlbums
-    } = useSinglePage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem, 'EmbeddedCard', 'embedded')
+    } = useSinglePage<EmbeddedItemRes, EmbeddedItem, AlbumItemRes>(EmbeddedItem, 'EmbeddedCard', 'embedded')
 
     const {
       fetchDiscogsInfo,
@@ -102,7 +102,7 @@ export default defineComponent({
     }
 
     const getRelated = async () => {
-      const relatedAlbumsConfig: RequestFilter[] = [
+      const relatedAlbumsConfig: RelatedAlbumsReqFilter[] = [
         {
           from: 'artists',
           key: 'artist._id',

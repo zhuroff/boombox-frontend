@@ -18,7 +18,6 @@
               v-if="'tracks' in album"
               :tracks="album.tracks"
               :albumID="album._id"
-              :artist="album.artist"
             />
             <slot
               v-else
@@ -70,8 +69,9 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from 'vue'
-import { BookletSlideState, RelatedAlbums } from '~/types/Album'
+import { BookletSlideState, RelatedAlbums, RelatedCompilations } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
+import { TrackRes } from '~/types/ReqRes'
 import { useLocales } from '~/hooks/useLocales'
 import BookletState from '~/classes/BookletState'
 import AlbumPage from '~/classes/AlbumPage'
@@ -82,6 +82,7 @@ import TrackList from '~/components/TrackList/TrackList.vue'
 import Table from '~/components/Table.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
+import CompilationPage from '~/classes/CompilationPage'
 
 export default defineComponent({
   name: 'AlbumPageTemplate',
@@ -99,7 +100,7 @@ export default defineComponent({
       required: true
     },
     album: {
-      type: Object as PropType<AlbumPage | EmbeddedItem>,
+      type: Object as PropType<AlbumPage | EmbeddedItem | CompilationPage<TrackRes>>,
       required: true
     },
     booklet: {
@@ -119,7 +120,7 @@ export default defineComponent({
       required: false
     },
     relatedAlbums: {
-      type: Array as PropType<RelatedAlbums[]>,
+      type: Array as PropType<Array<RelatedAlbums | RelatedCompilations>>,
       requried: false
     }
   },

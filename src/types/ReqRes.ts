@@ -7,8 +7,9 @@ export interface TrackRes extends Required<BasicEntity> {
   duration?: number
   listened?: number
   lyrics?: string
+  order?: number
   artist: BasicEntity
-  inAlbum: Pick<AlbumItem, '_id' | 'title' | 'cloudURL' | 'folderName' | 'period'>
+  inAlbum: Pick<AlbumItem, '_id' | 'title' | 'cloudURL' | 'folderName' | 'period' | 'genre'>
   inCompilations?: BasicEntity[]
 }
 

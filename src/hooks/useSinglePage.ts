@@ -2,15 +2,15 @@ import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { CloudFolderResponse } from '~/types/Cloud'
 import { AlbumBooklet, BookletSlideState } from '~/types/Album'
-import { BasicEntity, RequestConfig, RequestFilter, ResponseMessage } from '~/types/Common'
-import { AlbumItemRes, ListPageResponse } from '~/types/ReqRes'
+import { BasicEntity, RequestConfig, RelatedAlbumsReqFilter, RandomEntityReqFilter, ResponseMessage } from '~/types/Common'
+import { ListPageResponse } from '~/types/ReqRes'
 import { useLocales } from './useLocales'
 import BookletState from '~/classes/BookletState'
 import dbServices from '~/services/database.services'
 import cloudServices from '~/services/cloud.services'
 import store from '~/store'
 
-export const useSinglePage = <T extends BasicEntity, C>(
+export const useSinglePage = <T extends BasicEntity, C, R>(
   Class: new (prop: T, cardType: string, cardPath: string) => C,
   cardType: string,
   cardPath: string
@@ -107,11 +107,11 @@ export const useSinglePage = <T extends BasicEntity, C>(
     }
   }
 
-  const getRelatedAlbums = async (filter: RequestFilter, entityType: string) => {
+  const getRelatedAlbums = async (filter: RelatedAlbumsReqFilter | RandomEntityReqFilter, entityType: string) => {
     try {
       const response = {
-        [filter.from]: await dbServices.getEntityList<ListPageResponse<AlbumItemRes>>(
-          { ...requestConfig, filter, isRandom: true, },
+        [filter.from]: await dbServices.getEntityList<ListPageResponse<R>>(
+          { ...requestConfig, filter, isRandom: true },
           entityType
         )
       }  

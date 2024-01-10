@@ -1,9 +1,9 @@
 import { Ref } from 'vue'
 import { JSONSchema4 } from 'json-schema'
-import AlbumPage from '~/classes/AlbumPage'
-import CompilationEntity from '~/classes/CompilationEntity'
-import AlbumTrack from '~/classes/AlbumTrack'
+import { TrackRes } from './ReqRes'
 import PlayerTrack from '~/classes/PlayerTrack'
+import AlbumPage from '~/classes/AlbumPage'
+import CompilationPage from '~/classes/CompilationPage'
 
 export type LocaleKeys = 'en' | 'by'
 export type EntityImagesKeys = 'poster' | 'avatar'
@@ -14,7 +14,7 @@ export interface BasicEntity {
   cloudURL?: string
 }
 
-export type PlayerPlaylist = AlbumPage | CompilationEntity<AlbumTrack>
+export type PlayerPlaylist = AlbumPage | CompilationPage<TrackRes>
 
 export interface AppStateInterface {
   currentPlaylist: PlayerPlaylist
@@ -64,12 +64,15 @@ export interface Snackbar {
   time?: number
 }
 
-export interface RequestFilter {
+export interface RandomEntityReqFilter {
   from: string
   key: string
   name: string
-  value: string
   excluded?: Record<string, string>
+}
+
+export interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
+  value: string
 }
 
 export interface RequestConfig {
@@ -77,7 +80,7 @@ export interface RequestConfig {
   sort: SortingValue
   limit: number
   isRandom?: true
-  filter?: RequestFilter
+  filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
 }
 
 export interface ImagePayload {

@@ -44,7 +44,7 @@ import { hostString } from '~/utils'
 import TextInput from './TextInput.vue'
 import Button from './Button.vue'
 import CollectionEntity from '~/classes/CollectionEntity'
-import CompilationEntity from '~/classes/CompilationEntity'
+import CompilationItem from '~/classes/CompilationItem'
 
 export default defineComponent({
   name: 'GatheringTab',
@@ -58,7 +58,7 @@ export default defineComponent({
       required: false
     },
     gathering: {
-      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationEntity<BasicEntity>)[]>,
+      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationItem<BasicEntity>)[]>,
       required: false
     },
     avatar: {
@@ -87,7 +87,7 @@ export default defineComponent({
     const isSelected = computed(() => (
       gathering && gathering.some((el) => {
         const isIdsEquals = el._id === id
-        const entities = el instanceof CompilationEntity ? el.tracks : el.albums
+        const entities = el instanceof CompilationItem ? el.tracks : el.albums
         return isIdsEquals && entities.some(({ _id }) => _id === entityID)
       })
     ))
@@ -155,3 +155,4 @@ export default defineComponent({
   }
 }
 </style>
+~/classes/CompilationItem

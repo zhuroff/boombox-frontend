@@ -1,10 +1,11 @@
-import { AppStateInterface, ReorderPayload } from '~/types/Common';
-import { useActionsPlayerPrivate } from './_actions.player';
-import databaseServices from '~/services/database.services';
-import AlbumTrack from '~/classes/AlbumTrack';
-import PlayerTrack from '~/classes/PlayerTrack';
-import AlbumPage from '~/classes/AlbumPage';
-import CompilationEntity from '~/classes/CompilationEntity'
+import { AppStateInterface, ReorderPayload } from '~/types/Common'
+import { useActionsPlayerPrivate } from './_actions.player'
+import { TrackRes } from '~/types/ReqRes'
+import databaseServices from '~/services/database.services'
+import AlbumTrack from '~/classes/AlbumTrack'
+import PlayerTrack from '~/classes/PlayerTrack'
+import AlbumPage from '~/classes/AlbumPage'
+import CompilationPage from '~/classes/CompilationPage'
 
 export const useActionsPlayer = (state: AppStateInterface) => {
   const {
@@ -67,7 +68,7 @@ export const useActionsPlayer = (state: AppStateInterface) => {
       }, [])
   }
 
-  const setPlayerPlaylist = (data: AlbumPage | CompilationEntity<AlbumTrack>) => {
+  const setPlayerPlaylist = (data: AlbumPage | CompilationPage<TrackRes>) => {
     if (!state.playingTrack._id) {
       state.currentPlaylist = data
     } else {

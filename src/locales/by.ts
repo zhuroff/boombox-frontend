@@ -98,7 +98,8 @@ export const localesBY: LocaleDictionary = {
     added: 'Трэк паспяхова дададзены ў компіляцыю',
     reordered: 'Парадак трэкаў паспяхова зменены',
     cardCaption: 'Трэкаў у компіляцыі',
-    drop: 'Компіляцыя паспяхова выдалена'
+    drop: 'Компіляцыя паспяхова выдалена',
+    more: 'кампiляцый'
   },
   search: {
     placeholder: 'Пошук...'

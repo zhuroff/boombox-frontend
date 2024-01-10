@@ -51,17 +51,24 @@
       </div>
       <div class="album__hero-heading">
         <RouterLink
+          v-if="artist"
           :to="`/artists/${artist._id}`"
           class="album__hero-category"
-        >{{ artist.title }}</RouterLink>&nbsp;
-        <span class="album__hero-divisor">\</span>&nbsp;
+        >
+          {{ artist.title }}
+          <span class="album__hero-divisor">\</span>&nbsp;
+        </RouterLink>        
         <strong class="album__hero-title">{{ title }}</strong>&nbsp;
-        <span class="album__hero-divisor">\</span>&nbsp;
         <RouterLink
+          v-if="period"
           :to="`/periods/${period._id}`"
           class="album__hero-category"
-        >{{ period.title }}</RouterLink>,
+        >
+          <span class="album__hero-divisor">\</span>&nbsp;
+          {{ period.title }},&nbsp;
+        </RouterLink>
         <RouterLink
+          v-if="genre"
           :to="`/genres/${genre._id}`"
           class="album__hero-category"
         >{{ genre.title }}</RouterLink><br>
@@ -122,15 +129,15 @@ export default defineComponent({
     },
     artist: {
       type: Object as PropType<BasicEntity>,
-      required: true
+      required: false
     },
     genre: {
       type: Object as PropType<BasicEntity>,
-      required: true
+      required: false
     },
     period: {
       type: Object as PropType<BasicEntity>,
-      required: true
+      required: false
     },
     totalCounts: {
       type: String,
@@ -177,6 +184,7 @@ export default defineComponent({
     }
 
     const searchWikiInfo = async () => {
+      if (!artist) return false
       resetWikiData()
       const albumLang = detectLocale(title)
       const artistLang = detectLocale(artist.title)

@@ -34,7 +34,7 @@ import { defineComponent, PropType, computed } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import Button from '~/components/Button.vue'
-import CompilationEntity from '~/classes/CompilationEntity'
+import CompilationItem from '~/classes/CompilationItem'
 
 export default defineComponent({
   name: 'CollectionCard',
@@ -43,7 +43,7 @@ export default defineComponent({
   },
   props: {
     card: {
-      type: Object as PropType<CompilationEntity<BasicEntity>>,
+      type: Object as PropType<CompilationItem<BasicEntity>>,
       required: true
     },
     rootPath: {
@@ -83,3 +83,4 @@ export default defineComponent({
   }
 }
 </style>
+~/classes/CompilationItem

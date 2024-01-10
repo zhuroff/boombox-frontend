@@ -98,7 +98,8 @@ export const localesEN: LocaleDictionary = {
     added: 'Track successfully added to compilation',
     reordered: 'Tracks order successfully changed',
     cardCaption: 'Tracks in compilation',
-    drop: 'Compilation successfully deleted'
+    drop: 'Compilation successfully deleted',
+    more: 'compilations'
   },
   search: {
     placeholder: 'Search...'

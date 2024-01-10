@@ -124,7 +124,6 @@ export default defineComponent({
     Sprite,
     Button
   },
-
   setup() {
     const { actions, getters } = store
     const isPlaylistOpen = ref(false)
@@ -217,7 +216,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
 <style lang="scss">

@@ -10,20 +10,20 @@ export default class AlbumTrack {
   readonly inAlbum: Pick<AlbumItem, '_id' | 'title' | 'cloudURL' | 'folderName'>
   readonly artist: BasicEntity
   readonly period: string
-  readonly albumCover?: string
+  readonly albumCover: string
   lyrics: string
   duration: number
   isDisabled: boolean
   order: number
   listened: number
   isOutOfAlbumList: boolean
-  inCompilations: BasicEntity[]
+  inCompilations?: BasicEntity[]
   
   constructor(
     track: TrackRes,
     order: number,
     period: string,
-    cover?: string,
+    cover = '/img/album.webp',
     isOutOfAlbumList = false
   ) {
     this._id = track._id
@@ -32,7 +32,6 @@ export default class AlbumTrack {
     this.cloudURL = track.cloudURL
     this.listened = track.listened || 0
     this.inAlbum = track.inAlbum
-    this.inCompilations = track.inCompilations || []
     this.artist = track.artist
     this.lyrics = track.lyrics || ''
     this.duration = track.duration || 0
@@ -41,5 +40,9 @@ export default class AlbumTrack {
     this.period = period
     this.albumCover = cover
     this.isOutOfAlbumList = isOutOfAlbumList
+
+    if (track.inCompilations) {
+      this.inCompilations = track.inCompilations
+    }
   }
 }

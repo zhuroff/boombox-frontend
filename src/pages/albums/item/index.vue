@@ -69,8 +69,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, computed, ref, watch } from 'vue'
-import { AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
-import { BasicEntity, RequestFilter } from '~/types/Common'
+import { AlbumItemRes, AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
+import { BasicEntity, RelatedAlbumsReqFilter } from '~/types/Common'
 import { RelatedAlbums } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useListPage } from '~/hooks/useListPage'
@@ -107,7 +107,7 @@ export default defineComponent({
       closeBookletModal,
       bookletPageChanged,
       route
-    } = useSinglePage<AlbumPageRes, AlbumPage>(AlbumPage, 'AlbumCard', 'albums')
+    } = useSinglePage<AlbumPageRes, AlbumPage, AlbumItemRes>(AlbumPage, 'AlbumCard', 'albums')
 
     const {
       fetchData: fetchCollections,
@@ -141,7 +141,7 @@ export default defineComponent({
     }
 
     const getRelated = async () => {
-      const relatedAlbumsConfig: RequestFilter[] = [
+      const relatedAlbumsConfig: RelatedAlbumsReqFilter[] = [
         {
           from: 'artists',
           key: 'artist._id',
@@ -169,7 +169,7 @@ export default defineComponent({
           await getRelatedAlbums(config, entityType.value)
         )))
         
-        relatedAlbums.value = response.map(({ docs, name}) => ({
+        relatedAlbums.value = response.map(({ docs, name }) => ({
           name,
           docs: docs.map<AlbumItem>((album) => new AlbumItem(album, 'AlbumCard', 'albums'))
         }))

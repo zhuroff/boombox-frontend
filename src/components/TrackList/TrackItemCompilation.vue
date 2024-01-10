@@ -30,7 +30,7 @@ import { defineComponent, ref } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import { useListPage } from '~/hooks/useListPage'
 import { CompilationEntityRes } from '~/types/ReqRes'
-import CompilationEntity from '~/classes/CompilationEntity'
+import CompilationItem from '~/classes/CompilationItem'
 import Button from '~/components/Button.vue'
 import GatheringTabs from '~/components/GatheringTabs.vue'
 import Modal from '~/components/Modal.vue'
@@ -51,10 +51,10 @@ export default defineComponent({
   setup() {
     const { fetchData, pagePagination } = useListPage<
       CompilationEntityRes<BasicEntity>,
-      CompilationEntity<BasicEntity>
-    >(CompilationEntity, '', '')
+      CompilationItem<BasicEntity>
+    >(CompilationItem, '', '')
     const isCompilationLoading = ref(false)
-    const compilations = ref<CompilationEntity<BasicEntity>[] | undefined>(undefined)
+    const compilations = ref<CompilationItem<BasicEntity>[] | undefined>(undefined)
 
     const openCompilationsModal = async () => {
       isCompilationLoading.value = true
@@ -92,3 +92,4 @@ export default defineComponent({
   }
 }
 </style>
+~/classes/CompilationItem

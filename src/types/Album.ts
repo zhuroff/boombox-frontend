@@ -1,5 +1,6 @@
-import AlbumItem from '~/classes/AlbumItem'
 import { BasicEntity } from './Common'
+import AlbumItem from '~/classes/AlbumItem'
+import CompilationItem from '~/classes/CompilationItem'
 
 export interface AlbumHeadProps {
   title: string
@@ -28,4 +29,9 @@ export interface BookletSlideState {
 export interface RelatedAlbums {
   name: string
   docs: AlbumItem[]
+}
+
+export interface RelatedCompilations {
+  name: string
+  docs: CompilationItem<BasicEntity>[]
 }

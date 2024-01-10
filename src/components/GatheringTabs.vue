@@ -42,7 +42,7 @@ import { useGathering } from '~/hooks/useGathering'
 import GatheringTab from './GatheringTab.vue'
 import Preloader from './Preloader.vue'
 import CollectionEntity from '~/classes/CollectionEntity'
-import CompilationEntity from '~/classes/CompilationEntity'
+import CompilationItem from '~/classes/CompilationItem'
 
 export default defineComponent({
   name: 'GatheringTabs',
@@ -56,7 +56,7 @@ export default defineComponent({
       required: true
     },
     results: {
-      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationEntity<BasicEntity>)[]>,
+      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationItem<BasicEntity>)[]>,
       required: true
     },
     pagination: {
