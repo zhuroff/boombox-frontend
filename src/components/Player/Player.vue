@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { defineComponent, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { DraggableEvent, ReorderPayload } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { secondsToMinutes } from '~/utils'

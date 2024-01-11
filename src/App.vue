@@ -57,4 +57,8 @@ export default defineComponent({
 
 <style lang="scss">
 @import '~/scss/app.scss';
+
+.template {
+  padding-bottom: 25px;
+}
 </style>

@@ -7,8 +7,22 @@
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
-    @deleteEntity="deleteCollection"
-  />
+    @deleteEntity="(id) => entityToDelete = id"
+  >
+    <template #modal>
+      <Modal
+        v-if="entityToDelete"
+        :isModalActive="entityToDelete !== null"
+        @closeModal="delReject"
+      >
+        <Confirmation
+          :message="lang('delConfirmMessage')"
+          @confirm="deleteCollection"
+          @reject="delReject"
+        />
+      </Modal>
+    </template>
+  </ListPageTemplate>
 </template>
 
 <script lang="ts">
@@ -20,11 +34,15 @@ import { BasicEntity } from '~/types/Common'
 import { isObjectsEquals } from '~/utils'
 import CollectionEntity from '~/classes/CollectionEntity'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import Confirmation from '~/components/Confirmation.vue'
+import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
   name: 'CollectionsList',
   components: {
-    ListPageTemplate
+    ListPageTemplate,
+    Confirmation,
+    Modal
   },
   setup() {
     const {
@@ -42,17 +60,24 @@ export default defineComponent({
 
     const { lang } = useLocales()
     const collections = ref<CollectionEntity<BasicEntity>[]>([])
+    const entityToDelete = ref<string | null>(null)
 
     const pageHeading = computed(() => (
       lang(`headings.collectionsPage`, pagePagination.value?.totalDocs || 0)
     ))
 
-    const deleteCollection = (id: string) => {
-      deleteEntity('collections', id)
+    const deleteCollection = () => {
+      if (!entityToDelete.value) return false
+      deleteEntity('collections', entityToDelete.value)
         .then(() => {
+          entityToDelete.value = null
           fetchData('collections')
             .then((payload) => collections.value = payload || [])
         })
+    }
+
+    const delReject = () => {
+      entityToDelete.value = null
     }
 
     watch(
@@ -67,6 +92,9 @@ export default defineComponent({
     )
 
     return {
+      lang,
+      delReject,
+      entityToDelete,
       isDataFetched,
       pagePagination,
       switchPagination,

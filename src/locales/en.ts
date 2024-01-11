@@ -7,7 +7,7 @@ export const localesEN: LocaleDictionary = {
   },
   cancel: 'Cancel',
   delete: 'Delete',
-  embeddedDelConfirm: 'Are you sure you want to delete this entity?',
+  delConfirmMessage: 'Are you sure you want to delete this entity?',
   navigation: {
     albums: 'Albums',
     artists: 'Artists',
@@ -111,7 +111,7 @@ export const localesEN: LocaleDictionary = {
     removeFromList: 'Remove from playlist'
   },
   totalAlbums: 'Total albums',
-  delEmbedded: 'Delete album',
+  deleteEntity: 'Delete album',
   deletedEmbeddedMessage: 'Album was successfully deleted',
   syncResponse: {
     added: 'Added albums',

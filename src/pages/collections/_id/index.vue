@@ -13,7 +13,17 @@
         :data="data"
         :description="totalCounts"
         @setUploadedImage="setUploadedImage"
-      />
+      >
+        <template #hero-content>
+          <Button
+            icon="delete"
+            size="medium"
+            className="--delete"
+            isText
+            @click="callDelConfirmation"
+          />
+        </template>
+      </CategoryHero>
       <ListPageTemplate
         placeholderImage="/img/album.webp"
         :isDataFetched="isDataFetched"
@@ -22,22 +32,43 @@
         @orderChanged="changeAlbumsOrder"
       />
     </transition-group>
+    <Modal
+      v-if="isDelConfirm"
+      :isModalActive="isDelConfirm"
+      @closeModal="delReject"
+    >
+      <Confirmation
+        :message="lang('delConfirmMessage')"
+        @confirm="deleteCompilation"
+        @reject="delReject"
+      />
+    </Modal>
   </section>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
+import { CollectionEntityRes } from '~/types/ReqRes'
 import { useCategory } from '~/hooks/useCategory'
-import { DraggableEvent, ReorderPayload } from '~/types/Common'
+import { BasicEntity, DraggableEvent, ReorderPayload } from '~/types/Common'
+import { useSinglePage } from '~/hooks/useSinglePage'
 import { useGathering } from '~/hooks/useGathering'
+import { useLocales } from '~/hooks/useLocales'
+import CollectionEntity from '~/classes/CollectionEntity'
+import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
-import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import Button from '~/components/Button.vue'
+import Confirmation from '~/components/Confirmation.vue'
+import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
   name: 'CollectionPage',
   components: {
+    Modal,
+    Button,
     Preloader,
+    Confirmation,
     CategoryHero,
     ListPageTemplate
   },
@@ -50,7 +81,15 @@ export default defineComponent({
       totalCounts
     } = useCategory(entityType)
 
+    const { deleteEntry } = useSinglePage<
+      CollectionEntityRes<BasicEntity>,
+      CollectionEntity<BasicEntity>,
+      CollectionEntityRes<BasicEntity>
+    >(CollectionEntity, 'CollectionCard', 'collections')
+
+    const { lang } = useLocales()
     const { reorder } = useGathering()
+    const isDelConfirm = ref(false)
 
     const albumList = computed(() => (
       (data.value?.albums || [])
@@ -71,11 +110,29 @@ export default defineComponent({
       reorder('collections', payload)
     }
 
+    const delReject = () => {
+      isDelConfirm.value = false
+    }
+
+    const callDelConfirmation = () => {
+      isDelConfirm.value = true
+    }
+
+    const deleteCompilation = () => {
+      if (!data.value) return false
+      deleteEntry('collections', data.value._id)
+    }
+
     return {
       data,
+      lang,
+      delReject,
+      isDelConfirm,
       isDataFetched,
       setUploadedImage,
       changeAlbumsOrder,
+      deleteCompilation,
+      callDelConfirmation,
       totalCounts,
       entityType,
       albumList
@@ -83,3 +140,26 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+@import '../../../scss/variables';
+
+.hero {
+  .--delete {
+    position: absolute;
+    fill: $white;
+    stroke: $white;
+    opacity: 0;
+    right: 3.5rem;
+    top: 1.25rem;
+    transition: opacity 0.3s $animation;
+  }
+
+  &:hover {
+    .--delete {
+      opacity: 1;
+      transition: opacity 0.3s $animation;
+    }
+  }
+}
+</style>

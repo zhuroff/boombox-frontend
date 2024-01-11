@@ -24,7 +24,7 @@
           <li
             class="overlay__list-item"
             @click="isDelConfirm = true"
-          >{{ lang('delEmbedded') }}</li>
+          >{{ lang('deleteEntity') }}</li>
         </template>
       </AlbumHero>
     </template>
@@ -41,7 +41,7 @@
         @closeModal="delReject"
       >
         <Confirmation
-          :message="lang('embeddedDelConfirm')"
+          :message="lang('delConfirmMessage')"
           @confirm="deleteEmbedded"
           @reject="delReject"
         />

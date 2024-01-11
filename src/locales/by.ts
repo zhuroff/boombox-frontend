@@ -7,7 +7,7 @@ export const localesBY: LocaleDictionary = {
   },
   cancel: 'Скасаваць',
   delete: 'Выдалiць',
-  embeddedDelConfirm: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
+  delConfirmMessage: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
   navigation: {
     albums: 'Альбомы',
     artists: 'Артысты',
@@ -111,7 +111,7 @@ export const localesBY: LocaleDictionary = {
     removeFromList: 'Выдаліць з плэйлiста'
   },
   totalAlbums: 'Усяго альбомаў',
-  delEmbedded: 'Выдаліць альбом',
+  deleteEntity: 'Выдаліць альбом',
   deletedEmbeddedMessage: 'Альбом паспяхова выдалены',
   syncResponse: {
     added: 'Дададзеныя альбомы',

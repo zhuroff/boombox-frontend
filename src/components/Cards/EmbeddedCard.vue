@@ -18,15 +18,26 @@
       <div class="cards__album-title">{{ card.title }}</div>
       <div class="cards__album-info">{{ cardCaption }}</div>
     </router-link>
+    <Button
+      icon="delete"
+      size="small"
+      className="--delete"
+      isText
+      @click="() => $emit('deleteEntity', card._id)"
+    />
   </li>
 </template>
 
 <script lang="ts">
 import { PropType, computed, defineComponent } from 'vue'
 import EmbeddedItem from '~/classes/EmbeddedItem'
+import Button from '~/components/Button.vue'
 
 export default defineComponent({
   name: 'EmbeddedCard',
+  components: {
+    Button
+  },
   props: {
     card: {
       type: Object as PropType<EmbeddedItem>,

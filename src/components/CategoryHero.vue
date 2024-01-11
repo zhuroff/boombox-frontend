@@ -17,6 +17,7 @@
           <Sprite name="camera" />
         </label>
       </form>
+      <slot name="hero-content"></slot>
     </div>
     <div class="hero__info">
       <div
@@ -153,6 +154,14 @@ export default defineComponent({
 
 .hero {
 
+  &:hover {
+
+    .hero__poster-label {
+      opacity: 1;
+      transition: opacity 0.3s $animation;
+    }
+  }
+
   &__poster {
     position: absolute;
     top: 0;
@@ -168,14 +177,6 @@ export default defineComponent({
       left: 0;
       width: 100%;
       height: 100%;
-    }
-
-    &:hover {
-
-      .hero__poster-label {
-        opacity: 1;
-        transition: opacity 0.3s $animation;
-      }
     }
 
     &-image {

@@ -15,7 +15,26 @@
         <template #cover>
           <CoverArt :cover="compilation.avatar" />
         </template>
+        <template #navlist>
+          <li
+            class="overlay__list-item"
+            @click="isDelConfirm = true"
+          >{{ lang('deleteEntity') }}</li>
+        </template>
       </AlbumHero>
+    </template>
+    <template #modal>
+      <Modal
+        v-if="isDelConfirm"
+        :isModalActive="isDelConfirm"
+        @closeModal="delReject"
+      >
+        <Confirmation
+          :message="lang('delConfirmMessage')"
+          @confirm="deleteCompilation"
+          @reject="delReject"
+        />
+      </Modal>
     </template>
   </AlbumPageTemplate>
 </template>
@@ -34,17 +53,22 @@ import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 import CompilationItem from '~/classes/CompilationItem'
 import CompilationPage from '~/classes/CompilationPage'
+import Confirmation from '~/components/Confirmation.vue'
+import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
   name: 'AlbumPage',
   components: {
     AlbumPageTemplate,
+    Confirmation,
     AlbumHero,
-    CoverArt
+    CoverArt,
+    Modal
   },
   setup() {
     const {
       fetchData,
+      deleteEntry,
       isDataFetched,
       getRandomAlbum,
       getRelatedAlbums,
@@ -60,6 +84,7 @@ export default defineComponent({
     const compilation = ref<CompilationPage<TrackRes>>({} as CompilationPage<TrackRes>)
     const relatedCompilations = ref<RelatedCompilations[]>([])
     const entityType = ref('compilations')
+    const isDelConfirm = ref(false)
 
     const getRandom = () => {
       getRandomAlbum(entityType.value)
@@ -110,6 +135,14 @@ export default defineComponent({
       return formattedTime
     }
 
+    const delReject = () => {
+      isDelConfirm.value = false
+    }
+
+    const deleteCompilation = () => {
+      deleteEntry('compilations', compilation.value._id)
+    }
+
     const totalCounts = computed(() => {
       const isAllTracksHaveDuration = compilation.value.tracks?.every((track) => (
         Number(track.duration)
@@ -155,11 +188,14 @@ export default defineComponent({
 
     return {
       lang,
+      delReject,
       compilation,
       entityType,
       getRelated,
+      isDelConfirm,
       totalCounts,
       isDataFetched,
+      deleteCompilation,
       relatedCompilations,
       getRandom
     }

@@ -87,7 +87,7 @@ export default defineComponent({
     const isSelected = computed(() => (
       gathering && gathering.some((el) => {
         const isIdsEquals = el._id === id
-        const entities = el instanceof CompilationItem ? el.tracks : el.albums
+        const entities = 'albums' in el ? el.albums : el.tracks
         return isIdsEquals && entities.some(({ _id }) => _id === entityID)
       })
     ))

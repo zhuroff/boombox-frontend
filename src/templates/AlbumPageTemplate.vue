@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <section class="template">
     <transition name="fade">
       <Preloader
         v-if="!isDataFetched || !album._id"

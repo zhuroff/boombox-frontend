@@ -7,8 +7,22 @@
     :pagePagination="pagePagination"
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
-    @deleteEntity="deleteCompilation"
-  />
+    @deleteEntity="(id) => entityToDelete = id"
+  >
+    <template #modal>
+      <Modal
+        v-if="entityToDelete"
+        :isModalActive="entityToDelete !== null"
+        @closeModal="delReject"
+      >
+        <Confirmation
+          :message="lang('delConfirmMessage')"
+          @confirm="deleteCompilation"
+          @reject="delReject"
+        />
+      </Modal>
+    </template>
+  </ListPageTemplate>
 </template>
 
 <script lang="ts">
@@ -20,11 +34,15 @@ import { BasicEntity } from '~/types/Common'
 import { isObjectsEquals } from '~/utils'
 import CompilationItem from '~/classes/CompilationItem'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+import Confirmation from '~/components/Confirmation.vue'
+import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
   name: 'CompilationsList',
   components: {
-    ListPageTemplate
+    ListPageTemplate,
+    Confirmation,
+    Modal
   },
   setup() {
     const {
@@ -42,17 +60,24 @@ export default defineComponent({
 
     const { lang } = useLocales()
     const compilations = ref<CompilationItem<BasicEntity>[]>([])
+    const entityToDelete = ref<string | null>(null)
 
     const pageHeading = computed(() => (
       lang(`headings.compilationsPage`, pagePagination.value?.totalDocs || 0)
     ))
 
-    const deleteCompilation = (id: string) => {
-      deleteEntity('compilations', id)
+    const deleteCompilation = () => {
+      if (!entityToDelete.value) return false
+      deleteEntity('compilations', entityToDelete.value)
         .then(() => {
+          entityToDelete.value = null
           fetchData('compilations')
             .then((payload) => compilations.value = payload || [])
         })
+    }
+
+    const delReject = () => {
+      entityToDelete.value = null
     }
 
     watch(
@@ -67,6 +92,9 @@ export default defineComponent({
     )
 
     return {
+      lang,
+      delReject,
+      entityToDelete,
       isDataFetched,
       pagePagination,
       switchPagination,
