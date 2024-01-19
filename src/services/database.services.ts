@@ -34,11 +34,6 @@ export default {
     commonServices.errorChecker(response.status)
     return response.data
   },
-  async getFile<File>(entityType: string, path: string, cloudURL: string) {
-    const response = await api.post<File>(`/api/${entityType}`, { path, cloudURL })
-    commonServices.errorChecker(response.status)
-    return response.data
-  },
   async search(payload: SearchPayload) {
     const response = await api.post<SearchResultState[]>(`/api/search`, payload)
     commonServices.errorChecker(response.status)

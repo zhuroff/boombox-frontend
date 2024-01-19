@@ -1,7 +1,7 @@
 import { AppStateInterface, ReorderPayload } from '~/types/Common'
 import { useActionsPlayerPrivate } from './_actions.player'
 import { TrackRes } from '~/types/ReqRes'
-import databaseServices from '~/services/database.services'
+import cloudServices from '~/services/cloud.services'
 import AlbumTrack from '~/classes/AlbumTrack'
 import PlayerTrack from '~/classes/PlayerTrack'
 import AlbumPage from '~/classes/AlbumPage'
@@ -20,7 +20,7 @@ export const useActionsPlayer = (state: AppStateInterface) => {
     checkOrReplacePlaylists(track)
     
     try {
-      const trackSourceLink: string = await databaseServices.getFile('tracks/audio', track.path, track.cloudURL)
+      const trackSourceLink: string = await cloudServices.getFile('tracks/audio', track.path, track.cloudURL, 'audio')
       if (!trackSourceLink) {
         throw new Error('Unable to get track source link')
       }

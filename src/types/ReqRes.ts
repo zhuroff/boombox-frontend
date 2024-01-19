@@ -91,3 +91,19 @@ export interface CategoryPageRes extends CategoryEntityRes {
   albums: AlbumItemRes[]
   embeddedAlbums?: EmbeddedItemRes[]
 }
+
+export interface CloudEntity extends BasicEntity {
+  created: string
+  modified: string
+  path: string
+  cover: string
+  routePath: string
+  mimeType?: string
+}
+
+export interface CloudEntityRes {
+  limit: number
+  offset: number
+  total: number
+  items: CloudEntity[]
+}

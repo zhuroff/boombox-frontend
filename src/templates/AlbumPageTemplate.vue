@@ -18,6 +18,7 @@
               v-if="'tracks' in album"
               :tracks="album.tracks"
               :albumID="album._id"
+              :isTOY="isTOY"
             />
             <slot
               v-else
@@ -122,6 +123,11 @@ export default defineComponent({
     relatedAlbums: {
       type: Array as PropType<Array<RelatedAlbums | RelatedCompilations>>,
       requried: false
+    },
+    isTOY: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   setup(_, { emit }) {

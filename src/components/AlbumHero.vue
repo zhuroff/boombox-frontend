@@ -14,7 +14,10 @@
           :results="results"
           @setInputValue="searchSubmit"
         />
-        <div class="album__hero-actions">
+        <div
+          v-if="withActions"
+          class="album__hero-actions"
+        >
           <div class="album__hero-nav">
             <Button
               icon="ellipsis"
@@ -53,6 +56,7 @@
         <RouterLink
           v-if="artist"
           :to="`/artists/${artist._id}`"
+          :disabled="!artist._id"
           class="album__hero-category"
         >
           {{ artist.title }}
@@ -62,14 +66,17 @@
         <RouterLink
           v-if="period"
           :to="`/periods/${period._id}`"
+          :disabled="!period._id"
           class="album__hero-category"
         >
           <span class="album__hero-divisor">\</span>&nbsp;
-          {{ period.title }},&nbsp;
+          {{ period.title }}
         </RouterLink>
+        <span v-if="genre?.title">,&nbsp; </span>
         <RouterLink
-          v-if="genre"
+          v-if="genre?.title"
           :to="`/genres/${genre._id}`"
+          :disabled="!genre._id"
           class="album__hero-category"
         >{{ genre.title }}</RouterLink><br>
       </div>
@@ -128,15 +135,15 @@ export default defineComponent({
       required: true
     },
     artist: {
-      type: Object as PropType<BasicEntity>,
+      type: Object as PropType<Partial<BasicEntity>>,
       required: false
     },
     genre: {
-      type: Object as PropType<BasicEntity>,
+      type: Object as PropType<Partial<BasicEntity>>,
       required: false
     },
     period: {
-      type: Object as PropType<BasicEntity>,
+      type: Object as PropType<Partial<BasicEntity>>,
       required: false
     },
     totalCounts: {
@@ -144,6 +151,11 @@ export default defineComponent({
       required: false
     },
     withSearch: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    withActions: {
       type: Boolean,
       required: false,
       default: true
@@ -184,7 +196,7 @@ export default defineComponent({
     }
 
     const searchWikiInfo = async () => {
-      if (!artist) return false
+      if (!artist?.title) return false
       resetWikiData()
       const albumLang = detectLocale(title)
       const artistLang = detectLocale(artist.title)
@@ -313,6 +325,11 @@ export default defineComponent({
       &:hover {
         color: $white;
         transition: color .2s $animation;
+      }
+
+      &[disabled=true] {
+        pointer-events: none;
+        cursor: default;
       }
     }
 

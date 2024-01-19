@@ -126,5 +126,9 @@ export const localesBY: LocaleDictionary = {
       invalid_tracks_names: 'Назва трэкаў не адпавядае патэрну: \'Нумар. Назва трэка.пашырэнне файла\'',
       no_tracks: 'Альбом не змяшчае ніводнага трэка'
     }
+  },
+  toy: {
+    emptyGenres: 'Калекцыі пакуль няма',
+    emptyYears: 'Перыядаў пакуль няма'
   }
 }

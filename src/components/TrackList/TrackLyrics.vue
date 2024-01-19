@@ -87,7 +87,7 @@ import store from '~/store'
 import Button from '~/components/Button.vue'
 import Textarea from '~/components/Textarea.vue'
 import Preloader from '~/components/Preloader.vue'
-import TrackServices from '~/services/TrackServices'
+import trackServices from '~/services/track.services'
 
 export default defineComponent({
   components: {
@@ -142,7 +142,7 @@ export default defineComponent({
     const fetchLyrics = () => {
       isFetching.value = true
 
-      TrackServices.searchLyrics(props.heading)
+      trackServices.searchLyrics(props.heading)
         .then((result) => setFoundLyrics(result))
         .catch((error) => setNotFoundLyricsError(error))
     }
@@ -158,7 +158,7 @@ export default defineComponent({
       lyrics.value = payload
       fetchedLyrics.length = 0
 
-      TrackServices.saveLyrics(props.id, payload)
+      trackServices.saveLyrics(props.id, payload)
         .then((message) => {
           if (isConfirm) {
             actions.setSnackbarMessage({
@@ -171,7 +171,7 @@ export default defineComponent({
     }
 
     const fetchTrackLyrics = async (id: string) => {
-      TrackServices.fetchLyrics(id)
+      trackServices.fetchLyrics(id)
         .then((data) => lyrics.value = data)
         .catch((error) => console.dir(error))
     }

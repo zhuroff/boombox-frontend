@@ -1,137 +1,184 @@
 <template>
-  <section class="section">
-    <transition name="fade">
-      <Preloader v-if="!toyYear.isFetched" mode="light" />
-    </transition>
-
-    <div v-if="toyYear.isFetched" class="album">
-      <div class="album__aside">
-        <div class="album__sidebar">
-          <CoverArt :albumCover="toyYear.data.albumCover" :isBooklet="toyYear.data.albumCoverArt?.length > 0"
-            @coverClick="fetchAlbumBooklet" />
-        </div>
-      </div>
-
-      <div class="album__content">
-        <TrackList :tracks="toyYear.data.tracks" :albumID="toyYear.data._id" :isTOY="true" @saveToyInfo="saveToyInfo" />
-      </div>
-    </div>
-  </section>
+  <AlbumPageTemplate
+    :isDataFetched="!isPageLoading"
+    :album="album"
+    :booklet="booklet"
+    :relatedAlbums="relatedAlbums"
+    :isTOY="true"
+    @closeBookletModal="closeBookletModal"
+    @bookletPageChanged="(data) => {
+      bookletPageChanged(data, album.folderName, album.cloudURL)
+    }"
+  >
+    <template #hero>
+      <AlbumHero
+        v-if="album._id"
+        :id="album._id"
+        :title="album.title"
+        :artist="album.artist"
+        :genre="album.genre"
+        :period="album.period"
+        :withActions="false"
+      >
+        <template #cover>
+          <CoverArt
+            :cover="album.coverURL"
+            :booklet="booklet"
+            @coverClick="() => bookletHandler()"
+            @closeBookletModal="closeBookletModal"
+            @slideChanged="bookletPageChanged"
+          />
+        </template>
+      </AlbumHero>
+    </template>
+  </AlbumPageTemplate>
 </template>
 
 <script lang="ts">
-import api from '~/api'
-import { PropType, defineComponent, reactive, watchEffect, ComputedRef, computed } from 'vue'
-import { TTOYEntity } from '~/types/TOY'
-import Preloader from '~/components/Preloader.vue'
-import CoverArt from "~/components/CoverArt.vue"
-import TrackList from "~/components/TrackList/TrackList.vue"
-import { AlbumHeadProps } from '~/types/Album'
+import { PropType, defineComponent, ref, watch } from 'vue'
+import { AlbumItemRes, AlbumPageRes, CloudEntity } from '~/types/ReqRes'
+import store from '~/store'
+import cloudServices from '~/services/cloud.services'
+import AlbumPage from '~/classes/AlbumPage'
+import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
+import { BasicEntity } from '~/types/Common'
+import BookletState from '~/classes/BookletState'
+import { AlbumBooklet, BookletSlideState, RelatedAlbums } from '~/types/Album'
+import { CloudFolderResponse } from '~/types/Cloud'
+import CoverArt from '~/components/CoverArt.vue'
+import AlbumHero from '~/components/AlbumHero.vue'
+import { useSinglePage } from '~/hooks/useSinglePage'
 
 export default defineComponent({
+  name: 'TOYYearPage',
   components: {
-    Preloader,
     CoverArt,
-    TrackList
+    AlbumHero,
+    AlbumPageTemplate
   },
-
   props: {
-    year: {
-      type: Object as PropType<Partial<TTOYEntity & { genre: string }>>,
+    params: {
+      type: Object as PropType<CloudEntity>,
+      required: false
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    backPath: {
+      type: String,
       required: true
     }
   },
-
   setup(props) {
-    const toyYear = reactive<any>({
-      isFetched: false,
-      data: {}
-    })
+    const {
+      booklet,
+      isDataFetched,
+      fetchBooklet,
+      getRandomAlbum,
+      getRelatedAlbums,
+      closeBookletModal,
+      bookletPageChanged
+    } = useSinglePage<AlbumPageRes, AlbumPage, AlbumItemRes>(AlbumPage, 'AlbumCard', 'albums')
 
-    const fetchYearContent = async () => {
+    const { actions } = store
+    const isPageLoading = ref(true)
+    const album = ref<AlbumPage>({} as AlbumPage)
+    const genreParams = ref<CloudEntity>({} as CloudEntity)
+    const relatedAlbums = ref<RelatedAlbums[]>([])
+
+    const bookletHandler = async () => {}
+
+    const fetchTOYAlbum = async (path: string) => {
       try {
-        const response = await api.post<any[]>('/api/toy', { path: props.year?.path, dirOnly: false })
+        const yearFolder = await cloudServices.getFolderContent(
+          '',
+          String(process.env.VUE_APP_TOY_CLOUD),
+          encodeURIComponent(`${path}/${props.title}`)
+        )
 
-        if (response?.status === 200) {
-          toyYear.data = {
-            _id: props.year.resource_id,
-            title: `${props.year.genre} - ${props.year.name}`,
-            albumCover: response.data.find(({ name }) => name === 'cover.webp')?.file || '/img/album.webp',
-            inCollections: [],
-            artist: {
-              _id: `artist-${props.year.resource_id}`,
-              title: 'Various Artists'
-            },
-            genre: {
-              _id: `genre-${props.year.resource_id}`,
-              title: props.year.genre
-            },
-            period: {
-              _id: `period-${props.year.resource_id}`,
-              title: props.year.name
-            },
-            albumCoverArt: response.data.find(({ name }) => name === 'booklet')?.path,
-            description: '',
-            tracks: response.data.reduce((acc, next) => {
-              if (next.media_type === 'audio') {
-                acc.push({
-                  _id: next.resource_id,
-                  title: next.name.replace(/^\d+\.\s/g, '').replace(/\.[^.]+$/, ""),
-                  link: next.file,
-                  // "artist": {
-                  //     "_id": "630a97b2bb05f204d7d90a97",
-                  //     "title": "Metallica"
-                  // },
-                  // "inAlbum": {
-                  //     "_id": "630a97acf7b94ac644bd8ec0",
-                  //     "title": "...And Justice For All"
-                  // },
-                  // "inCompilations": []
-                })
-              }
+        let coverURL: string
+        let coverPath = yearFolder.items.find(
+          (item) => item.title === 'cover.webp' && item.mimeType === 'image/webp'
+        )?.path
 
-              return acc
-            }, [] as any[])
-          }
-          toyYear.isFetched = true
-          // store.commit("setPlayerPlaylist", toyYear.data);
+        if (coverPath) {
+          coverPath = decodeURIComponent(coverPath).replace('MelodyMap/TOY/', '')
+          coverURL = await cloudServices.getFile(
+            'cloud/image',
+            coverPath,
+            String(process.env.VUE_APP_TOY_CLOUD),
+            'image',
+            'TOY'
+          )
+        } else {
+          coverURL = '/img/album.webp'
         }
 
-        fetchDBContent()
+        const x: AlbumPage = {
+          _id: genreParams.value._id,
+          title: genreParams.value.title,
+          caption: `Tracks of The Year / ${props.title} / ${genreParams.value.title}`,
+          cloudURL: String(genreParams.value.cloudURL),
+          folderName: `TOY/${genreParams.value.path}/${props.title}`,
+          inCollections: [],
+          cardType: 'AlbumCard',
+          cardPath: props.title,
+          artist: { title: 'Various Artists' } as BasicEntity,
+          genre: {} as BasicEntity,
+          period: { title: props.title } as BasicEntity,
+          coverURL,
+          tracks: yearFolder.items.reduce<any>((acc, next, index) => {
+            if (next.mimeType?.startsWith('audio')) {
+              acc.push({
+                _id: next._id,
+                title: next.title.replace(/^\d+\.\s|\.\w+$/g, ''),
+                period: props.title,
+                path: next.path,
+                order: index,
+                lyrics: '',
+                listened: 0,
+                isOutOfAlbumList: false,
+                isDisabled: false,
+                inCompilations: [],
+                inAlbum: {},
+                duration: 0,
+                cloudURL: next.cloudURL,
+                artist: { title: 'Various Artists' },
+                albumCover: coverURL
+              })
+            }
+            return acc
+          }, [])
+        }
+        album.value = x
+        actions.setPlayerPlaylist(x)
+        isPageLoading.value = false
       } catch (error) {
-        throw error
+        console.error(error)
       }
     }
 
-    const fetchDBContent = async () => {
-      const response = await api.get(`/api/toy/${props.year.resource_id?.replace(/[^a-z0-9]+/g, '')}`)
-    }
-
-    const fetchAlbumBooklet = async () => {
-      console.log('fetch booklet')
-    }
-
-    const saveToyInfo = (payload: any) => {
-      console.log(props.year)
-      console.log(payload)
-    }
-
-    watchEffect(() => {
-      toyYear.isFetched = false
-      fetchYearContent()
-    })
+    watch(
+      props,
+      (value) => {
+        if (value.params) {
+          genreParams.value = value.params
+          fetchTOYAlbum(`TOY/${value.params.path}`)
+        }
+      },
+      { immediate: true, deep: true }
+    )
 
     return {
-      toyYear,
-      fetchAlbumBooklet,
-      saveToyInfo
+      isPageLoading,
+      album,
+      booklet,
+      relatedAlbums,
+      closeBookletModal,
+      bookletHandler,
+      bookletPageChanged
     }
   }
 })
 </script>
-
-<style lang="scss">
-.tototo {
-  padding: 25px;
-}
-</style>
