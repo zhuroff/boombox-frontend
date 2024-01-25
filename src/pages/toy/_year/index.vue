@@ -116,7 +116,7 @@ export default defineComponent({
         }
 
         const x: AlbumPage = {
-          _id: genreParams.value._id,
+          _id: genreParams.value.id,
           title: genreParams.value.title,
           caption: `Tracks of The Year / ${props.title} / ${genreParams.value.title}`,
           cloudURL: String(genreParams.value.cloudURL),
@@ -131,7 +131,7 @@ export default defineComponent({
           tracks: yearFolder.items.reduce<any>((acc, next, index) => {
             if (next.mimeType?.startsWith('audio')) {
               acc.push({
-                _id: next._id,
+                _id: next.id,
                 title: next.title.replace(/^\d+\.\s|\.\w+$/g, ''),
                 period: props.title,
                 path: next.path,

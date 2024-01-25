@@ -92,7 +92,8 @@ export interface CategoryPageRes extends CategoryEntityRes {
   embeddedAlbums?: EmbeddedItemRes[]
 }
 
-export interface CloudEntity extends BasicEntity {
+export interface CloudEntity extends Omit<BasicEntity, '_id'> {
+  id: string
   created: string
   modified: string
   path: string
