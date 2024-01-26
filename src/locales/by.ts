@@ -92,6 +92,7 @@ export const localesBY: LocaleDictionary = {
   },
   compilations: {
     add: 'Дадаць у компіляцыю',
+    trackDelConfirmation: 'Вы ўпэўненыя, што хочаце выдаліць гэты трэк з компіляцыі?',
     namePlaceholder: 'Увядзіце назву компіляцыі',
     exists: 'Компіляцыя з такой назвай ужо існуе',
     removed: 'Трэк паспяхова выдалены з компіляцыі',

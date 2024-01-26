@@ -1,6 +1,15 @@
 <template>
   <div class="tracklist__row-cell --pointer --fix">
     <Button
+      v-if="isCompilation"
+      icon="minus"
+      size="small"
+      isText
+      className="tracklist__row-action"
+      @click="() => entityToDelete = trackID"
+    />
+    <Button
+      v-else
       icon="plus"
       size="small"
       isText
@@ -22,6 +31,17 @@
         entityType="compilations"
       />
     </Modal>
+    <Modal
+      v-if="entityToDelete"
+      :isModalActive="entityToDelete !== null"
+      @closeModal="delReject"
+    >
+      <Confirmation
+        :message="lang('compilations.trackDelConfirmation')"
+        @confirm="removeTrackFromCompilation"
+        @reject="delReject"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -29,10 +49,12 @@
 import { defineComponent, ref } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import { useListPage } from '~/hooks/useListPage'
+import { useLocales } from '~/hooks/useLocales'
 import { CompilationEntityRes } from '~/types/ReqRes'
 import CompilationItem from '~/classes/CompilationItem'
 import Button from '~/components/Button.vue'
 import GatheringTabs from '~/components/GatheringTabs.vue'
+import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
 
 export default defineComponent({
@@ -40,20 +62,29 @@ export default defineComponent({
   components: {
     Modal,
     Button,
+    Confirmation,
     GatheringTabs
   },
   props: {
     trackID: {
       type: String,
       required: true
+    },
+    isCompilation: {
+      type: Boolean,
+      required: true
     }
   },
-  setup() {
+  setup(_, { emit }) {
     const { fetchData, pagePagination } = useListPage<
       CompilationEntityRes<BasicEntity>,
       CompilationItem<BasicEntity>
     >(CompilationItem, '', '')
+
+    const { lang } = useLocales()
+
     const isCompilationLoading = ref(false)
+    const entityToDelete = ref<string | null>(null)
     const compilations = ref<CompilationItem<BasicEntity>[] | undefined>(undefined)
 
     const openCompilationsModal = async () => {
@@ -67,12 +98,25 @@ export default defineComponent({
       compilations.value = undefined
     }
 
+    const delReject = () => {
+      entityToDelete.value = null
+    }
+
+    const removeTrackFromCompilation = () => {
+      emit('removeTrackFromCompilation')
+      entityToDelete.value = null
+    }
+
     return {
+      removeTrackFromCompilation,
       openCompilationsModal,
       closeCollectionModal,
       isCompilationLoading,
+      entityToDelete,
       pagePagination,
-      compilations
+      compilations,
+      delReject,
+      lang
     }
   }
 })
@@ -92,4 +136,3 @@ export default defineComponent({
   }
 }
 </style>
-~/classes/CompilationItem

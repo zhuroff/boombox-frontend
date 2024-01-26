@@ -3,6 +3,9 @@
     :isDataFetched="isDataFetched"
     :album="compilation"
     :relatedAlbums="relatedCompilations"
+    :isCompilation="true"
+    @trackOrderChanged="trackOrderChanged"
+    @removeTrackFromCompilation="removeTrackFromCompilation"
   >
     <template #hero>
       <AlbumHero
@@ -41,11 +44,12 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, computed, ref, watch } from 'vue'
-import { BasicEntity, RandomEntityReqFilter } from '~/types/Common'
-import { CompilationEntityRes, TrackRes } from '~/types/ReqRes'
+import { BasicEntity, RandomEntityReqFilter, ReorderPayload } from '~/types/Common'
+import { CompilationEntityRes, GatheringUpdateReq, TrackRes } from '~/types/ReqRes'
 import { RelatedCompilations } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useLocales } from '~/hooks/useLocales'
+import { useGathering } from '~/hooks/useGathering'
 import { conjugate } from '~/utils'
 import store from '~/store'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
@@ -80,11 +84,26 @@ export default defineComponent({
     >(CompilationPage, 'CompilationCard', 'compilations')
 
     const { lang } = useLocales()
+    const { reorder, removeFromGathering } = useGathering()
     const { actions } = store
     const compilation = ref<CompilationPage<TrackRes>>({} as CompilationPage<TrackRes>)
     const relatedCompilations = ref<RelatedCompilations[]>([])
     const entityType = ref('compilations')
     const isDelConfirm = ref(false)
+
+    const totalCounts = computed(() => {
+      const isAllTracksHaveDuration = compilation.value.tracks?.every((track) => (
+        Number(track.duration)
+      ))
+      
+      return `
+        ${compilation.value.tracks?.length} ${conjugate('tracks', compilation.value.tracks?.length)}:
+        ${isAllTracksHaveDuration ? calcTotalTracksTime(compilation.value.tracks) : lang('unknownTime')}.
+        ${lang('listenedTracks')} ${compilation.value.tracks?.reduce((acc, { listened }) => (
+          acc + (Number(listened) || 0)
+        ), 0)}
+      `.trim()
+    })
 
     const getRandom = () => {
       getRandomAlbum(entityType.value)
@@ -143,19 +162,23 @@ export default defineComponent({
       deleteEntry('compilations', compilation.value._id)
     }
 
-    const totalCounts = computed(() => {
-      const isAllTracksHaveDuration = compilation.value.tracks?.every((track) => (
-        Number(track.duration)
-      ))
-      
-      return `
-        ${compilation.value.tracks?.length} ${conjugate('tracks', compilation.value.tracks?.length)}:
-        ${isAllTracksHaveDuration ? calcTotalTracksTime(compilation.value.tracks) : lang('unknownTime')}.
-        ${lang('listenedTracks')} ${compilation.value.tracks?.reduce((acc, { listened }) => (
-          acc + (Number(listened) || 0)
-        ), 0)}
-      `.trim()
-    })
+    const trackOrderChanged = (payload: ReorderPayload) => {
+      reorder('compilations', payload)
+    }
+
+    const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+      removeFromGathering(payload)
+        .then(() => {
+          fetchData(entityType.value)
+            .then((payload) => {
+              if (payload) {
+                compilation.value = payload
+                actions.setPlayerPlaylist(payload)
+                getRelated()
+              }
+            })
+        })
+    }
 
     watch(
       route,
@@ -197,6 +220,8 @@ export default defineComponent({
       isDataFetched,
       deleteCompilation,
       relatedCompilations,
+      removeTrackFromCompilation,
+      trackOrderChanged,
       getRandom
     }
   }

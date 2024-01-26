@@ -93,6 +93,7 @@ export const localesEN: LocaleDictionary = {
   compilations: {
     add: 'Add to compilation',
     namePlaceholder: 'Enter compilation name',
+    trackDelConfirmation: 'Are you sure you want to remove this track from the compilation?',
     exists: 'Compilation with this name already exists',
     removed: 'Track successfully removed from compilation',
     added: 'Track successfully added to compilation',

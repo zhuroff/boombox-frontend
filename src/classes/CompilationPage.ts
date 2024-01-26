@@ -11,11 +11,11 @@ export default class CompilationPage<T extends TrackRes> extends GatheringEntity
     cardPath: string
   ) {
     super(compilation, cardType, cardPath)
-    this.tracks = compilation.tracks.map((track) => (
+    this.tracks = compilation.tracks.map((track, index) => (
       new AlbumTrack({
         ...track,
         title: `${track.artist.title} - ${track.title} («${track.inAlbum.title}», ${track.inAlbum.period.title})`
-      }, track.order || 0, track.inAlbum.period.title, compilation.avatar)
+      }, index + 1, track.inAlbum.period.title, compilation.avatar)
     ))
   }
 }

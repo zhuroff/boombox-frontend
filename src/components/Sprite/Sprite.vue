@@ -115,6 +115,7 @@ import SpriteDisable from './SpriteDisable.vue'
 import SpriteSpinner from './SpriteSpinner.vue'
 import SpritePause from './SpritePause.vue'
 import SpritePlus from './SpritePlus.vue'
+import SpriteMinus from './SpriteMinus.vue'
 import SpritePlaying from './SpritePlaying.vue'
 import SpriteDrag from './SpriteDrag.vue'
 import SpriteChevronRight from './SpriteChevronRight.vue'
@@ -140,6 +141,7 @@ export default defineComponent({
     SpriteSpinner,
     SpritePause,
     SpritePlus,
+    SpriteMinus,
     SpritePlaying,
     SpriteDrag,
     SpriteChevronRight,
@@ -170,6 +172,7 @@ export default defineComponent({
       ['spinner', SpriteSpinner],
       ['pause', SpritePause],
       ['plus', SpritePlus],
+      ['minus', SpriteMinus],
       ['playing', SpritePlaying],
       ['drag', SpriteDrag],
       ['chevron-right', SpriteChevronRight],

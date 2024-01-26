@@ -35,16 +35,10 @@
       <TrackItemCompilation
         v-if="!isTOY"
         :trackID="track._id"
+        :isCompilation="isCompilation"
+        @removeTrackFromCompilation="() => $emit('removeTrackFromCompilation', track._id)"
       />
       <TrackItemDisable :fileid="track._id" />
-      <!-- <div class="tracklist__row-cell --pointer --fix">
-        <button
-          class="tracklist__row-action"
-          @click="isTOYEditable = !isTOYEditable"
-        >
-          <Sprite name="disable" />
-        </button>
-      </div> -->
       <div
         v-if="!isTOY"
         class="tracklist__row-cell --fix"
@@ -105,6 +99,10 @@ export default defineComponent({
       type: String,
       required: true
     },
+    isCompilation: {
+      type: Boolean,
+      required: true
+    },
     isTOY: {
       type: Boolean,
       required: true
@@ -133,14 +131,6 @@ export default defineComponent({
       isModalActive.value = !isModalActive.value
     }
 
-    const saveToyInfo = () => {
-      emit('saveToyInfo', {
-        trackId: props.track._id.replace(/[^a-z0-9]+/g, ''),
-        description: descriptionValue.value,
-        iframe: frameValue.value
-      })
-    }
-
     return {
       isModalActive,
       isPlayingTrack,
@@ -149,8 +139,7 @@ export default defineComponent({
       trackArtistAndTitle,
       isTOYEditable,
       descriptionValue,
-      frameValue,
-      saveToyInfo
+      frameValue
     }
   }
 })
@@ -265,6 +254,7 @@ export default defineComponent({
         width: 18px;
         height: 18px;
         color: $paleDP;
+        fill: $paleDP;
         transition: fill 0.2s ease;
       }
   

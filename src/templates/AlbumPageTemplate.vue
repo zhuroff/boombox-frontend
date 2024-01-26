@@ -19,6 +19,9 @@
               :tracks="album.tracks"
               :albumID="album._id"
               :isTOY="isTOY"
+              :isCompilation="isCompilation"
+              @trackOrderChanged="changeTracksOrder"
+              @removeTrackFromCompilation="removeTrackFromCompilation"
             />
             <slot
               v-else
@@ -72,7 +75,8 @@
 import { PropType, defineComponent } from 'vue'
 import { BookletSlideState, RelatedAlbums, RelatedCompilations } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
-import { TrackRes } from '~/types/ReqRes'
+import { GatheringUpdateReq, TrackRes } from '~/types/ReqRes'
+import { ReorderPayload } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import BookletState from '~/classes/BookletState'
 import AlbumPage from '~/classes/AlbumPage'
@@ -124,6 +128,11 @@ export default defineComponent({
       type: Array as PropType<Array<RelatedAlbums | RelatedCompilations>>,
       requried: false
     },
+    isCompilation: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     isTOY: {
       type: Boolean,
       required: false,
@@ -153,12 +162,22 @@ export default defineComponent({
       emit('bookletPageChanged', data)
     }
 
+    const changeTracksOrder = (payload: ReorderPayload) => {
+      emit('trackOrderChanged', payload)
+    }
+
+    const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+      emit('removeTrackFromCompilation', payload)
+    }
+
     return {
       updateDiscogsFilter,
       resetDiscogsFilters,
       switchPagination,
       closeBookletModal,
+      changeTracksOrder,
       bookletPageChanged,
+      removeTrackFromCompilation,
       lang
     }
   }

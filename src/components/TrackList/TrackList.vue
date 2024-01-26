@@ -12,7 +12,8 @@
         :isTOY="isTOY"
         :index="index"
         :albumID="albumID"
-        @saveToyInfo="saveToyInfo"
+        :isCompilation="isCompilation"
+        @removeTrackFromCompilation="removeTrackFromCompilation"
       />
     </VueDraggableNext>
   </div>
@@ -41,7 +42,7 @@ export default defineComponent({
       type: String,
       required: true
     },
-    isPlaylist: {
+    isCompilation: {
       type: Boolean,
       required: false,
       default: false
@@ -73,18 +74,25 @@ export default defineComponent({
 
       actions.changePlaylistOrder(payload)
 
-      if (props.isPlaylist) {
-        emit('orderChanged', payload)
+      if (props.isCompilation) {
+        emit('trackOrderChanged', payload)
       }
     }
 
-    const saveToyInfo = (payload: any) => emit('saveToyInfo', payload)
+    const removeTrackFromCompilation = (trackID: string) => {
+      emit('removeTrackFromCompilation', {
+        gatheringID: props.albumID,
+        entityType: 'compilations',
+        entityID: trackID,
+        isInList: true
+      })
+    }
 
     return {
       dragOptions,
       orderChanged,
-      saveToyInfo,
-      albumTracksOnly
+      albumTracksOnly,
+      removeTrackFromCompilation
     }
   }
 })

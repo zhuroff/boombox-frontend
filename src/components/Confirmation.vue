@@ -51,6 +51,7 @@ export default defineComponent({
     text-align: center;
     font-size: 1rem;
     margin-bottom: 1rem;
+    color: $black;
   }
 
   &__actions {
