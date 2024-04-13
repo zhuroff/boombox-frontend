@@ -1,5 +1,7 @@
 <template>
   <section class="section">
+    <button @click="x.prop++">Click</button>
+    <Comp :eee="x.prop" />
     <transition name="fade">
       <Preloader
         v-if="!isPageLoaded || !isSynchronized"
@@ -59,7 +61,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
 import Button from '~/components/Button/Button.vue'
@@ -67,6 +68,7 @@ import Preloader from '~/components/Preloader.vue'
 import api from '~/api'
 import store from '~/store'
 import { SyncResponse } from '~/types/Common'
+import Comp from './Comp.vue'
 
 interface BackupList {
   timestamp: number
@@ -76,7 +78,8 @@ interface BackupList {
 export default defineComponent({
   components: {
     Button,
-    Preloader
+    Preloader,
+    Comp
   },
 
   setup() {
@@ -85,6 +88,12 @@ export default defineComponent({
     const backups = reactive([]) as unknown as BackupList[]
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
+
+    const x = reactive({
+      prop: 0
+    })
+
+    const { prop } = x
 
     const setBackups = (data: string[]) => {
       const dateConfig = {
@@ -231,15 +240,14 @@ export default defineComponent({
       backupRestore,
       backupDelete,
       syncCollection,
-      isSynchronized
+      isSynchronized,
+      x
     }
   }
 })
-
 </script>
 
 <style lang="scss" scoped>
-
 @import '~/scss/variables';
 
 .settings {
@@ -282,5 +290,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

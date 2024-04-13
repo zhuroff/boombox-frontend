@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed, watch, ref } from 'vue'
+import { defineComponent, onMounted, computed, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
 import { CategoryItemRes } from '~/types/ReqRes'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
@@ -32,7 +32,7 @@ export default defineComponent({
       setEntitiesLimit
     } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'genres')
 
-    const genres = ref<CategoryItem[]>([])
+    const genres = reactive<CategoryItem[]>([])
 
     const pageHeading = computed(() => (
       `There are ${pagePagination.value?.totalDocs || 0} genres in collection`
@@ -40,12 +40,16 @@ export default defineComponent({
 
     watch(pageStateConfig, () => {
       fetchData('genres')
-        .then((data) => genres.value = data || [])
+        .then((data) => {
+          genres.splice(0, genres.length, ...data || [])
+        })
     })
 
     onMounted(() => {
       fetchData('genres')
-        .then((data) => genres.value = data || [])
+        .then((data) => {
+          genres.splice(0, genres.length, ...data || [])
+        })
     })
 
     return {

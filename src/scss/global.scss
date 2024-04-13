@@ -10,7 +10,6 @@
   min-height: calc(100vh - #{$playerHeight});
   display: flex;
   flex-direction: column;
-  padding-bottom: 25px;
 
   &.--z-low {
     height: calc(100vh - 62px);

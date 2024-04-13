@@ -16,7 +16,6 @@ export const localesBY: LocaleDictionary = {
     embedded: 'Фрэймы',
     collections: 'Калекцыi',
     compilations: 'Кампіляцыi',
-    youtube: 'YouTube',
     radio: 'Радыё',
     toy: 'TOY',
     settings: 'Налады',

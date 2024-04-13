@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
+import { defineComponent, computed, ref, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { CollectionEntityRes } from '~/types/ReqRes'
@@ -59,7 +59,7 @@ export default defineComponent({
     >(CollectionEntity, 'CollectionCard', 'collections')
 
     const { lang } = useLocales()
-    const collections = ref<CollectionEntity<BasicEntity>[]>([])
+    const collections = reactive<CollectionEntity<BasicEntity>[]>([])
     const entityToDelete = ref<string | null>(null)
 
     const pageHeading = computed(() => (
@@ -72,7 +72,9 @@ export default defineComponent({
         .then(() => {
           entityToDelete.value = null
           fetchData('collections')
-            .then((payload) => collections.value = payload || [])
+            .then((payload) => {
+              collections.splice(0, collections.length, ...payload || [])
+            })
         })
     }
 
@@ -85,7 +87,9 @@ export default defineComponent({
       (newVal, oldVal) => {
         if (!isObjectsEquals(newVal, oldVal)) {
           fetchData('collections')
-            .then((payload) => collections.value = payload || [])
+            .then((payload) => {
+              collections.splice(0, collections.length, ...payload || [])
+            })
         }
       },
       { immediate: true }

@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch, ref } from 'vue'
+import { defineComponent, computed, watch, reactive } from 'vue'
 import { AlbumItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
@@ -35,7 +35,7 @@ export default defineComponent({
     } = useListPage<AlbumItemRes, AlbumItem>(AlbumItem, 'AlbumCard', 'albums')
     
     const { lang } = useLocales()
-    const albums = ref<AlbumItem[]>([])
+    const albums = reactive<AlbumItem[]>([])
 
     const pageHeading = computed(() => (
       lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
@@ -46,7 +46,9 @@ export default defineComponent({
       (newVal, oldVal) => {
         if (!isObjectsEquals(newVal, oldVal)) {
           fetchData('albums')
-            .then((payload) => albums.value = payload || [])
+            .then((payload) => {
+              albums.splice(0, albums.length, ...payload || [])
+            })
         }
       },
       { immediate: true }

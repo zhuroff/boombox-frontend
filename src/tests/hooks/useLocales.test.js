@@ -1,0 +1,3 @@
+test('Set app locale', () => {
+  
+})

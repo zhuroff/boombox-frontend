@@ -22,6 +22,7 @@
       />
       <TrackItemPlay
         :track="track"
+        :isTOY="isTOY"
       />
       <TrackItemTitle
         :title="track.title"

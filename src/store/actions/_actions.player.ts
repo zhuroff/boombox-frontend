@@ -32,12 +32,17 @@ export const useActionsPlayerPrivate = (state: AppStateInterface) => {
     }
   }
 
-  const playAudio = (track: AlbumTrack, cb: (track: AlbumTrack) => Promise<void>) => {
-    const { audio } = state.playingTrack
+  const playAudio = (track: AlbumTrack, cb: (track: AlbumTrack) => Promise<void>, isFromDB = true) => {
+    const { audio, _id } = state.playingTrack
     audio.play()
       .then(() => {
         removeLoadingState()
-        checkAndSetDuration(track, cb)
+        if (isFromDB) {
+          checkAndSetDuration(track, cb)
+        } else {
+          setTrackDuration({ trackID: _id, duration: audio.duration })
+          timeProgressHandler(track, cb)
+        }
       })
       .catch(console.error)
   }

@@ -110,11 +110,6 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/youtube',
-    name: 'youtube',
-    component: () => import(/* webpackChunkName: 'youtube' */ '~/pages/youtube/index.vue')
-  },
-  {
     path: '/radio',
     name: 'radio',
     component: () => import(/* webpackChunkName: 'radio' */ '~/pages/radio/index.vue')

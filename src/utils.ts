@@ -95,3 +95,9 @@ export const secondsToMinutes = (duration?: number) => {
 
   return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
 }
+
+export const toCapitalize = (str: string) => (
+  str.split(' ')
+    .map((word) => word.toLowerCase().charAt(0).toUpperCase() + word.toLowerCase().slice(1))
+    .join(' ')
+)

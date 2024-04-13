@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, computed } from 'vue'
+import { defineComponent, ref, watch, computed, reactive } from 'vue'
 import { JSONSchema4 } from 'json-schema'
 import { EmbeddedItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
@@ -76,7 +76,7 @@ export default defineComponent({
     
     const { lang } = useLocales()
     const isCreateMode = ref(false)
-    const albums = ref<EmbeddedItem[]>([])
+    const albums = reactive<EmbeddedItem[]>([])
     const entityToDelete = ref<string | null>(null)
 
     const formSchema = embeddedFormSchema as JSONSchema4
@@ -87,7 +87,7 @@ export default defineComponent({
 
     const createNewEmbedded = async (formData: EmbeddedPayload) => {
       const response = await dbServices.createEntity<EmbeddedItemRes, EmbeddedPayload>('embedded', formData)
-      albums.value.unshift(new EmbeddedItem(response, 'EmbeddedCard', 'embedded'))
+      albums.unshift(new EmbeddedItem(response, 'EmbeddedCard', 'embedded'))
       isCreateMode.value = false
     }
 
@@ -97,7 +97,9 @@ export default defineComponent({
         .then(() => {
           entityToDelete.value = null
           fetchData('embedded')
-            .then((payload) => albums.value = payload || [])
+            .then((payload) => {
+              albums.splice(0, albums.length, ...payload || [])
+            })
         })
     }
 
@@ -111,7 +113,7 @@ export default defineComponent({
         if (!isObjectsEquals(newVal, oldVal)) {
           fetchData('embedded')
             .then((payload) => {
-              albums.value = payload || []
+              albums.splice(0, albums.length, ...payload || [])
             })
         }
       },

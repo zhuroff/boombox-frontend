@@ -12,6 +12,7 @@ export default {
 
     throw new Error()
   },
+
   async searchLyrics(query: string) {
     const response = await api.post<TrackLyricsResponse[]>('/api/tracks/lyrics', { query })
 
@@ -21,6 +22,7 @@ export default {
 
     throw new Error()
   },
+  
   async saveLyrics(id: string, lyrics: string) {
     const response = await api.patch<ResponseMessage>(`/api/tracks/${id}/lyrics`, { lyrics })
 

@@ -11,19 +11,19 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
 import { BasicEntity } from '~/types/Common'
-import TileCard from './TileCard.vue'
+import ListCardBasic from '~/classes/ListCardBasic'
 import AlbumCard from './AlbumCard.vue'
+import RadioCard from './RadioCard.vue'
 import CategoryCard from './CategoryCard.vue'
 import EmbeddedCard from './EmbeddedCard.vue'
 import CollectionCard from './CollectionCard.vue'
 import CompilationCard from './CompilationCard.vue'
-import ListCardBasic from '~/classes/ListCardBasic'
 
 export default defineComponent({
   name: 'AdapterCard',
   components: {
-    TileCard,
     AlbumCard,
+    RadioCard,
     CategoryCard,
     EmbeddedCard,
     CollectionCard,

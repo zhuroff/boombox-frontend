@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
+import { defineComponent, computed, ref, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { CompilationEntityRes } from '~/types/ReqRes'
@@ -59,7 +59,7 @@ export default defineComponent({
     >(CompilationItem, 'CompilationCard', 'compilations')
 
     const { lang } = useLocales()
-    const compilations = ref<CompilationItem<BasicEntity>[]>([])
+    const compilations = reactive<CompilationItem<BasicEntity>[]>([])
     const entityToDelete = ref<string | null>(null)
 
     const pageHeading = computed(() => (
@@ -72,7 +72,9 @@ export default defineComponent({
         .then(() => {
           entityToDelete.value = null
           fetchData('compilations')
-            .then((payload) => compilations.value = payload || [])
+            .then((payload) => {
+              compilations.splice(0, compilations.length, ...payload || [])
+            })
         })
     }
 
@@ -85,7 +87,9 @@ export default defineComponent({
       (newVal, oldVal) => {
         if (!isObjectsEquals(newVal, oldVal)) {
           fetchData('compilations')
-            .then((payload) => compilations.value = payload || [])
+            .then((payload) => {
+              compilations.splice(0, compilations.length, ...payload || [])
+            })
         }
       },
       { immediate: true }

@@ -59,6 +59,10 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    isTOY: {
+      type: Boolean,
+      required: true
     }
   },
   setup(props) {
@@ -92,7 +96,7 @@ export default defineComponent({
         })
       }
 
-      actions.playTrack(props.track)
+      actions.playTrack(props.track, props.isTOY ? 'TOY' : undefined)
       actions.togglePlayerVisibility()
     }
 

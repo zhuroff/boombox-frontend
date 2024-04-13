@@ -54,27 +54,27 @@
       </div>
       <div class="album__hero-heading">
         <RouterLink
-          v-if="artist"
+          v-if="artist?.title"
           :to="`/artists/${artist._id}`"
           :disabled="!artist._id"
           class="album__hero-category"
         >
-          {{ artist.title }}
-          <span class="album__hero-divisor">\</span>&nbsp;
-        </RouterLink>        
+          {{ artist.title }}&nbsp;
+        </RouterLink>
+        <span v-if="artist?.title" class="album__hero-divisor">\&nbsp;</span>
         <strong class="album__hero-title">{{ title }}</strong>&nbsp;
+        <span v-if="period?.title" class="album__hero-divisor">\&nbsp;</span>
         <RouterLink
-          v-if="period"
+          v-if="period?.title"
           :to="`/periods/${period._id}`"
           :disabled="!period._id"
           class="album__hero-category"
         >
-          <span class="album__hero-divisor">\</span>&nbsp;
           {{ period.title }}
         </RouterLink>
-        <span v-if="genre?.title">,&nbsp; </span>
+        <span v-if="genre?._id">,&nbsp; </span>
         <RouterLink
-          v-if="genre?.title"
+          v-if="genre?._id"
           :to="`/genres/${genre._id}`"
           :disabled="!genre._id"
           class="album__hero-category"

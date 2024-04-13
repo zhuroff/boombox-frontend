@@ -16,7 +16,6 @@ export const localesEN: LocaleDictionary = {
     embedded: 'Embedded',
     collections: 'Collections',
     compilations: 'Compilations',
-    youtube: 'YouTube',
     radio: 'Radio',
     toy: 'TOY',
     settings: 'Settings',

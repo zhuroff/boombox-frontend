@@ -1,96 +1,97 @@
 <template>
-  <div :class="[{ '--current': current._id === station.stationuuid }, 'station']">
-    <div class="station__cover">
-      <button class="station__play" @click="playStation">
-        <Sprite v-if="isOnPlay" name="playing" />
-        <Sprite v-else-if="current._id !== station.stationuuid || current.isOnPause" name="play" />
-        <Sprite v-else name="pause" />
-      </button>
+  <li class="cards__radio">
+    <div class="cards__radio-top">
+      <Button
+        size="medium"
+        :icon="isOnPlay ? 'pause' : 'play'"
+        @click="playStation"
+      />
+      <div class="cards__radio-data">
+        <div class="cards__radio-title">{{ toCapitalize(card.title) }}</div>
+        <div class="cards__radio-country">{{ card.country }}</div>
+      </div>
     </div>
-    <div class="station__content">
-      <div class="station__name">{{ station.name }}</div>
-      <div class="station__country">{{ station.country }}</div>
-      <ul class="station__tags">
-        <li class="station__tag">
-          <button
-            v-for="(tag, index) in stationTags"
-            :key="index"
-            :class="[{ '--active' : tag === genre }, 'station__tag-button']"
-            @click="() => $emit('fetchByGenre', tag)"
-          >{{ genre }}</button>
-        </li>
-        <!-- <CardRadioGenre v-for="(tag, index) in stationTags" :key="index" :genre="tag" :isActive="tag === genre"
-          @click="$emit('fetchByGenre', tag)" /> -->
-      </ul>
+    <div class="cards__radio-tags">
+      <Button
+        v-for="tag in tags"
+        :key="tag"
+        :label="toCapitalize(tag)"
+        size="small"
+        @click="playStation"
+      />
     </div>
-    <button v-if="isSaved" class="station__save" @click="removeStationFromDatabase">
-      <Sprite name="remove" />
-    </button>
-    <button v-else class="station__save" @click="saveStationToDatabase">
-      <Sprite name="plus" />
-    </button>
-  </div>
+  </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, reactive, PropType } from 'vue'
-import { RadioStationResponse } from '~/types/Radio'
+import { toCapitalize } from '~/utils'
 import store from '~/store'
-import Sprite from '~/components/Sprite/Sprite.vue'
-// import CardRadioGenre from '~/components/Cards/CardRadioGenre.vue'
+import RadioCard from '~/classes/RadioCard'
+import Button from '~/components/Button.vue'
 
 export default defineComponent({
   name: 'RadioCard',
   components: {
-    Sprite,
-    // CardRadioGenre
+    Button,
   },
   props: {
-    station: {
-      type: Object as PropType<RadioStationResponse>,
+    card: {
+      type: Object as PropType<RadioCard>,
       required: true
     },
-    genre: {
-      type: String,
-      required: true
-    },
-    current: {
-      type: Object as any,
-      required: false
-    },
-    isSaved: {
+    isDraggable: {
       type: Boolean,
-      required: false,
-      default: false
+      required: true
     }
+    // genre: {
+    //   type: String,
+    //   required: true
+    // },
+    // current: {
+    //   type: Object as any,
+    //   required: false
+    // },
+    // isSaved: {
+    //   type: Boolean,
+    //   required: false,
+    //   default: false
+    // }
   },
   setup(props, { emit }) {
+    console.log(props.card)
     const { actions, getters } = store
 
     const stationTags = reactive(computed(() => (
-      props.station?.tags?.split(',')
+      props.card?.tags?.split(',')
     )))
 
     const isOnPlay = computed(() => (
-      getters.playingTrack.value?._id === props.station.stationuuid
+      getters.playingTrack.value?._id === props.card._id
       && !getters.playingTrack.value.isOnPause
       && !getters.playingTrack.value.isOnLoading
     ))
 
-    const playStation = () => emit('playStation', props.station)
+    const tags = computed(() => (
+      props.card?.tags?.split(',')
+    ))
+
+    const playStation = () => emit('action:play', props.card)
 
     const saveStationToDatabase = () => {
-      emit('saveStationToDatabase', props.station)
+      emit('action:save', props.card)
     }
 
     const removeStationFromDatabase = () => {
-      emit('removeStationFromDatabase', props.station)
+      emit('action:remove', props.card)
     }
 
     return {
+      tags,
       isOnPlay,
       stationTags,
       playStation,
+      toCapitalize,
       saveStationToDatabase,
       removeStationFromDatabase
     }
@@ -102,7 +103,28 @@ export default defineComponent({
 @import '~/scss/variables';
 @import 'include-media';
 
-.station {
+.cards {
+
+  &__radio {
+    border-radius: $borderRadiusSM;
+    border: 1px solid $black;
+
+    &-top {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    &-title {
+      @include serif(1rem, 600);
+    }
+
+    &-country {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.card {
   position: relative;
   display: flex;
   grid-column: 1;
@@ -122,117 +144,6 @@ export default defineComponent({
     .station__save {
       opacity: 1;
       transition: opacity 0.3s $animation;
-    }
-  }
-
-  &.--current {
-
-    &:after {
-      content: '';
-      position: absolute;
-      top: -10px;
-      left: -10px;
-      width: calc(100% + 20px);
-      height: calc(100% + 20px);
-      border-radius: 5px;
-    }
-  }
-
-  &__play {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: 0;
-    padding: 0;
-    background-color: $dark;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.2s ease;
-
-    .icon.play,
-    .icon.pause {
-      width: 20px;
-      height: 20px;
-      color: $white;
-    }
-
-    .icon.playing {
-      width: 20px;
-      height: 20px;
-      margin-left: 2px;
-      fill: $white;
-    }
-  }
-
-  &__cover {
-    height: 40px;
-    width: 40px;
-    flex: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    margin-right: 3px;
-  }
-
-  &__content {
-    position: relative;
-    z-index: 1;
-  }
-
-  &__name {
-    font-weight: 600;
-    color: $dark;
-    font-size: 14px;
-    z-index: 1;
-    margin: 0 0 3px 7px;
-
-    @include media('<desktop') {
-      padding-right: 20px;
-    }
-  }
-
-  &__country {
-    font-weight: 600;
-    color: $dark;
-    font-size: 12px;
-    margin: 0 0 3px 7px;
-  }
-
-  &__tags {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  &__save {
-    position: absolute;
-    z-index: 1;
-    top: -9px;
-    right: -9px;
-    width: 30px;
-    height: 30px;
-    border: 0;
-    background-color: transparent;
-    outline: none;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.3s $animation;
-
-    @include media('>=desktop') {
-      opacity: 0;
-    }
-
-    .icon {
-      width: 17px;
-      height: 17px;
     }
   }
 }

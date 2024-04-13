@@ -1,190 +1,95 @@
 <template>
-  <section class="section">
+  <section class="template">
     <transition name="fade">
       <Preloader
-        v-if="!stations.isFetched"
+        v-if="!isFetched"
         mode="light"
       />
     </transition>
-
     <transition-group name="flyUp">
-      <ul
-        key="genres"
-        class="genres"
+      <!-- <Header
+        v-if="pageHeading"
+        :heading="pageHeading"
+        :withSearch="withSearch"
       >
-        <Button
-          v-for="(genre, index) in genres"
-          :key="index"
-          :text="genre"
-          :isFilled="genre === activeGenre"
-          :isDisabled="!stations.isFetched"
-          @onClick="setNewGenre(genre)"
+        <slot name="header"></slot>
+        <slot name="under-header"></slot>
+      </Header> -->
+      <CardList
+        v-if="isFetched && stations.get('saved')?.length"
+        key="list"
+      >
+        <AdapterCard
+          v-for="item in stations.get('saved')"
+          :key="item._id"
+          :card="item"
+          :isDraggable="false"
+          placeholderImage=""
+          @deleteEntity="(payload: unknown) => $emit('deleteEntity', payload)"
         />
-      </ul>
-
-      <ul
-        v-if="stations.isFetched"
-        class="stations --saved"
-        key="saved"
+      </CardList>
+      <CardList
+        v-if="isFetched && stations.get('all')?.length"
+        key="list"
       >
-        <!-- <CardWrapper
-          v-for="station in stations.data.get('saved')"
-          :key="station.stationuuid"
-        > -->
-          <!-- <CardRadio
-            :station="station"
-            :current="playingTrack"
-            :genre="activeGenre"
-            :isSaved="true"
-            @playStation="playStation"
-            @fetchByGenre="setNewGenre"
-            @removeStationFromDatabase="removeStationFromDatabase"
-          /> -->
-        <!-- </CardWrapper> -->
-      </ul>
-
-      <ul
-        v-if="stations.isFetched"
-        class="stations"
-        key="all"
-      >
-        <!-- <CardWrapper
-          v-for="station in filteredStations"
-          :key="station.stationuuid"
-        > -->
-          <!-- <CardRadio
-            :station="station"
-            :current="playingTrack"
-            :genre="activeGenre"
-            :isSaved="false"
-            @playStation="playStation"
-            @fetchByGenre="setNewGenre"
-            @saveStationToDatabase="saveStationToDatabase"
-          /> -->
-        <!-- </CardWrapper> -->
-      </ul>
+        <AdapterCard
+          v-for="item in stations.get('all')"
+          :key="item._id"
+          :card="item"
+          :isDraggable="false"
+          placeholderImage=""
+          @action:play="playStation"
+        />
+      </CardList>
     </transition-group>
-  </section>      
+  </section>
 </template>
 
 <script lang="ts">
-
-import { defineComponent, onMounted, ref, reactive, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { RadioPage, RadioStationResponse } from '~/types/Radio'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { RadioPageData } from '~/types/Radio'
+import RadioCard from '~/classes/RadioCard'
 import Preloader from '~/components/Preloader.vue'
-import Button from '~/components/Button/Button.vue'
-// import CardWrapper from '~/components/Cards/CardWrapper.vue'
-import RadioCard from '~/components/Cards/RadioCard.vue'
-import RadioServices from '~/services/RadioServices'
+import CardList from '~/components/Cards/CardList.vue'
+import AdapterCard from '~/components/Cards/AdapterCard.vue'
+import radioServices from '~/services/radio.services'
+import store from '~/store'
 
 export default defineComponent({
+  name: 'Radio',
   components: {
     Preloader,
-    Button,
-    // CardWrapper,
-    RadioCard
+    CardList,
+    AdapterCard
   },
-
   setup() {
     const router = useRouter()
     const route = useRoute()
+    const { actions } = store
 
+    const stations = reactive<RadioPageData>(new Map())
     const activeGenre = ref(route.query.p || 'jazz')
-    
-    const stations = reactive<RadioPage>({
-      isFetched: false,
-      data: new Map()
-    })
+    const isFetched = ref(false)
 
-    const genres = reactive([
-      'jazz', 'blues', 'rock', 'indie', 'hip-hop',
-      'metal', 'classical', 'electronic', 'ambient'
-    ])
+    const fetchStations = async () => {
+      try {
+        const [savedStations, allStations] = await Promise.all([
+          radioServices.get(),
+          radioServices.get({ genre: String(activeGenre.value), offset: 0 })
+        ])
 
-    const playingTrack = computed(() => false /* store.getters.playingTrack */)
-
-    const filteredStations = computed(() => {
-      if (!stations.data.get('saved')?.length) {
-        return stations.data.get('all')
-      }
-
-      return stations.data.get('all')?.filter((station) => (
-          !stations.data.get('saved')?.some((s: RadioStationResponse) => (
-            s.stationuuid === station.stationuuid
-          ))
-        ))
-    })
-
-    const playStation = (payload: RadioStationResponse) => {
-      // store.commit('setPlayingStation', payload)
-    }
-
-    const setNewGenre = (genre: string) => {
-      activeGenre.value = genre
-      stations.isFetched = false
-      router.push({ query: { p: genre } })
-      fetchAllStations()
-    }
-
-    const moveSavedToList = (id: string) => {
-      const movedStationIndex = stations.data.get('all')?.findIndex((station: RadioStationResponse) => (
-        station.stationuuid === id
-      ))
-
-      if (movedStationIndex && movedStationIndex > -1) {
-        const movedStation = stations.data.get('all')?.splice(movedStationIndex, 1)
-
-        if (movedStation) {
-          stations.data.get('saved')?.push(...movedStation)
-        }
+        stations.set('saved', savedStations.map((station) => new RadioCard(station, 'RadioCard')))
+        stations.set('all', allStations.map((station) => new RadioCard(station, 'RadioCard')))
+      } catch (error) {
+        console.error(error)
+      } finally {
+        isFetched.value = true
       }
     }
 
-    const removeStation = (id: string) => {
-      const deletedStationIndex = stations.data.get('saved')?.findIndex((station: RadioStationResponse) => (
-        station.stationuuid === id
-      ))
-
-      if (deletedStationIndex && deletedStationIndex > -1) {
-        stations.data.get('saved')?.splice(deletedStationIndex, 1)
-      }
-    }
-
-    const saveStationToDatabase = async (station: RadioStationResponse) => {
-      const { stationuuid, name } = station
-
-      // RadioServices.save({ stationuuid, name })
-      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-      //   .then(_ => moveSavedToList(stationuuid))
-      //   .catch((error) => console.dir(error))
-    }
-
-    const removeStationFromDatabase = async (payload: RadioStationResponse) => {
-      // RadioServices.remove(payload.stationuuid)
-      //   .then((message) => store.commit('setSnackbarMessage', { message, type: 'success' }))
-      //   .then(_ => removeStation(payload.stationuuid))
-      //   .catch((error) => console.dir(error))
-    }
-
-    const radioSetter = (key: 'saved' | 'all', data: RadioStationResponse[]) => {
-      stations.data.set(key, data)
-
-      if (stations.data.size === 2) {
-        stations.isFetched = true
-      }
-    }
-
-    const fetchSavedStations = () => {
-      RadioServices.savedStations()
-        .then((data) => radioSetter('saved', data))
-        .catch((error) => console.dir(error))
-    }
-
-    const fetchAllStations = async () => {
-      RadioServices.allStations({ genre: String(activeGenre.value), offset: 0 })
-        .then((data) => radioSetter('all', data))
-        .catch((error) => console.dir(error))
+    const playStation = (station: RadioCard) => {
+      actions.setPlayingStation(station)
     }
 
     onMounted(() => {
@@ -192,81 +97,14 @@ export default defineComponent({
         router.push({ query: { p: activeGenre.value } })
       }
 
-      fetchSavedStations()
-      fetchAllStations()
+      fetchStations()
     })
 
     return {
       stations,
-      activeGenre,
-      filteredStations,
-      genres,
-      playStation,
-      playingTrack,
-      setNewGenre,
-      saveStationToDatabase,
-      removeStationFromDatabase
+      isFetched,
+      playStation
     }
   }
 })
-
 </script>
-
-<style lang="scss" scoped>
-
-@import '~/scss/variables';
-@import 'include-media';
-
-.genres {
-  display: flex;
-  padding: 25px;
-
-  @include media('<laptop') {
-    width: 100%;
-    overflow: auto;
-  }
-
-  @include media('>=laptop') {
-    flex-wrap: wrap;
-  }
-
-  .button {
-    margin-right: 5px;
-  }
-}
-
-.stations {
-  padding: 25px;
-  display: grid;
-  gap: 15px;
-
-  @include media('>=tablet') {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  @include media('>=laptop') {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-  &.--saved {
-    min-height: auto;
-    background-color: $paleLT;
-
-    @include media('<desktop') {
-      padding-bottom: 25px;
-    }
-
-    @include media('>=desktop') {
-      padding-bottom: 10px;
-    }
-  }
-
-  .card {
-    width: 100%;
-    display: grid;
-    grid-template-rows: 1fr auto;
-  }
-}
-
-</style>

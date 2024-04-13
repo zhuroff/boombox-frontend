@@ -59,7 +59,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent, PropType, Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ImagePayload, EntityImagesKeys } from '~/types/Common'
@@ -129,7 +128,7 @@ export default defineComponent({
     watch(heroTitle, (newValue) => {
       if (typeof inputTimer.value === 'number') {
         clearTimeout(inputTimer.value)
-        
+
         inputTimer.value = setTimeout(() => {
           emit('saveTitle', newValue)
         }, 1000)
@@ -200,7 +199,7 @@ export default defineComponent({
       cursor: pointer;
       opacity: 0;
       transition: opacity 0.3s $animation;
-      
+
       input {
         position: absolute;
         width: 0;

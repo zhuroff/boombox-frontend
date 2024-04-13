@@ -1,9 +1,11 @@
-type RadioConfig = {
+import RadioCard from '~/classes/RadioCard'
+
+export interface RadioConfig {
   genre: string
   offset: number
 }
 
-type RadioStationResponse = {
+export interface RadioStation {
   country: string
   name: string
   stationuuid: string
@@ -12,19 +14,9 @@ type RadioStationResponse = {
   tags: string
 }
 
-type RadioPage = {
-  isFetched: boolean
-  data: Map<'saved' | 'all', RadioStationResponse[]>
-}
-
-type RadioSavePayload = {
+export interface RadioSavePayload {
   stationuuid: string
   name: string
 }
 
-export {
-  RadioConfig,
-  RadioStationResponse,
-  RadioPage,
-  RadioSavePayload
-}
+export type RadioPageData = Map<string, RadioCard[]>
