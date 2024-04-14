@@ -1,17 +1,19 @@
 <template>
   <li class="cards__radio">
-    <div class="cards__radio-top">
-      <Button
-        size="medium"
-        :icon="isOnPlay ? 'pause' : 'play'"
-        @click="playStation"
-      />
-      <div class="cards__radio-data">
-        <div class="cards__radio-title">{{ toCapitalize(card.title) }}</div>
-        <div class="cards__radio-country">{{ card.country }}</div>
-      </div>
-    </div>
-    <div class="cards__radio-tags">
+    <div
+      class="cards__radio-title"
+      :title="toCapitalize(card.title)"
+    >{{ reduceString(toCapitalize(card.title), 40) }}</div>
+    <div class="cards__radio-country">{{ card.country }}</div>
+    <Button
+      size="medium"
+      isRounded
+      isOutlined
+      :icon="isOnPlay ? 'pause' : 'play'"
+      :style="{ backgroundColor: '#fcd568', borderColor: '#fcd568' }"
+      @click="playStation"
+    />
+    <!-- <div class="cards__radio-tags">
       <Button
         v-for="tag in tags"
         :key="tag"
@@ -19,13 +21,13 @@
         size="small"
         @click="playStation"
       />
-    </div>
+    </div> -->
   </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, reactive, PropType } from 'vue'
-import { toCapitalize } from '~/utils'
+import { toCapitalize, reduceString } from '~/utils'
 import store from '~/store'
 import RadioCard from '~/classes/RadioCard'
 import Button from '~/components/Button.vue'
@@ -44,22 +46,8 @@ export default defineComponent({
       type: Boolean,
       required: true
     }
-    // genre: {
-    //   type: String,
-    //   required: true
-    // },
-    // current: {
-    //   type: Object as any,
-    //   required: false
-    // },
-    // isSaved: {
-    //   type: Boolean,
-    //   required: false,
-    //   default: false
-    // }
   },
   setup(props, { emit }) {
-    console.log(props.card)
     const { actions, getters } = store
 
     const stationTags = reactive(computed(() => (
@@ -92,6 +80,7 @@ export default defineComponent({
       stationTags,
       playStation,
       toCapitalize,
+      reduceString,
       saveStationToDatabase,
       removeStationFromDatabase
     }
@@ -106,44 +95,31 @@ export default defineComponent({
 .cards {
 
   &__radio {
-    border-radius: $borderRadiusSM;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 15px 30px;
+    padding: 25px 15px;
+    background-color: $black;
     border: 1px solid $black;
-
-    &-top {
-      display: flex;
-      gap: 0.75rem;
-    }
+    border-radius: $borderRadiusMD;
+    color: $paleLT;
 
     &-title {
-      @include serif(1rem, 600);
+      @include serif(1.25rem, 600);
+      text-align: center;
+      margin-bottom: 0.25rem;
     }
 
     &-country {
       font-size: 0.875rem;
-    }
-  }
-}
-
-.card {
-  position: relative;
-  display: flex;
-  grid-column: 1;
-
-  &:hover {
-
-    .station__img {
-      opacity: 0;
-      transition: opacity 0.2s ease;
+      margin-bottom: 1rem;
+      text-align: center;
     }
 
-    .station__play {
-      opacity: 1;
-      transition: opacity 0.2s ease;
-    }
-
-    .station__save {
-      opacity: 1;
-      transition: opacity 0.3s $animation;
+    .button {
+      margin-top: auto;
     }
   }
 }

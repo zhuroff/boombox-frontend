@@ -3,6 +3,7 @@ import RadioCard from '~/classes/RadioCard'
 export interface RadioConfig {
   genre: string
   offset: number
+  limit: number
 }
 
 export interface RadioStation {

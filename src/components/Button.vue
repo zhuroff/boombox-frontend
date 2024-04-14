@@ -5,6 +5,8 @@
       {
         '--outlined': isOutlined,
         '--inverted': isInverted,
+        '--rounded': isRounded,
+        '--active': isActive,
         '--text': isText
       },
       `--${size}`,
@@ -54,6 +56,11 @@ export default defineComponent({
       required: false,
       default: false
     },
+    isActive: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     isOutlined: {
       type: Boolean,
       required: false,
@@ -70,6 +77,11 @@ export default defineComponent({
       default: false
     },
     isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isRounded: {
       type: Boolean,
       required: false,
       default: false
@@ -90,6 +102,10 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  &.--rounded {
+    border-radius: 50%;
+  }
 
   &.--inverted {
     border-color: $paleDP;
@@ -117,15 +133,17 @@ export default defineComponent({
 
     &:hover {
       color: $paleDP;
-      // stroke: $paleDP;
-      // fill: $paleDP;
       transition: all 0.2s $animation;
     }
   }
 
   &.--small {
-    padding: .25rem .5rem;
     font-size: .75rem;
+    width: 30px;
+
+    &.--rounded {
+      height: 30px;
+    }
 
     .button__label {
 
@@ -140,16 +158,19 @@ export default defineComponent({
   }
 
   &.--medium {
-    padding: .5rem 1rem;
     font-size: .875rem;
     height: 36px;
+
+    &.--rounded {
+      width: 36px;
+    }
 
     .button__label {
       
       & + .icon {
        margin-left: 5px;
       }
-   }
+    }
 
     .icon {
       width: 1.25rem;
@@ -157,8 +178,12 @@ export default defineComponent({
   }
 
   &.--large {
-    padding: .75rem 1.25rem;
     font-size: 1rem;
+    height: 42px;
+
+    &.--rounded {
+      width: 42px;
+    }
 
     .button__label {
       
@@ -172,7 +197,7 @@ export default defineComponent({
     }
   }
 
-  &:not(.--outlined):not(.--text) {
+  &:not(.--outlined):not(.--text):not(.--inverted) {
     border-color: $dark;
     background-color: $dark;
     color: $white;
@@ -183,6 +208,11 @@ export default defineComponent({
       color: $black;
       transition: all 0.2s $animation;
     }
+  }
+
+  &.--active {
+    background-color: $warning !important;
+    color: $black !important;
   }
 
   &.--outlined.--text {

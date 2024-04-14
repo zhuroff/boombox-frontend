@@ -101,3 +101,9 @@ export const toCapitalize = (str: string) => (
     .map((word) => word.toLowerCase().charAt(0).toUpperCase() + word.toLowerCase().slice(1))
     .join(' ')
 )
+
+export const reduceString = (str: string, length: number) => (
+  str.length <= length
+    ? str
+    : str.slice(0, length).trim() + '...'
+)
