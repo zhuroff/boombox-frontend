@@ -110,14 +110,9 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/radio',
-    name: 'radio',
-    component: () => import(/* webpackChunkName: 'radio' */ '~/pages/radio/index.vue')
-  },
-  {
     path: '/settings',
     name: 'settings',
-    component: () => import(/* webpackChunkName: 'radio' */ '~/pages/settings/index.vue')
+    component: () => import(/* webpackChunkName: 'settings' */ '~/pages/settings/index.vue')
   }
   // {
   //   path: '/login',

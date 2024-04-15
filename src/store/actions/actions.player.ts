@@ -6,7 +6,6 @@ import AlbumTrack from '~/classes/AlbumTrack'
 import PlayerTrack from '~/classes/PlayerTrack'
 import AlbumPage from '~/classes/AlbumPage'
 import CompilationPage from '~/classes/CompilationPage'
-import RadioCard from '~/classes/RadioCard'
 
 export const useActionsPlayer = (state: AppStateInterface) => {
   const {
@@ -186,54 +185,6 @@ export const useActionsPlayer = (state: AppStateInterface) => {
     }
   }
 
-  const setPlayingStation = (station: RadioCard) => {
-    if (state.playingTrack._id === station._id) {
-      if (state.playingTrack.isOnPause) {
-        state.playingTrack.isOnPause = false
-        state.playingTrack.audio.play()
-      } else {
-        state.playingTrack.isOnPause = true
-        state.playingTrack.audio.pause()
-      }
-    } else {
-      // state.playingTrack = new PlayerTrack({
-      //   _id: station._id,
-      //   title: station.title
-      // })
-
-      // _id: string
-      // title: string  
-      // source: string
-      // cloudURL: string
-      // duration: number
-      // artistName: string
-      // albumName: string
-      // albumID: string
-      // albumFolder: string
-      // year: string
-      // cover?: string
-      // isOnLoading: boolean  
-      // isOnPause: boolean
-      // isOnRepeat: boolean
-      // progressLine: number
-      // progressTime: number
-      // audio: HTMLAudioElement
-      // crackle: HTMLAudioElement
-
-      // state.playingTrack.albumName = station.country
-      // state.playingTrack.artistName = station.title
-      // state.playingTrack.audio.src = station.urlResolved
-      // state.playingTrack._id = station._id
-      // state.playingTrack.isOnPause = false
-      // state.playingTrack.isOnRepeat = false
-      // state.playingTrack.title = station.title
-      // state.playingTrack.cover = '/img/album.webp'
-      // // state.currentPlaylist = { ...initPlaylist }
-      // state.currentPlaylist = {} as any
-      // state.playingTrack.audio.play()
-    }
-  }
-
   return {
     playTrack,
     setTrackOnPause,
@@ -244,7 +195,6 @@ export const useActionsPlayer = (state: AppStateInterface) => {
     addAlbumToPlaylist,
     removeTrackFromPlaylist,
     togglePlayerVisibility,
-    setPlayingStation,
     playTrackNext,
     addToEndOfList,
     switchToPrevTrack,

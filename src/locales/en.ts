@@ -16,7 +16,6 @@ export const localesEN: LocaleDictionary = {
     embedded: 'Embedded',
     collections: 'Collections',
     compilations: 'Compilations',
-    radio: 'Radio',
     toy: 'TOY',
     settings: 'Settings',
     tracks: 'Tracks'
@@ -28,8 +27,7 @@ export const localesEN: LocaleDictionary = {
   headings: {
     albumsPage: 'The collection contains {x} albums',
     collectionsPage: 'Total collections: {x}',
-    compilationsPage: 'Total compilations: {x}',
-    radio: 'Online radio stations'
+    compilationsPage: 'Total compilations: {x}'
   },
   getRandomAlbum: 'Random album',
   unknownTime: 'unknown time',
@@ -131,27 +129,5 @@ export const localesEN: LocaleDictionary = {
   toy: {
     emptyGenres: 'There are no any collection yet',
     emptyYears: 'There are no any periods yet'
-  },
-  radio: {
-    genres: {
-      acoustic: 'Acoustic',
-      alternative: 'Alternative Rock',
-      ambient: 'Ambient',
-      progressive_rock: 'Progressive Rock',
-      black_metal: 'Black Metal',
-      blues: 'Blues',
-      classic_rock: 'Classic Rock',
-      classical: 'Classical',
-      death_metal: 'Death Metal',
-      electronic: 'Electronic',
-      hard_rock: 'Hard Rock',
-      heavy_metal: 'Heavy Metal',
-      hip_hop: 'Hip Hop',
-      indie: 'Indie',
-      jazz: 'Jazz',
-      psychedelic_rock: 'Psychedelic Rock',
-      punk_rock: 'Punk Rock',
-      trip_hop: 'Trip Hop'
-    }
   }
 }

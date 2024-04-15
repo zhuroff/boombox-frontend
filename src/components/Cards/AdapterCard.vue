@@ -13,7 +13,6 @@ import { defineComponent, computed, PropType } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import ListCardBasic from '~/classes/ListCardBasic'
 import AlbumCard from './AlbumCard.vue'
-import RadioCard from './RadioCard.vue'
 import CategoryCard from './CategoryCard.vue'
 import EmbeddedCard from './EmbeddedCard.vue'
 import CollectionCard from './CollectionCard.vue'
@@ -23,7 +22,6 @@ export default defineComponent({
   name: 'AdapterCard',
   components: {
     AlbumCard,
-    RadioCard,
     CategoryCard,
     EmbeddedCard,
     CollectionCard,

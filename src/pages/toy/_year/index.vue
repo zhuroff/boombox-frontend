@@ -115,9 +115,8 @@ export default defineComponent({
           coverURL = '/img/album.webp'
         }
 
-        const x: AlbumPage = {
+        const toyAlbum: AlbumPage = {
           _id: genreParams.value.id,
-          // title: `Tracks of The Years: ${genreParams.value.title} - ${props.title}`,
           title: genreParams.value.title,
           caption: `Tracks of The Years / ${props.title} / ${genreParams.value.title}`,
           cloudURL: String(genreParams.value.cloudURL),
@@ -152,8 +151,8 @@ export default defineComponent({
             return acc
           }, [])
         }
-        album.value = x
-        actions.setPlayerPlaylist(x)
+        album.value = toyAlbum
+        actions.setPlayerPlaylist(toyAlbum)
         isPageLoading.value = false
       } catch (error) {
         console.error(error)

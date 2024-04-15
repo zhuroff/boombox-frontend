@@ -16,7 +16,6 @@ export const localesBY: LocaleDictionary = {
     embedded: 'Фрэймы',
     collections: 'Калекцыi',
     compilations: 'Кампіляцыi',
-    radio: 'Радыё',
     toy: 'TOY',
     settings: 'Налады',
     tracks: 'Трэкi'
@@ -28,8 +27,7 @@ export const localesBY: LocaleDictionary = {
   headings: {
     albumsPage: 'У калекцыi {x} альбомаў',
     collectionsPage: 'Усяго калекцый: {x}',
-    compilationsPage: 'Усяго компіляцый: {x}',
-    radio: 'Онлайн радыё',
+    compilationsPage: 'Усяго компіляцый: {x}'
   },
   getRandomAlbum: 'Выпадковы альбом',
   unknownTime: 'невядомы час',
@@ -131,27 +129,5 @@ export const localesBY: LocaleDictionary = {
   toy: {
     emptyGenres: 'Калекцыі пакуль няма',
     emptyYears: 'Перыядаў пакуль няма'
-  },
-  radio: {
-    genres: {
-      acoustic: 'Акустыка',
-      alternative: 'Альтэрнатыўны рок',
-      ambient: 'Эмбіент',
-      progressive_rock: 'Прагрэсіўны рок',
-      black_metal: 'Блэк-метал',
-      blues: 'Блюз',
-      classic_rock: 'Класiчны рок',
-      classical: 'Класічная музыка',
-      death_metal: 'Дэз-метал',
-      electronic: 'Электронная музыка',
-      hard_rock: 'Хард-рок',
-      heavy_metal: 'Хэві-метал',
-      hip_hop: 'Хіп-хоп',
-      indie: 'Інды-рок',
-      jazz: 'Джаз',
-      psychedelic_rock: 'Псiхадэлiчны рок',
-      punk_rock: 'Панк-рок',
-      trip_hop: 'Трып-хоп'
-    }
   }
 }
