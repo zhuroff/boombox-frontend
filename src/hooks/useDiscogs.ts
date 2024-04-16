@@ -99,6 +99,7 @@ export const useDiscogs = () => {
   }
 
   const fetchDiscogsInfo = async (entity: AlbumPage | EmbeddedItem) => {
+    if (!entity.artist) return
     isDiscogsFetched.value = false
     discogsData.value = []
     resetDiscogsFilters()

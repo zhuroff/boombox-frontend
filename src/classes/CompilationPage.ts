@@ -14,8 +14,8 @@ export default class CompilationPage<T extends TrackRes> extends GatheringEntity
     this.tracks = compilation.tracks.map((track, index) => (
       new AlbumTrack({
         ...track,
-        title: `${track.artist.title} - ${track.title} («${track.inAlbum.title}», ${track.inAlbum.period.title})`
-      }, index + 1, track.inAlbum.period.title, compilation.avatar)
+        title: `${track.artist.title} - ${track.title} («${track.inAlbum.title}», ${track.period.title})`
+      }, index + 1, compilation.avatar)
     ))
   }
 }

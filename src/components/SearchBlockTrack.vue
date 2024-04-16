@@ -9,6 +9,7 @@
       <TrackItemPlay
         :track="trackToPlay"
         :title="lang('player.playNow')"
+        :isTOY="false"
         isSearched
       />
       <Button 
@@ -64,7 +65,7 @@ export default defineComponent({
     const { lang } = useLocales()
     const { actions, getters } = store
     const trackToPlay = computed(() => (
-      new AlbumTrack(track, 0, track.inAlbum.period.title, track.coverURL, true)
+      new AlbumTrack(track, 0, track.coverURL, true)
     ))
     const isOutAlbumAdded = computed(() => (
       getters.currentPlaylistTracks.value.some(({ _id }) => _id === trackToPlay.value._id)

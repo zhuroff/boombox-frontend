@@ -26,8 +26,8 @@ export const useCategory = (entityType: string) => {
 
   const sortAlbumsByYears = (data: Array<AlbumItem | EmbeddedItem>) => {
     const sorted = data.sort((a, b) => {
-      const aYear = Number(a.period.title)
-      const bYear = Number(b.period.title)
+      const aYear = Number(a.period?.title)
+      const bYear = Number(b.period?.title)
 
       if (aYear < bYear) return -1
       if (aYear > bYear) return 1

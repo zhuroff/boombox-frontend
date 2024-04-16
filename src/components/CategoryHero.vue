@@ -42,35 +42,51 @@
         </form>
       </div>
       <div class="hero__content">
-        <input
-          v-if="isEditable"
-          type="text"
-          class="hero__title"
-          v-model="heroTitle"
-        >
-        <div
-          v-else
-          class="hero__title"
-        >{{ heroTitle }}</div>
-        <div class="hero__description">{{ description }}</div>
+        <div class="hero__content-info">
+          <input
+            v-if="isEditable"
+            type="text"
+            class="hero__title"
+            v-model="heroTitle"
+          >
+          <div
+            v-else
+            class="hero__title"
+          >{{ heroTitle }}</div>
+          <div class="hero__description">{{ description }}</div>
+        </div>
+        <div class="hero__content-actions">
+          <Button
+            label="Play wave"
+            size="large"
+            :disabled="!waveAlbum?.tracks?.length"
+            @click="playWave"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref, watch } from 'vue'
+import { defineComponent, onMounted, PropType, Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { TrackRes } from '~/types/ReqRes'
 import { ImagePayload, EntityImagesKeys } from '~/types/Common'
-import { hostString } from '~/utils'
-import CategoryPage from '~/classes/CategoryPage'
+import { hostString, categoryKeyDict } from '~/utils'
 import Sprite from '~/components/Sprite/Sprite.vue'
+import Button from '~/components/Button.vue'
+import CategoryPage from '~/classes/CategoryPage'
 import UploadServices from '~/services/UploadServices'
+import dbServices from '~/services/database.services'
+import AlbumPage from '~/classes/AlbumPage'
+import store from '~/store'
 
 export default defineComponent({
   name: 'CategoryHero',
   components: {
-    Sprite
+    Sprite,
+    Button
   },
   props: {
     data: {
@@ -97,11 +113,13 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const { actions } = store
     const route = useRoute()
     const posterElement: Ref<null | HTMLInputElement> = ref(null)
     const avatarElement: Ref<null | HTMLInputElement> = ref(null)
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
     const heroTitle = ref(props.data.title)
+    const waveAlbum = ref<null | AlbumPage>(null)
 
     const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => {
       if (element?.files?.length) {
@@ -123,6 +141,35 @@ export default defineComponent({
       }
     }
 
+    const getCategoryWave = async () => {
+      try {
+        const tracks = await dbServices.getEntityList<TrackRes[]>({
+          page: 1,
+          limit: 50,
+          filter: {
+            from: props.entity,
+            key: `${categoryKeyDict[props.entity]}.title`,
+            name: props.data.title
+          }
+        }, 'tracks/wave')
+
+        waveAlbum.value = new AlbumPage({
+          _id: '1',
+          title: `Wave by ${categoryKeyDict[props.entity]}: ${props.data.title}`,
+          tracks
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const playWave = () => {
+      if (!waveAlbum.value) return
+      actions.setPlayerPlaylist(waveAlbum.value)
+      actions.playTrack(waveAlbum.value.tracks[0], undefined)
+      actions.togglePlayerVisibility()
+    }
+
     const host = (pathname: string) => hostString(pathname)
 
     watch(heroTitle, (newValue) => {
@@ -135,11 +182,17 @@ export default defineComponent({
       }
     })
 
+    onMounted(() => {
+      getCategoryWave()
+    })
+
     return {
       posterElement,
       avatarElement,
       heroTitle,
+      waveAlbum,
       saveImage,
+      playWave,
       host
     }
   }
@@ -299,6 +352,9 @@ export default defineComponent({
     background-color: $transBlack;
     width: 100%;
     box-shadow: $shadowMedium;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__title {

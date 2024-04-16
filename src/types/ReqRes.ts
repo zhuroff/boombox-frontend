@@ -9,6 +9,8 @@ export interface TrackRes extends Required<BasicEntity> {
   lyrics?: string
   order?: number
   artist: BasicEntity
+  genre: BasicEntity
+  period: BasicEntity
   inAlbum: Pick<AlbumItem, '_id' | 'title' | 'cloudURL' | 'folderName' | 'period' | 'genre'>
   inCompilations?: BasicEntity[]
 }
@@ -20,12 +22,12 @@ export interface EmbeddedItemRes extends BasicEntity {
   period: BasicEntity
 }
 
-export interface AlbumItemRes extends Required<BasicEntity> {
-  folderName: string
-  inCollections: BasicEntity[]
-  artist: BasicEntity
-  genre: BasicEntity
-  period: BasicEntity
+export interface AlbumItemRes extends BasicEntity {
+  folderName?: string
+  inCollections?: BasicEntity[]
+  artist?: BasicEntity
+  genre?: BasicEntity
+  period?: BasicEntity
   coverURL?: string
 }
 

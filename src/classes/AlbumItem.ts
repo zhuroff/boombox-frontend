@@ -5,13 +5,13 @@ import ListCardBasic from './ListCardBasic'
 export default class AlbumItem extends ListCardBasic {
   readonly _id: string
   readonly title: string
-  readonly caption: string
-  readonly cloudURL: string
-  readonly folderName: string
-  readonly inCollections: BasicEntity[]
-  readonly artist: BasicEntity
-  readonly genre: BasicEntity
-  readonly period: BasicEntity
+  readonly cloudURL?: string
+  readonly folderName?: string
+  readonly inCollections?: BasicEntity[]
+  readonly caption?: string
+  readonly artist?: BasicEntity
+  readonly genre?: BasicEntity
+  readonly period?: BasicEntity
   readonly coverURL?: string
 
   constructor(album: AlbumItemRes, cardType: string, cardPath: string) {
@@ -25,6 +25,9 @@ export default class AlbumItem extends ListCardBasic {
     this.genre = album.genre
     this.period = album.period
     this.coverURL = album.coverURL
-    this.caption = `${album.artist.title } / ${album.period.title} / ${album.genre.title}`
+
+    if (album.artist && album.period && album.genre) {
+      this.caption = `${album.artist.title } / ${album.period.title} / ${album.genre.title}`
+    }
   }
 }

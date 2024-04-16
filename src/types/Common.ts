@@ -77,8 +77,8 @@ export interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
 
 export interface RequestConfig {
   page: number
-  sort: SortingValue
   limit: number
+  sort?: SortingValue
   isRandom?: true
   filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
 }

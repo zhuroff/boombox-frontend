@@ -107,3 +107,10 @@ export const reduceString = (str: string, length: number) => (
     ? str
     : str.slice(0, length).trim() + '...'
 )
+
+export const categoryKeyDict: Record<string, string> = {
+  genres: 'genre',
+  artists: 'artist',
+  periods: 'period',
+  collections: 'collection',
+}

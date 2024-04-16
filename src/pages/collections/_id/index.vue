@@ -95,7 +95,7 @@ export default defineComponent({
       (data.value?.albums || [])
         .map((album) => ({
           ...album,
-          caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`
+          caption: `${album.artist!.title} / ${album.period!.title} / ${album.genre!.title}`
         }))
     ))
 

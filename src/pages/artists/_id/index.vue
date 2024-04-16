@@ -51,7 +51,7 @@ export default defineComponent({
       sortAlbumsByYears([...(data.value?.albums || []), ...(data.value?.embeddedAlbums || [])])
         .map((album) => ({
           ...album,
-          caption: `${album.artist.title} / ${album.period.title} / ${album.genre.title}`
+          caption: `${album.artist!.title} / ${album.period!.title} / ${album.genre!.title}`
         }))
     ))
 

@@ -144,7 +144,7 @@ export default defineComponent({
                   h(
                     'span',
                     {},
-                    (data as AlbumItem).artist.title
+                    (data as AlbumItem).artist?.title
                   )
                 ]
               )

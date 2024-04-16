@@ -43,7 +43,7 @@ export const useSinglePage = <T extends BasicEntity, C, R>(
     }
   }
 
-  const fetchBooklet = async (folder: string, cloud: string) => {
+  const fetchBooklet = async (folder: string, cloud?: string) => {
     booklet.value.isActive = true
     if (booklet.value.items.length > booklet.value.offset || !cloud) return
 
@@ -68,8 +68,9 @@ export const useSinglePage = <T extends BasicEntity, C, R>(
     }
   }
 
-  const bookletPageChanged = (data: BookletSlideState, folder: string, cloud: string) => {
+  const bookletPageChanged = (data: BookletSlideState, cloud?: string, folder?: string) => {
     if (
+      folder && cloud &&
       booklet.value.items.length !== booklet.value.total
       && data.slidingToIndex === booklet.value.items.length - 5
     ) {

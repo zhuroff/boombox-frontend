@@ -21,6 +21,10 @@ export default class PlayerTrack {
   crackle: HTMLAudioElement
 
   constructor(track: AlbumTrack) {
+    if (!track.inAlbum?.folderName) {
+      throw new Error('folderName property is not defined')
+    }
+
     this._id = track._id
     this.title = track.title
     this.source = track.path
@@ -30,7 +34,7 @@ export default class PlayerTrack {
     this.albumName = track.inAlbum.title || ''
     this.albumID = track.inAlbum._id
     this.albumFolder = track.inAlbum.folderName
-    this.year = track.period || ''
+    this.year = track.period.title
     this.cover = track.albumCover
     this.isOnPause = false
     this.isOnRepeat = false

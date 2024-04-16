@@ -12,7 +12,7 @@
     @switchPagination="setDiscogsPaginationPage"
     @closeBookletModal="closeBookletModal"
     @bookletPageChanged="(data) => {
-      bookletPageChanged(data, album.folderName, album.cloudURL)
+      bookletPageChanged(data, album.cloudURL, album.folderName)
     }"
   >
     <template #hero>
@@ -141,6 +141,8 @@ export default defineComponent({
     }
 
     const getRelated = async () => {
+      if (!album.value.artist || !album.value.genre) return
+
       const relatedAlbumsConfig: RelatedAlbumsReqFilter[] = [
         {
           from: 'artists',
@@ -179,6 +181,8 @@ export default defineComponent({
     }
 
     const bookletHandler = async () => {
+      if (!album.value.folderName) return
+
       if (booklet.value.isEmpty) {
         actions.setSnackbarMessage({
           message: lang('bookletNotFound'),
