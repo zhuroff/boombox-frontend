@@ -154,11 +154,7 @@ export default defineComponent({
       }
 
       @include media('>=desktop') {
-        font-weight: 600;
-        color: $dark;
-        font-size: 14px;
-        position: relative;
-        margin-top: 7px;
+        @include cardHeading();
       }
     }
 
@@ -169,10 +165,7 @@ export default defineComponent({
       }
 
       @include media('>=desktop') {
-        font-weight: 600;
-        color: $paleDP;
-        font-size: 12px;
-        position: relative;
+        @include cardCaption();
       }
     }
 

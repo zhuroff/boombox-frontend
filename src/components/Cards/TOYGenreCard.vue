@@ -57,7 +57,7 @@ export default defineComponent({
   }
 
   &-link {
-    @include serif(2.5rem, 400);
+    @include serif(2.5rem);
     display: flex;
     justify-content: center;
     align-items: center;

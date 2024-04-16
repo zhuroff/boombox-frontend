@@ -4,8 +4,6 @@
       class="modal__close"
       icon="close"
       size="large"
-      isOutlined
-      isInverted
       isText
       @click="closeModal"
     />    

@@ -98,7 +98,7 @@ export default defineComponent({
 .textarea-input {
   &__element {
     overflow-y: hidden;
-    font-size: 1rem;
+    font-size: .875rem;
     display: block;
     width: 100%;
     border-radius: $borderRadiusSM;

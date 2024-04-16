@@ -29,7 +29,6 @@
       />
       <Button
         icon="save"
-        isOutlined
         :style="{ marginLeft: '0.5rem' }"
       />
     </form>
@@ -145,7 +144,7 @@ export default defineComponent({
     }
 
     span {
-      @include serif(1rem, 600);
+      @include serif(1rem);
       color: $black;
     }
   }

@@ -117,7 +117,7 @@ export default defineComponent({
     &.--medium {
       padding: .5rem 1rem;
       font-size: .875rem;
-      height: 36px;
+      height: $inputSizeMD;
     }
 
     &.--error {

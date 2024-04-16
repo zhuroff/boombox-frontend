@@ -16,7 +16,6 @@
         v-if="!isOutAlbumAdded"
         icon="chevron-right"
         size="small"
-        isOutlined
         :title="lang('player.playNext')"
         @click="() => playTrackNext(trackToPlay)"
       />
@@ -24,7 +23,6 @@
         v-if="!isOutAlbumAdded"
         icon="chevron-right-double"
         size="small"
-        isOutlined
         :title="lang('player.addToList')"
         @click="() => addToEndOfList(trackToPlay)"
       />
@@ -32,7 +30,6 @@
         v-if="isOutAlbumAdded"
         icon="playlist-remove"
         size="small"
-        isOutlined
         :title="lang('player.removeFromList')"
         @click="() => removeTrackFromPlaylist(trackToPlay._id)"
       />

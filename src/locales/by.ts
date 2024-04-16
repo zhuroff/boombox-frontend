@@ -107,7 +107,8 @@ export const localesBY: LocaleDictionary = {
     playNow: 'Граць зараз',
     playNext: 'Граць наступным',
     addToList: 'Дадаць да плэйлiста',
-    removeFromList: 'Выдаліць з плэйлiста'
+    removeFromList: 'Выдаліць з плэйлiста',
+    waveButton: 'Граць гэтую хвалю'
   },
   totalAlbums: 'Усяго альбомаў',
   deleteEntity: 'Выдаліць альбом',

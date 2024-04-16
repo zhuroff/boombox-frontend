@@ -107,7 +107,8 @@ export const localesEN: LocaleDictionary = {
     playNow: 'Play now',
     playNext: 'Play next',
     addToList: 'Add to playlist',
-    removeFromList: 'Remove from playlist'
+    removeFromList: 'Remove from playlist',
+    waveButton: 'Play this wave'
   },
   totalAlbums: 'Total albums',
   deleteEntity: 'Delete album',

@@ -3,26 +3,23 @@
     :class="[
       'button',
       {
-        '--outlined': isOutlined,
         '--inverted': isInverted,
         '--rounded': isRounded,
-        '--active': isActive,
         '--text': isText
       },
       `--${size}`,
       className
     ]"
-    :disabled="isDisabled"
   >
+    <Sprite
+      v-if="icon"
+      :name="icon"
+    />
     <span
       v-if="label"
       class="button__label">{{ label }}
     </span>
     <slot></slot>
-    <Sprite
-      v-if="icon"
-      :name="icon"
-    />
   </button>
 </template>
 
@@ -56,27 +53,12 @@ export default defineComponent({
       required: false,
       default: false
     },
-    isActive: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isOutlined: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isText: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     isInverted: {
       type: Boolean,
       required: false,
       default: false
     },
-    isDisabled: {
+    isText: {
       type: Boolean,
       required: false,
       default: false
@@ -102,47 +84,42 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: all 0.3s $animation;
+
+  &:hover {
+    background-color: $black;
+    color: $paleLT;
+    transition: all 0.3s $animation;
+  }
 
   &.--rounded {
     border-radius: 50%;
+    padding: 0 !important;
   }
 
   &.--inverted {
-    border-color: $paleDP;
-    color: $paleDP;
-    transition: all 0.2s $animation;
+    border-color: $paleLT;
+    color: $paleLT;
 
     &:hover {
-      border-color: $white;
-      color: $white;
-      transition: all 0.2s $animation;
-
-      .icon {
-        fill: $white;
-      }
-    }
-
-    .icon {
-      fill: $paleDP;
-    }
-  }
-
-  &.--text {
-    background-color: transparent;
-    border-color: transparent !important;
-
-    &:hover {
-      color: $paleDP;
-      transition: all 0.2s $animation;
+      background-color: $paleLT;
+      color: $black;
     }
   }
 
   &.--small {
-    font-size: .75rem;
-    width: 30px;
+    font-size: .625rem;
+    height: $inputSizeSM;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
 
     &.--rounded {
-      height: 30px;
+      width: $inputSizeSM;
     }
 
     .button__label {
@@ -158,11 +135,13 @@ export default defineComponent({
   }
 
   &.--medium {
-    font-size: .875rem;
-    height: 36px;
+    font-size: .75rem;
+    height: $inputSizeMD;
+    padding-left: 1rem;
+    padding-right: 1rem;
 
     &.--rounded {
-      width: 36px;
+      width: $inputSizeMD;
     }
 
     .button__label {
@@ -179,10 +158,12 @@ export default defineComponent({
 
   &.--large {
     font-size: 1rem;
-    height: 42px;
+    height: $inputSizeLG;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
 
     &.--rounded {
-      width: 42px;
+      width: $inputSizeLG;
     }
 
     .button__label {
@@ -197,37 +178,10 @@ export default defineComponent({
     }
   }
 
-  &:not(.--outlined):not(.--text):not(.--inverted) {
-    border-color: $dark;
-    background-color: $dark;
-    color: $white;
-    transition: all 0.2s $animation;
-
-    &:hover {
-      background-color: $warning;
-      color: $black;
-      transition: all 0.2s $animation;
-    }
-  }
-
-  &.--active {
-    background-color: $warning !important;
-    color: $black !important;
-  }
-
-  &.--outlined.--text {
-    background-color: transparent;
-    border-color: transparent;
-  }
-
   &[disabled] {
     pointer-events: none;
     cursor: default;
     opacity: 0.5;
-  }
-
-  &__label {
-    white-space: nowrap;
   }
 }
 </style>

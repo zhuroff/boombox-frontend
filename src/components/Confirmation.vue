@@ -4,7 +4,6 @@
     <div class="confirmation__actions">
       <Button
         :label="lang('delete')"
-        isOutlined
         @click="() => $emit('confirm')"
       />
       <Button

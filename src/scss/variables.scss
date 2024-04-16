@@ -1,4 +1,4 @@
-$font: 'Source Sans Pro', sans-serif;
+$font: 'Nunito', sans-serif;
 
 $white: #fff;
 $black: #2b2b2b;
@@ -18,6 +18,10 @@ $transLight: rgba(255, 255, 255, 0.7);
 $borderRadiusSM: 3px;
 $borderRadiusMD: 7px;
 $borderRadiusLG: 10px;
+
+$inputSizeSM: 30px;
+$inputSizeMD: 38px;
+$inputSizeLG: 46px;
 
 $containerWidth: 1198px;
 $asideWidth: 250px;
@@ -53,8 +57,23 @@ $breakpoints: (
   }
 }
 
-@mixin serif($size, $weight) {
-  font: $size Oranienbaum, serif;
+@mixin serif($size) {
+  font: $size 'Yeseva One', serif;
   letter-spacing: 1px;
-  font-weight: $weight;
+  font-weight: 400;
+}
+
+@mixin cardHeading() {
+  font-weight: 700;
+  color: $dark;
+  font-size: 0.875rem;
+  position: relative;
+  margin-top: 7px;
+}
+
+@mixin cardCaption() {
+  font-weight: 600;
+  color: $paleDP;
+  font-size: .75rem;
+  position: relative;
 }

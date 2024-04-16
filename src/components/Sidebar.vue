@@ -1,9 +1,9 @@
 <template>
   <aside :class="[{ '--opened': isExpanded }, 'aside']">
-    <ButtonBurger
+    <!-- <ButtonBurger
       :isActive="isExpanded"
       @burgerClick="burgerClick"
-    />
+    /> -->
     <router-link
       class="aside__homelink"
       to="/"
@@ -34,13 +34,13 @@
 import { computed, defineComponent } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
 import router from '~/router'
-import ButtonBurger from '~/components/Button/ButtonBurger.vue'
+// import ButtonBurger from '~/components/Button/ButtonBurger.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
   name: 'Sidebar',
   components: {
-    ButtonBurger,
+    // ButtonBurger,
     Sprite
   },
   props: {
@@ -74,7 +74,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../scss/variables.scss';
 @import 'include-media';
 
@@ -116,10 +116,11 @@ export default defineComponent({
   &__homelink {
     display: flex;
     align-items: center;
-    font-size: 16px;
+    font-size: 1.15rem;
     padding: 0 25px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 1px;
 
     @include media('<laptop') {
       justify-content: flex-end;
@@ -139,9 +140,9 @@ export default defineComponent({
       }
 
       @include media('>=laptop') {
-        width: 25px;
-        height: 25px;
-        margin-right: 10px;
+        width: 24px;
+        height: 24px;
+        margin-right: 0.5rem;
         flex: none;
         fill: $paleDP;
         stroke: $paleDP;

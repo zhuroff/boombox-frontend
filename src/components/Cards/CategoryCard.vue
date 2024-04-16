@@ -63,7 +63,6 @@ export default defineComponent({
 
   &__cover {
     display: block;
-    margin-bottom: 7px;
     background-color: $white;
     border-radius: 50%;
     object-fit: cover;
@@ -87,15 +86,11 @@ export default defineComponent({
   }
 
   &__title {
-    font-weight: 600;
-    color: $dark;
-    font-size: 14px;
+    @include cardHeading();
   }
 
   &__info {
-    font-weight: 600;
-    color: $paleDP;
-    font-size: 12px;
+    @include cardCaption();
   }
 }
 </style>

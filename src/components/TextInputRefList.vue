@@ -25,7 +25,6 @@
       icon="save"
       type="button"
       :disabled="newEntityInput.length < 3"
-      isOutlined
       @click="createNewRefEntity"
     />
   </div>

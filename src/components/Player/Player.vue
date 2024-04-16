@@ -74,7 +74,6 @@
               <Button
                 icon="close"
                 size="small"
-                isOutlined
                 isText
                 @click="(e) => removeFromPlaylist(e, track._id)"
               />

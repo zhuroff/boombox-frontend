@@ -89,7 +89,7 @@ export default defineComponent({
 }
 
 .toyempty {
-  @include serif(3rem, 600);
+  @include serif(3rem);
   display: flex;
   justify-content: center;
   align-items: center;

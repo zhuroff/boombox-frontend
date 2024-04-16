@@ -80,12 +80,12 @@ export default defineComponent({
   &__heading {
 
     @include media('<tablet') {
-      @include serif(1.25rem, 600);
+      @include serif(1.5rem);
       margin-right: 1rem;
     }
 
     @include media('>=tablet') {
-      @include serif(1.5rem, 600);
+      @include serif(1.75rem);
       margin-right: 2rem;
     }
   }

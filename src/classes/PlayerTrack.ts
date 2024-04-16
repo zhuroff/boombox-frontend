@@ -9,8 +9,8 @@ export default class PlayerTrack {
   artistName: string
   albumName: string
   albumID: string
-  albumFolder: string
   year: string
+  albumFolder?: string
   cover?: string
   isOnLoading: boolean  
   isOnPause: boolean
@@ -21,10 +21,6 @@ export default class PlayerTrack {
   crackle: HTMLAudioElement
 
   constructor(track: AlbumTrack) {
-    if (!track.inAlbum?.folderName) {
-      throw new Error('folderName property is not defined')
-    }
-
     this._id = track._id
     this.title = track.title
     this.source = track.path
@@ -33,7 +29,6 @@ export default class PlayerTrack {
     this.artistName = track.artist.title || ''
     this.albumName = track.inAlbum.title || ''
     this.albumID = track.inAlbum._id
-    this.albumFolder = track.inAlbum.folderName
     this.year = track.period.title
     this.cover = track.albumCover
     this.isOnPause = false
@@ -43,6 +38,10 @@ export default class PlayerTrack {
     this.progressTime = 0
     this.audio = new Audio(track.path || '')
     this.crackle = new Audio('/media/vinyl_01.wav')
+
+    if (track.inAlbum.folderName) {
+      this.albumFolder = track.inAlbum.folderName
+    }
 
     this.crackle.loop = true
     this.audio.volume = Number(localStorage.getItem('playerVolume')) || 1

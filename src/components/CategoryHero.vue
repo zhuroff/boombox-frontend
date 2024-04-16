@@ -57,8 +57,9 @@
         </div>
         <div class="hero__content-actions">
           <Button
-            label="Play wave"
-            size="large"
+            size="medium"
+            isInverted
+            :label="lang('player.waveButton')"
             :disabled="!waveAlbum?.tracks?.length"
             @click="playWave"
           />
@@ -73,6 +74,7 @@ import { defineComponent, onMounted, PropType, Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { TrackRes } from '~/types/ReqRes'
 import { ImagePayload, EntityImagesKeys } from '~/types/Common'
+import { useLocales } from '~/hooks/useLocales'
 import { hostString, categoryKeyDict } from '~/utils'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
@@ -113,7 +115,8 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const { actions } = store
+    const { actions, getters: { playingTrack, playlists } } = store
+    const { lang } = useLocales()
     const route = useRoute()
     const posterElement: Ref<null | HTMLInputElement> = ref(null)
     const avatarElement: Ref<null | HTMLInputElement> = ref(null)
@@ -154,10 +157,12 @@ export default defineComponent({
         }, 'tracks/wave')
 
         waveAlbum.value = new AlbumPage({
-          _id: '1',
+          _id: props.entity,
           title: `Wave by ${categoryKeyDict[props.entity]}: ${props.data.title}`,
           tracks
         })
+
+        actions.setPlayerPlaylist(waveAlbum.value)
       } catch (error) {
         console.error(error)
       }
@@ -165,9 +170,20 @@ export default defineComponent({
 
     const playWave = () => {
       if (!waveAlbum.value) return
-      actions.setPlayerPlaylist(waveAlbum.value)
-      actions.playTrack(waveAlbum.value.tracks[0], undefined)
-      actions.togglePlayerVisibility()
+      if (!playingTrack.value._id) {
+        actions.playTrack(waveAlbum.value.tracks[0])
+        actions.togglePlayerVisibility()
+      } else {
+        if (playlists.value.current._id !== props.entity) {
+          actions.setPlayerPlaylist(waveAlbum.value)
+          actions.playTrack(waveAlbum.value.tracks[0])
+          actions.togglePlayerVisibility()
+        }
+
+        playingTrack.value.isOnPause
+          ? actions.continuePlay()
+          : actions.setTrackOnPause()
+      }
     }
 
     const host = (pathname: string) => hostString(pathname)
@@ -193,7 +209,8 @@ export default defineComponent({
       waveAlbum,
       saveImage,
       playWave,
-      host
+      host,
+      lang
     }
   }
 })
@@ -367,11 +384,11 @@ export default defineComponent({
     width: 100%;
 
     @include media('<tablet') {
-      @include serif(2rem, 600);
+      @include serif(2rem);
     }
 
     @include media('>=tablet') {
-      @include serif(3rem, 600);
+      @include serif(3rem);
     }
   }
 

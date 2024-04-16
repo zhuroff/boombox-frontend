@@ -1,7 +1,5 @@
 <template>
   <section class="section">
-    <button @click="x.prop++">Click</button>
-    <Comp :eee="x.prop" />
     <transition name="fade">
       <Preloader
         v-if="!isPageLoaded || !isSynchronized"
@@ -15,21 +13,20 @@
       >
         <div class="backups__actions">
           <Button
-            :text="lang('settings.createBackup')"
-            @onClick="createBackups"
+            :label="lang('settings.createBackup')"
+            @click="createBackups"
           />
           <Button
-            :text="lang('settings.synchronize')"
-            @onClick="syncCollection"
+            :label="lang('settings.synchronize')"
+            @click="syncCollection"
           />
           <Button
             v-for="locale in allLocales"
             :key="locale"
-            :text="lang(`languages.${locale}`)"
-            @onClick="setLocale(locale)"
+            :label="lang(`languages.${locale}`)"
+            @click="setLocale(locale)"
           />
         </div>
-
         <table class="backups__table">
           <tbody class="backups__table-body">
             <tr
@@ -40,16 +37,16 @@
               <td class="backups__table-cell">{{ item.dateCreation }}</td>
               <td class="backups__table-cell">
                 <Button
-                  text="Restore"
+                  label="Restore"
                   mode="text"
-                  @onClick="backupRestore(item.timestamp)"
+                  @click="backupRestore(item.timestamp)"
                 />
               </td>
               <td class="backups__table-cell">
                 <Button
-                  text="Delete"
+                  label="Delete"
                   mode="text"
-                  @onClick="backupDelete(item.timestamp)"
+                  @click="backupDelete(item.timestamp)"
                 />
               </td>
             </tr>
@@ -63,12 +60,11 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
-import Button from '~/components/Button/Button.vue'
+import Button from '~/components/Button.vue'
 import Preloader from '~/components/Preloader.vue'
 import api from '~/api'
 import store from '~/store'
 import { SyncResponse } from '~/types/Common'
-import Comp from './Comp.vue'
 
 interface BackupList {
   timestamp: number
@@ -78,8 +74,7 @@ interface BackupList {
 export default defineComponent({
   components: {
     Button,
-    Preloader,
-    Comp
+    Preloader
   },
 
   setup() {
@@ -88,12 +83,6 @@ export default defineComponent({
     const backups = reactive([]) as unknown as BackupList[]
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
-
-    const x = reactive({
-      prop: 0
-    })
-
-    const { prop } = x
 
     const setBackups = (data: string[]) => {
       const dateConfig = {
@@ -240,8 +229,7 @@ export default defineComponent({
       backupRestore,
       backupDelete,
       syncCollection,
-      isSynchronized,
-      x
+      isSynchronized
     }
   }
 })

@@ -9,7 +9,6 @@
           v-if="withSearch"
           type="search"
           size="medium"
-          isInverted
           :placeholder="lang('search.placeholder')"
           :results="results"
           @setInputValue="searchSubmit"
@@ -22,7 +21,6 @@
             <Button
               icon="ellipsis"
               isText
-              isInverted
               @click="isActionsOpens = !isActionsOpens"
             />
             <Overlay
@@ -314,7 +312,7 @@ export default defineComponent({
 
     &-title {
       color: $warning;
-      @include serif(2.25rem, bold);
+      @include serif(2.25rem);
     }
 
     &-category {

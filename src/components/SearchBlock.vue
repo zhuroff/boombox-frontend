@@ -27,8 +27,6 @@
     <Button
       v-if="localValue.length > 2"
       icon="close"
-      isOutlined
-      isInverted
       isText
       @click="() => localValue = ''"
     />
@@ -323,7 +321,7 @@ export default defineComponent({
     }
 
     &-title {
-      @include serif(1rem, 600);
+      @include serif(1rem);
       margin-bottom: 5px;
       padding: 0 25px;
     }

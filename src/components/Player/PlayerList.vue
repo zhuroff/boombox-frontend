@@ -2,7 +2,6 @@
   <div class="player__playlist">
     <Button
       icon="playlist"
-      isOutlined
       :className="isActive ? '--active' : ''"
       @click="togglePlaylistState"
     />

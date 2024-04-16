@@ -4,9 +4,7 @@
       <div class="lyrics__heading">{{ heading }}</div>
       <Button
         :label="lang('lyrics.get')"
-        isOutlined
-        isInverted
-        :isDisabled="isFetching"
+        :disabled="isFetching"
         @click="fetchLyrics"
       />
     </header>
