@@ -15,17 +15,25 @@ export const useActionsPlayer = (state: AppStateInterface) => {
     playAudio
   } = useActionsPlayerPrivate(state)
 
-  const playTrack = async (track: AlbumTrack, root?: string) => {
+  const playTrack = async (track: AlbumTrack) => {
     setLoadingState(track._id)
     checkOrReplacePlaylists(track)
     
     try {
-      const trackSourceLink: string = await cloudServices.getFile('tracks/audio', track.path, track.cloudURL, 'audio', root)
+      const trackSourceLink: string = await cloudServices.getFile(
+        'tracks/audio',
+        track.path,
+        track.cloudURL,
+        'audio',
+        track.isTOY ? 'TOY' : ''
+      )
+
       if (!trackSourceLink) {
         throw new Error('Unable to get track source link')
       }
+      
       state.playingTrack = new PlayerTrack({ ...track, path: trackSourceLink })
-      playAudio(track, playTrack, root ? false : true)
+      playAudio(track, playTrack, !track.isTOY)
     } catch (error) {
       console.error(error)
     }

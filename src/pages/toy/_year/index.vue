@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent, ref, watch } from 'vue'
-import { AlbumItemRes, AlbumPageRes, CloudEntity } from '~/types/ReqRes'
+import { AlbumItemRes, AlbumPageRes, CloudEntity, TrackRes } from '~/types/ReqRes'
 import store from '~/store'
 import cloudServices from '~/services/cloud.services'
 import AlbumPage from '~/classes/AlbumPage'
@@ -114,45 +114,29 @@ export default defineComponent({
         } else {
           coverURL = '/img/album.webp'
         }
-
-        const toyAlbum: AlbumPage = {
+        album.value = new AlbumPage({
           _id: genreParams.value.id,
           title: genreParams.value.title,
-          caption: `Tracks of The Years / ${props.title} / ${genreParams.value.title}`,
-          cloudURL: String(genreParams.value.cloudURL),
-          folderName: `TOY/${genreParams.value.path}/${props.title}`,
-          inCollections: [],
-          cardType: 'AlbumCard',
-          cardPath: props.title,
-          artist: { title: 'Tracks of The Years' } as BasicEntity,
-          genre: {} as BasicEntity,
-          period: { title: props.title } as BasicEntity,
           coverURL,
-          tracks: yearFolder.items.reduce<any>((acc, next, index) => {
+          tracks: yearFolder.items.reduce<TrackRes[]>((acc, next, index) => {
             if (next.mimeType?.startsWith('audio')) {
               acc.push({
                 _id: next.id,
                 title: next.title.replace(/^\d+\.\s|\.\w+$/g, ''),
-                period: props.title,
+                artist: { title: 'Various Artists', _id: '' },
+                genre: { title: String(props.params?.title), _id: '' },
+                period: { title: props.title, _id: '' },
+                inAlbum: { title: 'Tracks of The Years', _id: '' },
                 path: next.path.replace('MelodyMap%2FTOY%2F', ''),
+                isTOY: true,
                 order: index,
-                lyrics: '',
-                listened: 0,
-                isOutOfAlbumList: false,
-                isDisabled: false,
-                inCompilations: [],
-                inAlbum: {},
-                duration: 0,
-                cloudURL: next.cloudURL,
-                artist: { title: 'Various Artists' },
-                albumCover: coverURL
+                cloudURL: String(next.cloudURL)
               })
             }
             return acc
           }, [])
-        }
-        album.value = toyAlbum
-        actions.setPlayerPlaylist(toyAlbum)
+        })
+        actions.setPlayerPlaylist(album.value)
         isPageLoading.value = false
       } catch (error) {
         console.error(error)

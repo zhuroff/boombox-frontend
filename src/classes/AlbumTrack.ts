@@ -12,6 +12,7 @@ export default class AlbumTrack {
   readonly period: BasicEntity
   readonly genre: BasicEntity
   readonly albumCover: string
+  readonly isTOY?: boolean
   lyrics: string
   duration: number
   isDisabled: boolean
@@ -44,6 +45,10 @@ export default class AlbumTrack {
 
     if (track.inCompilations) {
       this.inCompilations = track.inCompilations
+    }
+
+    if (track.isTOY) {
+      this.isTOY = track.isTOY
     }
   }
 }

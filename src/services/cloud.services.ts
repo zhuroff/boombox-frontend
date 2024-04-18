@@ -25,5 +25,11 @@ export default {
     const response = await api.post('/api/cloud/content', { path, limit, root, offset, cloudURL })
     commonServices.errorChecker(response.status)
     return response.data
+  },
+
+  async getRandomTracks(path: string, years: string[], cloudURL: string, root: string, limit?: number): Promise<CloudEntityRes['items']> {
+    const response = await api.post('/api/cloud/track/random', { path, years, cloudURL, root, limit })
+    commonServices.errorChecker(response.status)
+    return response.data
   }
 }

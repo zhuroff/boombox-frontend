@@ -66,9 +66,11 @@
                 <Sprite v-if="isPlaying(track._id)" name="playing" />
               </div>
               <div class="overlay__list-info">
-                <strong>{{ index + 1 }} - {{ track.title }}</strong>
-                <span>{{ track.artist.title }}</span>
-                <span>{{ track.inAlbum.title }}</span>
+                <strong>{{ index + 1 < 10 ? `0${index + 1}` : index + 1 }}. {{ track.title }}</strong>
+                <div>
+                  <span>{{ track.artist.title }} | </span>
+                  <span>{{ track.inAlbum.title }}</span>
+                </div>
               </div>
               <time>{{ trackTime(track.duration) }}</time>
               <Button
@@ -883,7 +885,7 @@ export default defineComponent({
 
       &-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         padding-right: 0;
 
         img {
@@ -916,6 +918,7 @@ export default defineComponent({
         time {
           margin-left: auto;
           color: $paleDP;
+          white-space: nowrap;
           font-size: 0.875rem;
           transition: all 0.2s $animation;
         }
@@ -947,7 +950,7 @@ export default defineComponent({
         position: relative;
         width: 40px;
         height: 40px;
-        margin: 0.25rem 0.875rem 0 0;
+        margin: 0rem 0.875rem 0 0;
 
         .playing {
           position: absolute;
@@ -964,8 +967,6 @@ export default defineComponent({
 
       &-info {
         line-height: 1.2;
-        display: flex;
-        flex-direction: column;
         width: calc(100% - 110px);
         padding-right: 1rem;
       }

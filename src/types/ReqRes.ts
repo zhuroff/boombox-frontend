@@ -8,6 +8,7 @@ export interface TrackRes extends Required<BasicEntity> {
   listened?: number
   lyrics?: string
   order?: number
+  isTOY?: boolean
   artist: BasicEntity
   genre: BasicEntity
   period: BasicEntity

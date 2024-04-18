@@ -96,7 +96,7 @@ export default defineComponent({
         })
       }
 
-      actions.playTrack(props.track, props.isTOY ? 'TOY' : undefined)
+      actions.playTrack(props.track)
       actions.togglePlayerVisibility()
     }
 
