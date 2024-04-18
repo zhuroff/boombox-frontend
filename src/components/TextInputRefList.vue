@@ -14,7 +14,7 @@
     class="text-input__refcreate"
   >
     <div class="text-input__refcreate-heading">
-      Nothing was found among {{ refConfig.refEntityKey }}. Create a new one
+      {{ lang('embeddedForm.notFound', refConfig.refEntityKey) }}
     </div>
     <input
       class="text-input__element --medium"
@@ -22,8 +22,8 @@
       v-model="newEntityInput"
     />
     <Button
-      icon="save"
       type="button"
+      :label="lang('save')"
       :disabled="newEntityInput.length < 3"
       @click="createNewRefEntity"
     />
@@ -38,6 +38,7 @@ import { debounce } from '~/utils'
 import Button from '~/components/Button.vue'
 import dbServices from '~/services/database.services'
 import { EmbeddedItemRes } from '~/types/ReqRes'
+import { useLocales } from '~/hooks/useLocales'
 
 export default defineComponent({
   name: 'TextInputRefList',
@@ -51,6 +52,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const { lang } = useLocales()
     const { results, searchSubmit } = useSearch()
     const isCreateModeActive = ref(false)
     const newEntityInput = ref('')
@@ -105,6 +107,7 @@ export default defineComponent({
     )
 
     return {
+      lang,
       formRefsList,
       selectRefItem,
       newEntityInput,

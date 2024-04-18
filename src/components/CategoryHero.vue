@@ -57,6 +57,7 @@
         </div>
         <div class="hero__content-actions">
           <Button
+            v-if="entity !== 'collections'"
             size="medium"
             isInverted
             :label="lang('player.waveButton')"
@@ -79,7 +80,7 @@ import { hostString, categoryKeyDict } from '~/utils'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
 import CategoryPage from '~/classes/CategoryPage'
-import UploadServices from '~/services/UploadServices'
+import uploadServices from '~/services/upload.services'
 import dbServices from '~/services/database.services'
 import AlbumPage from '~/classes/AlbumPage'
 import store from '~/store'
@@ -133,7 +134,7 @@ export default defineComponent({
           id: String(route.params.id)
         }
 
-        UploadServices.uploadImage<CategoryPage>(payload)
+        uploadServices.uploadImage<CategoryPage>(payload)
           .then((data) => {
             emit('setUploadedImage', {
               key: payload.type,
@@ -394,8 +395,8 @@ export default defineComponent({
 
   &__description {
     font-weight: 600;
-    font-size: 1rem;
     color: $white;
   }
 }
 </style>
+~/services/upload.services

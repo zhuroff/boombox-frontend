@@ -93,30 +93,18 @@ export default defineComponent({
 
   &:hover {
     background-color: $black;
-    color: $paleLT;
     transition: all 0.3s $animation;
-  }
 
-  &.--rounded {
-    border-radius: 50%;
-    padding: 0 !important;
-  }
-
-  &.--inverted {
-    border-color: $paleLT;
-    color: $paleLT;
-
-    &:hover {
-      background-color: $paleLT;
-      color: $black;
+    &:not(.--text) {
+      color: $paleLT;
     }
   }
 
   &.--small {
     font-size: .625rem;
     height: $inputSizeSM;
-    padding-left: 0.875rem;
-    padding-right: 0.875rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 
     &.--rounded {
       width: $inputSizeSM;
@@ -175,6 +163,38 @@ export default defineComponent({
 
     .icon {
       width: 1.75rem;
+    }
+  }
+
+  &.--rounded {
+    border-radius: 50%;
+    padding: 0 !important;
+  }
+
+  &.--inverted {
+    border-color: $paleLT;
+    color: $paleLT;
+
+    &:hover {
+      background-color: $paleLT;
+      color: $black;
+    }
+  }
+
+  &.--text {
+    border: 0;
+    background-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &.--inverted {
+      color: $paleLT;
+
+      .icon {
+        fill: $paleLT;
+      }
     }
   }
 

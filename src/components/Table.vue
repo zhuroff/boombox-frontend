@@ -221,7 +221,6 @@ export default defineComponent({
     &-empty {
       text-align: center;
       padding: 1rem;
-      font-size: 1rem;
       font-weight: 600;
     }
   }

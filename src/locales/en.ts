@@ -7,6 +7,9 @@ export const localesEN: LocaleDictionary = {
   },
   cancel: 'Cancel',
   delete: 'Delete',
+  restore: 'Restore',
+  submit: 'Submit',
+  save: 'Save',
   delConfirmMessage: 'Are you sure you want to delete this entity?',
   navigation: {
     albums: 'Albums',
@@ -54,7 +57,8 @@ export const localesEN: LocaleDictionary = {
     genre: 'Genre',
     period: 'Period',
     frame: 'Frame code',
-    collections: 'In collection'
+    collections: 'In collection',
+    notFound: 'Nothing was found among {x}. Create a new one.'
   },
   formLabels: {
     errorRequired: 'This field is required'

@@ -153,7 +153,6 @@ export default defineComponent({
   &__nav {
 
     &-link {
-      font-size: 1rem;
       line-height: 3;
       display: block;
       padding: 0 25px;

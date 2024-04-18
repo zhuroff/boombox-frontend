@@ -2,8 +2,8 @@ import api from '~/api'
 import commonServices from './common.services'
 import { ImagePayload } from '~/types/Common'
 
-export default class UploadServices {
-  static async uploadImage<T>({ file, type, slug, id }: ImagePayload): Promise<T> {
+export default {
+  async uploadImage<T>({ file, type, slug, id }: ImagePayload): Promise<T> {
     const formData = new FormData()
     const url = `/api/${slug}/${id}/${type}`
 

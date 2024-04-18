@@ -48,9 +48,9 @@ export default defineComponent({
 
   &__message {
     text-align: center;
-    font-size: 1rem;
     margin-bottom: 1rem;
     color: $black;
+    font-weight: 600;
   }
 
   &__actions {

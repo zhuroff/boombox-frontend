@@ -116,7 +116,9 @@ export default defineComponent({
         }
         album.value = new AlbumPage({
           _id: genreParams.value.id,
-          title: genreParams.value.title,
+          title: `TOY: ${genreParams.value.title}`,
+          artist: { title: 'Various Artists', _id: '' },
+          period: { title: props.title, _id: '' },
           coverURL,
           tracks: yearFolder.items.reduce<TrackRes[]>((acc, next, index) => {
             if (next.mimeType?.startsWith('audio')) {

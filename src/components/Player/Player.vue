@@ -25,7 +25,7 @@
         <div class="player__title">
           <div class="player__title-track">{{ playingTrack.title }}</div>
           <div class="player__title-artist">
-            {{ playingTrack.artistName }} <br> ({{ playingTrack.albumName }}, {{ playingTrack.year }})
+            {{ playingTrack.artistName }} <br> ({{ playingTrack.albumName }}{{ playingTrack.year ? `, ${playingTrack.year}` : `` }})
           </div>
         </div>
       </div>
@@ -77,6 +77,7 @@
                 icon="close"
                 size="small"
                 isText
+                isInverted
                 @click="(e) => removeFromPlaylist(e, track._id)"
               />
             </li>
@@ -921,12 +922,6 @@ export default defineComponent({
           white-space: nowrap;
           font-size: 0.875rem;
           transition: all 0.2s $animation;
-        }
-
-        .button {
-          position: relative;
-          top: -2px;
-          color: $paleDP;
         }
 
         &.--active,

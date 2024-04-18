@@ -1,10 +1,11 @@
 <template>  
   <div class="lyrics">
     <header class="lyrics__header">
-      <div class="lyrics__heading">{{ heading }}</div>
+      <div class="lyrics__heading">{{ heading.replace('Various Artists - ', '') }}</div>
       <Button
         :label="lang('lyrics.get')"
         :disabled="isFetching"
+        isInverted
         @click="fetchLyrics"
       />
     </header>
@@ -57,8 +58,10 @@
               >
                 <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ lang('lyrics.expand') }}</span>
                 <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ lang('lyrics.collapse') }}</span>
-              </button>&nbsp;/&nbsp;
+              </button>
+              <span v-if="!track.isTOY">&nbsp;/&nbsp;</span>
               <button
+                v-if="!track.isTOY"
                 class="lyrics__item_action"
                 @click="saveLyrics(item.lyrics)"
               >{{ lang('lyrics.save') }}</button>
@@ -78,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, reactive, onMounted } from 'vue'
+import { defineComponent, Ref, ref, reactive, onMounted, PropType } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
 import { TrackLyricsResponse } from '~/types/Track'
 import store from '~/store'
@@ -86,6 +89,7 @@ import Button from '~/components/Button.vue'
 import Textarea from '~/components/Textarea.vue'
 import Preloader from '~/components/Preloader.vue'
 import trackServices from '~/services/track.services'
+import AlbumTrack from '~/classes/AlbumTrack'
 
 export default defineComponent({
   components: {
@@ -98,8 +102,8 @@ export default defineComponent({
       type: String,
       required: true
     },
-    id: {
-      type: String,
+    track: {
+      type: Object as PropType<AlbumTrack>,
       required: true
     }
   },
@@ -140,7 +144,7 @@ export default defineComponent({
     const fetchLyrics = () => {
       isFetching.value = true
 
-      trackServices.searchLyrics(props.heading)
+      trackServices.searchLyrics(props.heading.replace('Various Artists', ''))
         .then((result) => setFoundLyrics(result))
         .catch((error) => setNotFoundLyricsError(error))
     }
@@ -156,7 +160,7 @@ export default defineComponent({
       lyrics.value = payload
       fetchedLyrics.length = 0
 
-      trackServices.saveLyrics(props.id, payload)
+      trackServices.saveLyrics(props.track._id, payload)
         .then((message) => {
           if (isConfirm) {
             actions.setSnackbarMessage({
@@ -168,14 +172,14 @@ export default defineComponent({
         .catch((error) => console.dir(error))
     }
 
-    const fetchTrackLyrics = async (id: string) => {
-      trackServices.fetchLyrics(id)
+    const fetchTrackLyrics = async () => {
+      trackServices.fetchLyrics(props.track._id)
         .then((data) => lyrics.value = data)
         .catch((error) => console.dir(error))
     }
 
     onMounted(() => {
-      fetchTrackLyrics(props.id)
+      !props.track.isTOY && fetchTrackLyrics()
     })
 
     return {

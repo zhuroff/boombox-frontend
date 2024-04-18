@@ -12,6 +12,7 @@
     <template #header>
       <Button
         icon="plus"
+        isText
         @click="isCreateMode = !isCreateMode"
       />
     </template>

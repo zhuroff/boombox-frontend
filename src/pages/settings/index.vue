@@ -11,7 +11,7 @@
         v-if="isPageLoaded"
         class="settings"
       >
-        <div class="backups__actions">
+        <div class="settings__actions">
           <Button
             :label="lang('settings.createBackup')"
             @click="createBackups"
@@ -27,25 +27,21 @@
             @click="setLocale(locale)"
           />
         </div>
-        <table class="backups__table">
-          <tbody class="backups__table-body">
+        <table class="settings__table">
+          <tbody class="settings__table-body">
             <tr
               v-for="item in backups"
               :key="item.timestamp"
-              class="backups__table-row"
+              class="settings__table-row"
             >
-              <td class="backups__table-cell">{{ item.dateCreation }}</td>
-              <td class="backups__table-cell">
+              <td class="settings__table-cell">{{ item.dateCreation }}</td>
+              <td class="settings__table-cell">
                 <Button
-                  label="Restore"
-                  mode="text"
+                  :label="lang('restore')"
                   @click="backupRestore(item.timestamp)"
                 />
-              </td>
-              <td class="backups__table-cell">
                 <Button
-                  label="Delete"
-                  mode="text"
+                  :label="lang('delete')"
                   @click="backupDelete(item.timestamp)"
                 />
               </td>
@@ -244,14 +240,10 @@ export default defineComponent({
   &__actions {
     margin-bottom: 25px;
     display: flex;
-
-    .button {
-      margin-right: 10px;
-    }
+    gap: 0.5rem;
   }
 
   &__table {
-    width: 100%;
 
     &-row {
       border-bottom: 1px solid $paleLT;
@@ -266,7 +258,6 @@ export default defineComponent({
       border-right: 1px solid $paleLT;
 
       &:first-child {
-        width: 100%;
         padding-left: 0;
         font-weight: 600;
       }
@@ -274,6 +265,12 @@ export default defineComponent({
       &:last-child {
         padding-right: 0;
         border-right: 0;
+      }
+
+      .button {
+        &:not(:first-of-type) {
+          margin-left: 0.5rem;
+        }
       }
     }
   }

@@ -21,6 +21,7 @@
             <Button
               icon="ellipsis"
               isText
+              isInverted
               @click="isActionsOpens = !isActionsOpens"
             />
             <Overlay
@@ -305,7 +306,6 @@ export default defineComponent({
     }
 
     &-heading {
-      font-weight: 900;
       color: $paleDP;
       margin: 0.5rem 0 0.5rem;
     }
@@ -317,6 +317,7 @@ export default defineComponent({
 
     &-category {
       font-size: 1.25rem;
+      font-weight: 700;
       color: inherit;
       transition: color .2s $animation;
 
@@ -340,7 +341,7 @@ export default defineComponent({
     &-total {
       color: $paleDP;
       margin-top: auto;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     &-actions {

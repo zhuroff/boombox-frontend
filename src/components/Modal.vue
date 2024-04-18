@@ -5,6 +5,7 @@
       icon="close"
       size="large"
       isText
+      isInverted
       @click="closeModal"
     />    
     <slot></slot>

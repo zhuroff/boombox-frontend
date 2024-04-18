@@ -28,7 +28,7 @@
         @setInputValue="setCompilationName"
       />
       <Button
-        icon="save"
+        :label="lang('save')"
         :style="{ marginLeft: '0.5rem' }"
       />
     </form>

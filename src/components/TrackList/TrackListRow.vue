@@ -46,17 +46,17 @@
       >{{ track.listened }}</div>
     </div>
     <transition name="fade">
-        <Modal
-          v-if="isModalActive"
-          :isModalActive="isModalActive"
-          @closeModal="lyricsModalSwitcher"
-        >
-          <TrackLyrics
-            :heading="trackArtistAndTitle"
-            :id="track._id"
-          />
-        </Modal>
-      </transition>
+      <Modal
+        v-if="isModalActive"
+        :isModalActive="isModalActive"
+        @closeModal="lyricsModalSwitcher"
+      >
+        <TrackLyrics
+          :heading="trackArtistAndTitle"
+          :track="track"
+        />
+      </Modal>
+    </transition>
   </div>
 </template>
 
@@ -153,7 +153,6 @@ export default defineComponent({
 .tracklist {
 
   &__row {
-    font-size: 1rem;
     color: $black;
     height: 3rem;
     display: flex;

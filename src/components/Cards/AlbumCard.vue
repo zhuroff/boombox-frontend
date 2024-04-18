@@ -23,8 +23,9 @@
       v-if="isDraggable"
       icon="drag"
       size="small"
+      isInverted
+      isRounded
       className="--drag"
-      isText
     />
   </li>
 </template>
@@ -72,6 +73,12 @@ export default defineComponent({
     transition: all 0.3s ease;
     list-style: none;
 
+    &:hover {
+      .--drag {
+        opacity: 1;
+      }
+    }
+
     @include media('>=desktop') {
       margin-bottom: 15px;
       padding: 10px;
@@ -80,10 +87,11 @@ export default defineComponent({
     .--drag {
       position: absolute;
       top: 1rem;
-      left: 1.65rem;
+      left: 1.25rem;
       z-index: 2000;
-      background-color: $white;
       cursor: move;
+      opacity: 0;
+      background-color: $paleLT;
     }
 
     &-link {

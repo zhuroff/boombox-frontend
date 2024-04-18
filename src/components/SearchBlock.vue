@@ -28,6 +28,7 @@
       v-if="localValue.length > 2"
       icon="close"
       isText
+      isInverted
       @click="() => localValue = ''"
     />
     <div
@@ -221,7 +222,6 @@ export default defineComponent({
   }
 
   &.--medium {
-    font-size: 1rem;
 
     .input-search__element {
       height: 40px;
@@ -267,8 +267,6 @@ export default defineComponent({
       height: 22px;
       transform: scale(-1, 1);
       cursor: pointer;
-      position: relative;
-      top: 1px;
     }
   }
 
@@ -284,7 +282,7 @@ export default defineComponent({
     padding-left: 0.5rem;
     
     &:focus {
-      color: $dark;
+      color: $paleDP;
     }
 
     &::placeholder {

@@ -22,7 +22,8 @@
       icon="delete"
       size="small"
       className="--delete"
-      isText
+      isInverted
+      isRounded
       @click="() => $emit('deleteEntity', card._id)"
     />
   </li>

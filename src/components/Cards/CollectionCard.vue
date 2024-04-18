@@ -18,7 +18,8 @@
       icon="delete"
       size="small"
       className="--delete"
-      isText
+      isInverted
+      isRounded
       @click="() => $emit('deleteEntity', card._id)"
     />
   </li>
@@ -62,18 +63,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@import '~/scss/variables';
-
+<style lang="scss" scoped>
 .cards {
+
   &__album {
+
     .--delete {
-      position: absolute;
-      top: 1rem;
-      left: 1.65rem;
-      z-index: 2000;
-      background-color: $white;
-      cursor: pointer;
+      left: 1.75rem;
     }
   }
 }

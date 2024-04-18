@@ -28,7 +28,7 @@
     </div>
     <div class="form__footer">
       <Button
-        label="Отправить"
+        :label="lang('submit')"
         type="submit"
       />
     </div>
@@ -37,7 +37,6 @@
 
 <script lang="ts">
 import { PropType, StyleValue, ref, computed, defineComponent, reactive } from 'vue'
-import { BasicEntity } from '~/types/Common'
 import { JSONSchema4 } from 'json-schema'
 import { useLocales } from '~/hooks/useLocales'
 import TextInput from './TextInput.vue'

@@ -7,6 +7,9 @@ export const localesBY: LocaleDictionary = {
   },
   cancel: 'Скасаваць',
   delete: 'Выдалiць',
+  restore: 'Аднавiць',
+  submit: 'Даслаць',
+  save: 'Захаваць',
   delConfirmMessage: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
   navigation: {
     albums: 'Альбомы',
@@ -55,6 +58,7 @@ export const localesBY: LocaleDictionary = {
     period: 'Год выдання',
     frame: 'Код фрэйму',
     collections: 'У калекцыi',
+    notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.'
   },
   formLabels: {
     errorRequired: 'Гэта поле абавязковае'
