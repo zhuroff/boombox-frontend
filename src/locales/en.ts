@@ -60,6 +60,10 @@ export const localesEN: LocaleDictionary = {
     collections: 'In collection',
     notFound: 'Nothing was found among {x}. Create a new one.'
   },
+  loginForm: {
+    login: 'Login',
+    password: 'Password'
+  },
   formLabels: {
     errorRequired: 'This field is required'
   },

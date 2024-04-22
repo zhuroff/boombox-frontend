@@ -140,3 +140,9 @@ export interface RefPayload<T> {
   refEntityKey: string
   refEntityValue: T
 }
+
+export interface DropdownItem {
+  label: string
+  value: string
+  icon?: string
+}

@@ -20,11 +20,12 @@
             :label="lang('settings.synchronize')"
             @click="syncCollection"
           />
-          <Button
-            v-for="locale in allLocales"
-            :key="locale"
-            :label="lang(`languages.${locale}`)"
-            @click="setLocale(locale)"
+          <Dropdown
+            size="medium"
+            :items="langSelectItems"
+            :inputValue="currentLocale"
+            :style="{ width: '170px' }"
+            @applyValue="(option) => setLocale(option.value)"
           />
         </div>
         <table class="settings__table">
@@ -54,13 +55,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from 'vue'
+import { defineComponent, ref, reactive, computed, onMounted, ComputedRef } from 'vue'
+import { DropdownItem, SyncResponse } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
-import Button from '~/components/Button.vue'
 import Preloader from '~/components/Preloader.vue'
+import Button from '~/components/Button.vue'
+import Dropdown from '~/components/Inputs/Dropdown.vue'
 import api from '~/api'
 import store from '~/store'
-import { SyncResponse } from '~/types/Common'
 
 interface BackupList {
   timestamp: number
@@ -70,15 +72,31 @@ interface BackupList {
 export default defineComponent({
   components: {
     Button,
+    Dropdown,
     Preloader
   },
 
   setup() {
     const { allLocales, setLocale, lang } = useLocales()
-    const { actions } = store
+    const { actions, getters } = store
     const backups = reactive([]) as unknown as BackupList[]
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
+
+    const langSelectItems: ComputedRef<DropdownItem[]> = computed(() =>[
+      {
+        label: lang('languages.en'),
+        value: 'en',
+        icon: 'flag-en'
+      },
+      {
+        label: lang('languages.by'),
+        value: 'by',
+        icon: 'flag-by'
+      }
+    ])
+
+    const currentLocale = computed(() => getters.currentLocale)
 
     const setBackups = (data: string[]) => {
       const dateConfig = {
@@ -225,7 +243,9 @@ export default defineComponent({
       backupRestore,
       backupDelete,
       syncCollection,
-      isSynchronized
+      isSynchronized,
+      langSelectItems,
+      currentLocale
     }
   }
 })

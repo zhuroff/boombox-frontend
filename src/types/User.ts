@@ -1,6 +1,11 @@
 export type UserRoles = 'admin' | 'listener'
 
-export type User = {
+export interface AuthData {
+  login: string
+  password: string
+}
+
+export interface User {
   login: string
   name: string
   email: string

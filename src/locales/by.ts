@@ -60,6 +60,10 @@ export const localesBY: LocaleDictionary = {
     collections: 'У калекцыi',
     notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.'
   },
+  loginForm: {
+    login: 'Логін',
+    password: 'Пароль'
+  },
   formLabels: {
     errorRequired: 'Гэта поле абавязковае'
   },

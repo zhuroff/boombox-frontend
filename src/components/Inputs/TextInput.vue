@@ -5,6 +5,8 @@
         :class="['text-input__element', `--${size}`, errorMessage ? '--error' : '']"
         :placeholder="placeholder && `${placeholder}${isRequired ? '*' : ''}`"
         :style="style"
+        :type="type"
+        :readonly="isReadonly"
         v-model="inputValue"
       />
       <div
@@ -42,6 +44,12 @@ export default defineComponent({
       default: 'medium',
       validator: (value: string) => ['small', 'medium', 'large'].includes(value)
     },
+    type: {
+      type: String,
+      required: false,
+      default: 'text',
+      validator: (value: string) => ['text', 'password'].includes(value)
+    },
     style: {
       type: Object as PropType<StyleValue>,
       required: false
@@ -51,6 +59,11 @@ export default defineComponent({
       required: false
     },
     isRequired: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isReadonly: {
       type: Boolean,
       required: false,
       default: false
@@ -65,23 +78,23 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const inputValue = ref(props.inputValue || '')
+    const localValue = ref(props.inputValue || '')
     const isRefListActive = ref(false)
 
     const refConfig = computed(() => ({
       refEntityKey: props.refEntityKey || '',
-      refEntityValue: inputValue.value
+      refEntityValue: localValue.value
     }))
 
     const selectRefItem = (payload: RefPayload<BasicEntity>) => {
       isRefListActive.value = false
       nextTick(() => {
-        inputValue.value = payload.refEntityValue.title
+        localValue.value = payload.refEntityValue.title
         emit('setInputValue', payload.refEntityValue._id)
       })
     }
 
-    watch(inputValue, (newValue) => {
+    watch(localValue, (newValue) => {
       if (!props.refEntityKey) {
         emit('setInputValue', newValue)
       }
@@ -92,7 +105,7 @@ export default defineComponent({
     })
 
     return {
-      inputValue,
+      localValue,
       refConfig,
       selectRefItem,
       isRefListActive
@@ -102,7 +115,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../scss/variables.scss';
+@import '../../scss/variables.scss';
 @import 'include-media';
 
 .text-input {

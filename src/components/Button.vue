@@ -1,5 +1,6 @@
 <template>
   <button
+    :style="style"
     :class="[
       'button',
       {
@@ -8,7 +9,7 @@
         '--text': isText
       },
       `--${size}`,
-      className
+      className,
     ]"
   >
     <Sprite
@@ -24,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { PropType, StyleValue, defineComponent } from 'vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 export default defineComponent({
@@ -47,6 +48,10 @@ export default defineComponent({
       required: false,
       default: 'medium',
       validator: (value: string) => ['small', 'medium', 'large'].includes(value)
+    },
+    style: {
+      type: Object as PropType<StyleValue>,
+      required: false
     },
     className: {
       type: String,
@@ -110,15 +115,12 @@ export default defineComponent({
       width: $inputSizeSM;
     }
 
-    .button__label {
-
-       & + .icon {
-        margin-left: 3px;
-       }
-    }
-
     .icon {
       width: 1rem;
+
+      & + .button__label {
+        margin-left: 3px;
+      }
     }
   }
 
@@ -132,15 +134,12 @@ export default defineComponent({
       width: $inputSizeMD;
     }
 
-    .button__label {
-      
-      & + .icon {
-       margin-left: 5px;
-      }
-    }
-
     .icon {
       width: 1.25rem;
+
+      & + .button__label {
+        margin-left: 5px;
+      }
     }
   }
 
@@ -154,15 +153,12 @@ export default defineComponent({
       width: $inputSizeLG;
     }
 
-    .button__label {
-      
-      & + .icon {
-       margin-left: 10px;
-      }
-   }
-
     .icon {
       width: 1.75rem;
+
+      & + .button__label {
+        margin-left: 10px;
+      }
     }
   }
 

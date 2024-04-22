@@ -23,7 +23,7 @@ export default defineComponent({
     const { checkAndSetLocale } = useLocales()
     const { isAuthenticated, setIsAuthenticated } = useAuth()
     const layout = computed(() => (
-      isAuthenticated.value ? 'MainTemplate' : 'MainTemplate' // 'UnauthTemplate'
+      isAuthenticated.value ? 'MainTemplate' : MainTemplate // 'UnauthTemplate'
     ))
     const syncMessage = localStorage.getItem('syncMessage')
 

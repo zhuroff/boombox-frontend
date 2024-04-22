@@ -94,7 +94,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../scss/variables.scss';
+@import '../../scss/variables.scss';
 .textarea-input {
   &__element {
     overflow-y: hidden;

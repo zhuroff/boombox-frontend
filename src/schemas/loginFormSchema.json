@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "Login form",
+  "properties": {
+    "login": {
+      "type": "string",
+      "title": "loginForm.login",
+      "required": true,
+      "width": "100%"
+    },
+    "password": {
+      "type": "string",
+      "format": "password",
+      "title": "loginForm.password",
+      "required": true,
+      "width": "100%"
+    }
+  }
+}

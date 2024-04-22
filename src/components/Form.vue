@@ -12,6 +12,7 @@
       <TextInput
         v-if="isTextInput(value)"
         :errorMessage="errorInputs.has(key) ? lang('formLabels.errorRequired') : undefined"
+        :type="value.format"
         :isRequired="Boolean(value.required)"
         :placeholder="value.title && lang(value.title)"
         :refEntityKey="value.$ref"
@@ -29,6 +30,7 @@
     <div class="form__footer">
       <Button
         :label="lang('submit')"
+        :isInverted="isInverted"
         type="submit"
       />
     </div>
@@ -39,12 +41,12 @@
 import { PropType, StyleValue, ref, computed, defineComponent, reactive } from 'vue'
 import { JSONSchema4 } from 'json-schema'
 import { useLocales } from '~/hooks/useLocales'
-import TextInput from './TextInput.vue'
-import Textarea from './Textarea.vue'
+import TextInput from '~/components/Inputs/TextInput.vue'
+import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from './Button.vue'
 
 export default defineComponent({
-  name: 'form',
+  name: 'Form',
   components: {
     TextInput,
     Textarea,
@@ -54,6 +56,11 @@ export default defineComponent({
     schema: {
       type: Object as PropType<JSONSchema4>,
       required: true
+    },
+    isInverted: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     style: {
       type: Object as PropType<StyleValue>,

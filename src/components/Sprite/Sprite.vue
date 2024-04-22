@@ -34,6 +34,8 @@ import SpritePrevious from './SpritePrevious.vue'
 import SpriteVolume from './SpriteVolume.vue'
 import SpriteVolumeOff from './SpriteVolumeOff.vue'
 import SpriteYouTube from './SpriteYouTube.vue'
+import SpriteFlagBy from './SpriteFlagBy.vue'
+import SpriteFlagEn from './SpriteFlagEn.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -67,7 +69,9 @@ export default defineComponent({
     SpritePrevious,
     SpriteVolume,
     SpriteVolumeOff,
-    SpriteYouTube
+    SpriteYouTube,
+    SpriteFlagBy,
+    SpriteFlagEn
   },
   props: {
     name: {
@@ -75,7 +79,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup({ name }) {
+  setup(props) {
     const IconsMap = new Map([
       ['ellipsis', SpriteEllipsis],
       ['play', SpritePlay],
@@ -106,11 +110,13 @@ export default defineComponent({
       ['previous', SpritePrevious],
       ['volume', SpriteVolume],
       ['volume-off', SpriteVolumeOff],
-      ['youtube', SpriteYouTube]
+      ['youtube', SpriteYouTube],
+      ['flag-by', SpriteFlagBy],
+      ['flag-en', SpriteFlagEn]
     ])
 
     const IconComponent = computed(() => (
-      IconsMap.get(name) || null
+      IconsMap.get(props.name) || null
     ))
 
     return { IconComponent }

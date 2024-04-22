@@ -1,59 +1,65 @@
 <template>
-  <div class="container">
-    <main class="main">
-      <form @submit.prevent="signIn">
-        <fieldset>
-          <legend>Sign in</legend>
-          <input type="text" placeholder="login" v-model="userData.login" />
-          <input type="password" placeholder="password" v-model="userData.password" />
-        </fieldset>
-        <button type="submit">Log in</button>
-      </form>
-      <form @submit.prevent="signUp">
-        <fieldset>
-          <legend>Sign up</legend>
-          <input type="text" placeholder="login" v-model="registerData.login" />
-          <input type="password" placeholder="password" v-model="registerData.password" />
-          <input type="password" placeholder="password" v-model="registerData.passwordRepeat" />
-        </fieldset>
-        <button type="submit">Register</button>
-      </form>
+  <div class="login">
+    <main class="main --unauth">
+      <Form
+        :schema="formSchema"
+        :isInverted="true"
+        @formSubmit="login"
+      />
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent } from 'vue'
+import { JSONSchema4 } from 'json-schema'
+import { AuthData } from '~/types/User'
+import Form from '~/components/Form.vue'
+import loginFormSchema from '~/schemas/loginFormSchema.json'
 
 export default defineComponent({
   name: 'UnauthTemplate',
+  components: {
+    Form
+  },
   setup() {
-    const userData = reactive({
-      login: '',
-      password: ''
-    })
+    const formSchema = loginFormSchema as JSONSchema4
 
-    const registerData = reactive({
-      login: '',
-      password: '',
-      passwordRepeat: '',
-      role: 'admin'
-    })
-
-    const signIn = () => {
-      console.log(userData)
-    }
-
-    const signUp = () => {
-      console.log(registerData)
+    const login = (formData: AuthData) => {
+      console.log(formData)
     }
 
     return {
-      signIn,
-      signUp,
-      userData,
-      registerData
+      login,
+      formSchema
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+@import '~/scss/variables.scss';
+
+.login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $black;
+}
+
+.main {
+
+  &.--unauth {
+    padding: 25px;
+    width: 100%;
+    max-width: 500px;
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+}
+</style>
