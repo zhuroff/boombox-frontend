@@ -8,10 +8,14 @@
         '--large': size === 'large'
       }
     ]">
+      <span
+        v-if="placeholder && !currentValue.label"
+        class="dropdown__trigger-label"
+      >{{ placeholder }}</span>
       <Button
+        type="button"
         :label="currentValue.label"
         :icon="currentValue.icon"
-        :style="{ paddingRight: '2rem', width: '100%', justifyContent: 'flex-start' }"
         :size="size"
         @click="isOptionsOpened = !isOptionsOpened"
       />
@@ -74,7 +78,7 @@ export default defineComponent({
       type: Object as PropType<StyleValue>,
       required: false
     },
-    inputValue: {
+    selectedValue: {
       type: Object as PropType<ComputedRef<string> | Ref<string>>,
       required: false
     },
@@ -88,12 +92,11 @@ export default defineComponent({
       required: false
     }
   },
-  setup({ items, inputValue }, { emit }) {
+  setup({ items, selectedValue }, { emit }) {
     const isOptionsOpened = ref(false)
 
     const currentValue = computed(() => {
-      const current = items.find(({ value }) => value === inputValue?.value)
-      console.log(current)
+      const current = items.find(({ value }) => value === selectedValue?.value)
       return {
         label: current?.label,
         icon: current?.icon
@@ -102,6 +105,7 @@ export default defineComponent({
 
     const applyValue = (option: DropdownItem) => {
       emit('applyValue', option)
+      isOptionsOpened.value = false
     }
 
     return {
@@ -122,6 +126,19 @@ export default defineComponent({
   &__trigger {
     position: relative;
 
+    & > .button {
+      padding-right: 2rem;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      border-color: $paleMD;
+
+      &:hover {
+        background-color: inherit;
+        color: inherit;
+      }
+    }
+
     & > .icon {
       position: absolute;
       right: 0.5rem;
@@ -130,19 +147,55 @@ export default defineComponent({
       pointer-events: none;
     }
 
-    &.--small > .icon {
-      width: 1rem;
-      height: 1rem;
+    &.--small {
+
+      .dropdown__trigger-label {
+        font-size: .75rem;
+        left: .875rem;
+      }
+
+      & > .icon {
+        width: 1rem;
+        height: 1rem;
+      }
     }
 
-    &.--medium > .icon {
-      width: 1.25rem;
-      height: 1.25rem;
+    &.--medium {
+
+      .dropdown__trigger-label {
+        font-size: .875rem;
+        left: 1rem;
+      }
+
+      & > .icon {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
     }
 
-    &.--large > .icon {
-      width: 1.5rem;
-      height: 1.5rem;
+    &.--large {
+
+      .dropdown__trigger-label {
+        font-size: 1rem;
+        left: 1.25rem;
+      }
+
+      & > .icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+
+    &-label {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
+      display: block;
+      color: $paleDP;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 

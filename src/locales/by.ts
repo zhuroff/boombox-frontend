@@ -24,7 +24,7 @@ export const localesBY: LocaleDictionary = {
     tracks: 'Трэкi'
   },
   settings: {
-    createBackup: 'Стварыць рэзервовую копію',
+    createBackup: 'Стварыць бэкап',
     synchronize: 'Сінхранізаваць',
   },
   headings: {
@@ -63,6 +63,18 @@ export const localesBY: LocaleDictionary = {
   loginForm: {
     login: 'Логін',
     password: 'Пароль'
+  },
+  userForm: {
+    login: 'Логін',
+    email: 'Электронная пошта',
+    role: 'Роля',
+    password: 'Пароль',
+    passwordRepeat: 'Паўтарыце пароль',
+    admin: 'Адміністратар',
+    user: 'Карыстальнік',
+    errors: {
+      passwordsDoNotMatch: 'Паролі не супадаюць'
+    }
   },
   formLabels: {
     errorRequired: 'Гэта поле абавязковае'

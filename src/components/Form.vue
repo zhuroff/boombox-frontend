@@ -5,9 +5,12 @@
     @submit.prevent="onSubmit"
   >
     <div
-      v-for="[key, value] in schemaProps"
+      v-for="([key, value], index) in schemaProps"
       class="form__element"
-      :style="{ width: value.width || '100%' }"
+      :style="{
+        width: value.width || '100%',
+        zIndex: schemaProps.size - index
+      }"
     >
       <TextInput
         v-if="isTextInput(value)"
@@ -16,7 +19,7 @@
         :isRequired="Boolean(value.required)"
         :placeholder="value.title && lang(value.title)"
         :refEntityKey="value.$ref"
-        @setInputValue="(value) => formData[key] = value"
+        @setInputValue="(val) => formData[key] = val"
       />
       <Textarea
         v-else-if="isTextarea(value)"
@@ -24,7 +27,14 @@
         :errorMessage="errorInputs.has(key) ? lang('formLabels.errorRequired') : undefined"
         :isRequired="Boolean(value.required)"
         :placeholder="value.title && lang(value.title)"
-        @setTextareaValue="(value) => formData[key] = value"
+        @setTextareaValue="(val) => formData[key] = val"
+      />
+      <Dropdown
+        v-else-if="isDropdown(value)"
+        :items="dropdownItems(value)"
+        :placeholder="value.title && `${lang(value.title)}${value.required ? '*' : ''}`"
+        :selectedValue="getDropdownValue(key, value)"
+        @applyValue="(option) => formData[key] = option.value"
       />
     </div>
     <div class="form__footer">
@@ -38,18 +48,20 @@
 </template>
 
 <script lang="ts">
-import { PropType, StyleValue, ref, computed, defineComponent, reactive } from 'vue'
+import { PropType, StyleValue, ref, computed, defineComponent, reactive, toRef } from 'vue'
 import { JSONSchema4 } from 'json-schema'
 import { useLocales } from '~/hooks/useLocales'
 import TextInput from '~/components/Inputs/TextInput.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from './Button.vue'
+import Dropdown from './Inputs/Dropdown.vue'
 
 export default defineComponent({
   name: 'Form',
   components: {
     TextInput,
     Textarea,
+    Dropdown,
     Button
   },
   props: {
@@ -94,10 +106,10 @@ export default defineComponent({
 
     const formData = reactive(
       Object.entries(schema.properties)
-        .reduce((acc, [key, value]) => {
+        .reduce<Record<string, ReturnType<typeof initValues>>>((acc, [key, value]) => {
           acc[key] = initValues(value)          
           return acc
-        }, {} as Record<string, ReturnType<typeof initValues>>)
+        }, {})
     )
     
     const schemaProps = computed(() => (
@@ -105,11 +117,28 @@ export default defineComponent({
     ))
 
     const isTextInput = (value: JSONSchema4) => {
-      return (value.type === 'string' || value.$ref) && value.element !== 'textarea'
+      return (value.type === 'string' || value.$ref) && !value.element
     }
 
     const isTextarea = (value: JSONSchema4) => {
       return value.type === 'string' && !value.$ref && value.element === 'textarea'
+    }
+
+    const isDropdown = (value: JSONSchema4) => {
+      return value.type === 'string' && !value.$ref && value.element === 'select'
+    }
+
+    const dropdownItems = (value: JSONSchema4) => {
+      return (
+        Object.entries(value.properties || {})
+          .map(([key, value]) => ({ value: key, label: lang(value.title || '') }))
+      )
+    }
+
+    const getDropdownValue = (key: string, entity: JSONSchema4) => {
+      const localeKey = String(formData[key])
+      const localePath = entity.properties?.[localeKey]?.title
+      return toRef(() => localePath ? lang(localePath) : String(formData[key]))
     }
 
     const onSubmit = () => {
@@ -133,8 +162,20 @@ export default defineComponent({
       isTextInput,
       errorInputs,
       isTextarea,
+      isDropdown,
+      dropdownItems,
+      getDropdownValue,
       onSubmit
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.form {
+
+  &__element {
+    position: relative;
+  }
+}
+</style>

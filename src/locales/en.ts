@@ -64,6 +64,18 @@ export const localesEN: LocaleDictionary = {
     login: 'Login',
     password: 'Password'
   },
+  userForm: {
+    login: 'Login',
+    email: 'Email',
+    role: 'Role',
+    password: 'Password',
+    passwordRepeat: 'Repeat password',
+    admin: 'Administrator',
+    user: 'User',
+    errors: {
+      passwordsDoNotMatch: 'Passwords do not match'
+    }
+  },
   formLabels: {
     errorRequired: 'This field is required'
   },

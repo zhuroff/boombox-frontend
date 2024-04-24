@@ -23,7 +23,7 @@
           <Dropdown
             size="medium"
             :items="langSelectItems"
-            :inputValue="currentLocale"
+            :selectedValue="currentLocale"
             :style="{ width: '170px' }"
             @applyValue="(option) => setLocale(option.value)"
           />
@@ -49,6 +49,13 @@
             </tr>
           </tbody>
         </table>
+        <div class="settings__form">
+          <Form
+            :schema="userSchema"
+            :style="{ gap: '0.5rem', display: 'flex', flexDirection: 'column', maxWidth: '500px' }"
+            @formSubmit="createUser"
+          />
+        </div>
       </div>
     </transition>
   </section>
@@ -57,10 +64,14 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, onMounted, ComputedRef } from 'vue'
 import { DropdownItem, SyncResponse } from '~/types/Common'
+import { UserCreating } from '~/types/User'
+import { JSONSchema4 } from 'json-schema'
 import { useLocales } from '~/hooks/useLocales'
+import userFormSchema from '~/schemas/userFormSchema.json'
 import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button.vue'
 import Dropdown from '~/components/Inputs/Dropdown.vue'
+import Form from '~/components/Form.vue'
 import api from '~/api'
 import store from '~/store'
 
@@ -73,7 +84,8 @@ export default defineComponent({
   components: {
     Button,
     Dropdown,
-    Preloader
+    Preloader,
+    Form
   },
 
   setup() {
@@ -82,6 +94,7 @@ export default defineComponent({
     const backups = reactive([]) as unknown as BackupList[]
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
+    const userSchema = userFormSchema as JSONSchema4
 
     const langSelectItems: ComputedRef<DropdownItem[]> = computed(() =>[
       {
@@ -119,7 +132,7 @@ export default defineComponent({
 
         if (response) setBackups(response.data)
       } catch (error) {
-        console.dir(error)
+        console.error(error)
       }
     }
 
@@ -136,7 +149,7 @@ export default defineComponent({
           fetchBackups()
         }
       } catch (error) {
-        console.dir(error)
+        console.error(error)
       }
     }
 
@@ -153,7 +166,7 @@ export default defineComponent({
           fetchBackups()
         }
       } catch (error) {
-        console.dir(error)
+        console.error(error)
       }
     }
 
@@ -171,7 +184,7 @@ export default defineComponent({
         }
 
       } catch (error) {
-        console.dir(error)
+        console.error(error)
       }
     }
 
@@ -231,6 +244,16 @@ export default defineComponent({
       }
     }
 
+    const createUser = async (payload: UserCreating) => {
+      if (payload.password !== payload.passwordRepeat) {
+        return actions.setSnackbarMessage({
+          message: lang('userForm.errors.passwordsDoNotMatch'),
+          type: 'error',
+          time: 5000
+        })
+      }
+    }
+
     onMounted(() => fetchBackups())
 
     return {
@@ -245,7 +268,9 @@ export default defineComponent({
       syncCollection,
       isSynchronized,
       langSelectItems,
-      currentLocale
+      currentLocale,
+      userSchema,
+      createUser
     }
   }
 })
@@ -293,6 +318,10 @@ export default defineComponent({
         }
       }
     }
+  }
+
+  &__form {
+    margin-top: 25px;
   }
 }
 </style>

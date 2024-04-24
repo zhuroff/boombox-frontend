@@ -7,7 +7,7 @@
         :style="style"
         :type="type"
         :readonly="isReadonly"
-        v-model="inputValue"
+        v-model="localValue"
       />
       <div
         v-if="errorMessage"
@@ -135,6 +135,10 @@ export default defineComponent({
 
     &.--error {
       border-color: $error;
+    }
+
+    &::placeholder {
+      color: $paleDP;
     }
   }
 
