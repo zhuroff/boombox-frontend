@@ -38,7 +38,7 @@ export default defineComponent({
     const albums = reactive<AlbumItem[]>([])
 
     const pageHeading = computed(() => (
-      lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
+      lang(`headings.albumsPage`, String(pagePagination.value?.totalDocs || 0))
     ))
     
     watch(

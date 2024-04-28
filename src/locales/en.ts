@@ -28,9 +28,12 @@ export const localesEN: LocaleDictionary = {
     synchronize: 'Synchronize',
   },
   headings: {
-    albumsPage: 'The collection contains {x} albums',
+    albumsPage: 'Total albums in the collection: {x}',
     collectionsPage: 'Total collections: {x}',
-    compilationsPage: 'Total compilations: {x}'
+    compilationsPage: 'Total compilations: {x}',
+    artistsPage: 'Total artists in the collection: {x}',
+    genresPage: 'Total genres in the collection: {x}',
+    periodsPage: 'Total periods in the collection: {x}'
   },
   getRandomAlbum: 'Random album',
   unknownTime: 'unknown time',
@@ -69,9 +72,10 @@ export const localesEN: LocaleDictionary = {
     email: 'Email',
     role: 'Role',
     password: 'Password',
-    passwordRepeat: 'Repeat password',
+    passwordConfirm: 'Repeat password',
     admin: 'Administrator',
     user: 'User',
+    created: 'User was successfully created',
     errors: {
       passwordsDoNotMatch: 'Passwords do not match'
     }

@@ -38,7 +38,7 @@
             @click="applyValue(option)"
           >
             <Sprite v-if="option.icon" :name="option.icon" />
-            <span class="dropdown__options-label">{{ option.label }}</span>
+            <span class="dropdown__options-label">{{ lang(option.path) }}</span>
           </li>
         </ul>
       </div>
@@ -49,6 +49,7 @@
 <script lang="ts">
 import { ComputedRef, PropType, Ref, StyleValue, computed, defineComponent, ref } from 'vue'
 import { DropdownItem } from '~/types/Common'
+import { useLocales } from '~/hooks/useLocales'
 import Button from '../Button.vue'
 import Sprite from '../Sprite/Sprite.vue'
 
@@ -93,14 +94,17 @@ export default defineComponent({
     }
   },
   setup({ items, selectedValue }, { emit }) {
+    const { lang } = useLocales()
     const isOptionsOpened = ref(false)
 
     const currentValue = computed(() => {
       const current = items.find(({ value }) => value === selectedValue?.value)
-      return {
-        label: current?.label,
-        icon: current?.icon
-      }
+      return current
+        ? {
+            label: lang(current.path),
+            icon: current.icon
+          }
+        : { label: selectedValue?.value || '' }
     })
 
     const applyValue = (option: DropdownItem) => {
@@ -109,6 +113,7 @@ export default defineComponent({
     }
 
     return {
+      lang,
       isOptionsOpened,
       currentValue,
       applyValue

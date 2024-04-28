@@ -13,5 +13,7 @@ export interface User {
 
 export interface UserCreating extends User {
   password: string
-  passwordRepeat: string
+  passwordConfirm: string
 }
+
+export type UserResponse = User & { _id: string }

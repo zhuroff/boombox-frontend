@@ -142,7 +142,7 @@ export interface RefPayload<T> {
 }
 
 export interface DropdownItem {
-  label: string
+  path: string
   value: string
   icon?: string
 }

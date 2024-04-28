@@ -13,6 +13,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, computed, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
+import { useLocales } from '~/hooks/useLocales'
 import { CategoryItemRes } from '~/types/ReqRes'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import CategoryItem from '~/classes/CategoryItem'
@@ -31,11 +32,12 @@ export default defineComponent({
       switchPagination,
       setEntitiesLimit
     } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'genres')
+    const { lang } = useLocales()
 
     const genres = reactive<CategoryItem[]>([])
 
     const pageHeading = computed(() => (
-      `There are ${pagePagination.value?.totalDocs || 0} genres in collection`
+      lang('headings.genresPage', String(pagePagination.value?.totalDocs || 0))
     ))
 
     watch(pageStateConfig, () => {

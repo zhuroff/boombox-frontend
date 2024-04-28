@@ -104,7 +104,7 @@ import { PropType, computed, defineComponent, ref } from 'vue'
 import { BasicEntity, WikiSearchResult } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import { useSearch } from '~/hooks/useSearch'
-import { detectLocale } from '~/utils'
+import { detectWikiLocale } from '~/utils'
 import store from '~/store'
 import wiki from 'wikipedia'
 import CoverArt from '~/components/CoverArt.vue'
@@ -197,8 +197,8 @@ export default defineComponent({
     const searchWikiInfo = async () => {
       if (!artist?.title) return false
       resetWikiData()
-      const albumLang = detectLocale(title)
-      const artistLang = detectLocale(artist.title)
+      const albumLang = detectWikiLocale(title)
+      const artistLang = detectWikiLocale(artist.title)
       let locale = 'en'
 
       if (albumLang === 'ru' || artistLang === 'ru') {

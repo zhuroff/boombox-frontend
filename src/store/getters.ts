@@ -35,7 +35,7 @@ export const useGetters = (state: AppStateInterface) => {
     return playingTrackIndex > 0
   })
 
-  const getLocaleValue = (path: string, ...vars: Array<string | number>) => {
+  const getLocaleValue = (path: string, ...vars: string[]) => {
     const parsedPath = path.split('.')
     const dict = locales.get(currentLocale.value)
     const value = findLocaleLangValue(parsedPath, dict)

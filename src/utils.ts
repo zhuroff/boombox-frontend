@@ -1,4 +1,4 @@
-import { LocaleDictionary } from '~/types/Common'
+import { LocaleDictionary, LocaleKeys } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 
 export const findLocaleLangValue = (path: string[], dict?: LocaleDictionary): string | null => {
@@ -62,7 +62,7 @@ export const conjugate = (key: string, amount: number) => {
   return lang(`conjugated.${key}.plural`)
 }
 
-export const detectLocale = (str: string) => {
+export const detectWikiLocale = (str: string) => {
   if (str.match(/[a-zA-Z]/g)) {
     return 'en'
   } else if (str.match(/[а-яА-Я]/g)) {
@@ -113,4 +113,9 @@ export const categoryKeyDict: Record<string, string> = {
   artists: 'artist',
   periods: 'period',
   collections: 'collection',
+}
+
+export const localeIntlCodes: Record<LocaleKeys, Intl.LocalesArgument> = {
+  en: 'en-US',
+  by: 'ru-RU'
 }

@@ -36,10 +36,10 @@
       "title": "userForm.password",
       "required": true
     },
-    "passwordRepeat": {
+    "passwordConfirm": {
       "type": "string",
       "format": "password",
-      "title": "userForm.passwordRepeat",
+      "title": "userForm.passwordConfirm",
       "required": true
     }
   }

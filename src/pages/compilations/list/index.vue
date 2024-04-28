@@ -63,7 +63,7 @@ export default defineComponent({
     const entityToDelete = ref<string | null>(null)
 
     const pageHeading = computed(() => (
-      lang(`headings.compilationsPage`, pagePagination.value?.totalDocs || 0)
+      lang(`headings.compilationsPage`, String(pagePagination.value?.totalDocs || 0))
     ))
 
     const deleteCompilation = () => {

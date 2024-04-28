@@ -83,7 +83,7 @@ export default defineComponent({
     const formSchema = embeddedFormSchema as JSONSchema4
 
     const pageHeading = computed(() => (
-      lang(`headings.albumsPage`, pagePagination.value?.totalDocs || 0)
+      lang(`headings.albumsPage`, String(pagePagination.value?.totalDocs || 0))
     ))
 
     const createNewEmbedded = async (formData: EmbeddedPayload) => {

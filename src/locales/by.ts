@@ -28,9 +28,12 @@ export const localesBY: LocaleDictionary = {
     synchronize: 'Сінхранізаваць',
   },
   headings: {
-    albumsPage: 'У калекцыi {x} альбомаў',
+    albumsPage: 'Усяго альбомаў у калекцыі: {x}',
     collectionsPage: 'Усяго калекцый: {x}',
-    compilationsPage: 'Усяго компіляцый: {x}'
+    compilationsPage: 'Усяго кампіляцый у калекцыі: {x}',
+    artistsPage: 'Усяго артыстаў у калекцыі: {x}',
+    genresPage: 'Усяго жанраў у калекцыі: {x}',
+    periodsPage: 'Усяго перыядаў у калекцыі: {x}'
   },
   getRandomAlbum: 'Выпадковы альбом',
   unknownTime: 'невядомы час',
@@ -69,9 +72,10 @@ export const localesBY: LocaleDictionary = {
     email: 'Электронная пошта',
     role: 'Роля',
     password: 'Пароль',
-    passwordRepeat: 'Паўтарыце пароль',
+    passwordConfirm: 'Паўтарыце пароль',
     admin: 'Адміністратар',
     user: 'Карыстальнік',
+    created: 'Карыстальнік паспяхова створаны',
     errors: {
       passwordsDoNotMatch: 'Паролі не супадаюць'
     }

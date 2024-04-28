@@ -55,6 +55,7 @@ import TextInput from '~/components/Inputs/TextInput.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Button from './Button.vue'
 import Dropdown from './Inputs/Dropdown.vue'
+import { DropdownItem } from '~/types/Common'
 
 export default defineComponent({
   name: 'Form',
@@ -74,12 +75,17 @@ export default defineComponent({
       required: false,
       default: false
     },
+    isResetAfterSubmit: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     style: {
       type: Object as PropType<StyleValue>,
       required: false
     }
   },
-  setup({ schema }, { emit }) {
+  setup({ schema, isResetAfterSubmit }, { emit }) {
     if (!schema.properties) {
       throw new Error('No properties in schema')
     }
@@ -128,10 +134,10 @@ export default defineComponent({
       return value.type === 'string' && !value.$ref && value.element === 'select'
     }
 
-    const dropdownItems = (value: JSONSchema4) => {
+    const dropdownItems = (value: JSONSchema4): DropdownItem[] => {
       return (
         Object.entries(value.properties || {})
-          .map(([key, value]) => ({ value: key, label: lang(value.title || '') }))
+          .map<DropdownItem>(([key, value]) => ({ path: String(value.title), value: key }))
       )
     }
 
@@ -152,6 +158,14 @@ export default defineComponent({
       
       if (!errorInputs.value.size) {
         emit('formSubmit', formData)
+        
+        if (isResetAfterSubmit) {
+          Object.keys(formData)
+            .forEach((key) => {
+              formData[key] = initValues(schema.properties?.[key] || {})
+            })
+        }
+        console.log(formData)
       }
     }
 

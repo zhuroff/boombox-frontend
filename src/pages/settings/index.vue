@@ -22,8 +22,8 @@
           />
           <Dropdown
             size="medium"
-            :items="langSelectItems"
-            :selectedValue="currentLocale"
+            :items="langSelectorConfig.options"
+            :selectedValue="langSelectorConfig.locale"
             :style="{ width: '170px' }"
             @applyValue="(option) => setLocale(option.value)"
           />
@@ -31,27 +31,73 @@
         <table class="settings__table">
           <tbody class="settings__table-body">
             <tr
-              v-for="item in backups"
-              :key="item.timestamp"
+              v-for="timestamp in backups"
+              :key="timestamp"
               class="settings__table-row"
             >
-              <td class="settings__table-cell">{{ item.dateCreation }}</td>
+              <td class="settings__table-cell">
+                {{ new Date(timestamp).toLocaleDateString(localeIntlCodes[langSelectorConfig.locale.value], dateConfig) }}
+              </td>
               <td class="settings__table-cell">
                 <Button
                   :label="lang('restore')"
-                  @click="backupRestore(item.timestamp)"
+                  @click="backupRestore(timestamp)"
                 />
                 <Button
                   :label="lang('delete')"
-                  @click="backupDelete(item.timestamp)"
+                  @click="backupDelete(timestamp)"
                 />
               </td>
+            </tr>
+          </tbody>
+        </table>
+        <table
+          v-if="users.length"
+          class="settings__table"
+        >
+          <thead class="settings__table-head">
+            <tr class="settings__table-row">
+              <th class="settings__table-cell">ID</th>
+              <th class="settings__table-cell">Login</th>
+              <th class="settings__table-cell">Email</th>
+              <th class="settings__table-cell">Role</th>
+            </tr>
+          </thead>
+          <tbody class="settings__table-body">
+            <tr
+              v-for="user in users"
+              :key="user._id"
+              class="settings__table-row"
+            >
+              <td class="settings__table-cell">
+                {{ user._id }}
+              </td>
+              <td class="settings__table-cell">
+                {{ user.login }}
+              </td>
+              <td class="settings__table-cell">
+                {{ user.email }}
+              </td>
+              <td class="settings__table-cell">
+                {{ user.role }}
+              </td>
+              <!-- <td class="settings__table-cell">
+                <Button
+                  :label="lang('restore')"
+                  @click="backupRestore(timestamp)"
+                />
+                <Button
+                  :label="lang('delete')"
+                  @click="backupDelete(timestamp)"
+                />
+              </td> -->
             </tr>
           </tbody>
         </table>
         <div class="settings__form">
           <Form
             :schema="userSchema"
+            :isResetAfterSubmit="true"
             :style="{ gap: '0.5rem', display: 'flex', flexDirection: 'column', maxWidth: '500px' }"
             @formSubmit="createUser"
           />
@@ -62,11 +108,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, onMounted, ComputedRef } from 'vue'
-import { DropdownItem, SyncResponse } from '~/types/Common'
-import { UserCreating } from '~/types/User'
+import { defineComponent, ref, reactive, computed, onMounted } from 'vue'
+import { SyncResponse } from '~/types/Common'
+import { UserCreating, UserResponse } from '~/types/User'
 import { JSONSchema4 } from 'json-schema'
 import { useLocales } from '~/hooks/useLocales'
+import { localeIntlCodes } from '~/utils'
 import userFormSchema from '~/schemas/userFormSchema.json'
 import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button.vue'
@@ -74,11 +121,6 @@ import Dropdown from '~/components/Inputs/Dropdown.vue'
 import Form from '~/components/Form.vue'
 import api from '~/api'
 import store from '~/store'
-
-interface BackupList {
-  timestamp: number
-  dateCreation: string
-}
 
 export default defineComponent({
   components: {
@@ -91,38 +133,36 @@ export default defineComponent({
   setup() {
     const { allLocales, setLocale, lang } = useLocales()
     const { actions, getters } = store
-    const backups = reactive([]) as unknown as BackupList[]
+    const backups = reactive<number[]>([])
+    const users = reactive<UserResponse[]>([])
     const isPageLoaded = ref(false)
     const isSynchronized = ref(true)
     const userSchema = userFormSchema as JSONSchema4
+    const dateConfig = {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    } as const
 
-    const langSelectItems: ComputedRef<DropdownItem[]> = computed(() =>[
-      {
-        label: lang('languages.en'),
-        value: 'en',
-        icon: 'flag-en'
-      },
-      {
-        label: lang('languages.by'),
-        value: 'by',
-        icon: 'flag-by'
-      }
-    ])
+    const langSelectorConfig = computed(() => ({
+      locale: getters.currentLocale,
+      options: [
+        {
+          path: 'languages.en',
+          value: 'en',
+          icon: 'flag-en'
+        },
+        {
+          path: 'languages.by',
+          value: 'by',
+          icon: 'flag-by'
+        }
+      ]
+    }))
 
-    const currentLocale = computed(() => getters.currentLocale)
-
-    const setBackups = (data: string[]) => {
-      const dateConfig = {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      } as const
-      
+    const setBackups = (data: string[]) => {      
       backups.length = 0
-      backups.push(...data.map((el: string) => ({
-        timestamp: Number(el),
-        dateCreation: new Date(Number(el)).toLocaleDateString('ru-RU', dateConfig)
-      })))
+      backups.push(...data.map(Number))
       isPageLoaded.value = true
     }
 
@@ -131,6 +171,15 @@ export default defineComponent({
         const response = await api.get('/api/backup')
 
         if (response) setBackups(response.data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get<UserResponse[]>('/api/users')
+        users.push(...response.data)
       } catch (error) {
         console.error(error)
       }
@@ -245,30 +294,52 @@ export default defineComponent({
     }
 
     const createUser = async (payload: UserCreating) => {
-      if (payload.password !== payload.passwordRepeat) {
+      if (payload.password !== payload.passwordConfirm) {
         return actions.setSnackbarMessage({
           message: lang('userForm.errors.passwordsDoNotMatch'),
           type: 'error',
           time: 5000
         })
       }
+
+      try {
+        const { status, data } = await api.post<UserResponse>('/api/users/registration', payload)
+        if (status !== 201) {
+          throw new Error('Something went wrong')
+        }
+
+        actions.setSnackbarMessage({
+          message: lang('userForm.created'),
+          type: 'success',
+          time: 5000
+        })
+
+        users.push(data)
+      } catch (error) {
+        console.error(error)
+      }
     }
 
-    onMounted(() => fetchBackups())
+    onMounted(() => {
+      fetchBackups()
+      fetchUsers()
+    })
 
     return {
       lang,
+      dateConfig,
       allLocales,
       setLocale,
       isPageLoaded,
       backups,
+      users,
       createBackups,
       backupRestore,
       backupDelete,
       syncCollection,
       isSynchronized,
-      langSelectItems,
-      currentLocale,
+      langSelectorConfig,
+      localeIntlCodes,
       userSchema,
       createUser
     }
@@ -289,9 +360,11 @@ export default defineComponent({
   }
 
   &__table {
+    width: 100%;
+    max-width: 500px;
 
     &-row {
-      border-bottom: 1px solid $paleLT;
+      border-bottom: 1px solid $paleMD;
 
       &:last-child {
         border-bottom: 0;
@@ -300,16 +373,18 @@ export default defineComponent({
 
     &-cell {
       padding: 5px 10px;
-      border-right: 1px solid $paleLT;
+      border-right: 1px solid $paleMD;
 
       &:first-child {
         padding-left: 0;
         font-weight: 600;
+        width: 100%;
       }
 
       &:last-child {
         padding-right: 0;
         border-right: 0;
+        white-space: nowrap;
       }
 
       .button {
