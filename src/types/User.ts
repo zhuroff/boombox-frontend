@@ -17,3 +17,14 @@ export interface UserCreating extends User {
 }
 
 export type UserResponse = User & { _id: string }
+
+export interface AuthResponse {
+  accessToken: string
+  refreshToken: string
+  user: UserResponse
+}
+
+export interface AuthConfig {
+  isAuthenticated: boolean
+  user: UserResponse
+}

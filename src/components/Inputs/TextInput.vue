@@ -7,6 +7,7 @@
         :style="style"
         :type="type"
         :readonly="isReadonly"
+        autocomplete="off"
         v-model="localValue"
       />
       <div

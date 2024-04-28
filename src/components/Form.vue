@@ -165,7 +165,6 @@ export default defineComponent({
               formData[key] = initValues(schema.properties?.[key] || {})
             })
         }
-        console.log(formData)
       }
     }
 

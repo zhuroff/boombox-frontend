@@ -1,5 +1,6 @@
 import { Ref } from 'vue'
 import { JSONSchema4 } from 'json-schema'
+import { AuthConfig } from './User'
 import { TrackRes } from './ReqRes'
 import PlayerTrack from '~/classes/PlayerTrack'
 import AlbumPage from '~/classes/AlbumPage'
@@ -17,6 +18,7 @@ export interface BasicEntity {
 export type PlayerPlaylist = AlbumPage | CompilationPage<TrackRes>
 
 export interface AppStateInterface {
+  authConfig: AuthConfig
   currentPlaylist: PlayerPlaylist
   reservedPlaylist: PlayerPlaylist
   playingTrack: PlayerTrack

@@ -13,9 +13,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { JSONSchema4 } from 'json-schema'
-import { AuthData } from '~/types/User'
+import { AuthData, AuthResponse } from '~/types/User'
 import Form from '~/components/Form.vue'
 import loginFormSchema from '~/schemas/loginFormSchema.json'
+import api from '../api'
+import store from '../store'
 
 export default defineComponent({
   name: 'UnauthTemplate',
@@ -23,10 +25,19 @@ export default defineComponent({
     Form
   },
   setup() {
+    const { actions } = store
     const formSchema = loginFormSchema as JSONSchema4
 
-    const login = (formData: AuthData) => {
-      console.log(formData)
+    const login = async (formData: AuthData) => {
+      try {
+        const { data } = await api.post<AuthResponse>('api/users/login', formData)
+        localStorage.setItem('token', data.accessToken)
+        actions.setAuthConfig('isAuthenticated', true)
+        actions.setAuthConfig('user', data.user)
+      } catch (error) {
+        console.error(error)
+        actions.setAuthConfig('isAuthenticated', false)
+      }
     }
 
     return {

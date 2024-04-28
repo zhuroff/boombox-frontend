@@ -8,10 +8,10 @@
 
 import { defineComponent, onMounted, computed } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
-import { useAuth } from './hooks/useAuth'
-import api from './api'
 import MainTemplate from '~/templates/MainTemplate.vue'
 import UnauthTemplate from '~/templates/UnauthTemplate.vue'
+import api from './api'
+import store from './store'
 
 export default defineComponent({
   components: {
@@ -21,9 +21,9 @@ export default defineComponent({
 
   setup() {
     const { checkAndSetLocale } = useLocales()
-    const { isAuthenticated, setIsAuthenticated } = useAuth()
+    const { getters, actions } = store
     const layout = computed(() => (
-      isAuthenticated.value ? 'MainTemplate' : 'UnauthTemplate'
+      getters.authConfig.value.isAuthenticated ? 'MainTemplate' : 'UnauthTemplate'
     ))
     const syncMessage = localStorage.getItem('syncMessage')
 
@@ -33,23 +33,27 @@ export default defineComponent({
 
     const checkAuthentication = async () => {
       if (!localStorage.getItem('token')) {
-        return setIsAuthenticated(false)
-      }
-      try {
-        const res = await api.get('users/refresh')
-      } catch (error) {
-        console.error(error)
+        try {
+          const { data }  = await api.get('api/users/refresh')
+
+          localStorage.setItem('token', data.accessToken)
+          actions.setAuthConfig('isAuthenticated', true)
+          actions.setAuthConfig('user', data.user)
+        } catch (error) {
+          console.error(error)
+          localStorage.removeItem('token')
+        }
+      } else {
+        actions.setAuthConfig('isAuthenticated', true)
       }
     }
 
     onMounted(() => {
       checkAndSetLocale()
-      // checkAuthentication()
+      checkAuthentication()
     })
 
-    return {
-      layout
-    }
+    return { layout }
   }
 })
 

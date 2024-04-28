@@ -1,4 +1,5 @@
 import { AppStateInterface, LocaleKeys, Snackbar } from '~/types/Common';
+import { AuthConfig } from '~/types/User';
 
 export const useActionsCommon = (state: AppStateInterface) => {
   const setSnackbarMessage = (snackbar: Snackbar) => {
@@ -14,7 +15,12 @@ export const useActionsCommon = (state: AppStateInterface) => {
     state.currentLocale = locale
   }
 
+  const setAuthConfig = <T extends keyof AuthConfig>(key: T, value: AuthConfig[T]) => {
+    state.authConfig[key] = value
+  }
+
   return {
+    setAuthConfig,
     setSnackbarMessage,
     closeSnackbar,
     setLocale

@@ -4,6 +4,8 @@ import { findLocaleLangValue } from '~/utils'
 import locales from '~/locales'
 
 export const useGetters = (state: AppStateInterface) => {
+  const authConfig = computed(() => state.authConfig)
+  
   const playingTrack = computed(() => state.playingTrack)
 
   const playlists = computed(() => ({
@@ -49,6 +51,7 @@ export const useGetters = (state: AppStateInterface) => {
   const showState = computed(() => state)
 
   return {
+    authConfig,
     playingTrack,
     playlists,
     isNextTrackExists,

@@ -2,9 +2,9 @@
   "type": "object",
   "title": "Login form",
   "properties": {
-    "login": {
+    "email": {
       "type": "string",
-      "title": "loginForm.login",
+      "title": "loginForm.email",
       "required": true,
       "width": "100%"
     },
