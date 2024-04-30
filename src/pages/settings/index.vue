@@ -22,7 +22,7 @@
           />
           <Button
             :label="lang('settings.logout')"
-            @click="logOut"
+            @click="logout"
           />
           <Dropdown
             size="medium"
@@ -297,10 +297,15 @@ export default defineComponent({
       }
     }
 
-    const logOut = () => {
-      localStorage.removeItem('token')
-      actions.setAuthConfig('user', null)
-      actions.setAuthConfig('isAuthenticated', false)
+    const logout = async () => {
+      try {
+        await api.post('/api/users/logout')
+        localStorage.removeItem('token')
+        actions.setAuthConfig('user', undefined)
+        actions.setAuthConfig('isAuthenticated', false)
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     const createUser = async (payload: UserCreating) => {
@@ -352,7 +357,7 @@ export default defineComponent({
       localeIntlCodes,
       userSchema,
       createUser,
-      logOut
+      logout
     }
   }
 })

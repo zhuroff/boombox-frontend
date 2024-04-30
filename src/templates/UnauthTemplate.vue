@@ -31,9 +31,9 @@ export default defineComponent({
     const login = async (formData: AuthData) => {
       try {
         const { data } = await api.post<AuthResponse>('api/users/login', formData)
-        localStorage.setItem('token', data.accessToken)
         actions.setAuthConfig('isAuthenticated', true)
         actions.setAuthConfig('user', data.user)
+        localStorage.setItem('token', data.accessToken)
       } catch (error) {
         console.error(error)
         actions.setAuthConfig('isAuthenticated', false)

@@ -7,7 +7,7 @@ import PlayerTrack from '~/classes/PlayerTrack'
 
 class State {
   #state = reactive<AppStateInterface>({
-    authConfig: {} as AuthConfig,
+    authConfig: {},
     currentPlaylist: {} as PlayerPlaylist,
     reservedPlaylist: {} as PlayerPlaylist,
     playingTrack: {} as PlayerTrack,
