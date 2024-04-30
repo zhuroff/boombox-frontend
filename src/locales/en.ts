@@ -26,6 +26,7 @@ export const localesEN: LocaleDictionary = {
   settings: {
     createBackup: 'Create backup',
     synchronize: 'Synchronize',
+    logout: 'Logout'
   },
   headings: {
     albumsPage: 'Total albums in the collection: {x}',

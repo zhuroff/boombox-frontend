@@ -20,6 +20,10 @@
             :label="lang('settings.synchronize')"
             @click="syncCollection"
           />
+          <Button
+            :label="lang('settings.logout')"
+            @click="logOut"
+          />
           <Dropdown
             size="medium"
             :items="langSelectorConfig.options"
@@ -293,6 +297,12 @@ export default defineComponent({
       }
     }
 
+    const logOut = () => {
+      localStorage.removeItem('token')
+      actions.setAuthConfig('user', null)
+      actions.setAuthConfig('isAuthenticated', false)
+    }
+
     const createUser = async (payload: UserCreating) => {
       if (payload.password !== payload.passwordConfirm) {
         return actions.setSnackbarMessage({
@@ -341,7 +351,8 @@ export default defineComponent({
       langSelectorConfig,
       localeIntlCodes,
       userSchema,
-      createUser
+      createUser,
+      logOut
     }
   }
 })

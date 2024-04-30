@@ -26,6 +26,7 @@ export const localesBY: LocaleDictionary = {
   settings: {
     createBackup: 'Стварыць бэкап',
     synchronize: 'Сінхранізаваць',
+    logout: 'Выйсцi'
   },
   headings: {
     albumsPage: 'Усяго альбомаў у калекцыі: {x}',

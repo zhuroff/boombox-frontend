@@ -26,5 +26,5 @@ export interface AuthResponse {
 
 export interface AuthConfig {
   isAuthenticated: boolean
-  user: UserResponse
+  user: UserResponse | null
 }
