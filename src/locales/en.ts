@@ -7,6 +7,7 @@ export const localesEN: LocaleDictionary = {
   },
   cancel: 'Cancel',
   delete: 'Delete',
+  editPassword: 'Change password',
   restore: 'Restore',
   submit: 'Submit',
   save: 'Save',
@@ -34,7 +35,10 @@ export const localesEN: LocaleDictionary = {
     compilationsPage: 'Total compilations: {x}',
     artistsPage: 'Total artists in the collection: {x}',
     genresPage: 'Total genres in the collection: {x}',
-    periodsPage: 'Total periods in the collection: {x}'
+    periodsPage: 'Total periods in the collection: {x}',
+    backups: 'Backups',
+    users: 'Users',
+    createUser: 'Create user',
   },
   getRandomAlbum: 'Random album',
   unknownTime: 'unknown time',
@@ -76,6 +80,7 @@ export const localesEN: LocaleDictionary = {
     passwordConfirm: 'Repeat password',
     admin: 'Administrator',
     user: 'User',
+    listener: 'Listener',
     created: 'User was successfully created',
     errors: {
       passwordsDoNotMatch: 'Passwords do not match'
@@ -85,7 +90,15 @@ export const localesEN: LocaleDictionary = {
     errorRequired: 'This field is required'
   },
   table: {
-    empty: 'No data'
+    empty: 'No data',
+    theads: {
+      date: 'Date',
+      actions: 'Actions',
+      id: 'ID',
+      login: 'Login',
+      email: 'Email',
+      role: 'Role',
+    }
   },
   unknown: 'Unknown',
   moreOf: 'More of',

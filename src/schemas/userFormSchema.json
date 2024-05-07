@@ -21,6 +21,10 @@
         "user": {
           "type": "string",
           "title": "userForm.user"
+        },
+        "listener": {
+          "type": "string",
+          "title": "userForm.listener"
         }
       }
     },

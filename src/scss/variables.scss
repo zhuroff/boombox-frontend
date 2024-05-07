@@ -30,6 +30,8 @@ $albumAsideWidth: 500px;
 $playerHeight: 62px;
 $coverWidth: 350px;
 
+$mainPadding: 25px;
+
 $animation: cubic-bezier(.06,.28,.26,.81);
 
 $shadowLight: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -47,8 +49,8 @@ $breakpoints: (
 
 @mixin buttonClose {
   position: absolute;
-  top: 25px;
-  right: 25px;
+  top: $mainPadding;
+  right: $mainPadding;
   background-color: transparent;
   z-index: 10;
 

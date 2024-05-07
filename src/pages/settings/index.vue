@@ -2,7 +2,7 @@
   <section class="section">
     <transition name="fade">
       <Preloader
-        v-if="!isPageLoaded || !isSynchronized"
+        v-if="!isPageLoaded || isReloading"
         mode="light"
       />
     </transition>
@@ -13,10 +13,12 @@
       >
         <div class="settings__actions">
           <Button
+            v-if="isAdmin"
             :label="lang('settings.createBackup')"
             @click="createBackups"
           />
           <Button
+            v-if="isAdmin"
             :label="lang('settings.synchronize')"
             @click="syncCollection"
           />
@@ -32,80 +34,110 @@
             @applyValue="(option) => setLocale(option.value)"
           />
         </div>
-        <table class="settings__table">
-          <tbody class="settings__table-body">
-            <tr
-              v-for="timestamp in backups"
-              :key="timestamp"
-              class="settings__table-row"
-            >
-              <td class="settings__table-cell">
-                {{ new Date(timestamp).toLocaleDateString(localeIntlCodes[langSelectorConfig.locale.value], dateConfig) }}
-              </td>
-              <td class="settings__table-cell">
-                <Button
-                  :label="lang('restore')"
-                  @click="backupRestore(timestamp)"
-                />
-                <Button
-                  :label="lang('delete')"
-                  @click="backupDelete(timestamp)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table
-          v-if="users.length"
-          class="settings__table"
+        <section
+          v-if="isAdmin"
+          class="settings__section"
         >
-          <thead class="settings__table-head">
-            <tr class="settings__table-row">
-              <th class="settings__table-cell">ID</th>
-              <th class="settings__table-cell">Login</th>
-              <th class="settings__table-cell">Email</th>
-              <th class="settings__table-cell">Role</th>
-            </tr>
-          </thead>
-          <tbody class="settings__table-body">
-            <tr
-              v-for="user in users"
-              :key="user._id"
-              class="settings__table-row"
-            >
-              <td class="settings__table-cell">
-                {{ user._id }}
-              </td>
-              <td class="settings__table-cell">
-                {{ user.login }}
-              </td>
-              <td class="settings__table-cell">
-                {{ user.email }}
-              </td>
-              <td class="settings__table-cell">
-                {{ user.role }}
-              </td>
-              <!-- <td class="settings__table-cell">
-                <Button
-                  :label="lang('restore')"
-                  @click="backupRestore(timestamp)"
-                />
-                <Button
-                  :label="lang('delete')"
-                  @click="backupDelete(timestamp)"
-                />
-              </td> -->
-            </tr>
-          </tbody>
-        </table>
-        <div class="settings__form">
-          <Form
-            :schema="userSchema"
-            :isResetAfterSubmit="true"
-            :style="{ gap: '0.5rem', display: 'flex', flexDirection: 'column', maxWidth: '500px' }"
-            @formSubmit="createUser"
-          />
-        </div>
+          <h2 class="settings__section-heading">{{ lang('headings.backups') }}</h2>
+          <table class="settings__table">
+            <thead class="settings__table-head">
+              <tr class="settings__table-row">
+                <th class="settings__table-cell">{{ lang('table.theads.date') }}</th>
+                <th class="settings__table-cell">{{ lang('table.theads.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody class="settings__table-body">
+              <tr
+                v-for="timestamp in backups"
+                :key="timestamp"
+                class="settings__table-row"
+              >
+                <td class="settings__table-cell">
+                  {{ new Date(timestamp).toLocaleDateString(localeIntlCodes[langSelectorConfig.locale.value], dateConfig) }}
+                </td>
+                <td class="settings__table-cell">
+                  <Button
+                    size="small"
+                    :label="lang('restore')"
+                    @click="backupRestore(timestamp)"
+                  />
+                  <Button
+                    size="small"
+                    :label="lang('delete')"
+                    @click="backupDelete(timestamp)"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="settings__section" >
+          <h2 class="settings__section-heading">
+            {{ `${lang('headings.users')}${!isAdmin ? `: ${users?.[0].email}` : ''}` }}
+          </h2>
+          <table
+            v-if="users.length"
+            class="settings__table"
+          >
+            <thead class="settings__table-head">
+              <tr class="settings__table-row">
+                <th class="settings__table-cell">{{ lang('table.theads.id') }}</th>
+                <th class="settings__table-cell">{{ lang('table.theads.login') }}</th>
+                <th class="settings__table-cell">{{ lang('table.theads.email') }}</th>
+                <th class="settings__table-cell">{{ lang('table.theads.role') }}</th>
+                <th class="settings__table-cell">{{ lang('table.theads.actions') }}</th>
+              </tr>
+            </thead>
+            <tbody class="settings__table-body">
+              <tr
+                v-for="user in users"
+                :key="user._id"
+                class="settings__table-row"
+              >
+                <td class="settings__table-cell">
+                  {{ user._id }}
+                </td>
+                <td class="settings__table-cell">
+                  {{ user.login }}
+                </td>
+                <td class="settings__table-cell">
+                  {{ user.email }}
+                </td>
+                <td class="settings__table-cell">
+                  {{ user.role }}
+                </td>
+                <td class="settings__table-cell">
+                  <Button
+                    v-if="user._id === authConfig.user?._id"
+                    size="small"
+                    :label="lang('editPassword')"
+                    @click="changePassword(user)"
+                  />
+                  <Button
+                    v-if="user.role !== 'admin'"
+                    size="small"
+                    :label="lang('delete')"
+                    @click="deleteUser(user)"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section
+          v-if="isAdmin"
+          class="settings__section"
+        >
+          <h2 class="settings__section-heading">{{ lang('headings.createUser') }}</h2>
+          <div class="settings__form">
+            <Form
+              :schema="userSchema"
+              :isResetAfterSubmit="true"
+              :style="{ gap: '0.5rem', display: 'flex', flexDirection: 'column', maxWidth: '50%' }"
+              @formSubmit="createUser"
+            />
+          </div>
+        </section>
       </div>
     </transition>
   </section>
@@ -140,13 +172,17 @@ export default defineComponent({
     const backups = reactive<number[]>([])
     const users = reactive<UserResponse[]>([])
     const isPageLoaded = ref(false)
-    const isSynchronized = ref(true)
+    const isReloading = ref(false)
     const userSchema = userFormSchema as JSONSchema4
     const dateConfig = {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit'
     } as const
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
 
     const langSelectorConfig = computed(() => ({
       locale: getters.currentLocale,
@@ -167,7 +203,6 @@ export default defineComponent({
     const setBackups = (data: string[]) => {      
       backups.length = 0
       backups.push(...data.map(Number))
-      isPageLoaded.value = true
     }
 
     const fetchBackups = async () => {
@@ -180,16 +215,9 @@ export default defineComponent({
       }
     }
 
-    const fetchUsers = async () => {
-      try {
-        const response = await api.get<UserResponse[]>('/api/users')
-        users.push(...response.data)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
     const createBackups = async () => {
+      isReloading.value = true
+
       try {
         const response = await api.post('/api/backup/save')
         
@@ -203,6 +231,8 @@ export default defineComponent({
         }
       } catch (error) {
         console.error(error)
+      } finally {
+        isReloading.value = false
       }
     }
 
@@ -273,11 +303,10 @@ export default defineComponent({
     }
 
     const syncCollection = async () => {
-      isSynchronized.value = false
+      isReloading.value = true
 
       try {
         const response = await api.post<SyncResponse>('/api/sync')
-        isSynchronized.value = true
 
         if (response.status === 200) {
           Object.entries(response.data)
@@ -292,8 +321,9 @@ export default defineComponent({
           })
         }
       } catch (error) {
-        isSynchronized.value = true
         throw error
+      } finally {
+        isReloading.value = false
       }
     }
 
@@ -335,25 +365,61 @@ export default defineComponent({
       }
     }
 
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get<UserResponse[]>('/api/users')
+        users.length = 0
+        users.push(...response.data.sort((a, b) => a.role.localeCompare(b.role)))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const changePassword = async (user: UserResponse) => {
+      console.log(user)
+    }
+
+    const deleteUser = async (user: UserResponse) => {
+      isReloading.value = true
+      try {
+        await api.delete(`/api/users/${user._id}`)
+        await fetchUsers()
+      } catch (error) {
+        console.error(error)
+      } finally {
+        isReloading.value = false
+      }
+    }
+
     onMounted(() => {
-      fetchBackups()
-      fetchUsers()
+      if (isAdmin.value) {
+        Promise.all([fetchBackups, fetchUsers].map((fn) => fn()))
+          .then(() => isPageLoaded.value = true)
+          .catch(console.error)
+      } else if (getters.authConfig.value.user) {
+        isPageLoaded.value = true
+        users.push(getters.authConfig.value.user)
+      }
     })
 
     return {
       lang,
+      isAdmin,
       dateConfig,
       allLocales,
       setLocale,
       isPageLoaded,
       backups,
       users,
+      changePassword,
+      deleteUser,
       createBackups,
       backupRestore,
       backupDelete,
       syncCollection,
-      isSynchronized,
+      isReloading,
       langSelectorConfig,
+      authConfig: getters.authConfig,
       localeIntlCodes,
       userSchema,
       createUser,
@@ -367,17 +433,30 @@ export default defineComponent({
 @import '~/scss/variables';
 
 .settings {
-  padding: 25px;
+  padding: $mainPadding;
 
   &__actions {
-    margin-bottom: 25px;
+    margin-bottom: $mainPadding;
     display: flex;
     gap: 0.5rem;
   }
 
+  &__section {
+    width: 50%;
+    margin-bottom: $mainPadding;
+
+    &-heading {
+      @include serif(1.75rem);
+      margin-bottom: .5rem;
+    }
+  }
+
   &__table {
     width: 100%;
-    max-width: 500px;
+
+    &-head {
+      border-bottom: 2px solid $paleDP;
+    }
 
     &-row {
       border-bottom: 1px solid $paleMD;
@@ -409,10 +488,6 @@ export default defineComponent({
         }
       }
     }
-  }
-
-  &__form {
-    margin-top: 25px;
   }
 }
 </style>

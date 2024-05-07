@@ -7,6 +7,7 @@ export const localesBY: LocaleDictionary = {
   },
   cancel: 'Скасаваць',
   delete: 'Выдалiць',
+  editPassword: 'Змянiць пароль',
   restore: 'Аднавiць',
   submit: 'Даслаць',
   save: 'Захаваць',
@@ -34,7 +35,10 @@ export const localesBY: LocaleDictionary = {
     compilationsPage: 'Усяго кампіляцый у калекцыі: {x}',
     artistsPage: 'Усяго артыстаў у калекцыі: {x}',
     genresPage: 'Усяго жанраў у калекцыі: {x}',
-    periodsPage: 'Усяго перыядаў у калекцыі: {x}'
+    periodsPage: 'Усяго перыядаў у калекцыі: {x}',
+    backups: 'Створаныя бэкапы',
+    users: 'Карыстальнікі',
+    createUser: 'Стварыць карыстальніка'
   },
   getRandomAlbum: 'Выпадковы альбом',
   unknownTime: 'невядомы час',
@@ -76,6 +80,7 @@ export const localesBY: LocaleDictionary = {
     passwordConfirm: 'Паўтарыце пароль',
     admin: 'Адміністратар',
     user: 'Карыстальнік',
+    listener: 'Слухач',
     created: 'Карыстальнік паспяхова створаны',
     errors: {
       passwordsDoNotMatch: 'Паролі не супадаюць'
@@ -85,7 +90,15 @@ export const localesBY: LocaleDictionary = {
     errorRequired: 'Гэта поле абавязковае'
   },
   table: {
-    empty: 'Няма дадзеных'
+    empty: 'Няма дадзеных',
+    theads: {
+      date: 'Дата',
+      actions: 'Дзеянні',
+      id: 'ID',
+      login: 'Логін',
+      email: 'Email',
+      role: 'Роля',
+    }
   },
   unknown: 'Невядома',
   moreOf: 'Яшчэ альбомы',
