@@ -12,7 +12,7 @@ export interface AlbumHeadProps {
 export interface AlbumBooklet {
   id: string
   created: string
-  mimeType: string
+  mimeType?: string
   modified: string
   path: string
   title: string

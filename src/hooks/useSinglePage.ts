@@ -45,12 +45,14 @@ export const useSinglePage = <T extends BasicEntity, C, R>(
 
   const fetchBooklet = async (folder: string, cloud?: string) => {
     booklet.value.isActive = true
+
     if (booklet.value.items.length > booklet.value.offset || !cloud) return
 
     try {
       const bookletContent = await cloudServices.getImages<CloudFolderResponse<AlbumBooklet>>(
         `${folder}/booklet`, booklet.value.limit, booklet.value.offset, cloud
       )
+
       if (bookletContent) {
         booklet.value.items.push(...bookletContent.items)
         booklet.value.total = bookletContent.total

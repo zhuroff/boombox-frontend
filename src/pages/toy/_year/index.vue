@@ -41,10 +41,7 @@ import store from '~/store'
 import cloudServices from '~/services/cloud.services'
 import AlbumPage from '~/classes/AlbumPage'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
-import { BasicEntity } from '~/types/Common'
-import BookletState from '~/classes/BookletState'
-import { AlbumBooklet, BookletSlideState, RelatedAlbums } from '~/types/Album'
-import { CloudFolderResponse } from '~/types/Cloud'
+import { RelatedAlbums } from '~/types/Album'
 import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 import { useSinglePage } from '~/hooks/useSinglePage'
@@ -73,10 +70,6 @@ export default defineComponent({
   setup(props) {
     const {
       booklet,
-      isDataFetched,
-      fetchBooklet,
-      getRandomAlbum,
-      getRelatedAlbums,
       closeBookletModal,
       bookletPageChanged
     } = useSinglePage<AlbumPageRes, AlbumPage, AlbumItemRes>(AlbumPage, 'AlbumCard', 'albums')
@@ -87,7 +80,36 @@ export default defineComponent({
     const genreParams = ref<CloudEntity>({} as CloudEntity)
     const relatedAlbums = ref<RelatedAlbums[]>([])
 
-    const bookletHandler = async () => {}
+    const bookletHandler = async () => {
+      if (!props.params) return
+      booklet.value.isActive = true
+
+      if (booklet.value.items.length) return
+
+      const res = await cloudServices.getFolderContent(
+        '',
+        String(process.env.VUE_APP_TOY_CLOUD),
+        encodeURIComponent(`TOY/${props.params.path}/${props.title}/booklet`)
+      )
+
+      const images = await Promise.all(res.items.map(async (item) => ({
+        ...item,
+        url: await cloudServices.getFile<string>(
+          'cloud/image',
+          decodeURIComponent(item.path).replace('MelodyMap/TOY/', ''),
+          String(process.env.VUE_APP_TOY_CLOUD),
+          'image',
+          'TOY'
+        )
+      })))
+
+      if (images?.length) {
+        booklet.value.items.push(...images)
+        booklet.value.total = images.length
+        booklet.value.isCompleted = true
+        booklet.value.isFetched = true
+      }
+    }
 
     const fetchTOYAlbum = async (path: string) => {
       try {
@@ -114,6 +136,7 @@ export default defineComponent({
         } else {
           coverURL = '/img/album.webp'
         }
+
         album.value = new AlbumPage({
           _id: genreParams.value.id,
           title: `TOY: ${genreParams.value.title}`,
