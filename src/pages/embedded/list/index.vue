@@ -11,6 +11,7 @@
   >
     <template #header>
       <Button
+        v-if="isAdmin"
         icon="plus"
         isText
         @click="isCreateMode = !isCreateMode"
@@ -47,6 +48,7 @@ import { EmbeddedItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
 import { useLocales } from '~/hooks/useLocales'
 import { isObjectsEquals } from '~/utils'
+import store from '~/store'
 import dbServices from '~/services/database.services'
 import embeddedFormSchema from '~/schemas/embeddedFormSchema.json'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
@@ -75,12 +77,17 @@ export default defineComponent({
       setEntitiesLimit
     } = useListPage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem, 'EmbeddedCard', 'embedded')
     
+    const { getters } = store
     const { lang } = useLocales()
     const isCreateMode = ref(false)
     const albums = reactive<EmbeddedItem[]>([])
     const entityToDelete = ref<string | null>(null)
 
     const formSchema = embeddedFormSchema as JSONSchema4
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
 
     const pageHeading = computed(() => (
       lang(`headings.albumsPage`, String(pagePagination.value?.totalDocs || 0))
@@ -124,6 +131,7 @@ export default defineComponent({
     return {
       lang,
       albums,
+      isAdmin,
       delReject,
       formSchema,
       pageHeading,

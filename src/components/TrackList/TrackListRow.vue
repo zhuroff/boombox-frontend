@@ -34,7 +34,7 @@
         :duration="track.duration"
       />
       <TrackItemCompilation
-        v-if="!isTOY"
+        v-if="isAdmin && !isTOY"
         :trackID="track._id"
         :isCompilation="isCompilation"
         @removeTrackFromCompilation="() => $emit('removeTrackFromCompilation', track._id)"
@@ -109,7 +109,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props, { emit }) {
+  setup(props) {
     const { getters } = store
     const descriptionValue = ref('')
     const frameValue = ref('')
@@ -128,6 +128,10 @@ export default defineComponent({
       getters.playlists.value.current._id && props.albumID !== getters.playlists.value.current._id
     ))
 
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
+
     const lyricsModalSwitcher = () => {
       isModalActive.value = !isModalActive.value
     }
@@ -140,7 +144,8 @@ export default defineComponent({
       trackArtistAndTitle,
       isTOYEditable,
       descriptionValue,
-      frameValue
+      frameValue,
+      isAdmin
     }
   }
 })

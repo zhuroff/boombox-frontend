@@ -19,6 +19,7 @@
       <div class="cards__album-info">{{ cardCaption }}</div>
     </router-link>
     <Button
+      v-if="isAdmin"
       icon="delete"
       size="small"
       className="--delete"
@@ -33,6 +34,7 @@
 import { PropType, computed, defineComponent } from 'vue'
 import EmbeddedItem from '~/classes/EmbeddedItem'
 import Button from '~/components/Button.vue'
+import store from '~/store'
 
 export default defineComponent({
   name: 'EmbeddedCard',
@@ -50,11 +52,20 @@ export default defineComponent({
     }
   },
   setup({ card }) {
+    const { getters } = store
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
+
     const cardCaption = computed(() => (
       `${card.artist.title } / ${card.period.title} / ${card.genre.title}`
     ))
 
-    return { cardCaption }
+    return {
+      cardCaption,
+      isAdmin
+    }
   }
 })
 </script>

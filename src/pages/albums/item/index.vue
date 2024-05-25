@@ -41,6 +41,7 @@
             @click="addAlbumToPlaylist"
           >{{ lang('player.addToList') }}</li>
           <li
+            v-if="isAdmin"
             class="overlay__list-item"
             @click="openCollectionsModal"
           >{{ lang('collections.add') }}</li>
@@ -128,12 +129,16 @@ export default defineComponent({
     } = useDiscogs()
 
     const { lang } = useLocales()
-    const { actions } = store
+    const { actions, getters } = store
     const album = ref<AlbumPage>({} as AlbumPage)
     const relatedAlbums = ref<RelatedAlbums[]>([])
     const isCollectionLoading = ref(false)
     const collections = ref<CollectionEntity<BasicEntity>[] | undefined>(undefined)
     const entityType = ref('albums')
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
 
     const getRandom = () => {
       getRandomAlbum(entityType.value)
@@ -303,7 +308,8 @@ export default defineComponent({
       resetDiscogsFilters,
       bookletPageChanged,
       discogsFilters,
-      getRandom
+      getRandom,
+      isAdmin
     }
   }
 })

@@ -7,7 +7,10 @@
         :alt="data.title"
         class="hero__poster-image"
       >
-      <form class="hero__poster-form">
+      <form
+        v-if="isAdmin"
+        class="hero__poster-form"
+      >
         <label class="hero__poster-label">
           <input
             type="file"
@@ -30,7 +33,10 @@
           :alt="data.title"
           class="hero__avatar-image"
         >
-        <form class="hero__avatar-form">
+        <form
+          v-if="isAdmin"
+          class="hero__avatar-form"
+        >
           <label class="hero__avatar-label">
             <input
               type="file"
@@ -71,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, Ref, ref, watch } from 'vue'
+import { defineComponent, onMounted, PropType, Ref, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { TrackRes } from '~/types/ReqRes'
 import { ImagePayload, EntityImagesKeys } from '~/types/Common'
@@ -116,7 +122,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const { actions, getters: { playingTrack, playlists } } = store
+    const { actions, getters: { playingTrack, playlists, authConfig } } = store
     const { lang } = useLocales()
     const route = useRoute()
     const posterElement: Ref<null | HTMLInputElement> = ref(null)
@@ -124,6 +130,10 @@ export default defineComponent({
     const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
     const heroTitle = ref(props.data.title)
     const waveAlbum = ref<null | AlbumPage>(null)
+
+    const isAdmin = computed(() => (
+      authConfig.value.user?.role === 'admin'
+    ))
 
     const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => {
       if (element?.files?.length) {
@@ -210,6 +220,7 @@ export default defineComponent({
       waveAlbum,
       saveImage,
       playWave,
+      isAdmin,
       host,
       lang
     }

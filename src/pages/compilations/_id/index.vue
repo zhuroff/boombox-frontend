@@ -20,6 +20,7 @@
         </template>
         <template #navlist>
           <li
+            v-if="isAdmin"
             class="overlay__list-item"
             @click="isDelConfirm = true"
           >{{ lang('deleteEntity') }}</li>
@@ -85,7 +86,7 @@ export default defineComponent({
 
     const { lang } = useLocales()
     const { reorder, removeFromGathering } = useGathering()
-    const { actions } = store
+    const { actions, getters } = store
     const compilation = ref<CompilationPage<TrackRes>>({} as CompilationPage<TrackRes>)
     const relatedCompilations = ref<RelatedCompilations[]>([])
     const entityType = ref('compilations')
@@ -104,6 +105,10 @@ export default defineComponent({
         ), 0)}
       `.trim()
     })
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
 
     const getRandom = () => {
       getRandomAlbum(entityType.value)
@@ -222,9 +227,9 @@ export default defineComponent({
       relatedCompilations,
       removeTrackFromCompilation,
       trackOrderChanged,
-      getRandom
+      getRandom,
+      isAdmin
     }
   }
 })
 </script>
-~/classes/CompilationItem

@@ -22,6 +22,7 @@
       >
         <template #navlist>
           <li
+            v-if="isAdmin"
             class="overlay__list-item"
             @click="isDelConfirm = true"
           >{{ lang('deleteEntity') }}</li>
@@ -51,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useLocales } from '~/hooks/useLocales'
@@ -64,6 +65,7 @@ import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
+import store from '~/store'
 
 export default defineComponent({
   components: {
@@ -91,10 +93,15 @@ export default defineComponent({
       discogsFilters
     } = useDiscogs()
 
+    const { getters } = store
     const { lang } = useLocales()
     const album = ref<EmbeddedItem>({} as EmbeddedItem)
     const relatedAlbums = ref<RelatedAlbums[]>([])
     const isDelConfirm = ref(false)
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
 
     const getRandom = () => {
       getRandomAlbum('albums')
@@ -171,6 +178,7 @@ export default defineComponent({
       isDelConfirm,
       getRandom,
       delReject,
+      isAdmin,
       album,
       lang
     }

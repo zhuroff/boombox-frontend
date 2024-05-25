@@ -16,6 +16,7 @@
       >
         <template #hero-content>
           <Button
+            v-if="isAdmin"
             icon="delete"
             size="medium"
             className="--delete"
@@ -61,6 +62,7 @@ import CategoryHero from '~/components/CategoryHero.vue'
 import Button from '~/components/Button.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
+import store from '~/store'
 
 export default defineComponent({
   name: 'CollectionPage',
@@ -86,10 +88,15 @@ export default defineComponent({
       CollectionEntity<BasicEntity>,
       CollectionEntityRes<BasicEntity>
     >(CollectionEntity, 'CollectionCard', 'collections')
-
+    
+    const { getters } = store
     const { lang } = useLocales()
     const { reorder } = useGathering()
     const isDelConfirm = ref(false)
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
 
     const albumList = computed(() => (
       (data.value?.albums || [])
@@ -126,6 +133,7 @@ export default defineComponent({
     return {
       data,
       lang,
+      isAdmin,
       delReject,
       isDelConfirm,
       isDataFetched,

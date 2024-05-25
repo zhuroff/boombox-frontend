@@ -20,6 +20,7 @@
       <div class="cards__album-info">{{ cardCaption }}</div>
     </router-link>
     <Button
+      v-if="isAdmin"
       icon="delete"
       size="small"
       className="--delete"
@@ -36,6 +37,7 @@ import { BasicEntity } from '~/types/Common'
 import { useLocales } from '~/hooks/useLocales'
 import Button from '~/components/Button.vue'
 import CompilationItem from '~/classes/CompilationItem'
+import store from '~/store'
 
 export default defineComponent({
   name: 'CollectionCard',
@@ -57,13 +59,22 @@ export default defineComponent({
     }
   },
   setup({ card }) {
+    const { getters } = store
+
     const { lang } = useLocales()
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
 
     const cardCaption = computed(() => (
       `${lang('compilations.cardCaption')}: ${card.tracks.length}`
     ))
 
-    return { cardCaption }
+    return {
+      cardCaption,
+      isAdmin
+    }
   }
 })
 </script>

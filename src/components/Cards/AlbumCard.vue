@@ -20,7 +20,7 @@
       <div class="cards__album-info">{{ card.caption }}</div>
     </router-link>
     <Button
-      v-if="isDraggable"
+      v-if="isAdmin && isDraggable"
       icon="drag"
       size="small"
       isInverted
@@ -31,9 +31,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, computed, PropType } from 'vue'
 import AlbumItem from '~/classes/AlbumItem'
 import Button from '~/components/Button.vue'
+import store from '~/store'
 
 export default defineComponent({
   name: 'AlbumCard',
@@ -57,6 +58,15 @@ export default defineComponent({
       type: Boolean,
       required: true
     }
+  },
+  setup () {
+    const { getters } = store
+
+    const isAdmin = computed(() => (
+      getters.authConfig.value.user?.role === 'admin'
+    ))
+
+    return { isAdmin }
   }
 })
 </script>
