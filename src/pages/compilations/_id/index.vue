@@ -16,7 +16,11 @@
         @getRandomAlbum="getRandom"
       >
         <template #cover>
-          <CoverArt :cover="compilation.avatar" />
+          <CoverArt
+            :cover="compilation.avatar"
+            uploadable
+            @uploadImage="uploadAvatar"
+          />
         </template>
         <template #navlist>
           <li
@@ -45,13 +49,13 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, computed, ref, watch } from 'vue'
-import { BasicEntity, RandomEntityReqFilter, ReorderPayload } from '~/types/Common'
+import { BasicEntity, ImagePayload, RandomEntityReqFilter, ReorderPayload } from '~/types/Common'
 import { CompilationEntityRes, GatheringUpdateReq, TrackRes } from '~/types/ReqRes'
 import { RelatedCompilations } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useLocales } from '~/hooks/useLocales'
 import { useGathering } from '~/hooks/useGathering'
-import { conjugate } from '~/utils'
+import { conjugate, hostString } from '~/utils'
 import store from '~/store'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
@@ -60,6 +64,7 @@ import CompilationItem from '~/classes/CompilationItem'
 import CompilationPage from '~/classes/CompilationPage'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
+import uploadServices from '~/services/upload.services'
 
 export default defineComponent({
   name: 'AlbumPage',
@@ -185,6 +190,21 @@ export default defineComponent({
         })
     }
 
+    const uploadAvatar = (file: File) => {
+      const payload: ImagePayload = {
+        file,
+        type: 'avatar',
+        id: String(route.params.id),
+        slug: 'compilations'
+      }
+
+      uploadServices.uploadImage<any>(payload)
+        .then((data) => {
+          compilation.value.avatar = hostString(data.avatar)
+        })
+        .catch(console.error)
+    }
+
     watch(
       route,
       (newValue) => {
@@ -227,6 +247,7 @@ export default defineComponent({
       relatedCompilations,
       removeTrackFromCompilation,
       trackOrderChanged,
+      uploadAvatar,
       getRandom,
       isAdmin
     }

@@ -116,8 +116,8 @@ export default defineComponent({
 
 .album {
   &__booklet {
-    flex: none;
     z-index: 10;
+    position: relative;
 
     @include media('>=laptop') {
       width: $coverWidth;
@@ -169,16 +169,7 @@ export default defineComponent({
       border-radius: $borderRadiusSM;
       overflow: hidden;
       transition: opacity 0.3s ease;
-
-      &:before {
-        content: '';
-        background-color: rgba(0, 0, 0, 0.75);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
+      background-color: rgba(0, 0, 0, 0.75);
     }
 
     &_label {
@@ -195,6 +186,10 @@ export default defineComponent({
         height: 0;
         opacity: 0;
         outline: none;
+      }
+
+      .icon {
+        color: $white;
       }
     }
   }

@@ -87,8 +87,8 @@ export default defineComponent({
       (newVal, oldVal) => {
         if (!isObjectsEquals(newVal, oldVal)) {
           fetchData('compilations')
-            .then((payload) => {
-              compilations.splice(0, compilations.length, ...payload || [])
+            .then((data) => {
+              compilations.splice(0, compilations.length, ...data || [])
             })
         }
       },

@@ -1,5 +1,6 @@
-import { GatheringEntityRes } from '~/types/ReqRes'
 import ListCardBasic from './ListCardBasic'
+import { GatheringEntityRes } from '~/types/ReqRes'
+import { hostString } from '~/utils'
 
 export default abstract class GatheringEntity<T extends GatheringEntityRes> extends ListCardBasic {
   readonly _id: string
@@ -13,7 +14,8 @@ export default abstract class GatheringEntity<T extends GatheringEntityRes> exte
     this._id = gathering._id
     this.title = gathering.title
     this.dateCreated = gathering.dateCreated
-    this.poster = gathering.poster
-    this.avatar = gathering.avatar
+    
+    if (gathering.poster) this.poster = hostString(gathering.poster)
+    if (gathering.avatar) this.avatar = hostString(gathering.avatar)
   }
 }
