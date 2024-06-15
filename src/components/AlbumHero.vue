@@ -286,6 +286,8 @@ export default defineComponent({
 
     &-cover {
       width: $coverWidth;
+      position: relative;
+      z-index: 9000;
     }
 
     &-info {

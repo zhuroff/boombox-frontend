@@ -114,12 +114,6 @@ const routes: Array<RouteRecordRaw> = [
     name: 'settings',
     component: () => import(/* webpackChunkName: 'settings' */ '~/pages/settings/index.vue')
   }
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   meta: { layout: 'AuthTemplate' },
-  //   component: () => import(/* webpackChunkName: 'auth' */ '~/pages/login/index.vue')
-  // }
 ]
 
 const router = createRouter({

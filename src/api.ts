@@ -1,8 +1,9 @@
 import axios from 'axios'
 import store from './store'
+import { hostString } from './utils'
 
 const api = axios.create({
-  baseURL: process.env.VUE_APP_DEV_HOST,
+  baseURL: hostString(''),
   withCredentials: true,
   headers: {
     'accept': 'application/json',
