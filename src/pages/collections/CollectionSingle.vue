@@ -150,7 +150,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../../scss/variables';
+@import '~/scss/variables';
 
 .hero {
   .--delete {

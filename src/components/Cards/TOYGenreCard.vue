@@ -2,7 +2,7 @@
   <li class="card__toy">
     <router-link
       class="card__toy-link"
-      :to="{ path: `/${rootPath}/${slugify(card.path)}` }"
+      :to="{ path: `/${rootPath}/${card.path}` }"
     >
       <span>{{ card.title }}</span>
     </router-link>
@@ -12,7 +12,6 @@
 <script lang="ts">
 import { PropType, defineComponent } from 'vue'
 import { CloudEntity } from '~/types/ReqRes'
-import { slugify } from '~/utils'
 
 export default defineComponent({
   name: 'TOYGenreCard',
@@ -24,11 +23,6 @@ export default defineComponent({
     rootPath: {
       type: String,
       required: true
-    }
-  },
-  setup() {
-    return {
-      slugify
     }
   }
 })

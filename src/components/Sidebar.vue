@@ -56,11 +56,9 @@ export default defineComponent({
     const navbar = computed(() => (
       router
         .getRoutes()
-        .filter(({ path }) => (
-          ![':id', ':genre'].some((slug) => path.includes(slug)) && path !== '/'
-        ))
-        .map(({ name, path }) => ({
-          title: lang(`navigation.${name as string}`),
+        .filter(({ meta }) => meta?.navLocaleKey)
+        .map(({ meta, path }) => ({
+          title: lang(`navigation.${meta.navLocaleKey as string}`),
           route: path.replace('/', '')
         }))
     ))

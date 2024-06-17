@@ -35,16 +35,17 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, ref, watch } from 'vue'
-import { AlbumItemRes, AlbumPageRes, CloudEntity, TrackRes } from '~/types/ReqRes'
-import store from '~/store'
+import { defineComponent, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { AlbumItemRes, AlbumPageRes, TrackRes } from '~/types/ReqRes'
+import { RelatedAlbums } from '~/types/Album'
+import { useSinglePage } from '~/hooks/useSinglePage'
 import cloudServices from '~/services/cloud.services'
 import AlbumPage from '~/classes/AlbumPage'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
-import { RelatedAlbums } from '~/types/Album'
 import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
-import { useSinglePage } from '~/hooks/useSinglePage'
+import store from '~/store'
 
 export default defineComponent({
   name: 'TOYYearPage',
@@ -53,35 +54,20 @@ export default defineComponent({
     AlbumHero,
     AlbumPageTemplate
   },
-  props: {
-    params: {
-      type: Object as PropType<CloudEntity>,
-      required: false
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    backPath: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
     const {
       booklet,
       closeBookletModal,
       bookletPageChanged
     } = useSinglePage<AlbumPageRes, AlbumPage, AlbumItemRes>(AlbumPage, 'AlbumCard', 'albums')
 
+    const route = useRoute()
     const { actions } = store
     const isPageLoading = ref(true)
     const album = ref<AlbumPage>({} as AlbumPage)
-    const genreParams = ref<CloudEntity>({} as CloudEntity)
     const relatedAlbums = ref<RelatedAlbums[]>([])
 
     const bookletHandler = async () => {
-      if (!props.params) return
       booklet.value.isActive = true
 
       if (booklet.value.items.length) return
@@ -89,7 +75,7 @@ export default defineComponent({
       const res = await cloudServices.getFolderContent(
         '',
         String(process.env.VUE_APP_TOY_CLOUD),
-        encodeURIComponent(`TOY/${props.params.path}/${props.title}/booklet`)
+        encodeURIComponent(`TOY/${route.params.genre}/${route.params.year}/booklet`)
       )
 
       const images = await Promise.all(res.items.map(async (item) => ({
@@ -111,12 +97,12 @@ export default defineComponent({
       }
     }
 
-    const fetchTOYAlbum = async (path: string) => {
+    const fetchTOYAlbum = async () => {
       try {
         const yearFolder = await cloudServices.getFolderContent(
           '',
           String(process.env.VUE_APP_TOY_CLOUD),
-          encodeURIComponent(`${path}/${props.title}`)
+          encodeURIComponent(`${`TOY/${route.params.genre}`}/${route.params.year}`)
         )
 
         let coverURL: string
@@ -138,10 +124,10 @@ export default defineComponent({
         }
 
         album.value = new AlbumPage({
-          _id: genreParams.value.id,
-          title: `TOY: ${genreParams.value.title}`,
+          _id: String(route.params.year),
+          title: `TOY: ${route.params.genre}`,
           artist: { title: 'Various Artists', _id: '' },
-          period: { title: props.title, _id: '' },
+          period: { title: String(route.params.year), _id: '' },
           coverURL,
           tracks: yearFolder.items.reduce<TrackRes[]>((acc, next, index) => {
             if (next.mimeType?.startsWith('audio')) {
@@ -149,8 +135,8 @@ export default defineComponent({
                 _id: next.id,
                 title: next.title.replace(/^\d+\.\s|\.\w+$/g, ''),
                 artist: { title: 'Various Artists', _id: '' },
-                genre: { title: String(props.params?.title), _id: '' },
-                period: { title: props.title, _id: '' },
+                genre: { title: String(route.params.genre), _id: '' },
+                period: { title: String(route.params.year), _id: '' },
                 inAlbum: { title: 'Tracks of The Years', _id: '' },
                 path: next.path.replace('MelodyMap%2FTOY%2F', ''),
                 isTOY: true,
@@ -161,19 +147,20 @@ export default defineComponent({
             return acc
           }, [])
         })
+
         actions.setPlayerPlaylist(album.value)
-        isPageLoading.value = false
       } catch (error) {
         console.error(error)
+      } finally {
+        isPageLoading.value = false
       }
     }
 
     watch(
-      props,
+      route,
       (value) => {
-        if (value.params) {
-          genreParams.value = value.params
-          fetchTOYAlbum(`TOY/${value.params.path}`)
+        if (value.params?.genre) {
+          fetchTOYAlbum()
         }
       },
       { immediate: true, deep: true }

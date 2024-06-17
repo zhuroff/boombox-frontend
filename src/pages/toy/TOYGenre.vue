@@ -10,7 +10,7 @@
     class="toygenres"
   >
     <Header
-      :heading="params?.title || ''"
+      :heading="heading || ''"
       :withSearch="false"
     >
       <Button
@@ -25,7 +25,7 @@
         v-for="[key, value] in genreFolders"
         :key="key"
         :card="value"
-        :rootPath="`toy/${slugify(params?.path || '')}`"
+        :rootPath="`toy/${(heading || '')}`"
       />
     </ul>
   </div>
@@ -36,10 +36,9 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, reactive, ref, watch } from 'vue'
+import { computed, defineComponent, reactive, ref, watch } from 'vue'
 import { CloudEntity, CloudEntityRes, TrackRes } from '~/types/ReqRes'
 import { useLocales } from '~/hooks/useLocales'
-import { slugify } from '~/utils'
 import cloudServices from '~/services/cloud.services'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
@@ -47,6 +46,7 @@ import TOYYearCard from '~/components/Cards/TOYYearCard.vue'
 import Button from '~/components/Button.vue'
 import AlbumPage from '~/classes/AlbumPage'
 import store from '~/store'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'TOYGenrePage',
@@ -56,18 +56,15 @@ export default defineComponent({
     TOYYearCard,
     Button
   },
-  props: {
-    params: {
-      type: Object as PropType<CloudEntity>,
-      required: false
-    }
-  },
-  setup(props) {
+  setup() {
+    const route = useRoute()
     const { lang } = useLocales()
     const { actions, getters: { playingTrack, playlists } } = store
     const isPageLoading = ref(true)
     const genreFolders = reactive<Map<string, CloudEntity>>(new Map())
     const waveAlbum = ref<null | AlbumPage>(null)
+
+    const heading = computed(() => String(route.params.genre))
 
     const playWave = () => {
       if (!waveAlbum.value) return
@@ -75,7 +72,7 @@ export default defineComponent({
         actions.playTrack(waveAlbum.value.tracks[0])
         actions.togglePlayerVisibility()
       } else {
-        if (playlists.value.current._id !== props.params?.title) {
+        if (playlists.value.current._id !== route.params.genre) {
           actions.setPlayerPlaylist(waveAlbum.value)
           actions.playTrack(waveAlbum.value.tracks[0])
           actions.togglePlayerVisibility()
@@ -88,14 +85,12 @@ export default defineComponent({
     }
 
     const fetchTOYYears = async () => {
-      if (!props.params?.cloudURL) return
-
       try {
         const years: string[] = []
         const genreFolder = await cloudServices.getFolderContent(
           '',
-          props.params.cloudURL,
-          encodeURIComponent(`TOY/${props.params.path}`)
+          String(process.env.VUE_APP_TOY_CLOUD),
+          encodeURIComponent(`TOY/${route.params.genre}`)
         )
 
         genreFolder.items.forEach((item) => {
@@ -112,24 +107,24 @@ export default defineComponent({
           }
         })
 
-        isPageLoading.value = false
         getTOYWave(years)
       } catch (error) {
         console.error(error)
+      } finally {
+        isPageLoading.value = false
       }
     }
 
     const getTOYWave = async (years: string[]) => {
-      if (!props.params?.cloudURL) return
       try {
         const tracks = await cloudServices.getRandomTracks(
           '',
           years,
-          props.params.cloudURL,
-          encodeURIComponent(`TOY/${props.params.path}`),
+          String(process.env.VUE_APP_TOY_CLOUD),
+          encodeURIComponent(`TOY/${route.params.genre}`),
           50
         )
-        setTOYWave(tracks, props.params.title)
+        setTOYWave(tracks, String(route.params.genre))
       } catch (error) {
         console.error(error)
       }
@@ -159,9 +154,9 @@ export default defineComponent({
     }
 
     watch(
-      props,
+      route,
       (value) => {
-        if (value.params) {
+        if (value.params?.genre) {
           fetchTOYYears()
         }
       },
@@ -173,7 +168,7 @@ export default defineComponent({
       genreFolders,
       waveAlbum,
       playWave,
-      slugify,
+      heading,
       lang
     }
   }
