@@ -9,6 +9,24 @@
   &.--z-low {
     height: calc(100vh - 62px);
   }
+
+  &__center {
+    padding: $mainPadding;
+
+    h1 {
+      margin-bottom: 0.75rem;
+
+      @include media('<tablet') {
+        @include serif(1.5rem);
+        margin-right: 1rem;
+      }
+  
+      @include media('>=tablet') {
+        @include serif(1.75rem);
+        margin-right: 2rem;
+      }
+    }
+  }
 }
 
 .hero {

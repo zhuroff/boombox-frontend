@@ -12,6 +12,8 @@ export const localesEN: LocaleDictionary = {
   submit: 'Submit',
   save: 'Save',
   delConfirmMessage: 'Are you sure you want to delete this entity?',
+  pageNotFound: 'Page not found',
+  goBack: 'Go back',
   navigation: {
     albums: 'Albums',
     artists: 'Artists',

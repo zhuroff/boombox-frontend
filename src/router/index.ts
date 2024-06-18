@@ -161,6 +161,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'settings',
     meta: { navLocaleKey: 'settings' },
     component: () => import(/* webpackChunkName: 'settings' */ '~/pages/settings/index.vue')
+  },
+  {
+    path: '/:unknown(.*)*',
+    name: 'not-found',
+    component: () => import(/* webpackChunkName: 'not-found' */ '~/pages/404.vue')
   }
 ]
 
