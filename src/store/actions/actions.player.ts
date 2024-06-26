@@ -20,13 +20,13 @@ export const useActionsPlayer = (state: AppStateInterface) => {
     checkOrReplacePlaylists(track)
     
     try {
-      const trackSourceLink: string = await cloudServices.getFile(
-        'tracks/audio',
-        track.path,
-        track.cloudURL,
-        'audio',
-        track.isTOY ? 'TOY' : ''
-      )
+      const trackSourceLink: string = await cloudServices.getFile({
+        entityType: 'tracks/audio',
+        path: track.path,
+        cloudURL: track.cloudURL,
+        type:'audio',
+        root: track.isTOY ? 'TOY' : ''
+      })
 
       if (!trackSourceLink) {
         throw new Error('Unable to get track source link')

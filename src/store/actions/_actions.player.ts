@@ -148,7 +148,7 @@ export const useActionsPlayerPrivate = (state: AppStateInterface) => {
       saveTrackDuration(audio.duration, track._id)
       timeProgressHandler(track, cb)
     } else {
-      const audioLink = await cloudServices.getTrackDuration(track.path, track.cloudURL)
+      const audioLink = await cloudServices.getTrackDuration({ path: track.path, cloudURL: track.cloudURL })
       const pureAudio = new Audio(audioLink)
       pureAudio.onloadedmetadata = () => {
         setTrackDuration({ trackID: track._id, duration: pureAudio.duration })

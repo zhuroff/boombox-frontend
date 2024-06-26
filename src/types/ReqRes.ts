@@ -111,3 +111,32 @@ export interface CloudEntityRes {
   total: number
   items: CloudEntity[]
 }
+
+export interface CloudEntityReq {
+  path: string
+  cloudURL: string
+  root?: string
+}
+
+export interface CloudEntityReqExt extends CloudEntityReq {
+  limit?: number
+  offset?: number
+}
+
+export interface CloudEntityReqRandom extends CloudEntityReqExt {
+  criteria: string
+  exclude: string
+  value: string
+}
+
+export interface CloudEntityReqFile extends CloudEntityReq {
+  type: string
+  entityType: string
+}
+
+export interface CloudFolderResponse<T> {
+  items: T[]
+  limit: number
+  offset: number
+  total: number
+}

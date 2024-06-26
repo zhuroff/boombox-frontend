@@ -35,13 +35,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { AlbumItemRes, AlbumPageRes, TrackRes } from '~/types/ReqRes'
 import { RelatedAlbums } from '~/types/Album'
+import { BasicEntity } from '~/types/Common'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import cloudServices from '~/services/cloud.services'
 import AlbumPage from '~/classes/AlbumPage'
+import AlbumItem from '~/classes/AlbumItem'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
@@ -65,28 +67,28 @@ export default defineComponent({
     const { actions } = store
     const isPageLoading = ref(true)
     const album = ref<AlbumPage>({} as AlbumPage)
-    const relatedAlbums = ref<RelatedAlbums[]>([])
+    const relatedAlbums = reactive<RelatedAlbums[]>([])
 
     const bookletHandler = async () => {
       booklet.value.isActive = true
 
       if (booklet.value.items.length) return
 
-      const res = await cloudServices.getFolderContent(
-        '',
-        String(process.env.VUE_APP_TOY_CLOUD),
-        encodeURIComponent(`TOY/${route.params.genre}/${route.params.year}/booklet`)
-      )
+      const res = await cloudServices.getFolderContent({
+        path: '',
+        cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+        root: encodeURIComponent(`TOY/${route.params.genre}/${route.params.year}/booklet`)
+      })
 
       const images = await Promise.all(res.items.map(async (item) => ({
         ...item,
-        url: await cloudServices.getFile<string>(
-          'cloud/image',
-          decodeURIComponent(item.path).replace('MelodyMap/TOY/', ''),
-          String(process.env.VUE_APP_TOY_CLOUD),
-          'image',
-          'TOY'
-        )
+        url: await cloudServices.getFile<string>({
+          entityType: 'cloud/image',
+          path: decodeURIComponent(item.path).replace('MelodyMap/TOY/', ''),
+          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+          type: 'image',
+          root:'TOY'
+        })
       })))
 
       if (images?.length) {
@@ -98,12 +100,14 @@ export default defineComponent({
     }
 
     const fetchTOYAlbum = async () => {
+      isPageLoading.value = true
+
       try {
-        const yearFolder = await cloudServices.getFolderContent(
-          '',
-          String(process.env.VUE_APP_TOY_CLOUD),
-          encodeURIComponent(`${`TOY/${route.params.genre}`}/${route.params.year}`)
-        )
+        const yearFolder = await cloudServices.getFolderContent({
+          path: '',
+          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+          root: encodeURIComponent(`${`TOY/${route.params.genre}`}/${route.params.year}`)
+        })
 
         let coverURL: string
         let coverPath = yearFolder.items.find(
@@ -112,13 +116,13 @@ export default defineComponent({
 
         if (coverPath) {
           coverPath = decodeURIComponent(coverPath).replace('MelodyMap/TOY/', '')
-          coverURL = await cloudServices.getFile(
-            'cloud/image',
-            coverPath,
-            String(process.env.VUE_APP_TOY_CLOUD),
-            'image',
-            'TOY'
-          )
+          coverURL = await cloudServices.getFile({
+            entityType: 'cloud/image',
+            path: coverPath,
+            cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+            type: 'image',
+            root: 'TOY'
+          })
         } else {
           coverURL = '/img/album.webp'
         }
@@ -156,11 +160,44 @@ export default defineComponent({
       }
     }
 
+    const fetchRelatedAlbums = async (criteria: Record<string, string>) => {
+      relatedAlbums.length = 0
+      
+      try {
+        const res = await cloudServices.getRamdomAlbums<{ period: BasicEntity; genre: BasicEntity }>({
+          path: '',
+          criteria: criteria.get,
+          exclude: String(route.params[criteria.exclude]),
+          value: String(route.params[criteria.get]),
+          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+          root: 'TOY',
+          limit: 5
+        })
+
+        relatedAlbums.push({
+          name: String(route.params[criteria.get]),
+          docs: res.map((album) => (
+            new AlbumItem({
+              _id: album.period.title,
+              cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+              ...album
+            }, 'AlbumCard', `toy/${album.genre.title}`)
+          ))
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
     watch(
       route,
       (value) => {
         if (value.params?.genre) {
-          fetchTOYAlbum()
+          fetchTOYAlbum(),
+          [
+            { get: 'year', exclude: 'genre' },
+            { get: 'genre', exclude: 'year' }
+          ].map((criteria) => fetchRelatedAlbums(criteria))
         }
       },
       { immediate: true, deep: true }

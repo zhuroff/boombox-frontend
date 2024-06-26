@@ -87,11 +87,11 @@ export default defineComponent({
     const fetchTOYYears = async () => {
       try {
         const years: string[] = []
-        const genreFolder = await cloudServices.getFolderContent(
-          '',
-          String(process.env.VUE_APP_TOY_CLOUD),
-          encodeURIComponent(`TOY/${route.params.genre}`)
-        )
+        const genreFolder = await cloudServices.getFolderContent({
+          path: '',
+          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+          root: encodeURIComponent(`TOY/${route.params.genre}`)
+        })
 
         genreFolder.items.forEach((item) => {
           if (!item.mimeType && item.title.length === 4) {
@@ -117,13 +117,13 @@ export default defineComponent({
 
     const getTOYWave = async (years: string[]) => {
       try {
-        const tracks = await cloudServices.getRandomTracks(
-          '',
+        const tracks = await cloudServices.getRandomTracks({
+          path: '',
           years,
-          String(process.env.VUE_APP_TOY_CLOUD),
-          encodeURIComponent(`TOY/${route.params.genre}`),
-          50
-        )
+          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+          root: encodeURIComponent(`TOY/${route.params.genre}`),
+          limit: 50
+        })
         setTOYWave(tracks, String(route.params.genre))
       } catch (error) {
         console.error(error)

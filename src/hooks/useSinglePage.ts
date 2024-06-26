@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { CloudFolderResponse } from '~/types/Cloud'
+import { CloudFolderResponse } from '~/types/ReqRes'
 import { AlbumBooklet, BookletSlideState } from '~/types/Album'
 import { BasicEntity, RequestConfig, RelatedAlbumsReqFilter, RandomEntityReqFilter, ResponseMessage } from '~/types/Common'
 import { ListPageResponse } from '~/types/ReqRes'
@@ -49,9 +49,12 @@ export const useSinglePage = <T extends BasicEntity, C, R>(
     if (booklet.value.items.length > booklet.value.offset || !cloud) return
 
     try {
-      const bookletContent = await cloudServices.getImages<CloudFolderResponse<AlbumBooklet>>(
-        `${folder}/booklet`, booklet.value.limit, booklet.value.offset, cloud
-      )
+      const bookletContent = await cloudServices.getImages<CloudFolderResponse<AlbumBooklet>>({
+        path: `${folder}/booklet`,
+        limit: booklet.value.limit,
+        offset: booklet.value.offset,
+        cloudURL: cloud
+      })
 
       if (bookletContent) {
         booklet.value.items.push(...bookletContent.items)

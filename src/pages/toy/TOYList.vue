@@ -43,7 +43,11 @@ export default defineComponent({
 
     const fetchTOYTable = async () => {
       try {
-        const rootFolder = await cloudServices.getFolderContent('', String(process.env.VUE_APP_TOY_CLOUD), 'TOY')
+        const rootFolder = await cloudServices.getFolderContent({
+          path: '',
+          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+          root: 'TOY'
+        })
 
         rootFolder.items.forEach((item) => {
           if (!item.mimeType) {
