@@ -103,6 +103,10 @@ export default defineComponent({
 @import 'include-media';
 
 .tracklist {
-  margin: 75px 0 25px;
+  margin-bottom: 25px;
+
+  @include media('>=laptop') {
+    margin-top: 75px;
+  }
 }
 </style>

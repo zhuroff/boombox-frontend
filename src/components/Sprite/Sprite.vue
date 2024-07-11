@@ -36,6 +36,7 @@ import SpriteVolumeOff from './SpriteVolumeOff.vue'
 import SpriteYouTube from './SpriteYouTube.vue'
 import SpriteFlagBy from './SpriteFlagBy.vue'
 import SpriteFlagEn from './SpriteFlagEn.vue'
+import SpriteBurger from './SpriteBurger.vue'
 
 export default defineComponent({
   name: 'Sprite',
@@ -71,7 +72,8 @@ export default defineComponent({
     SpriteVolumeOff,
     SpriteYouTube,
     SpriteFlagBy,
-    SpriteFlagEn
+    SpriteFlagEn,
+    SpriteBurger
   },
   props: {
     name: {
@@ -112,7 +114,8 @@ export default defineComponent({
       ['volume-off', SpriteVolumeOff],
       ['youtube', SpriteYouTube],
       ['flag-by', SpriteFlagBy],
-      ['flag-en', SpriteFlagEn]
+      ['flag-en', SpriteFlagEn],
+      ['burger', SpriteBurger]
     ])
 
     const IconComponent = computed(() => (

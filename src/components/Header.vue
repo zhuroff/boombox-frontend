@@ -56,7 +56,7 @@ export default defineComponent({
     background-color: $dark;
     color: $white;
     position: relative;
-    padding: 75px 25px 0;
+    padding: 25px 25px 0;
 
     &:after {
       content: '';

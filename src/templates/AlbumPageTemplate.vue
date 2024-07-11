@@ -8,11 +8,13 @@
     </transition>
     <transition name="fade">
       <div v-if="isDataFetched && album._id" class="album">
-        <slot name="hero"></slot>
+        <slot name="hero">
+          <slot name="frame"></slot>
+        </slot>
         <div class="album__content">
           <div
             class="album__main"
-            :style="{ marginTop: 'tracks' in album ? 0 : '-300px' }"
+            ref="albumContent"
           >
             <TrackList
               v-if="'tracks' in album"
@@ -23,10 +25,6 @@
               @trackOrderChanged="changeTracksOrder"
               @removeTrackFromCompilation="removeTrackFromCompilation"
             />
-            <slot
-              v-else
-              name="frame"
-            ></slot>
             <div
               v-if="discogsTablePayload?.isFetched && discogsFiltersStates"
               class="album__discogs"
@@ -72,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from 'vue'
+import { PropType, defineComponent, nextTick, Ref, ref, watchEffect } from 'vue'
 import { BookletSlideState, RelatedAlbums, RelatedCompilations } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
 import { GatheringUpdateReq, TrackRes } from '~/types/ReqRes'
@@ -139,8 +137,9 @@ export default defineComponent({
       default: false
     }
   },
-  setup(_, { emit }) {
-    const { lang } = useLocales()    
+  setup(props, { emit }) {
+    const { lang } = useLocales()
+    const albumContent: Ref<null | HTMLInputElement> = ref(null)
 
     const updateDiscogsFilter = (payload: [keyof DiscogsFilter, string]) => {
       emit('filter:update', payload)
@@ -170,7 +169,24 @@ export default defineComponent({
       emit('removeTrackFromCompilation', payload)
     }
 
+    watchEffect(() => {
+      if (!('frame' in props.album)) return
+
+      nextTick(() => {
+        const frameHeight = document.querySelector('iframe')?.clientHeight
+        const heroHeight = document.querySelector('.album__hero')?.clientHeight
+
+        if (!frameHeight || !heroHeight || Number(frameHeight) <= Number(heroHeight)) return
+
+        if (albumContent.value) {
+          const contentMargin = frameHeight - heroHeight + 50
+          albumContent.value.style.marginTop = `${contentMargin}px`
+        }
+      })
+    })
+
     return {
+      albumContent,
       updateDiscogsFilter,
       resetDiscogsFilters,
       switchPagination,
@@ -223,20 +239,34 @@ export default defineComponent({
 
   &__related {
 
+    @include media('<laptop') {
+      margin-bottom: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
     &-title {
       font-weight: 600;
       text-align: center;
-      margin-bottom: 1rem;
+
+      @include media('>=laptop') {
+        margin-bottom: 1rem;
+      }
     }
   }
 
   &__discogs {
 
+    @include media('<laptop') {
+      display: none;
+    }
+
     &-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem 0;
+      margin-bottom: 0.75rem;
 
       .discogs {
         width: 100px;

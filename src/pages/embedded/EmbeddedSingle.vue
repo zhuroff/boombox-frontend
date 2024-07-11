@@ -18,6 +18,7 @@
         :artist="album.artist"
         :genre="album.genre"
         :period="album.period"
+        :frame="album.frame"
         @getRandomAlbum="getRandom"
       >
         <template #navlist>
@@ -28,12 +29,6 @@
           >{{ lang('deleteEntity') }}</li>
         </template>
       </AlbumHero>
-    </template>
-    <template #frame>
-      <div
-        v-html="album.frame"
-        class="album__frame"
-      />
     </template>
     <template #modal>
       <Modal
@@ -68,12 +63,13 @@ import Modal from '~/components/Modal.vue'
 import store from '~/store'
 
 export default defineComponent({
+  name: 'EmbeddedSingle',
   components: {
     AlbumPageTemplate,
     Confirmation,
     AlbumHero,
     Modal
-},
+  },
   setup() {
     const {
       fetchData,
@@ -194,6 +190,7 @@ export default defineComponent({
 
   iframe {
     border-radius: $borderRadiusSM;
+    min-height: 500px;
   }
 }
 </style>

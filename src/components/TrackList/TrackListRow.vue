@@ -190,7 +190,7 @@ export default defineComponent({
         }
 
         @include media('<laptop') {
-          width: 18px;
+          display: none;
         }
 
         @include media('>=laptop') {
@@ -229,6 +229,13 @@ export default defineComponent({
 
       &.--duration {
 
+        @include media('<laptop') {
+          display: none;
+        }
+      }
+
+      &.--compilation {
+       
         @include media('<laptop') {
           display: none;
         }

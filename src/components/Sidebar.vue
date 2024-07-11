@@ -1,9 +1,11 @@
 <template>
   <aside :class="[{ '--opened': isExpanded }, 'aside']">
-    <!-- <ButtonBurger
-      :isActive="isExpanded"
-      @burgerClick="burgerClick"
-    /> -->
+    <Button
+      className="aside__burger"
+      :icon="isExpanded ? 'close' : 'burger'"
+      isText
+      @click="burgerClick"
+    />
     <router-link
       class="aside__homelink"
       to="/"
@@ -34,14 +36,14 @@
 import { computed, defineComponent } from 'vue'
 import { useLocales } from '~/hooks/useLocales'
 import router from '~/router'
-// import ButtonBurger from '~/components/Button/ButtonBurger.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
+import Button from './Button.vue'
 
 export default defineComponent({
   name: 'Sidebar',
   components: {
-    // ButtonBurger,
-    Sprite
+    Sprite,
+    Button
   },
   props: {
     isExpanded: {
@@ -101,7 +103,6 @@ export default defineComponent({
   }
 
   @include media('>=laptop') {
-    // border-right: 1px solid $paleLT;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     position: relative;
     width: $asideWidth;
@@ -111,23 +112,45 @@ export default defineComponent({
     z-index: 1000;
   }
 
+  &__burger {
+    
+    @include media('<laptop') {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0 !important;
+
+      .icon {
+        width: 2rem !important;
+        fill: $white;
+        color: $white;
+      }
+    }
+
+    @include media('>=laptop') {
+      display: none;
+    }
+  }
+
   &__homelink {
     display: flex;
     align-items: center;
-    font-size: 1.15rem;
-    padding: 0 25px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
 
     @include media('<laptop') {
-      justify-content: flex-end;
+      justify-content: flex-start;
       height: 50px;
+      padding: 0 1rem;
+      font-size: 1rem;
       color: $white;
     }
 
     @include media('>=laptop') {
       height: 70px;
+      padding: 0 25px;
+      font-size: 1.15rem;
       color: $paleDP;
     }
 
@@ -153,16 +176,17 @@ export default defineComponent({
     &-link {
       line-height: 3;
       display: block;
-      padding: 0 25px;
       transition: all 0.2s ease;
 
       @include media('<laptop') {
         text-align: right;
         color: $white;
+        padding: 0 1rem;
       }
 
       @include media('>=laptop') {
         color: $white;
+        padding: 0 $mainPadding;
       }
 
       &:hover,

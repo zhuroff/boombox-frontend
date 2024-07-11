@@ -67,7 +67,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 5000;
+  z-index: 9000;
   cursor: default;
   background-color: rgba(0, 0, 0, 0.75);
 

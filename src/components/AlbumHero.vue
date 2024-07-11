@@ -1,7 +1,12 @@
 <template>
   <div class="album__hero">
     <div class="album__hero-cover">
-      <slot name="cover"></slot>
+      <div
+        v-if="frame"
+        v-html="frame"
+        class="album__frame"
+      />
+      <slot v-else name="cover"></slot>
     </div>
     <div class="album__hero-info">
       <div class="album__hero-head">
@@ -145,6 +150,10 @@ export default defineComponent({
       type: Object as PropType<Partial<BasicEntity>>,
       required: false
     },
+    frame: {
+      type: String,
+      required: false
+    },
     totalCounts: {
       type: String,
       required: false
@@ -160,7 +169,7 @@ export default defineComponent({
       default: true
     }
   },
-  setup({ artist, title }) {
+  setup({ artist, title, frame }) {
     const { lang } = useLocales()
     const { actions, getters } = store
     const { searchSubmit, results } = useSearch()
@@ -285,9 +294,16 @@ export default defineComponent({
     }
 
     &-cover {
-      width: $coverWidth;
       position: relative;
       z-index: 9000;
+
+      @include media('<laptop') {
+        width: 100%;
+      }
+
+      @include media('>=laptop') {
+        width: $coverWidth;
+      }
     }
 
     &-info {

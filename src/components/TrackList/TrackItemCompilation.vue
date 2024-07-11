@@ -1,5 +1,5 @@
 <template>
-  <div class="tracklist__row-cell --pointer --fix">
+  <div class="tracklist__row-cell --pointer --fix --compilation">
     <Button
       v-if="isCompilation"
       icon="minus"
