@@ -1,31 +1,23 @@
 <template>  
   <div
     class="tracklist__row-cell --pointer --title"
-    @click="callLyricsModal"
+    @click="() => emit('callLyricsModal')"
   >
     <span class="tracklist__row-title">{{ title }}</span>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+interface Props {
+  title: string
+}
 
-export default defineComponent({
-  props: {
-    title: {
-      type: String,
-      required: true
-    }
-  },
+interface Emits {
+  (e: 'callLyricsModal'): void
+}
 
-  setup(_, { emit }) {
-    const callLyricsModal = () => {
-      emit('callLyricsModal')
-    }
-
-    return { callLyricsModal }
-  }
-})
+defineProps<Props>()
+const emit = defineEmits<Emits>()
 </script>
 
 <style lang="scss" scoped>

@@ -9,23 +9,15 @@
   </li>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent } from 'vue'
+<script setup lang="ts">
 import { CloudEntity } from '~/types/ReqRes'
 
-export default defineComponent({
-  name: 'TOYYearCard',
-  props: {
-    card: {
-      type: Object as PropType<CloudEntity>,
-      required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    }
-  }
-})
+interface Props {
+  card: CloudEntity
+  rootPath: string
+}
+
+defineProps<Props>()
 </script>
 
 <style lang="scss" scoped>

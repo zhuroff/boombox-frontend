@@ -4,31 +4,32 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
 
-export default defineComponent({
-  name: 'Overlay',
-  setup(_, { emit }) {
-    const isMounted = ref(false)
-    const clickWatcher = (event: MouseEvent) => {
-      if (!isMounted.value) {
-        return isMounted.value = true
-      }
+interface Emits {
+  (e: 'closeOverlay'): void
+}
 
-      if (!(event.target as Element)?.closest('.overlay')) {
-        emit('closeOverlay')
-        document.body.removeEventListener('click', clickWatcher)
-      }
-    }
+const emit = defineEmits<Emits>()
 
-    onMounted(() => {
-      document.body.addEventListener('click', clickWatcher)
-    })
-
-    onUnmounted(() => {
-      document.body.removeEventListener('click', clickWatcher)
-    })
+const isMounted = ref(false)
+const clickWatcher = (event: MouseEvent) => {
+  if (!isMounted.value) {
+    return isMounted.value = true
   }
+
+  if (!(event.target as Element)?.closest('.overlay')) {
+    emit('closeOverlay')
+    document.body.removeEventListener('click', clickWatcher)
+  }
+}
+
+onMounted(() => {
+  document.body.addEventListener('click', clickWatcher)
+})
+
+onUnmounted(() => {
+  document.body.removeEventListener('click', clickWatcher)
 })
 </script>

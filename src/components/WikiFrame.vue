@@ -14,7 +14,7 @@
     <div
       v-if="!isLoading && !frameURL"
       class="wikiframe__placeholder"
-    >{{ lang('wiki.frameHeading') }}</div>
+    >{{ localize('wiki.frameHeading') }}</div>
     <iframe
       v-if="frameURL"
       :src="frameURL"
@@ -28,48 +28,35 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { WikiSearchResult } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import Preloader from './Preloader.vue'
 
-export default defineComponent({
-  name: 'WikiFrame',
-  components: {
-    Preloader
-  },
-  props: {
-    frameURL: {
-      type: String,
-      required: false
-    },
-    searchResults: {
-      type: Array as PropType<WikiSearchResult[]>,
-      required: false
-    },
-    isLoading: {
-      type: Boolean,
-      required: true
-    }
-  },
+interface Props {
+  isLoading: boolean
+  frameURL?: string
+  searchResults?: WikiSearchResult[]
+}
 
-  setup(_, { emit }) {
-    const { lang } = useLocales()
-    const selected = ref<number>(-1)
+interface Emits {
+  (e: 'selectWikiResult', value: number): void
+}
 
-    const selectWikiResult = (id: number) => {
-      selected.value = id
-      emit('selectWikiResult', id)
-    }
+defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-    return {
-      lang,
-      selected,
-      selectWikiResult
-    }
-  }
-})
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
+const selected = ref<number>(-1)
+
+const selectWikiResult = (id: number) => {
+  selected.value = id
+  emit('selectWikiResult', id)
+}
 </script>
 
 <style lang="scss" scoped>

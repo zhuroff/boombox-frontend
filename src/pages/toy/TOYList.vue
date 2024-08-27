@@ -19,64 +19,52 @@
   <div
     v-else-if="!isLoading && !rootFolders.size"
     class="toyempty"
-  >{{ lang('toy.emptyGenres') }}</div>
+  >{{ localize('toy.emptyGenres') }}</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, onMounted, ref } from 'vue'
+<script setup lang="ts">
+import { reactive, onMounted, ref } from 'vue'
 import { CloudEntity } from '~/types/ReqRes'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import Preloader from '~/components/Preloader.vue'
 import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
 import cloudServices from '~/services/cloud.services'
 
-export default defineComponent({
-  name: 'TOYRootPage',
-  components: {
-    Preloader,
-    TOYGenreCard
-  },
-  setup() {
-    const { lang } = useLocales()
-    const isLoading = ref(true)
-    const rootFolders = reactive<Map<string, CloudEntity>>(new Map())
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const fetchTOYTable = async () => {
-      try {
-        const rootFolder = await cloudServices.getFolderContent({
-          path: '',
-          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
-          root: 'TOY'
-        })
+const isLoading = ref(true)
+const rootFolders = reactive<Map<string, CloudEntity>>(new Map())
 
-        rootFolder.items.forEach((item) => {
-          if (!item.mimeType) {
-            rootFolders.set(
-              item.title,
-              {
-                ...item,
-                path: decodeURIComponent(item.path).replace('/', '')
-              }
-            )
-          }
-        })
-      } catch (error) {
-        console.error(error)
-      } finally {
-        isLoading.value = false
-      }
-    }
-
-    onMounted(() => {
-      fetchTOYTable()
+const fetchTOYTable = async () => {
+  try {
+    const rootFolder = await cloudServices.getFolderContent({
+      path: '',
+      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      root: 'TOY'
     })
 
-    return {
-      lang,
-      isLoading,
-      rootFolders
-    }
+    rootFolder.items.forEach((item) => {
+      if (!item.mimeType) {
+        rootFolders.set(
+          item.title,
+          {
+            ...item,
+            path: decodeURIComponent(item.path).replace('/', '')
+          }
+        )
+      }
+    })
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
   }
+}
+
+onMounted(() => {
+  fetchTOYTable()
 })
 </script>
 

@@ -11,23 +11,14 @@
   </VueDraggableNext>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { VueDraggableNext } from 'vue-draggable-next'
 
-export default defineComponent({
-  name: 'CardList',
-  components: {
-    VueDraggableNext
-  },
-  props: {
-    isDisabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  }
-})
+interface Props {
+  isDisabled?: boolean
+}
+
+defineProps<Props>()
 </script>
 
 <style lang="scss" scoped>

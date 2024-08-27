@@ -39,7 +39,7 @@
       @closeModal="delReject"
     >
       <Confirmation
-        :message="lang('delConfirmMessage')"
+        :message="localize('delConfirmMessage')"
         @confirm="deleteCompilation"
         @reject="delReject"
       />
@@ -47,14 +47,14 @@
   </section>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 import { CollectionEntityRes } from '~/types/ReqRes'
 import { useCategory } from '~/hooks/useCategory'
-import { BasicEntity, DraggableEvent, ReorderPayload } from '~/types/Common'
+import { BasicEntity, DraggableEvent } from '~/types/Common'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useGathering } from '~/hooks/useGathering'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import CollectionEntity from '~/classes/CollectionEntity'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Preloader from '~/components/Preloader.vue'
@@ -62,91 +62,64 @@ import CategoryHero from '~/components/CategoryHero.vue'
 import Button from '~/components/Button.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
-import store from '~/store'
 
-export default defineComponent({
-  name: 'CollectionPage',
-  components: {
-    Modal,
-    Button,
-    Preloader,
-    Confirmation,
-    CategoryHero,
-    ListPageTemplate
-  },
-  setup() {
-    const entityType = 'collections'
-    const {
-      data,
-      isDataFetched,
-      setUploadedImage,
-      totalCounts
-    } = useCategory(entityType)
+const entityType = 'collections'
 
-    const { deleteEntry } = useSinglePage<
-      CollectionEntityRes<BasicEntity>,
-      CollectionEntity<BasicEntity>,
-      CollectionEntityRes<BasicEntity>
-    >(CollectionEntity, 'CollectionCard', 'collections')
-    
-    const { getters } = store
-    const { lang } = useLocales()
-    const { reorder } = useGathering()
-    const isDelConfirm = ref(false)
+const {
+  data,
+  isDataFetched,
+  setUploadedImage,
+  totalCounts
+} = useCategory(entityType)
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const { deleteEntry } = useSinglePage<
+  CollectionEntityRes<BasicEntity>,
+  CollectionEntity<BasicEntity>,
+  CollectionEntityRes<BasicEntity>
+>(CollectionEntity, 'CollectionCard', 'collections')
 
-    const albumList = computed(() => (
-      (data.value?.albums || [])
-        .map((album) => ({
-          ...album,
-          caption: `${album.artist!.title} / ${album.period!.title} / ${album.genre!.title}`
-        }))
-    ))
+const {
+  globalGetters: { localize, authConfig }
+} = useGlobalStore()
 
-    const changeAlbumsOrder = (event: DraggableEvent) => {
-      if (!data.value) return false
-      const payload: ReorderPayload = {
-        oldOrder: event.oldIndex,
-        newOrder: event.newIndex,
-        entityID: data.value._id
-      }
+const { reorder } = useGathering()
+const isDelConfirm = ref(false)
 
-      reorder('collections', payload)
-    }
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
 
-    const delReject = () => {
-      isDelConfirm.value = false
-    }
+const albumList = computed(() => (
+  (data.value?.albums || [])
+    .map((album) => ({
+      ...album,
+      caption: `${album.artist!.title} / ${album.period!.title} / ${album.genre!.title}`
+    }))
+))
 
-    const callDelConfirmation = () => {
-      isDelConfirm.value = true
-    }
-
-    const deleteCompilation = () => {
-      if (!data.value) return false
-      deleteEntry('collections', data.value._id)
-    }
-
-    return {
-      data,
-      lang,
-      isAdmin,
-      delReject,
-      isDelConfirm,
-      isDataFetched,
-      setUploadedImage,
-      changeAlbumsOrder,
-      deleteCompilation,
-      callDelConfirmation,
-      totalCounts,
-      entityType,
-      albumList
-    }
+const changeAlbumsOrder = (event: DraggableEvent) => {
+  if (!data.value) return false
+  const payload: ReorderPayload = {
+    oldOrder: event.oldIndex,
+    newOrder: event.newIndex,
+    entityID: data.value._id
   }
-})
+
+  reorder('collections', payload)
+}
+
+const delReject = () => {
+  isDelConfirm.value = false
+}
+
+const callDelConfirmation = () => {
+  isDelConfirm.value = true
+}
+
+const deleteCompilation = () => {
+  if (!data.value) return false
+  deleteEntry('collections', data.value._id)
+}
 </script>
 
 <style lang="scss" scoped>

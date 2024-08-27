@@ -1,6 +1,6 @@
 import axios from 'axios'
-import store from './store'
-import { hostString } from './utils'
+import useGlobalStore from '~/store/global'
+import { hostString } from '~/utils'
 
 const api = axios.create({
   baseURL: hostString(''),
@@ -20,12 +20,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const { actions } = store
+    const { globalActions: { setAuthConfig } } = useGlobalStore()
 
     if (error.response) {
       if (error.response.status === 403) {
-        actions.setAuthConfig('isAuthenticated', false)
-        actions.setAuthConfig('user', undefined)
+        setAuthConfig('isAuthenticated', false)
+        setAuthConfig('user', undefined)
         localStorage.removeItem('token')
       }
 

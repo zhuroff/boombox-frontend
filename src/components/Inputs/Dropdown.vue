@@ -38,7 +38,7 @@
             @click="applyValue(option)"
           >
             <Sprite v-if="option.icon" :name="option.icon" />
-            <span class="dropdown__options-label">{{ lang(option.path) }}</span>
+            <span class="dropdown__options-label">{{ localize(option.path) }}</span>
           </li>
         </ul>
       </div>
@@ -46,80 +46,50 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ComputedRef, PropType, Ref, StyleValue, computed, defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ComputedRef, Ref, StyleValue, computed, ref } from 'vue'
 import { DropdownItem } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import Button from '../Button.vue'
 import Sprite from '../Sprite/Sprite.vue'
 
-export default defineComponent({
-  name: 'Dropdown',
-  components: {
-    Button,
-    Sprite
-  },
-  props: {
-    items: {
-      type: Array as PropType<DropdownItem[]>,
-      required: true
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    size: {
-      type: String,
-      required: false,
-      default: 'medium',
-      validator: (value: string) => ['small', 'medium', 'large'].includes(value)
-    },
-    style: {
-      type: Object as PropType<StyleValue>,
-      required: false
-    },
-    selectedValue: {
-      type: Object as PropType<ComputedRef<string> | Ref<string>>,
-      required: false
-    },
-    isRequired: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    errorMessage: {
-      type: String,
-      required: false
-    }
-  },
-  setup({ items, selectedValue }, { emit }) {
-    const { lang } = useLocales()
-    const isOptionsOpened = ref(false)
+interface Props {
+  items: DropdownItem[]
+  placeholder?: string
+  size?: 'small' | 'medium' | 'large'
+  style?: StyleValue
+  selectedValue?: ComputedRef<string> | Ref<string>
+  isRequired?: boolean
+  errorMessage?: string
+}
 
-    const currentValue = computed(() => {
-      const current = items.find(({ value }) => value === selectedValue?.value)
-      return current
-        ? {
-            label: lang(current.path),
-            icon: current.icon
-          }
-        : { label: selectedValue?.value || '' }
-    })
+interface Emits {
+  (e: 'applyValue', option: DropdownItem): void
+}
 
-    const applyValue = (option: DropdownItem) => {
-      emit('applyValue', option)
-      isOptionsOpened.value = false
-    }
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-    return {
-      lang,
-      isOptionsOpened,
-      currentValue,
-      applyValue
-    }
-  }
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
+const isOptionsOpened = ref(false)
+
+const currentValue = computed(() => {
+  const current = props.items.find(({ value }) => value === props.selectedValue?.value)
+  return current
+    ? {
+        label: localize(current.path),
+        icon: current.icon
+      }
+    : { label: props.selectedValue?.value || '' }
 })
+
+const applyValue = (option: DropdownItem) => {
+  emit('applyValue', option)
+  isOptionsOpened.value = false
+}
 </script>
 
 <style lang="scss" scoped>

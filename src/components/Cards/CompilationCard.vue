@@ -31,50 +31,30 @@
   </li>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { BasicEntity } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import Button from '~/components/Button.vue'
 import CompilationItem from '~/classes/CompilationItem'
-import store from '~/store'
 
-export default defineComponent({
-  name: 'CollectionCard',
-  components: {
-    Button
-  },
-  props: {
-    card: {
-      type: Object as PropType<CompilationItem<BasicEntity>>,
-      required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: true
-    }
-  },
-  setup({ card }) {
-    const { getters } = store
+interface Props {
+  card: CompilationItem<BasicEntity>
+  rootPath: string
+  placeholderImage: string
+}
 
-    const { lang } = useLocales()
+const props = defineProps<Props>()
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const {
+  globalGetters: { localize, authConfig }
+} = useGlobalStore()
 
-    const cardCaption = computed(() => (
-      `${lang('compilations.cardCaption')}: ${card.tracks.length}`
-    ))
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
 
-    return {
-      cardCaption,
-      isAdmin
-    }
-  }
-})
+const cardCaption = computed(() => (
+  `${localize('compilations.cardCaption')}: ${props.card.tracks.length}`
+))
 </script>

@@ -11,47 +11,39 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import { computed } from 'vue'
+import usePlayingTrack from '~/store/track'
 
-export default defineComponent({
-  setup() {
-    const { actions, getters } = store
+const {
+  trackGetters: { playingTrack },
+  trackActions: { setPosition }
+} = usePlayingTrack()
 
-    const leftTimeToMinutes = computed(() => {
-      if (!getters.playingTrack.value) return '0:00'
+const leftTimeToMinutes = computed(() => {
+  if (!playingTrack.value) return '0:00'
 
-      const minutes = Math.floor(getters.playingTrack.value.progressTime / 60)
-      const seconds = Math.floor(getters.playingTrack.value.progressTime - minutes * 60)
+  const minutes = Math.floor(playingTrack.value.progressTime / 60)
+  const seconds = Math.floor(playingTrack.value.progressTime - minutes * 60)
 
-      if (Number.isNaN(minutes)) return '0:00'
+  if (Number.isNaN(minutes)) return '0:00'
 
-      return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
-    })
-
-    const fullTimeToMinutes = computed(() => {
-      if (!getters.playingTrack.value) return '0:00'
-
-      const minutes = Math.floor(Number(getters.playingTrack.value.duration) / 60)
-      const seconds = Math.floor(Number(getters.playingTrack.value.duration) - minutes * 60)
-
-      if (Number.isNaN(minutes)) return '0:00'
-
-      return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
-    })
-
-    const setTrackPosition = (event: MouseEvent) => {
-      const value = event.offsetX / (event.target as HTMLElement).offsetWidth
-      actions.setPosition(value)
-    }
-
-    return {
-      leftTimeToMinutes,
-      fullTimeToMinutes,
-      setTrackPosition,
-      playingTrack: getters.playingTrack.value
-    }
-  },
+  return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
 })
+
+const fullTimeToMinutes = computed(() => {
+  if (!playingTrack.value) return '0:00'
+
+  const minutes = Math.floor(Number(playingTrack.value.duration) / 60)
+  const seconds = Math.floor(Number(playingTrack.value.duration) - minutes * 60)
+
+  if (Number.isNaN(minutes)) return '0:00'
+
+  return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
+})
+
+const setTrackPosition = (event: MouseEvent) => {
+  const value = event.offsetX / (event.target as HTMLElement).offsetWidth
+  setPosition(value)
+}
 </script>

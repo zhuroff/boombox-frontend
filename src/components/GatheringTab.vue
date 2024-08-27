@@ -23,91 +23,65 @@
       @submit.prevent="createCompilation"
     >
       <TextInput
-        :placeholder="lang(`${entityType}.namePlaceholder`)"
+        :placeholder="localize(`${entityType}.namePlaceholder`)"
         :inputValue="title"
         @setInputValue="setCompilationName"
       />
       <Button
-        :label="lang('save')"
+        :label="localize('save')"
         :style="{ marginLeft: '0.5rem' }"
       />
     </form>
   </li>
 </template>
 
-<script lang="ts">
-import { PropType, computed, defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { BasicEntity } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { hostString } from '~/utils'
 import TextInput from '~/components/Inputs/TextInput.vue'
 import Button from './Button.vue'
 import CollectionEntity from '~/classes/CollectionEntity'
 import CompilationItem from '~/classes/CompilationItem'
 
-export default defineComponent({
-  name: 'GatheringTab',
-  components: {
-    TextInput,
-    Button
-  },
-  props: {
-    id: {
-      type: String,
-      required: false
-    },
-    gathering: {
-      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationItem<BasicEntity>)[]>,
-      required: false
-    },
-    avatar: {
-      type: String,
-      required: false
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: false
-    },
-    entityID: {
-      type: String,
-      required: true
-    },
-    entityType: {
-      type: String,
-      required: false
-    }
-  },
-  setup({ gathering, id, entityID }, { emit }) {
-    const { lang } = useLocales()
-    const isSelected = computed(() => (
-      gathering && gathering.some((el) => {
-        const isIdsEquals = el._id === id
-        const entities = 'albums' in el ? el.albums : el.tracks
-        return isIdsEquals && entities.some(({ _id }) => _id === entityID)
-      })
-    ))
+interface Props {
+  title: string
+  entityID: string
+  id?: string
+  gathering?: (CollectionEntity<BasicEntity> | CompilationItem<BasicEntity>)[]
+  avatar?: string
+  placeholderImage?: string
+  entityType?: string
+}
 
-    const host = (pathname: string) => hostString(pathname)
-    const addToGathering = () => emit('addToGathering')
-    const removeFromGathering = () => emit('removeFromGathering')
-    const createCompilation = () => emit('createNewCompilation')
-    const setCompilationName = (value: string) => emit('setCompilationName', value)
+interface Emits {
+  (e: 'addToGathering'): void
+  (e: 'removeFromGathering'): void
+  (e: 'createNewCompilation'): void
+  (e: 'setCompilationName', value: string): void
+}
 
-    return {
-      lang,
-      host,
-      isSelected,
-      createCompilation,
-      setCompilationName,
-      addToGathering,
-      removeFromGathering
-    }
-  }
-})
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
+const isSelected = computed(() => (
+  props.gathering?.some((el) => {
+    const isIdsEquals = el._id === props.id
+    const entities = 'albums' in el ? el.albums : el.tracks
+    return isIdsEquals && entities.some(({ _id }) => _id === props.entityID)
+  })
+))
+
+const host = (pathname: string) => hostString(pathname)
+const addToGathering = () => emit('addToGathering')
+const removeFromGathering = () => emit('removeFromGathering')
+const createCompilation = () => emit('createNewCompilation')
+const setCompilationName = (value: string) => emit('setCompilationName', value)
 </script>
 
 <style lang="scss" scoped>

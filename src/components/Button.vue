@@ -24,57 +24,22 @@
   </button>
 </template>
 
-<script lang="ts">
-import { PropType, StyleValue, defineComponent } from 'vue'
+<script setup lang="ts">
+import { StyleValue } from 'vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  name: 'Button',
-  components: {
-    Sprite
-  },
-  props: {
-    label: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    icon: {
-      type: String,
-      required: false
-    },
-    size: {
-      type: String,
-      required: false,
-      default: 'medium',
-      validator: (value: string) => ['small', 'medium', 'large'].includes(value)
-    },
-    style: {
-      type: Object as PropType<StyleValue>,
-      required: false
-    },
-    className: {
-      type: String,
-      required: false,
-      default: false
-    },
-    isInverted: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isText: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isRounded: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  }
-})
+interface Props {
+  label?: string
+  icon?: string
+  size?: 'small' | 'medium' | 'large'
+  style?: StyleValue
+  className?: string
+  isInverted?: boolean
+  isText?: boolean
+  isRounded?: boolean
+}
+
+defineProps<Props>()
 </script>
 
 <style lang="scss">

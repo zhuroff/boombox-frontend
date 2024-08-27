@@ -25,7 +25,7 @@
       @focus="isFocused = true"
     />
     <Button
-      v-if="localValue.length > 2"
+      v-if="localValue && localValue.length > 2"
       icon="close"
       isText
       isInverted
@@ -40,7 +40,7 @@
         :key="result.key"
         class="input-search__results-block"
       >
-        <div class="input-search__results-title">{{ lang(`navigation.${result.key}`) }}</div>
+        <div class="input-search__results-title">{{ localize(`navigation.${result.key}`) }}</div>
         <ul class="input-search__results-list">
           <li
             v-for="item in result.data"
@@ -55,10 +55,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent, h, ref, watch } from 'vue'
+<script setup lang="ts">
+import { h, ref, watch } from 'vue'
 import { coverPlaceholders, debounce } from '~/utils'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { SearchResultData, SearchResultState } from '~/types/Search'
 import { TrackRes } from '~/types/ReqRes'
 import { RouterLink } from 'vue-router'
@@ -68,126 +68,92 @@ import SearchBlockTrack from './SearchBlockTrack.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
 
-export default defineComponent({
-  name: 'SearchBlock',
-  components: {
-    Sprite,
-    Button
-  },
-  props: {
-    type: {
-      type: String,
-      required: true,
-      validator: (value: string) => (
-        ['password', 'text', 'number', 'search', 'email', 'tel'].includes(value)
-      )
-    },
-    results: {
-      type: Array as PropType<SearchResultState[]>,
-      required: true
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    isInverted: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    value: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    size: {
-      type: String,
-      required: false,
-      default: 'medium',
-      validator: (value: string) => (
-        ['small', 'medium', 'large'].includes(value) 
-      )
-    }
-  },
-  setup({ value }, { emit }) {
-    const { lang } = useLocales()
-    const searchInput = ref<HTMLInputElement>(null!)
-    const isFocused = ref(false)
-    const localValue = ref(value)
+interface Props {
+  type: 'password' | 'text' | 'number' | 'search' | 'email' | 'tel'
+  results: SearchResultState[]
+  placeholder?: string
+  isInverted?: boolean
+  value?: string
+  size?: 'small' | 'medium' | 'large'
+}
 
-    const emitInputValue = debounce((value: string) => {
-      emit('setInputValue', value)
-    })
+interface Emits {
+  (e: 'setInputValue', value: string): void
+}
 
-    const getRowComponent = (key: string, data: SearchResultData) => {
-      switch(key) {
-        case 'albums':
-          return h(
-            RouterLink,
-            { to: `/albums/${data._id}`, class: 'input-search__results-link' },
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const {
+  globalGetters: { localize, authConfig }
+} = useGlobalStore()
+
+const searchInput = ref<HTMLInputElement>(null!)
+const isFocused = ref(false)
+const localValue = ref(props.value)
+
+const emitInputValue = debounce((value: string) => {
+  emit('setInputValue', value)
+})
+
+const getRowComponent = (key: string, data: SearchResultData) => {
+  switch(key) {
+    case 'albums':
+      return h(
+        RouterLink,
+        { to: `/albums/${data._id}`, class: 'input-search__results-link' },
+        [
+          h(
+            'img',
+            { src: (data as AlbumItem).coverURL },
+          ),
+          h(
+            'div',
+            {},
             [
-              h(
-                'img',
-                { src: (data as AlbumItem).coverURL },
-              ),
-              h(
-                'div',
-                {},
-                [
-                  h(
-                    'strong',
-                    {},
-                    (data as AlbumItem).title
-                  ),
-                  h(
-                    'span',
-                    {},
-                    (data as AlbumItem).artist?.title
-                  )
-                ]
-              )
-            ]
-          )
-        case 'tracks':
-          return h(
-            SearchBlockTrack,
-            { track: data as TrackRes }
-          )
-        default:
-          return h(
-            RouterLink,
-            { to: `/${key}/${data._id}`, class: 'input-search__results-link' },
-            [
-              h(
-                'img',
-                { src: 'avatar' in data ? hostString(String(data.avatar)) : coverPlaceholders(key) },
-              ),
               h(
                 'strong',
                 {},
-                data.title
+                (data as AlbumItem).title
+              ),
+              h(
+                'span',
+                {},
+                (data as AlbumItem).artist?.title
               )
             ]
           )
-      }
-    }
+        ]
+      )
+    case 'tracks':
+      return h(
+        SearchBlockTrack,
+        { track: data as TrackRes }
+      )
+    default:
+      return h(
+        RouterLink,
+        { to: `/${key}/${data._id}`, class: 'input-search__results-link' },
+        [
+          h(
+            'img',
+            { src: 'avatar' in data ? hostString(String(data.avatar)) : coverPlaceholders(key) },
+          ),
+          h(
+            'strong',
+            {},
+            data.title
+          )
+        ]
+      )
+  }
+}
 
-    watch(
-      localValue,
-      (value) => emitInputValue(value),
-      { immediate: false }
-    )
-
-    return {
-      lang,
-      searchInput,
-      isFocused,
-      localValue,
-      getRowComponent
-    }
-  },
-})
+watch(
+  localValue,
+  (value) => value && emitInputValue(value),
+  { immediate: false }
+)
 </script>
 
 <style lang="scss">

@@ -5,10 +5,10 @@
       <strong>{{ track.title }}</strong>
       <span>{{ track.artist.title }} - {{ track.inAlbum.title }}</span>
     </div>
-    <div class="input-search__results-actions">
+    <!-- <div class="input-search__results-actions">
       <TrackItemPlay
         :track="trackToPlay"
-        :title="lang('player.playNow')"
+        :title="localize('player.playNow')"
         :isTOY="false"
         isSearched
       />
@@ -16,68 +16,58 @@
         v-if="!isOutAlbumAdded"
         icon="chevron-right"
         size="small"
-        :title="lang('player.playNext')"
+        :title="localize('player.playNext')"
         @click="() => playTrackNext(trackToPlay)"
       />
       <Button
         v-if="!isOutAlbumAdded"
         icon="chevron-right-double"
         size="small"
-        :title="lang('player.addToList')"
+        :title="localize('player.addToList')"
         @click="() => addToEndOfList(trackToPlay)"
       />
       <Button
         v-if="isOutAlbumAdded"
         icon="playlist-remove"
         size="small"
-        :title="lang('player.removeFromList')"
+        :title="localize('player.removeFromList')"
         @click="() => removeTrackFromPlaylist(trackToPlay._id)"
       />
-    </div>
+    </div>  -->
   </div>
 </template>
 
-<script lang="ts">
-import { PropType, computed, defineComponent, ref } from 'vue'
-import { useLocales } from '~/hooks/useLocales'
-import store from '~/store'
+<script setup lang="ts">
+import { computed } from 'vue'
+import useGlobalStore from '~/store/global'
+import usePlaylist from '~/store/playlist'
 import AlbumTrack from '~/classes/AlbumTrack'
 import TrackItemPlay from '~/components/TrackList/TrackItemPlay.vue'
 import Button from '~/components/Button.vue'
 import { TrackRes } from '~/types/ReqRes'
 
-export default defineComponent({
-  name: 'SearchBlockTrack',
-  components: {
-    Button,
-    TrackItemPlay
-  },
-  props: {
-    track: {
-      type: Object as PropType<TrackRes>,
-      required: true
-    }
-  },
-  setup({ track }) {
-    const { lang } = useLocales()
-    const { actions, getters } = store
-    const trackToPlay = computed(() => (
-      new AlbumTrack(track, 0, track.coverURL, true)
-    ))
-    const isOutAlbumAdded = computed(() => (
-      getters.currentPlaylistTracks.value.some(({ _id }) => _id === trackToPlay.value._id)
-    ))
+interface Props {
+  track: TrackRes
+}
 
-    return {
-      lang,
-      trackToPlay,
-      isOutAlbumAdded,
-      playTrackNext: actions.playTrackNext,
-      addToEndOfList: actions.addToEndOfList,
-      removeTrackFromPlaylist: actions.removeTrackFromPlaylist
-    }
-  }
-})
+const props = defineProps<Props>()
+
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
+const {
+  playerGetters: { currentPlaylistTracks },
+  playerActions: { playTrackNext, addToEndOfList, removeTrackFromPlaylist }
+} = usePlaylist()
+
+// const trackToPlay = computed(() => (
+//   new AlbumTrack(props.track, 0, props.track.coverURL, true)
+// ))
+
+// const isOutAlbumAdded = computed(() => (
+//   currentPlaylistTracks.value.some(({ _id }) => _id === trackToPlay.value._id)
+// ))
 </script>
 
 <style lang="scss">

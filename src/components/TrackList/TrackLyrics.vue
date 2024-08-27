@@ -3,7 +3,7 @@
     <header class="lyrics__header">
       <div class="lyrics__heading">{{ heading.replace('Various Artists - ', '') }}</div>
       <Button
-        :label="lang('lyrics.get')"
+        :label="localize('lyrics.get')"
         :disabled="isFetching"
         isInverted
         @click="fetchLyrics"
@@ -23,14 +23,14 @@
         <div
           v-if="!lyrics && !fetchedLyrics.length"
           class="lyrics__empty"
-        >{{ lang('lyrics.empty') }}</div>
+        >{{ localize('lyrics.empty') }}</div>
       </transition>
       <Textarea
         v-if="!isFetching && !fetchedLyrics.length"
         classname="lyrics__text"
         :rows="3"
         :content="lyrics || undefined"
-        :placeholder="lang('lyrics.placeholder')"
+        :placeholder="localize('lyrics.placeholder')"
         @setTextareaValue="updateLyrics"
       />
       <div
@@ -56,15 +56,15 @@
                 class="lyrics__item_action"
                 @click="expandLyrics(index)"
               >
-                <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ lang('lyrics.expand') }}</span>
-                <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ lang('lyrics.collapse') }}</span>
+                <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ localize('lyrics.expand') }}</span>
+                <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ localize('lyrics.collapse') }}</span>
               </button>
               <span v-if="!track.isTOY">&nbsp;/&nbsp;</span>
               <button
                 v-if="!track.isTOY"
                 class="lyrics__item_action"
                 @click="saveLyrics(item.lyrics)"
-              >{{ lang('lyrics.save') }}</button>
+              >{{ localize('lyrics.save') }}</button>
               <Textarea
                 v-if="expandedLyrics === index"
                 :rows="3"
@@ -80,120 +80,100 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, Ref, ref, reactive, onMounted, PropType } from 'vue'
-import { useLocales } from '~/hooks/useLocales'
+<script setup lang="ts">
+import { ref, reactive, onMounted } from 'vue'
+import useGlobalStore from '~/store/global'
+import useSnackbar from '~/hooks/useSnackbar'
 import { TrackLyricsResponse } from '~/types/Track'
-import store from '~/store'
 import Button from '~/components/Button.vue'
 import Textarea from '~/components/Inputs/Textarea.vue'
 import Preloader from '~/components/Preloader.vue'
 import trackServices from '~/services/track.services'
 import AlbumTrack from '~/classes/AlbumTrack'
 
-export default defineComponent({
-  components: {
-    Button,
-    Textarea,
-    Preloader
-  },
-  props: {
-    heading: {
-      type: String,
-      required: true
-    },
-    track: {
-      type: Object as PropType<AlbumTrack>,
-      required: true
-    }
-  },
-  setup(props) {
-    const { lang } = useLocales()
-    const { actions } = store
-    const lyrics: Ref<null | string> = ref(null)
-    const expandedLyrics: Ref<null | number> = ref(null)
-    const isFetching = ref(false)
-    const fetchedLyrics = reactive<TrackLyricsResponse[]>([])
-    const updateLyricsTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
+interface Props {
+  heading: string
+  track: AlbumTrack
+}
 
-    const updateLyrics = (value: string) => {
-      lyrics.value = value
+const props = defineProps<Props>()
 
-      if (typeof updateLyricsTimer.value === 'number') {
-        clearTimeout(updateLyricsTimer.value)
-        updateLyricsTimer.value = setTimeout(() => (
-          saveLyrics(value, false)
-        ), 1000)
-      }
-    }
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const setFoundLyrics = (data: TrackLyricsResponse[]) => {
-      isFetching.value = false
-      fetchedLyrics.push(...data)
-    }
+const { setSnackbarMessage } = useSnackbar()
 
-    const setNotFoundLyricsError = (error: { message: string }) => {
-      isFetching.value = false
+const lyrics = ref<null | string>(null)
+const expandedLyrics = ref<null | number>(null)
+const isFetching = ref(false)
+const fetchedLyrics = reactive<TrackLyricsResponse[]>([])
+const updateLyricsTimer = ref<ReturnType<typeof setTimeout> | number>(0)
 
-      actions.setSnackbarMessage({
-        message: error.message,
-        type: 'error'
-      })
-    }
+const updateLyrics = (value?: string) => {
+  lyrics.value = value || ''
 
-    const fetchLyrics = () => {
-      isFetching.value = true
-
-      trackServices.searchLyrics(props.heading.replace('Various Artists', ''))
-        .then((result) => setFoundLyrics(result))
-        .catch((error) => setNotFoundLyricsError(error))
-    }
-
-    const expandLyrics = (index: number) => {
-      expandedLyrics.value =
-        index === expandedLyrics.value
-          ? null
-          : index
-    }
-
-    const saveLyrics = (payload: string, isConfirm = true) => {
-      lyrics.value = payload
-      fetchedLyrics.length = 0
-
-      trackServices.saveLyrics(props.track._id, payload)
-        .then((message) => {
-          if (isConfirm) {
-            actions.setSnackbarMessage({
-              message: String(message),
-              type: 'success'
-            })
-          }
-        })
-        .catch((error) => console.dir(error))
-    }
-
-    const fetchTrackLyrics = async () => {
-      trackServices.fetchLyrics(props.track._id)
-        .then((data) => lyrics.value = data)
-        .catch((error) => console.dir(error))
-    }
-
-    onMounted(() => {
-      !props.track.isTOY && fetchTrackLyrics()
-    })
-
-    return {
-      lang,
-      lyrics,
-      expandedLyrics,
-      isFetching,
-      fetchLyrics,
-      fetchedLyrics,
-      updateLyrics,
-      expandLyrics,
-      saveLyrics
-    }
+  if (typeof updateLyricsTimer.value === 'number') {
+    clearTimeout(updateLyricsTimer.value)
+    updateLyricsTimer.value = setTimeout(() => (
+      saveLyrics(value || '', false)
+    ), 1000)
   }
+}
+
+const setFoundLyrics = (data: TrackLyricsResponse[]) => {
+  isFetching.value = false
+  fetchedLyrics.push(...data)
+}
+
+const setNotFoundLyricsError = (error: { message: string }) => {
+  isFetching.value = false
+
+  setSnackbarMessage({
+    message: error.message,
+    type: 'error'
+  })
+}
+
+const fetchLyrics = () => {
+  isFetching.value = true
+
+  trackServices.searchLyrics(props.heading.replace('Various Artists', ''))
+    .then((result) => setFoundLyrics(result))
+    .catch((error) => setNotFoundLyricsError(error))
+}
+
+const expandLyrics = (index: number) => {
+  expandedLyrics.value =
+    index === expandedLyrics.value
+      ? null
+      : index
+}
+
+const saveLyrics = (payload: string, isConfirm = true) => {
+  lyrics.value = payload
+  fetchedLyrics.length = 0
+
+  trackServices.saveLyrics(props.track._id, payload)
+    .then((message) => {
+      if (isConfirm) {
+        setSnackbarMessage({
+          message: String(message),
+          type: 'success'
+        })
+      }
+    })
+    .catch((error) => console.dir(error))
+}
+
+const fetchTrackLyrics = async () => {
+  trackServices.fetchLyrics(props.track._id)
+    .then((data) => lyrics.value = data)
+    .catch((error) => console.dir(error))
+}
+
+onMounted(() => {
+  !props.track.isTOY && fetchTrackLyrics()
 })
 </script>
 

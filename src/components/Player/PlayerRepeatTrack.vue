@@ -4,7 +4,7 @@
     @click="changeRepeatState"
   >
     <Sprite
-      v-if="!isTrackRepeat"
+      v-if="!playingTrack?.isOnRepeat"
       name="repeat"
     />
     <Sprite
@@ -14,37 +14,22 @@
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import usePlaylist from '~/store/playlist'
+import usePlayingTrack from '~/store/track'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Sprite
-  },
-  props: {
-    isMobile: {
-      type: Boolean,
-      required: false
-    }
-  },
-  setup() {
-    const { actions, getters } = store
+interface Props {
+  isMobile?: boolean
+}
 
-    const isTrackRepeat = computed(() => (
-      getters.playingTrack.value?.isOnRepeat
-    ))
+defineProps<Props>()
 
-    const changeRepeatState = () => {
-      actions.changeRepeatState()
-    }
+const {
+  playerActions: { changeRepeatState }
+} = usePlaylist()
 
-    return {
-      isTrackRepeat,
-      changeRepeatState
-    }
-  }
-})
+const {
+  trackGetters: { playingTrack }
+} = usePlayingTrack()
 </script>
-

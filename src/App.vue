@@ -13,62 +13,51 @@
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue'
-import { useLocales } from '~/hooks/useLocales'
+<script setup lang="ts">
+import { onMounted, computed } from 'vue'
+import api from '~/api'
+import useGlobalStore from '~/store/global'
 import Preloader from '~/components/Preloader.vue'
 import MainTemplate from '~/templates/MainTemplate.vue'
 import UnauthTemplate from '~/templates/UnauthTemplate.vue'
-import api from './api'
-import store from './store'
 
-export default defineComponent({
-  components: {
-    Preloader,
-    MainTemplate,
-    UnauthTemplate
-  },
+const {
+  globalActions: { checkAndSetLocale, setAuthConfig },
+  globalGetters: { isAuthenticated }
+} = useGlobalStore()
 
-  setup() {
-    const { checkAndSetLocale } = useLocales()
-    const { getters: { authConfig }, actions } = store
+const isAuthChecking = computed(() => (
+  typeof isAuthenticated.value === 'undefined'
+))
 
-    const isAuthChecking = computed(() => (
-      typeof authConfig.value.isAuthenticated === 'undefined'
-    ))
+const layout = computed(() => (
+  isAuthenticated.value ? MainTemplate : UnauthTemplate
+))
 
-    const layout = computed(() => (
-      authConfig.value.isAuthenticated ? 'MainTemplate' : 'UnauthTemplate'
-    ))
+const syncMessage = localStorage.getItem('syncMessage')
 
-    const syncMessage = localStorage.getItem('syncMessage')
+if (syncMessage) {
+  localStorage.removeItem('syncMessage')
+}
 
-    if (syncMessage) {
-      localStorage.removeItem('syncMessage')
-    }
+const checkAuthentication = async () => {
+  try {
+    const { data } = await api.get<AuthRefreshResponse>('api/users/refresh')
 
-    const checkAuthentication = async () => {
-      try {
-        const { data }  = await api.get('api/users/refresh')
-
-        localStorage.setItem('token', data.accessToken)
-        actions.setAuthConfig('isAuthenticated', true)
-        actions.setAuthConfig('user', data.user)
-      } catch (error) {
-        console.error(error)
-        localStorage.removeItem('token')
-        actions.setAuthConfig('isAuthenticated', false)
-        actions.setAuthConfig('user', undefined)
-      }
-    }
-
-    onMounted(() => {
-      checkAndSetLocale()
-      checkAuthentication()
-    })
-
-    return { isAuthChecking, layout }
+    localStorage.setItem('token', data.accessToken)
+    setAuthConfig('isAuthenticated', true)
+    setAuthConfig('user', data.user)
+  } catch (error) {
+    console.error(error)
+    localStorage.removeItem('token')
+    setAuthConfig('isAuthenticated', false)
+    setAuthConfig('user', undefined)
   }
+}
+
+onMounted(() => {
+  checkAndSetLocale()
+  checkAuthentication()
 })
 </script>
 

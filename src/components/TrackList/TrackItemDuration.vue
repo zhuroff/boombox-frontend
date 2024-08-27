@@ -4,19 +4,15 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { secondsToMinutes } from '@/utils'
 
-export default defineComponent({
-  props: {
-    duration: {
-      required: false
-    }
-  },
-  setup(props) {
-    const trackTime = computed(() => secondsToMinutes(props.duration))
-    return { trackTime }
-  }
-})
+interface Props {
+  duration: number
+}
+
+const props = defineProps<Props>()
+
+const trackTime = computed(() => secondsToMinutes(props.duration))
 </script>

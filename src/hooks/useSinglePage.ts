@@ -4,19 +4,23 @@ import { CloudFolderResponse } from '~/types/ReqRes'
 import { AlbumBooklet, BookletSlideState } from '~/types/Album'
 import { BasicEntity, RequestConfig, RelatedAlbumsReqFilter, RandomEntityReqFilter, ResponseMessage } from '~/types/Common'
 import { ListPageResponse } from '~/types/ReqRes'
-import { useLocales } from './useLocales'
+import useGlobalStore from '~/store/global'
+import useSnackbar from './useSnackbar'
 import BookletState from '~/classes/BookletState'
 import dbServices from '~/services/database.services'
 import cloudServices from '~/services/cloud.services'
-import store from '~/store'
 
 export const useSinglePage = <T extends BasicEntity, C, R>(
   Class: new (prop: T, cardType: string, cardPath: string) => C,
   cardType: string,
   cardPath: string
 ) => {
-  const { actions } = store
-  const { lang } = useLocales()
+  const {
+    globalGetters: { localize }
+  } = useGlobalStore()
+
+  const { setSnackbarMessage } = useSnackbar()
+
   const route = useRoute()
   const router = useRouter()
   const booklet = ref<BookletState>(new BookletState())
@@ -102,8 +106,8 @@ export const useSinglePage = <T extends BasicEntity, C, R>(
     try {
       const response = await dbServices.deleteEntity<ResponseMessage>(entityType, id)
       if (response) {
-        actions.setSnackbarMessage({
-          message: lang(String(response.message)),
+        setSnackbarMessage({
+          message: localize(String(response.message)),
           type: 'success'
         })
         router.replace(`/${entityType}`)

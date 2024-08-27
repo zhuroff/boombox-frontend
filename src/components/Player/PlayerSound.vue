@@ -13,7 +13,7 @@
     </div>
     <button
       :class="[{ '--muted' : isMuted }, 'player__sound_button']"
-      @click="switchMuteState"
+      @click="toggleMuteState"
     >
       <Sprite v-if="!isMuted" name="volume" />
       <Sprite v-else name="volume-off" />
@@ -21,36 +21,24 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import { ref } from 'vue'
+import usePlayingTrack from '~/store/track'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Sprite
-  },
+const {
+  trackActions: { setSoundVolume, switchMuteState }
+} = usePlayingTrack()
 
-  setup() {
-    const { actions } = store
-    const volume = ref(Number(localStorage.getItem('playerVolume')) || 1)
-    const isMuted = ref(false)
+const volume = ref(Number(localStorage.getItem('playerVolume')) || 1)
+const isMuted = ref(false)
 
-    const changeSoundVolume = (event: Event) => {
-      actions.setSoundVolume(Number((event.target as HTMLInputElement).value))
-    }
+const changeSoundVolume = (event: Event) => {
+  setSoundVolume(Number((event.target as HTMLInputElement).value))
+}
 
-    const switchMuteState = () => {
-      isMuted.value = !isMuted.value
-      actions.switchMuteState()
-    }
-
-    return {
-      volume,
-      isMuted,
-      changeSoundVolume,
-      switchMuteState
-    }
-  }
-})
+const toggleMuteState = () => {
+  isMuted.value = !isMuted.value
+  switchMuteState()
+}
 </script>

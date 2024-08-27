@@ -10,58 +10,44 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, computed, watch, reactive } from 'vue'
+<script setup lang="ts">
+import { onMounted, computed, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { CategoryItemRes } from '~/types/ReqRes'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import CategoryItem from '~/classes/CategoryItem'
 
-export default defineComponent({
-  components: {
-    ListPageTemplate
-  },
+const {
+  fetchData,
+  isDataFetched,
+  pagePagination,
+  pageStateConfig,
+  switchPagination,
+  setEntitiesLimit
+} = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'periods')
 
-  setup() {
-    const {
-      fetchData,
-      isDataFetched,
-      pagePagination,
-      pageStateConfig,
-      switchPagination,
-      setEntitiesLimit
-    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'periods')
-    const { lang } = useLocales()
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const periods = reactive<CategoryItem[]>([])
+const periods = reactive<CategoryItem[]>([])
 
-    const pageHeading = computed(() => (
-      lang('headings.periodsPage', String(pagePagination.value?.totalDocs || 0))
-    ))
+const pageHeading = computed(() => (
+  localize('headings.periodsPage', String(pagePagination.value?.totalDocs || 0))
+))
 
-    watch(pageStateConfig, () => {
-      fetchData('periods')
-        .then((data) => {
-          periods.splice(0, periods.length, ...data || [])
-        })
+watch(pageStateConfig, () => {
+  fetchData('periods')
+    .then((data) => {
+      periods.splice(0, periods.length, ...data || [])
     })
+})
 
-    onMounted(() => {
-      fetchData('periods')
-        .then((data) => {
-          periods.splice(0, periods.length, ...data || [])
-        })
+onMounted(() => {
+  fetchData('periods')
+    .then((data) => {
+      periods.splice(0, periods.length, ...data || [])
     })
-
-    return {
-      periods,
-      pageHeading,
-      pagePagination,
-      isDataFetched,
-      switchPagination,
-      setEntitiesLimit
-    }
-  }
 })
 </script>

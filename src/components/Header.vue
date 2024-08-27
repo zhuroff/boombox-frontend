@@ -5,41 +5,30 @@
       v-if="withSearch"
       type="search"
       :results="results"
-      :placeholder="lang('search.placeholder')"
+      :placeholder="localize('search.placeholder')"
       @setInputValue="searchSubmit"
     />
     <slot></slot>
   </header>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { useLocales } from '~/hooks/useLocales'
+<script setup lang="ts">
 import { useSearch } from '~/hooks/useSearch'
+import useGlobalStore from '~/store/global'
 import SearchBlock from '~/components/SearchBlock.vue'
 
-export default defineComponent({
-  name: 'Header',
-  components: {
-    SearchBlock
-  },
-  props: {
-    heading: {
-      type: String,
-      required: true
-    },
-    withSearch: {
-      type: Boolean,
-      required: false,
-      default: true
-    }
-  },
-  setup() {
-    const { lang } = useLocales()
-    const { searchSubmit, results } = useSearch()
-    return { lang, results, searchSubmit }
-  }
-})
+interface Props {
+  heading: string
+  withSearch?: boolean
+}
+
+defineProps<Props>()
+
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
+const { searchSubmit, results } = useSearch()
 </script>
 
 <style lang="scss">

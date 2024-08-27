@@ -32,7 +32,7 @@
         @closeModal="delReject"
       >
         <Confirmation
-          :message="lang('delConfirmMessage')"
+          :message="localize('delConfirmMessage')"
           @confirm="deleteEmbedded"
           @reject="delReject"
         />
@@ -41,14 +41,13 @@
   </ListPageTemplate>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch, computed, reactive } from 'vue'
+<script setup lang="ts">
+import { ref, watch, computed, reactive } from 'vue'
 import { JSONSchema4 } from 'json-schema'
 import { EmbeddedItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { isObjectsEquals } from '~/utils'
-import store from '~/store'
 import dbServices from '~/services/database.services'
 import embeddedFormSchema from '~/schemas/embeddedFormSchema.json'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
@@ -58,95 +57,68 @@ import Modal from '~/components/Modal.vue'
 import Button from '~/components/Button.vue'
 import Form from '~/components/Form.vue'
 
-export default defineComponent({
-  components: {
-    ListPageTemplate,
-    Confirmation,
-    Button,
-    Modal,
-    Form
-  },
-  setup() {
-    const {
-      fetchData,
-      deleteEntity,
-      isDataFetched,
-      pagePagination,
-      pageStateConfig,
-      switchPagination,
-      setEntitiesLimit
-    } = useListPage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem, 'EmbeddedCard', 'embedded')
-    
-    const { getters } = store
-    const { lang } = useLocales()
-    const isCreateMode = ref(false)
-    const albums = reactive<EmbeddedItem[]>([])
-    const entityToDelete = ref<string | null>(null)
+const {
+  fetchData,
+  deleteEntity,
+  isDataFetched,
+  pagePagination,
+  pageStateConfig,
+  switchPagination,
+  setEntitiesLimit
+} = useListPage<EmbeddedItemRes, EmbeddedItem>(EmbeddedItem, 'EmbeddedCard', 'embedded')
 
-    const formSchema = embeddedFormSchema as JSONSchema4
+const {
+  globalGetters: { localize, authConfig }
+} = useGlobalStore()
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const isCreateMode = ref(false)
+const albums = reactive<EmbeddedItem[]>([])
+const entityToDelete = ref<string | null>(null)
 
-    const pageHeading = computed(() => (
-      lang(`headings.albumsPage`, String(pagePagination.value?.totalDocs || 0))
-    ))
+const formSchema = embeddedFormSchema as JSONSchema4
 
-    const createNewEmbedded = async (formData: EmbeddedPayload) => {
-      const response = await dbServices.createEntity<EmbeddedItemRes, EmbeddedPayload>('embedded', formData)
-      albums.unshift(new EmbeddedItem(response, 'EmbeddedCard', 'embedded'))
-      isCreateMode.value = false
-    }
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
 
-    const deleteEmbedded = () => {
-      if (!entityToDelete.value) return false
-      deleteEntity('embedded', entityToDelete.value)
-        .then(() => {
-          entityToDelete.value = null
-          fetchData('embedded')
-            .then((payload) => {
-              albums.splice(0, albums.length, ...payload || [])
-            })
+const pageHeading = computed(() => (
+  localize(`headings.albumsPage`, String(pagePagination.value?.totalDocs || 0))
+))
+
+const createNewEmbedded = async (formData: EmbeddedPayload) => {
+  const response = await dbServices.createEntity<EmbeddedItemRes, EmbeddedPayload>('embedded', formData)
+  albums.unshift(new EmbeddedItem(response, 'EmbeddedCard', 'embedded'))
+  isCreateMode.value = false
+}
+
+const deleteEmbedded = () => {
+  if (!entityToDelete.value) return false
+  deleteEntity('embedded', entityToDelete.value)
+    .then(() => {
+      entityToDelete.value = null
+      fetchData('embedded')
+        .then((payload) => {
+          albums.splice(0, albums.length, ...payload || [])
+        })
+    })
+}
+
+const delReject = () => {
+  entityToDelete.value = null
+}
+
+watch(
+  pageStateConfig,
+  (newVal, oldVal) => {
+    if (!isObjectsEquals(newVal, oldVal)) {
+      fetchData('embedded')
+        .then((payload) => {
+          albums.splice(0, albums.length, ...payload || [])
         })
     }
-
-    const delReject = () => {
-      entityToDelete.value = null
-    }
-
-    watch(
-      pageStateConfig,
-      (newVal, oldVal) => {
-        if (!isObjectsEquals(newVal, oldVal)) {
-          fetchData('embedded')
-            .then((payload) => {
-              albums.splice(0, albums.length, ...payload || [])
-            })
-        }
-      },
-      { immediate: true }
-    )
-
-    return {
-      lang,
-      albums,
-      isAdmin,
-      delReject,
-      formSchema,
-      pageHeading,
-      entityToDelete,
-      isCreateMode,
-      deleteEmbedded,
-      pagePagination,
-      isDataFetched,
-      switchPagination,
-      setEntitiesLimit,
-      createNewEmbedded
-    }
-
-  }
-})
+  },
+  { immediate: true }
+)
 </script>
 
 <style lang="scss" scoped>

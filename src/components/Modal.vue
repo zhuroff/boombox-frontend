@@ -12,41 +12,33 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, watchEffect } from 'vue'
+<script setup lang="ts">
+import { watchEffect } from 'vue'
 import Button from '~/components/Button.vue'
-import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Button,
-    Sprite
-  },
+interface Props {
+  isModalActive: boolean
+}
 
-  props: {
-    isModalActive: {
-      type: Boolean,
-      required: true
-    }
-  },
+interface Emits {
+  (e: 'closeModal'): void
+}
 
-  setup(props, { emit }) {
-    const closeModal = () => {
-      document.querySelector('.aside')?.classList.remove('--z-low')
-      document.querySelector('.player')?.classList.remove('--z-low')
-      document.querySelector('.section')?.classList.remove('--z-low')
-      emit('closeModal')
-    }
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-    watchEffect(() => {
-      if (props.isModalActive) {
-        document.querySelector('.aside')?.classList.add('--z-low')
-        document.querySelector('.player')?.classList.add('--z-low')
-        document.querySelector('.section')?.classList.add('--z-low')
-      }
-    })
+const closeModal = () => {
+  document.querySelector('.aside')?.classList.remove('--z-low')
+  document.querySelector('.player')?.classList.remove('--z-low')
+  document.querySelector('.section')?.classList.remove('--z-low')
+  emit('closeModal')
+}
 
-    return { closeModal }
+watchEffect(() => {
+  if (props.isModalActive) {
+    document.querySelector('.aside')?.classList.add('--z-low')
+    document.querySelector('.player')?.classList.add('--z-low')
+    document.querySelector('.section')?.classList.add('--z-low')
   }
 })
 </script>

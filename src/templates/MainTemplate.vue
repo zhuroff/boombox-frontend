@@ -17,35 +17,18 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import Sidebar from '~/components/Sidebar.vue'
 import Player from '~/components/Player/Player.vue'
 import Snackbar from '~/components/Snackbar.vue'
 
-export default defineComponent({
-  name: 'MainTemplate',
-  components: {
-    Sidebar,
-    Player,
-    Snackbar
-  },
+const main = ref(null)
+const isNavOpened = ref(false)
 
-  setup() {
-    const main = ref(null)
-    const isNavOpened = ref(false)
-
-    const navHandler = () => {
-      isNavOpened.value = !isNavOpened.value
-    }
-
-    return {
-      main,
-      navHandler,
-      isNavOpened
-    }
-  }
-})
+const navHandler = () => {
+  isNavOpened.value = !isNavOpened.value
+}
 </script>
 
 <style lang="scss" scoped>

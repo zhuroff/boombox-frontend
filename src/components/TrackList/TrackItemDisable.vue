@@ -5,36 +5,24 @@
       size="small"
       isText
       className="tracklist__row-action"
-      @click="disableTrack"
+      @click="() => disableOrEnableTrack(fileid)"
     />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import usePlayingTrack from '~/store/track'
 import Button from '~/components/Button.vue'
 
-export default defineComponent({
-  components: {
-    Button
-  },
-  props: {
-    fileid: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
-    const { actions } = store
+interface Props {
+  fileid: string
+}
 
-    const disableTrack = () => {
-      actions.disableOrEnableTrack(props.fileid)
-    }
+defineProps<Props>()
 
-    return { disableTrack }
-  }
-})
+const {
+  trackActions: { disableOrEnableTrack }
+} = usePlayingTrack()
 </script>
 
 <style lang="scss" scoped>

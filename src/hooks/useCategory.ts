@@ -1,6 +1,6 @@
 import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useLocales } from './useLocales'
+import useGlobalStore from '~/store/global'
 import { UploadImageResult } from '~/types/Common'
 import { CategoryPageRes } from '~/types/ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
@@ -9,7 +9,10 @@ import CategoryPage from '~/classes/CategoryPage'
 import dbServices from '~/services/database.services'
 
 export const useCategory = (entityType: string) => {
-  const { lang } = useLocales()
+  const {
+    globalGetters: { localize }
+  } = useGlobalStore()
+
   const route = useRoute()
   const data = ref<CategoryPage>()
   const isDataFetched = ref(false)
@@ -21,7 +24,7 @@ export const useCategory = (entityType: string) => {
   }
   
   const totalCounts = computed(() => (
-    lang('totalAlbums') + `: ${(data.value?.albums?.length || 0) + (data.value?.embeddedAlbums?.length || 0)}`
+    localize('totalAlbums') + `: ${(data.value?.albums?.length || 0) + (data.value?.embeddedAlbums?.length || 0)}`
   ))
 
   const sortAlbumsByYears = (data: Array<AlbumItem | EmbeddedItem>) => {

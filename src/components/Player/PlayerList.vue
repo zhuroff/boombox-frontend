@@ -3,34 +3,24 @@
     <Button
       icon="playlist"
       :className="isActive ? '--active' : ''"
-      @click="togglePlaylistState"
+      @click="() => emit('togglePlaylistState')"
     />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import Button from '../Button.vue'
 
-export default defineComponent({
-  name: 'PlayerList',
-  components: {
-    Button
-  },
-  props: {
-    isActive: {
-      type: Boolean,
-      required: true
-    }
-  },
-  setup(_, { emit }) {
-    const togglePlaylistState = () => {
-      emit('togglePlaylistState')
-    }
+interface Props {
+  isActive: boolean
+}
 
-    return { togglePlaylistState }
-  }
-})
+interface Emits {
+  (e: 'togglePlaylistState'): void
+}
+
+defineProps<Props>()
+const emit = defineEmits<Emits>()
 </script>
 
 <style lang="scss">

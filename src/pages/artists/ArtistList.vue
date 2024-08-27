@@ -10,58 +10,44 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, computed, watch, reactive } from 'vue'
+<script setup lang="ts">
+import { onMounted, computed, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { CategoryItemRes } from '~/types/ReqRes'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import CategoryItem from '~/classes/CategoryItem'
 
-export default defineComponent({
-  components: {
-    ListPageTemplate
-  },
+const {
+  fetchData,
+  isDataFetched,
+  pagePagination,
+  pageStateConfig,
+  switchPagination,
+  setEntitiesLimit
+} = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'artists')
 
-  setup() {
-    const {
-      fetchData,
-      isDataFetched,
-      pagePagination,
-      pageStateConfig,
-      switchPagination,
-      setEntitiesLimit
-    } = useListPage<CategoryItemRes, CategoryItem>(CategoryItem, 'CategoryCard', 'artists')
-    const { lang } = useLocales()
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const artists = reactive<CategoryItem[]>([])
+const artists = reactive<CategoryItem[]>([])
 
-    const pageHeading = computed(() => (
-      lang('headings.artistsPage', String(pagePagination.value?.totalDocs || 0))
-    ))
+const pageHeading = computed(() => (
+  localize('headings.artistsPage', String(pagePagination.value?.totalDocs || 0))
+))
 
-    watch(pageStateConfig, () => {
-      fetchData('artists')
-        .then((data) => {
-          artists.splice(0, artists.length, ...data || [])
-        })
+watch(pageStateConfig, () => {
+  fetchData('artists')
+    .then((data) => {
+      artists.splice(0, artists.length, ...data || [])
     })
+})
 
-    onMounted(() => {
-      fetchData('artists')
-        .then((data) => {
-          artists.splice(0, artists.length, ...data || [])
-        })
+onMounted(() => {
+  fetchData('artists')
+    .then((data) => {
+      artists.splice(0, artists.length, ...data || [])
     })
-
-    return {
-      artists,
-      pageHeading,
-      pagePagination,
-      isDataFetched,
-      switchPagination,
-      setEntitiesLimit
-    }
-  }
 })
 </script>

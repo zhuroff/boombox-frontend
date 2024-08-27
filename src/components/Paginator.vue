@@ -54,71 +54,55 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, PropType, ref, watch } from 'vue'
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
 import { Pagination, PaginationConfig } from '~/types/Common'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  name: 'Paginator', 
-  components: {
-    Sprite
-  },
-  props: {
-    pagination: {
-      type: Object as PropType<Pagination>,
-      required: true
-    },
-    config: {
-      type: Object as PropType<PaginationConfig>,
-      required: true
-    }
-  },
-  setup({ pagination }, { emit }) {
-    const localLimit = ref(pagination.limit)
-    const localPage = ref(pagination.page)
-    const options = computed(() => (
-      Array.from({ length: pagination.totalPages }, (_, b) => ++b)
-    ))
+interface Props {
+  pagination: Pagination
+  config: PaginationConfig
+}
 
-    const buttons = computed(() => {
-      const minButton = Math.max(1, localPage.value - 2)
-      const maxButton = Math.min(minButton + 4, pagination.totalPages)
-      const result = []
+interface Emits {
+  (e: 'changeLimit', limit: number): void
+  (e: 'switchPagination', page: number): void
+}
 
-      for (let i = minButton; i <= maxButton; i++) {
-        result.push(i)
-      }
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-      return result
-    })
+const localLimit = ref(props.pagination.limit)
+const localPage = ref(props.pagination.page)
 
-    const switchPagination = (page: number) => {
-      localPage.value = page
-    }
+const buttons = computed(() => {
+  const minButton = Math.max(1, localPage.value - 2)
+  const maxButton = Math.min(minButton + 4, props.pagination.totalPages)
+  const result = []
 
-    watch(
-      [localLimit, localPage],
-      ([newLimitValue, newPageValue], [oldLimitValue, oldPageValue]) => {
-        if (newLimitValue !== oldLimitValue) {
-          emit('changeLimit', newLimitValue)
-          localPage.value = 1
-        } else if (newPageValue !== oldPageValue) {
-          emit('switchPagination', newPageValue)
-        }
-      },
-      { immediate: false }
-    )
-
-    return {
-      options,
-      buttons,
-      localLimit,
-      localPage,
-      switchPagination
-    }
+  for (let i = minButton; i <= maxButton; i++) {
+    result.push(i)
   }
+
+  return result
 })
+
+const switchPagination = (page: number) => {
+  localPage.value = page
+}
+
+watch(
+  [localLimit, localPage],
+  ([newLimitValue, newPageValue], [oldLimitValue, oldPageValue]) => {
+    if (newLimitValue !== oldLimitValue) {
+      emit('changeLimit', newLimitValue)
+      localPage.value = 1
+    } else if (newPageValue !== oldPageValue) {
+      emit('switchPagination', newPageValue)
+    }
+  },
+  { immediate: false }
+)
 </script>
 
 <style lang="scss" scoped>

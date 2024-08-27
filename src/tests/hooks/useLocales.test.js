@@ -1,3 +1,0 @@
-test('Set app locale', () => {
-  
-})

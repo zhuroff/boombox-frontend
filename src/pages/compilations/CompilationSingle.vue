@@ -27,7 +27,7 @@
             v-if="isAdmin"
             class="overlay__list-item"
             @click="isDelConfirm = true"
-          >{{ lang('deleteEntity') }}</li>
+          >{{ localize('deleteEntity') }}</li>
         </template>
       </AlbumHero>
     </template>
@@ -38,7 +38,7 @@
         @closeModal="delReject"
       >
         <Confirmation
-          :message="lang('delConfirmMessage')"
+          :message="localize('delConfirmMessage')"
           @confirm="deleteCompilation"
           @reject="delReject"
         />
@@ -47,16 +47,16 @@
   </AlbumPageTemplate>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, computed, ref, watch } from 'vue'
-import { BasicEntity, ImagePayload, RandomEntityReqFilter, ReorderPayload } from '~/types/Common'
-import { CompilationEntityRes, GatheringUpdateReq, TrackRes } from '~/types/ReqRes'
+<script setup lang="ts">
+import { onMounted, computed, ref, watch } from 'vue'
+import { BasicEntity, ImagePayload, RandomEntityReqFilter } from '~/types/Common'
+import { CompilationEntityRes, TrackRes } from '~/types/ReqRes'
 import { RelatedCompilations } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
+import usePlaylist from '~/store/playlist'
 import { useGathering } from '~/hooks/useGathering'
-import { conjugate, hostString } from '~/utils'
-import store from '~/store'
+import { hostString } from '~/utils'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
@@ -66,191 +66,167 @@ import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
 import uploadServices from '~/services/upload.services'
 
-export default defineComponent({
-  name: 'AlbumPage',
-  components: {
-    AlbumPageTemplate,
-    Confirmation,
-    AlbumHero,
-    CoverArt,
-    Modal
-  },
-  setup() {
-    const {
-      fetchData,
-      deleteEntry,
-      isDataFetched,
-      getRandomAlbum,
-      getRelatedAlbums,
-      route
-    } = useSinglePage<
-      CompilationEntityRes<TrackRes>,
-      CompilationPage<TrackRes>,
-      CompilationEntityRes<BasicEntity>
-    >(CompilationPage, 'CompilationCard', 'compilations')
+const {
+  fetchData,
+  deleteEntry,
+  isDataFetched,
+  getRandomAlbum,
+  getRelatedAlbums,
+  route
+} = useSinglePage<
+  CompilationEntityRes<TrackRes>,
+  CompilationPage<TrackRes>,
+  CompilationEntityRes<BasicEntity>
+>(CompilationPage, 'CompilationCard', 'compilations')
 
-    const { lang } = useLocales()
-    const { reorder, removeFromGathering } = useGathering()
-    const { actions, getters } = store
-    const compilation = ref<CompilationPage<TrackRes>>({} as CompilationPage<TrackRes>)
-    const relatedCompilations = ref<RelatedCompilations[]>([])
-    const entityType = ref('compilations')
-    const isDelConfirm = ref(false)
+const {
+  globalGetters: { localize, conjugate, authConfig }
+} = useGlobalStore()
 
-    const totalCounts = computed(() => {
-      const isAllTracksHaveDuration = compilation.value.tracks?.every((track) => (
-        Number(track.duration)
+const {
+  playerActions: { setPlayerPlaylist }
+} = usePlaylist()
+
+const { reorder, removeFromGathering } = useGathering()
+const compilation = ref<CompilationPage<TrackRes>>({} as CompilationPage<TrackRes>)
+const relatedCompilations = ref<RelatedCompilations[]>([])
+const entityType = ref('compilations')
+const isDelConfirm = ref(false)
+
+const totalCounts = computed(() => {
+  const isAllTracksHaveDuration = compilation.value.tracks?.every((track) => (
+    Number(track.duration)
+  ))
+  
+  return `
+    ${compilation.value.tracks?.length} ${conjugate('tracks', compilation.value.tracks?.length)}:
+    ${isAllTracksHaveDuration ? calcTotalTracksTime(compilation.value.tracks) : localize('unknownTime')}.
+    ${localize('listenedTracks')} ${compilation.value.tracks?.reduce((acc, { listened }) => (
+      acc + (Number(listened) || 0)
+    ), 0)}
+  `.trim()
+})
+
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
+
+const getRandom = () => {
+  getRandomAlbum(entityType.value)
+}
+
+const getRelated = async () => {
+  const relatedAlbumsConfig: RandomEntityReqFilter[] = [
+    {
+      from: 'compilations',
+      key: 'compilation._id',
+      name: localize('compilations.more'),
+      excluded: { _id: compilation.value._id }
+    }
+  ]
+
+  try {
+    relatedCompilations.value = []
+    const response = await Promise.all(relatedAlbumsConfig.map(async (config) => (
+      await getRelatedAlbums(config, entityType.value)
+    )))
+    
+    relatedCompilations.value = response.map(({ docs, name }) => ({
+      name,
+      docs: docs.map<CompilationItem<BasicEntity>>((compilation) => (
+        new CompilationItem(compilation, 'CompilationCard', 'compilations')
       ))
-      
-      return `
-        ${compilation.value.tracks?.length} ${conjugate('tracks', compilation.value.tracks?.length)}:
-        ${isAllTracksHaveDuration ? calcTotalTracksTime(compilation.value.tracks) : lang('unknownTime')}.
-        ${lang('listenedTracks')} ${compilation.value.tracks?.reduce((acc, { listened }) => (
-          acc + (Number(listened) || 0)
-        ), 0)}
-      `.trim()
-    })
+    }))
+  } catch (error) {
+    console.error(error)
+  }
+}
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const calcTotalTracksTime = (tracks: CompilationPage<TrackRes>['tracks']): string => {
+  const totalDurationInSeconds = tracks.reduce((acc, next) => (
+    acc + (Number(next.duration) || 0)
+  ), 0)
 
-    const getRandom = () => {
-      getRandomAlbum(entityType.value)
-    }
+  const hours = Math.floor(totalDurationInSeconds / 3600)
+  const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
+  const seconds = Math.floor(totalDurationInSeconds % 60)
 
-    const getRelated = async () => {
-      const relatedAlbumsConfig: RandomEntityReqFilter[] = [
-        {
-          from: 'compilations',
-          key: 'compilation._id',
-          name: lang('compilations.more'),
-          excluded: { _id: compilation.value._id }
-        }
-      ]
+  const formattedTime = `
+    ${hours.toString().padStart(2, '0')}:
+    ${minutes.toString().padStart(2, '0')}:
+    ${seconds.toString().padStart(2, '0')}
+  `.replace(/\s+/g, '')
 
-      try {
-        relatedCompilations.value = []
-        const response = await Promise.all(relatedAlbumsConfig.map(async (config) => (
-          await getRelatedAlbums(config, entityType.value)
-        )))
-        
-        relatedCompilations.value = response.map(({ docs, name }) => ({
-          name,
-          docs: docs.map<CompilationItem<BasicEntity>>((compilation) => (
-            new CompilationItem(compilation, 'CompilationCard', 'compilations')
-          ))
-        }))
-      } catch (error) {
-        console.error(error)
-      }
-    }
+  return formattedTime
+}
 
-    const calcTotalTracksTime = (tracks: CompilationPage<TrackRes>['tracks']): string => {
-      const totalDurationInSeconds = tracks.reduce((acc, next) => (
-        acc + (Number(next.duration) || 0)
-      ), 0)
+const delReject = () => {
+  isDelConfirm.value = false
+}
 
-      const hours = Math.floor(totalDurationInSeconds / 3600)
-      const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
-      const seconds = Math.floor(totalDurationInSeconds % 60)
+const deleteCompilation = () => {
+  deleteEntry('compilations', compilation.value._id)
+}
 
-      const formattedTime = `
-        ${hours.toString().padStart(2, '0')}:
-        ${minutes.toString().padStart(2, '0')}:
-        ${seconds.toString().padStart(2, '0')}
-      `.replace(/\s+/g, '')
+const trackOrderChanged = (payload: ReorderPayload) => {
+  reorder('compilations', payload)
+}
 
-      return formattedTime
-    }
-
-    const delReject = () => {
-      isDelConfirm.value = false
-    }
-
-    const deleteCompilation = () => {
-      deleteEntry('compilations', compilation.value._id)
-    }
-
-    const trackOrderChanged = (payload: ReorderPayload) => {
-      reorder('compilations', payload)
-    }
-
-    const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
-      removeFromGathering(payload)
-        .then(() => {
-          fetchData(entityType.value)
-            .then((payload) => {
-              if (payload) {
-                compilation.value = payload
-                actions.setPlayerPlaylist(payload)
-                getRelated()
-              }
-            })
-        })
-    }
-
-    const uploadAvatar = (file: File) => {
-      const payload: ImagePayload = {
-        file,
-        type: 'avatar',
-        id: String(route.params.id),
-        slug: 'compilations'
-      }
-
-      uploadServices.uploadImage<any>(payload)
-        .then((data) => {
-          compilation.value.avatar = hostString(data.avatar)
-        })
-        .catch(console.error)
-    }
-
-    watch(
-      route,
-      (newValue) => {
-        if (newValue.params.id && newValue.params.id !== compilation.value._id) {
-          compilation.value = {} as CompilationPage<TrackRes>
-          fetchData(entityType.value)
-            .then((payload) => {
-              if (payload) {
-                compilation.value = payload
-                actions.setPlayerPlaylist(payload)
-                getRelated()
-              }
-            })
-        }
-      },
-      { immediate: false }
-    )
-
-    onMounted(() => {
+const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+  removeFromGathering(payload)
+    .then(() => {
       fetchData(entityType.value)
         .then((payload) => {
           if (payload) {
             compilation.value = payload
-            actions.setPlayerPlaylist(payload)
+            setPlayerPlaylist(payload)
             getRelated()
           }
         })
     })
+}
 
-    return {
-      lang,
-      delReject,
-      compilation,
-      entityType,
-      getRelated,
-      isDelConfirm,
-      totalCounts,
-      isDataFetched,
-      deleteCompilation,
-      relatedCompilations,
-      removeTrackFromCompilation,
-      trackOrderChanged,
-      uploadAvatar,
-      getRandom,
-      isAdmin
-    }
+const uploadAvatar = (file: File) => {
+  const payload: ImagePayload = {
+    file,
+    type: 'avatar',
+    id: String(route.params.id),
+    slug: 'compilations'
   }
+
+  uploadServices.uploadImage<any>(payload)
+    .then((data) => {
+      compilation.value.avatar = hostString(data.avatar)
+    })
+    .catch(console.error)
+}
+
+watch(
+  route,
+  (newValue) => {
+    if (newValue.params.id && newValue.params.id !== compilation.value._id) {
+      compilation.value = {} as CompilationPage<TrackRes>
+      fetchData(entityType.value)
+        .then((payload) => {
+          if (payload) {
+            compilation.value = payload
+            setPlayerPlaylist(payload)
+            getRelated()
+          }
+        })
+    }
+  },
+  { immediate: false }
+)
+
+onMounted(() => {
+  fetchData(entityType.value)
+    .then((payload) => {
+      if (payload) {
+        compilation.value = payload
+        setPlayerPlaylist(payload)
+        getRelated()
+      }
+    })
 })
 </script>

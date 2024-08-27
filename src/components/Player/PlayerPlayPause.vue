@@ -15,31 +15,12 @@
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import usePlayingTrack from '~/store/track'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Sprite
-  },
-  setup() {
-    const { actions, getters } = store
-
-    const setTrackOnPause = () => {
-      actions.setTrackOnPause()
-    }
-
-    const continuePlay = () => {
-      actions.continuePlay()
-    }
-
-    return {
-      playingTrack: getters.playingTrack.value,
-      setTrackOnPause,
-      continuePlay
-    }
-  }
-})
+const {
+  trackGetters: { playingTrack },
+  trackActions: { continuePlay, setTrackOnPause }
+} = usePlayingTrack()
 </script>

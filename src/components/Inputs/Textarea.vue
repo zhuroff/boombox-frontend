@@ -17,80 +17,50 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, watchEffect, ref, Ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, watchEffect, ref, Ref } from 'vue'
 
-export default defineComponent({
-  name: 'Textarea',
-  props: {
-    content: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    rows: {
-      type: Number,
-      required: true,
-      validator: (value: number) => value > 0
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    classname: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    isDisabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isRequired: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    errorMessage: {
-      type: String,
-      required: false
-    }
-  },
-  setup(props, { emit }) {
-    const textElement: Ref<null | HTMLTextAreaElement> = ref(null)
-    const text = ref(props.content)
+interface Props {
+  content?: string
+  rows: number
+  placeholder?: string
+  classname?: string
+  isDisabled?: boolean
+  isRequired?: boolean
+  errorMessage?: string
+}
 
-    const resizeTextarea = () => {
-      if (textElement.value) {
-        textElement.value.setAttribute('style', 'height: auto;')
-        textElement.value.setAttribute('style', `height: ${textElement.value.scrollHeight + 2}px;`)
-      }
-    }
+interface Emits {
+  (e: 'setTextareaValue', value?: string): void
+}
 
-    onMounted(() => {
-      resizeTextarea()
-      window.onresize = resizeTextarea
-    })
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-    watchEffect(() => {
-      text.value = props.content
-      setTimeout(() => resizeTextarea(), 0)
-    })
+const textElement: Ref<null | HTMLTextAreaElement> = ref(null)
+const text = ref(props.content)
 
-    const emitTextareaValue = () => {
-      resizeTextarea()
-      emit('setTextareaValue', text.value)
-    }
-
-    return {
-      textElement,
-      text,
-      emitTextareaValue
-    }
+const resizeTextarea = () => {
+  if (textElement.value) {
+    textElement.value.setAttribute('style', 'height: auto;')
+    textElement.value.setAttribute('style', `height: ${textElement.value.scrollHeight + 2}px;`)
   }
+}
+
+onMounted(() => {
+  resizeTextarea()
+  window.onresize = resizeTextarea
 })
+
+watchEffect(() => {
+  text.value = props.content
+  setTimeout(() => resizeTextarea(), 0)
+})
+
+const emitTextareaValue = () => {
+  resizeTextarea()
+  emit('setTextareaValue', text.value)
+}
 </script>
 
 <style lang="scss">

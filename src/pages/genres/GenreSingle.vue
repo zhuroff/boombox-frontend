@@ -24,46 +24,27 @@
   </section>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { useCategory } from '~/hooks/useCategory'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 
-export default defineComponent({
-  name: 'GenrePage',
-  components: {
-    Preloader,
-    CategoryHero,
-    ListPageTemplate
-  },
-  setup() {
-    const entityType = 'genres'
-    const {
-      data,
-      isDataFetched,
-      setUploadedImage,
-      sortAlbumsByYears,
-      totalCounts
-    } = useCategory(entityType)
+const entityType = 'genres'
+const {
+  data,
+  isDataFetched,
+  setUploadedImage,
+  sortAlbumsByYears,
+  totalCounts
+} = useCategory(entityType)
 
-    const albumList = computed(() => (
-      sortAlbumsByYears([...(data.value?.albums || []), ...(data.value?.embeddedAlbums || [])])
-        .map((album) => ({
-          ...album,
-          caption: `${album.artist!.title} / ${album.period!.title} / ${album.genre!.title}`
-        }))
-    ))
-
-    return {
-      data,
-      isDataFetched,
-      setUploadedImage,
-      totalCounts,
-      entityType,
-      albumList
-    }
-  }
-})
+const albumList = computed(() => (
+  sortAlbumsByYears([...(data.value?.albums || []), ...(data.value?.embeddedAlbums || [])])
+    .map((album) => ({
+      ...album,
+      caption: `${album.artist!.title} / ${album.period!.title} / ${album.genre!.title}`
+    }))
+))
 </script>

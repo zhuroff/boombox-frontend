@@ -52,7 +52,7 @@
             class="album__related"
           >
             <div class="album__related-title">
-              {{ lang('moreOf') }} {{ name }}
+              {{ localize('moreOf') }} {{ name }}
             </div>
             <AdapterCard
               v-for="item in docs"
@@ -69,13 +69,12 @@
   </section>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent, nextTick, Ref, ref, watchEffect } from 'vue'
-import { BookletSlideState, RelatedAlbums, RelatedCompilations } from '~/types/Album'
+<script setup lang="ts">
+import { nextTick, Ref, ref, watchEffect } from 'vue'
+import { RelatedAlbums, RelatedCompilations } from '~/types/Album'
 import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
-import { GatheringUpdateReq, TrackRes } from '~/types/ReqRes'
-import { ReorderPayload } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import { TrackRes } from '~/types/ReqRes'
+import useGlobalStore from '~/store/global'
 import BookletState from '~/classes/BookletState'
 import AlbumPage from '~/classes/AlbumPage'
 import EmbeddedItem from '~/classes/EmbeddedItem'
@@ -87,116 +86,74 @@ import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
 import CompilationPage from '~/classes/CompilationPage'
 
-export default defineComponent({
-  name: 'AlbumPageTemplate',
-  components: {
-    Preloader,
-    AdapterCard,
-    TrackList,
-    Table,
-    Sprite,
-    Button
-  },
-  props: {
-    isDataFetched: {
-      type: Boolean,
-      required: true
-    },
-    album: {
-      type: Object as PropType<AlbumPage | EmbeddedItem | CompilationPage<TrackRes>>,
-      required: true
-    },
-    booklet: {
-      type: Object as PropType<BookletState>,
-      required: false
-    },
-    discogsTablePayload: {
-      type: Object as PropType<DiscogsTablePayload>,
-      required: false
-    },
-    discogsFilters: {
-      type: Object as PropType<DiscogsFilter>,
-      required: false
-    },
-    discogsFiltersStates: {
-      type: Object as PropType<Record<keyof DiscogsFilter, null | string>>,
-      required: false
-    },
-    relatedAlbums: {
-      type: Array as PropType<Array<RelatedAlbums | RelatedCompilations>>,
-      requried: false
-    },
-    isCompilation: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isTOY: {
-      type: Boolean,
-      required: false,
-      default: false
+interface Props {
+  isDataFetched: boolean
+  album: AlbumPage | EmbeddedItem | CompilationPage<TrackRes>
+  booklet?: BookletState
+  discogsTablePayload?: DiscogsTablePayload
+  discogsFilters?: DiscogsFilter
+  discogsFiltersStates?: Record<keyof DiscogsFilter, null | string>
+  relatedAlbums: Array<RelatedAlbums | RelatedCompilations>
+  isCompilation?: boolean
+  isTOY?: boolean
+}
+
+interface Emits {
+  (e: 'filter:reset'): void
+  (e: 'filter:update', payload: [keyof DiscogsFilter, string | null]): void
+  (e: 'switchPagination', page: number): void
+  (e: 'trackOrderChanged', payload: ReorderPayload): void
+  (e: 'removeTrackFromCompilation', payload: GatheringUpdateReq): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const { globalGetters: { localize } } = useGlobalStore()
+const albumContent: Ref<null | HTMLInputElement> = ref(null)
+
+const updateDiscogsFilter = (payload: [keyof DiscogsFilter, string | null]) => {
+  emit('filter:update', payload)
+}
+
+const switchPagination = (page: number) => {
+  emit('switchPagination', page)
+}
+
+const resetDiscogsFilters = () => {
+  emit('filter:reset')
+}
+
+// const closeBookletModal = () => {
+//   emit('closeBookletModal')
+// }
+
+// const bookletPageChanged = (data: BookletSlideState) => {
+//   emit('bookletPageChanged', data)
+// }
+
+const changeTracksOrder = (payload: ReorderPayload) => {
+  emit('trackOrderChanged', payload)
+}
+
+const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+  emit('removeTrackFromCompilation', payload)
+}
+
+watchEffect(() => {
+  if (!('frame' in props.album)) return
+
+  nextTick(() => {
+    const frameHeight = document.querySelector('iframe')?.clientHeight
+    const heroHeight = document.querySelector('.album__hero')?.clientHeight
+
+    if (!frameHeight || !heroHeight || Number(frameHeight) <= Number(heroHeight)) return
+
+    if (albumContent.value) {
+      const contentMargin = frameHeight - heroHeight + 50
+      albumContent.value.style.marginTop = `${contentMargin}px`
     }
-  },
-  setup(props, { emit }) {
-    const { lang } = useLocales()
-    const albumContent: Ref<null | HTMLInputElement> = ref(null)
-
-    const updateDiscogsFilter = (payload: [keyof DiscogsFilter, string]) => {
-      emit('filter:update', payload)
-    }
-
-    const switchPagination = (page: number) => {
-      emit('switchPagination', page)
-    }
-
-    const resetDiscogsFilters = () => {
-      emit('filter:reset')
-    }
-
-    const closeBookletModal = () => {
-      emit('closeBookletModal')
-    }
-
-    const bookletPageChanged = (data: BookletSlideState) => {
-      emit('bookletPageChanged', data)
-    }
-
-    const changeTracksOrder = (payload: ReorderPayload) => {
-      emit('trackOrderChanged', payload)
-    }
-
-    const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
-      emit('removeTrackFromCompilation', payload)
-    }
-
-    watchEffect(() => {
-      if (!('frame' in props.album)) return
-
-      nextTick(() => {
-        const frameHeight = document.querySelector('iframe')?.clientHeight
-        const heroHeight = document.querySelector('.album__hero')?.clientHeight
-
-        if (!frameHeight || !heroHeight || Number(frameHeight) <= Number(heroHeight)) return
-
-        if (albumContent.value) {
-          const contentMargin = frameHeight - heroHeight + 50
-          albumContent.value.style.marginTop = `${contentMargin}px`
-        }
-      })
-    })
-
-    return {
-      albumContent,
-      updateDiscogsFilter,
-      resetDiscogsFilters,
-      switchPagination,
-      closeBookletModal,
-      changeTracksOrder,
-      bookletPageChanged,
-      removeTrackFromCompilation,
-      lang
-    }
-  }
+  })
 })
 </script>
 

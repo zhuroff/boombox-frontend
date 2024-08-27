@@ -1,12 +1,9 @@
 import { Ref } from 'vue'
 import { JSONSchema4 } from 'json-schema'
-import { AuthConfig } from './User'
 import { TrackRes } from './ReqRes'
-import PlayerTrack from '~/classes/PlayerTrack'
 import AlbumPage from '~/classes/AlbumPage'
 import CompilationPage from '~/classes/CompilationPage'
 
-export type LocaleKeys = 'en' | 'by'
 export type EntityImagesKeys = 'poster' | 'avatar'
 
 export interface BasicEntity {
@@ -16,20 +13,6 @@ export interface BasicEntity {
 }
 
 export type PlayerPlaylist = AlbumPage | CompilationPage<TrackRes>
-
-export interface AppStateInterface {
-  authConfig: AuthConfig
-  currentPlaylist: PlayerPlaylist
-  reservedPlaylist: PlayerPlaylist
-  playingTrack: PlayerTrack
-  snackbar: Snackbar[]
-  isPlayerExpanded: boolean
-  currentLocale: LocaleKeys
-}
-
-export interface LocaleDictionary {
-  [key: string]: string | LocaleDictionary
-}
 
 export type TableFilter = Record<string, string[]>
 
@@ -52,18 +35,6 @@ export type SortingValue = Record<string, 1 | -1>
 export interface DraggableEvent {
   newIndex: number
   oldIndex: number
-}
-
-export interface ReorderPayload {
-  entityID: string
-  oldOrder: number
-  newOrder: number
-}
-
-export interface Snackbar {
-  message: string
-  type: 'warning' | 'success' | 'error' | 'info'
-  time?: number
 }
 
 export interface RandomEntityReqFilter {

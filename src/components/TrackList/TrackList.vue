@@ -19,83 +19,68 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, PropType, computed } from 'vue'
-import { DraggableEvent, ReorderPayload } from '~/types/Common'
+<script setup lang="ts">
+import { reactive, computed } from 'vue'
+import { DraggableEvent } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
-import store from '~/store'
+import usePlaylist from '~/store/playlist'
 import AlbumTrack from '~/classes/AlbumTrack'
 import TrackListRow from './TrackListRow.vue'
 
-export default defineComponent({
-  name: 'TrackList',
-  components: {
-    VueDraggableNext,
-    TrackListRow
-  },
-  props: {
-    tracks: {
-      type: Array as PropType<AlbumTrack[]>,
-      required: true
-    },
-    albumID: {
-      type: String,
-      required: true
-    },
-    isCompilation: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isTOY: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
-  setup(props, { emit }) {
-    const { actions } = store
+interface Props {
+  tracks: AlbumTrack[]
+  albumID: string
+  isCompilation?: boolean
+  isTOY?: boolean
+}
 
-    const dragOptions = reactive({
-      animation: 300,
-      disabled: false
-    })
+interface Emits {
+  (e: 'trackOrderChanged', payload: ReorderPayload): void
+  (e: 'removeTrackFromCompilation', payload: GatheringUpdateReq): void
+}
 
-    const albumTracksOnly = computed(() => (
-      props.tracks.filter(({ isOutOfAlbumList }) => !isOutOfAlbumList)
-    ))
-
-    const orderChanged = (event: DraggableEvent) => {
-      const payload: ReorderPayload = {
-        oldOrder: event.oldIndex,
-        newOrder: event.newIndex,
-        entityID: props.albumID
-      }
-
-      actions.changePlaylistOrder(payload)
-
-      if (props.isCompilation) {
-        emit('trackOrderChanged', payload)
-      }
-    }
-
-    const removeTrackFromCompilation = (trackID: string) => {
-      emit('removeTrackFromCompilation', {
-        gatheringID: props.albumID,
-        entityType: 'compilations',
-        entityID: trackID,
-        isInList: true
-      })
-    }
-
-    return {
-      dragOptions,
-      orderChanged,
-      albumTracksOnly,
-      removeTrackFromCompilation
-    }
-  }
+const props = withDefaults(defineProps<Props>(), {
+  isCompilation: false,
+  isTOY: false
 })
+
+const emit = defineEmits<Emits>()
+
+const {
+  playerActions: { changePlaylistOrder }
+} = usePlaylist()
+
+const dragOptions = reactive({
+  animation: 300,
+  disabled: false
+})
+
+const albumTracksOnly = computed(() => (
+  props.tracks.filter(({ isOutOfAlbumList }) => !isOutOfAlbumList)
+))
+
+const orderChanged = (event: DraggableEvent) => {
+  const payload: ReorderPayload = {
+    oldOrder: event.oldIndex,
+    newOrder: event.newIndex,
+    entityID: props.albumID
+  }
+
+  changePlaylistOrder(payload)
+
+  if (props.isCompilation) {
+    emit('trackOrderChanged', payload)
+  }
+}
+
+const removeTrackFromCompilation = (trackID: string) => {
+  emit('removeTrackFromCompilation', {
+    gatheringID: props.albumID,
+    entityType: 'compilations',
+    entityID: trackID,
+    isInList: true
+  })
+}
 </script>
 
 <style lang="scss">

@@ -30,44 +30,30 @@
   </li>
 </template>
 
-<script lang="ts">
-import { PropType, computed, defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
+import useGlobalStore from '~/store/global'
 import EmbeddedItem from '~/classes/EmbeddedItem'
 import Button from '~/components/Button.vue'
-import store from '~/store'
 
-export default defineComponent({
-  name: 'EmbeddedCard',
-  components: {
-    Button
-  },
-  props: {
-    card: {
-      type: Object as PropType<EmbeddedItem>,
-      required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    }
-  },
-  setup({ card }) {
-    const { getters } = store
+interface Props {
+  card: EmbeddedItem
+  rootPath: string
+}
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const props = defineProps<Props>()
 
-    const cardCaption = computed(() => (
-      `${card.artist.title } / ${card.period.title} / ${card.genre.title}`
-    ))
+const {
+  globalGetters: { authConfig }
+} = useGlobalStore()
 
-    return {
-      cardCaption,
-      isAdmin
-    }
-  }
-})
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
+
+const cardCaption = computed(() => (
+  `${props.card.artist.title } / ${props.card.period.title} / ${props.card.genre.title}`
+))
 </script>
 
 <style lang="scss">

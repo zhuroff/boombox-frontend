@@ -35,8 +35,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent } from 'vue'
+<script setup lang="ts">
 import { BasicEntity, Pagination } from '~/types/Common'
 import { useGathering } from '~/hooks/useGathering'
 import GatheringTab from './GatheringTab.vue'
@@ -44,109 +43,76 @@ import Preloader from './Preloader.vue'
 import CollectionEntity from '~/classes/CollectionEntity'
 import CompilationItem from '~/classes/CompilationItem'
 
-export default defineComponent({
-  name: 'GatheringTabs',
-  components: {
-    GatheringTab,
-    Preloader
-  },
-  props: {
-    isLoading: {
-      type: Boolean,
-      required: true
-    },
-    results: {
-      type: Array as PropType<(CollectionEntity<BasicEntity> | CompilationItem<BasicEntity>)[]>,
-      required: true
-    },
-    pagination: {
-      type: Object as PropType<Pagination>,
-      required: true
-    },
-    entityID: {
-      type: String,
-      required: true
-    },
-    entityType: {
-      type: String,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: true
-    }
-  },
-  setup({ results, entityType, entityID }) {
-    const {
-      removeFromGathering,
-      createNewGathering,
-      setGatheringName,
-      gatheringName,
-      addToGathering
-    } = useGathering()
+interface Props {
+  isLoading: boolean
+  results: (CollectionEntity<BasicEntity> | CompilationItem<BasicEntity>)[]
+  pagination: Pagination
+  entityID: string
+  entityType: string
+  placeholderImage: string
+}
 
-    const addEntityToGathering = (gathering: typeof results[0], gatherings: typeof results) => {
-      addToGathering({
-        entityID,
-        entityType,
-        gatheringID: gathering._id,
-        order: getOrder(gathering._id, gatherings) || 1,
-        isInList: false
-      })
-        .then(() => addNewGathering(gathering, gatherings))
-    }
+const props = defineProps<Props>()
 
-    const removeEntityFromGathering = (gatheringID: string, gatherings: typeof results) => {
-      removeFromGathering({
-        entityID,
-        entityType,
-        gatheringID,
-        isInList: true
-      })
-        .then(() => deleteEntityFromGathering(gatheringID, gatherings))
-    }
+const {
+  removeFromGathering,
+  createNewGathering,
+  setGatheringName,
+  gatheringName,
+  addToGathering
+} = useGathering()
 
-    const getTargetEntities = (gatheringID: string, gatherings: typeof results) => {
-      const target = gatherings.find(({ _id }) => gatheringID === _id)
-      if (target) {
-        return target instanceof CollectionEntity ? target.albums : target.tracks
-      }
-    }
+const addEntityToGathering = (gathering: typeof props.results[number], gatherings: typeof props.results) => {
+  addToGathering({
+    entityID: props.entityID,
+    entityType: props.entityType,
+    gatheringID: gathering._id,
+    order: getOrder(gathering._id, gatherings) || 1,
+    isInList: false
+  })
+    .then(() => addNewGathering(gathering, gatherings))
+}
 
-    const getOrder = (gatheringID: string, gatherings: typeof results) => {
-      const entities = getTargetEntities(gatheringID, gatherings)
-      return entities && entities.length + 1
-    }
+const removeEntityFromGathering = (gatheringID: string, gatherings: typeof props.results) => {
+  removeFromGathering({
+    entityID: props.entityID,
+    entityType: props.entityType,
+    gatheringID,
+    isInList: true
+  })
+    .then(() => deleteEntityFromGathering(gatheringID, gatherings))
+}
 
-    const addNewGathering = (gathering: typeof results[0], gatherings: typeof results) => {
-      const entities = getTargetEntities(gathering._id, gatherings)
-      entities?.push({ _id: entityID, title: '' })
-    }
-
-    const deleteEntityFromGathering = (gatheringID: string, gatherings: typeof results) => {
-      const entities = getTargetEntities(gatheringID, gatherings)
-      if (entities) {
-        const index = entities.findIndex(({ _id }) => _id === entityID)
-        entities.splice(index, 1)
-      }
-    }
-
-    return {
-      createNewGathering,
-      setGatheringName,
-      gatheringName,
-      addToGathering,
-      addEntityToGathering,
-      removeEntityFromGathering,
-      getOrder
-    }
+const getTargetEntities = (gatheringID: string, gatherings: typeof props.results) => {
+  const target = gatherings.find(({ _id }) => gatheringID === _id)
+  if (target) {
+    return target instanceof CollectionEntity ? target.albums : target.tracks
   }
-})
+}
+
+const getOrder = (gatheringID: string, gatherings: typeof props.results) => {
+  const entities = getTargetEntities(gatheringID, gatherings)
+  return entities && entities.length + 1
+}
+
+const addNewGathering = (gathering: typeof props.results[number], gatherings: typeof props.results) => {
+  const entities = getTargetEntities(gathering._id, gatherings)
+  entities?.push({ _id: props.entityID, title: '' })
+}
+
+const deleteEntityFromGathering = (gatheringID: string, gatherings: typeof props.results) => {
+  const entities = getTargetEntities(gatheringID, gatherings)
+  if (entities) {
+    const index = entities.findIndex(({ _id }) => _id === props.entityID)
+    entities.splice(index, 1)
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 @import '../scss/variables.scss';
 @import 'include-media';
+
 .entity-tabs {
   width: calc(100vw - 20px);
   max-width: 1200px;

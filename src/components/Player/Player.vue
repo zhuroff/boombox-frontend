@@ -59,7 +59,7 @@
               v-for="(track, index) in currentPlaylistTracks"
               :class="[{ '--active' : isPlaying(track._id) }, 'overlay__list-item']"
               :key="track._id"
-              @click="() => playTrack(track)"
+              @click="() => playCurrentTrack(track)"
             >
               <div class="overlay__list-cover">
                 <img :src="track.albumCover" />
@@ -88,12 +88,13 @@
   </section>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive, ref } from 'vue'
-import { DraggableEvent, ReorderPayload } from '~/types/Common'
+<script setup lang="ts">
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { DraggableEvent } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { secondsToMinutes } from '~/utils'
-import store from '~/store'
+import usePlayingTrack from '~/store/track'
+import usePlaylist from '~/store/playlist'
 import AlbumTrack from '~/classes/AlbumTrack'
 import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
 import PlayerPrevTrack from './PlayerPrevTrack.vue'
@@ -110,113 +111,89 @@ import Button from '../Button.vue'
 
 type PlayerKeyNav = 'Space' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown'
 
-export default defineComponent({
-  components: {
-    PlayerRepeatTrack,
-    PlayerPrevTrack,
-    PlayerNextTrack,
-    PlayerPlayPause,
-    PlayerProgressBar,
-    PlayerCrackle,
-    PlayerSound,
-    PlayerExternal,
-    PlayerList,
-    VueDraggableNext,
-    Overlay,
-    Sprite,
-    Button
-  },
-  setup() {
-    const { actions, getters } = store
-    const isPlaylistOpen = ref(false)
-    const dragOptions = reactive({
-      animation: 300,
-      disabled: false
-    })
+const {
+  trackGetters: { playingTrack },
+  trackActions: { playTrack, continuePlay, setTrackOnPause }
+} = usePlayingTrack()
 
-    const trackTime = (duration: number) => secondsToMinutes(duration)
-    const isPlaying = (id: string) => id === getters.playingTrack.value?._id
+const {
+  playerGetters: { currentPlaylist, currentPlaylistTracks, isPlayerExpanded },
+  playerActions: { changePlaylistOrder, removeTrackFromPlaylist, switchToPrevTrack, switchToNextTrack, togglePlayerVisibility }
+} = usePlaylist()
 
-    const orderChanged = (event: DraggableEvent) => {
-      const payload: ReorderPayload = {
-        oldOrder: event.oldIndex,
-        newOrder: event.newIndex,
-        entityID: getters.playlists.value.current._id!
-      }
+const isPlaylistOpen = ref(false)
+const dragOptions = reactive({
+  animation: 300,
+  disabled: false
+})
 
-      actions.changePlaylistOrder(payload)
-    }
+const trackTime = (duration: number) => secondsToMinutes(duration)
+const isPlaying = (id: string) => id === playingTrack.value?._id
 
-    const playOrPause = () => {
-      if (getters.playingTrack.value?.isOnPause) {
-        actions.continuePlay()
-      } else {
-        actions.setTrackOnPause()
-      }
-    }
-
-    const volumeUp = () => {
-      console.log('Volume up!')
-    }
-
-    const volumeDown = () => {
-      console.log('Volume down!')
-    }
-
-    const togglePlaylistState = () => {
-      isPlaylistOpen.value = !isPlaylistOpen.value
-    }
-
-    const playTrack = (track: AlbumTrack) => {
-      actions.playTrack(track)
-      actions.togglePlayerVisibility()
-    }
-
-    const removeFromPlaylist = (event: Event, id: string) => {
-      event.stopPropagation()
-      actions.removeTrackFromPlaylist(id)
-    }
-
-    const keyboardPlayerKeys = {
-      Space: playOrPause,
-      ArrowLeft: actions.switchToPrevTrack,
-      ArrowRight: actions.switchToNextTrack,
-      ArrowUp: volumeUp,
-      ArrowDown: volumeDown
-    }
-
-    const keyboardNavHandler = (event: KeyboardEvent) => {
-      const keyCode = event.code as PlayerKeyNav
-      const inputTags = ['TEXTAREA', 'INPUT', 'BUTTON']
-      const isInputTags = inputTags.includes((event.target as HTMLInputElement).tagName)
-
-      if (keyboardPlayerKeys[keyCode] && !isInputTags && getters.playingTrack.value?._id) {
-        keyboardPlayerKeys[keyCode]()
-      }
-    }
-    
-    onMounted(() => {
-      document.addEventListener('keyup', keyboardNavHandler)
-    })
-
-    onUnmounted(() => {
-      document.removeEventListener('keyup', keyboardNavHandler)
-    })
-
-    return {
-      playingTrack: getters.playingTrack,
-      isPlayerExpanded: getters.isPlayerExpanded,
-      currentPlaylistTracks: getters.currentPlaylistTracks,
-      togglePlaylistState,
-      removeFromPlaylist,
-      playTrack,
-      trackTime,
-      isPlaylistOpen,
-      isPlaying,
-      dragOptions,
-      orderChanged
-    }
+const orderChanged = (event: DraggableEvent) => {
+  const payload: ReorderPayload = {
+    oldOrder: event.oldIndex,
+    newOrder: event.newIndex,
+    entityID: currentPlaylist.value?._id
   }
+
+  changePlaylistOrder(payload)
+}
+
+const playOrPause = () => {
+  if (playingTrack.value?.isOnPause) {
+    continuePlay()
+  } else {
+    setTrackOnPause()
+  }
+}
+
+const volumeUp = () => {
+  console.log('Volume up!')
+}
+
+const volumeDown = () => {
+  console.log('Volume down!')
+}
+
+const togglePlaylistState = () => {
+  isPlaylistOpen.value = !isPlaylistOpen.value
+}
+
+const playCurrentTrack = (track: AlbumTrack) => {
+  playTrack(track)
+  togglePlayerVisibility()
+}
+
+const removeFromPlaylist = (event: Event, id: string) => {
+  event.stopPropagation()
+  removeTrackFromPlaylist(id)
+}
+
+const keyboardPlayerKeys = {
+  Space: playOrPause,
+  ArrowLeft: switchToPrevTrack,
+  ArrowRight: switchToNextTrack,
+  ArrowUp: volumeUp,
+  ArrowDown: volumeDown
+}
+
+const keyboardNavHandler = (event: KeyboardEvent) => {
+  const keyCode = event.code as PlayerKeyNav
+  const inputTags = ['TEXTAREA', 'INPUT', 'BUTTON']
+  const isInputTags = inputTags.includes((event.target as HTMLInputElement).tagName)
+
+  if (keyboardPlayerKeys[keyCode] && !isInputTags && playingTrack.value?._id) {
+    keyboardPlayerKeys[keyCode]()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keyup', keyboardNavHandler)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keyup', keyboardNavHandler)
 })
 </script>
 

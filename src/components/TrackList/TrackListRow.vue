@@ -60,9 +60,11 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed, PropType } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import useGlobalStore from '~/store/global'
+import usePlaylist from '~/store/playlist'
+import usePlayingTrack from '~/store/track'
 import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 import TrackItemAdd from './TrackItemAdd.vue'
@@ -74,81 +76,51 @@ import TrackItemDisable from './TrackItemDisable.vue'
 import Modal from '~/components/Modal.vue'
 import TrackLyrics from './TrackLyrics.vue'
 
-export default defineComponent({
-  name: 'TrackListRow',
-  components: {
-    Button,
-    TrackItemAdd,
-    TrackItemPlay,
-    TrackItemTitle,
-    TrackItemDuration,
-    TrackItemCompilation,
-    TrackItemDisable,
-    Modal,
-    TrackLyrics
-  },
-  props: {
-    track: {
-      type: Object as PropType<AlbumTrack>,
-      required: true
-    },
-    index: {
-      type: Number,
-      required: true
-    },
-    albumID: {
-      type: String,
-      required: true
-    },
-    isCompilation: {
-      type: Boolean,
-      required: true
-    },
-    isTOY: {
-      type: Boolean,
-      required: true
-    }
-  },
-  setup(props) {
-    const { getters } = store
-    const descriptionValue = ref('')
-    const frameValue = ref('')
-    const isModalActive = ref(false)
-    const isTOYEditable = ref(false)
+interface Props {
+  track: AlbumTrack
+  index: number
+  albumID: string
+  isCompilation: boolean
+  isTOY: boolean
+}
 
-    const trackArtistAndTitle = computed(() => (
-      `${props.track.artist.title} - ${props.track.title}`
-    ))
+const props = defineProps<Props>()
 
-    const isPlayingTrack = computed(() => (
-      getters.playingTrack.value?._id === props.track._id
-    ))
+const {
+  globalGetters: { authConfig }
+} = useGlobalStore()
 
-    const isNotCurrentPlaylist = computed(() => (
-      getters.playlists.value.current._id && props.albumID !== getters.playlists.value.current._id
-    ))
+const {
+  playerGetters: { currentPlaylist }
+} = usePlaylist()
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const {
+  trackGetters: { playingTrack }
+} = usePlayingTrack()
 
-    const lyricsModalSwitcher = () => {
-      isModalActive.value = !isModalActive.value
-    }
+const isModalActive = ref(false)
+const isTOYEditable = ref(false)
 
-    return {
-      isModalActive,
-      isPlayingTrack,
-      lyricsModalSwitcher,
-      isNotCurrentPlaylist,
-      trackArtistAndTitle,
-      isTOYEditable,
-      descriptionValue,
-      frameValue,
-      isAdmin
-    }
-  }
-})
+const trackArtistAndTitle = computed(() => (
+  `${props.track.artist.title} - ${props.track.title}`
+))
+
+const isPlayingTrack = computed(() => (
+  playingTrack.value?._id === props.track._id
+))
+
+const isNotCurrentPlaylist = computed(() => (
+  // @ts-expect-error: fix
+  currentPlaylist.value?._id && props.albumID !== currentPlaylist.value._id
+))
+
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
+
+const lyricsModalSwitcher = () => {
+  isModalActive.value = !isModalActive.value
+}
 </script>
 
 <style lang="scss">

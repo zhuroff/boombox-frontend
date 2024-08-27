@@ -1,34 +1,25 @@
 <template>  
   <button
     :class="[{ '--active' : isCrackled }, 'player__crackle']"
-    @click="crackleSwitch"
+    @click="toggleCrackle"
   >
     <Sprite name="vinyl" />
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import { ref } from 'vue'
+import usePlayingTrack from '~/store/track'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Sprite
-  },
-  setup() {
-    const { actions } = store
-    const isCrackled = ref(false)
+const {
+  trackActions: { crackleSwitch }
+} = usePlayingTrack()
 
-    const crackleSwitch = () => {
-      actions.crackleSwitch()
-      isCrackled.value = !isCrackled.value
-    }
+const isCrackled = ref(false)
 
-    return {
-      isCrackled,
-      crackleSwitch
-    }
-  },
-})
+const toggleCrackle = () => {
+  crackleSwitch()
+  isCrackled.value = !isCrackled.value
+}
 </script>

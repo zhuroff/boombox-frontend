@@ -25,7 +25,7 @@
           v-for="item in dataList"
           :key="item._id"
           :card="item"
-          :isDraggable="isDraggable"
+          :isDraggable="Boolean(isDraggable)"
           :placeholderImage="placeholderImage"
           @deleteEntity="(payload: unknown) => $emit('deleteEntity', payload)"
         />
@@ -44,8 +44,8 @@
   </section>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { BasicEntity, Pagination, PaginationConfig } from '~/types/Common'
 import ListCardBasic from '~/classes/ListCardBasic'
 import Preloader from '~/components/Preloader.vue'
@@ -54,64 +54,24 @@ import CardList from '~/components/Cards/CardList.vue'
 import AdapterCard from '~/components/Cards/AdapterCard.vue'
 import Paginator from '~/components/Paginator.vue'
 
-export default defineComponent({
-  name: 'ListPageTemplate',
-  components: {
-    Preloader,
-    Header,
-    CardList,
-    AdapterCard,
-    Paginator
-  },
-  props: {
-    isDataFetched: {
-      type: Boolean,
-      required: true
-    },
-    pageHeading: {
-      type: String,
-      required: false
-    },
-    dataList: {
-      type: Array as PropType<Array<BasicEntity & ListCardBasic>>,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: true
-    },
-    pagePagination: {
-      type: Object as PropType<Pagination>,
-      required: false
-    },
-    switchPagination: {
-      type: Function as PropType<(page: number) => void>,
-      required: false
-    },
-    setEntitiesLimit: {
-      type: Function as PropType<(limit: number) => void>,
-      required: false
-    },
-    withSearch: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    isDraggable: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
-  setup({ pagePagination }) {
-    const paginationConfig = ref<PaginationConfig>({
-      limiter: [12, 15, 18, 30, 45, 48, 60, 75, 78, 100, 102],
-      increment: true,
-      decrement: true,
-      selected: pagePagination?.limit || 15
-    })
+interface Props {
+  isDataFetched: boolean
+  dataList: Array<BasicEntity & ListCardBasic>
+  placeholderImage: string
+  pagePagination?: Pagination
+  switchPagination?: (page: number) => void
+  setEntitiesLimit?: (limit: number) => void
+  pageHeading?: string
+  withSearch?: boolean
+  isDraggable?: boolean
+}
 
-    return { paginationConfig }
-  }
-})
+const props = defineProps<Props>()
+
+const paginationConfig = computed<PaginationConfig>(() => ({
+  limiter: [12, 15, 18, 30, 45, 48, 60, 75, 78, 100, 102],
+  increment: true,
+  decrement: true,
+  selected: props.pagePagination?.limit || 15
+}))
 </script>

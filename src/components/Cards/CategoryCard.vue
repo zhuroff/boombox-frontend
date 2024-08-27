@@ -15,32 +15,19 @@
   </li>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script setup lang="ts">
 import { hostString } from '~/utils'
 import CategoryItem from '~/classes/CategoryItem'
 
-export default defineComponent({
-  name: 'CategoryCard',
-  props: {
-    card: {
-      type: Object as PropType<CategoryItem>,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    }
-  },
-  setup() {
-    const host = (pathname: string) => hostString(pathname)
-    return { host }
-  }
-})
+interface Props {
+  card: CategoryItem
+  placeholderImage: string
+  rootPath: string
+}
+
+defineProps<Props>()
+
+const host = (pathname: string) => hostString(pathname)
 </script>
 
 <style lang="scss" scoped>

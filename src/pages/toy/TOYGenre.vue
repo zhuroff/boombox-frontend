@@ -15,7 +15,7 @@
     >
       <Button
         size="medium"
-        :label="lang('player.waveButton')"
+        :label="localize('player.waveButton')"
         :disabled="!waveAlbum?.tracks?.length"
         @click="playWave"
       />
@@ -32,147 +32,143 @@
   <div
     v-else-if="!isPageLoading && !genreFolders.size"
     class="toyempty"
-  >{{ lang('toy.emptyYears') }}</div>
+  >{{ localize('toy.emptyYears') }}</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, reactive, ref, watch } from 'vue'
+<script setup lang="ts">
+import { computed, reactive, ref, watch } from 'vue'
 import { CloudEntity, CloudEntityRes, TrackRes } from '~/types/ReqRes'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
+import usePlaylist from '~/store/playlist'
+import usePlayingTrack from '~/store/track'
 import cloudServices from '~/services/cloud.services'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
 import TOYYearCard from '~/components/Cards/TOYYearCard.vue'
 import Button from '~/components/Button.vue'
 import AlbumPage from '~/classes/AlbumPage'
-import store from '~/store'
 import { useRoute } from 'vue-router'
 
-export default defineComponent({
-  name: 'TOYGenrePage',
-  components: {
-    Preloader,
-    Header,
-    TOYYearCard,
-    Button
-  },
-  setup() {
-    const route = useRoute()
-    const { lang } = useLocales()
-    const { actions, getters: { playingTrack, playlists } } = store
-    const isPageLoading = ref(true)
-    const genreFolders = reactive<Map<string, CloudEntity>>(new Map())
-    const waveAlbum = ref<null | AlbumPage>(null)
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const heading = computed(() => String(route.params.genre))
+const {
+  playerGetters: { currentPlaylist },
+  playerActions: { setPlayerPlaylist, togglePlayerVisibility }
+} = usePlaylist()
 
-    const playWave = () => {
-      if (!waveAlbum.value) return
-      if (!playingTrack.value._id) {
-        actions.playTrack(waveAlbum.value.tracks[0])
-        actions.togglePlayerVisibility()
-      } else {
-        if (playlists.value.current._id !== route.params.genre) {
-          actions.setPlayerPlaylist(waveAlbum.value)
-          actions.playTrack(waveAlbum.value.tracks[0])
-          actions.togglePlayerVisibility()
-        }
+const {
+  trackGetters: { playingTrack },
+  trackActions: { playTrack, continuePlay, setTrackOnPause }
+} = usePlayingTrack()
 
-        playingTrack.value.isOnPause
-          ? actions.continuePlay()
-          : actions.setTrackOnPause()
-      }
+const route = useRoute()
+const isPageLoading = ref(true)
+const genreFolders = reactive<Map<string, CloudEntity>>(new Map())
+const waveAlbum = ref<null | AlbumPage>(null)
+
+const heading = computed(() => String(route.params.genre))
+
+const playWave = () => {
+  if (!waveAlbum.value) return
+  if (!playingTrack.value?._id) {
+    // @ts-expect-error: fix
+    playTrack(waveAlbum.value.tracks[0])
+    togglePlayerVisibility()
+  } else {
+    // @ts-expect-error: fix
+    if (currentPlaylist.value?._id !== route.params.genre) {
+      setPlayerPlaylist(waveAlbum.value)
+      // @ts-expect-error: fix
+      playTrack(waveAlbum.value.tracks[0])
+      togglePlayerVisibility()
     }
 
-    const fetchTOYYears = async () => {
-      try {
-        const years: string[] = []
-        const genreFolder = await cloudServices.getFolderContent({
-          path: '',
-          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
-          root: encodeURIComponent(`TOY/${route.params.genre}`)
-        })
-
-        genreFolder.items.forEach((item) => {
-          if (!item.mimeType && item.title.length === 4) {
-            years.push(item.title)
-            genreFolders.set(
-              item.title,
-              {
-                ...item,
-                path: decodeURIComponent(item.path).replace('MelodyMap/TOY/', '')
-              }
-            )
-            
-          }
-        })
-
-        getTOYWave(years)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        isPageLoading.value = false
-      }
-    }
-
-    const getTOYWave = async (years: string[]) => {
-      try {
-        const tracks = await cloudServices.getRandomTracks({
-          path: '',
-          years,
-          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
-          root: encodeURIComponent(`TOY/${route.params.genre}`),
-          limit: 50
-        })
-        setTOYWave(tracks, String(route.params.genre))
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    const setTOYWave = (tracks: CloudEntityRes['items'], title: string) => {
-      waveAlbum.value = new AlbumPage({
-        _id: title,
-        title: title,
-        tracks: tracks.reduce<TrackRes[]>((acc, next, index) => {
-          acc.push({
-            _id: next.id,
-            title: next.title.replace(/^\d+\.\s|\.\w+$/g, ''),
-            artist: { title: 'Various Artists', _id: '' },
-            genre: { title: '', _id: '' },
-            period: { title: '', _id: '' },
-            inAlbum: { title: 'Tracks of the Years', _id: '' },
-            path: next.path.replace('MelodyMap%2FTOY%2F', ''),
-            isTOY: true,
-            order: index,
-            cloudURL: String(next.cloudURL)
-          })
-          return acc
-        }, [])
-      })
-      actions.setPlayerPlaylist(waveAlbum.value)
-    }
-
-    watch(
-      route,
-      (value) => {
-        if (value.params?.genre) {
-          fetchTOYYears()
-        }
-      },
-      { immediate: true, deep: true }
-    )
-
-    return {
-      isPageLoading,
-      genreFolders,
-      waveAlbum,
-      playWave,
-      heading,
-      lang
-    }
+    playingTrack.value.isOnPause
+      ? continuePlay()
+      : setTrackOnPause()
   }
-})
+}
+
+const fetchTOYYears = async () => {
+  try {
+    const years: string[] = []
+    const genreFolder = await cloudServices.getFolderContent({
+      path: '',
+      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      root: encodeURIComponent(`TOY/${route.params.genre}`)
+    })
+
+    genreFolder.items.forEach((item) => {
+      if (!item.mimeType && item.title.length === 4) {
+        years.push(item.title)
+        genreFolders.set(
+          item.title,
+          {
+            ...item,
+            path: decodeURIComponent(item.path).replace('MelodyMap/TOY/', '')
+          }
+        )
+        
+      }
+    })
+
+    getTOYWave(years)
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isPageLoading.value = false
+  }
+}
+
+const getTOYWave = async (years: string[]) => {
+  try {
+    const tracks = await cloudServices.getRandomTracks({
+      path: '',
+      years,
+      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      root: encodeURIComponent(`TOY/${route.params.genre}`),
+      limit: 50
+    })
+    setTOYWave(tracks, String(route.params.genre))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const setTOYWave = (tracks: CloudEntityRes['items'], title: string) => {
+  waveAlbum.value = new AlbumPage({
+    _id: title,
+    title: title,
+    tracks: tracks.reduce<TrackRes[]>((acc, next, index) => {
+      acc.push({
+        _id: next.id,
+        title: next.title.replace(/^\d+\.\s|\.\w+$/g, ''),
+        artist: { title: 'Various Artists', _id: '' },
+        genre: { title: '', _id: '' },
+        period: { title: '', _id: '' },
+        inAlbum: { title: 'Tracks of the Years', _id: '' },
+        path: next.path.replace('MelodyMap%2FTOY%2F', ''),
+        isTOY: true,
+        order: index,
+        cloudURL: String(next.cloudURL)
+      })
+      return acc
+    }, [])
+  })
+  setPlayerPlaylist(waveAlbum.value)
+}
+
+watch(
+  route,
+  (value) => {
+    if (value.params?.genre) {
+      fetchTOYYears()
+    }
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style lang="scss" scoped>

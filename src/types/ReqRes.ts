@@ -66,14 +66,6 @@ export interface GatheringCreateRes {
   title: string
 }
 
-export interface GatheringUpdateReq {
-  gatheringID: string
-  entityType: string
-  entityID: string
-  isInList: boolean
-  order?: number
-}
-
 export interface GatheringUpdateRes {
   entityID: string
   gatheringID: string

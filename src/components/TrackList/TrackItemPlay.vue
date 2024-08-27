@@ -30,94 +30,81 @@
       isText
       className="tracklist__row-action"
       :title="title"
-      @click="playTrack"
+      @click="playAudio"
     />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, PropType } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import { computed } from 'vue'
+import usePlaylist from '~/store/playlist'
+import usePlayingTrack from '~/store/track'
 import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
-export default defineComponent({
-  name: 'TrackItemPlay',
-  components: {
-    Button,
-  },
-  props: {
-    track: {
-      type: Object as PropType<AlbumTrack>,
-      required: true
-    },
-    title: {
-      type: String,
-      required: false
-    },
-    isSearched: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    isTOY: {
-      type: Boolean,
-      required: true
-    }
-  },
-  setup(props) {
-    const { actions, getters } = store
+interface Props {
+  track: AlbumTrack
+  title?: string
+  isSearched?: boolean
+  isTOY: boolean
+}
 
-    const isPlaying = computed(() => (
-      getters.playingTrack.value?._id === props.track._id &&
-      !getters.playingTrack.value.isOnPause &&
-      !getters.playingTrack.value.isOnLoading
-    ))
-
-    const isPaused = computed(() => (
-      getters.playingTrack.value?._id === props.track._id &&
-      getters.playingTrack.value.isOnPause
-    ))
-
-    const isOnLoading = computed(() => (
-      getters.playingTrack.value?._id === props.track._id &&
-      getters.playingTrack.value.isOnLoading
-    ))
-
-    const playTrack = () => {
-      if (props.isSearched) {
-        const index = getters.currentPlaylistTracks.value.findIndex(
-          (track) => track._id === getters.playingTrack.value?._id
-        )
-
-        actions.addTrackToPlaylist({
-          order: index !== -1 ? index : 0,
-          track: props.track
-        })
-      }
-
-      actions.playTrack(props.track)
-      actions.togglePlayerVisibility()
-    }
-
-    const pauseTrack = () => {
-      actions.setTrackOnPause()
-    }
-
-    const playFurther = () => {
-      actions.continuePlay()
-    }
-
-    return {
-      isPlaying,
-      isPaused,
-      isOnLoading,
-      playTrack,
-      pauseTrack,
-      playFurther
-    }
-  }
+const props = withDefaults(defineProps<Props>(), {
+  title: '',
+  isSearched: false
 })
+
+const {
+  playerGetters: { currentPlaylistTracks },
+  playerActions: { appendTrackToPlaylist, togglePlayerVisibility }
+} = usePlaylist()
+
+const {
+  trackGetters: { playingTrack },
+  trackActions: { playTrack, continuePlay, setTrackOnPause }
+} = usePlayingTrack()
+
+const isPlaying = computed(() => (
+  playingTrack.value?._id === props.track._id &&
+  !playingTrack.value.isOnPause &&
+  !playingTrack.value.isOnLoading
+))
+
+const isPaused = computed(() => (
+  playingTrack.value?._id === props.track._id &&
+  playingTrack.value.isOnPause
+))
+
+const isOnLoading = computed(() => (
+  playingTrack.value?._id === props.track._id &&
+  playingTrack.value.isOnLoading
+))
+
+const playAudio = () => {
+  if (props.isSearched) {
+    const index = currentPlaylistTracks.value.findIndex(
+      (track) => track._id === playingTrack.value?._id
+    )
+
+    appendTrackToPlaylist({
+      order: index !== -1 ? index : 0,
+      // @ts-expect-error: fix
+      track: props.track
+    })
+  }
+
+  // @ts-expect-error: fix
+  playTrack(props.track)
+  togglePlayerVisibility()
+}
+
+const pauseTrack = () => {
+  setTrackOnPause()
+}
+
+const playFurther = () => {
+  continuePlay()
+}
 </script>
 
 <style lang="scss">

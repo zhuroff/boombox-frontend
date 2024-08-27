@@ -30,45 +30,28 @@
   </li>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, PropType } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
+import useGlobalStore from '~/store/global'
 import AlbumItem from '~/classes/AlbumItem'
 import Button from '~/components/Button.vue'
-import store from '~/store'
 
-export default defineComponent({
-  name: 'AlbumCard',
-  components: {
-    Button
-  },
-  props: {
-    card: {
-      type: Object as PropType<AlbumItem>,
-      required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: true
-    },
-    isDraggable: {
-      type: Boolean,
-      required: true
-    }
-  },
-  setup () {
-    const { getters } = store
+interface Props {
+  card: AlbumItem
+  rootPath: string
+  placeholderImage: string
+  isDraggable: boolean
+}
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+defineProps<Props>()
 
-    return { isAdmin }
-  }
-})
+const {
+  globalGetters: { authConfig }
+} = useGlobalStore()
+
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
 </script>
 
 <style lang="scss">

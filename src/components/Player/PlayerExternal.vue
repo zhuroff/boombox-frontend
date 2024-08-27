@@ -7,29 +7,21 @@
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import usePlayingTrack from '~/store/track'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Sprite
-  },
-  setup() {
-    const { getters } = store
+const {
+  trackGetters: { playingTrack }
+} = usePlayingTrack()
 
-    const proceedToYouTube = () => {
-      if (!getters.playingTrack.value) {
-        throw new Error('No track is playing')
-      }
-      const { artistName, title } = getters.playingTrack.value
-      const url = `https://www.youtube.com/results?search_query=${artistName} ${title}`.replaceAll(' ', '+')
-
-      window.open(url)
-    }
-
-    return { proceedToYouTube }
+const proceedToYouTube = () => {
+  if (!playingTrack.value) {
+    throw new Error('No track is playing')
   }
-})
+  const { artistName, title } = playingTrack.value
+  const url = `https://www.youtube.com/results?search_query=${artistName} ${title}`.replaceAll(' ', '+')
+
+  window.open(url)
+}
 </script>

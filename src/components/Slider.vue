@@ -26,38 +26,25 @@
 
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script setup lang="ts">
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { BookletSlideState } from '~/types/Album'
 
-export default defineComponent({
-  components: {
-    Carousel,
-    Slide,
-    Navigation
-  },
-  props: {
-    data: {
-      type: Array as PropType<string[]>,
-      required: true
-    },
-    isFullSlideSet: {
-      type: Boolean,
-      required: true
-    }
-  },
-  setup(_, { emit }) {
-    const handleSlideStart = (data: BookletSlideState) => {
-      emit('slideChanged', data)
-    }
+interface Props {
+  data: string[]
+  isFullSlideSet: boolean
+}
 
-    return {
-      handleSlideStart
-    }
-  }
-})
+interface Emits {
+  (e: 'slideChanged', data: BookletSlideState): void
+}
 
+defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const handleSlideStart = (data: BookletSlideState) => {
+  emit('slideChanged', data)
+}
 </script>
 
 <style lang="scss">
@@ -153,5 +140,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

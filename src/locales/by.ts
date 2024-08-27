@@ -1,5 +1,3 @@
-import { LocaleDictionary } from '~/types/Common'
-
 export const localesBY: LocaleDictionary = {
   languages: {
     en: 'Англiйская',

@@ -26,7 +26,7 @@
             v-if="isAdmin"
             class="overlay__list-item"
             @click="isDelConfirm = true"
-          >{{ lang('deleteEntity') }}</li>
+          >{{ localize('deleteEntity') }}</li>
         </template>
       </AlbumHero>
     </template>
@@ -37,7 +37,7 @@
         @closeModal="delReject"
       >
         <Confirmation
-          :message="lang('delConfirmMessage')"
+          :message="localize('delConfirmMessage')"
           @confirm="deleteEmbedded"
           @reject="delReject"
         />
@@ -46,11 +46,11 @@
   </AlbumPageTemplate>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
 import { useDiscogs } from '~/hooks/useDiscogs'
 import { useSinglePage } from '~/hooks/useSinglePage'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { RelatedAlbums } from '~/types/Album'
 import { RelatedAlbumsReqFilter } from '~/types/Common'
 import { AlbumItemRes, EmbeddedItemRes } from '~/types/ReqRes'
@@ -60,125 +60,97 @@ import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
-import store from '~/store'
 
-export default defineComponent({
-  name: 'EmbeddedSingle',
-  components: {
-    AlbumPageTemplate,
-    Confirmation,
-    AlbumHero,
-    Modal
-  },
-  setup() {
-    const {
-      fetchData,
-      deleteEntry,
-      isDataFetched,
-      getRandomAlbum,
-      getRelatedAlbums
-    } = useSinglePage<EmbeddedItemRes, EmbeddedItem, AlbumItemRes>(EmbeddedItem, 'EmbeddedCard', 'embedded')
+const {
+  fetchData,
+  deleteEntry,
+  isDataFetched,
+  getRandomAlbum,
+  getRelatedAlbums
+} = useSinglePage<EmbeddedItemRes, EmbeddedItem, AlbumItemRes>(EmbeddedItem, 'EmbeddedCard', 'embedded')
 
-    const {
-      fetchDiscogsInfo,
-      discogsTablePayload,
-      discogsFiltersStates,
-      setDiscogsFilterValue,
-      setDiscogsPaginationPage,
-      resetDiscogsFilters,
-      discogsFilters
-    } = useDiscogs()
+const {
+  fetchDiscogsInfo,
+  discogsTablePayload,
+  discogsFiltersStates,
+  setDiscogsFilterValue,
+  setDiscogsPaginationPage,
+  resetDiscogsFilters,
+  discogsFilters
+} = useDiscogs()
 
-    const { getters } = store
-    const { lang } = useLocales()
-    const album = ref<EmbeddedItem>({} as EmbeddedItem)
-    const relatedAlbums = ref<RelatedAlbums[]>([])
-    const isDelConfirm = ref(false)
+const {
+  globalGetters: { localize, authConfig }
+} = useGlobalStore()
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const album = ref<EmbeddedItem>({} as EmbeddedItem)
+const relatedAlbums = ref<RelatedAlbums[]>([])
+const isDelConfirm = ref(false)
 
-    const getRandom = () => {
-      getRandomAlbum('albums')
-        .then((payload) => payload && fetchDiscogsInfo(payload))
-    }
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
 
-    const getRelated = async () => {
-      const relatedAlbumsConfig: RelatedAlbumsReqFilter[] = [
-        {
-          from: 'artists',
-          key: 'artist._id',
-          name: album.value.artist.title,
-          value: album.value.artist._id,
-          excluded: {
-            _id: album.value._id
-          }
-        },
-        {
-          from: 'genres',
-          key: 'genre._id',
-          name: album.value.genre.title,
-          value: album.value.genre._id,
-          excluded: {
-            _id: album.value._id,
-            'artist._id': album.value.artist._id
-          }
-        }
-      ]
+const getRandom = () => {
+  getRandomAlbum('albums')
+    .then((payload) => payload && fetchDiscogsInfo(payload))
+}
 
-      try {
-        relatedAlbums.value = []
-        const response = await Promise.all(relatedAlbumsConfig.map(async (config) => (
-          await getRelatedAlbums(config, 'albums')
-        )))
-        
-        relatedAlbums.value = response.map(({ docs, name}) => ({
-          name,
-          docs: docs.map<AlbumItem>((album) => new AlbumItem(album, 'AlbumCard', 'albums'))
-        }))
-      } catch (error) {
-        console.error(error)
+const getRelated = async () => {
+  const relatedAlbumsConfig: RelatedAlbumsReqFilter[] = [
+    {
+      from: 'artists',
+      key: 'artist._id',
+      name: album.value.artist.title,
+      value: album.value.artist._id,
+      excluded: {
+        _id: album.value._id
+      }
+    },
+    {
+      from: 'genres',
+      key: 'genre._id',
+      name: album.value.genre.title,
+      value: album.value.genre._id,
+      excluded: {
+        _id: album.value._id,
+        'artist._id': album.value.artist._id
       }
     }
+  ]
 
-    const delReject = () => {
-      isDelConfirm.value = false
-    }
-
-    const deleteEmbedded = () => {
-      deleteEntry('embedded', album.value._id)
-    }
-
-    onMounted(() => {
-      fetchData('embedded')
-        .then((payload) => {
-          if (payload) {
-            album.value = payload
-            getRelated()
-            fetchDiscogsInfo(payload)
-          }
-        })
-    })
-
-    return {
-      isDataFetched,
-      relatedAlbums,
-      deleteEmbedded,
-      discogsTablePayload,
-      discogsFiltersStates,
-      setDiscogsFilterValue,
-      setDiscogsPaginationPage,
-      resetDiscogsFilters,
-      discogsFilters,
-      isDelConfirm,
-      getRandom,
-      delReject,
-      isAdmin,
-      album,
-      lang
-    }
+  try {
+    relatedAlbums.value = []
+    const response = await Promise.all(relatedAlbumsConfig.map(async (config) => (
+      await getRelatedAlbums(config, 'albums')
+    )))
+    
+    relatedAlbums.value = response.map(({ docs, name}) => ({
+      name,
+      docs: docs.map<AlbumItem>((album) => new AlbumItem(album, 'AlbumCard', 'albums'))
+    }))
+  } catch (error) {
+    console.error(error)
   }
+}
+
+const delReject = () => {
+  isDelConfirm.value = false
+}
+
+const deleteEmbedded = () => {
+  deleteEntry('embedded', album.value._id)
+}
+
+onMounted(() => {
+  fetchData('embedded')
+    .then((payload) => {
+      if (payload) {
+        album.value = payload
+        getRelated()
+        fetchDiscogsInfo(payload)
+      }
+    })
 })
 </script>
 

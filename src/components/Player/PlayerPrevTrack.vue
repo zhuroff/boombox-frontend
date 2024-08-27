@@ -1,29 +1,19 @@
 <template>  
   <button
     class="player__previous"
-    :disabled="!isPrevTrackExist"
+    :disabled="!isPrevTrackExists"
     @click="switchToPrevTrack"
   >
     <Sprite name="previous" />
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Sprite
-  },
-  setup() {
-    const { actions, getters } = store
-
-    return {
-      isPrevTrackExist: getters.isPrevTrackExists,
-      switchToPrevTrack: actions.switchToPrevTrack
-    }
-  }
-})
+const {
+  playerGetters: { isPrevTrackExists },
+  playerActions: { switchToPrevTrack }
+} = usePlaylist()
 </script>

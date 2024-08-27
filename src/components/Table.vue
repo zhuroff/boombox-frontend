@@ -23,7 +23,7 @@
           <span
             v-else
             class="table__cell-text"
-          >{{ lang(`${localeKey}.${key}`) }}</span>
+          >{{ localize(`${localeKey}.${key}`) }}</span>
         </th>
       </tr>
     </thead>
@@ -76,7 +76,7 @@
         <td
           :colspan="propMap.size"
           class="table__cell-empty"
-        >{{ lang('table.empty') }}</td>
+        >{{ localize('table.empty') }}</td>
       </tr>
     </tbody>
   </table>
@@ -89,72 +89,53 @@
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { JSONSchema4 } from 'json-schema'
-import { ComputedRef, PropType, computed, defineComponent, ref } from 'vue'
+import { ComputedRef, computed, ref } from 'vue'
 import { PaginationConfig, TableFilter, TablePayload } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import Select from '~/components/Select.vue'
 import Paginator from '~/components/Paginator.vue'
 
-export default defineComponent({
-  name: 'Table',
-  components: {
-    Select,
-    Paginator
-  },
-  props: {
-    tableState: {
-      type: Object as PropType<TablePayload<Record<string, any>>>,
-      required: true
-    },
-    tableFilters: {
-      type: Object as PropType<TableFilter>,
-      required: false
-    },
-    tableFiltersState: {
-      type: Object as PropType<Record<keyof TableFilter, null | string>>,
-      required: true
-    },
-    localeKey: {
-      type: String,
-      required: true
-    }
-  },
-  setup({ tableState }, { emit }) {
-    const { lang } = useLocales()
+interface Props {
+  tableState: TablePayload<Record<string, any>>
+  tableFilters?: TableFilter
+  tableFiltersState: Record<keyof TableFilter, null | string>
+  localeKey: string
+}
 
-    const paginationConfig = ref<PaginationConfig>({
-      increment: true,
-      decrement: true
-    })
+interface Emits {
+  (e: 'update:filter', payload: [string, string | null]): void
+  (e: 'switchPagination', value: number): void
+}
 
-    const propMap: ComputedRef<Map<string, JSONSchema4>> = computed(() => (
-      new Map([...Object.entries(tableState.schema.properties || {})])
-    ))
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-    const updateFilterValue = (payload: [string, string]) => {
-      emit('update:filter', payload)
-    }
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const openExternalLink = (url: string) => {
-      window.open(url)
-    }
-
-    const switchPagination = (value: number) => {
-      emit('switchPagination', value)
-    }
-
-    return {
-      lang,
-      propMap,
-      paginationConfig,
-      updateFilterValue,
-      openExternalLink,
-      switchPagination
-    }
-  }
+const paginationConfig = ref<PaginationConfig>({
+  increment: true,
+  decrement: true
 })
+
+const propMap: ComputedRef<Map<string, JSONSchema4>> = computed(() => (
+  new Map([...Object.entries(props.tableState.schema.properties || {})])
+))
+
+const updateFilterValue = (payload: [string, string | null]) => {
+  emit('update:filter', payload)
+}
+
+const openExternalLink = (url: string) => {
+  window.open(url)
+}
+
+const switchPagination = (value: number) => {
+  emit('switchPagination', value)
+}
 </script>
 
 <style lang="scss" scoped>

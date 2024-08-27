@@ -1,10 +1,10 @@
 <template>
   <section class="section">
     <div class="section__center">
-      <h1>{{ lang('pageNotFound') }}</h1>
+      <h1>{{ localize('pageNotFound') }}</h1>
       <div>
         <Button
-          :label="lang('goBack')"
+          :label="localize('goBack')"
           @click="() => router.back()"
         />
       </div>
@@ -12,22 +12,14 @@
   </section>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import Button from '~/components/Button.vue'
 
-export default defineComponent({
-  name: 'not-found',
-  components: {
-    Button
-  },
-  setup() {
-    const router = useRouter()
-    const { lang } = useLocales()
+const router = useRouter()
 
-    return { router, lang }
-  }
-})
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 </script>

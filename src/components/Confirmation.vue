@@ -3,38 +3,30 @@
     <div class="confirmation__message">{{ message }}</div>
     <div class="confirmation__actions">
       <Button
-        :label="lang('delete')"
+        :label="localize('delete')"
         @click="() => $emit('confirm')"
       />
       <Button
-        :label="lang('cancel')"
+        :label="localize('cancel')"
         @click="() => $emit('reject')"
       />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { useLocales } from '~/hooks/useLocales'
+<script setup lang="ts">
+import useGlobalStore from '~/store/global'
 import Button from '~/components/Button.vue'
 
-export default defineComponent({
-  name: 'Confirmation',
-  components: {
-    Button
-  },
-  props: {
-    message: {
-      type: String,
-      required: true
-    }
-  },
-  setup() {
-    const { lang } = useLocales()
-    return { lang }
-  }
-})
+interface Props {
+  message: string
+}
+
+defineProps<Props>()
+
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 </script>
 
 <style lang="scss" scoped>

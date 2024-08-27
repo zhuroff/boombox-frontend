@@ -3,12 +3,12 @@
     { '--fix' : isOutAlbumAdded },
     'tracklist__row-cell --pointer --add'
   ]">
-    <Button
+    <!-- <Button
       v-if="!isOutAlbumAdded"
       icon="chevron-right"
       size="small"
       isText
-      :title="lang('player.playNext')"
+      :title="localize('player.playNext')"
       @click="() => playTrackNext(track)"
     />
     <Button
@@ -16,61 +16,50 @@
       icon="chevron-right-double"
       size="small"
       isText
-      :title="lang('player.addToList')"
+      :title="localize('player.addToList')"
       @click="() => addToEndOfList(track)"
-    />
+    /> -->
     <Button
       v-if="isOutAlbumAdded"
       icon="playlist-remove"
       size="small"
       isText
       className="--excluded"
-      :title="lang('player.removeFromList')"
+      :title="localize('player.removeFromList')"
       @click="excludeTrack"
     />
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
-import { useLocales } from '~/hooks/useLocales'
-import store from '~/store'
+<script setup lang="ts">
+import { computed } from 'vue'
+import useGlobalStore from '~/store/global'
+import usePlaylist from '~/store/playlist'
 import AlbumTrack from 'classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
-export default defineComponent({
-  name: 'TrackItemAdd',
-  components: {
-    Button
-  },
-  props: {
-    track: {
-      type: Object as PropType<AlbumTrack>,
-      required: true
-    },
-  },
-  setup(props) {
-    const { lang } = useLocales()
-    const { actions, getters } = store
-    
-    const isOutAlbumAdded = computed(() => (
-      getters.currentPlaylistTracks.value.some(({ _id }) => _id === props.track._id)
-    ))
+interface Props {
+  track: AlbumTrack
+}
 
-    const excludeTrack = () => {
-      actions.removeTrackFromPlaylist(props.track._id)
-    }
+const props = defineProps<Props>()
 
-    return {
-      lang,
-      excludeTrack,
-      isOutAlbumAdded,
-      playTrackNext: actions.playTrackNext,
-      addToEndOfList: actions.addToEndOfList,
-      removeTrackFromPlaylist: actions.removeTrackFromPlaylist
-    }
-  }
-})
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
+const {
+  playerGetters: { currentPlaylistTracks },
+  playerActions: { addToEndOfList, playTrackNext, removeTrackFromPlaylist }
+} = usePlaylist()
+
+const isOutAlbumAdded = computed(() => (
+  currentPlaylistTracks.value.some(({ _id }) => _id === props.track._id)
+))
+
+const excludeTrack = () => {
+  removeTrackFromPlaylist(props.track._id)
+}
 </script>
 
 <style lang="scss">

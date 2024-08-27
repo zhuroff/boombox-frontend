@@ -26,51 +26,32 @@
   </li>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { BasicEntity } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import CollectionEntity from '~/classes/CollectionEntity'
 import Button from '~/components/Button.vue'
-import store from '~/store'
 
-export default defineComponent({
-  name: 'CollectionCard',
-  components: {
-    Button
-  },
-  props: {
-    card: {
-      type: Object as PropType<CollectionEntity<BasicEntity>>,
-      required: true
-    },
-    rootPath: {
-      type: String,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: true
-    }
-  },
-  setup({ card }) {
-    const { getters } = store
-    const { lang } = useLocales()
+interface Props {
+  card: CollectionEntity<BasicEntity>
+  rootPath: string
+  placeholderImage: string
+}
 
-    const cardCaption = computed(() => (
-      `${lang('collections.cardCaption')}: ${card.albums.length}`
-    ))
+const props = defineProps<Props>()
 
-    const isAdmin = computed(() => (
-      getters.authConfig.value.user?.role === 'admin'
-    ))
+const {
+  globalGetters: { localize, authConfig }
+} = useGlobalStore()
 
-    return {
-      cardCaption,
-      isAdmin
-    }
-  }
-})
+const cardCaption = computed(() => (
+  `${localize('collections.cardCaption')}: ${props.card.albums.length}`
+))
+
+const isAdmin = computed(() => (
+  authConfig.value.user?.role === 'admin'
+))
 </script>
 
 <style lang="scss" scoped>

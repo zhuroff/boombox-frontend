@@ -1,30 +1,19 @@
 <template>  
   <button
     class="player__next"
-    :disabled="!isNextTrackExist"
+    :disabled="!isNextTrackExists"
     @click="switchToNextTrack"
   >
     <Sprite name="next" />
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
-export default defineComponent({
-  components: {
-    Sprite
-  },
-
-  setup() {
-    const { actions, getters } = store
-
-    return {
-      isNextTrackExist: getters.isNextTrackExists,
-      switchToNextTrack: actions.switchToNextTrack
-    }
-  },
-})
+const {
+  playerGetters: { isNextTrackExists },
+  playerActions: { switchToNextTrack }
+} = usePlaylist()
 </script>

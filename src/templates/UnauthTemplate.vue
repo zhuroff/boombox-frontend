@@ -10,42 +10,30 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { JSONSchema4 } from 'json-schema'
-import { AuthData, AuthResponse } from '~/types/User'
+import api from '../api'
+import useGlobalStore from '~/store/global'
 import Form from '~/components/Form.vue'
 import loginFormSchema from '~/schemas/loginFormSchema.json'
-import api from '../api'
-import store from '../store'
 
-export default defineComponent({
-  name: 'UnauthTemplate',
-  components: {
-    Form
-  },
-  setup() {
-    const { actions } = store
-    const formSchema = loginFormSchema as JSONSchema4
+const {
+  globalActions: { setAuthConfig }
+} = useGlobalStore()
 
-    const login = async (formData: AuthData) => {
-      try {
-        const { data } = await api.post<AuthResponse>('api/users/login', formData)
-        actions.setAuthConfig('isAuthenticated', true)
-        actions.setAuthConfig('user', data.user)
-        localStorage.setItem('token', data.accessToken)
-      } catch (error) {
-        console.error(error)
-        actions.setAuthConfig('isAuthenticated', false)
-      }
-    }
+const formSchema = loginFormSchema as JSONSchema4
 
-    return {
-      login,
-      formSchema
-    }
+const login = async (formData: AuthData) => {
+  try {
+    const { data } = await api.post<AuthResponse>('api/users/login', formData)
+    setAuthConfig('isAuthenticated', true)
+    setAuthConfig('user', data.user)
+    localStorage.setItem('token', data.accessToken)
+  } catch (error) {
+    console.error(error)
+    setAuthConfig('isAuthenticated', false)
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>

@@ -2,40 +2,24 @@
   <div class="snackbar">
     <transition-group name="flyUp">
       <div
-        v-for="(item, index) in snackbarItems"
-        :key="index"
+        v-for="([id, item]) in snackbarQueue"
+        :key="id"
         class="snackbar__item"
       >
         <div class="snackbar__text" v-html="item.message" />
         <button
           :class="`snackbar__action --${item.type}`"
-          @click="() => closeSnackbar(index)"
+          @click="() => closeSnackbar(id)"
         >OK</button>
       </div>
     </transition-group>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-import store from '~/store'
+<script setup lang="ts">
+import useSnackbar from '~/hooks/useSnackbar'
 
-export default defineComponent({
-  setup() {
-    const { actions, getters } = store
-
-    const snackbarItems = computed(() => getters.snackbarItems.value)
-
-    const closeSnackbar = (index: number) => {
-      actions.closeSnackbar(index)
-    }
-
-    return {
-      snackbarItems,
-      closeSnackbar
-    }
-  }
-})
+const { snackbarQueue, closeSnackbar } = useSnackbar()
 </script>
 
 <style lang="scss">

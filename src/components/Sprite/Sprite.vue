@@ -2,8 +2,8 @@
   <component :is="IconComponent" />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import SpriteEllipsis from './SpriteEllipsis.vue'
 import SpritePlay from './SpritePlay.vue'
 import SpriteDisable from './SpriteDisable.vue'
@@ -38,91 +38,49 @@ import SpriteFlagBy from './SpriteFlagBy.vue'
 import SpriteFlagEn from './SpriteFlagEn.vue'
 import SpriteBurger from './SpriteBurger.vue'
 
-export default defineComponent({
-  name: 'Sprite',
-  components: {
-    SpritePlay,
-    SpriteEllipsis,
-    SpriteDisable,
-    SpriteSpinner,
-    SpritePause,
-    SpritePlus,
-    SpriteMinus,
-    SpritePlaying,
-    SpriteDrag,
-    SpriteChevronRight,
-    SpriteChevronLeft,
-    SpriteChevronRightDouble,
-    SpriteChevronLeftDouble,
-    SpriteChevronDown,
-    SpriteDiscogs,
-    SpriteClose,
-    SpriteLoupe,
-    SpritePlaylist,
-    SpritePlaylistRemove,
-    SpriteCamera,
-    SpriteSave,
-    SpriteDelete,
-    SpriteVinyl,
-    SpriteRepeat,
-    SpriteRepeatActive,
-    SpriteNext,
-    SpritePrevious,
-    SpriteVolume,
-    SpriteVolumeOff,
-    SpriteYouTube,
-    SpriteFlagBy,
-    SpriteFlagEn,
-    SpriteBurger
-  },
-  props: {
-    name: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
-    const IconsMap = new Map([
-      ['ellipsis', SpriteEllipsis],
-      ['play', SpritePlay],
-      ['disable', SpriteDisable],
-      ['spinner', SpriteSpinner],
-      ['pause', SpritePause],
-      ['plus', SpritePlus],
-      ['minus', SpriteMinus],
-      ['playing', SpritePlaying],
-      ['drag', SpriteDrag],
-      ['chevron-right', SpriteChevronRight],
-      ['chevron-left', SpriteChevronLeft],
-      ['chevron-right-double', SpriteChevronRightDouble],
-      ['chevron-left-double', SpriteChevronLeftDouble],
-      ['chevron-down', SpriteChevronDown],
-      ['discogs', SpriteDiscogs],
-      ['close', SpriteClose],
-      ['loupe', SpriteLoupe],
-      ['playlist', SpritePlaylist],
-      ['playlist-remove', SpritePlaylistRemove],
-      ['camera', SpriteCamera],
-      ['save', SpriteSave],
-      ['delete', SpriteDelete],
-      ['vinyl', SpriteVinyl],
-      ['repeat', SpriteRepeat],
-      ['repeat-active', SpriteRepeatActive],
-      ['next', SpriteNext],
-      ['previous', SpritePrevious],
-      ['volume', SpriteVolume],
-      ['volume-off', SpriteVolumeOff],
-      ['youtube', SpriteYouTube],
-      ['flag-by', SpriteFlagBy],
-      ['flag-en', SpriteFlagEn],
-      ['burger', SpriteBurger]
-    ])
+interface Props {
+  name: string
+}
 
-    const IconComponent = computed(() => (
-      IconsMap.get(props.name) || null
-    ))
+const props = defineProps<Props>()
 
-    return { IconComponent }
-  }
-})
+const IconsMap = new Map([
+  ['ellipsis', SpriteEllipsis],
+  ['play', SpritePlay],
+  ['disable', SpriteDisable],
+  ['spinner', SpriteSpinner],
+  ['pause', SpritePause],
+  ['plus', SpritePlus],
+  ['minus', SpriteMinus],
+  ['playing', SpritePlaying],
+  ['drag', SpriteDrag],
+  ['chevron-right', SpriteChevronRight],
+  ['chevron-left', SpriteChevronLeft],
+  ['chevron-right-double', SpriteChevronRightDouble],
+  ['chevron-left-double', SpriteChevronLeftDouble],
+  ['chevron-down', SpriteChevronDown],
+  ['discogs', SpriteDiscogs],
+  ['close', SpriteClose],
+  ['loupe', SpriteLoupe],
+  ['playlist', SpritePlaylist],
+  ['playlist-remove', SpritePlaylistRemove],
+  ['camera', SpriteCamera],
+  ['save', SpriteSave],
+  ['delete', SpriteDelete],
+  ['vinyl', SpriteVinyl],
+  ['repeat', SpriteRepeat],
+  ['repeat-active', SpriteRepeatActive],
+  ['next', SpriteNext],
+  ['previous', SpritePrevious],
+  ['volume', SpriteVolume],
+  ['volume-off', SpriteVolumeOff],
+  ['youtube', SpriteYouTube],
+  ['flag-by', SpriteFlagBy],
+  ['flag-en', SpriteFlagEn],
+  ['burger', SpriteBurger]
+])
+
+const IconComponent = computed(() => (
+  IconsMap.get(props.name) || null
+))
 </script>

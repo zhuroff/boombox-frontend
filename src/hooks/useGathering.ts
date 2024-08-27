@@ -1,13 +1,17 @@
 import { ref } from 'vue'
-import { ReorderPayload, ResponseMessage } from '~/types/Common'
-import { GatheringCreateReq, GatheringCreateRes, GatheringUpdateReq, GatheringUpdateRes } from '~/types/ReqRes'
-import { useLocales } from './useLocales'
+import { ResponseMessage } from '~/types/Common'
+import { GatheringCreateReq, GatheringCreateRes, GatheringUpdateRes } from '~/types/ReqRes'
+import useGlobalStore from '~/store/global'
+import useSnackbar from './useSnackbar'
 import dbServices from '~/services/database.services'
-import store from '~/store'
 
 export const useGathering = <T>() => {
-  const { actions } = store
-  const { lang } = useLocales()
+  const {
+    globalGetters: { localize }
+  } = useGlobalStore()
+
+  const { setSnackbarMessage } = useSnackbar()
+
   const gatheringName = ref('')
 
   const createNewGathering = async (payload: GatheringCreateReq<T>) => {
@@ -21,8 +25,8 @@ export const useGathering = <T>() => {
       payload.results.push(response)
       gatheringName.value = ''
     } catch (error) {
-      actions.setSnackbarMessage({
-        message: lang((error as Error).message),
+      setSnackbarMessage({
+        message: localize((error as Error).message),
         type: 'error'
       })
     }
@@ -46,8 +50,8 @@ export const useGathering = <T>() => {
 
     try {
       const response = await dbServices.updateEntity<ResponseMessage, GatheringUpdateRes>(payload.entityType, reqPayload)
-      actions.setSnackbarMessage({
-        message: lang(String(response.message)),
+      setSnackbarMessage({
+        message: localize(String(response.message)),
         type: 'success'
       })
     } catch (error) {
@@ -58,8 +62,8 @@ export const useGathering = <T>() => {
   const removeFromGathering = async (payload: GatheringUpdateReq) => {
     try {
       const response = await dbServices.updateEntity<ResponseMessage, GatheringUpdateRes>(payload.entityType, payload)
-      actions.setSnackbarMessage({
-        message: lang(String(response.message)),
+      setSnackbarMessage({
+        message: localize(String(response.message)),
         type: 'success'
       })
     } catch (error) {
@@ -70,8 +74,8 @@ export const useGathering = <T>() => {
   const reorder = async (entityType: string, payload: ReorderPayload) => {
     try {
       const response = await dbServices.reorderEntities<ResponseMessage, ReorderPayload>(entityType, payload.entityID, payload)
-      actions.setSnackbarMessage({
-        message: lang(String(response.message)),
+      setSnackbarMessage({
+        message: localize(String(response.message)),
         type: 'success'
       })
     } catch (error) {

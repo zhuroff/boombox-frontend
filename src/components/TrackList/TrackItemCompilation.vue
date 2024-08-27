@@ -37,7 +37,7 @@
       @closeModal="delReject"
     >
       <Confirmation
-        :message="lang('compilations.trackDelConfirmation')"
+        :message="localize('compilations.trackDelConfirmation')"
         @confirm="removeTrackFromCompilation"
         @reject="delReject"
       />
@@ -45,11 +45,11 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import { useListPage } from '~/hooks/useListPage'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { CompilationEntityRes } from '~/types/ReqRes'
 import CompilationItem from '~/classes/CompilationItem'
 import Button from '~/components/Button.vue'
@@ -57,69 +57,50 @@ import GatheringTabs from '~/components/GatheringTabs.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
 
-export default defineComponent({
-  name: 'TrackItemCompilation',
-  components: {
-    Modal,
-    Button,
-    Confirmation,
-    GatheringTabs
-  },
-  props: {
-    trackID: {
-      type: String,
-      required: true
-    },
-    isCompilation: {
-      type: Boolean,
-      required: true
-    }
-  },
-  setup(_, { emit }) {
-    const { fetchData, pagePagination } = useListPage<
-      CompilationEntityRes<BasicEntity>,
-      CompilationItem<BasicEntity>
-    >(CompilationItem, '', '')
+interface Props {
+  trackID: string
+  isCompilation: boolean
+}
 
-    const { lang } = useLocales()
+interface Emits {
+  (e: 'removeTrackFromCompilation'): void
+}
 
-    const isCompilationLoading = ref(false)
-    const entityToDelete = ref<string | null>(null)
-    const compilations = ref<CompilationItem<BasicEntity>[] | undefined>(undefined)
+defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-    const openCompilationsModal = async () => {
-      isCompilationLoading.value = true
-      compilations.value = await fetchData('compilations')
-      isCompilationLoading.value = false
-    }
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const closeCollectionModal = () => {
-      isCompilationLoading.value = false
-      compilations.value = undefined
-    }
+const { fetchData, pagePagination } = useListPage<
+  CompilationEntityRes<BasicEntity>,
+  CompilationItem<BasicEntity>
+>(CompilationItem, '', '')
 
-    const delReject = () => {
-      entityToDelete.value = null
-    }
+const isCompilationLoading = ref(false)
+const entityToDelete = ref<string | null>(null)
+const compilations = ref<CompilationItem<BasicEntity>[] | undefined>(undefined)
 
-    const removeTrackFromCompilation = () => {
-      emit('removeTrackFromCompilation')
-      entityToDelete.value = null
-    }
+const openCompilationsModal = async () => {
+  isCompilationLoading.value = true
+  compilations.value = await fetchData('compilations')
+  isCompilationLoading.value = false
+}
 
-    return {
-      removeTrackFromCompilation,
-      openCompilationsModal,
-      closeCollectionModal,
-      isCompilationLoading,
-      entityToDelete,
-      pagePagination,
-      compilations,
-      delReject,
-      lang
-    }
-  }
-})
+const closeCollectionModal = () => {
+  isCompilationLoading.value = false
+  compilations.value = undefined
+}
+
+const delReject = () => {
+  entityToDelete.value = null
+}
+
+const removeTrackFromCompilation = () => {
+  emit('removeTrackFromCompilation')
+  entityToDelete.value = null
+}
 </script>
 
 <style lang="scss" scoped>

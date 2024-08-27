@@ -3,7 +3,7 @@
     <img
       :src="cover || '/img/album.webp'"
       class="album__cover"
-      @click="$emit('coverClick')"
+      @click="() => emit('coverClick')"
     >
     <transition name="fade">
       <Modal
@@ -36,8 +36,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref, Ref, watch } from 'vue'
+<script setup lang="ts">
+import { ref, Ref, watch } from 'vue'
 import { BookletSlideState } from '~/types/Album'
 import BookletState from '~/classes/BookletState'
 import Sprite from '~/components/Sprite/Sprite.vue'
@@ -45,69 +45,48 @@ import Modal from '~/components/Modal.vue'
 import Preloader from '~/components/Preloader.vue'
 import Slider from '~/components/Slider.vue'
 
-export default defineComponent({
-  name: 'CoverArt',
-  components: {
-    Sprite,
-    Modal,
-    Preloader,
-    Slider
-  },
-  props: {
-    cover: {
-      type: String,
-      required: false
-    },
-    booklet: {
-      type: Object as PropType<BookletState>,
-      required: false
-    },
-    uploadable: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    uploadSlug: {
-      type: String,
-      required: false
-    }
-  },
-  setup({ booklet }, { emit }) {
-    const coverElement: Ref<null | HTMLInputElement> = ref(null)
-    const isFullSlideSet = ref(false)
+interface Props {
+  cover?: string
+  booklet?: BookletState
+  uploadable?: boolean
+  uploadSlug?: string
+}
 
-    const closeBookletModal = () => {
-      emit('closeBookletModal')
-    }
+interface Emits {
+  (e: 'coverClick'): void
+  (e: 'closeBookletModal'): void
+  (e: 'uploadImage', image: File): void
+  (e: 'slideChanged', data: BookletSlideState): void
+}
 
-    const setCover = () => {
-      if (coverElement?.value?.files) {
-        emit('uploadImage', coverElement.value.files[0])
-      }
-    }
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-    const slideChanged = (data: BookletSlideState) => {
-      emit('slideChanged', data)
-    }
+const coverElement: Ref<null | HTMLInputElement> = ref(null)
+const isFullSlideSet = ref(false)
 
-    watch(
-      [booklet],
-      ([val]) => {
-        if (val?.isCompleted) {
-          isFullSlideSet.value = true
-        }
-      }
-    )
+const closeBookletModal = () => {
+  emit('closeBookletModal')
+}
 
-    return {
-      closeBookletModal,
-      isFullSlideSet,
-      slideChanged,
-      coverElement,
-      setCover
+const setCover = () => {
+  if (coverElement?.value?.files) {
+    emit('uploadImage', coverElement.value.files[0])
+  }
+}
+
+const slideChanged = (data: BookletSlideState) => {
+  emit('slideChanged', data)
+}
+
+watch(
+  () => props.booklet,
+  (val) => {
+    if (val?.isCompleted) {
+      isFullSlideSet.value = true
     }
   }
-})
+)
 </script>
 
 <style lang="scss">

@@ -32,46 +32,39 @@
   </aside>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { useLocales } from '~/hooks/useLocales'
+<script setup lang="ts">
+import { computed } from 'vue'
+import useGlobalStore from '~/store/global'
 import router from '~/router'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from './Button.vue'
 
-export default defineComponent({
-  name: 'Sidebar',
-  components: {
-    Sprite,
-    Button
-  },
-  props: {
-    isExpanded: {
-      type: Boolean,
-      required: true
-    },
-  },
-  setup(_, { emit }) {
-    const { lang } = useLocales()
-    const burgerClick = () => emit('burgerClick')
+interface Props {
+  isExpanded: boolean
+}
 
-    const navbar = computed(() => (
-      router
-        .getRoutes()
-        .filter(({ meta }) => meta?.navLocaleKey)
-        .map(({ meta, path }) => ({
-          title: lang(`navigation.${meta.navLocaleKey as string}`),
-          route: path.replace('/', '')
-        }))
-    ))
+interface Emits {
+  (e: 'burgerClick'): void
+}
 
-    return {
-      navbar,
-      burgerClick,
-      lang
-    }
-  }
-})
+defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
+const burgerClick = () => emit('burgerClick')
+
+const navbar = computed(() => (
+  router
+    .getRoutes()
+    .filter(({ meta }) => meta?.navLocaleKey)
+    .map(({ meta, path }) => ({
+      title: localize(`navigation.${meta.navLocaleKey as string}`),
+      route: path.replace('/', '')
+    }))
+))
 </script>
 
 <style lang="scss">

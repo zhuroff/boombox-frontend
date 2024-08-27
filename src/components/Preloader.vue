@@ -24,21 +24,12 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+interface Props {
+  mode: 'dark' | 'light'
+}
 
-export default defineComponent({
-  name: 'Preloader',
-  props: {
-    mode: {
-      type: String,
-      required: true,
-      validator: (value: string) => (
-        ['dark', 'light'].includes(value)
-      )
-    }
-  }
-})
+defineProps<Props>()
 </script>
 
 <style lang="scss">

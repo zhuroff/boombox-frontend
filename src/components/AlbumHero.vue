@@ -14,7 +14,7 @@
           v-if="withSearch"
           type="search"
           size="medium"
-          :placeholder="lang('search.placeholder')"
+          :placeholder="localize('search.placeholder')"
           :results="results"
           @setInputValue="searchSubmit"
         />
@@ -45,11 +45,11 @@
                 <li
                   class="overlay__list-item"
                   @click="searchWikiInfo"
-                >{{ lang('wiki.navItem') }}</li>
+                >{{ localize('wiki.navItem') }}</li>
                 <li
                   class="overlay__list-item"
                   @click="() => $emit('getRandomAlbum')"
-                >{{ lang('getRandomAlbum') }}</li>
+                >{{ localize('getRandomAlbum') }}</li>
                 <slot name="navlist"></slot>
               </ul>
             </Overlay>
@@ -104,170 +104,116 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PropType, computed, defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { BasicEntity, WikiSearchResult } from '~/types/Common'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
+// import usePlayingTrack from '~/store/track'
+import useSnackbar from '~/hooks/useSnackbar'
 import { useSearch } from '~/hooks/useSearch'
 import { detectWikiLocale } from '~/utils'
-import store from '~/store'
 import wiki from 'wikipedia'
-import CoverArt from '~/components/CoverArt.vue'
 import Button from './Button.vue'
 import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
 import SearchBlock from '~/components/SearchBlock.vue'
 
-export default defineComponent({
-  name: 'AlbumHero',
-  components: {
-    CoverArt,
-    Button,
-    Overlay,
-    Modal,
-    WikiFrame,
-    SearchBlock
-  },
-  props: {
-    id: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    artist: {
-      type: Object as PropType<Partial<BasicEntity>>,
-      required: false
-    },
-    genre: {
-      type: Object as PropType<Partial<BasicEntity>>,
-      required: false
-    },
-    period: {
-      type: Object as PropType<Partial<BasicEntity>>,
-      required: false
-    },
-    frame: {
-      type: String,
-      required: false
-    },
-    totalCounts: {
-      type: String,
-      required: false
-    },
-    withSearch: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    withActions: {
-      type: Boolean,
-      required: false,
-      default: true
-    }
-  },
-  setup({ artist, title, frame }) {
-    const { lang } = useLocales()
-    const { actions, getters } = store
-    const { searchSubmit, results } = useSearch()
-    const isActionsOpens = ref(false)
-    const isWikiLoading = ref(false)
-    
-    const isWikiReady = ref(false)
-    const wikiFrameURL = ref<string | undefined>(undefined)
-    const wikiFrameResults = ref<WikiSearchResult[] | undefined>(undefined)
+interface Props {
+  id: string
+  title: string
+  artist?: BasicEntity
+  genre?: BasicEntity
+  period?: BasicEntity
+  frame?: string
+  totalCounts?: string
+  withSearch?: boolean
+  withActions?: boolean
+}
 
-    const isPlaying = computed(() => (
-      getters.playingTrack.value?._id &&
-      !getters.playingTrack.value.isOnPause &&
-      !getters.playingTrack.value.isOnLoading
-    ))
+const props = defineProps<Props>()
 
-    const isPaused = computed(() => (
-      getters.playingTrack.value?._id &&
-      getters.playingTrack.value.isOnPause
-    ))
+const { globalGetters: { localize } } = useGlobalStore()
+// const { trackGetters: { playingTrack } } = usePlayingTrack()
+const { setSnackbarMessage } = useSnackbar()
+const { searchSubmit, results } = useSearch()
+const isActionsOpens = ref(false)
+const isWikiLoading = ref(false)
 
-    const getWikiInfo = async (searchParam: string | number = title) => {
-      isWikiLoading.value = true
-      try {
-        const wikiPage = await wiki.page(String(searchParam))
-        wikiFrameURL.value = wikiPage.canonicalurl
-        isWikiReady.value = true
-        isWikiLoading.value = false
-      } catch (error) {
-        wikiErrorHandler(error)
-      }
-    }
+const isWikiReady = ref(false)
+const wikiFrameURL = ref<string | undefined>(undefined)
+const wikiFrameResults = ref<WikiSearchResult[] | undefined>(undefined)
 
-    const searchWikiInfo = async () => {
-      if (!artist?.title) return false
-      resetWikiData()
-      const albumLang = detectWikiLocale(title)
-      const artistLang = detectWikiLocale(artist.title)
-      let locale = 'en'
+// const isPlaying = computed(() => (
+//   playingTrack.value?._id 
+//   && !playingTrack.value.isOnPause
+//   && !playingTrack.value.isOnLoading
+// ))
 
-      if (albumLang === 'ru' || artistLang === 'ru') {
-        locale = 'ru'
-      }
+// const isPaused = computed(() => (
+//   playingTrack.value?._id
+//   && playingTrack.value.isOnPause
+// ))
 
-      wiki.setLang(locale)
-      isWikiLoading.value = true
-
-      try {
-        const { results } = await wiki.search(`${artist.title} - ${title}`)
-        if (!results.length) {
-          throw new Error('Nothing was found')
-        }
-        wikiFrameResults.value = results
-        isWikiReady.value = true
-      } catch (error) {
-        wikiErrorHandler(error)
-      } finally {
-        isWikiLoading.value = false
-      }
-    }
-
-    const wikiErrorHandler = (error: unknown) => {
-      closeWikiModal()
-      actions.setSnackbarMessage({
-        message: lang('wiki.notFound'),
-        type: 'error'
-      })
-      console.error(error)
-    }
-
-    const closeWikiModal = () => {
-      isWikiReady.value = false
-      isWikiLoading.value = false
-      resetWikiData()
-    }
-
-    const resetWikiData = () => {
-      wikiFrameURL.value = undefined
-      wikiFrameResults.value = undefined
-    }    
-
-    return {
-      lang,
-      isPlaying,
-      isPaused,
-      isActionsOpens,
-      searchWikiInfo,
-      getWikiInfo,
-      isWikiReady,
-      closeWikiModal,
-      wikiFrameURL,
-      isWikiLoading,
-      wikiFrameResults,
-      searchSubmit,
-      results
-    }
+const getWikiInfo = async (searchParam: string | number = props.title) => {
+  isWikiLoading.value = true
+  try {
+    const wikiPage = await wiki.page(String(searchParam))
+    wikiFrameURL.value = wikiPage.canonicalurl
+    isWikiReady.value = true
+    isWikiLoading.value = false
+  } catch (error) {
+    wikiErrorHandler(error)
   }
-})
+}
+
+const searchWikiInfo = async () => {
+  if (!props.artist?.title) return false
+  resetWikiData()
+  const albumLang = detectWikiLocale(props.title)
+  const artistLang = detectWikiLocale(props.artist.title)
+  let locale = 'en'
+
+  if (albumLang === 'ru' || artistLang === 'ru') {
+    locale = 'ru'
+  }
+
+  wiki.setLang(locale)
+  isWikiLoading.value = true
+
+  try {
+    const { results } = await wiki.search(`${props.artist.title} - ${props.title}`)
+    if (!results.length) {
+      throw new Error('Nothing was found')
+    }
+    wikiFrameResults.value = results
+    isWikiReady.value = true
+  } catch (error) {
+    wikiErrorHandler(error)
+  } finally {
+    isWikiLoading.value = false
+  }
+}
+
+const wikiErrorHandler = (error: unknown) => {
+  closeWikiModal()
+  setSnackbarMessage({
+    message: localize('wiki.notFound'),
+    type: 'error'
+  })
+  console.error(error)
+}
+
+const closeWikiModal = () => {
+  isWikiReady.value = false
+  isWikiLoading.value = false
+  resetWikiData()
+}
+
+const resetWikiData = () => {
+  wikiFrameURL.value = undefined
+  wikiFrameResults.value = undefined
+}
 </script>
 
 <style lang="scss" scoped>

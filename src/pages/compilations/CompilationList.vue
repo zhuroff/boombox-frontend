@@ -16,7 +16,7 @@
         @closeModal="delReject"
       >
         <Confirmation
-          :message="lang('delConfirmMessage')"
+          :message="localize('delConfirmMessage')"
           @confirm="deleteCompilation"
           @reject="delReject"
         />
@@ -25,10 +25,10 @@
   </ListPageTemplate>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, ref, watch, reactive } from 'vue'
+<script setup lang="ts">
+import { computed, ref, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
-import { useLocales } from '~/hooks/useLocales'
+import useGlobalStore from '~/store/global'
 import { CompilationEntityRes } from '~/types/ReqRes'
 import { BasicEntity } from '~/types/Common'
 import { isObjectsEquals } from '~/utils'
@@ -37,77 +37,56 @@ import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
 
-export default defineComponent({
-  name: 'CompilationsList',
-  components: {
-    ListPageTemplate,
-    Confirmation,
-    Modal
-  },
-  setup() {
-    const {
-      fetchData,
-      isDataFetched,
-      pagePagination,
-      pageStateConfig,
-      switchPagination,
-      setEntitiesLimit,
-      deleteEntity
-    } = useListPage<
-      CompilationEntityRes<BasicEntity>,
-      CompilationItem<BasicEntity>
-    >(CompilationItem, 'CompilationCard', 'compilations')
+const {
+  fetchData,
+  isDataFetched,
+  pagePagination,
+  pageStateConfig,
+  switchPagination,
+  setEntitiesLimit,
+  deleteEntity
+} = useListPage<
+  CompilationEntityRes<BasicEntity>,
+  CompilationItem<BasicEntity>
+>(CompilationItem, 'CompilationCard', 'compilations')
 
-    const { lang } = useLocales()
-    const compilations = reactive<CompilationItem<BasicEntity>[]>([])
-    const entityToDelete = ref<string | null>(null)
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 
-    const pageHeading = computed(() => (
-      lang(`headings.compilationsPage`, String(pagePagination.value?.totalDocs || 0))
-    ))
+const compilations = reactive<CompilationItem<BasicEntity>[]>([])
+const entityToDelete = ref<string | null>(null)
 
-    const deleteCompilation = () => {
-      if (!entityToDelete.value) return false
-      deleteEntity('compilations', entityToDelete.value)
-        .then(() => {
-          entityToDelete.value = null
-          fetchData('compilations')
-            .then((payload) => {
-              compilations.splice(0, compilations.length, ...payload || [])
-            })
+const pageHeading = computed(() => (
+  localize(`headings.compilationsPage`, String(pagePagination.value?.totalDocs || 0))
+))
+
+const deleteCompilation = () => {
+  if (!entityToDelete.value) return false
+  deleteEntity('compilations', entityToDelete.value)
+    .then(() => {
+      entityToDelete.value = null
+      fetchData('compilations')
+        .then((payload) => {
+          compilations.splice(0, compilations.length, ...payload || [])
+        })
+    })
+}
+
+const delReject = () => {
+  entityToDelete.value = null
+}
+
+watch(
+  pageStateConfig,
+  (newVal, oldVal) => {
+    if (!isObjectsEquals(newVal, oldVal)) {
+      fetchData('compilations')
+        .then((data) => {
+          compilations.splice(0, compilations.length, ...data || [])
         })
     }
-
-    const delReject = () => {
-      entityToDelete.value = null
-    }
-
-    watch(
-      pageStateConfig,
-      (newVal, oldVal) => {
-        if (!isObjectsEquals(newVal, oldVal)) {
-          fetchData('compilations')
-            .then((data) => {
-              compilations.splice(0, compilations.length, ...data || [])
-            })
-        }
-      },
-      { immediate: true }
-    )
-
-    return {
-      lang,
-      delReject,
-      entityToDelete,
-      isDataFetched,
-      pagePagination,
-      switchPagination,
-      setEntitiesLimit,
-      deleteCompilation,
-      pageHeading,
-      compilations
-    }
-  }
-})
+  },
+  { immediate: true }
+)
 </script>
-~/classes/CompilationItem

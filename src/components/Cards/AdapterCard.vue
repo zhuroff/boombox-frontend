@@ -8,8 +8,8 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, PropType } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { BasicEntity } from '~/types/Common'
 import ListCardBasic from '~/classes/ListCardBasic'
 import AlbumCard from './AlbumCard.vue'
@@ -18,31 +18,13 @@ import EmbeddedCard from './EmbeddedCard.vue'
 import CollectionCard from './CollectionCard.vue'
 import CompilationCard from './CompilationCard.vue'
 
-export default defineComponent({
-  name: 'AdapterCard',
-  components: {
-    AlbumCard,
-    CategoryCard,
-    EmbeddedCard,
-    CollectionCard,
-    CompilationCard
-  },
-  props: {
-    card: {
-      type: Object as PropType<BasicEntity & ListCardBasic>,
-      required: true
-    },
-    placeholderImage: {
-      type: String,
-      required: true
-    },
-    isDraggable: {
-      type: Boolean,
-      required: true
-    }
-  },
-  setup({ card }) {
-    return { cardComponent: computed(() => card.cardType) }
-  }
-})
+interface Props {
+  card: BasicEntity & ListCardBasic
+  placeholderImage: string
+  isDraggable: boolean
+}
+
+const props = defineProps<Props>()
+
+const cardComponent = computed(() => props.card.cardType)
 </script>
