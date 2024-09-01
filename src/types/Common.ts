@@ -1,5 +1,4 @@
 import { Ref } from 'vue'
-import { JSONSchema4 } from 'json-schema'
 import { TrackRes } from './ReqRes'
 import AlbumPage from '~/classes/AlbumPage'
 import CompilationPage from '~/classes/CompilationPage'
@@ -89,7 +88,7 @@ export interface TablePayload<T> {
   rows: T[]
   pagination: Pagination
   isFetched: Ref<boolean>
-  schema: JSONSchema4
+  schema: any
 }
 
 export interface WikiSearchResult {

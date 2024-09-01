@@ -90,7 +90,6 @@
 </template>
 
 <script setup lang="ts">
-import { JSONSchema4 } from 'json-schema'
 import { ComputedRef, computed, ref } from 'vue'
 import { PaginationConfig, TableFilter, TablePayload } from '~/types/Common'
 import useGlobalStore from '~/store/global'
@@ -121,7 +120,7 @@ const paginationConfig = ref<PaginationConfig>({
   decrement: true
 })
 
-const propMap: ComputedRef<Map<string, JSONSchema4>> = computed(() => (
+const propMap: ComputedRef<Map<string, TableSchema>> = computed(() => (
   new Map([...Object.entries(props.tableState.schema.properties || {})])
 ))
 

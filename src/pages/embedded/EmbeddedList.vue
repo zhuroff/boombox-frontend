@@ -19,10 +19,10 @@
     </template>
     <template v-if="isCreateMode" #under-header>
       <div class="embedded__create">
-        <Form
+        <!-- <Form
           :schema="formSchema"
           @formSubmit="createNewEmbedded"
-        />
+        /> -->
       </div>
     </template>
     <template #modal>
@@ -43,7 +43,6 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, reactive } from 'vue'
-import { JSONSchema4 } from 'json-schema'
 import { EmbeddedItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
 import useGlobalStore from '~/store/global'
@@ -75,7 +74,7 @@ const isCreateMode = ref(false)
 const albums = reactive<EmbeddedItem[]>([])
 const entityToDelete = ref<string | null>(null)
 
-const formSchema = embeddedFormSchema as JSONSchema4
+const formSchema = embeddedFormSchema
 
 const isAdmin = computed(() => (
   authConfig.value.user?.role === 'admin'

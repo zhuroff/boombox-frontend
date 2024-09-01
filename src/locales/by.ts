@@ -69,8 +69,10 @@ export const localesBY: LocaleDictionary = {
     notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.'
   },
   loginForm: {
-    login: 'Логін',
-    password: 'Пароль'
+    email: 'Email',
+    password: 'Пароль',
+    emailPlaceholder: 'Увядзiце email, на якi вы рэгiстравалiся',
+    passwordPlaceholder: 'Увядзiце пароль да аккаунту'
   },
   userForm: {
     login: 'Логін',

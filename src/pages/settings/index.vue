@@ -130,12 +130,12 @@
         >
           <h2 class="settings__section-heading">{{ localize('headings.createUser') }}</h2>
           <div class="settings__form">
-            <Form
+            <!-- <Form
               :schema="userSchema"
               :isResetAfterSubmit="true"
               :style="{ gap: '0.5rem', display: 'flex', flexDirection: 'column', maxWidth: '50%' }"
               @formSubmit="createUser"
-            />
+            /> -->
           </div>
         </section>
       </div>
@@ -146,7 +146,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { SyncResponse } from '~/types/Common'
-import { JSONSchema4 } from 'json-schema'
 import { localeIntlCodes } from '~/utils'
 import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
@@ -168,7 +167,7 @@ const backups = reactive<number[]>([])
 const users = reactive<UserResponse[]>([])
 const isPageLoaded = ref(false)
 const isReloading = ref(false)
-const userSchema = userFormSchema as JSONSchema4
+const userSchema = userFormSchema
 const dateConfig = {
   hour: '2-digit',
   minute: '2-digit',

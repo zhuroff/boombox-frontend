@@ -3,12 +3,12 @@ import usePlaylist from '~/store/playlist'
 import databaseServices from '~/services/database.services'
 import cloudServices from '~/services/cloud.services'
 
-const {
-  playerGetters: { currentPlaylist },
-  playerActions: { checkOrReplacePlaylists }
-} = usePlaylist()
-
 const actions = (state: AudioTrackState) => {
+  const {
+    playerGetters: { currentPlaylist },
+    playerActions: { checkOrReplacePlaylists }
+  } = usePlaylist()
+  
   const setTrackState = (track: AlbumTrack) => {
     state.playingTrack = {
       _id: track._id,

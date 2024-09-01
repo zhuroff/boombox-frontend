@@ -2,8 +2,7 @@
   <div class="login">
     <main class="main --unauth">
       <Form
-        :schema="formSchema"
-        :isInverted="true"
+        :formSchema="formSchema"
         @formSubmit="login"
       />
     </main>
@@ -11,28 +10,58 @@
 </template>
 
 <script setup lang="ts">
-import { JSONSchema4 } from 'json-schema'
 import api from '../api'
 import useGlobalStore from '~/store/global'
-import Form from '~/components/Form.vue'
-import loginFormSchema from '~/schemas/loginFormSchema.json'
+import Form from '~/components/Form/Form.vue'
 
 const {
   globalActions: { setAuthConfig }
 } = useGlobalStore()
 
-const formSchema = loginFormSchema as JSONSchema4
+const formSchema = new Map<string, FormSchemaProperty>([
+  ['login', {
+    id: 'login-email',
+    name: 'loginForm.email',
+    placeholder: 'loginForm.emailPlaceholder',
+    required: true,
+    type: 'email',
+    label: {
+      labelText: 'loginForm.email'
+    }
+  }],
+  ['password', {
+    id: 'login-password',
+    name: 'loginForm.password',
+    placeholder: 'loginForm.passwordPlaceholder',
+    required: true,
+    type: 'password',
+    label: {
+      labelText: 'loginForm.password'
+    }
+  }],
+  ['textarea', {
+    id: 'textarea',
+    name: 'textarea',
+    placeholder: 'Textarea placeholder',
+    required: true,
+    type: 'textarea',
+    label: {
+      labelText: 'Textarea label'
+    }
+  }]
+])
 
-const login = async (formData: AuthData) => {
-  try {
-    const { data } = await api.post<AuthResponse>('api/users/login', formData)
-    setAuthConfig('isAuthenticated', true)
-    setAuthConfig('user', data.user)
-    localStorage.setItem('token', data.accessToken)
-  } catch (error) {
-    console.error(error)
-    setAuthConfig('isAuthenticated', false)
-  }
+const login = async (formData: CustomFormData) => {
+  console.log(formData)
+  // try {
+  //   const { data } = await api.post<AuthResponse>('api/users/login', formData)
+  //   setAuthConfig('isAuthenticated', true)
+  //   setAuthConfig('user', data.user)
+  //   localStorage.setItem('token', data.accessToken)
+  // } catch (error) {
+  //   console.error(error)
+  //   setAuthConfig('isAuthenticated', false)
+  // }
 }
 </script>
 
@@ -44,7 +73,6 @@ const login = async (formData: AuthData) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: $black;
 }
 
 .main {

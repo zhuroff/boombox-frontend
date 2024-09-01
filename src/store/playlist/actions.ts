@@ -1,11 +1,11 @@
 import usePlayingTrack from '~/store/track'
 
-const {
-  trackGetters: { playingTrack },
-  trackActions: { playTrack }
-} = usePlayingTrack()
-
 const actions = (state: PlayerState) => {
+  const {
+    trackGetters: { playingTrack },
+    trackActions: { playTrack }
+  } = usePlayingTrack()
+  
   const checkOrReplacePlaylists = (track: AlbumTrack) => {
     console.log(
       state.currentPlaylist,

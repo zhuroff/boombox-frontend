@@ -1,6 +1,7 @@
 <template>
   <button
     :style="style"
+    :type="type"
     :class="[
       'button',
       {
@@ -18,7 +19,7 @@
     />
     <span
       v-if="label"
-      class="button__label">{{ label }}
+      class="button__label">{{ localize(label) }}
     </span>
     <slot></slot>
   </button>
@@ -26,6 +27,7 @@
 
 <script setup lang="ts">
 import { StyleValue } from 'vue'
+import useGlobalStore from '~/store/global'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 interface Props {
@@ -33,13 +35,21 @@ interface Props {
   icon?: string
   size?: 'small' | 'medium' | 'large'
   style?: StyleValue
+  type?: 'button' | 'submit'
   className?: string
   isInverted?: boolean
   isText?: boolean
   isRounded?: boolean
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  size: 'medium',
+  type: 'button'
+})
+
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
 </script>
 
 <style lang="scss">

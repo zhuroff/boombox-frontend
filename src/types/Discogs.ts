@@ -1,5 +1,4 @@
 import { Ref } from 'vue'
-import { JSONSchema4, JSONSchema4TypeName } from 'json-schema'
 import { Pagination, TableFilter } from './Common'
 
 export interface DiscogsReleaseRow {
@@ -82,10 +81,10 @@ export interface DiscogsFilter extends TableFilter {
   label: string[]
 }
 
-export class DiscogsTableSchema implements JSONSchema4 {
-  type: JSONSchema4TypeName
+export class DiscogsTableSchema {
+  type: string
   title = 'Discogs Schema'
-  properties: JSONSchema4
+  properties: any
   constructor() {
     this.type = 'object'
     this.properties = {

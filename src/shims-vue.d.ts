@@ -150,3 +150,65 @@ interface GatheringUpdateReq {
   isInList: boolean
   order?: number
 }
+
+type ElementSize = 'small' | 'medium' | 'large'
+
+type ElementPosition = 'top' | 'right' | 'bottom' | 'left'
+
+interface InputLabelConfig {
+  labelText: string
+  labelTextPosition?: 'right' | 'left'
+  size?: ElementSize
+  isError?: boolean
+}
+
+interface BaseInputFieldSchema {
+  name: string
+  id?: string
+  required?: boolean
+  disabled?: boolean
+  readonly?: boolean
+  defaultValue?: string
+  label?: InputLabelConfig
+}
+
+interface TextInputFieldSchema extends BaseInputFieldSchema {
+  type: 'text' | 'email' | 'password'
+  placeholder?: string
+}
+
+interface TextareaInputFieldSchema extends BaseInputFieldSchema {
+  type: 'textarea'
+  placeholder?: string
+  rows?: number
+}
+
+interface NumberInputFieldSchema extends BaseInputFieldSchema {
+  type: 'number' | 'range'
+  minValue?: number
+  maxValue?: number
+  placeholder?: string
+}
+
+interface CheckboxInputFieldSchema extends BaseInputFieldSchema {
+  type: 'checkbox' | 'radio'
+}
+
+interface FileInputFieldSchema extends BaseInputFieldSchema {
+  type: 'file'
+}
+
+interface SelectInputFieldSchema extends BaseInputFieldSchema {
+  type: 'select' | 'multiselect'
+  options: Array<{ label: string, value: string }>
+}
+
+type FormSchemaProperty = 
+  | TextInputFieldSchema
+  | TextareaInputFieldSchema
+  | NumberInputFieldSchema
+  | CheckboxInputFieldSchema
+  | FileInputFieldSchema
+  | SelectInputFieldSchema
+  
+type CustomFormData = Record<string, string | File>

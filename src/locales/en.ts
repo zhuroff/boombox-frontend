@@ -69,8 +69,10 @@ export const localesEN: LocaleDictionary = {
     notFound: 'Nothing was found among {x}. Create a new one.'
   },
   loginForm: {
-    login: 'Login',
-    password: 'Password'
+    email: 'Email',
+    password: 'Password',
+    emailPlaceholder: 'Enter the email you\'ve registered on',
+    passwordPlaceholder: 'Enter the account password'
   },
   userForm: {
     login: 'Login',

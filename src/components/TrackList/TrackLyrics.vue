@@ -25,11 +25,12 @@
           class="lyrics__empty"
         >{{ localize('lyrics.empty') }}</div>
       </transition>
-      <Textarea
+      <TextareaInput
         v-if="!isFetching && !fetchedLyrics.length"
-        classname="lyrics__text"
-        :rows="3"
-        :content="lyrics || undefined"
+        className="lyrics__text"
+        name="lyrics"
+        type="textarea"
+        :defaultValue="lyrics || undefined"
         :placeholder="localize('lyrics.placeholder')"
         @setTextareaValue="updateLyrics"
       />
@@ -65,12 +66,13 @@
                 class="lyrics__item_action"
                 @click="saveLyrics(item.lyrics)"
               >{{ localize('lyrics.save') }}</button>
-              <Textarea
+              <TextareaInput
                 v-if="expandedLyrics === index"
-                :rows="3"
-                :content="item.lyrics"
-                classname="lyrics__text"
-                isDisabled
+                :defaultValue="item.lyrics"
+                name="lyrics"
+                type="textarea"
+                className="lyrics__text"
+                disabled
               />
             </div>
           </li>
@@ -86,7 +88,7 @@ import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
 import { TrackLyricsResponse } from '~/types/Track'
 import Button from '~/components/Button.vue'
-import Textarea from '~/components/Inputs/Textarea.vue'
+import TextareaInput from '~/components/Form/TextareaInput.vue'
 import Preloader from '~/components/Preloader.vue'
 import trackServices from '~/services/track.services'
 import AlbumTrack from '~/classes/AlbumTrack'
