@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WikiSearchResult } from '~/types/Common'
+import type { WikiSearchResult } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Preloader from './Preloader.vue'
 

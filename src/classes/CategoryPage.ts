@@ -1,4 +1,4 @@
-import { CategoryPageRes } from '~/types/ReqRes'
+import type { CategoryPageRes } from '~/types/ReqRes'
 import AlbumItem from './AlbumItem'
 import EmbeddedItem from './EmbeddedItem'
 import CategoryEntity from './CategoryEntity'

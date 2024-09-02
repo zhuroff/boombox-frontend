@@ -1,4 +1,4 @@
-import { BasicEntity, Pagination } from './Common'
+import type { BasicEntity, Pagination } from '~/types/Common'
 import AlbumItem from '~/classes/AlbumItem'
 
 export interface TrackRes extends Required<BasicEntity> {

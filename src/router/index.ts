@@ -1,7 +1,7 @@
 import { h } from 'vue'
-import { createRouter, createWebHistory, RouteRecordRaw, RouterView } from 'vue-router'
+import { createRouter, createWebHistory, RouterView } from 'vue-router'
 
-const routes: Array<RouteRecordRaw> = [
+const routes: Array<any> = [
   {
     path: '/',
     name: 'home',
@@ -170,7 +170,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 

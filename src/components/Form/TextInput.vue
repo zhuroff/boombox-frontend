@@ -14,7 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import { StyleValue, computed } from 'vue'
+import { computed } from 'vue'
+import type { StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
 
 interface Props {

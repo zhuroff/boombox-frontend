@@ -1,6 +1,6 @@
 import api from '~/api'
 import commonServices from './common.services'
-import { CloudEntity, CloudEntityReq, CloudEntityReqExt, CloudEntityReqFile, CloudEntityReqRandom, CloudEntityRes } from '~/types/ReqRes'
+import type { CloudEntity, CloudEntityReq, CloudEntityReqExt, CloudEntityReqFile, CloudEntityReqRandom, CloudEntityRes } from '~/types/ReqRes'
 
 export default {
   async getImages<T>({ path, limit, offset, cloudURL, root }: CloudEntityReqExt): Promise<void | T> {

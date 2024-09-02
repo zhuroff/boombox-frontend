@@ -1,4 +1,4 @@
-import { BasicEntity } from '~/types/Common'
+import type { BasicEntity } from '~/types/Common'
 import AlbumTrack from '~/classes/AlbumTrack'
 
 export interface Playlist {

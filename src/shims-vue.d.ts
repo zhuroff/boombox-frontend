@@ -17,6 +17,13 @@ interface LocaleDictionary {
   [key: string]: string | LocaleDictionary
 }
 
+interface SyncResponse {
+  added: number
+  updated: number
+  deleted: number
+  invalid: Record<string, string>[] | 0
+}
+
 interface GlobalState {
   currentLocale: LocaleKeys
   authConfig: AuthConfig

@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { StyleValue } from 'vue'
+import type { StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
 import Sprite from '~/components/Sprite/Sprite.vue'
 

@@ -90,8 +90,9 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, computed, ref } from 'vue'
-import { PaginationConfig, TableFilter, TablePayload } from '~/types/Common'
+import { computed, ref } from 'vue'
+import type { ComputedRef } from 'vue'
+import type { PaginationConfig, TableFilter, TablePayload } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Select from '~/components/Select.vue'
 import Paginator from '~/components/Paginator.vue'
@@ -120,7 +121,7 @@ const paginationConfig = ref<PaginationConfig>({
   decrement: true
 })
 
-const propMap: ComputedRef<Map<string, TableSchema>> = computed(() => (
+const propMap: ComputedRef<Map<string, any>> = computed(() => (
   new Map([...Object.entries(props.tableState.schema.properties || {})])
 ))
 

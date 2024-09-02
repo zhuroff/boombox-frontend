@@ -1,5 +1,5 @@
-import { Ref } from 'vue'
-import { TrackRes } from './ReqRes'
+import type { Ref } from 'vue'
+import type { TrackRes } from '~/types/ReqRes'
 import AlbumPage from '~/classes/AlbumPage'
 import CompilationPage from '~/classes/CompilationPage'
 
@@ -99,13 +99,6 @@ export interface WikiSearchResult {
 export interface AlignmentPosition {
   x: 'right' | 'left'
   y: 'top' | 'bottom'
-}
-
-export interface SyncResponse {
-  added: number
-  updated: number
-  deleted: number
-  invalid: Record<string, string>[] | 0
 }
 
 export interface RefPayload<T> {

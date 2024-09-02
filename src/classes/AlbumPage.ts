@@ -1,4 +1,4 @@
-import { AlbumPageRes } from '~/types/ReqRes'
+import type { AlbumPageRes } from '~/types/ReqRes'
 import AlbumItem from './AlbumItem'
 import AlbumTrack from './AlbumTrack'
 

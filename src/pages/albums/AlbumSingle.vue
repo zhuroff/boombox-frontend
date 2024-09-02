@@ -70,9 +70,9 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from 'vue'
-import { AlbumItemRes, AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
-import { BasicEntity, RelatedAlbumsReqFilter } from '~/types/Common'
-import { RelatedAlbums } from '~/types/Album'
+import type { AlbumItemRes, AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
+import type { BasicEntity, RelatedAlbumsReqFilter } from '~/types/Common'
+import type { RelatedAlbums } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useListPage } from '~/hooks/useListPage'
 import { useDiscogs } from '~/hooks/useDiscogs'

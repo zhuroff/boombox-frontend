@@ -24,8 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import { StyleValue, computed, nextTick, ref, watch } from 'vue'
-import { BasicEntity, RefPayload } from '~/types/Common'
+import { computed, nextTick, ref, watch } from 'vue'
+import type { StyleValue } from 'vue'
+import type { BasicEntity, RefPayload } from '~/types/Common'
 import TextInputRefList from './TextInputRefList.vue'
 
 interface Props {

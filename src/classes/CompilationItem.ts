@@ -1,4 +1,4 @@
-import { CompilationEntityRes } from '~/types/ReqRes'
+import type { CompilationEntityRes } from '~/types/ReqRes'
 import GatheringEntity from './GatheringEntity'
 
 export default class CompilationItem<T> extends GatheringEntity<CompilationEntityRes<T>> {

@@ -47,10 +47,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { BasicEntity } from '~/types/Common'
+import type { BasicEntity } from '~/types/Common'
 import { useListPage } from '~/hooks/useListPage'
 import useGlobalStore from '~/store/global'
-import { CompilationEntityRes } from '~/types/ReqRes'
+import type { CompilationEntityRes } from '~/types/ReqRes'
 import CompilationItem from '~/classes/CompilationItem'
 import Button from '~/components/Button.vue'
 import GatheringTabs from '~/components/GatheringTabs.vue'

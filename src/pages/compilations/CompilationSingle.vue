@@ -49,9 +49,9 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from 'vue'
-import { BasicEntity, ImagePayload, RandomEntityReqFilter } from '~/types/Common'
-import { CompilationEntityRes, TrackRes } from '~/types/ReqRes'
-import { RelatedCompilations } from '~/types/Album'
+import type { BasicEntity, ImagePayload, RandomEntityReqFilter } from '~/types/Common'
+import type { CompilationEntityRes, TrackRes } from '~/types/ReqRes'
+import type { RelatedCompilations } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'

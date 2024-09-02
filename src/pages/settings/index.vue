@@ -145,7 +145,6 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
-import { SyncResponse } from '~/types/Common'
 import { localeIntlCodes } from '~/utils'
 import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
@@ -153,7 +152,7 @@ import userFormSchema from '~/schemas/userFormSchema.json'
 import Preloader from '~/components/Preloader.vue'
 import Button from '~/components/Button.vue'
 import Dropdown from '~/components/Inputs/Dropdown.vue'
-import Form from '~/components/Form.vue'
+// import Form from '~/components/Form/Form.vue'
 import api from '~/api'
 
 const {

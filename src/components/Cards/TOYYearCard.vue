@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { CloudEntity } from '~/types/ReqRes'
+import type { CloudEntity } from '~/types/ReqRes'
 
 interface Props {
   card: CloudEntity

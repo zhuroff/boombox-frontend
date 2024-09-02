@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { BasicEntity } from '~/types/Common'
+import type { BasicEntity } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Button from '~/components/Button.vue'
 import CompilationItem from '~/classes/CompilationItem'

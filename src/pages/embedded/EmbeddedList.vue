@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, reactive } from 'vue'
-import { EmbeddedItemRes } from '~/types/ReqRes'
+import type { EmbeddedItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
 import useGlobalStore from '~/store/global'
 import { isObjectsEquals } from '~/utils'
@@ -54,7 +54,7 @@ import EmbeddedItem from '~/classes/EmbeddedItem'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
 import Button from '~/components/Button.vue'
-import Form from '~/components/Form.vue'
+// import Form from '~/components/Form/Form.vue'
 
 const {
   fetchData,

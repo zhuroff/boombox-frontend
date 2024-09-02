@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { BasicEntity, Pagination, PaginationConfig } from '~/types/Common'
+import type { BasicEntity, Pagination, PaginationConfig } from '~/types/Common'
 import ListCardBasic from '~/classes/ListCardBasic'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'

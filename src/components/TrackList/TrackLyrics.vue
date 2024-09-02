@@ -86,7 +86,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
-import { TrackLyricsResponse } from '~/types/Track'
+import type { TrackLyricsResponse } from '~/types/Track'
 import Button from '~/components/Button.vue'
 import TextareaInput from '~/components/Form/TextareaInput.vue'
 import Preloader from '~/components/Preloader.vue'

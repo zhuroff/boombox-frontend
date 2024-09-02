@@ -35,7 +35,7 @@
 import { computed } from 'vue'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import AlbumTrack from 'classes/AlbumTrack'
+import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
 interface Props {

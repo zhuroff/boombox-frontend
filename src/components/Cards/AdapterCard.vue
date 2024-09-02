@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { BasicEntity } from '~/types/Common'
+import type { BasicEntity } from '~/types/Common'
 import ListCardBasic from '~/classes/ListCardBasic'
 import AlbumCard from './AlbumCard.vue'
 import CategoryCard from './CategoryCard.vue'

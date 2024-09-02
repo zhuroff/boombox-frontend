@@ -1,35 +1,14 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "es2022",
-    "moduleResolution": "Node",
-    "lib": [
-      "ESNext",
-      "ESNext.AsyncIterable",
-      "DOM"
-    ],
-    "jsx": "preserve",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "sourceMap": true,
-    "strict": true,
-    "noEmit": true,
-    "removeComments": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "noPropertyAccessFromIndexSignature": false,
-    "baseUrl": "src",
-    "paths": {
-      "~/*": ["./*"]
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
     },
-    "types": [
-      "@types/node"
-    ]
-  },
-  "exclude": [
-    "node_modules",
-    "dist"
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.vitest.json"
+    }
   ]
 }

@@ -1,4 +1,4 @@
-import { CompilationEntityRes, TrackRes } from '~/types/ReqRes'
+import type { CompilationEntityRes, TrackRes } from '~/types/ReqRes'
 import GatheringEntity from './GatheringEntity'
 import AlbumTrack from './AlbumTrack'
 

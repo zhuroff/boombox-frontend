@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-import { DraggableEvent } from '~/types/Common'
+import type { DraggableEvent } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import usePlaylist from '~/store/playlist'
 import AlbumTrack from '~/classes/AlbumTrack'

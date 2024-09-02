@@ -17,7 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, watchEffect, ref, Ref, StyleValue } from 'vue'
+import { onMounted, computed, watchEffect, ref } from 'vue'
+import type { Ref, StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
 
 interface Props {

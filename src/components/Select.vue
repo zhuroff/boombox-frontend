@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { TableFilter } from '~/types/Common'
+import type { TableFilter } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 
 interface Props {

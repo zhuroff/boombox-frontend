@@ -49,9 +49,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { CollectionEntityRes } from '~/types/ReqRes'
+import type { CollectionEntityRes } from '~/types/ReqRes'
 import { useCategory } from '~/hooks/useCategory'
-import { BasicEntity, DraggableEvent } from '~/types/Common'
+import type { BasicEntity, DraggableEvent } from '~/types/Common'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useGathering } from '~/hooks/useGathering'
 import useGlobalStore from '~/store/global'

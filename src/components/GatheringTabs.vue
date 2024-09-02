@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { BasicEntity, Pagination } from '~/types/Common'
+import type { BasicEntity, Pagination } from '~/types/Common'
 import { useGathering } from '~/hooks/useGathering'
 import GatheringTab from './GatheringTab.vue'
 import Preloader from './Preloader.vue'

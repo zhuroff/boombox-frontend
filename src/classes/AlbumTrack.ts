@@ -1,5 +1,5 @@
-import { BasicEntity } from '~/types/Common'
-import { TrackRes } from '~/types/ReqRes'
+import type { BasicEntity } from '~/types/Common'
+import type { TrackRes } from '~/types/ReqRes'
 import AlbumItem from './AlbumItem'
 
 export default class AlbumTrack {

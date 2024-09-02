@@ -1,5 +1,5 @@
 import api from '~/api'
-import { DiscogsQueryConfig, DiscogsReleaseRow } from '~/types/Discogs'
+import type { DiscogsQueryConfig, DiscogsReleaseRow } from '~/types/Discogs'
 
 export default {
   async getData(config: DiscogsQueryConfig) {

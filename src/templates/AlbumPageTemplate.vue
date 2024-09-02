@@ -70,10 +70,11 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, Ref, ref, watchEffect } from 'vue'
-import { RelatedAlbums, RelatedCompilations } from '~/types/Album'
-import { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
-import { TrackRes } from '~/types/ReqRes'
+import { nextTick, ref, watchEffect } from 'vue'
+import type { Ref } from 'vue'
+import type { RelatedAlbums, RelatedCompilations } from '~/types/Album'
+import type { DiscogsFilter, DiscogsTablePayload } from '~/types/Discogs'
+import type { TrackRes } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
 import BookletState from '~/classes/BookletState'
 import AlbumPage from '~/classes/AlbumPage'

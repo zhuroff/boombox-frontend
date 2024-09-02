@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { reactive, onMounted, ref } from 'vue'
-import { CloudEntity } from '~/types/ReqRes'
+import type { CloudEntity } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
 import Preloader from '~/components/Preloader.vue'
 import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
@@ -41,7 +41,7 @@ const fetchTOYTable = async () => {
   try {
     const rootFolder = await cloudServices.getFolderContent({
       path: '',
-      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
       root: 'TOY'
     })
 

@@ -14,7 +14,7 @@
 import { onMounted, computed, watch, reactive } from 'vue'
 import { useListPage } from '~/hooks/useListPage'
 import useGlobalStore from '~/store/global'
-import { CategoryItemRes } from '~/types/ReqRes'
+import type { CategoryItemRes } from '~/types/ReqRes'
 import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import CategoryItem from '~/classes/CategoryItem'
 

@@ -106,7 +106,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { BasicEntity, WikiSearchResult } from '~/types/Common'
+import type { BasicEntity, WikiSearchResult } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 // import usePlayingTrack from '~/store/track'
 import useSnackbar from '~/hooks/useSnackbar'

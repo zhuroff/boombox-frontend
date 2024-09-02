@@ -77,10 +77,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, Ref, ref, computed, watch } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
+import type { Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { TrackRes } from '~/types/ReqRes'
-import { ImagePayload, EntityImagesKeys } from '~/types/Common'
+import type { TrackRes } from '~/types/ReqRes'
+import type { ImagePayload, EntityImagesKeys } from '~/types/Common'
 import { hostString, categoryKeyDict } from '~/utils'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'

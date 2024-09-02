@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
-import { CloudEntity, CloudEntityRes, TrackRes } from '~/types/ReqRes'
+import type { CloudEntity, CloudEntityRes, TrackRes } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
 import usePlayingTrack from '~/store/track'
@@ -96,7 +96,7 @@ const fetchTOYYears = async () => {
     const years: string[] = []
     const genreFolder = await cloudServices.getFolderContent({
       path: '',
-      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
       root: encodeURIComponent(`TOY/${route.params.genre}`)
     })
 
@@ -127,7 +127,7 @@ const getTOYWave = async (years: string[]) => {
     const tracks = await cloudServices.getRandomTracks({
       path: '',
       years,
-      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
       root: encodeURIComponent(`TOY/${route.params.genre}`),
       limit: 50
     })

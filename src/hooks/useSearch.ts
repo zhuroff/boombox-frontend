@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { SearchResultState } from '~/types/Search'
+import type { SearchResultState } from '~/types/Search'
 import dbServices from '~/services/database.services'
 
 export const useSearch = () => {

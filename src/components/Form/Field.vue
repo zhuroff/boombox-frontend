@@ -13,7 +13,8 @@
 
 <script setup lang="ts">
 import { h, reactive, defineAsyncComponent } from 'vue'
-import { FieldApi, Validator } from '@tanstack/vue-form'
+import { FieldApi } from '@tanstack/vue-form'
+import type { Validator } from '@tanstack/vue-form'
 
 type TanstackFormField = FieldApi<
   CustomFormData,

@@ -1,4 +1,4 @@
-import { CategoryItemRes } from '~/types/ReqRes'
+import type { CategoryItemRes } from '~/types/ReqRes'
 import CategoryEntity from './CategoryEntity'
 
 export default class CategoryItem extends CategoryEntity {

@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { computed, watch, reactive } from 'vue'
-import { AlbumItemRes } from '~/types/ReqRes'
+import type { AlbumItemRes } from '~/types/ReqRes'
 import { useListPage } from '~/hooks/useListPage'
 import useGlobalStore from '~/store/global'
 import { isObjectsEquals } from '~/utils'

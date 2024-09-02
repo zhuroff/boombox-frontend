@@ -1,5 +1,5 @@
-import { BasicEntity } from '~/types/Common'
-import { AlbumItemRes } from '~/types/ReqRes'
+import type { BasicEntity } from '~/types/Common'
+import type { AlbumItemRes } from '~/types/ReqRes'
 import ListCardBasic from './ListCardBasic'
 
 export default class AlbumItem extends ListCardBasic {

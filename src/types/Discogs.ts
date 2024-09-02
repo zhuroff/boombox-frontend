@@ -1,5 +1,5 @@
-import { Ref } from 'vue'
-import { Pagination, TableFilter } from './Common'
+import type { Ref } from 'vue'
+import type { Pagination, TableFilter } from './Common'
 
 export interface DiscogsReleaseRow {
   id: number

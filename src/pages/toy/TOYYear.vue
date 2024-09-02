@@ -37,9 +37,9 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { AlbumItemRes, AlbumPageRes, TrackRes } from '~/types/ReqRes'
-import { RelatedAlbums } from '~/types/Album'
-import { BasicEntity } from '~/types/Common'
+import type { AlbumItemRes, AlbumPageRes, TrackRes } from '~/types/ReqRes'
+import type { RelatedAlbums } from '~/types/Album'
+import type { BasicEntity } from '~/types/Common'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import usePlaylist from '~/store/playlist'
 import cloudServices from '~/services/cloud.services'
@@ -71,7 +71,7 @@ const bookletHandler = async () => {
 
   const res = await cloudServices.getFolderContent({
     path: '',
-    cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+    cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
     root: encodeURIComponent(`TOY/${route.params.genre}/${route.params.year}/booklet`)
   })
 
@@ -80,7 +80,7 @@ const bookletHandler = async () => {
     url: await cloudServices.getFile<string>({
       entityType: 'cloud/image',
       path: decodeURIComponent(item.path).replace('MelodyMap/TOY/', ''),
-      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
       type: 'image',
       root:'TOY'
     })
@@ -100,7 +100,7 @@ const fetchTOYAlbum = async () => {
   try {
     const yearFolder = await cloudServices.getFolderContent({
       path: '',
-      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
       root: encodeURIComponent(`${`TOY/${route.params.genre}`}/${route.params.year}`)
     })
 
@@ -114,7 +114,7 @@ const fetchTOYAlbum = async () => {
       coverURL = await cloudServices.getFile({
         entityType: 'cloud/image',
         path: coverPath,
-        cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+        cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
         type: 'image',
         root: 'TOY'
       })
@@ -164,7 +164,7 @@ const fetchRelatedAlbums = async (criteria: Record<string, string>) => {
       criteria: criteria.get,
       exclude: String(route.params[criteria.exclude]),
       value: String(route.params[criteria.get]),
-      cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
       root: 'TOY',
       limit: 5
     })
@@ -174,7 +174,7 @@ const fetchRelatedAlbums = async (criteria: Record<string, string>) => {
       docs: res.map((album) => (
         new AlbumItem({
           _id: album.period.title,
-          cloudURL: String(process.env.VUE_APP_TOY_CLOUD),
+          cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
           ...album
         }, 'AlbumCard', `toy/${album.genre.title}`)
       ))

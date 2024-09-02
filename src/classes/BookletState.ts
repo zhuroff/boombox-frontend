@@ -1,4 +1,4 @@
-import { AlbumBooklet } from '~/types/Album'
+import type { AlbumBooklet } from '~/types/Album'
 import CloudContent from './CloudContent'
 
 export default class BookletState extends CloudContent<AlbumBooklet> {

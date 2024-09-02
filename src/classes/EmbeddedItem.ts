@@ -1,5 +1,5 @@
-import { BasicEntity } from '~/types/Common'
-import { EmbeddedItemRes } from '~/types/ReqRes'
+import type { BasicEntity } from '~/types/Common'
+import type { EmbeddedItemRes } from '~/types/ReqRes'
 import ListCardBasic from './ListCardBasic'
 
 export default class EmbeddedItem extends ListCardBasic {

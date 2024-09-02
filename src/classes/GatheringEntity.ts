@@ -1,6 +1,6 @@
-import ListCardBasic from './ListCardBasic'
-import { GatheringEntityRes } from '~/types/ReqRes'
+import type { GatheringEntityRes } from '~/types/ReqRes'
 import { hostString } from '~/utils'
+import ListCardBasic from './ListCardBasic'
 
 export default abstract class GatheringEntity<T extends GatheringEntityRes> extends ListCardBasic {
   readonly _id: string

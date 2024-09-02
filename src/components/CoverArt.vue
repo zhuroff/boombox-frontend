@@ -37,8 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue'
-import { BookletSlideState } from '~/types/Album'
+import { ref, watch } from 'vue'
+import type { Ref } from 'vue'
+import type { BookletSlideState } from '~/types/Album'
 import BookletState from '~/classes/BookletState'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Modal from '~/components/Modal.vue'

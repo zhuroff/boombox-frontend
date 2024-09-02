@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { BasicEntity } from '~/types/Common'
+import type { BasicEntity } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import { hostString } from '~/utils'
 import TextInput from '~/components/Inputs/TextInput.vue'

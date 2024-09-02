@@ -1,6 +1,6 @@
 import api from '~/api'
-import { ResponseMessage } from '~/types/Common'
-import { TrackLyricsData, TrackLyricsResponse } from '~/types/Track'
+import type { ResponseMessage } from '~/types/Common'
+import type { TrackLyricsData, TrackLyricsResponse } from '~/types/Track'
 
 export default {
   async fetchLyrics(id: string) {

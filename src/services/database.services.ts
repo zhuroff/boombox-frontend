@@ -1,6 +1,6 @@
 import api from '~/api'
-import { RequestConfig } from '~/types/Common'
-import { SearchPayload, SearchResultState } from '~/types/Search'
+import type { RequestConfig } from '~/types/Common'
+import type { SearchPayload, SearchResultState } from '~/types/Search'
 import commonServices from './common.services'
 
 export default {

@@ -33,11 +33,11 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue'
 import { useSearch } from '~/hooks/useSearch'
-import { BasicEntity, RefPayload } from '~/types/Common'
+import type { BasicEntity, RefPayload } from '~/types/Common'
 import { debounce } from '~/utils'
 import Button from '~/components/Button.vue'
 import dbServices from '~/services/database.services'
-import { EmbeddedItemRes } from '~/types/ReqRes'
+import type { EmbeddedItemRes } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
 
 interface Props {

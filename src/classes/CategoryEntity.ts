@@ -1,4 +1,4 @@
-import { CategoryEntityRes } from '~/types/ReqRes'
+import type { CategoryEntityRes } from '~/types/ReqRes'
 import ListCardBasic from './ListCardBasic'
 
 export default abstract class CategoryEntity extends ListCardBasic {

@@ -47,8 +47,9 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, Ref, StyleValue, computed, ref } from 'vue'
-import { DropdownItem } from '~/types/Common'
+import { computed, ref } from 'vue'
+import type { ComputedRef, Ref, StyleValue } from 'vue'
+import type { DropdownItem } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Button from '../Button.vue'
 import Sprite from '../Sprite/Sprite.vue'

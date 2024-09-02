@@ -90,7 +90,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
-import { DraggableEvent } from '~/types/Common'
+import type { DraggableEvent } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { secondsToMinutes } from '~/utils'
 import usePlayingTrack from '~/store/track'

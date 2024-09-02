@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { ResponseMessage } from '~/types/Common'
-import { GatheringCreateReq, GatheringCreateRes, GatheringUpdateRes } from '~/types/ReqRes'
+import type { ResponseMessage } from '~/types/Common'
+import type { GatheringCreateReq, GatheringCreateRes, GatheringUpdateRes } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
 import useSnackbar from './useSnackbar'
 import dbServices from '~/services/database.services'

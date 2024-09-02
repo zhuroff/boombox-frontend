@@ -1,4 +1,4 @@
-import { TrackRes } from './ReqRes'
+import type { TrackRes } from './ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
 import CategoryItem from '~/classes/CategoryItem'
 

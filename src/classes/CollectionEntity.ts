@@ -1,4 +1,4 @@
-import { CollectionEntityRes } from '~/types/ReqRes'
+import type { CollectionEntityRes } from '~/types/ReqRes'
 import GatheringEntity from './GatheringEntity'
 
 export default class CollectionEntity<T> extends GatheringEntity<CollectionEntityRes<T>> {

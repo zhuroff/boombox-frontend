@@ -1,4 +1,4 @@
-import { BasicEntity } from './Common'
+import type { BasicEntity } from './Common'
 import AlbumItem from '~/classes/AlbumItem'
 import CompilationItem from '~/classes/CompilationItem'
 

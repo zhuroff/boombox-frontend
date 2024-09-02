@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
-import { BookletSlideState } from '~/types/Album'
+import type { BookletSlideState } from '~/types/Album'
 
 interface Props {
   data: string[]
