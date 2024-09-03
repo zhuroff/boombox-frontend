@@ -9,12 +9,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import usePlayingTrack from '~/store/track'
+import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 const {
-  trackActions: { crackleSwitch }
-} = usePlayingTrack()
+  playerActions: { crackleSwitch }
+} = usePlaylist()
 
 const isCrackled = ref(false)
 

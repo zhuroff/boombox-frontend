@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import usePlayingTrack from '~/store/track'
+import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 const {
-  trackGetters: { playingTrack },
-  trackActions: { continuePlay, setTrackOnPause }
-} = usePlayingTrack()
+  playerGetters: { playingTrack },
+  playerActions: { continuePlay, setTrackOnPause }
+} = usePlaylist()
 </script>

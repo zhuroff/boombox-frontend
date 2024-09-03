@@ -1,0 +1,12 @@
+@import '~/scss/variables.scss';
+@import 'include-media';
+
+.input-field {
+  border: 1px solid $paleMD;
+  padding: .5rem .75rem;
+  width: 100%;
+
+  &::placeholder {
+    color: $paleDP;
+  }
+}

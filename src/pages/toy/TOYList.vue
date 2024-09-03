@@ -41,7 +41,7 @@ const fetchTOYTable = async () => {
   try {
     const rootFolder = await cloudServices.getFolderContent({
       path: '',
-      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VITE_TOY_CLOUD),
       root: 'TOY'
     })
 

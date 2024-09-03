@@ -85,7 +85,6 @@ import type { ImagePayload, EntityImagesKeys } from '~/types/Common'
 import { hostString, categoryKeyDict } from '~/utils'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import usePlayingTrack from '~/store/track'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
 import CategoryPage from '~/classes/CategoryPage'
@@ -114,14 +113,9 @@ const {
 } = useGlobalStore()
 
 const {
-  playerGetters: { currentPlaylist },
-  playerActions: { setPlayerPlaylist, togglePlayerVisibility }
+  playerGetters: { currentPlaylist, playingTrack },
+  playerActions: { setPlayerPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
 } = usePlaylist()
-
-const {
-  trackGetters: { playingTrack },
-  trackActions: { playTrack, continuePlay, setTrackOnPause }
-} = usePlayingTrack()
 
 const route = useRoute()
 const posterElement: Ref<null | HTMLInputElement> = ref(null)

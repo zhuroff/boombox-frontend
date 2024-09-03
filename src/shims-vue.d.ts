@@ -33,6 +33,7 @@ interface GlobalState {
 interface PlayerState {
   currentPlaylist: PlayerPlaylist | null
   reservedPlaylist: PlayerPlaylist | null
+  playingTrack: AudioTrack | null
   isPlayerExpanded: boolean
 }
 
@@ -127,10 +128,6 @@ interface AudioTrack {
   crackle: HTMLAudioElement
 }
 
-interface AudioTrackState {
-  playingTrack: AudioTrack | null
-}
-
 interface TrackProgress {
   progressLine: number
   progressTime: number
@@ -176,6 +173,7 @@ interface BaseInputFieldSchema {
   disabled?: boolean
   readonly?: boolean
   defaultValue?: string
+  size?: ElementSize
   label?: InputLabelConfig
 }
 

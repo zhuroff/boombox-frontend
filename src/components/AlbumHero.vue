@@ -108,7 +108,6 @@
 import { ref } from 'vue'
 import type { BasicEntity, WikiSearchResult } from '~/types/Common'
 import useGlobalStore from '~/store/global'
-// import usePlayingTrack from '~/store/track'
 import useSnackbar from '~/hooks/useSnackbar'
 import { useSearch } from '~/hooks/useSearch'
 import { detectWikiLocale } from '~/utils'
@@ -118,6 +117,7 @@ import Overlay from './Overlay.vue'
 import Modal from './Modal.vue'
 import WikiFrame from './WikiFrame.vue'
 import SearchBlock from '~/components/SearchBlock.vue'
+import usePlaylist from '~/store/playlist'
 
 interface Props {
   id: string
@@ -134,7 +134,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const { globalGetters: { localize } } = useGlobalStore()
-// const { trackGetters: { playingTrack } } = usePlayingTrack()
+const { playerGetters: { playingTrack } } = usePlaylist()
 const { setSnackbarMessage } = useSnackbar()
 const { searchSubmit, results } = useSearch()
 const isActionsOpens = ref(false)

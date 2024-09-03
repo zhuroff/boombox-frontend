@@ -17,6 +17,7 @@
 import { computed } from 'vue'
 import type { StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
+import './InputField.scss'
 
 interface Props {
   name: string
@@ -58,28 +59,3 @@ const stateClasses = computed(() => [
   }
 ])
 </script>
-
-<style scoped lang="scss">
-@import '~/scss/variables.scss';
-@import 'include-media';
-
-.input-field {
-  border-radius: $borderRadiusSM;
-  border: 1px solid $paleMD;
-  width: 100%;
-
-  &.--medium {
-    padding: .5rem 1rem;
-    font-size: .875rem;
-    height: $inputSizeMD;
-  }
-
-  &.--error {
-    border-color: $error;
-  }
-
-  &::placeholder {
-    color: $paleDP;
-  }
-}
-</style>

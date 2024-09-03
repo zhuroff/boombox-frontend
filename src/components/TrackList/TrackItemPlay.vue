@@ -38,7 +38,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import usePlaylist from '~/store/playlist'
-import usePlayingTrack from '~/store/track'
 import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
@@ -55,14 +54,9 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const {
-  playerGetters: { currentPlaylistTracks },
-  playerActions: { appendTrackToPlaylist, togglePlayerVisibility }
+  playerGetters: { playingTrack, currentPlaylistTracks },
+  playerActions: { appendTrackToPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
 } = usePlaylist()
-
-const {
-  trackGetters: { playingTrack },
-  trackActions: { playTrack, continuePlay, setTrackOnPause }
-} = usePlayingTrack()
 
 const isPlaying = computed(() => (
   playingTrack.value?._id === props.track._id &&

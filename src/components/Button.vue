@@ -2,16 +2,7 @@
   <button
     :style="style"
     :type="type"
-    :class="[
-      'button',
-      {
-        '--inverted': isInverted,
-        '--rounded': isRounded,
-        '--text': isText
-      },
-      `--${size}`,
-      className,
-    ]"
+    :class="stateClasses"
   >
     <Sprite
       v-if="icon"
@@ -26,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
 import Sprite from '~/components/Sprite/Sprite.vue'
@@ -42,7 +34,7 @@ interface Props {
   isRounded?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   size: 'medium',
   type: 'button'
 })
@@ -50,6 +42,17 @@ withDefaults(defineProps<Props>(), {
 const {
   globalGetters: { localize }
 } = useGlobalStore()
+
+const stateClasses = computed(() => [
+  'button',
+  {
+    '--inverted': props.isInverted,
+    '--rounded': props.isRounded,
+    '--text': props.isText
+  },
+  `--${props.size}`,
+  props.className,
+])
 </script>
 
 <style lang="scss">
@@ -57,7 +60,6 @@ const {
 @import 'include-media';
 
 .button {
-  border-radius: $borderRadiusSM;
   border: 1px solid $black;
   color: $black;
   background-color: transparent;
@@ -81,13 +83,9 @@ const {
   }
 
   &.--small {
-    font-size: .625rem;
-    height: $inputSizeSM;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
 
     &.--rounded {
-      width: $inputSizeSM;
+      width: $elementHeightSM;
     }
 
     .icon {
@@ -100,13 +98,9 @@ const {
   }
 
   &.--medium {
-    font-size: .75rem;
-    height: $inputSizeMD;
-    padding-left: 1rem;
-    padding-right: 1rem;
 
     &.--rounded {
-      width: $inputSizeMD;
+      width: $elementHeightMD;
     }
 
     .icon {
@@ -119,13 +113,9 @@ const {
   }
 
   &.--large {
-    font-size: 1rem;
-    height: $inputSizeLG;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
 
     &.--rounded {
-      width: $inputSizeLG;
+      width: $elementHeightLG;
     }
 
     .icon {
@@ -167,6 +157,11 @@ const {
         fill: $paleLT;
       }
     }
+  }
+
+  &__label {
+    display: block;
+    margin: 0 .75rem;
   }
 
   &[disabled] {

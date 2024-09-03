@@ -8,6 +8,7 @@ export const localesEN: LocaleDictionary = {
   editPassword: 'Change password',
   restore: 'Restore',
   submit: 'Submit',
+  signIn: 'Sign in',
   save: 'Save',
   delConfirmMessage: 'Are you sure you want to delete this entity?',
   pageNotFound: 'Page not found',

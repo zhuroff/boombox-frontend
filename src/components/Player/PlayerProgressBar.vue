@@ -13,12 +13,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import usePlayingTrack from '~/store/track'
+import usePlaylist from '~/store/playlist'
 
 const {
-  trackGetters: { playingTrack },
-  trackActions: { setPosition }
-} = usePlayingTrack()
+  playerGetters: { playingTrack },
+  playerActions: { setPosition }
+} = usePlaylist()
 
 const leftTimeToMinutes = computed(() => {
   if (!playingTrack.value) return '0:00'

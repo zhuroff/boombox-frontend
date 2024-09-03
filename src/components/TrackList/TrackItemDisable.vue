@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import usePlayingTrack from '~/store/track'
+import usePlaylist from '~/store/playlist'
 import Button from '~/components/Button.vue'
 
 interface Props {
@@ -21,8 +21,8 @@ interface Props {
 defineProps<Props>()
 
 const {
-  trackActions: { disableOrEnableTrack }
-} = usePlayingTrack()
+  playerActions: { disableOrEnableTrack }
+} = usePlaylist()
 </script>
 
 <style lang="scss" scoped>

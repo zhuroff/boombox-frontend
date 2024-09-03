@@ -8,6 +8,7 @@ export const localesBY: LocaleDictionary = {
   editPassword: 'Змянiць пароль',
   restore: 'Аднавiць',
   submit: 'Даслаць',
+  signIn: 'Увайсцi',
   save: 'Захаваць',
   delConfirmMessage: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
   pageNotFound: 'Старонка не знайдзена',

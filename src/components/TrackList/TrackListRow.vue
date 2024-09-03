@@ -64,7 +64,6 @@
 import { ref, computed } from 'vue'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import usePlayingTrack from '~/store/track'
 import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 import TrackItemAdd from './TrackItemAdd.vue'
@@ -91,12 +90,8 @@ const {
 } = useGlobalStore()
 
 const {
-  playerGetters: { currentPlaylist }
+  playerGetters: { playingTrack, currentPlaylist }
 } = usePlaylist()
-
-const {
-  trackGetters: { playingTrack }
-} = usePlayingTrack()
 
 const isModalActive = ref(false)
 const isTOYEditable = ref(false)

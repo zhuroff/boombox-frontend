@@ -3,9 +3,10 @@ export const isObjectsEquals = <T>(a: T, b: T): boolean => {
 }
 
 export const hostString = (pathname: string) => {
-  const host = import.meta.env.NODE_ENV === 'development'
-    ? import.meta.env.VUE_APP_DEV_HOST
-    : import.meta.env.VUE_APP_LIVE_HOST
+  const host = import.meta.env.DEV
+    ? import.meta.env.VITE_DEV_HOST
+    : import.meta.env.VITE_LIVE_HOST
+    console.log(host)
 
   return `${host}${pathname}`
 }

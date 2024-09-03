@@ -15,7 +15,7 @@
     </div>
     <Button
       type="submit"
-      label="submit"
+      :label="submitButtonLocale"
     />
   </form>
 </template>
@@ -27,13 +27,16 @@ import Button from '~/components/Button.vue'
 
 interface Props {
   formSchema: Map<string, FormSchemaProperty>
+  submitButtonLocale?: string
 }
 
 interface Emits {
   (e: 'formSubmit', value: CustomFormData): void
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  submitButtonLocale: 'submit'
+})
 const emit = defineEmits<Emits>()
 
 const form = useForm({

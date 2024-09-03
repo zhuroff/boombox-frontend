@@ -93,7 +93,6 @@ import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import type { DraggableEvent } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { secondsToMinutes } from '~/utils'
-import usePlayingTrack from '~/store/track'
 import usePlaylist from '~/store/playlist'
 import AlbumTrack from '~/classes/AlbumTrack'
 import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
@@ -112,13 +111,22 @@ import Button from '../Button.vue'
 type PlayerKeyNav = 'Space' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown'
 
 const {
-  trackGetters: { playingTrack },
-  trackActions: { playTrack, continuePlay, setTrackOnPause }
-} = usePlayingTrack()
-
-const {
-  playerGetters: { currentPlaylist, currentPlaylistTracks, isPlayerExpanded },
-  playerActions: { changePlaylistOrder, removeTrackFromPlaylist, switchToPrevTrack, switchToNextTrack, togglePlayerVisibility }
+  playerGetters: {
+    playingTrack,
+    currentPlaylist,
+    currentPlaylistTracks,
+    isPlayerExpanded
+  },
+  playerActions: {
+    playTrack,
+    continuePlay,
+    setTrackOnPause,
+    changePlaylistOrder,
+    removeTrackFromPlaylist,
+    switchToPrevTrack,
+    switchToNextTrack,
+    togglePlayerVisibility
+  }
 } = usePlaylist()
 
 const isPlaylistOpen = ref(false)

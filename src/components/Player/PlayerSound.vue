@@ -23,12 +23,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import usePlayingTrack from '~/store/track'
+import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 const {
-  trackActions: { setSoundVolume, switchMuteState }
-} = usePlayingTrack()
+  playerActions: { setSoundVolume, switchMuteState }
+} = usePlaylist()
 
 const volume = ref(Number(localStorage.getItem('playerVolume')) || 1)
 const isMuted = ref(false)

@@ -19,7 +19,7 @@ import type { Validator } from '@tanstack/vue-form'
 type TanstackFormField = FieldApi<
   CustomFormData,
   string,
-  Validator<string, unknown> | undefined, undefined, string
+  Validator<string, unknown> | undefined, undefined, string | File
 >
 
 interface Props {
@@ -48,6 +48,7 @@ const FieldLabel = () => {
       label,
       {
         targetId: props.property.id,
+        size: props.property.size,
         ...props.property.label
       }
     )
@@ -55,7 +56,11 @@ const FieldLabel = () => {
 
   return h(
     label,
-    props.property.label,
+    {
+      // @ts-expect-error: fix
+      size: props.property.size,
+      ...props.property.label
+    },
     FieldComponent
   )
 }

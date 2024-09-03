@@ -54,10 +54,7 @@ const stateClasses = computed(() => ([
 <style setup lang="scss">
 .label {
   display: block;
-
-  &.--medium {
-    font-size: 1rem;
-  }
+  height: auto;
 
   &.--top,
   &.--bottom {

@@ -40,7 +40,6 @@ import { computed, reactive, ref, watch } from 'vue'
 import type { CloudEntity, CloudEntityRes, TrackRes } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import usePlayingTrack from '~/store/track'
 import cloudServices from '~/services/cloud.services'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
@@ -54,14 +53,9 @@ const {
 } = useGlobalStore()
 
 const {
-  playerGetters: { currentPlaylist },
-  playerActions: { setPlayerPlaylist, togglePlayerVisibility }
+  playerGetters: { playingTrack, currentPlaylist },
+  playerActions: { setPlayerPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
 } = usePlaylist()
-
-const {
-  trackGetters: { playingTrack },
-  trackActions: { playTrack, continuePlay, setTrackOnPause }
-} = usePlayingTrack()
 
 const route = useRoute()
 const isPageLoading = ref(true)
@@ -96,7 +90,7 @@ const fetchTOYYears = async () => {
     const years: string[] = []
     const genreFolder = await cloudServices.getFolderContent({
       path: '',
-      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VITE_TOY_CLOUD),
       root: encodeURIComponent(`TOY/${route.params.genre}`)
     })
 
@@ -127,7 +121,7 @@ const getTOYWave = async (years: string[]) => {
     const tracks = await cloudServices.getRandomTracks({
       path: '',
       years,
-      cloudURL: String(import.meta.env.VUE_APP_TOY_CLOUD),
+      cloudURL: String(import.meta.env.VITE_TOY_CLOUD),
       root: encodeURIComponent(`TOY/${route.params.genre}`),
       limit: 50
     })

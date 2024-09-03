@@ -5,6 +5,7 @@ import getters from './getters'
 const defaultState = (): PlayerState => ({
   currentPlaylist: null,
   reservedPlaylist: null,
+  playingTrack: null,
   isPlayerExpanded: false
 })
 

@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import usePlaylist from '~/store/playlist'
-import usePlayingTrack from '~/store/track'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 interface Props {
@@ -26,10 +25,7 @@ interface Props {
 defineProps<Props>()
 
 const {
+  playerGetters: { playingTrack },
   playerActions: { changeRepeatState }
 } = usePlaylist()
-
-const {
-  trackGetters: { playingTrack }
-} = usePlayingTrack()
 </script>

@@ -3,6 +3,7 @@
     <main class="main --unauth">
       <Form
         :formSchema="formSchema"
+        submitButtonLocale="signIn"
         @formSubmit="login"
       />
     </main>
@@ -19,7 +20,7 @@ const {
 } = useGlobalStore()
 
 const formSchema = new Map<string, FormSchemaProperty>([
-  ['login', {
+  ['email', {
     id: 'login-email',
     name: 'loginForm.email',
     placeholder: 'loginForm.emailPlaceholder',
@@ -38,30 +39,19 @@ const formSchema = new Map<string, FormSchemaProperty>([
     label: {
       labelText: 'loginForm.password'
     }
-  }],
-  ['textarea', {
-    id: 'textarea',
-    name: 'textarea',
-    placeholder: 'Textarea placeholder',
-    required: true,
-    type: 'textarea',
-    label: {
-      labelText: 'Textarea label'
-    }
   }]
 ])
 
 const login = async (formData: CustomFormData) => {
-  console.log(formData)
-  // try {
-  //   const { data } = await api.post<AuthResponse>('api/users/login', formData)
-  //   setAuthConfig('isAuthenticated', true)
-  //   setAuthConfig('user', data.user)
-  //   localStorage.setItem('token', data.accessToken)
-  // } catch (error) {
-  //   console.error(error)
-  //   setAuthConfig('isAuthenticated', false)
-  // }
+  try {
+    const { data } = await api.post<AuthResponse>('api/users/login', formData)
+    setAuthConfig('isAuthenticated', true)
+    setAuthConfig('user', data.user)
+    localStorage.setItem('token', data.accessToken)
+  } catch (error) {
+    console.error(error)
+    setAuthConfig('isAuthenticated', false)
+  }
 }
 </script>
 
