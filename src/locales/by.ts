@@ -10,6 +10,7 @@ export const localesBY: LocaleDictionary = {
   submit: 'Даслаць',
   signIn: 'Увайсцi',
   save: 'Захаваць',
+  offline: 'Няма далучэння да Iнтэрнэту',
   delConfirmMessage: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
   pageNotFound: 'Старонка не знайдзена',
   goBack: 'Назад',

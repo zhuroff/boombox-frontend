@@ -10,6 +10,7 @@ export const localesEN: LocaleDictionary = {
   submit: 'Submit',
   signIn: 'Sign in',
   save: 'Save',
+  offline: 'You\'re offline',
   delConfirmMessage: 'Are you sure you want to delete this entity?',
   pageNotFound: 'Page not found',
   goBack: 'Go back',

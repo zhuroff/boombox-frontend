@@ -6,10 +6,10 @@ import {
 
 describe('hostString', () => {
   it('returns the correct host string', () => {
-    expect(hostString('')).toBe('http://localhost:3001')
-    expect(hostString('/')).toBe('http://localhost:3001')
-    expect(hostString('/foo')).toBe('http://localhost:3001/foo')
-    expect(hostString('/bar/777')).toBe('http://localhost:3001/bar/777')
+    expect(hostString('')).toBe(import.meta.env.VITE_DEV_HOST)
+    expect(hostString('/')).toBe(`${import.meta.env.VITE_DEV_HOST}/`)
+    expect(hostString('/foo')).toBe(`${import.meta.env.VITE_DEV_HOST}/foo`)
+    expect(hostString('/bar/777')).toBe(`${import.meta.env.VITE_DEV_HOST}/bar/777`)
   })
 })
 

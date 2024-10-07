@@ -6,7 +6,6 @@ export const hostString = (pathname: string) => {
   const host = import.meta.env.DEV
     ? import.meta.env.VITE_DEV_HOST
     : import.meta.env.VITE_LIVE_HOST
-    console.log(host)
 
   return `${host}${pathname}`
 }
@@ -88,4 +87,21 @@ export const categoryKeyDict: Record<string, string> = {
 export const localeIntlCodes: Record<LocaleKeys, Intl.LocalesArgument> = {
   en: 'en-US',
   by: 'ru-RU'
+}
+
+export const getTimestamp = (value: number, unit: 's' | 'm' | 'h') => {
+  const MS_IN_SECOND = 1000
+  const MS_IN_MINUTE = MS_IN_SECOND * 60
+  const MS_IN_HOUR = MS_IN_MINUTE * 60
+
+  switch (unit) {
+    case 'h':
+      return value * MS_IN_HOUR
+    case 'm':
+      return value * MS_IN_MINUTE
+    case 's':
+      return value * MS_IN_SECOND
+    default:
+      throw new Error('Invalid unit. Use "h" for hours, "m" for minutes, or "s" for seconds.')
+  }
 }
