@@ -17,6 +17,19 @@ interface LocaleDictionary {
   [key: string]: string | LocaleDictionary
 }
 
+interface Pagination {
+  totalDocs: number
+  totalPages: number
+  page: number
+}
+
+type SortingValue = Record<string, 1 | -1>
+
+interface PaginationState extends Pick<Pagination, 'page'> {
+  limit: number
+  sort: SortingValue
+}
+
 interface SyncResponse {
   added: number
   updated: number
