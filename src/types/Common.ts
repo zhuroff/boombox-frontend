@@ -22,13 +22,6 @@ export interface Pagination {
   limit: number
 }
 
-export interface PaginationConfig {
-  limiter?: number[]
-  increment?: true
-  decrement?: true
-  selected?: number
-}
-
 export type SortingValue = Record<string, 1 | -1>
 
 export interface DraggableEvent {

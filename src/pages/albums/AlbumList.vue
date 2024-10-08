@@ -8,13 +8,15 @@
     :switchPagination="switchPagination"
     :setEntitiesLimit="setEntitiesLimit"
   /> -->
-  <h1>albums page</h1>
+  <EntityListTemplate
+    entityKey="albums"
+    placeholderPreview="/img/album.webp"
+    pageHeadingKey="headings.albumsPage"
+  />
 </template>
 
 <script setup lang="ts">
-import useEntities from '~/store/entities/useEntities'
-const { data } = useEntities('albums')
-console.log(data)
+import EntityListTemplate from '~/templates/EntityListTemplate.vue'
 
 // import { computed, watch, reactive } from 'vue'
 // import type { AlbumItemRes } from '~/types/ReqRes'

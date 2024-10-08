@@ -30,6 +30,19 @@ interface PaginationState extends Pick<Pagination, 'page'> {
   sort: SortingValue
 }
 
+interface PaginationConfig {
+  limiter?: number[]
+  increment?: true
+  decrement?: true
+  selected?: number
+  totalDocs: number,
+  totalPages: number
+}
+
+type PaginationStateSetter = <T extends keyof PaginationState>(key: T, value: PaginationState[T]) => void
+
+type PaginationConfigSetter = <T extends keyof PaginationConfig>(key: T, value: PaginationConfig[T]) => void
+
 interface SyncResponse {
   added: number
   updated: number
@@ -81,6 +94,11 @@ interface AuthResponse {
 interface AuthConfig {
   isAuthenticated?: boolean
   user?: UserResponse
+}
+
+interface ListPageResponse<T> {
+  docs: T[],
+  pagination: Pagination
 }
 
 interface Snackbar {

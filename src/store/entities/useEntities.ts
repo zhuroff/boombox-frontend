@@ -1,23 +1,18 @@
 import { useQuery } from '@tanstack/vue-query'
 import dbServices from '~/services/database.services'
-import usePagination from '~/hooks/usePagination'
 
-const useEntities = (entityKey: string) => {
-  const { pagination, setPaginationPage, setPaginationLimit } = usePagination()
-
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: [entityKey],
-    queryFn: dbServices.getEntityList.bind(this, pagination, entityKey),
+const useEntities = <T>(entityKey: string, pagination: PaginationState) => {
+  const { isPending, isFetched, isError, data, error } = useQuery<ListPageResponse<T>>({
+    queryKey: [entityKey, pagination],
+    queryFn: () => dbServices.getEntityList(pagination, entityKey),
   })
 
   return {
     isPending,
+    isFetched,
     isError,
-    data,
     error,
-    pagination,
-    setPaginationPage,
-    setPaginationLimit
+    data
   }
 }
 
