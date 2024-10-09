@@ -2,11 +2,11 @@
   <li class="cardlist__item">
     <router-link
       class="cardlist__item-link"
-      :to="{ path: `/${rootPath}/${card._id}` }"
+      :to="{ path: `/${entityKey}/${card._id}` }"
     >
       <div class="cardlist__item-image">
         <img
-          :src="card.coverURL || placeholderPreview"
+          :src="cardCover"
           :alt="card.title"
           class="cardlist__item-cover"
         />
@@ -19,7 +19,10 @@
       <div class="cardlist__item-title">
         {{ card.title }}
       </div>
-      <div class="cardlist__item-info">
+      <div
+        v-if="cardCaption"
+        class="cardlist__item-info"
+      >
         {{ cardCaption }}
       </div>
     </router-link>
@@ -29,20 +32,31 @@
       size="small"
       isInverted
       isRounded
-      className="--drag"
+      className="cardlist__item-action --drag"
+    />
+    <Button
+      v-if="isAdmin && isDeletable"
+      icon="delete"
+      size="small"
+      isInverted
+      isRounded
+      className="cardlist__item-action"
+      @click="() => $emit('deleteEntity', { id: card._id, entityKey })"
     />
   </li>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { hostString } from '~/utils'
 import useGlobalStore from '~/store/global'
 import Button from '~/components/Button.vue'
 
 interface Props {
-  card: AlbumItem
-  rootPath: string
-  isDraggable: boolean
+  card: AlbumItem | CollectedItem
+  entityKey: string
+  isDraggable?: boolean
+  isDeletable?: boolean
   placeholderPreview: string
 }
 
@@ -57,6 +71,14 @@ const isAdmin = computed(() => (
 ))
 
 const cardCaption = computed(() => (
-  `${props.card.artist.title } / ${props.card.period.title} / ${props.card.genre.title}`
+  'artist' in props.card && props.card.artist
+    ? `${props.card.artist.title } / ${props.card.period.title} / ${props.card.genre.title}`
+    : null
+))
+
+const cardCover = computed(() => (
+  'avatar' in props.card && props.card.avatar
+    ? hostString(props.card.avatar)
+    : ('coverURL' in props.card && props.card.coverURL) || props.placeholderPreview
 ))
 </script>

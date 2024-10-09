@@ -3,19 +3,19 @@
     <div class="confirmation__message">{{ message }}</div>
     <div class="confirmation__actions">
       <Button
-        :label="localize('delete')"
+        label="delete"
         @click="() => $emit('confirm')"
       />
       <Button
-        :label="localize('cancel')"
+        label="cancel"
         @click="() => $emit('reject')"
       />
     </div>
+    <slot></slot>
   </div>
 </template>
 
 <script setup lang="ts">
-import useGlobalStore from '~/store/global'
 import Button from '~/components/Button.vue'
 
 interface Props {
@@ -23,13 +23,9 @@ interface Props {
 }
 
 defineProps<Props>()
-
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~/scss/variables';
 @import 'include-media';
 
@@ -37,6 +33,7 @@ const {
   background-color: $white;
   border-radius: $borderRadiusMD;
   padding: 25px;
+  position: relative;
 
   &__message {
     text-align: center;
@@ -49,6 +46,10 @@ const {
     display: flex;
     justify-content: flex-end;
     gap: 1rem
+  }
+
+  .preloader {
+    height: 100%;
   }
 }
 </style>

@@ -10,15 +10,14 @@
     />
     <span
       v-if="label"
-      class="button__label">{{ localize(label) }}
-    </span>
+      class="button__label"
+    >{{ localize(label) }}</span>
     <slot></slot>
   </button>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { StyleValue } from 'vue'
+import { computed, type StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
 import Sprite from '~/components/Sprite/Sprite.vue'
 

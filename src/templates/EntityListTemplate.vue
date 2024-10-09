@@ -19,7 +19,10 @@
         v-if="data?.docs"
         :entities="data?.docs"
         :entityKey="entityKey"
+        :isDraggable="isDraggable"
+        :isDeletable="isDeletable"
         :placeholderPreview="placeholderPreview"
+        @deleteEntity="confirmDelete"
       />
       <Paginator
         v-if="paginationConfig?.totalPages > 1"
@@ -30,33 +33,80 @@
         :updatePaginationState="updatePaginationState"
       />
     </transition-group>
+    <Modal
+      v-if="isDeletable && deletePayload"
+      :isModalActive="deletePayload !== null"
+      @closeModal="deletePayload = null"
+    >
+      <Confirmation
+        :message="localize('delConfirmMessage')"
+        @confirm="deleteConfirm"
+        @reject="deletePayload = null"
+      >
+        <Preloader
+          v-if="deletePayload.isPending"
+          mode="light"
+        />
+      </Confirmation>
+    </Modal>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import useGlobalStore from '~/store/global'
 import useEntities from '~/store/entities/useEntities'
 import usePagination from '~/hooks/usePagination'
+import useSnackbar from '~/hooks/useSnackbar'
 import Preloader from '~/components/Preloader.vue'
 import Header from '~/components/Header.vue'
 import EntityCards from '~/components/EntityCards.vue'
 import Paginator from '~/components/Paginator.vue'
+import Modal from '~/components/Modal.vue'
+import Confirmation from '~/components/Confirmation.vue'
 
 interface Props {
   entityKey: string
   placeholderPreview: string
   pageHeadingKey?: string
+  isDraggable?: boolean 
+  isDeletable?: boolean
   withSearch?: boolean
 }
 
 const props = defineProps<Props>()
 
 const { pagination, paginationConfig, updatePaginationConfig, updatePaginationState } = usePagination()
-const { data, isFetched } = useEntities<BasicEntity>(props.entityKey, pagination)
+const { data, refetch, isFetched, deleteEntity } = useEntities<BasicEntity>(props.entityKey, pagination)
 const { globalGetters: { localize } } = useGlobalStore()
+const { setSnackbarMessage } = useSnackbar()
+
+const deletePayload = ref<DeletePayload | null>(null)
 
 const docsCount = computed(() => String(data.value?.pagination.totalDocs || 0))
+
+const confirmDelete = (payload: DeletePayload) => {
+  deletePayload.value = payload
+}
+
+const deleteConfirm = () => {
+  if (!deletePayload.value) return
+
+  deletePayload.value.isPending = true
+
+  deleteEntity(deletePayload.value)
+    .then((res) => {
+      if (res) {
+        refetch()
+        setSnackbarMessage({
+          message: localize(`${deletePayload.value?.entityKey}.drop`),
+          type: 'success'
+        })
+      }
+    })
+    .catch(console.error)
+    .finally(() => deletePayload.value = null)
+}
 
 watchEffect(() => {
   if (isFetched.value) {

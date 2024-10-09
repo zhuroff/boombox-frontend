@@ -58,11 +58,11 @@ defineProps<Props>()
     background-color: $transLight;
 
     @include media('<laptop') {
-      height: 100vh
+      height: 100%;
     }
 
     @include media('>=laptop') {
-      height: calc(100vh - #{$playerHeight});
+      height: calc(100% - #{$playerHeight});
     }
   }
 

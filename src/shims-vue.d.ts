@@ -113,6 +113,12 @@ interface BasicEntity {
   cloudURL?: string
 }
 
+interface DeletePayload {
+  id: string
+  entityKey: string
+  isPending?: boolean
+}
+
 interface AlbumItem extends Required<BasicEntity> {
   artist: BasicEntity
   genre: BasicEntity
@@ -121,6 +127,11 @@ interface AlbumItem extends Required<BasicEntity> {
   inCollections: BasicEntity[]
   coverURL?: string
   folderName: string
+}
+
+interface CollectedItem extends BasicEntity {
+  avatar?: string
+  poster?: string
 }
 
 interface AlbumTrack extends Required<BasicEntity> {

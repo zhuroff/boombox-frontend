@@ -67,6 +67,9 @@ onMounted(() => {
 
 .template {
   padding-bottom: 25px;
+  min-height: calc(100vh - $playerHeight);
+  display: flex;
+  flex-direction: column;
 }
 
 .app-preloading {

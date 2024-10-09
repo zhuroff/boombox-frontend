@@ -12,9 +12,11 @@
       :key="entity._id"
       :is="entityCardComponent"
       :card="entity"
-      :isDraggable="false"
-      :rootPath="entityKey"
+      :isDraggable="isDraggable"
+      :isDeletable="isDeletable"
+      :entityKey="entityKey"
       :placeholderPreview="placeholderPreview"
+      @deleteEntity="(payload: DeletePayload) => $emit('deleteEntity', payload)"
     />
   </VueDraggableNext>
 </template>
@@ -27,6 +29,7 @@ interface Props<T> {
   entities: T[]
   entityKey: string
   isDraggable?: boolean
+  isDeletable?: boolean
   placeholderPreview: string
 }
 
@@ -34,9 +37,11 @@ const props = defineProps<Props<BasicEntity>>()
 
 const cardsMap: Record<string, string> = {
   albums: 'AlbumCard',
+  collections: 'AlbumCard',
+  compilations: 'AlbumCard',
   artists: 'CategoryCard',
-  genres: 'CategoryCard',
   periods: 'CategoryCard',
+  genres: 'CategoryCard'
 }
 
 const entityCardComponent = defineAsyncComponent(() => (

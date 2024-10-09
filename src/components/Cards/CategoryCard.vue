@@ -2,7 +2,7 @@
   <li class="cardlist__item">
     <router-link
       class="cardlist__item-link"
-      :to="`/${rootPath}/${card._id}`"
+      :to="`/${entityKey}/${card._id}`"
     >
       <img
         :src="card.avatar ? host(card.avatar) : placeholderPreview"
@@ -27,7 +27,7 @@ import CategoryItem from '~/classes/CategoryItem'
 interface Props {
   card: CategoryItem
   placeholderPreview: string
-  rootPath: string
+  entityKey: string
 }
 
 defineProps<Props>()
