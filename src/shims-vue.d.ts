@@ -129,6 +129,10 @@ interface AlbumItem extends Required<BasicEntity> {
   folderName: string
 }
 
+interface EmbeddedItem extends Omit<AlbumItem, 'tracks'> {
+  frame: string
+}
+
 interface CollectedItem extends BasicEntity {
   avatar?: string
   poster?: string
@@ -214,6 +218,7 @@ interface BaseInputFieldSchema {
   required?: boolean
   disabled?: boolean
   readonly?: boolean
+  refKey?: string
   defaultValue?: string
   size?: ElementSize
   label?: InputLabelConfig

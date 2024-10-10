@@ -63,12 +63,16 @@ export const localesEN: LocaleDictionary = {
   },
   embeddedForm: {
     title: 'Album title',
+    titlePlaceholder: 'Enter the album title',
     artist: 'Artist',
+    artistPlaceholder: 'Enter the artist name',
     genre: 'Genre',
     period: 'Period',
     frame: 'Frame code',
     collections: 'In collection',
-    notFound: 'Nothing was found among {x}. Create a new one.'
+    notFound: 'Nothing was found among {x}. Create a new one.',
+    addAlbum: 'Add album',
+    submit: 'Create album'
   },
   loginForm: {
     email: 'Email',

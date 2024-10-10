@@ -5,7 +5,13 @@
       :to="{ path: `/${entityKey}/${card._id}` }"
     >
       <div class="cardlist__item-image">
+        <div
+          v-if="card.frame"
+          v-html="card.frame"
+          class="cardlist__item-cover --blind"
+        />
         <img
+          v-else
           :src="cardCover"
           :alt="card.title"
           class="cardlist__item-cover"
@@ -53,7 +59,7 @@ import useGlobalStore from '~/store/global'
 import Button from '~/components/Button.vue'
 
 interface Props {
-  card: AlbumItem | CollectedItem
+  card: AlbumItem | CollectedItem | EmbeddedItem
   entityKey: string
   isDraggable?: boolean
   isDeletable?: boolean

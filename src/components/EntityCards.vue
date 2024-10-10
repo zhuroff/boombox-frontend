@@ -39,9 +39,10 @@ const cardsMap: Record<string, string> = {
   albums: 'AlbumCard',
   collections: 'AlbumCard',
   compilations: 'AlbumCard',
+  embedded: 'AlbumCard',
   artists: 'CategoryCard',
   periods: 'CategoryCard',
-  genres: 'CategoryCard'
+  genres: 'CategoryCard',
 }
 
 const entityCardComponent = defineAsyncComponent(() => (

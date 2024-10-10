@@ -24,10 +24,7 @@ interface Props {
 
 defineProps<Props>()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
-
+const { globalGetters: { localize } } = useGlobalStore()
 const { searchSubmit, results } = useSearch()
 </script>
 
@@ -64,6 +61,7 @@ const { searchSubmit, results } = useSearch()
 
   @include media('>=laptop') {
     padding: 25px 25px 0;
+    justify-content: space-between;
   }
 
   &__heading {

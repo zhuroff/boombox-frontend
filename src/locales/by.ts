@@ -63,12 +63,16 @@ export const localesBY: LocaleDictionary = {
   },
   embeddedForm: {
     title: 'Назва альбому',
+    titlePlaceholder: 'Увядзiце назву альбому',
     artist: 'Артыст',
+    artistPlaceholder: 'Увядзiце iмя артыста',
     genre: 'Жанр',
     period: 'Год выдання',
     frame: 'Код фрэйму',
     collections: 'У калекцыi',
-    notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.'
+    notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.',
+    addAlbum: 'Дадаць альбом',
+    submit: 'Стварыць альбом'
   },
   loginForm: {
     email: 'Email',
