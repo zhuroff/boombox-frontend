@@ -10,14 +10,14 @@
     </div>
     <div class="album__hero-info">
       <div class="album__hero-head">
-        <SearchBlock
+        <!-- <SearchBlock
           v-if="withSearch"
           type="search"
           size="medium"
           :placeholder="localize('search.placeholder')"
           :results="results"
           @setInputValue="searchSubmit"
-        />
+        /> -->
         <div
           v-if="withActions"
           class="album__hero-actions"
@@ -109,7 +109,7 @@ import { ref } from 'vue'
 import type { BasicEntity, WikiSearchResult } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
-import { useSearch } from '~/hooks/useSearch'
+// import { useSearch } from '~/hooks/useSearch'
 import { detectWikiLocale } from '~/utils'
 import wiki from 'wikipedia'
 import Button from './Button.vue'
@@ -136,7 +136,7 @@ const props = defineProps<Props>()
 const { globalGetters: { localize } } = useGlobalStore()
 const { playerGetters: { playingTrack } } = usePlaylist()
 const { setSnackbarMessage } = useSnackbar()
-const { searchSubmit, results } = useSearch()
+// const { searchSubmit, results } = useSearch()
 const isActionsOpens = ref(false)
 const isWikiLoading = ref(false)
 

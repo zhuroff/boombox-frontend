@@ -264,3 +264,11 @@ type FormSchemaProperty =
   | SelectInputFieldSchema
   
 type CustomFormData = Record<string, string | File>
+
+type SearchResultData = AlbumItem | CategoryItem | TrackRes
+
+interface SearchResultState {
+  title: string
+  key: string
+  data: SearchResultData[]
+}

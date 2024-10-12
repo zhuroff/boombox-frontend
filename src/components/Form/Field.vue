@@ -8,13 +8,22 @@
       v-if="!property.label || !!property.id"
       :is="FieldComponent()"
     />
+    <ul
+      v-if="searchResultsData?.length"
+    >
+      <li
+        v-for="item in searchResultsData"
+        :key="item._id"
+      >{{ item.title }}</li>
+    </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import { h, reactive, defineAsyncComponent } from 'vue'
-import { FieldApi } from '@tanstack/vue-form'
-import type { Validator } from '@tanstack/vue-form'
+import { h, ref, reactive, defineAsyncComponent, computed } from 'vue'
+import { FieldApi, type Validator } from '@tanstack/vue-form'
+import { useSearch } from '~/hooks/useSearch'
+import { debounce } from '~/utils'
 
 type TanstackFormField = FieldApi<
   CustomFormData,
@@ -29,14 +38,25 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const searchQuery = ref('')
 const renderConfig = reactive({
   name: props.field.name,
   defaultValue: props.field.state.value,
   onBlur: props.field.handleBlur,
   onInput: (e: Event) => {
     props.field.handleChange((e.target as HTMLInputElement).value)
+    props.property.refKey && searchRef((e.target as HTMLInputElement).value)
   }
 })
+
+const { searchResults, searchRefetch, searchError } = useSearch(searchQuery, props.property.refKey)
+
+const searchRef = debounce((query: string) => {
+  searchQuery.value = query
+  query && searchRefetch()
+}, 1000)
+
+const searchResultsData = computed(() => searchResults.value?.[0]?.data)
 
 const FieldLabel = () => {
   const label = defineAsyncComponent(() => (

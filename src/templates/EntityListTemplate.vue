@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref, computed, watchEffect } from 'vue'
 import useGlobalStore from '~/store/global'
-import useEntities from '~/store/entities/useEntities'
+import useEntities from '~/hooks/useEntities'
 import usePagination from '~/hooks/usePagination'
 import useSnackbar from '~/hooks/useSnackbar'
 import Preloader from '~/components/Preloader.vue'

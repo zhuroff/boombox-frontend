@@ -1,19 +1,19 @@
 <template>
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
-    <SearchBlock
+    <!-- <SearchBlock
       v-if="withSearch"
       type="search"
       :results="results"
       :placeholder="localize('search.placeholder')"
       @setInputValue="searchSubmit"
-    />
+    /> -->
     <slot></slot>
   </header>
 </template>
 
 <script setup lang="ts">
-import { useSearch } from '~/hooks/useSearch'
+// import { useSearch } from '~/hooks/useSearch'
 import useGlobalStore from '~/store/global'
 import SearchBlock from '~/components/SearchBlock.vue'
 
@@ -25,7 +25,7 @@ interface Props {
 defineProps<Props>()
 
 const { globalGetters: { localize } } = useGlobalStore()
-const { searchSubmit, results } = useSearch()
+// const { searchSubmit, results } = useSearch()
 </script>
 
 <style lang="scss">

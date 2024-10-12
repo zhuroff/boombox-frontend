@@ -59,7 +59,6 @@
 import { h, ref, watch } from 'vue'
 import { coverPlaceholders, debounce } from '~/utils'
 import useGlobalStore from '~/store/global'
-import type { SearchResultData, SearchResultState } from '~/types/Search'
 import type { TrackRes } from '~/types/ReqRes'
 import { RouterLink } from 'vue-router'
 import { hostString } from '~/utils'
