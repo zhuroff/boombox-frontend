@@ -43,13 +43,13 @@ export const localesEN: LocaleDictionary = {
     createUser: 'Create user',
   },
   getRandomAlbum: 'Random album',
-  unknownTime: 'unknown time',
+  unknownTime: 'Not all tracks have been listened to yet',
   listenedTracks: 'Total tracks listened:',
   conjugated: {
     tracks: {
-      singular: 'track',
-      upToFive: 'tracks',
-      plural: 'tracks'
+      singular: 'Track',
+      upToFive: 'Tracks',
+      plural: 'Tracks'
     }
   },
   playButton: 'Play',
@@ -156,6 +156,7 @@ export const localesEN: LocaleDictionary = {
     removeFromList: 'Remove from playlist',
     waveButton: 'Play this wave'
   },
+  totalLength: 'Length',
   totalAlbums: 'Total albums',
   deleteEntity: 'Delete album',
   deletedEmbeddedMessage: 'Album was successfully deleted',

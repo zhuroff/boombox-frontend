@@ -1,5 +1,5 @@
 import api from '~/api'
-import type { RequestConfig } from '~/types/Common'
+// @ts-expect-error: fix
 import type { SearchPayload, SearchResultState } from '~/types/Search'
 import commonServices from './common.services'
 
@@ -34,7 +34,7 @@ export default {
     return response.data
   },
 
-  async getEntityList<T>(config: RequestConfig, entityKey: string) {
+  async getEntityList<T>(entityKey: string, config: RequestConfig) {
     const response = await api.post<T>(`/api/${entityKey}`, config)
     commonServices.errorChecker(response.status)
     return response.data

@@ -29,25 +29,6 @@ export interface DraggableEvent {
   oldIndex: number
 }
 
-export interface RandomEntityReqFilter {
-  from: string
-  key: string
-  name: string
-  excluded?: Record<string, string>
-}
-
-export interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
-  value: string
-}
-
-export interface RequestConfig {
-  page: number
-  limit: number
-  sort?: SortingValue
-  isRandom?: true
-  filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
-}
-
 export interface ImagePayload {
   file: File
   type: EntityImagesKeys

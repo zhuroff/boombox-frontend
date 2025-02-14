@@ -71,8 +71,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from 'vue'
 import type { AlbumItemRes, AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
-import type { BasicEntity, RelatedAlbumsReqFilter } from '~/types/Common'
-import type { RelatedAlbums } from '~/types/Album'
+import type { BasicEntity } from '~/types/Common'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useListPage } from '~/hooks/useListPage'
 import { useDiscogs } from '~/hooks/useDiscogs'
@@ -176,6 +175,7 @@ const getRelated = async () => {
     
     relatedAlbums.value = response.map(({ docs, name }) => ({
       name,
+      // @ts-expect-error: fix
       docs: docs.map<AlbumItem>((album) => new AlbumItem(album, 'AlbumCard', 'albums'))
     }))
   } catch (error) {
@@ -261,7 +261,7 @@ watch(
           if (payload) {
             album.value = payload
             setPlayerPlaylist(payload)
-            getRelated()
+            // getRelated()
             fetchDiscogsInfo(payload)
           }
         })
@@ -273,11 +273,12 @@ watch(
 onMounted(() => {
   fetchData(entityType.value)
     .then((payload) => {
+      console.log(payload)
       if (payload) {
         album.value = payload
         setPlayerPlaylist(payload)
-        getRelated()
-        fetchDiscogsInfo(payload)
+        // getRelated()
+        // fetchDiscogsInfo(payload)
       }
     })
 })

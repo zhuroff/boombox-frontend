@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref, computed, watchEffect } from 'vue'
 import useGlobalStore from '~/store/global'
-import useEntities from '~/hooks/useEntities'
+import useEntityList from '~/shared/useEntityList'
 import usePagination from '~/hooks/usePagination'
 import useSnackbar from '~/hooks/useSnackbar'
 import Preloader from '~/components/Preloader.vue'
@@ -77,7 +77,14 @@ interface Props {
 const props = defineProps<Props>()
 
 const { pagination, paginationConfig, updatePaginationConfig, updatePaginationState } = usePagination()
-const { data, refetch, isFetched, deleteEntity } = useEntities<BasicEntity>(props.entityKey, pagination)
+
+const listQueryConfig = computed(() => ({
+  qEntity: props.entityKey,
+  entityKey: props.entityKey,
+  requestConfig: pagination
+}))
+
+const { data, refetch, isFetched } = useEntityList<BasicEntity>(listQueryConfig)
 const { globalGetters: { localize } } = useGlobalStore()
 const { setSnackbarMessage } = useSnackbar()
 
@@ -94,18 +101,18 @@ const deleteConfirm = () => {
 
   deletePayload.value.isPending = true
 
-  deleteEntity(deletePayload.value)
-    .then((res) => {
-      if (res) {
-        refetch()
-        setSnackbarMessage({
-          message: localize(`${deletePayload.value?.entityKey}.drop`),
-          type: 'success'
-        })
-      }
-    })
-    .catch(console.error)
-    .finally(() => deletePayload.value = null)
+  // deleteEntity(deletePayload.value)
+  //   .then((res) => {
+  //     if (res) {
+  //       refetch()
+  //       setSnackbarMessage({
+  //         message: localize(`${deletePayload.value?.entityKey}.drop`),
+  //         type: 'success'
+  //       })
+  //     }
+  //   })
+  //   .catch(console.error)
+  //   .finally(() => deletePayload.value = null)
 }
 
 watchEffect(() => {

@@ -5,6 +5,90 @@ declare module '*.vue' {
   export default component
 }
 
+enum UserRole {
+  admin = 'admin',
+  developer = 'developer',
+  guest = 'guest'
+}
+
+interface Entity {
+  _id: string
+  title: string
+  dateCreated?: string
+  cloudURL?: string
+}
+
+interface Category extends Entity {
+  poster?: string
+  avatar?: string
+  albums: Album[]
+  embeddedAlbums?: unknown[]
+}
+
+interface Compilation extends Entity {
+  avatar?: string
+  poster?: string
+  tracks: Track[]
+}
+
+interface Album extends Entity {
+  folderName: string
+  artist: Entity
+  genre: Entity
+  period: Entity
+  created?: string
+  modified?: string
+  coverURL?: string
+  tracks: Track[]
+  inCollections: Entity[]
+}
+
+type AlbumShort = Required<Pick<Album, '_id' | 'title' | 'cloudURL' | 'folderName'>>
+
+interface Embedded extends Entity {
+  artist: Entity
+  genre: Entity
+  period: Entity
+  frame: string
+  inCollections: Entity[]
+}
+
+type UnifiedAlbum = Album | Embedded | Compilation
+
+interface Track extends Entity {
+  fileName: string
+  created?: string
+  modified?: string
+  duration?: number
+  path: string
+  mimeType?: string
+  listened: number
+  inAlbum: AlbumShort
+  inCompilations: Entity[]
+  artist: Entity
+  genre: Entity
+  period: Entity
+}
+
+interface User {
+  _id: string
+  login: string
+  email: string
+  role: UserRole
+  dateCreated: string
+}
+
+interface Token {
+  _id: string
+  user: User
+  refreshToken: string
+}
+
+/**
+ * =================================================================
+ * =================================================================
+ */
+
 type UserRoles = 'admin' | 'user'
 type LocaleKeys = 'en' | 'by'
 
@@ -42,6 +126,28 @@ interface PaginationConfig {
 type PaginationStateSetter = <T extends keyof PaginationState>(key: T, value: PaginationState[T]) => void
 
 type PaginationConfigSetter = <T extends keyof PaginationConfig>(key: T, value: PaginationConfig[T]) => void
+
+interface RandomEntityReqFilter {
+  from: string
+  key: string
+  name: string
+  excluded?: Record<string, string>
+}
+
+interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
+  value: string
+}
+
+type RequestConfig = PaginationState & {
+  isRandom?: true
+  filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
+}
+
+interface UseEntityListPayload {
+  qEntity: string
+  entityKey: string
+  requestConfig: RequestConfig
+}
 
 interface SyncResponse {
   added: number
@@ -136,6 +242,25 @@ interface EmbeddedItem extends Omit<AlbumItem, 'tracks'> {
 interface CollectedItem extends BasicEntity {
   avatar?: string
   poster?: string
+}
+
+type UnifiedAlbumPage = AlbumItem | EmbeddedItem | CompilationPage
+
+type UnifiedAlbumEntity = AlbumItem | EmbeddedItem | CompilationItem
+
+// interface RelatedAlbums {
+//   name: string
+//   docs: AlbumItem[]
+// }
+
+// interface RelatedCompilations {
+//   name: string
+//   docs: CompilationItem<BasicEntity>[]
+// }
+
+interface UnifiedRelatedAlbums {
+  name: string
+  docs: UnifiedAlbumEntity[]
 }
 
 interface AlbumTrack extends Required<BasicEntity> {

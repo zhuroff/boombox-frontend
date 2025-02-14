@@ -43,13 +43,13 @@ export const localesBY: LocaleDictionary = {
     createUser: 'Стварыць карыстальніка'
   },
   getRandomAlbum: 'Выпадковы альбом',
-  unknownTime: 'невядомы час',
+  unknownTime: 'Яшчэ не ўсе трэкi праслуханы',
   listenedTracks: 'Усяго праслуханых трэкаў:',
   conjugated: {
     tracks: {
-      singular: 'трэк',
-      upToFive: 'трэкi',
-      plural: 'трэкаў'
+      singular: 'Трэк',
+      upToFive: 'Трэкi',
+      plural: 'Трэкаў'
     }
   },
   playButton: 'Граць',
@@ -156,6 +156,7 @@ export const localesBY: LocaleDictionary = {
     removeFromList: 'Выдаліць з плэйлiста',
     waveButton: 'Граць гэтую хвалю'
   },
+  totalLength: 'Працягласть',
   totalAlbums: 'Усяго альбомаў',
   deleteEntity: 'Выдаліць альбом',
   deletedEmbeddedMessage: 'Альбом паспяхова выдалены',

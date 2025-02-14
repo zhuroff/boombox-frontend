@@ -1,6 +1,4 @@
 import type { BasicEntity } from './Common'
-import AlbumItem from '~/classes/AlbumItem'
-import CompilationItem from '~/classes/CompilationItem'
 
 export interface AlbumHeadProps {
   title: string
@@ -24,14 +22,4 @@ export interface BookletSlideState {
   prevSlideIndex: number
   slidesCount: number
   slidingToIndex: number
-}
-
-export interface RelatedAlbums {
-  name: string
-  docs: AlbumItem[]
-}
-
-export interface RelatedCompilations {
-  name: string
-  docs: CompilationItem<BasicEntity>[]
 }

@@ -56,34 +56,34 @@
           </div>
         </div>
       </div>
-      <div class="album__hero-heading">
+      <!-- <div class="album__hero-heading">
         <RouterLink
-          v-if="artist?.title"
-          :to="`/artists/${artist._id}`"
-          :disabled="!artist._id"
+          v-if="album.artist?.title"
+          :to="`/artists/${album.artist._id}`"
+          :disabled="!album.artist._id"
           class="album__hero-category"
         >
-          {{ artist.title }}&nbsp;
+          {{ album.artist.title }}&nbsp;
         </RouterLink>
-        <span v-if="artist?.title" class="album__hero-divisor">\&nbsp;</span>
-        <strong class="album__hero-title">{{ title }}</strong>&nbsp;
-        <span v-if="period?.title" class="album__hero-divisor">\&nbsp;</span>
+        <span v-if="album.artist?.title" class="album__hero-divisor">\&nbsp;</span>
+        <strong class="album__hero-title">{{ album.title }}</strong>&nbsp;
+        <span v-if="album.period?.title" class="album__hero-divisor">\&nbsp;</span>
         <RouterLink
-          v-if="period?.title"
-          :to="`/periods/${period._id}`"
-          :disabled="!period._id"
+          v-if="album.period?.title"
+          :to="`/periods/${album.period._id}`"
+          :disabled="!album.period._id"
           class="album__hero-category"
         >
-          {{ period.title }}
+          {{ album.period.title }}
         </RouterLink>
-        <span v-if="genre?._id">,&nbsp; </span>
+        <span v-if="album.genre?._id">,&nbsp; </span>
         <RouterLink
-          v-if="genre?._id"
-          :to="`/genres/${genre._id}`"
-          :disabled="!genre._id"
+          v-if="album.genre?._id"
+          :to="`/genres/${album.genre._id}`"
+          :disabled="!album.genre._id"
           class="album__hero-category"
-        >{{ genre.title }}</RouterLink><br>
-      </div>
+        >{{ album.album.genre.title }}</RouterLink><br>
+      </div> -->
       <div
         v-if="totalCounts"
         class="album__hero-total"
@@ -120,11 +120,7 @@ import SearchBlock from '~/components/SearchBlock.vue'
 import usePlaylist from '~/store/playlist'
 
 interface Props {
-  id: string
-  title: string
-  artist?: BasicEntity
-  genre?: BasicEntity
-  period?: BasicEntity
+  album: UnifiedAlbum
   frame?: string
   totalCounts?: string
   withSearch?: boolean
@@ -155,7 +151,7 @@ const wikiFrameResults = ref<WikiSearchResult[] | undefined>(undefined)
 //   && playingTrack.value.isOnPause
 // ))
 
-const getWikiInfo = async (searchParam: string | number = props.title) => {
+const getWikiInfo = async (searchParam: string | number = props.album.title) => {
   isWikiLoading.value = true
   try {
     const wikiPage = await wiki.page(String(searchParam))
@@ -168,10 +164,10 @@ const getWikiInfo = async (searchParam: string | number = props.title) => {
 }
 
 const searchWikiInfo = async () => {
-  if (!props.artist?.title) return false
+  if (!props.album.artist?.title) return false
   resetWikiData()
-  const albumLang = detectWikiLocale(props.title)
-  const artistLang = detectWikiLocale(props.artist.title)
+  const albumLang = detectWikiLocale(props.album.title)
+  const artistLang = detectWikiLocale(props.album.artist.title)
   let locale = 'en'
 
   if (albumLang === 'ru' || artistLang === 'ru') {
@@ -182,7 +178,7 @@ const searchWikiInfo = async () => {
   isWikiLoading.value = true
 
   try {
-    const { results } = await wiki.search(`${props.artist.title} - ${props.title}`)
+    const { results } = await wiki.search(`${props.album.artist.title} - ${props.album.title}`)
     if (!results.length) {
       throw new Error('Nothing was found')
     }
