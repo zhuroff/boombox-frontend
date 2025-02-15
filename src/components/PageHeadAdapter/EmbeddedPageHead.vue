@@ -38,16 +38,40 @@
         {{ album.genre.title }}
       </RouterLink>
     </div>
+    <div class="album__hero-actions">
+      <Button
+        icon="wiki"
+        size="small"
+        isRounded
+        isInverted
+      />
+      <Button
+        icon="question"
+        size="small"
+        isRounded
+        isInverted
+        @click="getRandomAlbum"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import useGlobalStore from '~/store/global'
+import Button from '../Button.vue'
 
 interface Props {
   album: Embedded
 }
 
+interface Emits {
+  (e: 'getRandomAlbum', entityType: string): void
+}
+
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
 const { globalGetters: { localize } } = useGlobalStore()
+
+const getRandomAlbum = () => emit('getRandomAlbum', 'albums')
 </script>

@@ -15,39 +15,6 @@
       bookletPageChanged(data, album.cloudURL, album.folderName)
     }"
   >
-    <template #hero>
-      <AlbumHero
-        v-if="album._id"
-        :id="album._id"
-        :title="album.title"
-        :artist="album.artist"
-        :genre="album.genre"
-        :period="album.period"
-        :totalCounts="totalCounts"
-        @getRandomAlbum="getRandom"
-      >
-        <template #cover>
-          <CoverArt
-            :cover="album.coverURL"
-            :booklet="booklet"
-            @coverClick="() => bookletHandler()"
-            @closeBookletModal="closeBookletModal"
-            @slideChanged="bookletPageChanged"
-          />
-        </template>
-        <template #navlist>
-          <li
-            class="overlay__list-item"
-            @click="addAlbumToPlaylist"
-          >{{ localize('player.addToList') }}</li>
-          <li
-            v-if="isAdmin"
-            class="overlay__list-item"
-            @click="openCollectionsModal"
-          >{{ localize('collections.add') }}</li>
-        </template>
-      </AlbumHero>
-    </template>
     <template #modal>
       <Modal
         v-if="isCollectionLoading || collections"

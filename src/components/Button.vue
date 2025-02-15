@@ -138,6 +138,14 @@ const stateClasses = computed(() => [
     &:hover {
       background-color: $paleLT;
       color: $black;
+
+      .icon {
+        fill: $dark;
+      }
+    }
+
+    .icon {
+      fill: $white;
     }
   }
 

@@ -1,16 +1,7 @@
 <template>
   <section class="template">
     <transition name="fade">
-      <Preloader
-        v-if="!isDataFetched || !album"
-        mode="light"
-      />
-    </transition>
-    <transition name="fade">
       <!-- <div v-if="isDataFetched && album" class="album">
-        <slot name="hero">
-          <slot name="frame"></slot>
-        </slot>
         <div class="album__content">
           <div
             class="album__main"

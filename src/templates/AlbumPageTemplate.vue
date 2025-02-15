@@ -19,11 +19,4 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-console.log(props.album)
 </script>
-
-<!-- <style lang="scss">
-.album {
-  background-color: #25272d;
-}
-</style> -->

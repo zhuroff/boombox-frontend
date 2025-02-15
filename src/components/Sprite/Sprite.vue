@@ -37,6 +37,8 @@ import SpriteYouTube from './SpriteYouTube.vue'
 import SpriteFlagBy from './SpriteFlagBy.vue'
 import SpriteFlagEn from './SpriteFlagEn.vue'
 import SpriteBurger from './SpriteBurger.vue'
+import SpriteWiki from './SpriteWiki.vue'
+import SpriteQuestion from './SpriteQuestion.vue'
 
 interface Props {
   name: string
@@ -77,7 +79,9 @@ const IconsMap = new Map([
   ['youtube', SpriteYouTube],
   ['flag-by', SpriteFlagBy],
   ['flag-en', SpriteFlagEn],
-  ['burger', SpriteBurger]
+  ['burger', SpriteBurger],
+  ['wiki', SpriteWiki],
+  ['question', SpriteQuestion]
 ])
 
 const IconComponent = computed(() => (

@@ -1,8 +1,6 @@
 <template>
   <div class="album__hero-cover">
-    <CoverArt
-      :cover="album.coverURL || coverPlaceholders('album')"
-    />
+    <CoverArt :cover="album.coverURL || coverPlaceholders('album')"/>
   </div>
   <div class="album__hero-info">
     <slot name="hero"></slot>
@@ -43,6 +41,21 @@
       {{ localize('totalLength') }}:&nbsp;
       <span class="album__hero-category">{{ length }}</span>
     </div>
+    <div class="album__hero-actions">
+      <Button
+        icon="wiki"
+        size="small"
+        isRounded
+        isInverted
+      />
+      <Button
+        icon="question"
+        size="small"
+        isRounded
+        isInverted
+        @click="getRandomAlbum"
+      />
+    </div>
   </div>
 </template>
 
@@ -50,13 +63,21 @@
 import { coverPlaceholders } from '~/utils'
 import useGlobalStore from '~/store/global'
 import CoverArt from '~/components/CoverArt.vue'
+import Button from '../Button.vue'
 
 interface Props {
   album: Album
   length: string
 }
 
+interface Emits {
+  (e: 'getRandomAlbum', entityType: string): void
+}
+
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
 const { globalGetters: { localize } } = useGlobalStore()
+
+const getRandomAlbum = () => emit('getRandomAlbum', 'albums')
 </script>

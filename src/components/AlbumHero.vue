@@ -1,13 +1,5 @@
 <template>
   <div class="album__hero">
-    <div class="album__hero-cover">
-      <div
-        v-if="frame"
-        v-html="frame"
-        class="album__frame"
-      />
-      <slot v-else name="cover"></slot>
-    </div>
     <div class="album__hero-info">
       <div class="album__hero-head">
         <!-- <SearchBlock
@@ -56,38 +48,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="album__hero-heading">
-        <RouterLink
-          v-if="album.artist?.title"
-          :to="`/artists/${album.artist._id}`"
-          :disabled="!album.artist._id"
-          class="album__hero-category"
-        >
-          {{ album.artist.title }}&nbsp;
-        </RouterLink>
-        <span v-if="album.artist?.title" class="album__hero-divisor">\&nbsp;</span>
-        <strong class="album__hero-title">{{ album.title }}</strong>&nbsp;
-        <span v-if="album.period?.title" class="album__hero-divisor">\&nbsp;</span>
-        <RouterLink
-          v-if="album.period?.title"
-          :to="`/periods/${album.period._id}`"
-          :disabled="!album.period._id"
-          class="album__hero-category"
-        >
-          {{ album.period.title }}
-        </RouterLink>
-        <span v-if="album.genre?._id">,&nbsp; </span>
-        <RouterLink
-          v-if="album.genre?._id"
-          :to="`/genres/${album.genre._id}`"
-          :disabled="!album.genre._id"
-          class="album__hero-category"
-        >{{ album.album.genre.title }}</RouterLink><br>
-      </div> -->
-      <div
-        v-if="totalCounts"
-        class="album__hero-total"
-      >{{ totalCounts }}</div>
     </div>
     <Modal
       v-if="isWikiLoading || isWikiReady"
@@ -305,13 +265,13 @@ const resetWikiData = () => {
     }
 
     &-actions {
-      margin-left: 1rem;
+      // margin-left: 1rem;
       display: flex;
       align-items: center;
 
-      .button {
-        transform: rotate(90deg);
-      }
+      // .button {
+      //   transform: rotate(90deg);
+      // }
     }
 
     &-nav {

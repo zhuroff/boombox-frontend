@@ -1,6 +1,8 @@
 <template>
   <div class="album__hero">
-    <component :is="PageHeadComponent">
+    <component
+      :is="PageHeadComponent"
+      @getRandomAlbum="getRandomAlbum">
       <template #hero>
         <div class="album__hero-heading">
           <strong class="album__hero-title">
@@ -20,17 +22,21 @@ import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { globalGetters: { localize } } = useGlobalStore()
 
 interface Props {
   album: UnifiedAlbum
   withSearch?: boolean
-  // withActions?: boolean
+}
+
+interface Emits {
+  (e: 'getRandomAlbum', entityType: string): void
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const getRandomAlbum = (entityType: string) => emit('getRandomAlbum', entityType)
 
 const totalTracksTime = computed(() => {
   if (!('tracks' in props.album)) return ''
@@ -80,8 +86,8 @@ const PageHeadComponent = computed(() => {
 <style lang="scss">
 @import '../../scss/variables.scss';
 @import 'include-media';
-.album {
 
+.album {
   &__hero {
     background-color:  $dark;
 
@@ -118,6 +124,8 @@ const PageHeadComponent = computed(() => {
       position: relative;
       z-index: 2000;
       flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
     }
 
     &-head {
@@ -127,10 +135,6 @@ const PageHeadComponent = computed(() => {
     &-summary {
       color: $paleDP;
       line-height: 1.5;
-    }
-
-    .input {
-      flex-grow: 1;
     }
 
     &-heading {
@@ -156,30 +160,12 @@ const PageHeadComponent = computed(() => {
       }
     }
 
-    &-divisor {
-      font-size: 3rem;
-      font-weight: normal;
-      color: $warning;
-    }
-
-    &-total {
-      color: $paleDP;
-      margin-top: auto;
-      font-weight: 700;
-    }
-
     &-actions {
-      margin-left: 1rem;
+      margin-top: auto;
       display: flex;
       align-items: center;
-
-      .button {
-        transform: rotate(90deg);
-      }
-    }
-
-    &-nav {
-      position: relative;
+      gap: 0.5rem;
+      justify-content: flex-end;
     }
   }
 }

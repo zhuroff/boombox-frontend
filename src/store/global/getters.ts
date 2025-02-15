@@ -8,20 +8,9 @@ const getters = (state: GlobalState) => {
 
   const isAuthenticated = computed(() => state.authConfig.isAuthenticated)
 
-  const conjugate = (key: string, amount: number) => {
-    const lastDigit = amount % 10
-    const lastTwoDigits = amount % 100
-    if (lastTwoDigits > 10 && lastTwoDigits < 20) {
-      return localize(`conjugated.${key}.plural`)
-    }
-    if (lastDigit === 1) {
-      return localize(`conjugated.${key}.singular`)
-    }
-    if (lastDigit >= 2 && lastDigit <= 4) {
-      return localize(`conjugated.${key}.upToFive`)
-    }
-    return localize(`conjugated.${key}.plural`)
-  }
+  const isAdmin = computed(() => (
+    authConfig.value.user?.role === 'admin'
+  ))
 
   const localize = (path: string, ...vars: string[]) => {
     const parsedPath = path.split('.')
@@ -35,8 +24,8 @@ const getters = (state: GlobalState) => {
   }
 
   return {
+    isAdmin,
     localize,
-    conjugate,
     authConfig,
     currentLocale,
     isAuthenticated

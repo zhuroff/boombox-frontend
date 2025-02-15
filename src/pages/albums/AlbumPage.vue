@@ -15,7 +15,7 @@
         <template #head>
           <PageHeadAdapter
             :album="album"
-            @getRandomAlbum="getRandom"
+            @getRandomAlbum="getRandomAlbum"
           />
         </template>
       </AlbumPageTemplate>
@@ -25,11 +25,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import useGlobalStore from '~/store/global'
 import useEntityPage from '~/shared/useEntityPage'
 import useEntityList from '~/shared/useEntityList'
 import Preloader from '~/components/Preloader.vue'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
+
+const { globalGetters: { localize, isAdmin } } = useGlobalStore()
 
 const { data: album, isFetched: isAlbumFetched } = useEntityPage<Album>('albums')
 
@@ -46,8 +49,8 @@ const isAlbumReady = computed(() => (
   Boolean(album.value) && isAlbumFetched.value
 ))
 
-const getRandom = () => {
-  console.log('GET RANDOM')
+const getRandomAlbum = (entityType: string) => {
+  console.log('GET RANDOM', entityType)
 }
 
 const artistConfig = computed<UseEntityListPayload>(() => (

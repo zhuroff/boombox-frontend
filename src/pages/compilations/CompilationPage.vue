@@ -15,7 +15,7 @@
         <template #head>
           <PageHeadAdapter
             :album="compilation"
-            @getRandomAlbum="getRandom"
+            @getRandomAlbum="getRandomAlbum"
           />
         </template>
       </AlbumPageTemplate>
@@ -46,8 +46,8 @@ const isCompilationReady = computed(() => (
   Boolean(compilation.value) && isAlbumFetched.value
 ))
 
-const getRandom = () => {
-  console.log('GET RANDOM')
+const getRandomAlbum = (entityType: string) => {
+  console.log('GET RANDOM', entityType)
 }
 
 const relatedCompilationsConfig = computed<UseEntityListPayload>(() => (
