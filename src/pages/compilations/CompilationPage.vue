@@ -7,29 +7,58 @@
       />
     </transition>
     <transition name="fade">
-      <AlbumPageTemplate
-        v-if="compilation"
-        :album="compilation"
-        :relatedAlbums="relatedCompilations"
-      >
-        <template #head>
-          <PageHeadAdapter
-            :album="compilation"
-            @getRandomAlbum="getRandomAlbum"
-          />
-        </template>
-      </AlbumPageTemplate>
+      <div v-if="compilation" class="album">
+        <PageHeadAdapter
+          :album="compilation"
+          @getRandomAlbum="getRandomAlbum"
+        />
+        <div class="album__content">
+          <div
+            class="album__main"
+            ref="albumContent"
+          >
+            <TrackList
+              v-if="'tracks' in compilation"
+              :tracks="compilation.tracks"
+              :albumID="compilation._id"
+              @trackOrderChanged="changeTracksOrder"
+              @removeTrackFromCompilation="removeTrackFromCompilation"
+            />
+          </div>
+          <div
+            v-for="{ name, docs } in relatedCompilations"
+            class="album__related"
+          >
+            <div class="album__related-title">
+              {{ localize('moreOf') }} {{ name }}
+            </div>
+            <EntityCards
+              :entities="docs"
+              :entityKey="'albums'"
+              :isDraggable="false"
+              :isDeletable="false"
+              template="col"
+              placeholderPreview="/img/album.webp"
+              @deleteEntity="confirmDelete"
+            />
+          </div>
+        </div>
+      </div>
     </transition>
   </section>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import useGlobalStore from '~/store/global'
 import useEntityPage from '~/shared/useEntityPage'
 import useEntityList from '~/shared/useEntityList'
 import Preloader from '~/components/Preloader.vue'
-import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
+import TrackList from '~/components/TrackList/TrackList.vue'
+import EntityCards from '~/components/EntityCards.vue'
+
+const { globalGetters: { localize, isAdmin } } = useGlobalStore()
 
 const { data: compilation, isFetched: isAlbumFetched } = useEntityPage<Compilation>('compilations')
 
@@ -48,6 +77,18 @@ const isCompilationReady = computed(() => (
 
 const getRandomAlbum = (entityType: string) => {
   console.log('GET RANDOM', entityType)
+}
+
+const changeTracksOrder = (payload: ReorderPayload) => {
+  // emit('trackOrderChanged', payload)
+}
+
+const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+  // emit('removeTrackFromCompilation', payload)
+}
+
+const confirmDelete = () => {
+
 }
 
 const relatedCompilationsConfig = computed<UseEntityListPayload>(() => (
@@ -76,5 +117,5 @@ const relatedCompilations = computed(() => ([
     docs: relatedCompilationsRes.value?.docs || [],
     name: 'Other'
   }
-]))
+]).filter(({ docs }) => docs.length))
 </script>

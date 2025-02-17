@@ -73,7 +73,6 @@ const navbar = computed(() => (
 
 .aside {
   flex: none;
-  background-color: $white;
   z-index: 2000;
   background-color: $dark;
   overflow: auto;
@@ -96,7 +95,6 @@ const navbar = computed(() => (
   }
 
   @include media('>=laptop') {
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     position: relative;
     width: $asideWidth;
   }
@@ -144,7 +142,7 @@ const navbar = computed(() => (
       height: 70px;
       padding: 0 25px;
       font-size: 1.15rem;
-      color: $paleDP;
+      color: $paleMD;
     }
 
     .icon-vinyl {
@@ -185,7 +183,8 @@ const navbar = computed(() => (
       &:hover,
       &.router-link-active {
         transition: all 0.2s ease;
-        background-color: $white;
+        // background-color: $white;
+        background-color: $paleLT;
         color: $dark;
       }
     }

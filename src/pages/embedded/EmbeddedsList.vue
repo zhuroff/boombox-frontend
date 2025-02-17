@@ -180,7 +180,8 @@ const createEmbeddedAlbum = (formData: CustomFormData) => {
     right: 0;
     width: 60%;
     border-radius: $borderRadiusSM;
-    background-color: $white;
+    // background-color: $white;
+    background-color: $paleLT;
     box-shadow: $shadowLight;
     padding: 25px;
     z-index: 3000;

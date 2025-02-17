@@ -6,7 +6,8 @@
   position: absolute;
   z-index: 1000;
   border-radius: $borderRadiusMD;
-  background-color: $white;
+  // background-color: $white;
+  background-color: $paleLT;
   box-shadow: $shadowMedium;
 
   &__list {

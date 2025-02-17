@@ -30,7 +30,8 @@ defineProps<Props>()
 @import 'include-media';
 
 .confirmation {
-  background-color: $white;
+  // background-color: $white;
+  background-color: $paleLT;
   border-radius: $borderRadiusMD;
   padding: 25px;
   position: relative;

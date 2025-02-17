@@ -182,7 +182,8 @@ const applyValue = (option: DropdownItem) => {
     width: 100%;
 
     &-list {
-      background-color: $white;
+      // background-color: $white;
+      background-color: $paleLT;
       margin: 0;
       padding: 0.5rem 0;
       box-shadow: $shadowMedium;

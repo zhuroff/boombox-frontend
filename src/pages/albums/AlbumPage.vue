@@ -7,18 +7,43 @@
       />
     </transition>
     <transition name="fade">
-      <AlbumPageTemplate
-        v-if="album"
-        :album="album"
-        :relatedAlbums="relatedAlbums"
-      >
-        <template #head>
-          <PageHeadAdapter
-            :album="album"
-            @getRandomAlbum="getRandomAlbum"
-          />
-        </template>
-      </AlbumPageTemplate>
+      <div v-if="album" class="album">
+        <PageHeadAdapter
+          :album="album"
+          @getRandomAlbum="getRandomAlbum"
+        />
+        <div class="album__content">
+          <div
+            class="album__main"
+            ref="albumContent"
+          >
+            <TrackList
+              v-if="'tracks' in album"
+              :tracks="album.tracks"
+              :albumID="album._id"
+              @trackOrderChanged="changeTracksOrder"
+              @removeTrackFromCompilation="removeTrackFromCompilation"
+            />
+          </div>
+          <div
+            v-for="{ name, docs } in relatedAlbums"
+            class="album__related"
+          >
+            <div class="album__related-title">
+              {{ localize('moreOf') }} {{ name }}
+            </div>
+            <EntityCards
+              :entities="docs"
+              :entityKey="'albums'"
+              :isDraggable="false"
+              :isDeletable="false"
+              template="col"
+              placeholderPreview="/img/album.webp"
+              @deleteEntity="confirmDelete"
+            />
+          </div>
+        </div>
+      </div>
     </transition>
   </section>
 </template>
@@ -29,8 +54,9 @@ import useGlobalStore from '~/store/global'
 import useEntityPage from '~/shared/useEntityPage'
 import useEntityList from '~/shared/useEntityList'
 import Preloader from '~/components/Preloader.vue'
-import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
+import TrackList from '~/components/TrackList/TrackList.vue'
+import EntityCards from '~/components/EntityCards.vue'
 
 const { globalGetters: { localize, isAdmin } } = useGlobalStore()
 
@@ -51,6 +77,18 @@ const isAlbumReady = computed(() => (
 
 const getRandomAlbum = (entityType: string) => {
   console.log('GET RANDOM', entityType)
+}
+
+const changeTracksOrder = (payload: ReorderPayload) => {
+  // emit('trackOrderChanged', payload)
+}
+
+const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+  // emit('removeTrackFromCompilation', payload)
+}
+
+const confirmDelete = () => {
+
 }
 
 const artistConfig = computed<UseEntityListPayload>(() => (
@@ -103,7 +141,7 @@ const relatedAlbums = computed(() => ([
     docs: relatedAlbumsByGenre.value?.docs || [],
     name: album.value?.genre.title || ''
   }
-]))
+]).filter(({ docs }) => docs.length))
 
 // fetchDiscogsInfo(payload)
 </script>

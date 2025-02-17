@@ -31,7 +31,7 @@ const navHandler = () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~/scss/variables';
 @import 'include-media';
 
@@ -46,7 +46,8 @@ const navHandler = () => {
   }
 
   @include media('>=laptop') {
-    background-color: $white;
+    // background-color: $white;
+    background-color: $paleLT;
   }
 }
 
@@ -54,7 +55,8 @@ const navHandler = () => {
   flex: none;
   position: relative;
   z-index: 1000;
-  background-color: $white;
+  // background-color: $white;
+  background-color: $paleLT;
   overflow: auto;
 
   @include media('<laptop') {
@@ -107,6 +109,10 @@ const navHandler = () => {
   @include media('>=laptop') {
     width: calc(100% - #{$asideWidth});
     height: calc(100vh - #{$playerHeight});
+  }
+
+  .content {
+    padding: 2rem 1rem 0 1rem;
   }
 }
 </style>

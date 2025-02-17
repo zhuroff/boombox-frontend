@@ -118,7 +118,8 @@ const deleteEntityFromGathering = (gatheringID: string, gatherings: typeof props
   max-width: 1200px;
   max-height: calc(100vh - 50px);
   overflow: auto;
-  background-color: $white;
+  // background-color: $white;
+  background-color: $paleLT;
   border-radius: $borderRadiusLG;
   padding: 25px;
 

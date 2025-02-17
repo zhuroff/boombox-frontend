@@ -261,7 +261,8 @@ watch(
     top: 100%;
     width: 100%;
     padding: 25px 0;
-    background-color: $white;
+    // background-color: $white;
+    background-color: $paleLT;
     border-bottom-left-radius: $borderRadiusLG;
     border-bottom-right-radius: $borderRadiusLG;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);

@@ -40,14 +40,17 @@
     </div>
     <div class="album__hero-actions">
       <Button
-        icon="wiki"
-        size="small"
+        icon="loupe"
         isRounded
         isInverted
       />
       <Button
-        icon="question"
-        size="small"
+        icon="wiki"
+        isRounded
+        isInverted
+      />
+      <Button
+        icon="target"
         isRounded
         isInverted
         @click="getRandomAlbum"

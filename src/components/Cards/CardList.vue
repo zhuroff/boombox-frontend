@@ -21,7 +21,7 @@ interface Props {
 defineProps<Props>()
 </script>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
 @import '~/scss/variables';
 @import 'include-media';
 .cardlist {
@@ -68,4 +68,4 @@ defineProps<Props>()
     padding: 25px;
   }
 }
-</style>
+</style> -->

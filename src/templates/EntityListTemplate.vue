@@ -1,5 +1,5 @@
 <template>
-  <section class="template">
+  <div class="template">
     <transition name="fade">
       <Preloader
         v-if="!isFetched"
@@ -15,23 +15,25 @@
         <slot name="header"></slot>
         <slot name="under-header"></slot>
       </Header>
-      <EntityCards
-        v-if="data?.docs"
-        :entities="data?.docs"
-        :entityKey="entityKey"
-        :isDraggable="isDraggable"
-        :isDeletable="isDeletable"
-        :placeholderPreview="placeholderPreview"
-        @deleteEntity="confirmDelete"
-      />
-      <Paginator
-        v-if="paginationConfig?.totalPages > 1"
-        key="pagination"
-        :config="paginationConfig"
-        :pagination="pagination"
-        :style="{ marginTop: 'auto' }"
-        :updatePaginationState="updatePaginationState"
-      />
+      <section class="content">
+        <EntityCards
+          v-if="data?.docs"
+          :entities="data?.docs"
+          :entityKey="entityKey"
+          :isDraggable="isDraggable"
+          :isDeletable="isDeletable"
+          :placeholderPreview="placeholderPreview"
+          @deleteEntity="confirmDelete"
+        />
+        <Paginator
+          v-if="paginationConfig?.totalPages > 1"
+          key="pagination"
+          :config="paginationConfig"
+          :pagination="pagination"
+          :style="{ marginTop: 'auto' }"
+          :updatePaginationState="updatePaginationState"
+        />
+      </section>
     </transition-group>
     <Modal
       v-if="isDeletable && deletePayload"
@@ -49,7 +51,7 @@
         />
       </Confirmation>
     </Modal>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">

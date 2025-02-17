@@ -2,7 +2,7 @@
   <div>
     <div :class="[
       { '--playing': isPlayingTrack },
-      { '--disabled': track.isDisabled },
+      // { '--disabled': track.isDisabled },
       'tracklist__row'
     ]">
       <div class="tracklist__row-cell --drag">
@@ -14,7 +14,8 @@
         />
       </div>
       <div class="tracklist__row-cell --order">
-        {{ track.order || index + 1 }}
+        <!-- {{ track.order || index + 1 }} -->
+        {{ index + 1 }}
       </div>
       <TrackItemAdd
         v-if="isNotCurrentPlaylist"
@@ -64,7 +65,6 @@
 import { ref, computed } from 'vue'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 import TrackItemAdd from './TrackItemAdd.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
@@ -76,7 +76,7 @@ import Modal from '~/components/Modal.vue'
 import TrackLyrics from './TrackLyrics.vue'
 
 interface Props {
-  track: AlbumTrack
+  track: Track
   index: number
   albumID: string
   isCompilation: boolean

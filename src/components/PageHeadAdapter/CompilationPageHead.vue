@@ -15,10 +15,15 @@
     </div>
     <div class="album__hero-actions">
       <Button
-        icon="question"
-        size="small"
+        icon="loupe"
         isRounded
         isInverted
+      />
+      <Button
+        icon="target"
+        isRounded
+        isInverted
+        isText
         @click="getRandomAlbum"
       />
     </div>

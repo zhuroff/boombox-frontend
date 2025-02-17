@@ -15,11 +15,11 @@
         class="text-input__error"
       >{{ errorMessage }}</div>
     </div>
-    <TextInputRefList
+    <!-- <TextInputRefList
       v-if="refEntityKey && isRefListActive"
       :refConfig="refConfig"
       @selectRefItem="selectRefItem"
-    />
+    /> -->
   </div>
 </template>
 
@@ -27,7 +27,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import type { StyleValue } from 'vue'
 import type { BasicEntity, RefPayload } from '~/types/Common'
-import TextInputRefList from './TextInputRefList.vue'
+// import TextInputRefList from './TextInputRefList.vue'
 
 interface Props {
   placeholder?: string

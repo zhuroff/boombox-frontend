@@ -60,12 +60,12 @@
                 <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ localize('lyrics.expand') }}</span>
                 <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ localize('lyrics.collapse') }}</span>
               </button>
-              <span v-if="!track.isTOY">&nbsp;/&nbsp;</span>
+              <!-- <span v-if="!track.isTOY">&nbsp;/&nbsp;</span>
               <button
                 v-if="!track.isTOY"
                 class="lyrics__item_action"
                 @click="saveLyrics(item.lyrics)"
-              >{{ localize('lyrics.save') }}</button>
+              >{{ localize('lyrics.save') }}</button> -->
               <TextareaInput
                 v-if="expandedLyrics === index"
                 :defaultValue="item.lyrics"
@@ -91,11 +91,10 @@ import Button from '~/components/Button.vue'
 import TextareaInput from '~/components/Form/TextareaInput.vue'
 import Preloader from '~/components/Preloader.vue'
 import trackServices from '~/services/track.services'
-import AlbumTrack from '~/classes/AlbumTrack'
 
 interface Props {
   heading: string
-  track: AlbumTrack
+  track: Track
 }
 
 const props = defineProps<Props>()
@@ -175,6 +174,7 @@ const fetchTrackLyrics = async () => {
 }
 
 onMounted(() => {
+  // @ts-expect-error: fix
   !props.track.isTOY && fetchTrackLyrics()
 })
 </script>
@@ -183,7 +183,8 @@ onMounted(() => {
 @import '~/scss/variables';
 
 .lyrics {
-  background-color: $white;
+  // background-color: $white;
+  background-color: $paleLT;
   border-radius: 10px;
   width: 100%;
   max-width: 768px;
@@ -234,7 +235,8 @@ onMounted(() => {
     margin-top: 1rem;
     padding: 0 !important;
     border: none !important;
-    background-color: $white;
+    // background-color: $white;
+    background-color: $paleLT;
   }
 
   &__empty {

@@ -24,11 +24,10 @@ import { reactive, computed } from 'vue'
 import type { DraggableEvent } from '~/types/Common'
 import { VueDraggableNext } from 'vue-draggable-next'
 import usePlaylist from '~/store/playlist'
-import AlbumTrack from '~/classes/AlbumTrack'
 import TrackListRow from './TrackListRow.vue'
 
 interface Props {
-  tracks: AlbumTrack[]
+  tracks: Track[]
   albumID: string
   isCompilation?: boolean
   isTOY?: boolean
@@ -56,7 +55,7 @@ const dragOptions = reactive({
 })
 
 const albumTracksOnly = computed(() => (
-  props.tracks.filter(({ isOutOfAlbumList }) => !isOutOfAlbumList)
+  props.tracks//.filter(({ isOutOfAlbumList }) => !isOutOfAlbumList)
 ))
 
 const orderChanged = (event: DraggableEvent) => {
