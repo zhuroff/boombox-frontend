@@ -60,9 +60,10 @@ const { globalGetters: { localize } } = useGlobalStore()
   }
 
   @include media('>=laptop') {
-    padding: 19px 25px 19px;
+    padding: 0 25px;
     justify-content: space-between;
     background-color: $dark;
+    height: 70px;
   }
 
   &__heading {

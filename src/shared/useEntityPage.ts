@@ -1,24 +1,50 @@
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, watch, type Ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import dbServices from '~/services/database.services'
 
-const useEntityPage = <T>(entityKey: string, isEnabled = true) => {
+const useEntityPage = <T extends Entity>(
+  entityKey: Ref<string>,
+  preRandomState?: Ref<string>
+) => {
   const route = useRoute()
+  const router = useRouter()
   
-  const routePath = computed(() => (
-    typeof route.params.id === 'string'
+  const routePath = computed(() => {
+    if (preRandomState?.value) {
+      return 'random'
+    }
+
+    return typeof route.params.id === 'string'
       ? route.params.id
       : route.params.id.join('/')
-  ))
+  })
 
   const { refetch, isFetched, isRefetching, isError, data, error, isFetching } = useQuery<T>({
-    queryKey: [entityKey, routePath],
-    enabled: isEnabled,
+    queryKey: [routePath, preRandomState],
     retry: 3,
     refetchOnWindowFocus: false,
-    queryFn: () => dbServices.getEntity(entityKey, routePath.value),
+    queryFn: () => dbServices.getEntity(entityKey.value, routePath.value)
   })
+
+  watch(
+    [isFetched, data],
+    ([newFetched, newData]) => {
+      if (newFetched && preRandomState?.value) {
+        router.replace(`/${entityKey.value}/${newData?._id}`)
+      }
+    },
+  )
+
+  watch(
+    [route, data],
+    ([newRouteState, newDataState], [_, prevDataState]) => {
+      if (!prevDataState?._id || !newDataState?._id || !preRandomState) return
+      if (newDataState._id !== newRouteState.params.id) {
+        preRandomState.value = ''
+      }
+    }
+  )
 
   return {
     isRefetching,

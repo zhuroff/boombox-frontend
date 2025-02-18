@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import useGlobalStore from '~/store/global'
 import useEntityPage from '~/shared/useEntityPage'
 import useEntityList from '~/shared/useEntityList'
@@ -44,9 +44,12 @@ import Preloader from '~/components/Preloader.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import EntityCards from '~/components/EntityCards.vue'
 
-const { globalGetters: { localize, isAdmin } } = useGlobalStore()
+const { globalGetters: { localize } } = useGlobalStore()
 
-const { data: album, isFetched: isAlbumFetched } = useEntityPage<Embedded>('embedded')
+const pageEntityKey = ref('embedded')
+const preRandomState = ref('')
+
+const { data: album, isFetched: isAlbumFetched } = useEntityPage<Embedded>(pageEntityKey, preRandomState)
 
 const relatedAlbumsReqConfig: RequestConfig = {
   page: 1,
@@ -59,8 +62,8 @@ const isAlbumReady = computed(() => (
   Boolean(album.value) && isAlbumFetched.value
 ))
 
-const getRandomAlbum = (entityType: string) => {
-  console.log('GET RANDOM', entityType)
+const getRandomAlbum = () => {
+  preRandomState.value = album.value?._id || ''
 }
 
 const confirmDelete = () => {

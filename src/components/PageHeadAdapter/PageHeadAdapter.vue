@@ -22,21 +22,18 @@ import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 
-const { globalGetters: { localize } } = useGlobalStore()
-
 interface Props {
   album: UnifiedAlbum
   withSearch?: boolean
 }
 
 interface Emits {
-  (e: 'getRandomAlbum', entityType: string): void
+  (e: 'getRandomAlbum'): void
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
-
-const getRandomAlbum = (entityType: string) => emit('getRandomAlbum', entityType)
+const { globalGetters: { localize } } = useGlobalStore()
 
 const totalTracksTime = computed(() => {
   if (!('tracks' in props.album)) return ''
@@ -81,6 +78,8 @@ const PageHeadComponent = computed(() => {
 
   return h(EmbeddedPageHead, { album: props.album })
 })
+
+const getRandomAlbum = () => emit('getRandomAlbum')
 </script>
 
 <style lang="scss">
@@ -140,6 +139,7 @@ const PageHeadComponent = computed(() => {
     &-heading {
       color: $paleDP;
       margin: 0.5rem 0 1.75rem;
+      width: 80%;
     }
 
     &-title {
@@ -161,11 +161,13 @@ const PageHeadComponent = computed(() => {
     }
 
     &-actions {
-      margin-top: auto;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       justify-content: flex-end;
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
   }
 }

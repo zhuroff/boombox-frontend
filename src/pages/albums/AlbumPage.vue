@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import useGlobalStore from '~/store/global'
 import useEntityPage from '~/shared/useEntityPage'
 import useEntityList from '~/shared/useEntityList'
@@ -58,9 +58,12 @@ import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import EntityCards from '~/components/EntityCards.vue'
 
-const { globalGetters: { localize, isAdmin } } = useGlobalStore()
+const { globalGetters: { localize } } = useGlobalStore()
 
-const { data: album, isFetched: isAlbumFetched } = useEntityPage<Album>('albums')
+const pageEntityKey = ref('albums')
+const preRandomState = ref('')
+
+const { data: album, isFetched: isAlbumFetched } = useEntityPage<Album>(pageEntityKey, preRandomState)
 
 // setPlayerPlaylist(payload)
 
@@ -75,8 +78,8 @@ const isAlbumReady = computed(() => (
   Boolean(album.value) && isAlbumFetched.value
 ))
 
-const getRandomAlbum = (entityType: string) => {
-  console.log('GET RANDOM', entityType)
+const getRandomAlbum = () => {
+  preRandomState.value = album.value?._id || ''
 }
 
 const changeTracksOrder = (payload: ReorderPayload) => {

@@ -9,13 +9,17 @@
     <transition-group name="flyUp">
       <Header
         v-if="pageHeadingKey"
+        key="header"
         :heading="localize(pageHeadingKey, docsCount)"
         :withSearch="!!withSearch"
       >
         <slot name="header"></slot>
         <slot name="under-header"></slot>
       </Header>
-      <section class="content">
+      <section
+        class="content"
+        key="content"
+      >
         <EntityCards
           v-if="data?.docs"
           :entities="data?.docs"

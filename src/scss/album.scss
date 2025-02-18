@@ -17,8 +17,16 @@
 
     @include media('>=laptop') {
       display: grid;
-      grid-template-columns: 1fr 19.48% 19.48%;
+      grid-template-columns: calc(100% - (19.48% * 2) - 2rem) 19.48% 19.48%;
       gap: 1rem;
+    }
+
+    @include media('>=desktop-lg') {
+      grid-template-columns: calc(100% - (260px * 2) - 2rem) 260px 260px;
+    }
+
+    @include media('>=desktop-hg') {
+      max-width: 1700px;
     }
   }
 

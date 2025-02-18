@@ -23,7 +23,6 @@
         icon="target"
         isRounded
         isInverted
-        isText
         @click="getRandomAlbum"
       />
     </div>
@@ -42,7 +41,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'getRandomAlbum', entityType: string): void
+  (e: 'getRandomAlbum'): void
 }
 
 const props = defineProps<Props>()
@@ -50,5 +49,5 @@ const emit = defineEmits<Emits>()
 
 const { globalGetters: { localize } } = useGlobalStore()
 
-const getRandomAlbum = () => emit('getRandomAlbum', 'compilations')
+const getRandomAlbum = () => emit('getRandomAlbum')
 </script>
