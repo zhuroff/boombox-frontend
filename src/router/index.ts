@@ -19,26 +19,8 @@ const routes: Array<any> = [
       },
       {
         path: '/albums/:id',
-        name: 'album-single',
-        component: () => import(/* webpackChunkName: 'album-single' */ '~/pages/albums/AlbumPage.vue')
-      }
-    ]
-  },
-  {
-    path: '/compilations',
-    name: 'compilations',
-    component: RouterView,
-    children: [
-      {
-        path: '/compilations',
-        name: 'compilation-list',
-        meta: { navLocaleKey: 'compilations' },
-        component: () => import(/* webpackChunkName: 'compilation-list' */ '~/pages/compilations/CompilationsList.vue')
-      },
-      {
-        path: '/compilations/:id',
-        name: 'compilation-single',
-        component: () => import(/* webpackChunkName: 'compilation-single' */ '~/pages/compilations/CompilationPage.vue')
+        name: 'album-page',
+        component: () => import(/* webpackChunkName: 'album-page' */ '~/pages/albums/AlbumPage.vue')
       }
     ]
   },
@@ -57,6 +39,24 @@ const routes: Array<any> = [
         path: '/embedded/:id',
         name: 'embedded-single',
         component: () => import(/* webpackChunkName: 'embedded-single' */ '~/pages/embedded/EmbeddedPage.vue')
+      }
+    ]
+  },
+  {
+    path: '/compilations',
+    name: 'compilations',
+    component: RouterView,
+    children: [
+      {
+        path: '/compilations',
+        name: 'compilation-list',
+        meta: { navLocaleKey: 'compilations' },
+        component: () => import(/* webpackChunkName: 'compilation-list' */ '~/pages/compilations/CompilationsList.vue')
+      },
+      {
+        path: '/compilations/:id',
+        name: 'compilation-single',
+        component: () => import(/* webpackChunkName: 'compilation-single' */ '~/pages/compilations/CompilationPage.vue')
       }
     ]
   },
@@ -114,8 +114,8 @@ const routes: Array<any> = [
       },
       {
         path: '/artists/:id',
-        name: 'artist-single',
-        component: () => import(/* webpackChunkName: 'artist-single' */ '~/pages/artists/ArtistSingle.vue')
+        name: 'artist-page',
+        component: () => import(/* webpackChunkName: 'artist-page' */ '~/pages/artists/ArtistPage.vue')
       }
     ]
   },

@@ -25,6 +25,7 @@
               :entityKey="'albums'"
               :isDraggable="false"
               :isDeletable="false"
+              template="offset"
               placeholderPreview="/img/album.webp"
               @deleteEntity="confirmDelete"
             />
@@ -124,3 +125,21 @@ const relatedAlbums = computed(() => ([
 
 // fetchDiscogsInfo(payload)
 </script>
+
+<style scoped lang="scss">
+.album {
+
+  &__content {
+    grid-template-columns: 350px 1fr;
+  }
+
+  &__related {
+    grid-column: 2;
+
+    &-title {
+      text-align: left;
+      margin-left: 10px;
+    }
+  }
+}
+</style>

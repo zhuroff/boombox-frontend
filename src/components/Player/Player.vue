@@ -62,7 +62,7 @@
               @click="() => playCurrentTrack(track)"
             >
               <div class="overlay__list-cover">
-                <img :src="track.albumCover" />
+                <img :src="track.albumCover" referrerpolicy="no-referrer" />
                 <Sprite v-if="isPlaying(track._id)" name="playing" />
               </div>
               <div class="overlay__list-info">

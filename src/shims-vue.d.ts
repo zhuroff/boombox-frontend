@@ -22,7 +22,7 @@ interface Category extends Entity {
   poster?: string
   avatar?: string
   albums: Album[]
-  embeddedAlbums?: unknown[]
+  embeddedAlbums?: Embedded[]
 }
 
 interface Compilation extends Entity {
@@ -40,7 +40,7 @@ interface Album extends Entity {
   modified?: string
   coverURL?: string
   tracks: Track[]
-  inCollections: Entity[]
+  inCollections?: Entity[]
 }
 
 type AlbumShort = Required<Pick<Album, '_id' | 'title' | 'cloudURL' | 'folderName'>>
@@ -50,7 +50,7 @@ interface Embedded extends Entity {
   genre: Entity
   period: Entity
   frame: string
-  inCollections: Entity[]
+  inCollections?: Entity[]
 }
 
 type UnifiedAlbum = Album | Embedded | Compilation

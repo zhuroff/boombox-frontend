@@ -101,13 +101,13 @@ const relatedCompilationsConfig = computed<UseEntityListPayload>(() => (
         entityKey: 'compilations',
         requestConfig: {
           ...relatedCompilationsReqConfig,
-          // filter: {
-          //   from: 'genres',
-          //   key: 'genre._id',
-          //   name: compilation.value.genre.title,
-          //   value: compilation.value.genre._id,
-          //   excluded: { _id: compilation.value._id, 'artist._id': compilation.value.artist._id }
-          // }
+          filter: {
+            // from: 'genres',
+            // key: 'genre._id',
+            name: compilation.value.title,
+            value: compilation.value._id,
+            excluded: { _id: compilation.value._id }
+          }
         }
       }
     : {} as UseEntityListPayload

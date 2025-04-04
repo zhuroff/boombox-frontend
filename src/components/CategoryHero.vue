@@ -87,13 +87,12 @@ import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
-import CategoryPage from '~/classes/CategoryPage'
 import uploadServices from '~/services/upload.services'
 import dbServices from '~/services/database.services'
 import AlbumPage from '~/classes/AlbumPage'
 
 interface Props {
-  data: CategoryPage
+  data: Category
   entity: string
   description: string
   noAvatar?: boolean
@@ -137,7 +136,7 @@ const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => 
       id: String(route.params.id)
     }
 
-    uploadServices.uploadImage<CategoryPage>(payload)
+    uploadServices.uploadImage<Category>(payload)
       .then((data) => {
         // @ts-expect-error: fix
         emit('setUploadedImage', {
@@ -151,15 +150,19 @@ const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => 
 
 const getCategoryWave = async () => {
   try {
-    const tracks = await dbServices.getEntityList<TrackRes[]>({
-      page: 1,
-      limit: 50,
-      filter: {
-        from: props.entity,
-        key: `${categoryKeyDict[props.entity]}.title`,
-        name: props.data.title
+    const tracks = await dbServices.getEntityList<TrackRes[]>(
+      'tracks/wave',
+      {
+        page: 1,
+        limit: 50,
+        sort: { createdAt: -1 },
+        filter: {
+          from: props.entity,
+          key: `${categoryKeyDict[props.entity]}.title`,
+          name: props.data.title
+        }
       }
-    }, 'tracks/wave')
+    )
 
     waveAlbum.value = new AlbumPage({
       _id: props.entity,

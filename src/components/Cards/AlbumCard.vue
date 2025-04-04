@@ -14,6 +14,7 @@
           v-else
           :src="cardCover"
           :alt="card.title"
+          referrerpolicy="no-referrer"
           class="cardlist__item-cover"
         />
         <img

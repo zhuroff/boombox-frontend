@@ -16,6 +16,7 @@
       :isDeletable="isDeletable"
       :entityKey="entityKey"
       :placeholderPreview="placeholderPreview"
+      :class="`--${props.template}`"
       @deleteEntity="(payload: DeletePayload) => $emit('deleteEntity', payload)"
     />
   </VueDraggableNext>
@@ -30,7 +31,7 @@ interface Props<T> {
   entityKey: string
   isDraggable?: boolean
   isDeletable?: boolean
-  template?: 'col' | 'row'
+  template?: 'col' | 'row' | 'offset'
   placeholderPreview: string
 }
 
@@ -45,7 +46,7 @@ const cardsMap: Record<string, string> = {
   embedded: 'AlbumCard',
   artists: 'CategoryCard',
   periods: 'CategoryCard',
-  genres: 'CategoryCard',
+  genres: 'CategoryCard'
 }
 
 const entityCardComponent = defineAsyncComponent(() => (
@@ -96,15 +97,33 @@ const entityCardComponent = defineAsyncComponent(() => (
     }
 
     @include media('>=desktop', '<desktop-md') {
-      width: calc(25% - 10px);
+      &.--row {
+        width: calc(25% - 10px);
+      }
+
+      &.--offset {
+        width: calc(33.3333% - 10px);
+      }
     }
 
-    @include media('>=desktop-md', '<desktop-lg') {
-      width: calc(20% - 10px);
+    @include media('>=desktop-md', '<=desktop-lg') {
+      &.--row {
+        width: calc(20% - 10px);
+      }
+
+      &.--offset {
+        width: calc(33.3333% - 10px);
+      }
     }
 
     @include media('>=desktop-lg') {
-      width: calc(16.6666% - 10px);
+      &.--row {
+        width: calc(16.6666% - 10px);
+      }
+
+      &.--offset {
+        width: calc(20% - 10px);  
+      }
     }
 
     .--drag {

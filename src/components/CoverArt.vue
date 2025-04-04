@@ -3,6 +3,7 @@
     <img
       :src="cover || '/img/album.webp'"
       class="album__cover"
+      referrerpolicy="no-referrer"
       @click="() => emit('coverClick')"
     >
     <transition name="fade">

@@ -3,7 +3,10 @@
     class="tracklist__row-cell --pointer --title"
     @click="() => emit('callLyricsModal')"
   >
-    <span class="tracklist__row-title">{{ title }}</span>
+    <span
+      :title="title"
+      class="tracklist__row-title"
+    >{{ title }}</span>
   </div>
 </template>
 

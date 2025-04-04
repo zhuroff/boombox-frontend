@@ -210,6 +210,8 @@ const actions = (state: PlayerState) => {
         entityType: 'tracks/audio',
         path: track.path,
         cloudURL: track.cloudURL,
+        // @ts-expect-error: temp
+        cloudId: track.cloudId,
         type:'audio',
         root: track.isTOY ? 'TOY' : ''
       })
