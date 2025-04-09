@@ -10,11 +10,11 @@ export default {
     return response.data
   },
 
-  async getEntity<T>(entityKey: string, path: string) {
-    const response = await api.get<T>(`/api/${entityKey}/${path}`)
-    commonServices.errorChecker(response.status)
-    return response.data
-  },
+  // async getEntity<T>(entityKey: string, path: string) {
+  //   const response = await api.get<T>(`/api/${entityKey}/${path}`)
+  //   commonServices.errorChecker(response.status)
+  //   return response.data
+  // },
 
   async updateEntity<T, U>(entityKey: string, payload?: U): Promise<T> {
     const response = await api.patch<T>(`/api/${entityKey}/update`, payload)
@@ -34,11 +34,11 @@ export default {
     return response.data
   },
 
-  async getEntityList<T>(entityKey: string, config: RequestConfig) {
-    const response = await api.post<T>(`/api/${entityKey}`, config)
-    commonServices.errorChecker(response.status)
-    return response.data
-  },
+  // async getEntityList<T>(entityKey: string, config: RequestConfig) {
+  //   const response = await api.post<T>(`/api/${entityKey}`, config)
+  //   commonServices.errorChecker(response.status)
+  //   return response.data
+  // },
   
   async search(payload: SearchPayload) {
     const response = await api.post<SearchResultState[]>(`/api/search`, payload)

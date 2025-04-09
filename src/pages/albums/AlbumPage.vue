@@ -57,13 +57,16 @@ import Preloader from '~/components/Preloader.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import EntityCards from '~/components/EntityCards.vue'
+import DatabaseService from '~/services/DatabaseService'
 
 const { globalGetters: { localize } } = useGlobalStore()
+
+const dbService = new DatabaseService()
 
 const pageEntityKey = ref('albums')
 const preRandomState = ref('')
 
-const { data: album, isFetched: isAlbumFetched } = useEntityPage<Album>(pageEntityKey, preRandomState)
+const { data: album, isFetched: isAlbumFetched } = useEntityPage<Album>(pageEntityKey, dbService, preRandomState)
 
 // setPlayerPlaylist(payload)
 
@@ -71,7 +74,7 @@ const relatedAlbumsReqConfig: RequestConfig = {
   page: 1,
   limit: 5,
   sort: { title: 1 },
-  isRandom: true
+  isRandom: 1
 }
 
 const isAlbumReady = computed(() => (
@@ -125,15 +128,15 @@ const genreConfig = computed<UseEntityListPayload>(() => (
             key: 'genre._id',
             name: album.value.genre.title,
             value: album.value.genre._id,
-            excluded: { _id: album.value._id, 'artist._id': album.value.artist._id }
+            excluded: { _id: album.value._id, 'artist>_id': album.value.artist._id }
           }
         }
       }
     : {} as UseEntityListPayload
 ))
 
-const { data: relatedAlbumsByArtist } = useEntityList<Album>(artistConfig, isAlbumReady)
-const { data: relatedAlbumsByGenre } = useEntityList<Album>(genreConfig, isAlbumReady)
+const { data: relatedAlbumsByArtist } = useEntityList<Album>(artistConfig, dbService, isAlbumReady)
+const { data: relatedAlbumsByGenre } = useEntityList<Album>(genreConfig, dbService, isAlbumReady)
 
 const relatedAlbums = computed(() => ([
   {

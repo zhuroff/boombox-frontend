@@ -1,10 +1,11 @@
 import { computed, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
-import dbServices from '~/services/database.services'
+import DatabaseService from '~/services/DatabaseService'
 
 const useEntityPage = <T extends Entity>(
   entityKey: Ref<string>,
+  dbService: DatabaseService,
   preRandomState?: Ref<string>
 ) => {
   const route = useRoute()
@@ -24,7 +25,7 @@ const useEntityPage = <T extends Entity>(
     queryKey: [routePath, preRandomState],
     retry: 3,
     refetchOnWindowFocus: false,
-    queryFn: () => dbServices.getEntity(entityKey.value, routePath.value)
+    queryFn: () => dbService.getEntityPage(entityKey.value, routePath.value)
   })
 
   watch(

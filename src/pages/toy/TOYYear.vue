@@ -1,5 +1,5 @@
 <template>
-  <AlbumPageTemplate
+  <!-- <AlbumPageTemplate
     :isDataFetched="!isPageLoading"
     :album="album"
     :booklet="booklet"
@@ -31,7 +31,7 @@
         </template>
       </AlbumHero>
     </template>
-  </AlbumPageTemplate>
+  </AlbumPageTemplate> -->
 </template>
 
 <script setup lang="ts">
@@ -45,7 +45,7 @@ import usePlaylist from '~/store/playlist'
 import cloudServices from '~/services/cloud.services'
 import AlbumPage from '~/classes/AlbumPage'
 import AlbumItem from '~/classes/AlbumItem'
-import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
+// import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
 import AlbumHero from '~/components/AlbumHero.vue'
 

@@ -70,6 +70,7 @@ import EntityCards from '~/components/EntityCards.vue'
 import Paginator from '~/components/Paginator.vue'
 import Modal from '~/components/Modal.vue'
 import Confirmation from '~/components/Confirmation.vue'
+import DatabaseService from '~/services/DatabaseService'
 
 interface Props {
   entityKey: string
@@ -84,13 +85,15 @@ const props = defineProps<Props>()
 
 const { pagination, paginationConfig, updatePaginationConfig, updatePaginationState } = usePagination()
 
+const dbService = new DatabaseService()
+
 const listQueryConfig = computed(() => ({
   qEntity: props.entityKey,
   entityKey: props.entityKey,
   requestConfig: pagination
 }))
 
-const { data, refetch, isFetched } = useEntityList<BasicEntity>(listQueryConfig)
+const { data, refetch, isFetched } = useEntityList<BasicEntity>(listQueryConfig, dbService)
 const { globalGetters: { localize } } = useGlobalStore()
 const { setSnackbarMessage } = useSnackbar()
 

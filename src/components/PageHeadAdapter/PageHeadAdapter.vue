@@ -139,7 +139,7 @@ const getRandomAlbum = () => emit('getRandomAlbum')
     &-heading {
       color: $paleDP;
       margin: 0.5rem 0 1.75rem;
-      width: 80%;
+      max-width: 850px;
     }
 
     &-title {

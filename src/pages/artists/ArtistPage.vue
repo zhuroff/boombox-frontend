@@ -41,18 +41,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import useGlobalStore from '~/store/global'
 import useEntityPage from '~/shared/useEntityPage'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
 import EntityCards from '~/components/EntityCards.vue'
 import Paginator from '~/components/Paginator.vue'
+import DatabaseService from '~/services/DatabaseService'
+
+const dbService = new DatabaseService()
 
 const pageEntityKey = ref('artists')
 
 const { globalGetters: { localize } } = useGlobalStore()
-const { data, isFetched } = useEntityPage<Category>(pageEntityKey)
+const { data, isFetched } = useEntityPage<Category>(pageEntityKey, dbService)
 
 const albumList = computed<BasicEntity[]>(() => (
   [...(data.value?.albums || []), ...(data.value?.embeddedAlbums || [])]

@@ -57,13 +57,16 @@ import Preloader from '~/components/Preloader.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import EntityCards from '~/components/EntityCards.vue'
+import DatabaseService from '~/services/DatabaseService'
 
 const { globalGetters: { localize } } = useGlobalStore()
+
+const dbService = new DatabaseService()
 
 const pageEntityKey = ref('compilations')
 const preRandomState = ref('')
 
-const { data: compilation, isFetched: isAlbumFetched } = useEntityPage<Compilation>(pageEntityKey, preRandomState)
+const { data: compilation, isFetched: isAlbumFetched } = useEntityPage<Compilation>(pageEntityKey, dbService, preRandomState)
 
 // setPlayerPlaylist(payload)
 
@@ -71,7 +74,7 @@ const relatedCompilationsReqConfig: RequestConfig = {
   page: 1,
   limit: 5,
   sort: { title: 1 },
-  isRandom: true
+  isRandom: 1
 }
 
 const isCompilationReady = computed(() => (
@@ -102,8 +105,8 @@ const relatedCompilationsConfig = computed<UseEntityListPayload>(() => (
         requestConfig: {
           ...relatedCompilationsReqConfig,
           filter: {
-            // from: 'genres',
-            // key: 'genre._id',
+            from: 'genres',
+            key: 'genre._id',
             name: compilation.value.title,
             value: compilation.value._id,
             excluded: { _id: compilation.value._id }
@@ -113,7 +116,11 @@ const relatedCompilationsConfig = computed<UseEntityListPayload>(() => (
     : {} as UseEntityListPayload
 ))
 
-const { data: relatedCompilationsRes } = useEntityList<Compilation>(relatedCompilationsConfig, isCompilationReady)
+const { data: relatedCompilationsRes } = useEntityList<Compilation>(
+  relatedCompilationsConfig,
+  dbService,
+  isCompilationReady
+)
 
 const relatedCompilations = computed(() => ([
   {

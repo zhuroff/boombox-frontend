@@ -139,7 +139,7 @@ interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
 }
 
 type RequestConfig = PaginationState & {
-  isRandom?: true
+  isRandom?: true | 1
   filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
 }
 
