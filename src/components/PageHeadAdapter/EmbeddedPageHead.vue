@@ -43,6 +43,7 @@
         icon="loupe"
         isRounded
         isInverted
+        @click="callSearchBlock"
       />
       <Button
         icon="wiki"
@@ -69,6 +70,7 @@ interface Props {
 
 interface Emits {
   (e: 'getRandomAlbum'): void
+  (e: 'callSearchBlock'): void
 }
 
 const props = defineProps<Props>()
@@ -77,4 +79,5 @@ const emit = defineEmits<Emits>()
 const { globalGetters: { localize } } = useGlobalStore()
 
 const getRandomAlbum = () => emit('getRandomAlbum')
+const callSearchBlock = () => emit('callSearchBlock')
 </script>

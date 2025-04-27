@@ -390,6 +390,11 @@ type FormSchemaProperty =
   
 type CustomFormData = Record<string, string | File>
 
+interface SearchPayload {
+  query: string
+  key?: string
+}
+
 type SearchResultData = AlbumItem | CategoryItem | TrackRes
 
 interface SearchResultState {

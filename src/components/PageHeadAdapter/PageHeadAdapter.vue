@@ -2,7 +2,9 @@
   <div class="album__hero">
     <component
       :is="PageHeadComponent"
-      @getRandomAlbum="getRandomAlbum">
+      @getRandomAlbum="getRandomAlbum"
+      @callSearchBlock="isSearchMode = true"
+    >
       <template #hero>
         <div class="album__hero-heading">
           <strong class="album__hero-title">
@@ -12,15 +14,29 @@
       </template>
       <slot name="info"></slot>
     </component>
+    <Modal
+      :isModalActive="isSearchMode"
+      @closeModal="isSearchMode = false"
+    >
+      <SearchBlock
+        :isFetching="isSearchFetching"
+        :results="searchResults"
+        @onSearch="onSearch"
+      ></SearchBlock>
+    </Modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { h, computed } from 'vue'
+import { h, computed, ref } from 'vue'
+import DatabaseService from '~/services/DatabaseService'
+import useSearch from '~/shared/useSearch'
 import useGlobalStore from '~/store/global'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
+import Modal from '~/components/Modal.vue'
+import SearchBlock from '~/components/Search/SearchBlock.vue'
 
 interface Props {
   album: UnifiedAlbum
@@ -33,7 +49,19 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
 const { globalGetters: { localize } } = useGlobalStore()
+
+const dbService = new DatabaseService()
+
+const searchQuery = ref('')
+const isSearchMode = ref(false)
+
+const { searchResults, isSearchFetching } = useSearch(searchQuery, dbService)
+
+const onSearch = (value: string) => {
+  searchQuery.value = value
+}
 
 const totalTracksTime = computed(() => {
   if (!('tracks' in props.album)) return ''

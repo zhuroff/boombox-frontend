@@ -40,9 +40,9 @@ export default {
   //   return response.data
   // },
   
-  async search(payload: SearchPayload) {
-    const response = await api.post<SearchResultState[]>(`/api/search`, payload)
-    commonServices.errorChecker(response.status)
-    return response.data
-  }
+  // async search(payload: SearchPayload) {
+  //   const response = await api.post<SearchResultState[]>(`/api/search`, payload)
+  //   commonServices.errorChecker(response.status)
+  //   return response.data
+  // }
 }

@@ -1,5 +1,6 @@
 import type { BasicEntity } from '~/types/Common'
-import AlbumItem from '~/classes/AlbumItem'
+import type AlbumItem from '~/classes/AlbumItem'
+import type CategoryItem from '~/classes/CategoryItem'
 
 export interface TrackRes extends Required<BasicEntity> {
   path: string

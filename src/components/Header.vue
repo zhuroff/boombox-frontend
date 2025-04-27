@@ -1,21 +1,33 @@
 <template>
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
-    <!-- <SearchBlock
-      v-if="withSearch"
-      type="search"
-      :results="results"
-      :placeholder="localize('search.placeholder')"
-      @setInputValue="searchSubmit"
-    /> -->
+    <Button
+      icon="loupe"
+      isRounded
+      isInverted
+      @click="isSearchMode = !isSearchMode"
+    />
+    <Modal
+      :isModalActive="isSearchMode"
+      @closeModal="isSearchMode = false"
+    >
+      <SearchBlock
+        :isFetching="isSearchFetching"
+        :results="searchResults"
+        @onSearch="onSearch"
+      ></SearchBlock>
+    </Modal>
     <slot></slot>
   </header>
 </template>
 
 <script setup lang="ts">
-// import { useSearch } from '~/hooks/useSearch'
-import useGlobalStore from '~/store/global'
-import SearchBlock from '~/components/SearchBlock.vue'
+import { ref } from 'vue'
+import useSearch from '~/shared/useSearch'
+import DatabaseService from '~/services/DatabaseService'
+import Button from '~/components/Button.vue'
+import Modal from '~/components/Modal.vue'
+import SearchBlock from '~/components/Search/SearchBlock.vue'
 
 interface Props {
   heading: string
@@ -24,8 +36,16 @@ interface Props {
 
 defineProps<Props>()
 
-const { globalGetters: { localize } } = useGlobalStore()
-// const { searchSubmit, results } = useSearch()
+const dbService = new DatabaseService()
+
+const searchQuery = ref('')
+const isSearchMode = ref(false)
+
+const { searchResults, isSearchFetching } = useSearch(searchQuery, dbService)
+
+const onSearch = (value: string) => {
+  searchQuery.value = value
+}
 </script>
 
 <style lang="scss">

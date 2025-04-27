@@ -46,7 +46,6 @@ const navHandler = () => {
   }
 
   @include media('>=laptop') {
-    // background-color: $white;
     background-color: $paleLT;
   }
 }
@@ -55,7 +54,6 @@ const navHandler = () => {
   flex: none;
   position: relative;
   z-index: 1000;
-  // background-color: $white;
   background-color: $paleLT;
   overflow: auto;
 

@@ -19,7 +19,7 @@
       ref="searchInput"
       spellcheck="false"
       class="input-search__element"
-      :type="type"
+      type="search"
       :placeholder="placeholder"
       @blur="isFocused = false"
       @focus="isFocused = true"
@@ -68,7 +68,6 @@ import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
 
 interface Props {
-  type: 'password' | 'text' | 'number' | 'search' | 'email' | 'tel'
   results: SearchResultState[]
   placeholder?: string
   isInverted?: boolean

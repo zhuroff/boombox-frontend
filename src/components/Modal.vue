@@ -1,15 +1,20 @@
-<template>  
-  <div class="modal">
-    <Button
-      class="modal__close"
-      icon="close"
-      size="large"
-      isText
-      isInverted
-      @click="closeModal"
-    />    
-    <slot></slot>
-  </div>
+<template>
+  <transition name="fade">
+    <div
+      v-if="isModalActive"
+      class="modal"
+    >
+      <Button
+        class="modal__close"
+        icon="close"
+        size="large"
+        isText
+        isInverted
+        @click="closeModal"
+      />    
+      <slot></slot>
+    </div>
+  </transition>
 </template>
 
 <script setup lang="ts">

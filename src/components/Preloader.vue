@@ -41,13 +41,14 @@ defineProps<Props>()
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
   z-index: 3000;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &.--dark {
-    height: 100%;
+    background-color: $transDark;
     
     .preloader__icon {
       fill: $white;
@@ -57,13 +58,13 @@ defineProps<Props>()
   &.--light {
     background-color: $transLight;
 
-    @include media('<laptop') {
-      height: 100%;
-    }
+    // @include media('<laptop') {
+    //   height: 100%;
+    // }
 
-    @include media('>=laptop') {
-      height: calc(100% - #{$playerHeight});
-    }
+    // @include media('>=laptop') {
+    //   height: calc(100% - #{$playerHeight});
+    // }
   }
 
   &__icon {
