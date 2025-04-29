@@ -44,6 +44,19 @@
             />
           </div>
         </div>
+        <footer class="album__footer">
+          <Table
+            :tableState="discogsTableState"
+          />
+        </footer>
+        <!-- <Table
+          :tableState="discogsTableState"
+          :tableFilters="discogsFilters"
+          :tableFiltersState="discogsFiltersState"
+          localeKey="discogsTable"
+          @switchPagination="() => console.log('switchPagination')"
+          @update:filter="() => console.log('updateDiscogsFilter')"
+        /> -->
       </div>
     </transition>
     <Modal
@@ -77,18 +90,22 @@
 <script setup lang="ts">
 import useAlbum from './useAlbum'
 import useWiki from './useWiki'
+import useDiscogs from './useDiscogs'
 import useCollections from './useCollections'
 import useGlobalStore from '~/store/global'
 import DatabaseService from '~/services/DatabaseService'
+import DiscogsService from '~/services/DiscogsService'
 import Preloader from '~/components/Preloader.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import GatheringBlock from '~/components/Gatherings/GatheringBlock.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 import EntityCards from '~/components/EntityCards.vue'
+import Table from '~/components/Table/Table.vue'
 import WikiFrame from '~/components/WikiFrame.vue'
 import Modal from '~/components/Modal.vue'
 
 const dbService = new DatabaseService()
+const discogsService = new DiscogsService()
 
 const { globalGetters: { localize } } = useGlobalStore()
 
@@ -106,6 +123,12 @@ const {
   isGatheringFetching,
   isCollectionsModalEnabled
 } = useCollections(album, dbService)
+
+const {
+  discogsTableState,
+  discogsFiltersState,
+  discogsFilters
+} = useDiscogs(discogsService, album)
 
 const {
   isWikiSearching,

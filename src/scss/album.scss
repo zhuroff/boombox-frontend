@@ -60,22 +60,7 @@
     }
   }
 
-  &__discogs {
-
-    @include media('<laptop') {
-      display: none;
-    }
-
-    &-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-
-      .discogs {
-        width: 100px;
-        height: auto;
-      }
-    }
+  &__footer {
+    margin: $mainPadding;
   }
 }

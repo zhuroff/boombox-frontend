@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { ComputedRef } from 'vue'
-import type { PaginationConfig, TableFilter, TablePayload } from '~/types/Common'
+import type { TableFilter, TablePayload } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Select from '~/components/Select.vue'
 import Paginator from '~/components/Paginator.vue'
@@ -182,22 +182,22 @@ const switchPagination = (value: number) => {
       display: block;
     }
 
-    &-image {
-      width: 50px;
-      height: 50px;
-      max-width: 50px;
-      max-height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    // &-image {
+    //   width: 50px;
+    //   height: 50px;
+    //   max-width: 50px;
+    //   max-height: 50px;
+    //   display: flex;
+    //   justify-content: center;
+    //   align-items: center;
 
-      img {
-        max-width: inherit;
-        max-height: inherit;
-        object-fit: contain;
-        border-radius: $borderRadiusSM;
-      }
-    }
+    //   img {
+    //     max-width: inherit;
+    //     max-height: inherit;
+    //     object-fit: contain;
+    //     border-radius: $borderRadiusSM;
+    //   }
+    // }
 
     &-empty {
       text-align: center;
