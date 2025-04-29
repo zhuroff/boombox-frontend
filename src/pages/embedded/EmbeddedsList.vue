@@ -1,44 +1,4 @@
 <template>
-  <!-- <ListPageTemplate
-    placeholderImage="/img/album.webp"
-    :isDataFetched="isDataFetched"
-    :pageHeading="pageHeading"
-    :dataList="albums"
-    :pagePagination="pagePagination"
-    :switchPagination="switchPagination"
-    :setEntitiesLimit="setEntitiesLimit"
-    @deleteEntity="(id) => entityToDelete = id"
-  >
-    <template #header>
-      <Button
-        v-if="isAdmin"
-        icon="plus"
-        isText
-        @click="isCreateMode = !isCreateMode"
-      />
-    </template>
-    <template v-if="isCreateMode" #under-header>
-      <div class="embedded__create">
-        <Form
-          :schema="formSchema"
-          @formSubmit="createNewEmbedded"
-        />
-      </div>
-    </template>
-    <template #modal>
-      <Modal
-        v-if="entityToDelete"
-        :isModalActive="entityToDelete !== null"
-        @closeModal="delReject"
-      >
-        <Confirmation
-          :message="localize('delConfirmMessage')"
-          @confirm="deleteEmbedded"
-          @reject="delReject"
-        />
-      </Modal>
-    </template>
-  </ListPageTemplate> -->
   <EntityListTemplate
     entityKey="embedded"
     placeholderPreview="/img/album.webp"

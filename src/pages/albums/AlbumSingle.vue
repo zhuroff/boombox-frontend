@@ -50,7 +50,7 @@ import AlbumItem from '~/classes/AlbumItem'
 import CollectionEntity from '~/classes/CollectionEntity'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
-import AlbumHero from '~/components/AlbumHero.vue'
+// import AlbumHero from '~/components/AlbumHero.vue'
 import GatheringTabs from '~/components/GatheringTabs.vue'
 import Modal from '~/components/Modal.vue'
 

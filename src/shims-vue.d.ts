@@ -415,3 +415,8 @@ interface SearchResultState {
   key: string
   data: SearchResultData[]
 }
+
+interface WikiSearchResult {
+  title: string
+  pageid: number
+}

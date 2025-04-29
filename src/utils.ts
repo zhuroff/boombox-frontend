@@ -39,15 +39,15 @@ export const slugify = (str: string) => (
     .replace(/\s+/g, '-').trim()
 )
 
-export const detectWikiLocale = (str: string) => {
-  if (str.match(/[a-zA-Z]/g)) {
-    return 'en'
-  } else if (str.match(/[а-яА-Я]/g)) {
-    return 'ru'
-  }
+// export const detectWikiLocale = (str: string) => {
+//   if (str.match(/[a-zA-Z]/g)) {
+//     return 'en'
+//   } else if (str.match(/[а-яА-Я]/g)) {
+//     return 'ru'
+//   }
 
-  return 'en'
-}
+//   return 'en'
+// }
 
 export function debounce <T extends (...args: any[]) => void>(
   callback: T,

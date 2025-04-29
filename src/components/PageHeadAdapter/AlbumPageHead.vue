@@ -52,6 +52,7 @@
         icon="wiki"
         isRounded
         isInverted
+        @click="getWikiInfo"
       />
       <Button
         icon="add-box"
@@ -84,6 +85,7 @@ interface Emits {
   (e: 'getRandomAlbum'): void
   (e: 'callSearchBlock'): void
   (e: 'addToCollection'): void
+  (e: 'getWikiInfo'): void
 }
 
 const props = defineProps<Props>()
@@ -94,4 +96,5 @@ const { globalGetters: { localize } } = useGlobalStore()
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')
 const addToCollection = () => emit('addToCollection')
+const getWikiInfo = () => emit('getWikiInfo')
 </script>

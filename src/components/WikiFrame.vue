@@ -1,7 +1,7 @@
 <template>
   <div class="wikiframe">
     <ul
-      v-if="searchResults"
+      v-if="searchResults?.length"
       class="wikiframe__results"
     >
       <li
@@ -14,7 +14,9 @@
     <div
       v-if="!isLoading && !frameURL"
       class="wikiframe__placeholder"
-    >{{ localize('wiki.frameHeading') }}</div>
+    >
+      {{ searchResults?.length ? localize('wiki.frameHeading') : 'Nothing was found' }}
+    </div>
     <iframe
       v-if="frameURL"
       :src="frameURL"
@@ -23,14 +25,13 @@
     ></iframe>
     <Preloader
       v-if="isLoading"
-      mode="dark"
+      mode="light"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { WikiSearchResult } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Preloader from './Preloader.vue'
 

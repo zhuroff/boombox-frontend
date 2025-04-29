@@ -11,7 +11,7 @@
     @switchPagination="setDiscogsPaginationPage"
   >
     <template #hero>
-      <AlbumHero
+      <!-- <AlbumHero
         v-if="album._id"
         :id="album._id"
         :title="album.title"
@@ -28,7 +28,7 @@
             @click="isDelConfirm = true"
           >{{ localize('deleteEntity') }}</li>
         </template>
-      </AlbumHero>
+      </AlbumHero> -->
     </template>
     <template #modal>
       <Modal
@@ -57,7 +57,7 @@ import type { AlbumItemRes, EmbeddedItemRes } from '~/types/ReqRes'
 import AlbumItem from '~/classes/AlbumItem'
 import EmbeddedItem from '~/classes/EmbeddedItem'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
-import AlbumHero from '~/components/AlbumHero.vue'
+// import AlbumHero from '~/components/AlbumHero.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
 

@@ -65,11 +65,6 @@ export interface TablePayload<T> {
   schema: any
 }
 
-export interface WikiSearchResult {
-  title: string
-  pageid: number
-}
-
 export interface AlignmentPosition {
   x: 'right' | 'left'
   y: 'top' | 'bottom'

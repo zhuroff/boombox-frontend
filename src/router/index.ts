@@ -20,7 +20,7 @@ const routes: Array<any> = [
       {
         path: '/albums/:id',
         name: 'album-page',
-        component: () => import(/* webpackChunkName: 'album-page' */ '~/pages/albums/AlbumPage.vue')
+        component: () => import(/* webpackChunkName: 'album-page' */ '~/pages/albums/SinglePage/index.vue')
       }
     ]
   },

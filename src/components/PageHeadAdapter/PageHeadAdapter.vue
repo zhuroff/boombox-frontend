@@ -5,6 +5,7 @@
       @getRandomAlbum="getRandomAlbum"
       @callSearchBlock="isSearchMode = true"
       @addToCollection="addToCollection"
+      @getWikiInfo="getWikiInfo"
     >
       <template #hero>
         <div class="album__hero-heading">
@@ -47,6 +48,7 @@ interface Props {
 interface Emits {
   (e: 'getRandomAlbum'): void
   (e: 'addToCollection'): void
+  (e: 'getWikiInfo'): void
 }
 
 const props = defineProps<Props>()
@@ -111,6 +113,7 @@ const PageHeadComponent = computed(() => {
 
 const getRandomAlbum = () => emit('getRandomAlbum')
 const addToCollection = () => emit('addToCollection')
+const getWikiInfo = () => emit('getWikiInfo')
 </script>
 
 <style lang="scss">

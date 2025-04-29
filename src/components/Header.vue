@@ -81,7 +81,6 @@ const onSearch = (value: string) => {
 
   @include media('>=laptop') {
     padding: 0 25px;
-    justify-content: space-between;
     background-color: $dark;
     height: 70px;
   }
@@ -95,7 +94,7 @@ const onSearch = (value: string) => {
 
     @include media('>=tablet') {
       @include serif(1.75rem);
-      margin-right: 2rem;
+      margin-right: auto;
       color: $paleMD;
     }
   }
