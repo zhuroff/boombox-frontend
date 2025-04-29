@@ -1,7 +1,7 @@
 import { reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-const usePagination = () => {
+const usePagination = ({ isRouted = true }: UsePaginationProps) => {
   const { name, query } = useRoute()
   const router = useRouter()
 
@@ -44,6 +44,8 @@ const usePagination = () => {
   }
 
   onMounted(() => {
+    if (!isRouted) return
+
     const { page } = query
 
     if (!page) {

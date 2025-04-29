@@ -39,8 +39,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import useGlobalStore from '~/store/global'
-import useEntityPage from '~/shared/useEntityPage'
-import useEntityList from '~/shared/useEntityList'
+import useGetPage from '~/shared/useGetPage'
+import useGetList from '~/shared/useGetList'
 import Preloader from '~/components/Preloader.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import EntityCards from '~/components/EntityCards.vue'
@@ -53,7 +53,7 @@ const dbService = new DatabaseService()
 const pageEntityKey = ref('embedded')
 const preRandomState = ref('')
 
-const { data: album, isFetched: isAlbumFetched } = useEntityPage<Embedded>(pageEntityKey, dbService, preRandomState)
+const { data: album, isFetched: isAlbumFetched } = useGetPage<Embedded>(pageEntityKey, dbService, preRandomState)
 
 const relatedAlbumsReqConfig: RequestConfig = {
   page: 1,
@@ -112,8 +112,8 @@ const genreConfig = computed<UseEntityListPayload>(() => (
     : {} as UseEntityListPayload
 ))
 
-const { data: relatedAlbumsByArtist } = useEntityList<Embedded>(artistConfig, dbService, isAlbumReady)
-const { data: relatedAlbumsByGenre } = useEntityList<Embedded>(genreConfig, dbService, isAlbumReady)
+const { data: relatedAlbumsByArtist } = useGetList<Embedded>(artistConfig, dbService, isAlbumReady)
+const { data: relatedAlbumsByGenre } = useGetList<Embedded>(genreConfig, dbService, isAlbumReady)
 
 const relatedAlbums = computed(() => ([
   {

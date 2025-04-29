@@ -3,6 +3,7 @@
     :style="style"
     :type="type"
     :class="stateClasses"
+    :disabled="isDisabled"
   >
     <Sprite
       v-if="icon"
@@ -31,11 +32,13 @@ interface Props {
   isInverted?: boolean
   isText?: boolean
   isRounded?: boolean
+  isDisabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'medium',
-  type: 'button'
+  type: 'button',
+  isDisabled: false
 })
 
 const {

@@ -82,7 +82,7 @@ const getRowComponent = (key: string, data: SearchResultData) => {
     case 'albums':
       return h(
         RouterLink,
-        { to: `/albums/${data._id}`, class: 'search__block-link' },
+        { to: `/albums/${data._id}`, class: 'search__block-action' },
         [
           h(
             'img',
@@ -114,7 +114,7 @@ const getRowComponent = (key: string, data: SearchResultData) => {
     default:
       return h(
         RouterLink,
-        { to: `/${key}/${data._id}`, class: 'search__block-link' },
+        { to: `/${key}/${data._id}`, class: 'search__block-action' },
         [
           h(
             'img',
@@ -130,102 +130,3 @@ const getRowComponent = (key: string, data: SearchResultData) => {
   }
 }
 </script>
-
-<style scoped lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
-
-.search {
-  background-color: $white;
-  border-radius: $borderRadiusMD;
-  width: 100%;
-  align-self: flex-start;
-  overflow: hidden;
-
-  @include media('>=laptop') {
-    max-width: 650px;
-  }
-
-  &__body {
-    padding: $minPadding $minPadding 0;
-  }
-
-  &__results {
-    min-height: 120px;
-    max-height: calc(100vh - #{$doublePadding * 4} - #{$minPadding * 2});
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    margin: $minPadding 0;
-    position: relative;
-  }
-
-  &__empty {
-    flex: 1 1 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &__block {
-    padding: 0.75rem 0;
-
-    &:first-of-type {
-      padding-top: 0;
-    }
-
-    &:last-of-type {
-      padding-bottom: 0;
-      border-bottom: 0;
-    }
-
-    &-title {
-      @include serif(1rem);
-      margin-bottom: 5px;
-      padding: 0 5px;
-    }
-
-    &-link {
-      display: flex;
-      align-items: center;
-      padding: 5px;
-      transition: background-color 0.3s $animation;
-
-      &:hover {
-        background-color: $paleLT;
-        transition: background-color 0.3s $animation;
-      }
-
-      img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: $borderRadiusSM;
-        max-height: 100%;
-        display: block;
-        margin-right: 0.875rem;
-      }
-
-      strong {
-        color: $black;
-        display: block;
-      }
-
-      span {
-        font-size: 0.875rem;
-        color: $paleDP;
-      }
-    }
-  }
-
-  &__footer {
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-align: center;
-    padding: $minPadding;
-    border-top: 1px solid $paleMD;
-    color: $paleLT;
-    background-color: $dark;
-  }
-}
-</style>

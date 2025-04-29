@@ -1,0 +1,131 @@
+@import '~/scss/variables';
+@import 'include-media';
+
+.search {
+  background-color: $white;
+  border-radius: $borderRadiusMD;
+  width: 100%;
+  align-self: flex-start;
+  overflow: hidden;
+
+  @include media('>=laptop') {
+    max-width: 650px;
+  }
+
+  &__body {
+    padding: $minPadding $minPadding 0;
+  }
+
+  &__create {
+    position: relative;
+
+    .button {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
+  &__error {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: $error;
+  }
+
+  &__results {
+    min-height: 120px;
+    max-height: calc(100vh - #{$doublePadding * 4} - #{$minPadding * 2});
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    margin: $minPadding 0;
+    position: relative;
+  }
+
+  &__empty {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__block {
+    padding: 0.75rem 0;
+
+    &:first-of-type {
+      padding-top: 0;
+    }
+
+    &:last-of-type {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    &-title {
+      @include serif(1rem);
+      margin-bottom: 5px;
+      padding: 0 5px;
+    }
+
+    &-action {
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s $animation;
+
+      &:hover {
+        background-color: $paleLT;
+        transition: background-color 0.3s $animation;
+      }
+
+      img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: $borderRadiusSM;
+        max-height: 100%;
+        display: block;
+        margin-right: 0.875rem;
+      }
+
+      strong {
+        color: $black;
+        display: block;
+      }
+
+      span {
+        font-size: 0.875rem;
+        color: $paleDP;
+      }
+
+      .icon {
+        width: 24px;
+        margin-left: auto;
+        color: $paleDP;
+
+        &.--active {
+          fill: $success;
+        }
+      }
+    }
+  }
+
+  &__header,
+  &__footer {
+    letter-spacing: 1px;
+    text-align: center;
+    padding: $minPadding;
+    color: $paleLT;
+    background-color: $dark;
+  }
+
+  &__header {
+    @include serif(1rem);
+  }
+
+  &__footer {
+    font-size: 0.75rem;
+    border-top: 1px solid $paleMD;
+  }
+}

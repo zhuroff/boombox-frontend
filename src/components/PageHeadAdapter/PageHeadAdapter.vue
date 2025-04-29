@@ -4,6 +4,7 @@
       :is="PageHeadComponent"
       @getRandomAlbum="getRandomAlbum"
       @callSearchBlock="isSearchMode = true"
+      @addToCollection="addToCollection"
     >
       <template #hero>
         <div class="album__hero-heading">
@@ -45,6 +46,7 @@ interface Props {
 
 interface Emits {
   (e: 'getRandomAlbum'): void
+  (e: 'addToCollection'): void
 }
 
 const props = defineProps<Props>()
@@ -108,6 +110,7 @@ const PageHeadComponent = computed(() => {
 })
 
 const getRandomAlbum = () => emit('getRandomAlbum')
+const addToCollection = () => emit('addToCollection')
 </script>
 
 <style lang="scss">

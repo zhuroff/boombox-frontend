@@ -2,14 +2,6 @@
   <div class="album__hero">
     <div class="album__hero-info">
       <div class="album__hero-head">
-        <!-- <SearchBlock
-          v-if="withSearch"
-          type="search"
-          size="medium"
-          :placeholder="localize('search.placeholder')"
-          :results="results"
-          @setInputValue="searchSubmit"
-        /> -->
         <div
           v-if="withActions"
           class="album__hero-actions"

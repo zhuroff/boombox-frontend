@@ -126,7 +126,7 @@ export const localesEN: LocaleDictionary = {
   },
   collections: {
     add: 'Add to collection',
-    namePlaceholder: 'Enter collection name',
+    namePlaceholder: 'Enter new collection name, and save',
     exists: 'Collection with this name already exists',
     removed: 'Album successfully removed from collection',
     added: 'Album successfully added to collection',

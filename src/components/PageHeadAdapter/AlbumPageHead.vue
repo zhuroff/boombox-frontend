@@ -54,6 +54,12 @@
         isInverted
       />
       <Button
+        icon="add-box"
+        isRounded
+        isInverted
+        @click="addToCollection"
+      />
+      <Button
         icon="target"
         isRounded
         isInverted
@@ -77,6 +83,7 @@ interface Props {
 interface Emits {
   (e: 'getRandomAlbum'): void
   (e: 'callSearchBlock'): void
+  (e: 'addToCollection'): void
 }
 
 const props = defineProps<Props>()
@@ -86,4 +93,5 @@ const { globalGetters: { localize } } = useGlobalStore()
 
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')
+const addToCollection = () => emit('addToCollection')
 </script>

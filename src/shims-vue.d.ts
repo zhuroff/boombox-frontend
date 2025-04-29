@@ -25,8 +25,12 @@ interface Category extends Entity {
   embeddedAlbums?: Embedded[]
 }
 
-interface Compilation extends Entity {
+interface GatheringBasic extends Entity {
   avatar?: string
+  entities: string[]
+}
+
+interface Compilation extends GatheringBasic {
   poster?: string
   tracks: Track[]
 }
@@ -109,6 +113,10 @@ interface Pagination {
 
 type SortingValue = Record<string, 1 | -1>
 
+interface UsePaginationProps {
+  isRouted?: boolean
+}
+
 interface PaginationState extends Pick<Pagination, 'page'> {
   limit: number
   sort: SortingValue
@@ -144,7 +152,7 @@ type RequestConfig = PaginationState & {
 }
 
 interface UseEntityListPayload {
-  qEntity: string
+  // qEntity: string
   entityKey: string
   requestConfig: RequestConfig
 }
@@ -316,6 +324,11 @@ interface ReorderPayload {
   entityID: string
   oldOrder: number
   newOrder: number
+}
+
+interface GatheringCreateReq {
+  title: string,
+  entityID: string
 }
 
 interface GatheringUpdateReq {

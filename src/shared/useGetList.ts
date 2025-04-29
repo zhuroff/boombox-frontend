@@ -1,13 +1,13 @@
-import type { ComputedRef } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import DatabaseService from '~/services/DatabaseService'
+import type DatabaseService from '~/services/DatabaseService'
 
-const useEntityList = <T>(
+const useGetList = <T>(
   payload: ComputedRef<UseEntityListPayload>,
   dbService: DatabaseService,
-  isEnabled?: ComputedRef<boolean>
+  isEnabled?: ComputedRef<boolean> | Ref<boolean>
 ) => {
-  const { refetch, isFetched, isError, data, error } = useQuery<ListPageResponse<T>>({
+  const { refetch, isFetched, isFetching, isError, data, error } = useQuery<ListPageResponse<T>>({
     retry: 3,
     enabled: isEnabled,
     refetchOnWindowFocus: false,
@@ -19,6 +19,7 @@ const useEntityList = <T>(
   })
 
   return {
+    isFetching,
     isFetched,
     refetch,
     isError,
@@ -27,4 +28,4 @@ const useEntityList = <T>(
   }
 }
 
-export default useEntityList
+export default useGetList

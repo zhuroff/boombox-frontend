@@ -4,11 +4,11 @@ import type { SearchPayload, SearchResultState } from '~/types/Search'
 import commonServices from './common.services'
 
 export default {
-  async createEntity<T, U>(entityKey: string, payload?: U): Promise<T> {
-    const response = await api.post<T>(`/api/${entityKey}/create`, payload)
-    commonServices.errorChecker(response.status)
-    return response.data
-  },
+  // async createEntity<T, U>(entityKey: string, payload?: U): Promise<T> {
+  //   const response = await api.post<T>(`/api/${entityKey}/create`, payload)
+  //   commonServices.errorChecker(response.status)
+  //   return response.data
+  // },
 
   // async getEntity<T>(entityKey: string, path: string) {
   //   const response = await api.get<T>(`/api/${entityKey}/${path}`)
@@ -16,11 +16,11 @@ export default {
   //   return response.data
   // },
 
-  async updateEntity<T, U>(entityKey: string, payload?: U): Promise<T> {
-    const response = await api.patch<T>(`/api/${entityKey}/update`, payload)
-    commonServices.errorChecker(response.status)
-    return response.data
-  },
+  // async updateEntity<T, U>(entityKey: string, payload?: U): Promise<T> {
+  //   const response = await api.patch<T>(`/api/${entityKey}/update`, payload)
+  //   commonServices.errorChecker(response.status)
+  //   return response.data
+  // },
 
   async reorderEntities<T, U>(entityKey: string, id: string, payload: U): Promise<T> {
     const response = await api.patch<T>(`/api/${entityKey}/${id}/reorder`, payload)

@@ -40,6 +40,8 @@ import SpriteBurger from './SpriteBurger.vue'
 import SpriteWiki from './SpriteWiki.vue'
 import SpriteQuestion from './SpriteQuestion.vue'
 import SpriteTarget from './SpriteTarget.vue'
+import SpriteAddBox from './SpriteAddBox.vue'
+import SpriteCheck from './SpriteCheck.vue'
 
 interface Props {
   name: string
@@ -84,6 +86,8 @@ const IconsMap = new Map([
   ['wiki', SpriteWiki],
   ['question', SpriteQuestion],
   ['target', SpriteTarget],
+  ['add-box', SpriteAddBox],
+  ['check', SpriteCheck]
 ])
 
 const IconComponent = computed(() => (

@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import DatabaseService from '~/services/DatabaseService'
 
-const useEntityPage = <T extends Entity>(
+const useGetPage = <T extends Entity>(
   entityKey: Ref<string>,
   dbService: DatabaseService,
   preRandomState?: Ref<string>
@@ -58,4 +58,4 @@ const useEntityPage = <T extends Entity>(
   }
 }
 
-export default useEntityPage
+export default useGetPage

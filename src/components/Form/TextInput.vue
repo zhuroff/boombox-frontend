@@ -8,6 +8,7 @@
     :name="name"
     :readonly="readonly"
     :required="required"
+    :value="value"
     ref="textInputElement"
     autocomplete="off"
     @input="(e) => emit('onInput', (e.target as HTMLInputElement).value)"
@@ -23,6 +24,7 @@ import './InputField.scss'
 interface Props {
   name: string
   type: TextInputFieldSchema['type']
+  value?: string
   size?: ElementSize
   defaultValue?: string
   id?: string
@@ -40,6 +42,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  value: '',
   isError: false,
   required: false,
   readonly: false,

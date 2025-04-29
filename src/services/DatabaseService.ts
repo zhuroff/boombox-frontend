@@ -45,6 +45,32 @@ export default class DatabaseService {
     }
   }
 
+  createEntity = async <T, U>(entityKey: string, payload: U | null) => {
+    if (!payload) {
+      throw new Error('Query payload is not defined')
+    }
+
+    try {
+      const response = await api.post<T>(`/api/${entityKey}/create`, payload)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  updateEntity = async <T, U>(entityKey: string, payload: U | null) => {
+    if (!payload) {
+      throw new Error('Query payload is not defined')
+    }
+    
+    try {
+      const response = await api.patch<T>(`/api/${entityKey}/update`, payload)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
   search = async (payload: SearchPayload) => {
     try {
       const response = await api.post<SearchResultState[]>(`/api/search`, payload)

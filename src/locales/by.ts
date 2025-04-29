@@ -126,7 +126,7 @@ export const localesBY: LocaleDictionary = {
   },
   collections: {
     add: 'Дадаць у калекцыю',
-    namePlaceholder: 'Увядзіце назву калекцыі',
+    namePlaceholder: 'Увядзіце назву новай калекцыі і захавайце',
     exists: 'Калекцыя з такой назвай ужо існуе',
     removed: 'Альбом паспяхова выдалены з калекцыі',
     added: 'Альбом паспяхова дададзены ў калекцыю',

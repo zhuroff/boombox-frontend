@@ -51,8 +51,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import useGlobalStore from '~/store/global'
-import useEntityPage from '~/shared/useEntityPage'
-import useEntityList from '~/shared/useEntityList'
+import useGetPage from '~/shared/useGetPage'
+import useGetList from '~/shared/useGetList'
 import Preloader from '~/components/Preloader.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
@@ -66,7 +66,7 @@ const dbService = new DatabaseService()
 const pageEntityKey = ref('compilations')
 const preRandomState = ref('')
 
-const { data: compilation, isFetched: isAlbumFetched } = useEntityPage<Compilation>(pageEntityKey, dbService, preRandomState)
+const { data: compilation, isFetched: isAlbumFetched } = useGetPage<Compilation>(pageEntityKey, dbService, preRandomState)
 
 // setPlayerPlaylist(payload)
 
@@ -116,7 +116,7 @@ const relatedCompilationsConfig = computed<UseEntityListPayload>(() => (
     : {} as UseEntityListPayload
 ))
 
-const { data: relatedCompilationsRes } = useEntityList<Compilation>(
+const { data: relatedCompilationsRes } = useGetList<Compilation>(
   relatedCompilationsConfig,
   dbService,
   isCompilationReady

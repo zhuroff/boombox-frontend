@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import { ref, computed, watchEffect } from 'vue'
 import useGlobalStore from '~/store/global'
-import useEntityList from '~/shared/useEntityList'
+import useGetList from '~/shared/useGetList'
 import usePagination from '~/hooks/usePagination'
 import useSnackbar from '~/hooks/useSnackbar'
 import Preloader from '~/components/Preloader.vue'
@@ -83,17 +83,17 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { pagination, paginationConfig, updatePaginationConfig, updatePaginationState } = usePagination()
+const { pagination, paginationConfig, updatePaginationConfig, updatePaginationState } = usePagination({})
 
 const dbService = new DatabaseService()
 
 const listQueryConfig = computed(() => ({
-  qEntity: props.entityKey,
+  // qEntity: props.entityKey,
   entityKey: props.entityKey,
   requestConfig: pagination
 }))
 
-const { data, refetch, isFetched } = useEntityList<BasicEntity>(listQueryConfig, dbService)
+const { data, refetch, isFetched } = useGetList<BasicEntity>(listQueryConfig, dbService)
 const { globalGetters: { localize } } = useGlobalStore()
 const { setSnackbarMessage } = useSnackbar()
 
