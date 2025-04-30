@@ -6,14 +6,14 @@ import usePagination from '~/hooks/usePagination'
 import discogsTableSchema from '~/schemas/DiscogsSchema'
 
 const useDiscogs = (discogsService: DiscogsService, entity: Ref<Album> | Ref<EmbeddedItem> | Ref<undefined>) => {
-  const discogsFilters = reactive<DiscogsFilter>({
+  const discogsFilters = reactive<TableFilters>({
     country: [],
     releaseYear: [],
     releaseFormat: [],
     label: []
   })
 
-  const discogsFiltersState = reactive<Record<keyof DiscogsFilter, null | string>>({
+  const discogsFiltersState = reactive<Record<keyof TableFilters, null | string>>({
     country: null,
     releaseYear: null,
     releaseFormat: null,
@@ -72,11 +72,11 @@ const useDiscogs = (discogsService: DiscogsService, entity: Ref<Album> | Ref<Emb
 
   const resetDiscogsFilters = () => {
     for (const key in discogsFiltersState) {
-      discogsFiltersState[key as keyof DiscogsFilter] = null
+      discogsFiltersState[key as keyof TableFilters] = null
     }
   }
 
-  const setDiscogsFilterValue = (payload: [keyof DiscogsFilter, string]) => {
+  const setDiscogsFilterValue = (payload: [keyof TableFilters, string | null]) => {
     discogsPagination.page = 1
     discogsFiltersState[payload[0]] = payload[1]
   }
@@ -89,10 +89,10 @@ const useDiscogs = (discogsService: DiscogsService, entity: Ref<Album> | Ref<Emb
 
   const setDiscogsFilters = (data: DiscogsReleaseRow[]) => {
     const uniqueFilterValues = {
-      country: new Set<DiscogsFilter['country'][number]>(),
-      releaseYear: new Set<DiscogsFilter['releaseYear'][number]>(),
-      releaseFormat: new Set<DiscogsFilter['releaseFormat'][number]>(),
-      label: new Set<DiscogsFilter['label'][number]>()
+      country: new Set<TableFilters['country'][number]>(),
+      releaseYear: new Set<TableFilters['releaseYear'][number]>(),
+      releaseFormat: new Set<TableFilters['releaseFormat'][number]>(),
+      label: new Set<TableFilters['label'][number]>()
     }
 
     data.forEach((row) => {
@@ -104,7 +104,7 @@ const useDiscogs = (discogsService: DiscogsService, entity: Ref<Album> | Ref<Emb
     
     Object.entries(uniqueFilterValues).forEach(([key, value]) => {
       const sortedValues = [...value].sort()
-      discogsFilters[key as keyof DiscogsFilter] = sortedValues
+      discogsFilters[key as keyof TableFilters] = sortedValues
     })
   }
 

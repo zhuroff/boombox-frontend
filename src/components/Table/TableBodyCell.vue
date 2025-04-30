@@ -1,5 +1,5 @@
 <template>
-  <td class="table__row-cell">
+  <td class="table__body-cell">
     <component :is="cellComponent" />
   </td>
 </template>
@@ -65,7 +65,7 @@ const cellComponent = computed(() => {
 <style lang="scss" scoped>
 @use '~/scss/variables' as var;
 
-.table__row-cell {
+.table__body-cell {
   padding: 0.25rem;
   vertical-align: middle;
 

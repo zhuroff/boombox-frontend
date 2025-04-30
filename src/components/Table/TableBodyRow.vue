@@ -14,11 +14,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { JSONSchema4, JSONSchema4TypeName } from 'json-schema'
+import type { JSONSchema4, JSONSchema4Type, JSONSchema4TypeName } from 'json-schema'
 import TableBodyCell from './TableBodyCell.vue'
 
 interface Props {
-  row: Record<string, JSONSchema4TypeName>
+  row: Record<string, JSONSchema4Type>
   schema: JSONSchema4
 }
 
@@ -46,8 +46,8 @@ const rowClickHandler = () => {
   if (!rowLink.value.href) return
 
   rowLink.value.schema?.isInnerPage
-    ? window.location.href = rowLink.value.href
-    : window.open(rowLink.value.href)
+    ? window.location.href = String(rowLink.value.href)
+    : window.open(String(rowLink.value.href))
 }
 </script>
 

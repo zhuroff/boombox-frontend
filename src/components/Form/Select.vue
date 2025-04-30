@@ -4,7 +4,9 @@
       class="select__input"
       v-model="localSelected[entityKey]"
     >
-      <option>{{ localize(`${localeKey}.${entityKey}`) }}</option>
+      <option>
+        {{ localize(`${localeKey}.${entityKey}`) }}
+      </option>
       <option
         v-for="option in options"
         :key="option"
@@ -18,12 +20,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import type { TableFilter } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 
 interface Props {
   options: string[]
-  selected: Record<keyof TableFilter, null | string>
+  selected: Record<keyof TableFilters, null | string>
   localeKey: string
   entityKey: string
 }

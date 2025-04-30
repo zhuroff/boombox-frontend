@@ -80,13 +80,13 @@
       </tr>
     </tbody>
   </table>
-  <Paginator
+  <!-- <Paginator
     v-if="tableState.pagination?.totalPages > 1"
     key="pagination"
     :config="paginationConfig"
     :pagination="tableState.pagination"
     @switchPagination="switchPagination"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -95,7 +95,7 @@ import type { ComputedRef } from 'vue'
 import type { TableFilter, TablePayload } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Select from '~/components/Select.vue'
-import Paginator from '~/components/Paginator.vue'
+// import Paginator from '~/components/Paginator.vue'
 
 interface Props {
   tableState: TablePayload<Record<string, any>>
@@ -116,10 +116,10 @@ const {
   globalGetters: { localize }
 } = useGlobalStore()
 
-const paginationConfig = ref<PaginationConfig>({
-  increment: true,
-  decrement: true
-})
+// const paginationConfig = ref<PaginationConfig>({
+//   increment: true,
+//   decrement: true
+// })
 
 const propMap: ComputedRef<Map<string, any>> = computed(() => (
   new Map([...Object.entries(props.tableState.schema.properties || {})])
@@ -138,7 +138,7 @@ const switchPagination = (value: number) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
 @import '../scss/variables.scss';
 @import 'include-media';
 
@@ -206,4 +206,4 @@ const switchPagination = (value: number) => {
     }
   }
 }
-</style>
+</style> -->

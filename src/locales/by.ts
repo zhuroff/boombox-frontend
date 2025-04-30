@@ -57,6 +57,7 @@ export const localesBY: LocaleDictionary = {
   discogsTable: {
     cover: 'Вокладка',
     country: 'Краiна',
+    releaseTitle: 'Назва',
     releaseYear: 'Год',
     releaseFormat: 'Фармат',
     label: 'Лэйбл'

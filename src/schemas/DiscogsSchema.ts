@@ -54,6 +54,20 @@ const discogsTableSchema: JSONSchema4 = {
       minItems: 1
     }
   },
+  filters: {
+    country: {
+      type: 'select'
+    },
+    releaseFormat: {
+      type: 'select'
+    },
+    label: {
+      type: 'select'
+    },
+    releaseYear: {
+      type: 'select'
+    }
+  },
   additionalProperties: false
 }
 

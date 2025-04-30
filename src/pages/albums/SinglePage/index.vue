@@ -32,6 +32,10 @@
         <template #footer>
           <Table
             :tableState="discogsTableState"
+            :tableFilters="discogsFilters"
+            :tableFiltersState="discogsFiltersState"
+            localeRootKey="discogsTable"
+            @updateFilterValue="(value) => setDiscogsFilterValue(value)"
           />
         </template>
         <!-- <Table
@@ -77,7 +81,6 @@ import useAlbum from './useAlbum'
 import useWiki from './useWiki'
 import useDiscogs from './useDiscogs'
 import useCollections from './useCollections'
-import useGlobalStore from '~/store/global'
 import DatabaseService from '~/services/DatabaseService'
 import DiscogsService from '~/services/DiscogsService'
 import Preloader from '~/components/Preloader.vue'
@@ -91,8 +94,6 @@ import Modal from '~/components/Modal.vue'
 
 const dbService = new DatabaseService()
 const discogsService = new DiscogsService()
-
-const { globalGetters: { localize } } = useGlobalStore()
 
 const {
   album,
@@ -112,6 +113,7 @@ const {
 const {
   discogsTableState,
   discogsFiltersState,
+  setDiscogsFilterValue,
   discogsFilters
 } = useDiscogs(discogsService, album)
 

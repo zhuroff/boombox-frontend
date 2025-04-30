@@ -483,13 +483,6 @@ interface DiscogsQueryConfig {
   page: number
 }
 
-interface DiscogsFilter extends Pick<DiscogsReleaseRow, 'country' | 'releaseYear' | 'releaseFormat' | 'label'> {
-  country: string[]
-  releaseYear: string[]
-  releaseFormat: string[]
-  label: string[]
-}
-
 interface TableConfig<T, U> {
   rows: T[]
   schema: U
@@ -502,3 +495,12 @@ interface TableCellConfig<T, U> {
   value: T
   schema: U
 }
+
+interface TableHeadConfig<T> {
+  key: string
+  heading: string
+  schema: T | undefined
+  filter: T | undefined
+}
+
+type TableFilters = Record<string, string[]>
