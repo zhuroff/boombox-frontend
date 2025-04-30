@@ -32,8 +32,7 @@ const navHandler = () => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .container {
   height: 100vh;
@@ -41,12 +40,12 @@ const navHandler = () => {
   overflow: hidden;
   position: relative;
 
-  @include media('<laptop') {
-    background-color: $accent;
+  @include var.media('<laptop') {
+    background-color: var.$accent;
   }
 
-  @include media('>=laptop') {
-    background-color: $paleLT;
+  @include var.media('>=laptop') {
+    background-color: var.$paleLT;
   }
 }
 
@@ -54,21 +53,21 @@ const navHandler = () => {
   flex: none;
   position: relative;
   z-index: 1000;
-  background-color: $paleLT;
+  background-color: var.$paleLT;
   overflow: auto;
 
-  @include media('<laptop') {
+  @include var.media('<laptop') {
     width: 100vw;
     height: 100vh;
     left: 0;
     clip-path: circle(100%);
-    transition: all 0.75s $animation;
+    transition: all 0.75s var.$animation;
     padding-bottom: 60px;
 
     &.--offset {
       clip-path: circle(34%);
-      left: -#{$asideWidthMobile};
-      transition: all 0.5s $animation;
+      left: -#{var.$asideWidthMobile};
+      transition: all 0.5s var.$animation;
       filter: grayscale(1);
       animation: rotating 5s linear infinite;
 
@@ -80,11 +79,11 @@ const navHandler = () => {
         transform: translate(-50%, -50%);
         width: 100px;
         height: 100px;
-        background-color: $black;
+        background-color: var.$black;
         border-radius: 50%;
-        border: 4px solid $paleDP;
+        border: 4px solid var.$paleDP;
         z-index: 1;
-        animation: appearance 0.75s $animation;
+        animation: appearance 0.75s var.$animation;
       }
 
       &:after {
@@ -95,22 +94,22 @@ const navHandler = () => {
         transform: translate(-50%, -50%);
         width: 30px;
         height: 30px;
-        background-color: $white;
+        background-color: var.$white;
         border-radius: 50%;
-        border: 2px solid $dark;
+        border: 2px solid var.$dark;
         z-index: 2;
-        animation: appearance 0.75s $animation;
+        animation: appearance 0.75s var.$animation;
       }
     }
   }
 
-  @include media('>=laptop') {
-    width: calc(100% - #{$asideWidth});
-    height: calc(100vh - #{$playerHeight});
+  @include var.media('>=laptop') {
+    width: calc(100% - var.$asideWidth);
+    height: calc(100vh - var.$playerHeight);
   }
 
   .content {
-    padding: 2rem 1rem 0 1rem;
+    padding: 2rem 1rem var.$mainPadding 1rem;
   }
 }
 </style>

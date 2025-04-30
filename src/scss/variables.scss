@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use 'sass:string';
+
 $font: 'Nunito', sans-serif;
 
 $white: #fff;
@@ -40,16 +43,6 @@ $animation: cubic-bezier(.06,.28,.26,.81);
 $shadowLight: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 $shadowMedium: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
-$breakpoints: (
-  'tablet': 768px,
-  'laptop': 1024px,
-  'desktop': 1280px,
-  'desktop-md': 1536px,
-  'desktop-lg': 1780px,
-  'desktop-hg': 2048px,
-  'landscape': '(orientation: landscape)'
-  ) !default;
-
 @mixin buttonClose {
   position: absolute;
   top: $mainPadding;
@@ -81,4 +74,64 @@ $breakpoints: (
   color: $paleDP;
   font-size: .75rem;
   position: relative;
+}
+
+$breakpoints: (
+  'tablet': 768px,
+  'laptop': 1024px,
+  'desktop': 1280px,
+  'desktop-md': 1536px,
+  'desktop-lg': 1780px,
+  'desktop-hg': 2048px,
+  'landscape': '(orientation: landscape)'
+  ) !default;
+
+@function parse-condition($query) {
+  $operator: null;
+  $name: null;
+  $value: null;
+
+  @if string.index($query, '<=') == 1 {
+    $operator: 'max';
+    $name: string.slice($query, 3);
+  } @else if string.index($query, '>=') == 1 {
+    $operator: 'min';
+    $name: string.slice($query, 3);
+  } @else if string.index($query, '<') == 1 {
+    $operator: 'max';
+    $name: string.slice($query, 2);
+  } @else if string.index($query, '>') == 1 {
+    $operator: 'min';
+    $name: string.slice($query, 2);
+  } @else {
+    $operator: 'min';
+    $name: $query;
+  }
+
+  $value: map.get($breakpoints, $name);
+
+  @if $value == null {
+    @warn 'Неизвестный брейкпоинт: "#{$name}"';
+    @return null;
+  }
+
+  @return '(#{$operator}-width: #{$value})';
+}
+
+@mixin media($query1, $query2: null) {
+  $condition1: parse-condition($query1);
+  $condition2: if($query2 != null, parse-condition($query2), null);
+
+  @if $condition1 != null and ($query2 == null or $condition2 != null) {
+    $mediaQuery: 'screen and #{$condition1}';
+    @if $condition2 != null {
+      $mediaQuery: '#{$mediaQuery} and #{$condition2}';
+    }
+
+    @media #{$mediaQuery} {
+      @content;
+    }
+  } @else {
+    @warn 'Wrong conditions';
+  }
 }

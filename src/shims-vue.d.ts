@@ -256,10 +256,10 @@ type UnifiedAlbumPage = AlbumItem | EmbeddedItem | CompilationPage
 
 type UnifiedAlbumEntity = AlbumItem | EmbeddedItem | CompilationItem
 
-// interface RelatedAlbums {
-//   name: string
-//   docs: AlbumItem[]
-// }
+interface RelatedAlbums {
+  name: string
+  docs: Album[]
+}
 
 // interface RelatedCompilations {
 //   name: string
@@ -411,7 +411,6 @@ interface SearchPayload {
 type SearchResultData = AlbumItem | CategoryItem | TrackRes
 
 interface SearchResultState {
-  title: string
   key: string
   data: SearchResultData[]
 }

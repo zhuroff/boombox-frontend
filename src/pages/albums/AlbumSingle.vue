@@ -21,7 +21,7 @@
         :isModalActive="isCollectionLoading"
         @closeModal="closeCollectionModal"
       >
-        <GatheringTabs
+        <!-- <GatheringTabs
           v-if="!isCollectionLoading && collections"
           :isLoading="isCollectionLoading"
           :results="collections"
@@ -29,7 +29,7 @@
           :entityID="album._id"
           placeholderImage="/img/album.webp"
           entityType="collections"
-        />
+        /> -->
       </Modal>
     </template>
   </AlbumPageTemplate>
@@ -51,7 +51,7 @@ import CollectionEntity from '~/classes/CollectionEntity'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
 // import AlbumHero from '~/components/AlbumHero.vue'
-import GatheringTabs from '~/components/GatheringTabs.vue'
+// import GatheringTabs from '~/components/GatheringTabs.vue'
 import Modal from '~/components/Modal.vue'
 
 const {

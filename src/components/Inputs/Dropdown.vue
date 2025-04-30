@@ -94,7 +94,7 @@ const applyValue = (option: DropdownItem) => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
 
 .dropdown {
   position: relative;
@@ -107,7 +107,7 @@ const applyValue = (option: DropdownItem) => {
       width: 100%;
       display: flex;
       justify-content: flex-start;
-      border-color: $paleMD;
+      border-color: var.$paleMD;
 
       &:hover {
         background-color: inherit;
@@ -168,7 +168,7 @@ const applyValue = (option: DropdownItem) => {
       overflow: hidden;
       max-width: 100%;
       display: block;
-      color: $paleDP;
+      color: var.$paleDP;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -182,24 +182,23 @@ const applyValue = (option: DropdownItem) => {
     width: 100%;
 
     &-list {
-      // background-color: $white;
-      background-color: $paleLT;
+      background-color: var.$paleLT;
       margin: 0;
       padding: 0.5rem 0;
-      box-shadow: $shadowMedium;
-      border-radius: $borderRadiusMD;
+      box-shadow: var.$shadowMedium;
+      border-radius: var.$borderRadiusMD;
     }
 
     &-item {
       cursor: pointer;
       display: flex;
       align-items: center;
-      transition: all 0.2s $animation;
+      transition: all 0.2s var.$animation;
 
       &:hover {
-        background-color: $black;
-        color: $white;
-        transition: all 0.2s $animation;
+        background-color: var.$black;
+        color: var.$white;
+        transition: all 0.2s var.$animation;
       }
 
       &.--small {

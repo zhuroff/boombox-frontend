@@ -61,8 +61,7 @@ const selectWikiResult = (id: number) => {
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .wikiframe {
   width: calc(100vw - 20px);
@@ -70,8 +69,8 @@ const selectWikiResult = (id: number) => {
   max-width: 1200px;
   max-height: calc(100vh - 50px);
   overflow: hidden;
-  background-color: $white;
-  border-radius: $borderRadiusLG;
+  background-color: var.$white;
+  border-radius: var.$borderRadiusLG;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -84,16 +83,16 @@ const selectWikiResult = (id: number) => {
 
     &-item {
       font-size: 0.875rem;
-      color: $paleDP;
+      color: var.$paleDP;
       cursor: pointer;
       text-align: center;
 
       &:hover {
-        color: $dark;
+        color: var.$dark;
       }
 
       &.--selected {
-        color: $dark;
+        color: var.$dark;
         font-weight: 600;
       }
     }

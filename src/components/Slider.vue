@@ -1,29 +1,27 @@
-<template>
-  
-<div class="slider">
-  <Carousel
-    ref="slider"
-    :itemsToShow="1"
-    :wrapAround="true"
-    @slide-start="handleSlideStart"
-  >
-    <Slide
-      v-for="item in data"
-      :key="item"
+<template>  
+  <div class="slider">
+    <Carousel
+      ref="slider"
+      :itemsToShow="1"
+      :wrapAround="true"
+      @slide-start="handleSlideStart"
     >
-      <div class="carousel__item">
-        <img class="carousel__image" :src="item">
-      </div>
-    </Slide>
-    <template #addons="{ currentSlide }">
-      <Navigation :class="{
-        '--full' : isFullSlideSet,
-        '--first' : currentSlide === 0
-      }" />
-    </template>
-  </Carousel>
-</div>
-
+      <Slide
+        v-for="item in data"
+        :key="item"
+      >
+        <div class="carousel__item">
+          <img class="carousel__image" :src="item">
+        </div>
+      </Slide>
+      <template #addons="{ currentSlide }">
+        <Navigation :class="{
+          '--full' : isFullSlideSet,
+          '--first' : currentSlide === 0
+        }" />
+      </template>
+    </Carousel>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -48,8 +46,7 @@ const handleSlideStart = (data: BookletSlideState) => {
 </script>
 
 <style lang="scss">
-@import '../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 @import 'vue3-carousel/dist/carousel.css';
 
 .slider {
@@ -80,12 +77,12 @@ const handleSlideStart = (data: BookletSlideState) => {
   
     &__prev {
       background-color: transparent;
-      color: $paleDP;
-      transition: color 0.2s $animation;
+      color: var.$paleDP;
+      transition: color 0.2s var.$animation;
 
       &:hover {
-        color: $white;
-        transition: color 0.2s $animation;
+        color: var.$white;
+        transition: color 0.2s var.$animation;
       }
 
       &:not(.--full) {
@@ -98,13 +95,13 @@ const handleSlideStart = (data: BookletSlideState) => {
         }
       }
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         transform: translate(0, -50%);
         width: 50px;
         height: 50px;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         transform: translate(25px, -50%);
         width: 75px;
         height: 75px;
@@ -113,21 +110,21 @@ const handleSlideStart = (data: BookletSlideState) => {
   
     &__next {
       background-color: transparent;
-      color: $paleDP;
-      transition: color 0.2s $animation;
+      color: var.$paleDP;
+      transition: color 0.2s var.$animation;
 
       &:hover {
-        color: $white;
-        transition: color 0.2s $animation;
+        color: var.$white;
+        transition: color 0.2s var.$animation;
       }
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         transform: translate(0, -50%);
         width: 50px;
         height: 50px;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         transform: translate(-25px, -50%);
         width: 75px;
         height: 75px;

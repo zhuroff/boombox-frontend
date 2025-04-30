@@ -25,13 +25,13 @@
           />
         </template>
       </CategoryHero>
-      <ListPageTemplate
+      <!-- <ListPageTemplate
         placeholderImage="/img/album.webp"
         :isDataFetched="isDataFetched"
         :dataList="albumList"
         isDraggable
         @orderChanged="changeAlbumsOrder"
-      />
+      /> -->
     </transition-group>
     <Modal
       v-if="isDelConfirm"
@@ -56,7 +56,7 @@ import { useSinglePage } from '~/hooks/useSinglePage'
 import { useGathering } from '~/hooks/useGathering'
 import useGlobalStore from '~/store/global'
 import CollectionEntity from '~/classes/CollectionEntity'
-import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+// import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
 import Button from '~/components/Button.vue'
@@ -123,23 +123,23 @@ const deleteCompilation = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
 
 .hero {
   .--delete {
     position: absolute;
-    fill: $white;
-    stroke: $white;
+    fill: var.$white;
+    stroke: var.$white;
     opacity: 0;
     right: 3.5rem;
     top: 1.25rem;
-    transition: opacity 0.3s $animation;
+    transition: opacity 0.3s var.$animation;
   }
 
   &:hover {
     .--delete {
       opacity: 1;
-      transition: opacity 0.3s $animation;
+      transition: opacity 0.3s var.$animation;
     }
   }
 }

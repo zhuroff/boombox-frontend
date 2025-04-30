@@ -1,76 +1,41 @@
 <template>
-  <div class="search">
-    <header class="search__header">
+  <SearchWrapper isWithHeader>
+    <template #header>
       Collections
-    </header>
-    <div class="search__body">
-      <div class="search__create">
-        <TextInput
-          name="create"
-          type="text"
-          size="large"
-          style="padding-right: 2.5rem"
-          :value="newGatheringTitle"
-          :placeholder="inputPlaceholder"
-          :isError="isNewGatheringTitleDuplicated"
-          @onInput="(value) => newGatheringTitle = value"
-        />
-        <Button
-          v-if="!isCreatingDisabled"
-          icon="save"
-          size="large"
-          isText
-          @click="createNewGathering"
-        />
-        <div
-          v-if="isNewGatheringTitleDuplicated"
-          class="search__error"
-        >This title is already exists</div>
-      </div>
-      <div class="search__results">
-        <Preloader
-          v-if="isFetching"
-          mode="light"
-        />
-        <div
-          v-if="!gatherings?.length"
-          class="search__empty"
-        >
-          There are no results
-        </div>
-        <div
-          v-else
-          class="search__data"
-        >
-          <ul class="search__block-list">
-            <li
-              v-for="item in coveredGatherings"
-              :key="item._id"
-              class="search__block-item"
-              @click="selectGathering(item.isInCollection, item._id)"
-            >
-              <span class="search__block-action">
-                <img :src="item.avatar" />
-                <strong>{{ item.title }}</strong>
-                <Sprite
-                  :name="item.isInCollection ? 'check' : 'plus'"
-                  :class="[{ '--active' : item.isInCollection }]"
-                />
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+    </template>
+    <template #body>
+      <SearchCreate
+        :error="errorMessage"
+        :isSaveDisabled="!!isCreatingDisabled"
+        :inputValue="newGatheringTitle"
+        :inputPlaceholder="inputPlaceholder"
+        @passInputValue="(value) => newGatheringTitle = value"
+        @createEntity="createNewGathering"
+      />
+      <SearchResults
+        :isFetching="isFetching"
+        :isEmpty="!gatherings?.length"
+      >
+        <template #results>
+          <SearchBlock
+            v-for="result in gatheringBlocks"
+            :key="result.key"
+            :block="result"
+            :renderer="getRowComponent"
+          ></SearchBlock>
+        </template>
+      </SearchResults>
+    </template>
+  </SearchWrapper>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, h } from 'vue'
 import { hostString } from '~/utils'
-import TextInput from '../Form/TextInput.vue'
-import Button from '~/components/Button.vue'
-import Preloader from '~/components/Preloader.vue'
+import SearchWrapper from '~/components/Search/SearchWrapper.vue'
+import SearchCreate from '~/components/Search/SearchCreate.vue'
+import SearchResults from '~/components/Search/SearchResults.vue'
+import SearchBlock from '~/components/Search/SearchBlock.vue'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 interface Props {
@@ -112,6 +77,45 @@ const isNewGatheringTitleDuplicated = computed(() => (
     title.toLowerCase() === newGatheringTitle.value.toLowerCase()
   ))
 ))
+
+const errorMessage = computed(() => (
+  isNewGatheringTitleDuplicated.value
+    ? 'This title is already exists'
+    : null
+))
+
+const gatheringBlocks = computed<SearchResultState[]>(() => [{
+  key: 'gathering',
+  data: coveredGatherings.value || []
+}])
+
+const getRowComponent = (key: string, data: any) => {
+  return h(
+    'div',
+    {
+      class: 'search__block-action',
+      onClick: () => selectGathering(data.isInCollection, data._id)
+    },
+    [
+      h(
+        'img',
+        { src: data.avatar }
+      ),
+      h(
+        'strong',
+        {},
+        data.title
+      ),
+      h(
+        Sprite,
+        {
+          name: data.isInCollection ? 'check' : 'plus',
+          class: [{ '--active' : data.isInCollection }]
+        }
+      )
+    ]
+  )
+}
 
 const selectGathering = (isInList: boolean, gatheringID: string) => {
   emit('onSelectGathering', {

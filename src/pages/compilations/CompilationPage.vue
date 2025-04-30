@@ -7,43 +7,27 @@
       />
     </transition>
     <transition name="fade">
-      <div v-if="compilation" class="album">
-        <PageHeadAdapter
-          :album="compilation"
-          @getRandomAlbum="getRandomAlbum"
-        />
-        <div class="album__content">
-          <div
-            class="album__main"
-            ref="albumContent"
-          >
-            <TrackList
-              v-if="'tracks' in compilation"
-              :tracks="compilation.tracks"
-              :albumID="compilation._id"
-              @trackOrderChanged="changeTracksOrder"
-              @removeTrackFromCompilation="removeTrackFromCompilation"
-            />
-          </div>
-          <div
-            v-for="{ name, docs } in relatedCompilations"
-            class="album__related"
-          >
-            <div class="album__related-title">
-              {{ localize('moreOf') }} {{ name }}
-            </div>
-            <EntityCards
-              :entities="docs"
-              :entityKey="'albums'"
-              :isDraggable="false"
-              :isDeletable="false"
-              template="col"
-              placeholderPreview="/img/album.webp"
-              @deleteEntity="confirmDelete"
-            />
-          </div>
-        </div>
-      </div>
+      <AlbumContent
+        v-if="compilation"
+        :relatedAlbums="relatedAlbums"
+        entityKey="compilations"
+      >
+        <template #hero>
+          <PageHeadAdapter
+            :album="compilation"
+            @getRandomAlbum="getRandomAlbum"
+          />
+        </template>
+        <template #content>
+          <TrackList
+            v-if="'tracks' in compilation"
+            :tracks="compilation.tracks"
+            :albumID="compilation._id"
+            @trackOrderChanged="changeTracksOrder"
+            @removeTrackFromCompilation="removeTrackFromCompilation"
+          />
+        </template>
+      </AlbumContent>
     </transition>
   </section>
 </template>
@@ -54,9 +38,9 @@ import useGlobalStore from '~/store/global'
 import useGetPage from '~/shared/useGetPage'
 import useGetList from '~/shared/useGetList'
 import Preloader from '~/components/Preloader.vue'
+import AlbumContent from '~/components/Album/AlbumContent.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
-import EntityCards from '~/components/EntityCards.vue'
 import DatabaseService from '~/services/DatabaseService'
 
 const { globalGetters: { localize } } = useGlobalStore()

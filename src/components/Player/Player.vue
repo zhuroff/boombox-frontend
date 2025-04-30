@@ -206,17 +206,16 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss">
-@import '../../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .player {
   position: fixed;
   bottom: 0;
   z-index: 2000;
 
-  @include media('<laptop') {
+  @include var.media('<laptop') {
     left: 0;
-    box-shadow: $shadowMedium;
+    box-shadow: var.$shadowMedium;
     display: grid;
     width: 100vw;
 
@@ -225,7 +224,7 @@ onUnmounted(() => {
       grid-template-columns: 100%;
       grid-template-rows: 73vh 27vh;
 
-      @include media('landscape') {
+      @include var.media('landscape') {
         grid-template-rows: 65vh 35vh;
       }
 
@@ -237,13 +236,13 @@ onUnmounted(() => {
         width: 100%;
         height: 100vh;
         z-index: 10;
-        background: linear-gradient(to top left, $dark 50%, $accent 50%);
+        background: linear-gradient(to top left, var.$dark 50%, var.$accent 50%);
       }
     }
 
     &:not(.--expanded) {
       height: 60px;
-      background-color: $dark;
+      background-color: var.$dark;
       grid-template-columns: 1fr 150px;
 
       .player__left {
@@ -261,7 +260,7 @@ onUnmounted(() => {
 
           &:after {
             content: '';
-            background: linear-gradient(to right, transparent 0%, $dark 100%);
+            background: linear-gradient(to right, transparent 0%, var.$dark 100%);
             width: 50px;
             height: 100%;
             position: absolute;
@@ -320,11 +319,11 @@ onUnmounted(() => {
     }
   }
 
-  @include media('>=laptop') {
-    height: $playerHeight;
+  @include var.media('>=laptop') {
+    height: var.$playerHeight;
     display: flex;
-    width: calc(100vw - #{$asideWidth});
-    left: $asideWidth;
+    width: calc(100vw - var.$asideWidth);
+    left: var.$asideWidth;
   }
 
   &.--z-low {
@@ -333,14 +332,14 @@ onUnmounted(() => {
 
   &__left {
     flex: none;
-    transition: all 0.3s $animation;
+    transition: all 0.3s var.$animation;
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       position: relative;
       z-index: 100;
       padding-top: 70px;
 
-      @include media('landscape') {
+      @include var.media('landscape') {
         padding-top: 25px;
       }
 
@@ -352,7 +351,7 @@ onUnmounted(() => {
         height: 280px;
         left: calc(50% - 140px);
         border-radius: 50%;
-        box-shadow: $shadowMedium;
+        box-shadow: var.$shadowMedium;
         background:
           linear-gradient(30deg, transparent 40%, rgba(42, 41, 40, .85) 40%) no-repeat 100% 0,
           linear-gradient(60deg, rgba(42, 41, 40, .85) 60%, transparent 60%) no-repeat 0 100%,
@@ -365,29 +364,29 @@ onUnmounted(() => {
         width: 15px;
         height: 15px;
         border-radius: 50%;
-        background-color: $black;
+        background-color: var.$black;
         position: absolute;
         left: 50%;
         top: calc(50% - 30px);
         transform: translate(-50%, -50%);
 
-        @include media('landscape') {
+        @include var.media('landscape') {
           top: calc(50% - -45px);
         }
       }
     }
 
-    @include media('>=laptop') {
-      background-color: $accent;
+    @include var.media('>=laptop') {
+      background-color: var.$accent;
       position: absolute;
       left: 0;
       top: 0;
-      width: $asideWidth;
+      width: var.$asideWidth;
       height: 100%;
       padding: 12px 15px 12px 25px;
 
       &:hover {
-        min-width: $asideWidth;
+        min-width: var.$asideWidth;
         width: 100%;
         z-index: 20;
         transition: all 0.3s ease;
@@ -396,13 +395,13 @@ onUnmounted(() => {
 
     &-content {
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         height: 100%;
         display: flex;
         flex-direction: column;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         display: flex;
         align-items: center;
       }
@@ -411,16 +410,16 @@ onUnmounted(() => {
 
   &__right {
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       position: relative;
       z-index: 100;
       width: 100%;
       padding-bottom: 50px;
     }
 
-    @include media('>=laptop') {
-      background-color: $dark;
-      width: calc(100% - #{$asideWidth});
+    @include var.media('>=laptop') {
+      background-color: var.$dark;
+      width: calc(100% - var.$asideWidth);
       padding: 0 25px;
       margin-left: auto;
     }
@@ -430,7 +429,7 @@ onUnmounted(() => {
       align-items: center;
       height: 100%;
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         flex-wrap: wrap;
         justify-content: center;
       }
@@ -439,7 +438,7 @@ onUnmounted(() => {
 
   &__cover {
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       border-radius: 50%;
       width: 94px;
       height: 94px;
@@ -452,7 +451,7 @@ onUnmounted(() => {
       animation: rotating 5s linear infinite;
     }
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       width: 40px;
       height: 40px;
       border-radius: 3px;
@@ -461,15 +460,15 @@ onUnmounted(() => {
   }
 
   &__title {
-    color: $white;
+    color: var.$white;
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       text-align: center;
       margin-top: auto;
       padding: 0 25px 40px;
     }
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       margin-left: 12px;
       width: calc(100% - 50px);
     }
@@ -477,12 +476,12 @@ onUnmounted(() => {
     &-track {
       font-weight: 600;
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         font-size: 20px;
         margin-bottom: 5px;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         font-size: 14px;
         overflow: hidden;
         white-space: nowrap;
@@ -492,11 +491,11 @@ onUnmounted(() => {
 
     &-artist {
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         font-size: 14px;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         font-size: 12px;
         overflow: hidden;
         white-space: nowrap;
@@ -522,11 +521,11 @@ onUnmounted(() => {
       height: 100%;
     }
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       display: none;
     }
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       display: flex;
       width: 15px;
       height: 15px;
@@ -535,14 +534,14 @@ onUnmounted(() => {
 
     &.--mobile {
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         display: flex;
         margin-right: 25px;
         width: 24px;
         height: 24px;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         display: none;
       }
     }
@@ -572,7 +571,7 @@ onUnmounted(() => {
       border-radius: 50%;
       top: 5px;
       left: 5px;
-      background-color: $accent;
+      background-color: var.$accent;
       transition: all 0.2s ease;
     }
 
@@ -592,7 +591,7 @@ onUnmounted(() => {
       z-index: 10;
       width: 24px;
       height: 24px;
-      color: $white;
+      color: var.$white;
     }
   }
 
@@ -609,7 +608,7 @@ onUnmounted(() => {
     align-items: center;
 
     .icon {
-      color: $white;
+      color: var.$white;
     }
 
     &[disabled] {
@@ -620,7 +619,7 @@ onUnmounted(() => {
 
   &__next {
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       margin-right: 50px;
     }
   }
@@ -629,25 +628,25 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       padding: 10px 25px;
       width: 100vw;
     }
 
     &-bar {
       appearance: none;
-      background-color: $white;
+      background-color: var.$white;
       cursor: pointer;
       margin: 0 10px;
       border: 0;
       border-radius: 10px;
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         flex: 1 1 0;
         height: 5px;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         width: 326px;
         height: 10px;
       }
@@ -656,23 +655,23 @@ onUnmounted(() => {
         border: 0;
         border-radius: 10px;
 
-        @include media('<laptop') {
+        @include var.media('<laptop') {
           height: 5px;
         }
 
-        @include media('>=laptop') {
+        @include var.media('>=laptop') {
           height: 10px;
         }
       }
 
       &::-webkit-progress-value {
-        background-color: $accent;
+        background-color: var.$accent;
         border-radius: 5px;
       }
     }
 
     &-time {
-      color: $white;
+      color: var.$white;
       opacity: 0.5;
       font-size: 12px;
       position: relative;
@@ -690,20 +689,20 @@ onUnmounted(() => {
     z-index: 10;
     padding: 0;
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       margin-left: auto;
     }
 
     .icon-vinyl {
       width: 24px;
       height: 24px;
-      color: $white;
+      color: var.$white;
     }
 
     &.--active {
 
       .icon-vinyl {
-        color: $accent;
+        color: var.$accent;
       }
     }
   }
@@ -717,11 +716,11 @@ onUnmounted(() => {
     z-index: 10;
     overflow: hidden;
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       height: auto;
     }
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       height: 100%;
     }
 
@@ -731,7 +730,7 @@ onUnmounted(() => {
       .player__sound-range {
         opacity: 1;
         transform: translateX(0);
-        transition: all 0.3s $animation;
+        transition: all 0.3s var.$animation;
       }
     }
 
@@ -741,7 +740,7 @@ onUnmounted(() => {
       top: 0;
       height: 100%;
       padding: 0 40px 0 15px;
-      background-color: $dark;
+      background-color: var.$dark;
       display: flex;
       align-items: center;
       opacity: 0;
@@ -754,7 +753,7 @@ onUnmounted(() => {
       background-color: transparent;
 
       &::-webkit-slider-runnable-track {
-        background-color: $accent;
+        background-color: var.$accent;
         width: 100%;
         height: 10px;
         border-radius: 10px;
@@ -763,7 +762,7 @@ onUnmounted(() => {
       &::-webkit-slider-thumb {
         width: 16px;
         height: 16px;
-        background-color: $white;
+        background-color: var.$white;
         appearance: none;
         border-radius: 50%;
         position: relative;
@@ -784,13 +783,13 @@ onUnmounted(() => {
       padding: 0;
 
       .icon {
-        color: $white;
+        color: var.$white;
       }
 
       &.--muted {
 
         .icon {
-          color: $accent;
+          color: var.$accent;
         }
       }
     }
@@ -798,7 +797,7 @@ onUnmounted(() => {
     .icon-sound {
       width: 22px;
       height: 22px;
-      fill: $white;
+      fill: var.$white;
     }
 
     &:hover {
@@ -815,11 +814,11 @@ onUnmounted(() => {
 
   &__youtube {
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       display: none;
     }
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       margin-left: 23px;
       width: 25px;
       height: 25px;
@@ -830,7 +829,7 @@ onUnmounted(() => {
 
       .icon {
         width: 24px;
-        color: $white;
+        color: var.$white;
       }
     }
   }
@@ -839,12 +838,12 @@ onUnmounted(() => {
     width: 100vw;
     max-width: 777px;
     right: 0;
-    bottom: $playerHeight;
-    background-color: $transBlack;
-    height: calc(100vh - #{$playerHeight});
+    bottom: var.$playerHeight;
+    background-color: var.$transBlack;
+    height: calc(100vh - var.$playerHeight);
     overflow: auto;
     border-radius: 0;
-    transition: all 0.5s $animation;
+    transition: all 0.5s var.$animation;
 
     &.slide-in-enter-active {
       opacity: 0;
@@ -878,7 +877,7 @@ onUnmounted(() => {
           width: inherit;
           height: inherit;
           object-fit: cover;
-          border-radius: $borderRadiusSM;
+          border-radius: var.$borderRadiusSM;
           max-height: 100%;
           display: block;
         }
@@ -888,25 +887,25 @@ onUnmounted(() => {
           white-space: nowrap;
           overflow: hidden;
           font-size: 0.875rem;
-          color: $paleMD;
-          transition: all 0.2s $animation;
+          color: var.$paleMD;
+          transition: all 0.2s var.$animation;
         }
 
         span {
           font-size: 0.75rem;
-          color: $paleDP;
+          color: var.$paleDP;
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
-          transition: all 0.2s $animation;
+          transition: all 0.2s var.$animation;
         }
 
         time {
           margin-left: auto;
-          color: $paleDP;
+          color: var.$paleDP;
           white-space: nowrap;
           font-size: 0.875rem;
-          transition: all 0.2s $animation;
+          transition: all 0.2s var.$animation;
         }
 
         &.--active,
@@ -914,14 +913,14 @@ onUnmounted(() => {
           background-color: transparent;
 
           strong {
-            color: $white;
-            transition: all 0.2s $animation;
+            color: var.$white;
+            transition: all 0.2s var.$animation;
           }
 
           span,
           time {
-            color: $paleLT;
-            transition: all 0.2s $animation;
+            color: var.$paleLT;
+            transition: all 0.2s var.$animation;
           }
         }
       }
@@ -937,8 +936,8 @@ onUnmounted(() => {
           width: 25px;
           height: 25px;
           z-index: 10;
-          fill: $white;
-          color: $white;
+          fill: var.$white;
+          color: var.$white;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);

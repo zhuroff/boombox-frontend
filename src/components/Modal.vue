@@ -49,8 +49,7 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .modal {
   position: fixed;
@@ -69,11 +68,11 @@ watchEffect(() => {
   background-color: rgba(0, 0, 0, 0.75);
 
   &__close {
-    @include buttonClose;
+    @include var.buttonClose;
 
-    @include media('<laptop') {
-      left: 25px;
-      right: auto
+    @include var.media('<laptop') {
+      left: var.$mainPadding;
+      right: auto;
     }
   }
 }

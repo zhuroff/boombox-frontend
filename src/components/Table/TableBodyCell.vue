@@ -63,8 +63,7 @@ const cellComponent = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .table__row-cell {
   padding: 0.25rem;
@@ -76,7 +75,7 @@ const cellComponent = computed(() => {
     max-width: 50px;
     max-height: 50px;
     object-fit: contain;
-    border-radius: $borderRadiusSM;
+    border-radius: var.$borderRadiusSM;
   }
 
   span {

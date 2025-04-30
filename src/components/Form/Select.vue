@@ -54,8 +54,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .select {
   position: relative;
@@ -70,15 +69,15 @@ watch(
       top: 0;
       right: 0;
       transform: translate(35%, -35%);
-      background-color: $info;
+      background-color: var.$info;
 
     }
   }
   
   &__input {
     padding: 0.5rem;
-    border-color: $paleLT;
-    border-radius: $borderRadiusMD;
+    border-color: var.$paleLT;
+    border-radius: var.$borderRadiusMD;
     max-width: inherit;
 
     option:first-of-type {

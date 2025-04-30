@@ -11,11 +11,11 @@
       :isModalActive="isSearchMode"
       @closeModal="isSearchMode = false"
     >
-      <SearchBlock
+      <SearchModal
         :isFetching="isSearchFetching"
         :results="searchResults"
         @onSearch="onSearch"
-      ></SearchBlock>
+      ></SearchModal>
     </Modal>
     <slot></slot>
   </header>
@@ -27,7 +27,7 @@ import useSearch from '~/shared/useSearch'
 import DatabaseService from '~/services/DatabaseService'
 import Button from '~/components/Button.vue'
 import Modal from '~/components/Modal.vue'
-import SearchBlock from '~/components/Search/SearchBlock.vue'
+import SearchModal from '~/components/Search/SearchModal.vue'
 
 interface Props {
   heading: string
@@ -49,8 +49,7 @@ const onSearch = (value: string) => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .header {
   display: flex;
@@ -58,9 +57,9 @@ const onSearch = (value: string) => {
   align-items: center;
   position: relative;
 
-  @include media('<laptop') {
-    background-color: $dark;
-    color: $white;
+  @include var.media('<laptop') {
+    background-color: var.$dark;
+    color: var.$white;
     position: relative;
     padding: 25px 25px 0;
 
@@ -68,7 +67,7 @@ const onSearch = (value: string) => {
       content: '';
       width: 100vw;
       height: 75vh;
-      background: linear-gradient(to bottom, $dark, $white);
+      background: linear-gradient(to bottom, var.$dark, var.$white);
       position: absolute;
       left: 0;
       top: 100%;
@@ -79,23 +78,26 @@ const onSearch = (value: string) => {
     }
   }
 
-  @include media('>=laptop') {
+  @include var.media('>=laptop') {
     padding: 0 25px;
-    background-color: $dark;
+    background-color: var.$dark;
     height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
 
   &__heading {
 
-    @include media('<tablet') {
-      @include serif(1.5rem);
+    @include var.media('<tablet') {
+      @include var.serif(1.5rem);
       margin-right: 1rem;
     }
 
-    @include media('>=tablet') {
-      @include serif(1.75rem);
+    @include var.media('>=tablet') {
+      @include var.serif(1.75rem);
       margin-right: auto;
-      color: $paleMD;
+      color: var.$paleMD;
     }
   }
 }

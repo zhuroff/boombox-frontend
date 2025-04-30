@@ -16,13 +16,10 @@ interface Props {
   tableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <style lang="scss">
-@import '~/scss/variables.scss';
-@import 'include-media';
-
 .table {
   width: 100%;
 }

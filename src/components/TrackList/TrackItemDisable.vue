@@ -26,7 +26,8 @@ const {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
+
 .tracklist__row {
 
   &.--playing {
@@ -41,7 +42,7 @@ const {
     &:hover {
       fill: inherit;
       stroke: inherit;
-      color: $white;
+      color: var.$white;
     }
   }
 }

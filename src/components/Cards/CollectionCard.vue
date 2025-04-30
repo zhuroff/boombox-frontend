@@ -55,12 +55,30 @@ const isAdmin = computed(() => (
 </script>
 
 <style lang="scss" scoped>
+@use '~/scss/variables' as var;
+
 .cards {
 
   &__album {
 
     .--delete {
       left: 1.75rem;
+    }
+
+    &:hover {
+      .--delete {
+        opacity: 1;
+      }
+    }
+
+    .--delete {
+      position: absolute;
+      top: 1rem;
+      left: 1.25rem;
+      z-index: 2000;
+      cursor: pointer;
+      opacity: 0;
+      background-color: var.$paleLT;
     }
   }
 }

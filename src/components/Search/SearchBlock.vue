@@ -1,132 +1,99 @@
 <template>
-  <div class="search">
-    <div class="search__body">
-      <TextInput
-        name="search"
-        type="text"
-        placeholder="search.placeholder"
-        size="large"
-        isFocused
-        @onInput="debouncedSearch"
-      />
-      <div class="search__results">
-        <Preloader v-if="isFetching" mode="light" />
-        <div
-          v-if="!results?.length"
-          class="search__empty"
-        >
-          There are no results
-        </div>
-        <div
-          v-else
-          class="search__data"
-        >
-          <div
-            v-for="result in results"
-            :key="result.key"
-            class="search__block"
-          >
-            <div class="search__block-title">{{ localize(`navigation.${result.key}`) }}</div>
-            <ul class="search__block-list">
-              <li
-                v-for="item in result.data"
-                :key="item._id"
-                class="search__block-item"
-              >
-                <component :is="getRowComponent(result.key, item)" />
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <footer class="search__footer">
-      By album &nbsp;&bull;&nbsp;
-      By artist &nbsp;&bull;&nbsp;
-      By genre &nbsp;&bull;&nbsp;
-      By period &nbsp;&bull;&nbsp;
-      By track
-    </footer>
+  <div class="search__block">
+    <div
+      v-if="!!heading"
+      class="search__block-title"
+    >{{ heading }}</div>
+    <ul class="search__block-list">
+      <li
+        v-for="item in block.data"
+        :key="item._id"
+        class="search__block-item"
+      >
+        <component :is="renderer(block.key, item)" />
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import { h } from 'vue'
-import { RouterLink } from 'vue-router'
-import { debounce, hostString, coverPlaceholders } from '~/utils'
-import useGlobalStore from '~/store/global'
-import Preloader from '~/components/Preloader.vue'
-import TextInput from '../Form/TextInput.vue'
-import SearchBlockTrack from './SearchBlockTrack.vue'
+import type { RendererElement, RendererNode, VNode } from 'vue'
 
 interface Props {
-  isFetching: boolean
-  results: SearchResultState[] | undefined
-}
-
-interface Emits {
-  (e: 'onSearch', value: string): void
+  block: SearchResultState
+  heading?: string
+  renderer: (key: string, data: SearchResultData) => (
+    VNode<RendererNode, RendererElement, {
+      [key: string]: any
+    }>
+  )
 }
 
 defineProps<Props>()
-const emit = defineEmits<Emits>()
+</script>
 
-const { globalGetters: { localize } } = useGlobalStore()
+<style scoped lang="scss">
+@use '~/scss/variables' as var;
 
-const debouncedSearch = debounce((value: string) => {
-  emit('onSearch', value)
-})
+.search__block {
+  padding: 0.75rem 0;
 
-const getRowComponent = (key: string, data: SearchResultData) => {
-  switch(key) {
-    case 'albums':
-      return h(
-        RouterLink,
-        { to: `/albums/${data._id}`, class: 'search__block-action' },
-        [
-          h(
-            'img',
-            { src: (data as AlbumItem).coverURL },
-          ),
-          h(
-            'div',
-            {},
-            [
-              h(
-                'strong',
-                {},
-                (data as AlbumItem).title
-              ),
-              h(
-                'span',
-                {},
-                (data as AlbumItem).artist?.title
-              )
-            ]
-          )
-        ]
-      )
-    case 'tracks':
-      return h(
-        SearchBlockTrack,
-        { track: data as any }
-      )
-    default:
-      return h(
-        RouterLink,
-        { to: `/${key}/${data._id}`, class: 'search__block-action' },
-        [
-          h(
-            'img',
-            { src: 'avatar' in data ? hostString(String(data.avatar)) : coverPlaceholders(key) },
-          ),
-          h(
-            'strong',
-            {},
-            data.title
-          )
-        ]
-      )
+  &:first-of-type {
+    padding-top: 0;
+  }
+
+  &:last-of-type {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  &-title {
+    @include var.serif(1rem);
+    margin-bottom: 5px;
+    padding: 0 5px;
+  }
+
+  &-action {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s var.$animation;
+
+    &:hover {
+      background-color: var.$paleLT;
+      transition: background-color 0.3s var.$animation;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: var.$borderRadiusSM;
+      max-height: 100%;
+      display: block;
+      margin-right: 0.875rem;
+    }
+
+    strong {
+      color: var.$black;
+      display: block;
+    }
+
+    span {
+      font-size: 0.875rem;
+      color: var.$paleDP;
+    }
+
+    .icon {
+      width: 24px;
+      margin-left: auto;
+      color: var.$paleDP;
+
+      &.--active {
+        fill: var.$success;
+      }
+    }
   }
 }
-</script>
+</style>

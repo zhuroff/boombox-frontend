@@ -155,13 +155,12 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .album {
 
   iframe {
-    border-radius: $borderRadiusSM;
+    border-radius: var.$borderRadiusSM;
     min-height: 500px;
   }
 }

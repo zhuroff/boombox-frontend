@@ -127,9 +127,6 @@ const importAsyncComponent = () => {
 </script>
 
 <style setup lang="scss">
-@import '~/scss/variables.scss';
-@import 'include-media';
-
 .field {
   margin-bottom: 1rem;
 }
