@@ -57,13 +57,12 @@ const stateClasses = computed(() => [
 ])
 </script>
 
-<style lang="scss">
-@import '../scss/variables.scss';
-@import 'include-media';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .button {
-  border: 1px solid $black;
-  color: $black;
+  border: 1px solid var.$black;
+  color: var.$black;
   background-color: transparent;
   display: inline-flex;
   align-items: center;
@@ -73,21 +72,21 @@ const stateClasses = computed(() => [
   font-weight: 700;
   padding-top: 0;
   padding-bottom: 0;
-  transition: all 0.3s $animation;
+  transition: all 0.3s var.$animation;
 
   &:hover {
-    background-color: $black;
-    transition: all 0.3s $animation;
+    background-color: var.$black;
+    transition: all 0.3s var.$animation;
 
     &:not(.--text) {
-      color: $paleLT;
+      color: var.$paleLT;
     }
   }
 
   &.--small {
 
     &.--rounded {
-      width: $elementHeightSM;
+      width: var.$elementHeightSM;
     }
 
     .icon {
@@ -102,7 +101,7 @@ const stateClasses = computed(() => [
   &.--medium {
 
     &.--rounded {
-      width: $elementHeightMD;
+      width: var.$elementHeightMD;
     }
 
     .icon {
@@ -117,7 +116,7 @@ const stateClasses = computed(() => [
   &.--large {
 
     &.--rounded {
-      width: $elementHeightLG;
+      width: var.$elementHeightLG;
     }
 
     .icon {
@@ -135,20 +134,20 @@ const stateClasses = computed(() => [
   }
 
   &.--inverted {
-    border-color: $paleLT;
-    color: $paleLT;
+    border-color: var.$paleLT;
+    color: var.$paleLT;
 
     &:hover {
-      background-color: $paleLT;
-      color: $black;
+      background-color: var.$paleLT;
+      color: var.$black;
 
       .icon {
-        fill: $dark;
+        fill: var.$dark;
       }
     }
 
     .icon {
-      fill: $white;
+      fill: var.$white;
     }
   }
 
@@ -161,10 +160,10 @@ const stateClasses = computed(() => [
     }
 
     &.--inverted {
-      color: $paleLT;
+      color: var.$paleLT;
 
       .icon {
-        fill: $paleLT;
+        fill: var.$paleLT;
       }
     }
   }

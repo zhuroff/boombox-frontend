@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import useGlobalStore from '~/store/global'
-import EntityCards from '~/components/EntityCards.vue'
+import EntityCards from '~/components/Cards/EntityCards.vue'
 
 interface Props {
   relatedAlbums: RelatedAlbums[]
@@ -46,7 +46,7 @@ const { globalGetters: { localize } } = useGlobalStore()
 </script>
 
 <style lang="scss">
-@use '~/scss/variables.scss' as var;
+@use '~/scss/variables' as var;
 
 .album {
   flex: 1 1 0;
@@ -102,10 +102,6 @@ const { globalGetters: { localize } } = useGlobalStore()
       font-weight: 600;
       text-align: center;
       margin-bottom: 0.75rem;
-    }
-
-    .cardlist {
-      display: flex;
     }
   }
 

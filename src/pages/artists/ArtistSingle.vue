@@ -14,11 +14,11 @@
         :description="totalCounts"
         @setUploadedImage="setUploadedImage"
       />
-      <ListPageTemplate
+      <!-- <ListPageTemplate
         placeholderImage="/img/album.webp"
         :isDataFetched="isDataFetched"
         :dataList="albumList"
-      />
+      /> -->
     </transition-group>
   </section>
 </template>
@@ -28,7 +28,7 @@ import { computed } from 'vue'
 import { useCategory } from '~/hooks/useCategory'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
-import ListPageTemplate from '~/templates/ListPageTemplate.vue'
+// import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 
 const entityType = 'artists'
 const {

@@ -52,24 +52,23 @@ const rowClickHandler = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .table__row {
-  border-bottom: 1px solid $paleMD;
-  transition: background-color 0.2s $animation;
+  border-bottom: 1px solid var.$paleMD;
+  transition: background-color 0.2s var.$animation;
 
   &:last-of-type {
     border-bottom: none
   }
 
   &:nth-of-type(odd) {
-    background-color: $paleLW;
+    background-color: var.$paleLW;
   }
 
   &:hover {
-    background-color: $paleMD;
-    transition: background-color 0.2s $animation;
+    background-color: var.$paleMD;
+    transition: background-color 0.2s var.$animation;
   }
 }
 </style>

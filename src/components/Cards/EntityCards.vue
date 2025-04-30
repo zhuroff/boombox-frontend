@@ -5,7 +5,7 @@
     :class="[`cardlist --${props.template}`]"
     :animation="300"
     :disabled="!isDraggable"
-    @end="(event) => $emit('orderChanged', event)"
+    @end="(event) => emit('orderChanged', event)"
   >
     <component
       v-for="entity in entities"
@@ -17,17 +17,19 @@
       :entityKey="entityKey"
       :placeholderPreview="placeholderPreview"
       :class="`--${props.template}`"
-      @deleteEntity="(payload: DeletePayload) => $emit('deleteEntity', payload)"
+      @deleteEntity="(payload: DeletePayload) => emit('deleteEntity', payload)"
     />
   </VueDraggableNext>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { computed } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
+import AlbumCard from './AlbumCard.vue'
+import CategoryCard from './CategoryCard.vue'
 
-interface Props<T> {
-  entities: T[]
+interface Props {
+  entities: BasicEntity[]
   entityKey: string
   isDraggable?: boolean
   isDeletable?: boolean
@@ -35,28 +37,34 @@ interface Props<T> {
   placeholderPreview: string
 }
 
-const props = withDefaults(defineProps<Props<BasicEntity>>(), {
+interface Emits {
+  (e: 'orderChanged', event: unknown): void
+  (e: 'deleteEntity', payload: DeletePayload): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
   template: 'row'
 })
 
-const cardsMap: Record<string, string> = {
-  albums: 'AlbumCard',
-  collections: 'AlbumCard',
-  compilations: 'AlbumCard',
-  embedded: 'AlbumCard',
-  artists: 'CategoryCard',
-  periods: 'CategoryCard',
-  genres: 'CategoryCard'
+const emit = defineEmits<Emits>()
+
+const cardsMap: Record<string, any> = {
+  albums: AlbumCard,
+  collections: AlbumCard,
+  compilations: AlbumCard,
+  embedded: AlbumCard,
+  artists: CategoryCard,
+  periods: CategoryCard,
+  genres: CategoryCard
 }
 
-const entityCardComponent = defineAsyncComponent(() => (
-  import(`./Cards/${cardsMap[props.entityKey]}.vue`).then((sfc) => sfc.default)
+const entityCardComponent = computed(() => (
+  cardsMap[props.entityKey] || null
 ))
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .cardlist {
   display: flex;
@@ -84,19 +92,19 @@ const entityCardComponent = defineAsyncComponent(() => (
     &:hover {
       .cardlist__item-action {
         opacity: 1;
-        transition: opacity .3s $animation;
+        transition: opacity .3s var.$animation;
       }
     }
 
-    @include media('<tablet') {
+    @include var.media('<tablet') {
       width: calc(50% - 10px);
     }
 
-    @include media('>=tablet', '<desktop') {
+    @include var.media('>=tablet', '<desktop') {
       width: calc(33.3333% - 10px);
     }
 
-    @include media('>=desktop', '<desktop-md') {
+    @include var.media('>=desktop', '<desktop-md') {
       &.--row {
         width: calc(25% - 10px);
       }
@@ -106,7 +114,7 @@ const entityCardComponent = defineAsyncComponent(() => (
       }
     }
 
-    @include media('>=desktop-md', '<=desktop-lg') {
+    @include var.media('>=desktop-md', '<=desktop-lg') {
       &.--row {
         width: calc(20% - 10px);
       }
@@ -116,7 +124,7 @@ const entityCardComponent = defineAsyncComponent(() => (
       }
     }
 
-    @include media('>=desktop-lg') {
+    @include var.media('>=desktop-lg') {
       &.--row {
         width: calc(16.6666% - 10px);
       }
@@ -133,7 +141,7 @@ const entityCardComponent = defineAsyncComponent(() => (
       z-index: 2000;
       cursor: move;
       opacity: 0;
-      background-color: $paleLT;
+      background-color: var.$paleLT;
     }
 
     &-link {
@@ -143,7 +151,7 @@ const entityCardComponent = defineAsyncComponent(() => (
       position: relative;
       height: 100%;
 
-      @include media('>=desktop') {
+      @include var.media('>=desktop') {
         padding: 0 10px;
       }
     }
@@ -158,7 +166,7 @@ const entityCardComponent = defineAsyncComponent(() => (
       width: 100%;
       aspect-ratio: 1;
       display: block;
-      transition: transform 0.5s $animation;
+      transition: transform 0.5s var.$animation;
     }
 
     &-cover {
@@ -167,15 +175,15 @@ const entityCardComponent = defineAsyncComponent(() => (
       border-radius: 5px;
       object-fit: cover;
 
-      @include media('>=desktop') {
+      @include var.media('>=desktop') {
         &:not(.--fixed) {
           &:hover {
             transform: translateX(-10px);
-            transition: transform 0.3s $animation;
+            transition: transform 0.3s var.$animation;
 
             & + .cardlist__item-vinyl {
               transform: translateX(20px);
-              transition: transform 0.3s $animation;
+              transition: transform 0.3s var.$animation;
             }
           }
         }
@@ -201,17 +209,16 @@ const entityCardComponent = defineAsyncComponent(() => (
         border-radius: 5px;
         width: inherit !important;
         height: 100% !important;
-        // background-color: $white;
-        background-color: $paleLT;
+        background-color: var.$paleLT;
       }
     }
 
     &-vinyl {
-      @include media('<desktop') {
+      @include var.media('<desktop') {
         display: none
       }
 
-      @include media('>=desktop') {
+      @include var.media('>=desktop') {
         position: absolute;
         z-index: 1;
         top: 0;
@@ -221,23 +228,23 @@ const entityCardComponent = defineAsyncComponent(() => (
 
     &-title {
 
-      @include media('<desktop') {
+      @include var.media('<desktop') {
         display: none
       }
 
-      @include media('>=desktop') {
-        @include cardHeading();
+      @include var.media('>=desktop') {
+        @include var.cardHeading();
       }
     }
 
     &-info {
 
-      @include media('<desktop') {
+      @include var.media('<desktop') {
         display: none
       }
 
-      @include media('>=desktop') {
-        @include cardCaption();
+      @include var.media('>=desktop') {
+        @include var.cardCaption();
       }
     }
 
@@ -247,9 +254,8 @@ const entityCardComponent = defineAsyncComponent(() => (
       top: 1.25rem;
       right: 2.5rem;
       z-index: 10;
-      // background-color: $white;
-      background-color: $paleLT;
-      transition: opacity .3s $animation;
+      background-color: var.$paleLT;
+      transition: opacity .3s var.$animation;
     }
 
     &__cover {
@@ -261,7 +267,7 @@ const entityCardComponent = defineAsyncComponent(() => (
         .icon {
           width: 50px;
           height: 50px;
-          color: $white;
+          color: var.$white;
         }
       }
     }

@@ -131,18 +131,18 @@ const createEmbeddedAlbum = (formData: CustomFormData) => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
+
 .embedded {
+
   &__create {
     position: absolute;
     top: 100%;
     right: 0;
     width: 60%;
-    border-radius: $borderRadiusSM;
-    // background-color: $white;
-    background-color: $paleLT;
-    box-shadow: $shadowLight;
+    border-radius: var.$borderRadiusSM;
+    background-color: var.$paleLT;
+    box-shadow: var.$shadowLight;
     padding: 25px;
     z-index: 3000;
 

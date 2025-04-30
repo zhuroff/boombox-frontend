@@ -24,7 +24,6 @@ const emit = defineEmits<Emits>()
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
 .tracklist__row {
 
   &-cell {

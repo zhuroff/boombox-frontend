@@ -70,9 +70,6 @@ watch(localValue, (newValue) => {
 </script>
 
 <style scoped lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
-
 .text-input {
 
   &__element {

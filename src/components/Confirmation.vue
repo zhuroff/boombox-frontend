@@ -25,21 +25,19 @@ interface Props {
 defineProps<Props>()
 </script>
 
-<style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .confirmation {
-  // background-color: $white;
-  background-color: $paleLT;
-  border-radius: $borderRadiusMD;
+  background-color: var.$paleLT;
+  border-radius: var.$borderRadiusMD;
   padding: 25px;
   position: relative;
 
   &__message {
     text-align: center;
     margin-bottom: 1rem;
-    color: $black;
+    color: var.$black;
     font-weight: 600;
   }
 

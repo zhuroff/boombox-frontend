@@ -55,6 +55,8 @@ const isAdmin = computed(() => (
 </script>
 
 <style lang="scss" scoped>
+@use '~/scss/variables' as var;
+
 .cards {
 
   &__album {
@@ -76,7 +78,7 @@ const isAdmin = computed(() => (
       z-index: 2000;
       cursor: pointer;
       opacity: 0;
-      background-color: $paleLT;
+      background-color: var.$paleLT;
     }
   }
 }

@@ -43,7 +43,7 @@ import useGetPage from '~/shared/useGetPage'
 import useGetList from '~/shared/useGetList'
 import Preloader from '~/components/Preloader.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
-import EntityCards from '~/components/EntityCards.vue'
+import EntityCards from '~/components/Cards/EntityCards.vue'
 import DatabaseService from '~/services/DatabaseService'
 
 const { globalGetters: { localize } } = useGlobalStore()

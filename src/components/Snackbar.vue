@@ -22,8 +22,8 @@ import useSnackbar from '~/hooks/useSnackbar'
 const { snackbarQueue, closeSnackbar } = useSnackbar()
 </script>
 
-<style lang="scss">
-@import '~/scss/variables';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .snackbar {
   position: fixed;
@@ -37,7 +37,7 @@ const { snackbarQueue, closeSnackbar } = useSnackbar()
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: $black;
+    background-color: var.$black;
     padding: 15px 20px;
     border-radius: 7px;
     margin-top: 10px;
@@ -45,7 +45,7 @@ const { snackbarQueue, closeSnackbar } = useSnackbar()
   }
 
   &__text {
-    color: $white;
+    color: var.$white;
     margin-right: 15px;
   }
 
@@ -55,19 +55,19 @@ const { snackbarQueue, closeSnackbar } = useSnackbar()
     font-size: 16px;
 
     &.--success {
-      color: $success;
+      color: var.$success;
     }
 
     &.--warning {
-      color: $warning;
+      color: var.$warning;
     }
 
     &.--error {
-      color: $error;
+      color: var.$error;
     }
 
     &.--info {
-      color: $info;
+      color: var.$info;
     }
   }
 }

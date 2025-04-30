@@ -101,8 +101,6 @@ const playFurther = () => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-
 .tracklist__row {
 
   &-cell {

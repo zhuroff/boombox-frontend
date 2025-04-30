@@ -1739,11 +1739,6 @@ imurmurhash@^0.1.4:
   resolved "https://npm.netvision-internal.ru/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
 
-include-media@^2.0.0:
-  version "2.0.0"
-  resolved "https://npm.netvision-internal.ru/include-media/-/include-media-2.0.0.tgz#21f80a4b40addd1da5d500cf8bf3b123cb1136a6"
-  integrity sha512-LSJcffPYIZ/Kln0rIi5UhqQbZxElDCMYA4dPC5MI1rkwwjptgEiOicHnzB0MMhMNJver0+4zULb4MKlgDyapZg==
-
 infobox-parser@^3.6.2:
   version "3.6.4"
   resolved "https://npm.netvision-internal.ru/infobox-parser/-/infobox-parser-3.6.4.tgz#6693d78af81454aa8f474f841e397cda11d5d90d"

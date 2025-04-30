@@ -46,7 +46,7 @@ import useGlobalStore from '~/store/global'
 import useGetPage from '~/shared/useGetPage'
 import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
-import EntityCards from '~/components/EntityCards.vue'
+import EntityCards from '~/components/Cards/EntityCards.vue'
 import Paginator from '~/components/Paginator.vue'
 import DatabaseService from '~/services/DatabaseService'
 

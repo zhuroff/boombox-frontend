@@ -1,7 +1,7 @@
 <template>
   <div class="search__block">
     <div
-      v-f="!!heading"
+      v-if="!!heading"
       class="search__block-title"
     >{{ heading }}</div>
     <ul class="search__block-list">
@@ -20,7 +20,7 @@
 import type { RendererElement, RendererNode, VNode } from 'vue'
 
 interface Props {
-  block: SearchBlock
+  block: SearchResultState
   heading?: string
   renderer: (key: string, data: SearchResultData) => (
     VNode<RendererNode, RendererElement, {

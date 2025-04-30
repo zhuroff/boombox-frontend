@@ -214,9 +214,8 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
-@import '../scss/variables';
-@import 'include-media';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .hero {
   width: 100%;
@@ -227,7 +226,7 @@ onMounted(() => {
 
     .hero__poster-label {
       opacity: 1;
-      transition: opacity 0.3s $animation;
+      transition: opacity 0.3s var.$animation;
     }
   }
 
@@ -240,7 +239,7 @@ onMounted(() => {
 
     &:before {
       content: '';
-      background-color: $transBlack;
+      background-color: var.$transBlack;
       position: absolute;
       top: 0;
       left: 0;
@@ -268,7 +267,7 @@ onMounted(() => {
       align-items: center;
       cursor: pointer;
       opacity: 0;
-      transition: opacity 0.3s $animation;
+      transition: opacity 0.3s var.$animation;
 
       input {
         position: absolute;
@@ -279,7 +278,7 @@ onMounted(() => {
       }
 
       .icon {
-        color: $white;
+        color: var.$white;
       }
     }
   }
@@ -299,11 +298,11 @@ onMounted(() => {
     position: relative;
     z-index: 3;
 
-    @include media('<tablet') {
+    @include var.media('<tablet') {
       display: none;
     }
 
-    @include media('>=tablet') {
+    @include var.media('>=tablet') {
       width: 10rem;
       height: 10rem;
       border-radius: 50%;
@@ -333,9 +332,9 @@ onMounted(() => {
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: $black;
+      background-color: var.$black;
       opacity: 1;
-      transition: opacity 0.3s $animation;
+      transition: opacity 0.3s var.$animation;
     }
 
     &-label {
@@ -355,7 +354,7 @@ onMounted(() => {
       }
 
       .icon {
-        color: $white;
+        color: var.$white;
       }
     }
   }
@@ -366,16 +365,16 @@ onMounted(() => {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    background-color: $transBlack;
+    background-color: var.$transBlack;
     width: 100%;
-    box-shadow: $shadowMedium;
+    box-shadow: var.$shadowMedium;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
   &__title {
-    color: $warning;
+    color: var.$warning;
     padding: 0;
     border: 0;
     box-shadow: none;
@@ -383,19 +382,18 @@ onMounted(() => {
     background-color: transparent;
     width: 100%;
 
-    @include media('<tablet') {
-      @include serif(2rem);
+    @include var.media('<tablet') {
+      @include var.serif(2rem);
     }
 
-    @include media('>=tablet') {
-      @include serif(3rem);
+    @include var.media('>=tablet') {
+      @include var.serif(3rem);
     }
   }
 
   &__description {
     font-weight: 600;
-    color: $white;
+    color: var.$white;
   }
 }
 </style>
-~/services/upload.services

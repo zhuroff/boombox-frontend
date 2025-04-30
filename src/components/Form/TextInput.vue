@@ -19,7 +19,6 @@
 import { computed, ref, onMounted } from 'vue'
 import type { StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
-import './InputField.scss'
 
 interface Props {
   name: string

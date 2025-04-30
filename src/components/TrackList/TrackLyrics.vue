@@ -180,11 +180,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
 
 .lyrics {
-  // background-color: $white;
-  background-color: $paleLT;
+  background-color: var.$paleLT;
   border-radius: 10px;
   width: 100%;
   max-width: 768px;
@@ -197,7 +196,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: $dark;
+    background-color: var.$dark;
     padding: 25px;
     position: relative;
     z-index: 10;
@@ -206,7 +205,7 @@ onMounted(() => {
   &__heading {
     font-weight: 600;
     font-size: 20px;
-    color: $white;
+    color: var.$white;
   }
 
   &__content {
@@ -218,7 +217,7 @@ onMounted(() => {
 
     .preloader {
       position: absolute;
-      background: $white;
+      background: var.$white;
       z-index: 100;
       width: 100%;
       height: 100%;
@@ -235,8 +234,7 @@ onMounted(() => {
     margin-top: 1rem;
     padding: 0 !important;
     border: none !important;
-    // background-color: $white;
-    background-color: $paleLT;
+    background-color: var.$paleLT;
   }
 
   &__empty {
@@ -269,7 +267,7 @@ onMounted(() => {
     }
 
     &_title {
-      color: $dark;
+      color: var.$dark;
       font-weight: 600;
       font-size: 18px;
     }
@@ -279,7 +277,7 @@ onMounted(() => {
       background-color: transparent;
       outline: none;
       border: 0;
-      color: $paleDP;
+      color: var.$paleDP;
     }
   }
 }

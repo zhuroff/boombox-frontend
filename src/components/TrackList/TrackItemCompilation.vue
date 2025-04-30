@@ -21,7 +21,7 @@
       :isModalActive="isCompilationLoading"
       @closeModal="closeCollectionModal"
     >
-      <GatheringTabs
+      <!-- <GatheringTabs
         v-if="!isCompilationLoading && compilations"
         :isLoading="isCompilationLoading"
         :results="compilations"
@@ -29,7 +29,7 @@
         :entityID="trackID"
         placeholderImage="/img/album.webp"
         entityType="compilations"
-      />
+      /> -->
     </Modal>
     <Modal
       v-if="entityToDelete"
@@ -53,7 +53,7 @@ import useGlobalStore from '~/store/global'
 import type { CompilationEntityRes } from '~/types/ReqRes'
 import CompilationItem from '~/classes/CompilationItem'
 import Button from '~/components/Button.vue'
-import GatheringTabs from '~/components/GatheringTabs.vue'
+// import GatheringTabs from '~/components/GatheringTabs.vue'
 import Confirmation from '~/components/Confirmation.vue'
 import Modal from '~/components/Modal.vue'
 
@@ -104,7 +104,8 @@ const removeTrackFromCompilation = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
+
 .tracklist__row {
 
   &-action {
@@ -112,7 +113,7 @@ const removeTrackFromCompilation = () => {
     &:hover {
       fill: inherit;
       stroke: inherit;
-      color: $white;
+      color: var.$white;
     }
   }
 }

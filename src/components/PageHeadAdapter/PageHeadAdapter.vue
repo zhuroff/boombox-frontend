@@ -117,14 +117,13 @@ const getWikiInfo = () => emit('getWikiInfo')
 </script>
 
 <style lang="scss">
-@import '../../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .album {
   &__hero {
-    background-color:  $dark;
+    background-color: var.$dark;
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       position: fixed;
       top: 0;
       left: 0;
@@ -132,7 +131,7 @@ const getWikiInfo = () => emit('getWikiInfo')
       height: 100vw;
     }
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       position: relative;
       display: flex;
       padding: 25px;
@@ -143,12 +142,12 @@ const getWikiInfo = () => emit('getWikiInfo')
       position: relative;
       z-index: 9000;
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         width: 100%;
       }
 
-      @include media('>=laptop') {
-        width: $coverWidth;
+      @include var.media('>=laptop') {
+        width: var.$coverWidth;
       }
     }
 
@@ -166,26 +165,26 @@ const getWikiInfo = () => emit('getWikiInfo')
     }
 
     &-summary {
-      color: $paleDP;
+      color: var.$paleDP;
       line-height: 1.5;
     }
 
     &-heading {
-      color: $paleDP;
+      color: var.$paleDP;
       margin: 0.5rem 0 1.75rem;
       max-width: 850px;
     }
 
     &-title {
-      color: $warning;
-      @include serif(2.25rem);
+      color: var.$warning;
+      @include var.serif(2.25rem);
     }
 
     &-category {
       color: inherit;
 
       &.--link {
-        color: $white;
+        color: var.$white;
       }
 
       &[disabled=true] {

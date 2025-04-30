@@ -86,20 +86,20 @@ const emitTextareaValue = () => {
 }
 </script>
 
-<style lang="scss">
-@import '~/scss/variables.scss';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .textarea-field {
   overflow-y: hidden;
   font-size: .875rem;
   display: block;
   width: 100%;
-  border-radius: $borderRadiusSM;
-  border: 1px solid $paleMD;
+  border-radius: var.$borderRadiusSM;
+  border: 1px solid var.$paleMD;
   padding: .5rem 1rem;
 
   &.--error {
-    border-color: $error;
+    border-color: var.$error;
   }
 }
 </style>

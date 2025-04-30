@@ -397,20 +397,20 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
 
 .settings {
-  padding: $mainPadding;
+  padding: var.$mainPadding;
 
   &__actions {
-    margin-bottom: $mainPadding;
+    margin-bottom: var.$mainPadding;
     display: flex;
     gap: 0.5rem;
   }
 
   &__section {
     width: 50%;
-    margin-bottom: $mainPadding;
+    margin-bottom: var.$mainPadding;
 
     &-heading {
       @include serif(1.75rem);
@@ -422,11 +422,11 @@ onMounted(() => {
     width: 100%;
 
     &-head {
-      border-bottom: 2px solid $paleDP;
+      border-bottom: 2px solid var.$paleDP;
     }
 
     &-row {
-      border-bottom: 1px solid $paleMD;
+      border-bottom: 1px solid var.$paleMD;
 
       &:last-child {
         border-bottom: 0;
@@ -435,7 +435,7 @@ onMounted(() => {
 
     &-cell {
       padding: 5px 10px;
-      border-right: 1px solid $paleMD;
+      border-right: 1px solid var.$paleMD;
 
       &:first-child {
         padding-left: 0;

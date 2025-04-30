@@ -95,8 +95,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .paginator {
   display: flex;
@@ -126,9 +125,9 @@ watch(
     }
 
     &.--current {
-      border-radius: $borderRadiusSM;
-      background-color: $dark;
-      color: $white;
+      border-radius: var.$borderRadiusSM;
+      background-color: var.$dark;
+      color: var.$white;
     }
   }
 
@@ -147,7 +146,7 @@ watch(
     outline: none;
     font-family: inherit;
     font-size: 18px;
-    color: $paleDP;
+    color: var.$paleDP;
     background-color: transparent;
   }
 }

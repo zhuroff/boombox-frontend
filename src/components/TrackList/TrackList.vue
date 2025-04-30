@@ -83,13 +83,12 @@ const removeTrackFromCompilation = (trackID: string) => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .tracklist {
   margin-bottom: 25px;
 
-  @include media('>=laptop') {
+  @include var.media('>=laptop') {
     margin-top: 75px;
   }
 }

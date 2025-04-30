@@ -50,3 +50,23 @@ const form = useForm({
   }
 })
 </script>
+
+<style lang="scss">
+@use '~/scss/variables' as var;
+
+.input-field {
+  border: 1px solid;
+  border-color: var.$paleMD;
+  padding: .5rem .75rem;
+  width: 100%;
+
+  &::placeholder {
+    color: var.$paleDP;
+  }
+
+  &.--error {
+    border-color: var.$error;
+    outline-color: var.$error;
+  }
+}
+</style>

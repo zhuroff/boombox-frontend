@@ -56,8 +56,6 @@ const login = async (formData: CustomFormData) => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables.scss';
-
 .login {
   height: 100vh;
   display: flex;

@@ -119,20 +119,19 @@ const lyricsModalSwitcher = () => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .tracklist {
 
   &__row {
-    color: $black;
+    color: var.$black;
     height: 3rem;
     display: flex;
 
     &:hover {
-      border-radius: $borderRadiusSM;
-      background-color: $dark;
-      color: $white;
+      border-radius: var.$borderRadiusSM;
+      background-color: var.$dark;
+      color: var.$white;
     }
 
     &-cell {
@@ -152,15 +151,15 @@ const lyricsModalSwitcher = () => {
         justify-content: flex-start;
 
         .icon {
-          color: $paleDP;
-          fill: $paleDP;
+          color: var.$paleDP;
+          fill: var.$paleDP;
         }
 
-        @include media('<laptop') {
+        @include var.media('<laptop') {
           display: none;
         }
 
-        @include media('>=laptop') {
+        @include var.media('>=laptop') {
           width: 30px;
         }
         
@@ -173,11 +172,11 @@ const lyricsModalSwitcher = () => {
         flex: none;
         justify-content: center;
 
-        @include media('<laptop') {
+        @include var.media('<laptop') {
           width: 40px;
         }
 
-        @include media('>=laptop') {
+        @include var.media('>=laptop') {
           width: 50px;
         }
       }
@@ -188,7 +187,7 @@ const lyricsModalSwitcher = () => {
 
       &.--title {
 
-        @include media('<laptop') {
+        @include var.media('<laptop') {
           padding-left: 0;
           margin-right: 5px;
         }
@@ -196,21 +195,21 @@ const lyricsModalSwitcher = () => {
 
       &.--duration {
 
-        @include media('<laptop') {
+        @include var.media('<laptop') {
           display: none;
         }
       }
 
       &.--compilation {
        
-        @include media('<laptop') {
+        @include var.media('<laptop') {
           display: none;
         }
       }
 
       &:last-child {
 
-        @include media('<laptop') {
+        @include var.media('<laptop') {
           display: none;
         }
       }
@@ -225,32 +224,32 @@ const lyricsModalSwitcher = () => {
       background-color: transparent;
       border: 0;
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         padding: 0;
       }
   
       .icon {
         width: 18px;
         height: 18px;
-        color: $paleDP;
-        fill: $paleDP;
+        color: var.$paleDP;
+        fill: var.$paleDP;
         transition: fill 0.2s ease;
       }
   
       &:hover {
   
         .icon {
-          color: $white;
-          fill: $white;
+          color: var.$white;
+          fill: var.$white;
           transition: fill 0.2s ease;
         }
       }
     }
 
     &.--playing {
-      background-color: $dark;
-      color: $white;
-      border-radius: $borderRadiusSM;
+      background-color: var.$dark;
+      color: var.$white;
+      border-radius: var.$borderRadiusSM;
 
       .icon {
 
@@ -258,12 +257,12 @@ const lyricsModalSwitcher = () => {
         &.spinner,
         &.drag,
         &.plus {
-          fill: $white;
-          color: $white;
+          fill: var.$white;
+          color: var.$white;
         }
 
         &.spinner {
-          stroke: $white;
+          stroke: var.$white;
         }
       }
     }

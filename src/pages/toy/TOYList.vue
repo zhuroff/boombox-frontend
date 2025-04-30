@@ -69,8 +69,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
-
 .toylist {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
