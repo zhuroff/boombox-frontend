@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <section class="template">
     <iframe class="bandcamp" src="https://bandcamp.com/discover?s=new" />
   </section>
 </template>
@@ -9,6 +9,6 @@
 @import 'include-media';
 
 .bandcamp {
-  height: calc(100vh - #{$playerHeight});
+  height: calc(100vh - $playerHeight);
 }
 </style>

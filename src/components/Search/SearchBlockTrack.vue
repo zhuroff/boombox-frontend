@@ -1,9 +1,14 @@
 <template>
   <div class="input-search__results-track">
-    <img :src="track?.coverURL || '/img/album.webp'" :alt="track.inAlbum.title">
+    <img
+      :alt="track.inAlbum.title"
+      :src="track?.coverURL || '/img/album.webp'"
+    >
     <div>
       <strong>{{ track.title }}</strong>
-      <span>{{ track.artist.title }} - {{ track.inAlbum.title }}</span>
+      <span>
+        {{ track.artist.title }} - {{ track.inAlbum.title }}
+      </span>
     </div>
     <!-- <div class="input-search__results-actions">
       <TrackItemPlay
@@ -71,7 +76,7 @@ const {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
 
 .input-search {
 
@@ -81,18 +86,18 @@ const {
       padding: 5px;
       display: flex;
       align-items: center;
-      transition: background-color 0.3s $animation;
+      transition: background-color 0.3s var.$animation;
 
       &:hover {
-        background-color: $paleLT;
-        transition: background-color 0.3s $animation;
+        background-color: var.$paleLT;
+        transition: background-color 0.3s var.$animation;
       }
 
       img {
         width: 50px;
         height: 50px;
         object-fit: cover;
-        border-radius: $borderRadiusSM;
+        border-radius: var.$borderRadiusSM;
         grid-row: span 2;
         max-height: 100%;
         display: block;
@@ -100,13 +105,13 @@ const {
       }
 
       strong {
-        color: $black;
+        color: var.$black;
         display: block;
       }
 
       span {
         font-size: 0.875rem;
-        color: $paleDP;
+        color: var.$paleDP;
       }
     }
 
@@ -129,17 +134,17 @@ const {
         padding: 0;
         width: 2rem !important;
         height: 2rem !important;
-        border: 1px solid $paleDP;
-        fill: $paleDP;
+        border: 1px solid var.$paleDP;
+        fill: var.$paleDP;
 
         &:hover {
-          background-color: $paleDP;
-          fill: $white;
+          background-color: var.$paleDP;
+          fill: var.$white;
         }
 
         &.--active {
-          background-color: $paleDP;
-          fill: $white;
+          background-color: var.$paleDP;
+          fill: var.$white;
         }
       }
     }

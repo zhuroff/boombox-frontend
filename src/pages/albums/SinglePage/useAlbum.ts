@@ -69,7 +69,7 @@ const useAlbum = (dbService: DatabaseService) => {
 
   const { data: relatedAlbumsByGenre } = useGetList<Album>(genreConfig, dbService, isAlbumReady)
 
-  const relatedAlbums = computed(() => ([
+  const relatedAlbums = computed<RelatedAlbums[]>(() => ([
     {
       docs: relatedAlbumsByArtist.value?.docs || [],
       name: album.value?.artist.title || ''

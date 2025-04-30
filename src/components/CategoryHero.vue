@@ -219,6 +219,9 @@ onMounted(() => {
 @import 'include-media';
 
 .hero {
+  width: 100%;
+  height: 300px;
+  position: relative;
 
   &:hover {
 

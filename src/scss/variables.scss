@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use 'sass:string';
+
 $font: 'Nunito', sans-serif;
 
 $white: #fff;
@@ -40,16 +43,6 @@ $animation: cubic-bezier(.06,.28,.26,.81);
 $shadowLight: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 $shadowMedium: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
-$breakpoints: (
-  'tablet': 768px,
-  'laptop': 1024px,
-  'desktop': 1280px,
-  'desktop-md': 1536px,
-  'desktop-lg': 1780px,
-  'desktop-hg': 2048px,
-  'landscape': '(orientation: landscape)'
-  ) !default;
-
 @mixin buttonClose {
   position: absolute;
   top: $mainPadding;
@@ -81,4 +74,56 @@ $breakpoints: (
   color: $paleDP;
   font-size: .75rem;
   position: relative;
+}
+
+$breakpoints: (
+  'tablet': 768px,
+  'laptop': 1024px,
+  'desktop': 1280px,
+  'desktop-md': 1536px,
+  'desktop-lg': 1780px,
+  'desktop-hg': 2048px,
+  'landscape': '(orientation: landscape)'
+  ) !default;
+
+@mixin media($query) {
+  $operator: '';
+  $name: '';
+  $value: null;
+
+  @if string.index($query, '<=') == 1 {
+    $operator: 'max';
+    $name: string.slice($query, 3);
+    $value: map.get($breakpoints, $name);
+  } @else if string.index($query, '>=') == 1 {
+    $operator: 'min';
+    $name: string.slice($query, 3);
+    $value: map.get($breakpoints, $name);
+  } @else if string.index($query, '<') == 1 {
+    $operator: 'max';
+    $name: string.slice($query, 2);
+    $value: map.get($breakpoints, $name);
+    @if $value != null {
+      $value: $value - 1px;
+    }
+  } @else if string.index($query, '>') == 1 {
+    $operator: 'min';
+    $name: string.slice($query, 2);
+    $value: map.get($breakpoints, $name);
+    @if $value != null {
+      $value: $value + 1px;
+    }
+  } @else {
+    $operator: 'min';
+    $name: $query;
+    $value: map.get($breakpoints, $name);
+  }
+
+  @if $value != null {
+    @media screen and (#{$operator}-width: #{$value}) {
+      @content;
+    }
+  } @else {
+    @warn 'Неизвестный брейкпоинт: #{$name}';
+  }
 }

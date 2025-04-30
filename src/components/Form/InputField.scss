@@ -1,18 +1,17 @@
-@import '~/scss/variables.scss';
-@import 'include-media';
+@use '../../scss/variables' as var;
 
 .input-field {
   border: 1px solid;
-  border-color: $paleMD;
+  border-color: var.$paleMD;
   padding: .5rem .75rem;
   width: 100%;
 
   &::placeholder {
-    color: $paleDP;
+    color: var.$paleDP;
   }
 
   &.--error {
-    border-color: $error;
-    outline-color: $error;
+    border-color: var.$error;
+    outline-color: var.$error;
   }
 }

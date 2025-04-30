@@ -47,7 +47,7 @@ import AlbumPage from '~/classes/AlbumPage'
 import AlbumItem from '~/classes/AlbumItem'
 // import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
-import AlbumHero from '~/components/AlbumHero.vue'
+// import AlbumHero from '~/components/AlbumHero.vue'
 
 const {
   playerActions: { setPlayerPlaylist }

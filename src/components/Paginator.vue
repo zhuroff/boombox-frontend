@@ -103,6 +103,11 @@ watch(
   align-items: center;
   justify-content: center;
 
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+
   &__button {
     height: 40px;
     width: 40px;

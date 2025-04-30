@@ -20,11 +20,11 @@
       :isModalActive="isSearchMode"
       @closeModal="isSearchMode = false"
     >
-      <SearchBlock
+      <SearchModal
         :isFetching="isSearchFetching"
         :results="searchResults"
         @onSearch="onSearch"
-      ></SearchBlock>
+      ></SearchModal>
     </Modal>
   </div>
 </template>
@@ -38,7 +38,7 @@ import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import Modal from '~/components/Modal.vue'
-import SearchBlock from '~/components/Search/SearchBlock.vue'
+import SearchModal from '~/components/Search/SearchModal.vue'
 
 interface Props {
   album: UnifiedAlbum
