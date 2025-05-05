@@ -1,7 +1,7 @@
 <template>
   <div class="wikiframe">
     <ul
-      v-if="searchResults"
+      v-if="searchResults?.length"
       class="wikiframe__results"
     >
       <li
@@ -14,7 +14,9 @@
     <div
       v-if="!isLoading && !frameURL"
       class="wikiframe__placeholder"
-    >{{ localize('wiki.frameHeading') }}</div>
+    >
+      {{ searchResults?.length ? localize('wiki.frameHeading') : 'Nothing was found' }}
+    </div>
     <iframe
       v-if="frameURL"
       :src="frameURL"
@@ -23,14 +25,13 @@
     ></iframe>
     <Preloader
       v-if="isLoading"
-      mode="dark"
+      mode="light"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { WikiSearchResult } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import Preloader from './Preloader.vue'
 
@@ -60,8 +61,7 @@ const selectWikiResult = (id: number) => {
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .wikiframe {
   width: calc(100vw - 20px);
@@ -69,8 +69,8 @@ const selectWikiResult = (id: number) => {
   max-width: 1200px;
   max-height: calc(100vh - 50px);
   overflow: hidden;
-  background-color: $white;
-  border-radius: $borderRadiusLG;
+  background-color: var.$white;
+  border-radius: var.$borderRadiusLG;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -83,16 +83,16 @@ const selectWikiResult = (id: number) => {
 
     &-item {
       font-size: 0.875rem;
-      color: $paleDP;
+      color: var.$paleDP;
       cursor: pointer;
       text-align: center;
 
       &:hover {
-        color: $dark;
+        color: var.$dark;
       }
 
       &.--selected {
-        color: $dark;
+        color: var.$dark;
         font-weight: 600;
       }
     }

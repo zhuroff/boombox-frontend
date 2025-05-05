@@ -32,44 +32,44 @@ interface Props {
 defineProps<Props>()
 </script>
 
-<style lang="scss">
-@import '../scss/variables.scss';
-@import 'include-media';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .preloader {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
   z-index: 3000;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &.--dark {
-    height: 100%;
+    background-color: var.$transDark;
     
     .preloader__icon {
-      fill: $white;
+      fill: var.$white;
     }
   }
 
   &.--light {
-    background-color: $transLight;
+    background-color: var.$transLight;
 
-    @include media('<laptop') {
-      height: 100vh
-    }
+    // @include var.media('<laptop') {
+    //   height: 100%;
+    // }
 
-    @include media('>=laptop') {
-      height: calc(100vh - #{$playerHeight});
-    }
+    // @include var.media('>=laptop') {
+    //   height: calc(100% - var.$playerHeight);
+    // }
   }
 
   &__icon {
     
     path {
-      fill: $paleDP;
+      fill: var.$paleDP;
     }
   }
 }

@@ -60,12 +60,12 @@
                 <span v-if="expandedLyrics === null || expandedLyrics !== index">{{ localize('lyrics.expand') }}</span>
                 <span v-if="expandedLyrics !== null && expandedLyrics === index">{{ localize('lyrics.collapse') }}</span>
               </button>
-              <span v-if="!track.isTOY">&nbsp;/&nbsp;</span>
+              <!-- <span v-if="!track.isTOY">&nbsp;/&nbsp;</span>
               <button
                 v-if="!track.isTOY"
                 class="lyrics__item_action"
                 @click="saveLyrics(item.lyrics)"
-              >{{ localize('lyrics.save') }}</button>
+              >{{ localize('lyrics.save') }}</button> -->
               <TextareaInput
                 v-if="expandedLyrics === index"
                 :defaultValue="item.lyrics"
@@ -91,11 +91,10 @@ import Button from '~/components/Button.vue'
 import TextareaInput from '~/components/Form/TextareaInput.vue'
 import Preloader from '~/components/Preloader.vue'
 import trackServices from '~/services/track.services'
-import AlbumTrack from '~/classes/AlbumTrack'
 
 interface Props {
   heading: string
-  track: AlbumTrack
+  track: Track
 }
 
 const props = defineProps<Props>()
@@ -175,15 +174,16 @@ const fetchTrackLyrics = async () => {
 }
 
 onMounted(() => {
+  // @ts-expect-error: fix
   !props.track.isTOY && fetchTrackLyrics()
 })
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
 
 .lyrics {
-  background-color: $white;
+  background-color: var.$paleLT;
   border-radius: 10px;
   width: 100%;
   max-width: 768px;
@@ -196,7 +196,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: $dark;
+    background-color: var.$dark;
     padding: 25px;
     position: relative;
     z-index: 10;
@@ -205,7 +205,7 @@ onMounted(() => {
   &__heading {
     font-weight: 600;
     font-size: 20px;
-    color: $white;
+    color: var.$white;
   }
 
   &__content {
@@ -217,7 +217,7 @@ onMounted(() => {
 
     .preloader {
       position: absolute;
-      background: $white;
+      background: var.$white;
       z-index: 100;
       width: 100%;
       height: 100%;
@@ -234,7 +234,7 @@ onMounted(() => {
     margin-top: 1rem;
     padding: 0 !important;
     border: none !important;
-    background-color: $white;
+    background-color: var.$paleLT;
   }
 
   &__empty {
@@ -267,7 +267,7 @@ onMounted(() => {
     }
 
     &_title {
-      color: $dark;
+      color: var.$dark;
       font-weight: 600;
       font-size: 18px;
     }
@@ -277,7 +277,7 @@ onMounted(() => {
       background-color: transparent;
       outline: none;
       border: 0;
-      color: $paleDP;
+      color: var.$paleDP;
     }
   }
 }

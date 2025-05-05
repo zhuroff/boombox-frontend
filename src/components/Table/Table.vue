@@ -1,0 +1,58 @@
+<template>
+  <table class="table">
+    <thead class="table__head">
+      <TableHeadRow
+        :cells="tableHeader"
+        :filters="tableFilters"
+        :filtersState="tableFiltersState"
+        :localeRootKey="localeRootKey"
+        @updateFilterValue="(value) => emit('updateFilterValue', value)"
+      />
+    </thead>
+    <tbody class="table__body">
+      <TableBodyRow
+        v-for="row in tableState.rows"
+        :row="row"
+        :schema="tableState.schema"
+      />
+    </tbody>
+  </table>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
+import useGlobalStore from '~/store/global'
+import TableHeadRow from './TableHeadRow.vue'
+import TableBodyRow from './TableBodyRow.vue'
+
+interface Props {
+  tableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>
+  tableFilters: TableFilters
+  tableFiltersState: Record<string, string | null>
+  localeRootKey: string
+}
+
+interface Emits {
+  (e: 'updateFilterValue', value: [string, string | null]): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const { globalGetters: { localize } } = useGlobalStore()
+
+const tableHeader = computed<TableHeadConfig<JSONSchema4>[]>(() => (
+  props.tableState.schema.order.map((key: string) => ({
+    key,
+    heading: localize(`${props.localeRootKey}.${key}`),
+    schema: props.tableState.schema.properties?.[key],
+    filter: props.tableState.schema.filters?.[key]
+  }))
+))
+</script>
+
+<style lang="scss">
+.table {
+  width: 100%;
+}
+</style>

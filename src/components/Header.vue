@@ -1,21 +1,33 @@
 <template>
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
-    <SearchBlock
-      v-if="withSearch"
-      type="search"
-      :results="results"
-      :placeholder="localize('search.placeholder')"
-      @setInputValue="searchSubmit"
+    <Button
+      icon="loupe"
+      isRounded
+      isInverted
+      @click="isSearchMode = !isSearchMode"
     />
+    <Modal
+      :isModalActive="isSearchMode"
+      @closeModal="isSearchMode = false"
+    >
+      <SearchModal
+        :isFetching="isSearchFetching"
+        :results="searchResults"
+        @onSearch="onSearch"
+      ></SearchModal>
+    </Modal>
     <slot></slot>
   </header>
 </template>
 
 <script setup lang="ts">
-import { useSearch } from '~/hooks/useSearch'
-import useGlobalStore from '~/store/global'
-import SearchBlock from '~/components/SearchBlock.vue'
+import { ref } from 'vue'
+import useSearch from '~/shared/useSearch'
+import DatabaseService from '~/services/DatabaseService'
+import Button from '~/components/Button.vue'
+import Modal from '~/components/Modal.vue'
+import SearchModal from '~/components/Search/SearchModal.vue'
 
 interface Props {
   heading: string
@@ -24,16 +36,20 @@ interface Props {
 
 defineProps<Props>()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const dbService = new DatabaseService()
 
-const { searchSubmit, results } = useSearch()
+const searchQuery = ref('')
+const isSearchMode = ref(false)
+
+const { searchResults, isSearchFetching } = useSearch(searchQuery, dbService)
+
+const onSearch = (value: string) => {
+  searchQuery.value = value
+}
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .header {
   display: flex;
@@ -41,9 +57,9 @@ const { searchSubmit, results } = useSearch()
   align-items: center;
   position: relative;
 
-  @include media('<laptop') {
-    background-color: $dark;
-    color: $white;
+  @include var.media('<laptop') {
+    background-color: var.$dark;
+    color: var.$white;
     position: relative;
     padding: 25px 25px 0;
 
@@ -51,7 +67,7 @@ const { searchSubmit, results } = useSearch()
       content: '';
       width: 100vw;
       height: 75vh;
-      background: linear-gradient(to bottom, $dark, $white);
+      background: linear-gradient(to bottom, var.$dark, var.$white);
       position: absolute;
       left: 0;
       top: 100%;
@@ -62,20 +78,26 @@ const { searchSubmit, results } = useSearch()
     }
   }
 
-  @include media('>=laptop') {
-    padding: 25px 25px 0;
+  @include var.media('>=laptop') {
+    padding: 0 25px;
+    background-color: var.$dark;
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
 
   &__heading {
 
-    @include media('<tablet') {
-      @include serif(1.5rem);
+    @include var.media('<tablet') {
+      @include var.serif(1.5rem);
       margin-right: 1rem;
     }
 
-    @include media('>=tablet') {
-      @include serif(1.75rem);
-      margin-right: 2rem;
+    @include var.media('>=tablet') {
+      @include var.serif(1.75rem);
+      margin-right: auto;
+      color: var.$paleMD;
     }
   }
 }

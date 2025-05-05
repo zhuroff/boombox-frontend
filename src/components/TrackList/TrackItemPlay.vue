@@ -38,11 +38,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import usePlaylist from '~/store/playlist'
-import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
 interface Props {
-  track: AlbumTrack
+  track: Track
   title?: string
   isSearched?: boolean
   isTOY: boolean
@@ -102,8 +101,6 @@ const playFurther = () => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
-
 .tracklist__row {
 
   &-cell {

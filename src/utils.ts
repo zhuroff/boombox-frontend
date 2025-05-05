@@ -2,6 +2,14 @@ export const isObjectsEquals = <T>(a: T, b: T): boolean => {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+export const getUUID = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
 export const hostString = (pathname: string) => {
   const host = import.meta.env.DEV
     ? import.meta.env.VITE_DEV_HOST
@@ -30,16 +38,6 @@ export const slugify = (str: string) => (
     .replace(/[^a-zа-я0-9\s]+/g, '').trim()
     .replace(/\s+/g, '-').trim()
 )
-
-export const detectWikiLocale = (str: string) => {
-  if (str.match(/[a-zA-Z]/g)) {
-    return 'en'
-  } else if (str.match(/[а-яА-Я]/g)) {
-    return 'ru'
-  }
-
-  return 'en'
-}
 
 export function debounce <T extends (...args: any[]) => void>(
   callback: T,

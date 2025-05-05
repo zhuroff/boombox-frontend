@@ -8,7 +8,7 @@
     @removeTrackFromCompilation="removeTrackFromCompilation"
   >
     <template #hero>
-      <AlbumHero
+      <!-- <AlbumHero
         v-if="compilation._id"
         :id="compilation._id"
         :title="compilation.title"
@@ -29,7 +29,7 @@
             @click="isDelConfirm = true"
           >{{ localize('deleteEntity') }}</li>
         </template>
-      </AlbumHero>
+      </AlbumHero> -->
     </template>
     <template #modal>
       <Modal
@@ -58,8 +58,8 @@ import usePlaylist from '~/store/playlist'
 import { useGathering } from '~/hooks/useGathering'
 import { hostString } from '~/utils'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
-import CoverArt from '~/components/CoverArt.vue'
-import AlbumHero from '~/components/AlbumHero.vue'
+// import CoverArt from '~/components/CoverArt.vue'
+// import AlbumHero from '~/components/AlbumHero.vue'
 import CompilationItem from '~/classes/CompilationItem'
 import CompilationPage from '~/classes/CompilationPage'
 import Confirmation from '~/components/Confirmation.vue'

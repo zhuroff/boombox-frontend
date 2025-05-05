@@ -35,11 +35,10 @@
 import { computed } from 'vue'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import AlbumTrack from '~/classes/AlbumTrack'
 import Button from '~/components/Button.vue'
 
 interface Props {
-  track: AlbumTrack
+  track: Track
 }
 
 const props = defineProps<Props>()
@@ -63,7 +62,7 @@ const excludeTrack = () => {
 </script>
 
 <style lang="scss">
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
 
 .tracklist__row {
 
@@ -71,7 +70,7 @@ const excludeTrack = () => {
     
     &.--add {
       .button {
-        fill: $paleDP;
+        fill: var.$paleDP;
         padding: 0;
         height: 100%;
 
@@ -88,20 +87,20 @@ const excludeTrack = () => {
         }
 
         &:hover {
-          fill: $white;
-          color: $white;
+          fill: var.$white;
+          color: var.$white;
         }
 
         &.--active {
-          border: 1px solid $paleMD;
-          background-color: $paleMD;
+          border: 1px solid var.$paleMD;
+          background-color: var.$paleMD;
           border-radius: 50%;
-          fill: $white;
-          color: $white;
+          fill: var.$white;
+          color: var.$white;
 
           &:hover {
-            fill: $white;
-            color: $white;
+            fill: var.$white;
+            color: var.$white;
             stroke: inherit;
           }
         }

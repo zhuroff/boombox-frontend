@@ -67,38 +67,35 @@ const navbar = computed(() => (
 ))
 </script>
 
-<style lang="scss">
-@import '../scss/variables.scss';
-@import 'include-media';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .aside {
   flex: none;
-  background-color: $white;
   z-index: 2000;
-  background-color: $dark;
+  background-color: var.$dark;
   overflow: auto;
 
-  @include media('<laptop') {
+  @include var.media('<laptop') {
     position: relative;
-    width: $asideWidthMobile;
+    width: var.$asideWidthMobile;
     height: 100vh;
     top: 0;
     right: 0;
     padding-top: 50px;
-    transition: transform 0.75s $animation;
-    background-color: $accent;
+    transition: transform 0.75s var.$animation;
+    background-color: var.$accent;
     order: 1;
 
     &.--opened {
-      transform: translateX(-#{$asideWidthMobile});
-      transition: transform 0.5s $animation;
+      transform: translateX(-#{var.$asideWidthMobile});
+      transition: transform 0.5s var.$animation;
     }
   }
 
-  @include media('>=laptop') {
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  @include var.media('>=laptop') {
     position: relative;
-    width: $asideWidth;
+    width: var.$asideWidth;
   }
 
   &.--z-low {
@@ -107,7 +104,7 @@ const navbar = computed(() => (
 
   &__burger {
     
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       position: fixed;
       top: 1rem;
       right: 1rem;
@@ -115,13 +112,13 @@ const navbar = computed(() => (
 
       .icon {
         width: 2rem !important;
-        fill: $white;
-        color: $white;
+        fill: var.$white;
+        color: var.$white;
       }
     }
 
-    @include media('>=laptop') {
-      display: none;
+    @include var.media('>=laptop') {
+      display: none !important;
     }
   }
 
@@ -132,34 +129,34 @@ const navbar = computed(() => (
     text-transform: uppercase;
     letter-spacing: 1px;
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       justify-content: flex-start;
       height: 50px;
       padding: 0 1rem;
       font-size: 1rem;
-      color: $white;
+      color: var.$white;
     }
 
-    @include media('>=laptop') {
+    @include var.media('>=laptop') {
       height: 70px;
       padding: 0 25px;
       font-size: 1.15rem;
-      color: $paleDP;
+      color: var.$paleMD;
     }
 
     .icon-vinyl {
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         display: none;
       }
 
-      @include media('>=laptop') {
+      @include var.media('>=laptop') {
         width: 24px;
         height: 24px;
         margin-right: 0.5rem;
         flex: none;
-        fill: $paleDP;
-        stroke: $paleDP;
+        fill: var.$paleDP;
+        stroke: var.$paleDP;
       }
     }
   }
@@ -171,22 +168,22 @@ const navbar = computed(() => (
       display: block;
       transition: all 0.2s ease;
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         text-align: right;
-        color: $white;
+        color: var.$white;
         padding: 0 1rem;
       }
 
-      @include media('>=laptop') {
-        color: $white;
-        padding: 0 $mainPadding;
+      @include var.media('>=laptop') {
+        color: var.$white;
+        padding: 0 var.$mainPadding;
       }
 
       &:hover,
       &.router-link-active {
         transition: all 0.2s ease;
-        background-color: $white;
-        color: $dark;
+        background-color: var.$paleLT;
+        color: var.$dark;
       }
     }
   }

@@ -1,5 +1,6 @@
-import type { BasicEntity, Pagination } from '~/types/Common'
-import AlbumItem from '~/classes/AlbumItem'
+import type { BasicEntity } from '~/types/Common'
+import type AlbumItem from '~/classes/AlbumItem'
+import type CategoryItem from '~/classes/CategoryItem'
 
 export interface TrackRes extends Required<BasicEntity> {
   path: string
@@ -48,11 +49,6 @@ export interface CompilationEntityRes<T> extends GatheringEntityRes {
 
 export interface CollectionEntityRes<T> extends GatheringEntityRes {
   albums: T[]
-}
-
-export interface ListPageResponse<T> {
-  docs: T[],
-  pagination: Pagination
 }
 
 export interface GatheringCreateReq<T> {

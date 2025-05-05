@@ -43,13 +43,13 @@ export const localesBY: LocaleDictionary = {
     createUser: 'Стварыць карыстальніка'
   },
   getRandomAlbum: 'Выпадковы альбом',
-  unknownTime: 'невядомы час',
+  unknownTime: 'Яшчэ не ўсе трэкi праслуханы',
   listenedTracks: 'Усяго праслуханых трэкаў:',
   conjugated: {
     tracks: {
-      singular: 'трэк',
-      upToFive: 'трэкi',
-      plural: 'трэкаў'
+      singular: 'Трэк',
+      upToFive: 'Трэкi',
+      plural: 'Трэкаў'
     }
   },
   playButton: 'Граць',
@@ -57,18 +57,23 @@ export const localesBY: LocaleDictionary = {
   discogsTable: {
     cover: 'Вокладка',
     country: 'Краiна',
+    releaseTitle: 'Назва',
     releaseYear: 'Год',
     releaseFormat: 'Фармат',
     label: 'Лэйбл'
   },
   embeddedForm: {
     title: 'Назва альбому',
+    titlePlaceholder: 'Увядзiце назву альбому',
     artist: 'Артыст',
+    artistPlaceholder: 'Увядзiце iмя артыста',
     genre: 'Жанр',
     period: 'Год выдання',
     frame: 'Код фрэйму',
     collections: 'У калекцыi',
-    notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.'
+    notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.',
+    addAlbum: 'Дадаць альбом',
+    submit: 'Стварыць альбом'
   },
   loginForm: {
     email: 'Email',
@@ -122,7 +127,7 @@ export const localesBY: LocaleDictionary = {
   },
   collections: {
     add: 'Дадаць у калекцыю',
-    namePlaceholder: 'Увядзіце назву калекцыі',
+    namePlaceholder: 'Увядзіце назву новай калекцыі і захавайце',
     exists: 'Калекцыя з такой назвай ужо існуе',
     removed: 'Альбом паспяхова выдалены з калекцыі',
     added: 'Альбом паспяхова дададзены ў калекцыю',
@@ -152,6 +157,7 @@ export const localesBY: LocaleDictionary = {
     removeFromList: 'Выдаліць з плэйлiста',
     waveButton: 'Граць гэтую хвалю'
   },
+  totalLength: 'Працягласть',
   totalAlbums: 'Усяго альбомаў',
   deleteEntity: 'Выдаліць альбом',
   deletedEmbeddedMessage: 'Альбом паспяхова выдалены',

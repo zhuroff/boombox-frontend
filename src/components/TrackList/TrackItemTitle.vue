@@ -3,7 +3,10 @@
     class="tracklist__row-cell --pointer --title"
     @click="() => emit('callLyricsModal')"
   >
-    <span class="tracklist__row-title">{{ title }}</span>
+    <span
+      :title="title"
+      class="tracklist__row-title"
+    >{{ title }}</span>
   </div>
 </template>
 
@@ -21,7 +24,6 @@ const emit = defineEmits<Emits>()
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
 .tracklist__row {
 
   &-cell {

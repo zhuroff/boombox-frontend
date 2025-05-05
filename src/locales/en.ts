@@ -43,13 +43,13 @@ export const localesEN: LocaleDictionary = {
     createUser: 'Create user',
   },
   getRandomAlbum: 'Random album',
-  unknownTime: 'unknown time',
+  unknownTime: 'Not all tracks have been listened to yet',
   listenedTracks: 'Total tracks listened:',
   conjugated: {
     tracks: {
-      singular: 'track',
-      upToFive: 'tracks',
-      plural: 'tracks'
+      singular: 'Track',
+      upToFive: 'Tracks',
+      plural: 'Tracks'
     }
   },
   playButton: 'Play',
@@ -57,18 +57,23 @@ export const localesEN: LocaleDictionary = {
   discogsTable: {
     cover: 'Cover',
     country: 'Country',
+    releaseTitle: 'Title',
     releaseYear: 'Year',
     releaseFormat: 'Format',
     label: 'Label'
   },
   embeddedForm: {
     title: 'Album title',
+    titlePlaceholder: 'Enter the album title',
     artist: 'Artist',
+    artistPlaceholder: 'Enter the artist name',
     genre: 'Genre',
     period: 'Period',
     frame: 'Frame code',
     collections: 'In collection',
-    notFound: 'Nothing was found among {x}. Create a new one.'
+    notFound: 'Nothing was found among {x}. Create a new one.',
+    addAlbum: 'Add album',
+    submit: 'Create album'
   },
   loginForm: {
     email: 'Email',
@@ -122,7 +127,7 @@ export const localesEN: LocaleDictionary = {
   },
   collections: {
     add: 'Add to collection',
-    namePlaceholder: 'Enter collection name',
+    namePlaceholder: 'Enter new collection name, and save',
     exists: 'Collection with this name already exists',
     removed: 'Album successfully removed from collection',
     added: 'Album successfully added to collection',
@@ -152,6 +157,7 @@ export const localesEN: LocaleDictionary = {
     removeFromList: 'Remove from playlist',
     waveButton: 'Play this wave'
   },
+  totalLength: 'Length',
   totalAlbums: 'Total albums',
   deleteEntity: 'Delete album',
   deletedEmbeddedMessage: 'Album was successfully deleted',

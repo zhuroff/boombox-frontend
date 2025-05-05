@@ -31,6 +31,7 @@
     <div class="paginator__switcher">
       <button
         v-for="button in buttons"
+        :key="button"
         @click="switchPagination(button)"
         :class="[{ '--current' : button === pagination.page }, 'paginator__button']"
       >{{ button }}</button>
@@ -38,7 +39,7 @@
     <button
       v-if="config.increment"
       class="paginator__button"
-      :disabled="pagination.page === pagination.totalPages"
+      :disabled="pagination.page === config.totalPages"
       @click="switchPagination(pagination.page + 1)"
     >
       <Sprite name="chevron-right" />
@@ -46,8 +47,8 @@
     <button
       v-if="config.increment"
       class="paginator__button"
-      :disabled="pagination.page === pagination.totalPages"
-      @click="switchPagination(pagination.totalPages)"
+      :disabled="pagination.page === config.totalPages"
+      @click="switchPagination(config.totalPages)"
     >
       <Sprite name="chevron-right-double" />
     </button>
@@ -56,28 +57,22 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import type { Pagination, PaginationConfig } from '~/types/Common'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 interface Props {
-  pagination: Pagination
+  pagination: PaginationState
   config: PaginationConfig
-}
-
-interface Emits {
-  (e: 'changeLimit', limit: number): void
-  (e: 'switchPagination', page: number): void
+  updatePaginationState: PaginationStateSetter
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
 
 const localLimit = ref(props.pagination.limit)
 const localPage = ref(props.pagination.page)
 
 const buttons = computed(() => {
   const minButton = Math.max(1, localPage.value - 2)
-  const maxButton = Math.min(minButton + 4, props.pagination.totalPages)
+  const maxButton = Math.min(minButton + 4, props.config.totalPages)
   const result = []
 
   for (let i = minButton; i <= maxButton; i++) {
@@ -88,31 +83,29 @@ const buttons = computed(() => {
 })
 
 const switchPagination = (page: number) => {
-  localPage.value = page
+  props.updatePaginationState('page', page)
 }
 
 watch(
-  [localLimit, localPage],
-  ([newLimitValue, newPageValue], [oldLimitValue, oldPageValue]) => {
-    if (newLimitValue !== oldLimitValue) {
-      emit('changeLimit', newLimitValue)
-      localPage.value = 1
-    } else if (newPageValue !== oldPageValue) {
-      emit('switchPagination', newPageValue)
-    }
-  },
-  { immediate: false }
+  localLimit,
+  (val) => {
+    props.updatePaginationState('limit', val)
+  }
 )
 </script>
 
 <style lang="scss" scoped>
-@import '../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .paginator {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
 
   &__button {
     height: 40px;
@@ -132,9 +125,9 @@ watch(
     }
 
     &.--current {
-      border-radius: $borderRadiusSM;
-      background-color: $dark;
-      color: $white;
+      border-radius: var.$borderRadiusSM;
+      background-color: var.$dark;
+      color: var.$white;
     }
   }
 
@@ -153,7 +146,7 @@ watch(
     outline: none;
     font-family: inherit;
     font-size: 18px;
-    color: $paleDP;
+    color: var.$paleDP;
     background-color: transparent;
   }
 }

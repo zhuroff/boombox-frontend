@@ -87,13 +87,12 @@ import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import Button from '~/components/Button.vue'
-import CategoryPage from '~/classes/CategoryPage'
 import uploadServices from '~/services/upload.services'
 import dbServices from '~/services/database.services'
 import AlbumPage from '~/classes/AlbumPage'
 
 interface Props {
-  data: CategoryPage
+  data: Category
   entity: string
   description: string
   noAvatar?: boolean
@@ -137,7 +136,7 @@ const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => 
       id: String(route.params.id)
     }
 
-    uploadServices.uploadImage<CategoryPage>(payload)
+    uploadServices.uploadImage<Category>(payload)
       .then((data) => {
         // @ts-expect-error: fix
         emit('setUploadedImage', {
@@ -151,15 +150,19 @@ const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => 
 
 const getCategoryWave = async () => {
   try {
-    const tracks = await dbServices.getEntityList<TrackRes[]>({
-      page: 1,
-      limit: 50,
-      filter: {
-        from: props.entity,
-        key: `${categoryKeyDict[props.entity]}.title`,
-        name: props.data.title
+    const tracks = await dbServices.getEntityList<TrackRes[]>(
+      'tracks/wave',
+      {
+        page: 1,
+        limit: 50,
+        sort: { createdAt: -1 },
+        filter: {
+          from: props.entity,
+          key: `${categoryKeyDict[props.entity]}.title`,
+          name: props.data.title
+        }
       }
-    }, 'tracks/wave')
+    )
 
     waveAlbum.value = new AlbumPage({
       _id: props.entity,
@@ -211,17 +214,19 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
-@import '../scss/variables';
-@import 'include-media';
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
 
 .hero {
+  width: 100%;
+  height: 300px;
+  position: relative;
 
   &:hover {
 
     .hero__poster-label {
       opacity: 1;
-      transition: opacity 0.3s $animation;
+      transition: opacity 0.3s var.$animation;
     }
   }
 
@@ -234,7 +239,7 @@ onMounted(() => {
 
     &:before {
       content: '';
-      background-color: $transBlack;
+      background-color: var.$transBlack;
       position: absolute;
       top: 0;
       left: 0;
@@ -262,7 +267,7 @@ onMounted(() => {
       align-items: center;
       cursor: pointer;
       opacity: 0;
-      transition: opacity 0.3s $animation;
+      transition: opacity 0.3s var.$animation;
 
       input {
         position: absolute;
@@ -273,7 +278,7 @@ onMounted(() => {
       }
 
       .icon {
-        color: $white;
+        color: var.$white;
       }
     }
   }
@@ -293,11 +298,11 @@ onMounted(() => {
     position: relative;
     z-index: 3;
 
-    @include media('<tablet') {
+    @include var.media('<tablet') {
       display: none;
     }
 
-    @include media('>=tablet') {
+    @include var.media('>=tablet') {
       width: 10rem;
       height: 10rem;
       border-radius: 50%;
@@ -327,9 +332,9 @@ onMounted(() => {
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: $black;
+      background-color: var.$black;
       opacity: 1;
-      transition: opacity 0.3s $animation;
+      transition: opacity 0.3s var.$animation;
     }
 
     &-label {
@@ -349,7 +354,7 @@ onMounted(() => {
       }
 
       .icon {
-        color: $white;
+        color: var.$white;
       }
     }
   }
@@ -360,16 +365,16 @@ onMounted(() => {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    background-color: $transBlack;
+    background-color: var.$transBlack;
     width: 100%;
-    box-shadow: $shadowMedium;
+    box-shadow: var.$shadowMedium;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
   &__title {
-    color: $warning;
+    color: var.$warning;
     padding: 0;
     border: 0;
     box-shadow: none;
@@ -377,19 +382,18 @@ onMounted(() => {
     background-color: transparent;
     width: 100%;
 
-    @include media('<tablet') {
-      @include serif(2rem);
+    @include var.media('<tablet') {
+      @include var.serif(2rem);
     }
 
-    @include media('>=tablet') {
-      @include serif(3rem);
+    @include var.media('>=tablet') {
+      @include var.serif(3rem);
     }
   }
 
   &__description {
     font-weight: 600;
-    color: $white;
+    color: var.$white;
   }
 }
 </style>
-~/services/upload.services

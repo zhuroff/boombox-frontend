@@ -8,20 +8,22 @@
     :name="name"
     :readonly="readonly"
     :required="required"
+    :value="value"
+    ref="textInputElement"
     autocomplete="off"
     @input="(e) => emit('onInput', (e.target as HTMLInputElement).value)"
   />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import type { StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
-import './InputField.scss'
 
 interface Props {
   name: string
   type: TextInputFieldSchema['type']
+  value?: string
   size?: ElementSize
   defaultValue?: string
   id?: string
@@ -31,6 +33,7 @@ interface Props {
   required?: boolean
   disabled?: boolean
   style?: StyleValue
+  isFocused?: boolean
 }
 
 interface Emits {
@@ -38,6 +41,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  value: '',
   isError: false,
   required: false,
   readonly: false,
@@ -46,6 +50,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+
+const textInputElement = ref<null | HTMLInputElement>(null)
 
 const {
   globalGetters: { localize }
@@ -58,4 +64,10 @@ const stateClasses = computed(() => [
     '--error': props.isError
   }
 ])
+
+onMounted(() => {
+  if (props.isFocused) {
+    textInputElement.value?.focus()
+  }
+})
 </script>

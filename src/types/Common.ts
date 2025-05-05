@@ -22,37 +22,11 @@ export interface Pagination {
   limit: number
 }
 
-export interface PaginationConfig {
-  limiter?: number[]
-  increment?: true
-  decrement?: true
-  selected?: number
-}
-
 export type SortingValue = Record<string, 1 | -1>
 
 export interface DraggableEvent {
   newIndex: number
   oldIndex: number
-}
-
-export interface RandomEntityReqFilter {
-  from: string
-  key: string
-  name: string
-  excluded?: Record<string, string>
-}
-
-export interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
-  value: string
-}
-
-export interface RequestConfig {
-  page: number
-  limit: number
-  sort?: SortingValue
-  isRandom?: true
-  filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
 }
 
 export interface ImagePayload {
@@ -89,11 +63,6 @@ export interface TablePayload<T> {
   pagination: Pagination
   isFetched: Ref<boolean>
   schema: any
-}
-
-export interface WikiSearchResult {
-  title: string
-  pageid: number
 }
 
 export interface AlignmentPosition {

@@ -33,3 +33,30 @@ onUnmounted(() => {
   document.body.removeEventListener('click', clickWatcher)
 })
 </script>
+
+<style lang="scss" scoped>
+@use '~/scss/variables' as var;
+
+.overlay {
+  position: absolute;
+  z-index: 1000;
+  border-radius: var.$borderRadiusMD;
+  background-color: var.$paleLT;
+  box-shadow: var.$shadowMedium;
+
+  &__list {
+    padding: 0.75rem 0;
+
+    &-item {
+      padding: 0.25rem 1rem;
+      cursor: pointer;
+      line-height: 1.5;
+
+      &:hover {
+        background-color: var.$dark;
+        color: var.$white;
+      }
+    }
+  }
+}
+</style>

@@ -5,6 +5,94 @@ declare module '*.vue' {
   export default component
 }
 
+enum UserRole {
+  admin = 'admin',
+  developer = 'developer',
+  guest = 'guest'
+}
+
+interface Entity {
+  _id: string
+  title: string
+  dateCreated?: string
+  cloudURL?: string
+}
+
+interface Category extends Entity {
+  poster?: string
+  avatar?: string
+  albums: Album[]
+  embeddedAlbums?: Embedded[]
+}
+
+interface GatheringBasic extends Entity {
+  avatar?: string
+  entities: string[]
+}
+
+interface Compilation extends GatheringBasic {
+  poster?: string
+  tracks: Track[]
+}
+
+interface Album extends Entity {
+  folderName: string
+  artist: Entity
+  genre: Entity
+  period: Entity
+  created?: string
+  modified?: string
+  coverURL?: string
+  tracks: Track[]
+  inCollections?: Entity[]
+}
+
+type AlbumShort = Required<Pick<Album, '_id' | 'title' | 'cloudURL' | 'folderName'>>
+
+interface Embedded extends Entity {
+  artist: Entity
+  genre: Entity
+  period: Entity
+  frame: string
+  inCollections?: Entity[]
+}
+
+type UnifiedAlbum = Album | Embedded | Compilation
+
+interface Track extends Entity {
+  fileName: string
+  created?: string
+  modified?: string
+  duration?: number
+  path: string
+  mimeType?: string
+  listened: number
+  inAlbum: AlbumShort
+  inCompilations: Entity[]
+  artist: Entity
+  genre: Entity
+  period: Entity
+}
+
+interface User {
+  _id: string
+  login: string
+  email: string
+  role: UserRole
+  dateCreated: string
+}
+
+interface Token {
+  _id: string
+  user: User
+  refreshToken: string
+}
+
+/**
+ * =================================================================
+ * =================================================================
+ */
+
 type UserRoles = 'admin' | 'user'
 type LocaleKeys = 'en' | 'by'
 
@@ -15,6 +103,58 @@ interface AuthRefreshResponse {
 
 interface LocaleDictionary {
   [key: string]: string | LocaleDictionary
+}
+
+interface Pagination {
+  totalDocs: number
+  totalPages: number
+  page: number
+}
+
+type SortingValue = Record<string, 1 | -1>
+
+interface UsePaginationProps {
+  isRouted?: boolean
+}
+
+interface PaginationState extends Pick<Pagination, 'page'> {
+  limit: number
+  sort: SortingValue
+}
+
+interface PaginationConfig {
+  limiter?: number[]
+  increment?: true
+  decrement?: true
+  selected?: number
+  totalDocs: number,
+  totalPages: number
+}
+
+type PaginationStateSetter = <T extends keyof PaginationState>(key: T, value: PaginationState[T]) => void
+
+type PaginationConfigSetter = <T extends keyof PaginationConfig>(key: T, value: PaginationConfig[T]) => void
+
+interface RandomEntityReqFilter {
+  from: string
+  key: string
+  name: string
+  excluded?: Record<string, string>
+}
+
+interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
+  value: string
+}
+
+type RequestConfig = PaginationState & {
+  isRandom?: true | 1
+  filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
+}
+
+interface UseEntityListPayload {
+  // qEntity: string
+  entityKey: string
+  requestConfig: RequestConfig
 }
 
 interface SyncResponse {
@@ -70,6 +210,11 @@ interface AuthConfig {
   user?: UserResponse
 }
 
+interface ListPageResponse<T> {
+  docs: T[],
+  pagination: Pagination
+}
+
 interface Snackbar {
   message: string
   type: 'warning' | 'success' | 'error' | 'info'
@@ -82,6 +227,12 @@ interface BasicEntity {
   cloudURL?: string
 }
 
+interface DeletePayload {
+  id: string
+  entityKey: string
+  isPending?: boolean
+}
+
 interface AlbumItem extends Required<BasicEntity> {
   artist: BasicEntity
   genre: BasicEntity
@@ -90,6 +241,34 @@ interface AlbumItem extends Required<BasicEntity> {
   inCollections: BasicEntity[]
   coverURL?: string
   folderName: string
+}
+
+interface EmbeddedItem extends Omit<AlbumItem, 'tracks'> {
+  frame: string
+}
+
+interface CollectedItem extends BasicEntity {
+  avatar?: string
+  poster?: string
+}
+
+type UnifiedAlbumPage = AlbumItem | EmbeddedItem | CompilationPage
+
+type UnifiedAlbumEntity = AlbumItem | EmbeddedItem | CompilationItem
+
+interface RelatedAlbums {
+  name: string
+  docs: Album[]
+}
+
+// interface RelatedCompilations {
+//   name: string
+//   docs: CompilationItem<BasicEntity>[]
+// }
+
+interface UnifiedRelatedAlbums {
+  name: string
+  docs: UnifiedAlbumEntity[]
 }
 
 interface AlbumTrack extends Required<BasicEntity> {
@@ -147,6 +326,11 @@ interface ReorderPayload {
   newOrder: number
 }
 
+interface GatheringCreateReq {
+  title: string,
+  entityID: string
+}
+
 interface GatheringUpdateReq {
   gatheringID: string
   entityType: string
@@ -172,6 +356,7 @@ interface BaseInputFieldSchema {
   required?: boolean
   disabled?: boolean
   readonly?: boolean
+  refKey?: string
   defaultValue?: string
   size?: ElementSize
   label?: InputLabelConfig
@@ -217,3 +402,105 @@ type FormSchemaProperty =
   | SelectInputFieldSchema
   
 type CustomFormData = Record<string, string | File>
+
+interface SearchPayload {
+  query: string
+  key?: string
+}
+
+type SearchResultData = AlbumItem | CategoryItem | TrackRes
+
+interface SearchResultState {
+  key: string
+  data: SearchResultData[]
+}
+
+interface WikiSearchResult {
+  title: string
+  pageid: number
+}
+
+interface DiscogsReleaseRow {
+  id: number
+  country: string
+  cover: string
+  releaseFormat: string[]
+  genre: string[]
+  label: string[]
+  pageURL: string
+  releaseTitle: string
+  releaseYear: string
+}
+
+interface DiscogsData {
+  results: Map<number, DiscogsReleaseRow>
+  isFetched: boolean
+}
+
+interface DiscogsCompanies {
+  id: number
+  catno: string
+  entity_type_name: string
+  name: string
+}
+
+interface DiscogsArtists {
+  id: number
+  name: string
+  role: string
+  tracks: string
+}
+
+interface DiscogsIdentifiers {
+  description: string
+  type: string
+  value: string
+}
+
+interface DiscogsTracklist {
+  position: string
+  duration: string
+  title: string
+  type_: string
+}
+
+interface DiscogsVideos {
+  description: string
+  duration: number
+  embed: boolean
+  title: string
+  uri: string
+}
+
+interface DiscogsResponse {
+  pagination: Pagination
+  data: DiscogsReleaseRow[]
+}
+
+interface DiscogsQueryConfig {
+  artist: string
+  album: string
+  page: number
+}
+
+interface TableConfig<T, U> {
+  rows: T[]
+  schema: U
+  pagination?: Pagination
+  setPagination?: (payload: Partial<Pagination>) => void
+}
+
+interface TableCellConfig<T, U> {
+  key: string
+  value: T
+  schema: U
+}
+
+interface TableHeadConfig<T> {
+  key: string
+  heading: string
+  schema: T | undefined
+  filter: T | undefined
+}
+
+type TableFilters = Record<string, string[]>

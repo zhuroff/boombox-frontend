@@ -3,6 +3,7 @@
     <img
       :src="cover || '/img/album.webp'"
       class="album__cover"
+      referrerpolicy="no-referrer"
       @click="() => emit('coverClick')"
     >
     <transition name="fade">
@@ -91,16 +92,15 @@ watch(
 </script>
 
 <style lang="scss">
-@import '../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .album {
   &__booklet {
     z-index: 10;
     position: relative;
 
-    @include media('>=laptop') {
-      width: $coverWidth;
+    @include var.media('>=laptop') {
+      width: var.$coverWidth;
     }
 
     &:hover {
@@ -113,7 +113,7 @@ watch(
 
     & + .button {
 
-      @include media('<laptop') {
+      @include var.media('<laptop') {
         width: auto;
         position: absolute;
         right: 25px;
@@ -128,14 +128,14 @@ watch(
     object-fit: cover;
     cursor: pointer;
 
-    @include media('<laptop') {
+    @include var.media('<laptop') {
       width: 100%;
       height: auto;
     }
 
-    @include media('>=laptop') {
-      height: $coverWidth;
-      border-radius: $borderRadiusSM;
+    @include var.media('>=laptop') {
+      height: var.$coverWidth;
+      border-radius: var.$borderRadiusSM;
     }
 
     &_upload {
@@ -146,7 +146,7 @@ watch(
       height: 100%;
       cursor: pointer;
       opacity: 0;
-      border-radius: $borderRadiusSM;
+      border-radius: var.$borderRadiusSM;
       overflow: hidden;
       transition: opacity 0.3s ease;
       background-color: rgba(0, 0, 0, 0.75);
@@ -169,7 +169,7 @@ watch(
       }
 
       .icon {
-        color: $white;
+        color: var.$white;
       }
     }
   }

@@ -9,7 +9,7 @@ import { computed } from 'vue'
 import { secondsToMinutes } from '~/utils'
 
 interface Props {
-  duration: number
+  duration?: number
 }
 
 const props = defineProps<Props>()

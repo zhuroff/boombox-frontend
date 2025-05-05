@@ -1,14 +1,13 @@
 <template>
-  <section class="section">
+  <section class="template">
     <iframe class="bandcamp" src="https://bandcamp.com/discover?s=new" />
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .bandcamp {
-  height: calc(100vh - #{$playerHeight});
+  height: calc(100vh - var.$playerHeight);
 }
 </style>

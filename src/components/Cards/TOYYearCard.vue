@@ -21,28 +21,29 @@ defineProps<Props>()
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
+@use  '~/scss/variables' as var;
+
 .card__toy {
-  border-radius: $borderRadiusSM;
-  background-color: $black;
-  border: 1px solid $black;
+  border-radius: var.$borderRadiusSM;
+  background-color: var.$black;
+  border: 1px solid var.$black;
   position: relative;
   overflow: hidden;
 
   &:before {
     content: '';
-    background-color: $paleLT;
+    background-color: var.$paleLT;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     max-height: 0;
-    transition: max-height 0.5s $animation;
+    transition: max-height 0.5s var.$animation;
   }
   
   &-link {
-    color: $paleLT;
+    color:var.$paleLT;
     display: flex;
     padding: 0.75rem 1rem;
     align-items: center;
@@ -50,18 +51,18 @@ defineProps<Props>()
     font-weight: 600;
     position: relative;
     z-index: 10;
-    transition: color 0.5s $animation;
+    transition: color 0.5s var.$animation;
   }
 
   &:hover {
     &:before {
       max-height: 100%;
-      transition: max-height 0.5s $animation;
+      transition: max-height 0.5s var.$animation;
     }
 
     .card__toy-link {
       color: $black;
-      transition: color 0.5s $animation;
+      transition: color 0.5s var.$animation;
     }
   }
 }

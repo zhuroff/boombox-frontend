@@ -15,46 +15,13 @@
       bookletPageChanged(data, album.cloudURL, album.folderName)
     }"
   >
-    <template #hero>
-      <AlbumHero
-        v-if="album._id"
-        :id="album._id"
-        :title="album.title"
-        :artist="album.artist"
-        :genre="album.genre"
-        :period="album.period"
-        :totalCounts="totalCounts"
-        @getRandomAlbum="getRandom"
-      >
-        <template #cover>
-          <CoverArt
-            :cover="album.coverURL"
-            :booklet="booklet"
-            @coverClick="() => bookletHandler()"
-            @closeBookletModal="closeBookletModal"
-            @slideChanged="bookletPageChanged"
-          />
-        </template>
-        <template #navlist>
-          <li
-            class="overlay__list-item"
-            @click="addAlbumToPlaylist"
-          >{{ localize('player.addToList') }}</li>
-          <li
-            v-if="isAdmin"
-            class="overlay__list-item"
-            @click="openCollectionsModal"
-          >{{ localize('collections.add') }}</li>
-        </template>
-      </AlbumHero>
-    </template>
     <template #modal>
       <Modal
         v-if="isCollectionLoading || collections"
         :isModalActive="isCollectionLoading"
         @closeModal="closeCollectionModal"
       >
-        <GatheringTabs
+        <!-- <GatheringTabs
           v-if="!isCollectionLoading && collections"
           :isLoading="isCollectionLoading"
           :results="collections"
@@ -62,7 +29,7 @@
           :entityID="album._id"
           placeholderImage="/img/album.webp"
           entityType="collections"
-        />
+        /> -->
       </Modal>
     </template>
   </AlbumPageTemplate>
@@ -71,8 +38,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from 'vue'
 import type { AlbumItemRes, AlbumPageRes, CollectionEntityRes } from '~/types/ReqRes'
-import type { BasicEntity, RelatedAlbumsReqFilter } from '~/types/Common'
-import type { RelatedAlbums } from '~/types/Album'
+import type { BasicEntity } from '~/types/Common'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import { useListPage } from '~/hooks/useListPage'
 import { useDiscogs } from '~/hooks/useDiscogs'
@@ -84,8 +50,8 @@ import AlbumItem from '~/classes/AlbumItem'
 import CollectionEntity from '~/classes/CollectionEntity'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 import CoverArt from '~/components/CoverArt.vue'
-import AlbumHero from '~/components/AlbumHero.vue'
-import GatheringTabs from '~/components/GatheringTabs.vue'
+// import AlbumHero from '~/components/AlbumHero.vue'
+// import GatheringTabs from '~/components/GatheringTabs.vue'
 import Modal from '~/components/Modal.vue'
 
 const {
@@ -176,6 +142,7 @@ const getRelated = async () => {
     
     relatedAlbums.value = response.map(({ docs, name }) => ({
       name,
+      // @ts-expect-error: fix
       docs: docs.map<AlbumItem>((album) => new AlbumItem(album, 'AlbumCard', 'albums'))
     }))
   } catch (error) {
@@ -261,7 +228,7 @@ watch(
           if (payload) {
             album.value = payload
             setPlayerPlaylist(payload)
-            getRelated()
+            // getRelated()
             fetchDiscogsInfo(payload)
           }
         })
@@ -273,11 +240,12 @@ watch(
 onMounted(() => {
   fetchData(entityType.value)
     .then((payload) => {
+      console.log(payload)
       if (payload) {
         album.value = payload
         setPlayerPlaylist(payload)
-        getRelated()
-        fetchDiscogsInfo(payload)
+        // getRelated()
+        // fetchDiscogsInfo(payload)
       }
     })
 })

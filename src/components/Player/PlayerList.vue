@@ -24,8 +24,7 @@ const emit = defineEmits<Emits>()
 </script>
 
 <style lang="scss">
-@import '../../scss/variables.scss';
-@import 'include-media';
+@use '~/scss/variables' as var;
 
 .player {
 
@@ -44,13 +43,13 @@ const emit = defineEmits<Emits>()
 
       .icon {
         width: 24px;
-        fill: $white;
+        fill: var.$white;
       }
 
       &.--active {
 
         .icon {
-          fill: $accent;
+          fill: var.$accent;
         }
       }
     }

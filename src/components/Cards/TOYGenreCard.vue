@@ -21,25 +21,26 @@ defineProps<Props>()
 </script>
 
 <style lang="scss" scoped>
-@import '~/scss/variables';
+@use '~/scss/variables' as var;
+
 .card__toy {
-  border-radius: $borderRadiusMD;
-  background-color: $black;
-  border: 1px solid $black;
+  border-radius: var.$borderRadiusMD;
+  background-color: var.$black;
+  border: 1px solid var.$black;
   position: relative;
   overflow: hidden;
   min-height: 6rem;
 
   &:before {
     content: '';
-    background-color: $paleLT;
+    background-color: var.$paleLT;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     max-height: 0;
-    transition: max-height 0.5s $animation;
+    transition: max-height 0.5s var.$animation;
   }
 
   &-link {
@@ -51,10 +52,10 @@ defineProps<Props>()
     color: $paleLT;
     height: 100%;
     z-index: 10;
-    transition: color 0.5s $animation;
+    transition: color 0.5s var.$animation;
 
     span {
-      transition: transform 0.5s $animation;
+      transition: transform 0.5s var.$animation;
     }
 
     &:after {
@@ -66,29 +67,29 @@ defineProps<Props>()
       border-radius: 50%;
       left: 50%;
       transform: translate(-50%, 1500%);
-      transition: max-width 0.5s $animation;
-      background-image: linear-gradient(to right, rgba(15,30,54,0), $black, rgba(15,30,54,0))
+      transition: max-width 0.5s var.$animation;
+      background-image: linear-gradient(to right, rgba(15,30,54,0), var.$black, rgba(15,30,54,0))
     }
   }
 
   &:hover {
     &:before {
       max-height: 100%;
-      transition: max-height 0.5s $animation;
+      transition: max-height 0.5s var.$animation;
     }
 
     .card__toy-link {
       color: $black;
-      transition: color 0.5s $animation;
+      transition: color 0.5s var.$animation;
 
       span {
         transform: translateY(-0.5rem);
-        transition: transform 0.5s $animation;
+        transition: transform 0.5s var.$animation;
       }
 
       &:after {
         max-width: 10rem;
-        transition: max-width 0.75s $animation 0.2s;
+        transition: max-width 0.75s var.$animation 0.2s;
       }
     }
   }
