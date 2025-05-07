@@ -1,25 +1,29 @@
 <template>
   <div class="wikiframe">
     <ul
-      v-if="searchResults?.length"
+      v-if="wikiSearchResults?.results?.length"
       class="wikiframe__results"
     >
       <li
-        v-for="result in searchResults"
+        v-for="result in wikiSearchResults.results"
         :key="result.pageid"
         :class="[{ '--selected' : selected === result.pageid }, 'wikiframe__results-item']"
         @click="() => selectWikiResult(result.pageid)"
       >{{ result.title }}</li>
     </ul>
     <div
-      v-if="!isLoading && !frameURL"
+      v-if="!isLoading && !wikiFrameURL"
       class="wikiframe__placeholder"
     >
-      {{ searchResults?.length ? localize('wiki.frameHeading') : 'Nothing was found' }}
+      {{
+        wikiSearchResults?.results?.length
+          ? localize('wiki.frameHeading')
+          : 'Nothing was found'
+      }}
     </div>
     <iframe
-      v-if="frameURL"
-      :src="frameURL"
+      v-if="wikiFrameURL"
+      :src="wikiFrameURL"
       frameborder="0"
       class="wikiframe__content"
     ></iframe>
@@ -31,32 +35,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import type { MinimumAlbumInfo } from '~shared/model/types'
 import useGlobalStore from '~/store/global'
-import Preloader from './Preloader.vue'
+import Preloader from '~/components/Preloader.vue'
+import useWiki from '../model/useWiki'
 
 interface Props {
-  isLoading: boolean
-  frameURL?: string
-  searchResults?: WikiSearchResult[]
+  entity: MinimumAlbumInfo
 }
 
-interface Emits {
-  (e: 'selectWikiResult', value: number): void
-}
+const props = defineProps<Props>()
 
-defineProps<Props>()
-const emit = defineEmits<Emits>()
+const { globalGetters: { localize } } = useGlobalStore()
 
 const {
-  globalGetters: { localize }
-} = useGlobalStore()
+  isWikiSearching,
+  isWikiPageLoading,
+  wikiSearchResults,
+  wikiFrameURL,
+  wikiPageID
+} = useWiki(props.entity)
 
 const selected = ref<number>(-1)
 
+const isLoading = computed(() => (
+  isWikiSearching.value || isWikiPageLoading.value
+))
+
 const selectWikiResult = (id: number) => {
   selected.value = id
-  emit('selectWikiResult', id)
+  wikiPageID.value = String(id)
 }
 </script>
 

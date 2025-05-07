@@ -6,6 +6,7 @@
         mode="light"
       />
     </transition>
+
     <transition name="fade">
       <AlbumContent
         v-if="album"
@@ -20,6 +21,7 @@
             @getWikiInfo="isWikiFrameEnabled = true"
           />
         </template>
+
         <template #content>
           <TrackList
             v-if="'tracks' in album"
@@ -29,25 +31,13 @@
             @removeTrackFromCompilation="removeTrackFromCompilation"
           />
         </template>
+
         <template #footer>
-          <Table
-            :tableState="discogsTableState"
-            :tableFilters="discogsFilters"
-            :tableFiltersState="discogsFiltersState"
-            localeRootKey="discogsTable"
-            @updateFilterValue="(value) => setDiscogsFilterValue(value)"
-          />
+          <DiscogsTable :entity="minimumAlbumData" />
         </template>
-        <!-- <Table
-          :tableState="discogsTableState"
-          :tableFilters="discogsFilters"
-          :tableFiltersState="discogsFiltersState"
-          localeKey="discogsTable"
-          @switchPagination="() => console.log('switchPagination')"
-          @update:filter="() => console.log('updateDiscogsFilter')"
-        /> -->
       </AlbumContent>
     </transition>
+
     <Modal
       :isModalActive="isCollectionsModalEnabled"
       @closeModal="isCollectionsModalEnabled = false"
@@ -66,34 +56,27 @@
       :isModalActive="isWikiFrameEnabled"
       @closeModal="isWikiFrameEnabled = false"
     >
-      <WikiFrame
-        :frameURL="wikiFrameURL"
-        :isLoading="isWikiSearching || isWikiPageLoading"
-        :searchResults="wikiSearchResults?.results"
-        @selectWikiResult="(wikiID) => wikiPageID = String(wikiID)"
-      />
+      <WikiFrame :entity="minimumAlbumData" />
     </Modal>
   </section>
 </template>
 
 <script setup lang="ts">
-import useAlbum from './useAlbum'
-import useWiki from './useWiki'
-import useDiscogs from './useDiscogs'
-import useCollections from './useCollections'
+import { computed, ref } from 'vue'
+
+import { useAlbum, AlbumContent } from '~features/album'
+import { useCollections } from '~features/collection'
+import { DiscogsTable } from '~features/discogs'
+import { WikiFrame } from '~features/wiki'
+
 import DatabaseService from '~/services/DatabaseService'
-import DiscogsService from '~/services/DiscogsService'
 import Preloader from '~/components/Preloader.vue'
-import AlbumContent from '~/components/Album/AlbumContent.vue'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import GatheringBlock from '~/components/Gatherings/GatheringBlock.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
-import Table from '~/components/Table/Table.vue'
-import WikiFrame from '~/components/WikiFrame.vue'
 import Modal from '~/components/Modal.vue'
 
 const dbService = new DatabaseService()
-const discogsService = new DiscogsService()
 
 const {
   album,
@@ -110,21 +93,12 @@ const {
   isCollectionsModalEnabled
 } = useCollections(album, dbService)
 
-const {
-  discogsTableState,
-  discogsFiltersState,
-  setDiscogsFilterValue,
-  discogsFilters
-} = useDiscogs(discogsService, album)
+const isWikiFrameEnabled = ref(false)
 
-const {
-  isWikiSearching,
-  isWikiPageLoading,
-  isWikiFrameEnabled,
-  wikiSearchResults,
-  wikiFrameURL,
-  wikiPageID
-} = useWiki(album)
+const minimumAlbumData = computed(() => ({
+  albumTitle: album.value?.title || '',
+  albumArtist: album.value?.artist?.title || ''
+}))
 
 const changeTracksOrder = (payload: ReorderPayload) => {
   // emit('trackOrderChanged', payload)

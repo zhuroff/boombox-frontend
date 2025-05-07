@@ -3,24 +3,23 @@ import { createRouter, createWebHistory, RouterView } from 'vue-router'
 const routes: Array<any> = [
   {
     path: '/',
-    name: 'home',
-    component: import(/* webpackChunkName: 'home' */ '~/pages/index.vue')
+    name: 'home-page',
+    component: () => import(/* webpackChunkName: 'home-page' */ '~/pages/index.vue')
   },
   {
     path: '/albums',
-    name: 'albums',
     component: RouterView,
     children: [
       {
         path: '/albums',
-        name: 'album-list',
+        name: 'album-list-page',
         meta: { navLocaleKey: 'albums' },
-        component: () => import(/* webpackChunkName: 'album-list' */ '~/pages/albums/AlbumsList.vue')
+        component: () => import(/* webpackChunkName: 'album-list-page' */ '~pages/album-list-page/index.vue')
       },
       {
         path: '/albums/:id',
-        name: 'album-page',
-        component: () => import(/* webpackChunkName: 'album-page' */ '~/pages/albums/SinglePage/index.vue')
+        name: 'album-single-page',
+        component: () => import(/* webpackChunkName: 'album-single-page' */ '~/pages/album-single-page/index.vue')
       }
     ]
   },

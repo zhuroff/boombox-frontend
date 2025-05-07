@@ -420,69 +420,6 @@ interface WikiSearchResult {
   pageid: number
 }
 
-interface DiscogsReleaseRow {
-  id: number
-  country: string
-  cover: string
-  releaseFormat: string[]
-  genre: string[]
-  label: string[]
-  pageURL: string
-  releaseTitle: string
-  releaseYear: string
-}
-
-interface DiscogsData {
-  results: Map<number, DiscogsReleaseRow>
-  isFetched: boolean
-}
-
-interface DiscogsCompanies {
-  id: number
-  catno: string
-  entity_type_name: string
-  name: string
-}
-
-interface DiscogsArtists {
-  id: number
-  name: string
-  role: string
-  tracks: string
-}
-
-interface DiscogsIdentifiers {
-  description: string
-  type: string
-  value: string
-}
-
-interface DiscogsTracklist {
-  position: string
-  duration: string
-  title: string
-  type_: string
-}
-
-interface DiscogsVideos {
-  description: string
-  duration: number
-  embed: boolean
-  title: string
-  uri: string
-}
-
-interface DiscogsResponse {
-  pagination: Pagination
-  data: DiscogsReleaseRow[]
-}
-
-interface DiscogsQueryConfig {
-  artist: string
-  album: string
-  page: number
-}
-
 interface TableConfig<T, U> {
   rows: T[]
   schema: U

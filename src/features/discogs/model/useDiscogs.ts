@@ -1,11 +1,13 @@
-import { ref, reactive, computed, type Ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
-import type DiscogsService from '~/services/DiscogsService'
+import type DiscogsService from '~/features/discogs/api/DiscogsService'
 import usePagination from '~/hooks/usePagination'
 import discogsTableSchema from '~/schemas/DiscogsSchema'
+import type { DiscogsReleaseRow } from './types'
+import type { MinimumAlbumInfo } from '~shared/model/types'
 
-const useDiscogs = (discogsService: DiscogsService, entity: Ref<Album> | Ref<EmbeddedItem> | Ref<undefined>) => {
+const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) => {
   const discogsFilters = reactive<TableFilters>({
     country: [],
     releaseYear: [],
@@ -28,11 +30,11 @@ const useDiscogs = (discogsService: DiscogsService, entity: Ref<Album> | Ref<Emb
   } = usePagination({ isRouted: false })
 
   const discogsPayloadConfig = computed(() => ({
-    artist: entity.value?.artist.title || '',
-    album: entity.value?.title || ''
+    artist: entity.albumArtist,
+    album: entity.albumTitle
   }))
 
-  const isDiscogsReqEnabled = computed(() => !!entity.value)
+  const isDiscogsReqEnabled = computed(() => !!entity)
 
   const filteredDiscogsData = computed(() => (
     [...(discogsResults.value || [])]

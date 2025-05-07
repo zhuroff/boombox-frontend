@@ -1,4 +1,5 @@
 import api from '~/api'
+import type { DiscogsQueryConfig, DiscogsReleaseRow } from '../model/types'
 
 export default class DiscogsService {
   getData = async (config: DiscogsQueryConfig) => {

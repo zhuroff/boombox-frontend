@@ -1,16 +1,12 @@
-import { computed, ref, watch, type Ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
+import type { MinimumAlbumInfo } from '~shared/model/types'
 import wiki from 'wikipedia'
 
-const useWiki = (album: Ref<Album, Album> | Ref<undefined, undefined>) => {
+const useWiki = (entity: MinimumAlbumInfo) => {
   const wikiFrameURL = ref('')
   const wikiPageID = ref<string | null>(null)
   const wikiFrameResults = ref(null)
-  const isWikiFrameEnabled = ref(false)
-
-  const isWikiSearchEnabled = computed(() => (
-    isWikiFrameEnabled.value && !!album.value
-  ))
 
   const isWikiPageLoadingEnabled = computed(() => (
     !!wikiPageID.value
@@ -36,8 +32,8 @@ const useWiki = (album: Ref<Album, Album> | Ref<undefined, undefined>) => {
   const prepareSearchParams = () => {
     resetWikiData()
 
-    const albumLang = detectWikiLocale(album.value?.title)
-    const artistLang = detectWikiLocale(album.value?.artist.title)
+    const albumLang = detectWikiLocale(entity.albumTitle)
+    const artistLang = detectWikiLocale(entity.albumArtist)
     let wikiLang = 'en'
 
     if (!albumLang || !artistLang) false
@@ -55,12 +51,11 @@ const useWiki = (album: Ref<Album, Album> | Ref<undefined, undefined>) => {
     data: wikiSearchResults
   } = useQuery<{ results: WikiSearchResult[] }>({
     retry: 3,
-    enabled: isWikiSearchEnabled,
     refetchOnWindowFocus: false,
-    queryKey: [album],
+    queryKey: [entity],
     queryFn: () => {
       if (prepareSearchParams()) {
-        return wiki.search(`${album.value?.artist.title} - ${album.value?.title}`)
+        return wiki.search(`${entity.albumArtist} - ${entity.albumTitle}`)
       }
 
       throw new Error('Wiki search params is not defined')
@@ -93,7 +88,6 @@ const useWiki = (album: Ref<Album, Album> | Ref<undefined, undefined>) => {
   return {
     isWikiSearching,
     isWikiPageLoading,
-    isWikiFrameEnabled,
     wikiSearchResults,
     wikiFrameURL,
     wikiPageID
