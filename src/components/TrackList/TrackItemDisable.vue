@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import usePlaylist from '~/store/playlist'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   fileid: string

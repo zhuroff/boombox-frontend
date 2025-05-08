@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isPageLoaded || isReloading"
         mode="light"
       />
@@ -149,8 +149,7 @@ import { localeIntlCodes } from '~/utils'
 import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
 import userFormSchema from '~/schemas/userFormSchema.json'
-import Preloader from '~/components/Preloader.vue'
-import Button from '~/components/Button.vue'
+import { Loader, Button } from '~shared/UI'
 import Dropdown from '~/components/Inputs/Dropdown.vue'
 // import Form from '~/components/Form/Form.vue'
 import api from '~/api'

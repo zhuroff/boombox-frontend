@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isDataFetched"
         mode="light"
       />
@@ -57,11 +57,9 @@ import { useGathering } from '~/hooks/useGathering'
 import useGlobalStore from '~/store/global'
 import CollectionEntity from '~/classes/CollectionEntity'
 // import ListPageTemplate from '~/templates/ListPageTemplate.vue'
-import Preloader from '~/components/Preloader.vue'
+import { Loader } from '~shared/UI'
 import CategoryHero from '~/components/CategoryHero.vue'
-import Button from '~/components/Button.vue'
-import Confirmation from '~/components/Confirmation.vue'
-import Modal from '~/components/Modal.vue'
+import { Modal, Confirmation, Button } from '~shared/UI'
 
 const entityType = 'collections'
 

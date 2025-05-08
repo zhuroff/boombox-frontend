@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useForm } from '@tanstack/vue-form'
 import Field from './Field.vue'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   formSchema: Map<string, FormSchemaProperty>

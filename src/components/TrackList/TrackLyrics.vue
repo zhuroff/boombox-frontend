@@ -11,7 +11,7 @@
     </header>
     <div class="lyrics__content">
       <transition name="fade">
-        <Preloader
+        <Loader
           v-if="isFetching"
           mode="light"
         />
@@ -84,12 +84,12 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
+import { Loader } from '~shared/UI'
 import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
 import type { TrackLyricsResponse } from '~/types/Track'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 import TextareaInput from '~/components/Form/TextareaInput.vue'
-import Preloader from '~/components/Preloader.vue'
 import trackServices from '~/services/track.services'
 
 interface Props {
@@ -215,7 +215,7 @@ onMounted(() => {
     max-height: 100%;
     overflow: auto;
 
-    .preloader {
+    .loader {
       position: absolute;
       background: var.$white;
       z-index: 100;

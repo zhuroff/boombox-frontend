@@ -39,7 +39,7 @@ import useGlobalStore from '~/store/global'
 // import EmbeddedItem from '~/classes/EmbeddedItem'
 // import Confirmation from '~/components/Confirmation.vue'
 // import Modal from '~/components/Modal.vue'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 import Form from '~/components/Form/Form.vue'
 
 // const {

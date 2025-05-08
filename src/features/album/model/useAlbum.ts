@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
-import type DatabaseService from '~/services/DatabaseService'
-import useGetList from '~/shared/useGetList'
+import type DatabaseService from '~/shared/api/DatabaseService'
+import useGetList from '~/shared/model/useGetList'
 import useGetPage from '~/shared/useGetPage'
 
 const useAlbum = (dbService: DatabaseService) => {

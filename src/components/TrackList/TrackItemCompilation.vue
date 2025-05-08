@@ -52,10 +52,9 @@ import { useListPage } from '~/hooks/useListPage'
 import useGlobalStore from '~/store/global'
 import type { CompilationEntityRes } from '~/types/ReqRes'
 import CompilationItem from '~/classes/CompilationItem'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 // import GatheringTabs from '~/components/GatheringTabs.vue'
-import Confirmation from '~/components/Confirmation.vue'
-import Modal from '~/components/Modal.vue'
+import { Modal, Confirmation } from '~shared/UI'
 
 interface Props {
   trackID: string

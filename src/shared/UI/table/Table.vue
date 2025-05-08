@@ -29,12 +29,12 @@ import TableBodyRow from './TableBodyRow.vue'
 interface Props {
   tableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>
   tableFilters: TableFilters
-  tableFiltersState: Record<string, string | null>
+  tableFiltersState: Record<string, string | number | null>
   localeRootKey: string
 }
 
 interface Emits {
-  (e: 'updateFilterValue', value: [string, string | null]): void
+  (e: 'updateFilterValue', value: [string, string | number | null]): void
 }
 
 const props = defineProps<Props>()

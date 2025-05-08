@@ -1,36 +1,51 @@
 import { reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import type {
+  UsePaginationProps,
+  PaginationState,
+  PaginationConfig,
+  PaginationStateSetter,
+  PaginationConfigSetter
+} from '~widgets/Paginator/model/types'
 
-const usePagination = ({ isRouted = true }: UsePaginationProps) => {
-  const { name, query } = useRoute()
+const usePaginator = ({
+  docsLimit = 30,
+  docsSort = { title: 1 },
+  isRouted = true,
+  localStorageKey
+}: UsePaginationProps) => {
+  const { query } = useRoute()
   const router = useRouter()
 
-  const pagination = reactive<PaginationState>({
+  const paginationState: PaginationState = reactive({
     page: Number(query.page) || 1,
-    limit: Number(localStorage.getItem(`entitiesLimit:${String(name)}`)) || 15,
-    sort: { title: 1 }
+    limit: docsLimit,
+    sort: docsSort
   })
 
-  const paginationConfig = reactive<PaginationConfig>({
+  const paginationConfig: PaginationConfig = reactive({
     limiter: [12, 15, 18, 30, 45, 48, 60, 75, 78, 100, 102],
     increment: true,
     decrement: true,
     totalDocs: 0,
     totalPages: 0,
-    selected: pagination.limit
+    selected: paginationState.limit
   })
   
   const updatePaginationState: PaginationStateSetter = (key, value) => {
-    pagination[key] = value
+    paginationState[key] = value
 
     switch(key) {
       case 'page':
         changeRouteQuery({ page: String(value) })
         break
       case 'limit':
-        pagination.page = 1
+        paginationState.page = 1
         changeRouteQuery({ page: '1' })
-        localStorage.setItem(`entitiesLimit:${name?.toString()}`, value.toString())
+
+        if (localStorageKey) {
+          localStorage.setItem(localStorageKey, value.toString())
+        }
         break
     }
   }
@@ -40,25 +55,22 @@ const usePagination = ({ isRouted = true }: UsePaginationProps) => {
   }
 
   const changeRouteQuery = (query: Record<string, number | string>) => {
+    if (!isRouted) return
     router.push({ query })
   }
 
   onMounted(() => {
-    if (!isRouted) return
-
-    const { page } = query
-
-    if (!page) {
-      changeRouteQuery({ page: pagination.page })
+    if (!query.page) {
+      changeRouteQuery({ page: paginationState.page })
     }
   })
 
   return {
-    pagination,
+    paginationState,
     paginationConfig,
     updatePaginationState,
     updatePaginationConfig
   }
 }
 
-export default usePagination
+export default usePaginator

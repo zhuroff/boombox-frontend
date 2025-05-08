@@ -138,19 +138,18 @@ const routes: Array<any> = [
   },
   {
     path: '/periods',
-    name: 'periods',
     component: RouterView,
     children: [
       {
         path: '/periods',
-        name: 'period-list',
+        name: 'period-list-page',
         meta: { navLocaleKey: 'periods' },
-        component: () => import(/* webpackChunkName: 'period-list' */ '~/pages/periods/PeriodList.vue')
+        component: () => import(/* webpackChunkName: 'period-list-page' */ '~/pages/period-list-page/index.vue')
       },
       {
         path: '/periods/:id',
-        name: 'period-single',
-        component: () => import(/* webpackChunkName: 'period-single' */ '~/pages/periods/PeriodSingle.vue')
+        name: 'period-single-page',
+        component: () => import(/* webpackChunkName: 'period-single-page' */ '~/pages/period-single-page/index.vue')
       }
     ]
   },

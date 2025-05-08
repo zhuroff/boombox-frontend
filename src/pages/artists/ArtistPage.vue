@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isFetched"
         mode="light"
       />
@@ -41,14 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, ref } from 'vue'
+import { Loader, Paginator } from '~shared/UI'
 import useGlobalStore from '~/store/global'
 import useGetPage from '~/shared/useGetPage'
-import Preloader from '~/components/Preloader.vue'
 import CategoryHero from '~/components/CategoryHero.vue'
 import EntityCards from '~/components/Cards/EntityCards.vue'
-import Paginator from '~/components/Paginator.vue'
-import DatabaseService from '~/services/DatabaseService'
+import DatabaseService from '~/shared/api/DatabaseService'
 
 const dbService = new DatabaseService()
 

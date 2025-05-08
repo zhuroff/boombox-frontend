@@ -49,9 +49,8 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from 'vue'
-import type { BasicEntity, ImagePayload, RandomEntityReqFilter } from '~/types/Common'
+import type { BasicEntity, ImagePayload } from '~/types/Common'
 import type { CompilationEntityRes, TrackRes } from '~/types/ReqRes'
-import type { RelatedCompilations } from '~/types/Album'
 import { useSinglePage } from '~/hooks/useSinglePage'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
@@ -62,8 +61,7 @@ import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 // import AlbumHero from '~/components/AlbumHero.vue'
 import CompilationItem from '~/classes/CompilationItem'
 import CompilationPage from '~/classes/CompilationPage'
-import Confirmation from '~/components/Confirmation.vue'
-import Modal from '~/components/Modal.vue'
+import { Modal, Confirmation } from '~shared/UI'
 import uploadServices from '~/services/upload.services'
 
 const {

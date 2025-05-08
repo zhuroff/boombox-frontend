@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { watchEffect } from 'vue'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   isModalActive: boolean

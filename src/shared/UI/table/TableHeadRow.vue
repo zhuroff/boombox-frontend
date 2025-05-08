@@ -20,11 +20,11 @@ interface Props {
   cells: TableHeadConfig<JSONSchema4>[]
   filters: TableFilters
   localeRootKey: string
-  filtersState: Record<string, string | null>
+  filtersState: Record<string, string | number | null>
 }
 
 interface Emits {
-  (e: 'updateFilterValue', value: [string, string | null]): void
+  (e: 'updateFilterValue', value: [string, string | number | null]): void
 }
 
 defineProps<Props>()

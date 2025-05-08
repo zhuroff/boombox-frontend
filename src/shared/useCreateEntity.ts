@@ -1,6 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import type DatabaseService from '~/services/DatabaseService'
+import type DatabaseService from '~/shared/api/DatabaseService'
 
 const useCreateEntity = <T, U>(
   entityKey: Ref<string>,

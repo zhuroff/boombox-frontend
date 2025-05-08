@@ -1,7 +1,7 @@
 import { computed, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
-import DatabaseService from '~/services/DatabaseService'
+import DatabaseService from '~/shared/api/DatabaseService'
 
 const useGetPage = <T extends Entity>(
   entityKey: Ref<string>,

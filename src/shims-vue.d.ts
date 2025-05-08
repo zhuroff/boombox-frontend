@@ -105,35 +105,7 @@ interface LocaleDictionary {
   [key: string]: string | LocaleDictionary
 }
 
-interface Pagination {
-  totalDocs: number
-  totalPages: number
-  page: number
-}
-
 type SortingValue = Record<string, 1 | -1>
-
-interface UsePaginationProps {
-  isRouted?: boolean
-}
-
-interface PaginationState extends Pick<Pagination, 'page'> {
-  limit: number
-  sort: SortingValue
-}
-
-interface PaginationConfig {
-  limiter?: number[]
-  increment?: true
-  decrement?: true
-  selected?: number
-  totalDocs: number,
-  totalPages: number
-}
-
-type PaginationStateSetter = <T extends keyof PaginationState>(key: T, value: PaginationState[T]) => void
-
-type PaginationConfigSetter = <T extends keyof PaginationConfig>(key: T, value: PaginationConfig[T]) => void
 
 interface RandomEntityReqFilter {
   from: string
@@ -152,7 +124,6 @@ type RequestConfig = PaginationState & {
 }
 
 interface UseEntityListPayload {
-  // qEntity: string
   entityKey: string
   requestConfig: RequestConfig
 }

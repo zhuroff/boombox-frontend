@@ -1,7 +1,7 @@
 <template>
-  <div :class="`preloader --${mode}`">
+  <div :class="`loader --${mode}`">
     <svg
-      class="preloader__icon"
+      class="loader__icon"
       width="98px"
       height="98px"
       viewBox="0 0 100 100"
@@ -35,7 +35,7 @@ defineProps<Props>()
 <style lang="scss" scoped>
 @use '~/scss/variables' as var;
 
-.preloader {
+.loader {
   position: absolute;
   top: 0;
   left: 0;

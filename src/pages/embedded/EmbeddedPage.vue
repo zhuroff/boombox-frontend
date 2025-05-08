@@ -1,7 +1,7 @@
 <template>
   <section class="template">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isAlbumReady"
         mode="light"
       />
@@ -40,11 +40,11 @@
 import { computed, ref } from 'vue'
 import useGlobalStore from '~/store/global'
 import useGetPage from '~/shared/useGetPage'
-import useGetList from '~/shared/useGetList'
-import Preloader from '~/components/Preloader.vue'
+import useGetList from '~/shared/model/useGetList'
+import { Loader } from '~shared/UI'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import EntityCards from '~/components/Cards/EntityCards.vue'
-import DatabaseService from '~/services/DatabaseService'
+import DatabaseService from '~/shared/api/DatabaseService'
 
 const { globalGetters: { localize } } = useGlobalStore()
 

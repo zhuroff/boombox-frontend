@@ -3,6 +3,7 @@
     <span v-if="!filter?.length">{{ cell.heading }}</span>
     <Select
       v-else
+      size="small"
       :options="filter"
       :localeKey="localeRootKey"
       :entityKey="cell.key"
@@ -15,17 +16,17 @@
 
 <script setup lang="ts">
 import type { JSONSchema4 } from 'json-schema'
-import Select from '~/components/Form/Select.vue'
+import { Select } from '~shared/UI'
 
 interface Props {
   cell: TableHeadConfig<JSONSchema4>
   filter?: string[]
-  filtersState: Record<string, string | null>
+  filtersState: Record<string, string | number | null>
   localeRootKey: string
 }
 
 interface Emits {
-  (e: 'updateFilterValue', value: [string, string | null]): void
+  (e: 'updateFilterValue', value: [string, string | number | null]): void
 }
 
 defineProps<Props>()

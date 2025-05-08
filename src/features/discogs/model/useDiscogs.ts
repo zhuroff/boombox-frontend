@@ -2,10 +2,11 @@ import { ref, reactive, computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type DiscogsService from '~/features/discogs/api/DiscogsService'
-import usePagination from '~/hooks/usePagination'
+import { usePaginator } from '~widgets/Paginator'
 import discogsTableSchema from '~/schemas/DiscogsSchema'
 import type { DiscogsReleaseRow } from './types'
 import type { MinimumAlbumInfo } from '~shared/model/types'
+import type { PaginationState } from '~widgets/Paginator/model/types'
 
 const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) => {
   const discogsFilters = reactive<TableFilters>({
@@ -15,7 +16,7 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
     label: []
   })
 
-  const discogsFiltersState = reactive<Record<keyof TableFilters, null | string>>({
+  const discogsFiltersState = reactive<Record<keyof TableFilters, null | string | number>>({
     country: null,
     releaseYear: null,
     releaseFormat: null,
@@ -25,9 +26,9 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
   const discogsResults = ref<DiscogsReleaseRow[]>([])
 
   const {
-    pagination: discogsPagination,
+    paginationState: discogsPagination,
     updatePaginationConfig
-  } = usePagination({ isRouted: false })
+  } = usePaginator({ isRouted: false })
 
   const discogsPayloadConfig = computed(() => ({
     artist: entity.albumArtist,
@@ -45,7 +46,7 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
               let rowValue = row[key as keyof DiscogsReleaseRow]
               if (!value) return true
               if (!rowValue) rowValue = 'unknown'
-              return Array.isArray(rowValue) ? rowValue.includes(value) : rowValue === value
+              return Array.isArray(rowValue) ? rowValue.includes(String(value)) : rowValue === value
             })
         )
       })

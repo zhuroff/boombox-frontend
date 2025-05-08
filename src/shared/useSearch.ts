@@ -1,7 +1,7 @@
 import { watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type { Ref } from 'vue'
-import type DatabaseService from '~/services/DatabaseService'
+import type DatabaseService from '~/shared/api/DatabaseService'
 
 const useSearch = (
   query: Ref<string>,

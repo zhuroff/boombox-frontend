@@ -23,10 +23,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Modal, Button } from '~shared/UI'
 import useSearch from '~/shared/useSearch'
-import DatabaseService from '~/services/DatabaseService'
-import Button from '~/components/Button.vue'
-import Modal from '~/components/Modal.vue'
+import DatabaseService from '~/shared/api/DatabaseService'
 import SearchModal from '~/components/Search/SearchModal.vue'
 
 interface Props {

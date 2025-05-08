@@ -31,13 +31,13 @@
 
 <script setup lang="ts">
 import { h, computed, ref } from 'vue'
-import DatabaseService from '~/services/DatabaseService'
+import DatabaseService from '~/shared/api/DatabaseService'
 import useSearch from '~/shared/useSearch'
 import useGlobalStore from '~/store/global'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
-import Modal from '~/components/Modal.vue'
+import { Modal } from '~shared/UI'
 import SearchModal from '~/components/Search/SearchModal.vue'
 
 interface Props {

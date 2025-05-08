@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import useGlobalStore from '~/store/global'
-import Button from '../Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   album: Embedded

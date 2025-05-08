@@ -1,7 +1,7 @@
 <template>
   <div class="template">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isFetched"
         mode="light"
       />
@@ -20,9 +20,9 @@
         class="content"
         key="content"
       >
-        <EntityCards
+        <EntityCardList
           v-if="data?.docs"
-          :entities="data?.docs"
+          :entities="data.docs"
           :entityKey="entityKey"
           :isDraggable="isDraggable"
           :isDeletable="isDeletable"
@@ -30,11 +30,9 @@
           @deleteEntity="confirmDelete"
         />
         <Paginator
-          v-if="paginationConfig?.totalPages > 1"
-          key="pagination"
-          :config="paginationConfig"
-          :pagination="pagination"
-          :style="{ marginTop: 'auto' }"
+          v-if="isFetched && data"
+          :paginationState="paginationState"
+          :paginationConfig="paginationConfig"
           :updatePaginationState="updatePaginationState"
         />
       </section>
@@ -49,7 +47,7 @@
         @confirm="deleteConfirm"
         @reject="deletePayload = null"
       >
-        <Preloader
+        <Loader
           v-if="deletePayload.isPending"
           mode="light"
         />
@@ -60,17 +58,16 @@
 
 <script setup lang="ts">
 import { ref, computed, watchEffect } from 'vue'
+import { Header } from '~widgets/Header'
+import { Paginator, usePaginator } from '~widgets/Paginator'
+import { EntityCardList } from '~widgets/EntityCardList'
+import { Modal, Loader, Confirmation } from '~shared/UI'
+import { DatabaseService } from '~shared/api'
+import { useGetList } from '~shared/model'
+import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
+
 import useGlobalStore from '~/store/global'
-import useGetList from '~/shared/useGetList'
-import usePagination from '~/hooks/usePagination'
-import useSnackbar from '~/hooks/useSnackbar'
-import Preloader from '~/components/Preloader.vue'
-import Header from '~/components/Header.vue'
-import EntityCards from '~/components/Cards/EntityCards.vue'
-import Paginator from '~/components/Paginator.vue'
-import Modal from '~/components/Modal.vue'
-import Confirmation from '~/components/Confirmation.vue'
-import DatabaseService from '~/services/DatabaseService'
+// import useSnackbar from '~/hooks/useSnackbar'
 
 interface Props {
   entityKey: string
@@ -82,20 +79,38 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-const { pagination, paginationConfig, updatePaginationConfig, updatePaginationState } = usePagination({})
-
 const dbService = new DatabaseService()
 
+const { globalGetters: { localize } } = useGlobalStore()
+
+const docsLimit = ref((() => {
+  const cachedDocsLimit = localStorage.getItem(`docs-limit:${props.entityKey}`)
+
+  if (cachedDocsLimit) {
+    return Number(cachedDocsLimit)
+  } else {
+    localStorage.setItem(`docs-limit:${props.entityKey}`, String(DEFAULT_PAGE_DOCS_LIMIT))
+    return DEFAULT_PAGE_DOCS_LIMIT
+  }
+})())
+
+const {
+  paginationState,
+  paginationConfig,
+  updatePaginationState,
+  updatePaginationConfig
+} = usePaginator({
+  docsLimit: docsLimit.value,
+  localStorageKey: `docs-limit:${props.entityKey}`
+})
+
 const listQueryConfig = computed(() => ({
-  // qEntity: props.entityKey,
   entityKey: props.entityKey,
-  requestConfig: pagination
+  requestConfig: paginationState
 }))
 
-const { data, refetch, isFetched } = useGetList<BasicEntity>(listQueryConfig, dbService)
-const { globalGetters: { localize } } = useGlobalStore()
-const { setSnackbarMessage } = useSnackbar()
+const { data, isFetched } = useGetList<BasicEntity>(listQueryConfig, dbService)
+// const { setSnackbarMessage } = useSnackbar()
 
 const deletePayload = ref<DeletePayload | null>(null)
 
@@ -109,19 +124,6 @@ const deleteConfirm = () => {
   if (!deletePayload.value) return
 
   deletePayload.value.isPending = true
-
-  // deleteEntity(deletePayload.value)
-  //   .then((res) => {
-  //     if (res) {
-  //       refetch()
-  //       setSnackbarMessage({
-  //         message: localize(`${deletePayload.value?.entityKey}.drop`),
-  //         type: 'success'
-  //       })
-  //     }
-  //   })
-  //   .catch(console.error)
-  //   .finally(() => deletePayload.value = null)
 }
 
 watchEffect(() => {

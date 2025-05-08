@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isDataFetched"
         mode="light"
       />
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCategory } from '~/hooks/useCategory'
-import Preloader from '~/components/Preloader.vue'
+import { Loader } from '~shared/UI'
 import CategoryHero from '~/components/CategoryHero.vue'
 // import ListPageTemplate from '~/templates/ListPageTemplate.vue'
 

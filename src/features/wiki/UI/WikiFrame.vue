@@ -27,7 +27,7 @@
       frameborder="0"
       class="wikiframe__content"
     ></iframe>
-    <Preloader
+    <Loader
       v-if="isLoading"
       mode="light"
     />
@@ -37,8 +37,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { MinimumAlbumInfo } from '~shared/model/types'
+import { Loader } from '~shared/UI'
 import useGlobalStore from '~/store/global'
-import Preloader from '~/components/Preloader.vue'
 import useWiki from '../model/useWiki'
 
 interface Props {

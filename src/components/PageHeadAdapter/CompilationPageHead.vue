@@ -34,7 +34,7 @@
 import { hostString, coverPlaceholders } from '~/utils'
 import useGlobalStore from '~/store/global'
 import CoverArt from '~/components/CoverArt.vue'
-import Button from '../Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   album: Compilation

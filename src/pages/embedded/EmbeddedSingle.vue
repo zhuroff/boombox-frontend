@@ -58,8 +58,7 @@ import AlbumItem from '~/classes/AlbumItem'
 import EmbeddedItem from '~/classes/EmbeddedItem'
 import AlbumPageTemplate from '~/templates/AlbumPageTemplate.vue'
 // import AlbumHero from '~/components/AlbumHero.vue'
-import Confirmation from '~/components/Confirmation.vue'
-import Modal from '~/components/Modal.vue'
+import { Modal, Confirmation } from '~shared/UI'
 
 const {
   fetchData,

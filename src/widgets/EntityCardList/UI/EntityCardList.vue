@@ -25,8 +25,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import AlbumCard from './AlbumCard.vue'
-import CategoryCard from './CategoryCard.vue'
+import { AlbumCard } from '~entities/album'
+import { CategoryCard } from '~entities/category'
 
 interface Props {
   entities: BasicEntity[]

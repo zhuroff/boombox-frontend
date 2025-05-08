@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <Preloader
+    <Loader
       v-if="isLoading"
       mode="light"
     />
@@ -26,7 +26,7 @@
 import { reactive, onMounted, ref } from 'vue'
 import type { CloudEntity } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
-import Preloader from '~/components/Preloader.vue'
+import { Loader } from '~shared/UI'
 import TOYGenreCard from '~/components/Cards/TOYGenreCard.vue'
 import cloudServices from '~/services/cloud.services'
 

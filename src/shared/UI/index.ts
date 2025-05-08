@@ -1,1 +1,6 @@
 export { default as Table } from './table/Table.vue'
+export { default as Modal } from './modal/Modal.vue'
+export { default as Loader } from './loader/Loader.vue'
+export { default as Button } from './button/Button.vue'
+export { default as Select } from './select/Select.vue'
+export { default as Confirmation } from './confirmation/Confirmation.vue'

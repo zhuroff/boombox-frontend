@@ -37,7 +37,7 @@ import { computed } from 'vue'
 import useGlobalStore from '~/store/global'
 import router from '~/router'
 import Sprite from '~/components/Sprite/Sprite.vue'
-import Button from './Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   isExpanded: boolean

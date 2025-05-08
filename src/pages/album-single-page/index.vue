@@ -1,7 +1,7 @@
 <template>
   <section class="template">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isAlbumReady"
         mode="light"
       />
@@ -69,12 +69,12 @@ import { useCollections } from '~features/collection'
 import { DiscogsTable } from '~features/discogs'
 import { WikiFrame } from '~features/wiki'
 
-import DatabaseService from '~/services/DatabaseService'
-import Preloader from '~/components/Preloader.vue'
+import { Modal, Loader } from '~shared/UI'
+
+import DatabaseService from '~/shared/api/DatabaseService'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import GatheringBlock from '~/components/Gatherings/GatheringBlock.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
-import Modal from '~/components/Modal.vue'
 
 const dbService = new DatabaseService()
 

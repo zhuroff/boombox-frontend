@@ -35,7 +35,7 @@
 import { computed } from 'vue'
 import type { BasicEntity } from '~/types/Common'
 import useGlobalStore from '~/store/global'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 import CompilationItem from '~/classes/CompilationItem'
 
 interface Props {

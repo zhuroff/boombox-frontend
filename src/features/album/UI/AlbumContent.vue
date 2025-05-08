@@ -15,7 +15,7 @@
         <div class="album__related-title">
           {{ localize('moreOf') }} {{ name }}
         </div>
-        <EntityCards
+        <EntityCardList
           :entities="docs"
           :entityKey="entityKey"
           :isDraggable="false"
@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import useGlobalStore from '~/store/global'
-import EntityCards from '~/components/Cards/EntityCards.vue'
+import { EntityCardList } from '~widgets/EntityCardList'
 
 interface Props {
   relatedAlbums: RelatedAlbums[]

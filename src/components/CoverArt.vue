@@ -12,7 +12,10 @@
         :isModalActive="booklet?.isActive"
         @closeModal="closeBookletModal"
       >
-        <Preloader v-if="!booklet.isFetched" mode="dark" />
+        <Loader
+          v-if="!booklet.isFetched"
+          mode="dark"
+        />
         <Slider
           v-else
           :data="booklet.items.map(({ url }) => url)"
@@ -38,13 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import type { Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import type { BookletSlideState } from '~/types/Album'
+import { Modal, Loader } from '~shared/UI'
 import BookletState from '~/classes/BookletState'
 import Sprite from '~/components/Sprite/Sprite.vue'
-import Modal from '~/components/Modal.vue'
-import Preloader from '~/components/Preloader.vue'
 import Slider from '~/components/Slider.vue'
 
 interface Props {

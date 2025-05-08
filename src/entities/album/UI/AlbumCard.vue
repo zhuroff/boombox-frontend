@@ -57,7 +57,7 @@
 import { computed } from 'vue'
 import { hostString } from '~/utils'
 import useGlobalStore from '~/store/global'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   card: AlbumItem | CollectedItem | EmbeddedItem
