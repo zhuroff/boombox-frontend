@@ -102,37 +102,35 @@ const routes: Array<any> = [
   },
   {
     path: '/artists',
-    name: 'artists',
     component: RouterView,
     children: [
       {
         path: '/artists',
-        name: 'artist-list',
+        name: 'artist-list-page',
         meta: { navLocaleKey: 'artists' },
-        component: () => import(/* webpackChunkName: 'artist-list' */ '~/pages/artists/ArtistList.vue')
+        component: () => import(/* webpackChunkName: 'artist-list-page' */ '~/pages/artist-list-page/index.vue')
       },
       {
         path: '/artists/:id',
-        name: 'artist-page',
-        component: () => import(/* webpackChunkName: 'artist-page' */ '~/pages/artists/ArtistPage.vue')
+        name: 'artist-single-page',
+        component: () => import(/* webpackChunkName: 'artist-single-page' */ '~/pages/artist-single-page/index.vue')
       }
     ]
   },
   {
     path: '/genres',
-    name: 'genres',
     component: RouterView,
     children: [
       {
         path: '/genres',
-        name: 'genre-list',
+        name: 'genre-list-page',
         meta: { navLocaleKey: 'genres' },
-        component: () => import(/* webpackChunkName: 'genre-list' */ '~/pages/genres/GenreList.vue')
+        component: () => import(/* webpackChunkName: 'genre-list-page' */ '~/pages/genre-list-page/index.vue')
       },
       {
         path: '/genres/:id',
-        name: 'genre-single',
-        component: () => import(/* webpackChunkName: 'genre-single' */ '~/pages/genres/GenreSingle.vue')
+        name: 'genre-single-page',
+        component: () => import(/* webpackChunkName: 'genre-single-page' */ '~/pages/genre-single-page/index.vue')
       }
     ]
   },

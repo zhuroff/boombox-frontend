@@ -1,0 +1,1 @@
+export { default as CategoryHero } from './UI/CategoryHero.vue'

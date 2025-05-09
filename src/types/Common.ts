@@ -3,8 +3,6 @@ import type { TrackRes } from '~/types/ReqRes'
 import AlbumPage from '~/classes/AlbumPage'
 import CompilationPage from '~/classes/CompilationPage'
 
-export type EntityImagesKeys = 'poster' | 'avatar'
-
 export interface BasicEntity {
   _id: string
   title: string
@@ -27,18 +25,6 @@ export type SortingValue = Record<string, 1 | -1>
 export interface DraggableEvent {
   newIndex: number
   oldIndex: number
-}
-
-export interface ImagePayload {
-  file: File
-  type: EntityImagesKeys
-  slug: string
-  id: string
-}
-
-export interface UploadImageResult {
-  key: EntityImagesKeys
-  url: string
 }
 
 export interface ResponseMessage {

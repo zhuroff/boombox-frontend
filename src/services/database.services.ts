@@ -1,7 +1,6 @@
 import api from '~/api'
-// @ts-expect-error: fix
-import type { SearchPayload, SearchResultState } from '~/types/Search'
-import commonServices from './common.services'
+// import type { SearchPayload, SearchResultState } from '~/types/Search'
+// import commonServices from './common.services'
 
 export default {
   // async createEntity<T, U>(entityKey: string, payload?: U): Promise<T> {
@@ -24,13 +23,13 @@ export default {
 
   async reorderEntities<T, U>(entityKey: string, id: string, payload: U): Promise<T> {
     const response = await api.patch<T>(`/api/${entityKey}/${id}/reorder`, payload)
-    commonServices.errorChecker(response.status)
+    // commonServices.errorChecker(response.status)
     return response.data
   },
 
   async deleteEntity<T>(entityKey: string, id: string): Promise<T> {
     const response = await api.delete<T>(`/api/${entityKey}/${id}`)
-    commonServices.errorChecker(response.status)
+    // commonServices.errorChecker(response.status)
     return response.data
   },
 

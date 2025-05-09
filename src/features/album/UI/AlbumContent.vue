@@ -54,7 +54,7 @@ const { globalGetters: { localize } } = useGlobalStore()
 
   &__content {
     flex: 1 1 0;
-    padding: 25px;
+    padding: var.$mainPadding;
     position: relative;
 
     @include var.media('<laptop') {
@@ -85,14 +85,14 @@ const { globalGetters: { localize } } = useGlobalStore()
 
   &__frame {
     position: relative;
-    margin-bottom: 25px;
+    margin-bottom: var.$mainPadding;
     width: var.$coverWidth;
   }
 
   &__related {
 
     @include var.media('<laptop') {
-      margin-bottom: 25px;
+      margin-bottom: var.$mainPadding;
       display: flex;
       flex-direction: column;
       gap: 1rem;

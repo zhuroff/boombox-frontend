@@ -1,7 +1,6 @@
 import { computed, ref } from 'vue'
-import type DatabaseService from '~/shared/api/DatabaseService'
-import useGetList from '~/shared/model/useGetList'
-import useGetPage from '~/shared/useGetPage'
+import type { DatabaseService } from '~shared/api'
+import { useGetList, useGetPage } from '~shared/model'
 
 const useAlbum = (dbService: DatabaseService) => {
   const preRandomState = ref('')

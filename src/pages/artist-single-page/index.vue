@@ -15,7 +15,7 @@
         :data="category"
         :totalCounts="totalCounts"
         :setUploadedImage="setUploadedImage"
-        defaultPreview="/img/period.webp"
+        defaultPreview="/img/artist.webp"
       />
     </transition>
   </section>
@@ -33,7 +33,7 @@ import useGlobalStore from '~/store/global'
 
 const dbService = new DatabaseService()
 
-const pageEntityKey = ref('periods')
+const pageEntityKey = ref('artists')
 
 const { globalGetters: { localize } } = useGlobalStore()
 

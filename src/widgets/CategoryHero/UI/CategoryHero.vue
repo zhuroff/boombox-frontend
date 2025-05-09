@@ -63,7 +63,7 @@
         </div>
         <div class="hero__content-actions">
           <Button
-            v-if="entity !== 'collections'"
+            v-if="entityKey !== 'collections'"
             size="medium"
             isInverted
             :label="localize('player.waveButton')"
@@ -80,20 +80,21 @@
 import { onMounted, ref, computed, watch } from 'vue'
 import type { Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import type { TrackRes } from '~/types/ReqRes'
-import type { ImagePayload, EntityImagesKeys } from '~/types/Common'
+// import type { TrackRes } from '~/types/ReqRes'
+import type { ImagePayload, EntityImagesKeys } from '~entities/upload/model/types'
 import { hostString, categoryKeyDict } from '~/utils'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
 import Sprite from '~/components/Sprite/Sprite.vue'
 import { Button } from '~shared/UI'
-import uploadServices from '~/services/upload.services'
-import dbServices from '~/services/database.services'
+// import uploadServices from '~/services/upload.services'
+// import dbServices from '~/services/database.services'
 import AlbumPage from '~/classes/AlbumPage'
+import { UploadService } from '~shared/api'
 
 interface Props {
   data: Category
-  entity: string
+  entityKey: string
   description: string
   noAvatar?: boolean
   isEditable?: boolean
@@ -107,9 +108,9 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const {
-  globalGetters: { localize, authConfig }
-} = useGlobalStore()
+const { globalGetters: { localize, authConfig } } = useGlobalStore()
+
+const uploadService = new UploadService()
 
 const {
   playerGetters: { currentPlaylist, playingTrack },
@@ -132,11 +133,11 @@ const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => 
     const payload: ImagePayload = {
       file: element.files[0],
       type,
-      slug: props.entity,
+      slug: props.entityKey,
       id: String(route.params.id)
     }
 
-    uploadServices.uploadImage<Category>(payload)
+    uploadService.uploadImage<Category>(payload)
       .then((data) => {
         // @ts-expect-error: fix
         emit('setUploadedImage', {
@@ -149,31 +150,31 @@ const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => 
 }
 
 const getCategoryWave = async () => {
-  try {
-    const tracks = await dbServices.getEntityList<TrackRes[]>(
-      'tracks/wave',
-      {
-        page: 1,
-        limit: 50,
-        sort: { createdAt: -1 },
-        filter: {
-          from: props.entity,
-          key: `${categoryKeyDict[props.entity]}.title`,
-          name: props.data.title
-        }
-      }
-    )
+  // try {
+  //   const tracks = await dbServices.getEntityList<TrackRes[]>(
+  //     'tracks/wave',
+  //     {
+  //       page: 1,
+  //       limit: 50,
+  //       sort: { createdAt: -1 },
+  //       filter: {
+  //         from: props.entityKey,
+  //         key: `${categoryKeyDict[props.entityKey]}.title`,
+  //         name: props.data.title
+  //       }
+  //     }
+  //   )
 
-    waveAlbum.value = new AlbumPage({
-      _id: props.entity,
-      title: `Wave by ${categoryKeyDict[props.entity]}: ${props.data.title}`,
-      tracks
-    })
+  //   waveAlbum.value = new AlbumPage({
+  //     _id: props.entityKey,
+  //     title: `Wave by ${categoryKeyDict[props.entityKey]}: ${props.data.title}`,
+  //     tracks
+  //   })
 
-    setPlayerPlaylist(waveAlbum.value)
-  } catch (error) {
-    console.error(error)
-  }
+  //   setPlayerPlaylist(waveAlbum.value)
+  // } catch (error) {
+  //   console.error(error)
+  // }
 }
 
 const playWave = () => {
@@ -184,7 +185,7 @@ const playWave = () => {
     togglePlayerVisibility()
   } else {
     // @ts-expect-error: fix
-    if (currentPlaylist.value?._id !== props.entity) {
+    if (currentPlaylist.value?._id !== props.entityKey) {
       setPlayerPlaylist(waveAlbum.value)
       // @ts-expect-error: fix
       playTrack(waveAlbum.value.tracks[0])

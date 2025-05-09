@@ -70,8 +70,8 @@ import { DiscogsTable } from '~features/discogs'
 import { WikiFrame } from '~features/wiki'
 
 import { Modal, Loader } from '~shared/UI'
+import { DatabaseService } from '~shared/api'
 
-import DatabaseService from '~/shared/api/DatabaseService'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
 import GatheringBlock from '~/components/Gatherings/GatheringBlock.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'

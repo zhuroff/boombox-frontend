@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import useGlobalStore from '~/store/global'
-import useGetPage from '~/shared/useGetPage'
+import useGetPage from '~/shared/model/useGetPage'
 import useGetList from '~/shared/model/useGetList'
 import { Loader } from '~shared/UI'
 import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
