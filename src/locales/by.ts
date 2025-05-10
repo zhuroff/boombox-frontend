@@ -1,6 +1,6 @@
 export const localesBY: LocaleDictionary = {
   languages: {
-    en: 'Англiйская',
+    en: 'English',
     by: 'Беларуская'
   },
   cancel: 'Скасаваць',

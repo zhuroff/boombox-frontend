@@ -80,7 +80,7 @@ const onSearch = (value: string) => {
   @include var.media('>=laptop') {
     padding: 0 25px;
     background-color: var.$dark;
-    height: 70px;
+    height: var.$desktopHeaderHeight;
     position: sticky;
     top: 0;
     z-index: 1000;

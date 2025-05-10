@@ -110,6 +110,12 @@ const navHandler = () => {
 
   .content {
     padding: 2rem 1rem var.$mainPadding 1rem;
+
+    @include var.media('>=laptop') {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - (var.$desktopHeaderHeight + var.$playerHeight));
+    }
   }
 }
 </style>

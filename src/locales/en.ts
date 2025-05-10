@@ -1,7 +1,7 @@
 export const localesEN: LocaleDictionary = {
   languages: {
     en: 'English',
-    by: 'Belarusian'
+    by: 'Беларуская'
   },
   cancel: 'Cancel',
   delete: 'Delete',

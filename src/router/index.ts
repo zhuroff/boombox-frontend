@@ -61,19 +61,18 @@ const routes: Array<any> = [
   },
   {
     path: '/collections',
-    name: 'collections',
     component: RouterView,
     children: [
       {
         path: '/collections',
-        name: 'collection-list',
+        name: 'collection-list-page',
         meta: { navLocaleKey: 'collections' },
-        component: () => import(/* webpackChunkName: 'collection-list' */ '~/pages/collections/CollectionList.vue')
+        component: () => import(/* webpackChunkName: 'collection-list-page' */ '~/pages/collection-list-page/index.vue')
       },
       {
         path: '/collections/:id',
-        name: 'collection-single',
-        component: () => import(/* webpackChunkName: 'collection-single' */ '~/pages/collections/CollectionSingle.vue')
+        name: 'collection-single-page',
+        component: () => import(/* webpackChunkName: 'collection-single-page' */ '~/pages/collection-single-page/index.vue')
       }
     ]
   },

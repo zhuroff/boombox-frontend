@@ -1,72 +1,32 @@
 <template>
   <div class="hero">
-    <div class="hero__poster">
-      <img
-        v-if="data.poster"
-        :src="host(data.poster)"
-        :alt="data.title"
-        class="hero__poster-image"
-      >
-      <form
-        v-if="isAdmin"
-        class="hero__poster-form"
-      >
-        <label class="hero__poster-label">
-          <input
-            type="file"
-            ref="posterElement"
-            @change="() => saveImage('poster', posterElement)"
-          >
-          <Sprite name="camera" />
-        </label>
-      </form>
-      <slot name="hero-content"></slot>
-    </div>
+    <PosterUploader
+      :isAdmin="isAdmin"
+      :posterUrl="data.poster ? host(data.poster) : null"
+      :entityTitle="data.title"
+      @uploadPoster="uploadAndShowImage"
+    />
     <div class="hero__info">
-      <div
+      <AvatarUploader
         v-if="!noAvatar"
-        class="hero__avatar"
-      >
-        <img
-          v-if="data.avatar"
-          :src="host(data.avatar)"
-          :alt="data.title"
-          class="hero__avatar-image"
-        >
-        <form
-          v-if="isAdmin"
-          class="hero__avatar-form"
-        >
-          <label class="hero__avatar-label">
-            <input
-              type="file"
-              ref="avatarElement"
-              @change="() => saveImage('avatar', avatarElement)"
-            >
-            <Sprite name="camera" />
-          </label>
-        </form>
-      </div>
+        :isAdmin="isAdmin"
+        :avatarUrl="data.avatar ? host(data.avatar) : null"
+        :entityTitle="data.title"
+        @uploadAvatar="uploadAndShowImage"
+      />
       <div class="hero__content">
-        <div class="hero__content-info">
-          <input
-            v-if="isEditable"
-            type="text"
-            class="hero__title"
-            v-model="heroTitle"
-          >
-          <div
-            v-else
-            class="hero__title"
-          >{{ heroTitle }}</div>
-          <div class="hero__description">{{ description }}</div>
-        </div>
+        <CategoryTitleEditor
+          :isEditable="!!isEditable"
+          :heroTitle="props.data.title"
+          :description="description"
+          @saveNewTitle="(value) => emit('saveTitle', value)"
+        />
         <div class="hero__content-actions">
           <Button
             v-if="entityKey !== 'collections'"
             size="medium"
             isInverted
-            :label="localize('player.waveButton')"
+            label="player.waveButton"
             :disabled="!waveAlbum?.tracks?.length"
             @click="playWave"
           />
@@ -77,20 +37,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from 'vue'
-import type { Ref } from 'vue'
-import { useRoute } from 'vue-router'
-// import type { TrackRes } from '~/types/ReqRes'
-import type { ImagePayload, EntityImagesKeys } from '~entities/upload/model/types'
-import { hostString, categoryKeyDict } from '~/utils'
+import { onMounted, ref, computed } from 'vue'
+import { useUploadImage } from '~widgets/CategoryHero'
+import { PosterUploader, AvatarUploader, CategoryTitleEditor } from '~entities/category'
+import { hostString } from '~/utils'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import Sprite from '~/components/Sprite/Sprite.vue'
 import { Button } from '~shared/UI'
-// import uploadServices from '~/services/upload.services'
-// import dbServices from '~/services/database.services'
 import AlbumPage from '~/classes/AlbumPage'
 import { UploadService } from '~shared/api'
+import type { EntityImagesKeys } from '~entities/upload/model/types'
 
 interface Props {
   data: Category
@@ -108,45 +64,42 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { globalGetters: { localize, authConfig } } = useGlobalStore()
+const { globalGetters: { authConfig } } = useGlobalStore()
 
 const uploadService = new UploadService()
+
+const { uploadImage } = useUploadImage(props.entityKey, uploadService)
 
 const {
   playerGetters: { currentPlaylist, playingTrack },
   playerActions: { setPlayerPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
 } = usePlaylist()
 
-const route = useRoute()
-const posterElement: Ref<null | HTMLInputElement> = ref(null)
-const avatarElement: Ref<null | HTMLInputElement> = ref(null)
-const inputTimer: Ref<ReturnType<typeof setTimeout> | number> = ref(0)
-const heroTitle = ref(props.data.title)
 const waveAlbum = ref<null | AlbumPage>(null)
 
 const isAdmin = computed(() => (
   authConfig.value.user?.role === 'admin'
 ))
 
-const saveImage = (type: EntityImagesKeys, element: HTMLInputElement | null) => {
-  if (element?.files?.length) {
-    const payload: ImagePayload = {
-      file: element.files[0],
-      type,
-      slug: props.entityKey,
-      id: String(route.params.id)
-    }
+const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
+  const [type, file] = payload
 
-    uploadService.uploadImage<Category>(payload)
-      .then((data) => {
-        // @ts-expect-error: fix
-        emit('setUploadedImage', {
-          key: payload.type,
-          url: data[type]
-        })
-      })
-      .catch(console.error)
+  if (!file) {
+    throw new Error('File payload is not defined')
   }
+
+  uploadImage(type, file)
+    .then((data) => {
+      if (!data?.[type]) {
+        throw new Error(`Response data or ${type} of data is not defined`)
+      }
+
+      emit('setUploadedImage', {
+        key: type,
+        url: data[type]
+      })
+    })
+    .catch(console.error)
 }
 
 const getCategoryWave = async () => {
@@ -200,22 +153,12 @@ const playWave = () => {
 
 const host = (pathname: string) => hostString(pathname)
 
-watch(heroTitle, (newValue) => {
-  if (typeof inputTimer.value === 'number') {
-    clearTimeout(inputTimer.value)
-
-    inputTimer.value = setTimeout(() => {
-      emit('saveTitle', newValue)
-    }, 1000)
-  }
-})
-
 onMounted(() => {
   getCategoryWave()
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use '~/scss/variables' as var;
 
 .hero {
@@ -225,62 +168,9 @@ onMounted(() => {
 
   &:hover {
 
-    .hero__poster-label {
+    .poster__label {
       opacity: 1;
       transition: opacity 0.3s var.$animation;
-    }
-  }
-
-  &__poster {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    &:before {
-      content: '';
-      background-color: var.$transBlack;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    &-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    &-form {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-
-    &-label {
-      width: 78px;
-      height: 78px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.3s var.$animation;
-
-      input {
-        position: absolute;
-        width: 0;
-        height: 0;
-        opacity: 0;
-        outline: none;
-      }
-
-      .icon {
-        color: var.$white;
-      }
     }
   }
 
@@ -292,72 +182,6 @@ onMounted(() => {
     display: flex;
     align-items: center;
     width: 100%;
-  }
-
-  &__avatar {
-    margin: 0 25px;
-    position: relative;
-    z-index: 3;
-
-    @include var.media('<tablet') {
-      display: none;
-    }
-
-    @include var.media('>=tablet') {
-      width: 10rem;
-      height: 10rem;
-      border-radius: 50%;
-      overflow: hidden;
-      position: relative;
-      flex: none;
-      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    }
-
-    &-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-
-      & + .hero__avatar-form {
-        opacity: 0;
-
-        &:hover {
-          opacity: 1;
-        }
-      }
-    }
-
-    &-form {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var.$black;
-      opacity: 1;
-      transition: opacity 0.3s var.$animation;
-    }
-
-    &-label {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-
-      input {
-        position: absolute;
-        width: 0;
-        height: 0;
-        opacity: 0;
-        outline: none;
-      }
-
-      .icon {
-        color: var.$white;
-      }
-    }
   }
 
   &__content {
@@ -372,29 +196,6 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  &__title {
-    color: var.$warning;
-    padding: 0;
-    border: 0;
-    box-shadow: none;
-    outline: none;
-    background-color: transparent;
-    width: 100%;
-
-    @include var.media('<tablet') {
-      @include var.serif(2rem);
-    }
-
-    @include var.media('>=tablet') {
-      @include var.serif(3rem);
-    }
-  }
-
-  &__description {
-    font-weight: 600;
-    color: var.$white;
   }
 }
 </style>

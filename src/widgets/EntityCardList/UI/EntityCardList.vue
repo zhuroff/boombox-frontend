@@ -272,5 +272,9 @@ const entityCardComponent = computed(() => (
       }
     }
   }
+
+  @include var.media('>=laptop') {
+    margin-bottom: auto;
+  }
 }
 </style>

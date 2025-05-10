@@ -1,8 +1,6 @@
 <template>
   <section class="template">
-    <KeepAlive>
-      <iframe class="bandcamp" src="https://bandcamp.com/discover?s=new" />
-    </KeepAlive>
+    <iframe class="bandcamp" src="https://bandcamp.com/discover?s=new" />
   </section>
 </template>
 
