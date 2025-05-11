@@ -24,8 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import TextInput from '../Form/TextInput.vue'
-import { Button } from '~shared/UI'
+import { Button, TextInput } from '~shared/UI'
 
 interface Props {
   error: string | null

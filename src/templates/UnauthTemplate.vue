@@ -11,9 +11,10 @@
 </template>
 
 <script setup lang="ts">
+import type { FormPayload, FormSchemaProperty } from '~/shared/model/types'
 import api from '../api'
 import useGlobalStore from '~/store/global'
-import Form from '~/components/Form/Form.vue'
+import { Form } from '~shared/UI'
 
 const {
   globalActions: { setAuthConfig }
@@ -42,7 +43,7 @@ const formSchema = new Map<string, FormSchemaProperty>([
   }]
 ])
 
-const login = async (formData: CustomFormData) => {
+const login = async (formData: FormPayload) => {
   try {
     const { data } = await api.post<AuthResponse>('api/users/login', formData)
     setAuthConfig('isAuthenticated', true)

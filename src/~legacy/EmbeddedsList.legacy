@@ -13,7 +13,7 @@
         @click="isCreateMode = !isCreateMode"
       />
     </template>
-    <template v-if="isCreateMode" #under-header>
+    <!-- <template v-if="isCreateMode" #under-header>
       <div class="embedded__create">
         <Form
           :formSchema="formSchema"
@@ -21,7 +21,7 @@
           @formSubmit="createEmbeddedAlbum"
         />
       </div>
-    </template>
+    </template> -->
   </EntityListTemplate>
 </template>
 
@@ -40,7 +40,8 @@ import useGlobalStore from '~/store/global'
 // import Confirmation from '~/components/Confirmation.vue'
 // import Modal from '~/components/Modal.vue'
 import { Button } from '~shared/UI'
-import Form from '~/components/Form/Form.vue'
+import type { FormPayload, FormSchemaProperty } from '~/shared/model/types'
+// import Form from '~/components/Form/Form.vue'
 
 // const {
 //   fetchData,
@@ -96,7 +97,7 @@ const isAdmin = computed(() => (
 //   albums.unshift(new EmbeddedItem(response, 'EmbeddedCard', 'embedded'))
 //   isCreateMode.value = false
 // }
-const createEmbeddedAlbum = (formData: CustomFormData) => {
+const createEmbeddedAlbum = (formData: FormPayload) => {
   console.log(formData)
 }
 

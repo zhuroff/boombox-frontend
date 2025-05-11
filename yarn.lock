@@ -532,13 +532,6 @@
   resolved "https://npm.netvision-internal.ru/@rushstack%2feslint-patch/-/eslint-patch-1.11.0.tgz#75dce8e972f90bba488e2b0cc677fb233aa357ab"
   integrity sha512-zxnHvoMQVqewTJr/W4pKjF0bMGiKJv1WX7bSrkl46Hg0QjESbzBROWK0Wg4RphzSOS5Jiy7eFimmM3UgMrMZbQ==
 
-"@tanstack/form-core@1.9.0":
-  version "1.9.0"
-  resolved "https://npm.netvision-internal.ru/@tanstack%2fform-core/-/form-core-1.9.0.tgz#013dd316dddadb3f5fe541d3a2a10c0077d87ec1"
-  integrity sha512-lEXXQdIMW7PcybwnzJ+6VaEC65tWV/ZCgYfR5nC+lApXSlLPN+bp1fJanIclsw5U4dnx3DOxeOy/uzXwJ02wDQ==
-  dependencies:
-    "@tanstack/store" "^0.7.0"
-
 "@tanstack/match-sorter-utils@^8.19.4":
   version "8.19.4"
   resolved "https://npm.netvision-internal.ru/@tanstack%2fmatch-sorter-utils/-/match-sorter-utils-8.19.4.tgz#dacf772b5d94f4684f10dbeb2518cf72dccab8a5"
@@ -551,19 +544,6 @@
   resolved "https://npm.netvision-internal.ru/@tanstack%2fquery-core/-/query-core-5.74.9.tgz#35d5b1075663072bea22aa3ce21508b195306ecd"
   integrity sha512-qmjXpWyigDw4SfqdSBy24FzRvpBPXlaSbl92N77lcrL+yvVQLQkf0T6bQNbTxl9IEB/SvVFhhVZoIlQvFnNuuw==
 
-"@tanstack/store@0.7.0", "@tanstack/store@^0.7.0":
-  version "0.7.0"
-  resolved "https://npm.netvision-internal.ru/@tanstack%2fstore/-/store-0.7.0.tgz#afef29b06c6b592e93181cee9baa62fe77454459"
-  integrity sha512-CNIhdoUsmD2NolYuaIs8VfWM467RK6oIBAW4nPEKZhg1smZ+/CwtCdpURgp7nxSqOaV9oKkzdWD80+bC66F/Jg==
-
-"@tanstack/vue-form@^1.9.0":
-  version "1.9.0"
-  resolved "https://npm.netvision-internal.ru/@tanstack%2fvue-form/-/vue-form-1.9.0.tgz#2f8d7dde1bbbce79a7de34ff1feeb39329eff50c"
-  integrity sha512-y+gFNKGhz2EfAkd6sGYSi5f8VCGirfog12uAKh0jtTxk152rvEv7AIXPQIebzzymOzqi/JSuckehCuQku2mANA==
-  dependencies:
-    "@tanstack/form-core" "1.9.0"
-    "@tanstack/vue-store" "^0.7.0"
-
 "@tanstack/vue-query@^5.74.9":
   version "5.74.9"
   resolved "https://npm.netvision-internal.ru/@tanstack%2fvue-query/-/vue-query-5.74.9.tgz#e072af13a1618c5833aaec2a9bc93cbff61de5db"
@@ -572,14 +552,6 @@
     "@tanstack/match-sorter-utils" "^8.19.4"
     "@tanstack/query-core" "5.74.9"
     "@vue/devtools-api" "^6.6.3"
-    vue-demi "^0.14.10"
-
-"@tanstack/vue-store@^0.7.0":
-  version "0.7.0"
-  resolved "https://npm.netvision-internal.ru/@tanstack%2fvue-store/-/vue-store-0.7.0.tgz#f47ad84ab6c8677aefb143cb7079e7c2bcb2aadf"
-  integrity sha512-oLB/WuD26caR86rxLz39LvS5YdY0KIThJFEHIW/mXujC2+M/z3GxVZFJsZianAzr3tH56sZQ8kkq4NvwwsOBkQ==
-  dependencies:
-    "@tanstack/store" "0.7.0"
     vue-demi "^0.14.10"
 
 "@tsconfig/node20@^20.1.5":

@@ -16,6 +16,9 @@
         :schema="tableState.schema"
       />
     </tbody>
+    <tfoot class="table__footer">
+      <slot name="tfoot"></slot>
+    </tfoot>
   </table>
 </template>
 

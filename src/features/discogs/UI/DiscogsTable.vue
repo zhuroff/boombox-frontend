@@ -1,39 +1,50 @@
 <template>
   <Table
+    v-if="discogsTableState.rows.length"
     :tableState="discogsTableState"
     :tableFilters="discogsFilters"
     :tableFiltersState="discogsFiltersState"
     localeRootKey="discogsTable"
     @updateFilterValue="(value) => setDiscogsFilterValue(value)"
-  />
-  <!-- <Table
-    :tableState="discogsTableState"
-    :tableFilters="discogsFilters"
-    :tableFiltersState="discogsFiltersState"
-    localeKey="discogsTable"
-    @switchPagination="() => console.log('switchPagination')"
-    @update:filter="() => console.log('updateDiscogsFilter')"
-  /> -->
+  >
+    <template #tfoot>
+      <Paginator
+        v-if="isTablePaginated"
+        :paginationState="discogsPagination"
+        :paginationConfig="paginationConfig"
+        :updatePaginationState="updatePaginationState"
+      />
+    </template>
+  </Table>
 </template>
 
 <script setup lang="ts">
-import type { DiscogsPropEntity } from '../'
+import { computed } from 'vue'
+import { Paginator } from '~widgets/Paginator'
 import { Table } from '~shared/UI'
+import type { MinimumAlbumInfo } from '~shared/model/types'
 import useDiscogs from '../model/useDiscogs'
 import DiscogsService from '../api/DiscogsService'
 
 const discogsService = new DiscogsService()
 
 interface Props {
-  entity: DiscogsPropEntity
+  entity: MinimumAlbumInfo
 }
 
 const props = defineProps<Props>()
 
 const {
   discogsTableState,
+  discogsPagination,
+  paginationConfig,
   discogsFiltersState,
   setDiscogsFilterValue,
+  updatePaginationState,
   discogsFilters
 } = useDiscogs(discogsService, props.entity)
+
+const isTablePaginated = computed(() => (
+  discogsTableState.value.pagination.totalPages > 1
+))
 </script>

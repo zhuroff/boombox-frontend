@@ -2,11 +2,11 @@ import { ref, reactive, computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type DiscogsService from '~/features/discogs/api/DiscogsService'
-import { usePaginator } from '~widgets/Paginator'
-import discogsTableSchema from '~/schemas/DiscogsSchema'
-import type { DiscogsReleaseRow } from './types'
-import type { MinimumAlbumInfo } from '~shared/model/types'
 import type { PaginationState } from '~widgets/Paginator/model/types'
+import { usePaginator } from '~widgets/Paginator'
+import type { MinimumAlbumInfo } from '~shared/model/types'
+import type { DiscogsReleaseRow } from './types'
+import { discogsTableSchema } from '~features/discogs'
 
 const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) => {
   const discogsFilters = reactive<TableFilters>({
@@ -27,7 +27,9 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
 
   const {
     paginationState: discogsPagination,
-    updatePaginationConfig
+    paginationConfig,
+    updatePaginationConfig,
+    updatePaginationState
   } = usePaginator({ isRouted: false })
 
   const discogsPayloadConfig = computed(() => ({
@@ -79,7 +81,7 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
     }
   }
 
-  const setDiscogsFilterValue = (payload: [keyof TableFilters, string | null]) => {
+  const setDiscogsFilterValue = (payload: [keyof TableFilters, string | number | null]) => {
     discogsPagination.page = 1
     discogsFiltersState[payload[0]] = payload[1]
   }
@@ -131,7 +133,10 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
   return {
     isDiscogsFetching,
     discogsTableState,
+    discogsPagination,
+    paginationConfig,
     discogsFiltersState,
+    updatePaginationState,
     setDiscogsFilterValue,
     resetDiscogsFilters,
     discogsFilters

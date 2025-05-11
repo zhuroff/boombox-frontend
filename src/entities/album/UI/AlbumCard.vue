@@ -6,7 +6,7 @@
     >
       <div class="cardlist__item-image">
         <div
-          v-if="card.frame"
+          v-if="'frame' in card && card.frame"
           v-html="card.frame"
           class="cardlist__item-cover --blind"
         />

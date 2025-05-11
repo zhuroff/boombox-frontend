@@ -30,7 +30,7 @@
           @deleteEntity="confirmDelete"
         />
         <Paginator
-          v-if="isFetched && data"
+          v-if="isPaginated"
           :paginationState="paginationState"
           :paginationConfig="paginationConfig"
           :updatePaginationState="updatePaginationState"
@@ -115,6 +115,10 @@ const { data, isFetched } = useGetList<BasicEntity>(listQueryConfig, dbService)
 const deletePayload = ref<DeletePayload | null>(null)
 
 const docsCount = computed(() => String(data.value?.pagination.totalDocs || 0))
+
+const isPaginated = computed(() => (
+  isFetched.value && data.value?.pagination.totalPages > 1
+))
 
 const confirmDelete = (payload: DeletePayload) => {
   deletePayload.value = payload

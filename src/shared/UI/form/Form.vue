@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent.stop="form.handleSubmit()">
+  <!-- <form @submit.prevent.stop="form.handleSubmit()">
     <div
       v-for="[key, property] in formSchema"
       :key="key"
@@ -17,13 +17,16 @@
       type="submit"
       :label="submitButtonLocale"
     />
+  </form> -->
+  <form class="form">
+
   </form>
 </template>
 
 <script setup lang="ts">
-import { useForm } from '@tanstack/vue-form'
-import Field from './Field.vue'
+import type { FormPayload, FormSchemaProperty } from '~/shared/model/types'
 import { Button } from '~shared/UI'
+import Field from './Field.vue'
 
 interface Props {
   formSchema: Map<string, FormSchemaProperty>
@@ -31,24 +34,25 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'formSubmit', value: CustomFormData): void
+  (e: 'formSubmit', value: FormPayload): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
   submitButtonLocale: 'submit'
 })
 const emit = defineEmits<Emits>()
+console.log(props)
 
-const form = useForm({
-  defaultValues: [...props.formSchema.entries()]
-    .reduce<CustomFormData>((acc, [key, value]) => {
-      acc[key] = value.defaultValue || ''
-      return acc
-    }, {}),
-  onSubmit: ({ value }) => {
-    emit('formSubmit', value)
-  }
-})
+// const form = useForm({
+//   defaultValues: [...props.formSchema.entries()]
+//     .reduce<CustomFormData>((acc, [key, value]) => {
+//       acc[key] = value.defaultValue || ''
+//       return acc
+//     }, {}),
+//   onSubmit: ({ value }) => {
+//     emit('formSubmit', value)
+//   }
+// })
 </script>
 
 <style lang="scss">

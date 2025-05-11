@@ -25,19 +25,18 @@ const routes: Array<any> = [
   },
   {
     path: '/embedded',
-    name: 'embedded',
     component: RouterView,
     children: [
       {
         path: '/embedded',
-        name: 'embedded-list',
+        name: 'embedded-list-page',
         meta: { navLocaleKey: 'embedded' },
-        component: () => import(/* webpackChunkName: 'embedded-list' */ '~/pages/embedded/EmbeddedsList.vue')
+        component: () => import(/* webpackChunkName: 'embedded-list-page' */ '~/pages/embedded-list-page/index.vue')
       },
       {
         path: '/embedded/:id',
-        name: 'embedded-single',
-        component: () => import(/* webpackChunkName: 'embedded-single' */ '~/pages/embedded/EmbeddedPage.vue')
+        name: 'embedded-single-page',
+        component: () => import(/* webpackChunkName: 'embedded-single-page' */ '~/pages/embedded-single-page/index.vue')
       }
     ]
   },
