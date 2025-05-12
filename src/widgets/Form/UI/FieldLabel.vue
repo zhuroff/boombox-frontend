@@ -1,18 +1,18 @@
 <template>
   <label
     :for="targetId"
-    :class="stateClasses"
+    class="label"
   >
     <span
-      v-if="['top', 'left'].includes(labelTextPosition)"
-      class="label__text"
+      v-if="!!labelText && ['top', 'left'].includes(labelTextPosition)"
+      :class="stateClasses"
     >
       {{ localize(labelText) }}
     </span>
-    <slot></slot>
+    <slot name="formInput"></slot>
     <span
-      v-if="['right', 'bottom', undefined].includes(labelTextPosition)"
-      class="label__text"
+      v-if="!!labelText && ['right', 'bottom', undefined].includes(labelTextPosition)"
+      :class="stateClasses"
     >
       {{ localize(labelText) }}
     </span>
@@ -24,7 +24,7 @@ import { computed } from 'vue'
 import useGlobalStore from '~/store/global'
 
 interface Props {
-  labelText: string
+  labelText?: string
   size?: ElementSize
   labelTextPosition?: ElementPosition
   required?: boolean
@@ -42,7 +42,7 @@ const {
 } = useGlobalStore()
 
 const stateClasses = computed(() => ([
-  'label',
+  'label__text',
   `--${props.size}`,
   `--${props.labelTextPosition}`,
   {
@@ -55,6 +55,7 @@ const stateClasses = computed(() => ([
 .label {
   display: block;
   height: auto;
+  position: relative;
 
   &.--top,
   &.--bottom {

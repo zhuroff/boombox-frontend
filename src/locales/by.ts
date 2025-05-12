@@ -181,5 +181,6 @@ export const localesBY: LocaleDictionary = {
   toy: {
     emptyGenres: 'Калекцыі пакуль няма',
     emptyYears: 'Перыядаў пакуль няма'
-  }
+  },
+  createEntityLabel: 'Стварыць iстоту "{x}" з назвай: "{x}"'
 }

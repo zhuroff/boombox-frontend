@@ -10,6 +10,8 @@
         v-if="isAdmin"
         icon="plus"
         label="embeddedForm.addAlbum"
+        isInverted
+        :style="{ marginLeft: '1rem' }"
         @click="isCreateMode = !isCreateMode"
       />
     </template>
@@ -36,58 +38,15 @@ import { EntityListView } from '~widgets/EntityListView'
 import useGlobalStore from '~/store/global'
 import { Button } from '~shared/UI'
 import { Modal } from '~shared/UI'
-import { Form } from '~shared/UI'
-import type { FormPayload, FormSchemaProperty } from '~shared/model/types'
+import { Form } from '~widgets/Form'
+import type { FormPayload } from '~widgets/Form/model/types'
+import { embeddedAlbumFormSchema } from '~entities/embedded'
 
 const { globalGetters: { authConfig } } = useGlobalStore()
 
 const isCreateMode = ref(false)
 
-const formSchema = new Map<string, FormSchemaProperty>([
-  ['title', {
-    id: 'album-title',
-    name: 'embeddedForm.title',
-    placeholder: 'embeddedForm.titlePlaceholder',
-    required: true,
-    type: 'text',
-    label: {
-      labelText: 'embeddedForm.title'
-    }
-  }],
-  ['artist', {
-    id: 'album-artist',
-    name: 'embeddedForm.artist',
-    placeholder: 'embeddedForm.artistPlaceholder',
-    required: true,
-    type: 'text',
-    refKey: 'artists',
-    label: {
-      labelText: 'embeddedForm.artist'
-    }
-  }],
-  ['genre', {
-    id: 'album-genre',
-    name: 'embeddedForm.genre',
-    placeholder: 'embeddedForm.genrePlaceholder',
-    required: true,
-    type: 'text',
-    refKey: 'genres',
-    label: {
-      labelText: 'embeddedForm.genre'
-    }
-  }],
-  ['period', {
-    id: 'album-period',
-    name: 'embeddedForm.period',
-    placeholder: 'embeddedForm.periodPlaceholder',
-    required: true,
-    type: 'text',
-    refKey: 'periods',
-    label: {
-      labelText: 'embeddedForm.period'
-    }
-  }]
-])
+const formSchema = embeddedAlbumFormSchema
 
 const isAdmin = computed(() => (
   authConfig.value.user?.role === 'admin'
@@ -106,18 +65,13 @@ const createEmbeddedAlbum = (formData: FormPayload) => {
   &__create {
     width: 100%;
     max-width: 768px;
+    max-height: calc(100vh - var.$playerHeight - var.$desktopHeaderHeight);
     border-radius: var.$borderRadiusSM;
     background-color: var.$paleLT;
     box-shadow: var.$shadowLight;
     padding: var.$mainPadding;
     z-index: 3000;
-
-    .form {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 1rem;
-    }
+    overflow-y: auto;
   }
 }
 </style>

@@ -8,20 +8,27 @@
     </option>
     <option
       v-for="option in options"
-      :key="option"
+      :key="typeof option === 'object' ? option.value : option"
       :value="option"
     >
-      {{ option === 'unknown' ? localize('unknown') : option }}
+      {{
+        typeof option === 'object'
+          ? localize(option.label)
+          : option === 'unknown'
+            ? localize('unknown')
+            : option
+      }}
     </option>
   </select>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
+import type { Option } from '~shared/model/types'
 import useGlobalStore from '~/store/global'
 
 interface Props {
-  options: Array<string | number>
+  options: Array<string | number> | Option[]
   selected: Record<keyof TableFilters, null | string | number>
   entityKey: string
   localeKey?: string

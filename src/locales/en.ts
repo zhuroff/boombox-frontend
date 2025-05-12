@@ -181,5 +181,6 @@ export const localesEN: LocaleDictionary = {
   toy: {
     emptyGenres: 'There are no any collection yet',
     emptyYears: 'There are no any periods yet'
-  }
+  },
+  createEntityLabel: 'Create entity "{x}" with name: "{x}"'
 }

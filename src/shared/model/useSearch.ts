@@ -6,12 +6,12 @@ import type DatabaseService from '~/shared/api/DatabaseService'
 const useSearch = (
   query: Ref<string>,
   dbService: DatabaseService,
-  entityKey?: string
+  entityKey?: Ref<string>
 ) => {
   const { refetch, isFetched, isFetching, data, error } = useQuery<SearchResultState[]>({
     queryKey: [query, entityKey],
     refetchOnWindowFocus: false,
-    queryFn: () => dbService.search({ query: query.value, key: entityKey }),
+    queryFn: () => dbService.search({ query: query.value, key: entityKey?.value }),
     enabled: false,
     retry: 3
   })

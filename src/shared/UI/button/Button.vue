@@ -12,7 +12,13 @@
     <span
       v-if="label"
       class="button__label"
-    >{{ localize(label) }}</span>
+    >
+      {{
+        Array.isArray(label)
+          ? localize(label[0], ...label[1])
+          : localize(label)
+      }}
+    </span>
     <slot></slot>
   </button>
 </template>
@@ -23,7 +29,7 @@ import useGlobalStore from '~/store/global'
 import Sprite from '~/components/Sprite/Sprite.vue'
 
 interface Props {
-  label?: string
+  label?: string | [string, Array<string>]
   icon?: string
   size?: 'small' | 'medium' | 'large'
   style?: StyleValue

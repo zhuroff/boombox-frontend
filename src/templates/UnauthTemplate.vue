@@ -11,10 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import type { FormPayload, FormSchemaProperty } from '~/shared/model/types'
+import type { FormPayload, FormSchemaProperty } from '~widgets/Form/model/types'
+import { Form } from '~widgets/Form'
 import api from '../api'
 import useGlobalStore from '~/store/global'
-import { Form } from '~shared/UI'
 
 const {
   globalActions: { setAuthConfig }
@@ -23,7 +23,7 @@ const {
 const formSchema = new Map<string, FormSchemaProperty>([
   ['email', {
     id: 'login-email',
-    name: 'loginForm.email',
+    name: 'email',
     placeholder: 'loginForm.emailPlaceholder',
     required: true,
     type: 'email',
@@ -33,7 +33,7 @@ const formSchema = new Map<string, FormSchemaProperty>([
   }],
   ['password', {
     id: 'login-password',
-    name: 'loginForm.password',
+    name: 'password',
     placeholder: 'loginForm.passwordPlaceholder',
     required: true,
     type: 'password',
@@ -70,6 +70,7 @@ const login = async (formData: FormPayload) => {
     padding: 25px;
     width: 100%;
     max-width: 500px;
+    height: auto;
 
     .form {
       display: flex;

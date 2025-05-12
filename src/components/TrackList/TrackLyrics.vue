@@ -84,12 +84,10 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { Loader } from '~shared/UI'
+import { Loader, Button, TextareaInput } from '~shared/UI'
 import useGlobalStore from '~/store/global'
 import useSnackbar from '~/hooks/useSnackbar'
 import type { TrackLyricsResponse } from '~/types/Track'
-import { Button } from '~shared/UI'
-import TextareaInput from '~/components/Form/TextareaInput.vue'
 import trackServices from '~/services/track.services'
 
 interface Props {

@@ -8,24 +8,28 @@
     :name="name"
     :readonly="readonly"
     :required="required"
-    :value="value"
+    :value="modelValue"
     ref="textInputElement"
     autocomplete="off"
-    @input="(e) => emit('onInput', (e.target as HTMLInputElement).value)"
+    @input="(e) => {
+      const value = (e.target as HTMLInputElement).value;
+      emit('update:modelValue', value);
+      emit('onInput', value);
+    }"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import type { StyleValue } from 'vue'
+import type { TextInputFieldSchema } from '~/shared/model/types'
 import useGlobalStore from '~/store/global'
 
 interface Props {
   name: string
   type: TextInputFieldSchema['type']
-  value?: string
+  modelValue?: string
   size?: ElementSize
-  defaultValue?: string
   id?: string
   isError?: boolean
   placeholder?: string
@@ -38,10 +42,11 @@ interface Props {
 
 interface Emits {
   (e: 'onInput', value: string): void
+  (e: 'update:modelValue', value: string): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: '',
+  modelValue: '',
   isError: false,
   required: false,
   readonly: false,

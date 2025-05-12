@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { h, computed, ref } from 'vue'
 import DatabaseService from '~/shared/api/DatabaseService'
-import useSearch from '~/shared/useSearch'
+import { useSearch } from '~shared/model'
 import useGlobalStore from '~/store/global'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
