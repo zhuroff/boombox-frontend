@@ -8,6 +8,8 @@ export interface InputLabelConfig {
 export interface BaseInputFieldSchema {
   name: string
   id?: string
+  errorMessages?: string[]
+  validator?: <T>(value: T) => number
   required?: boolean
   disabled?: boolean
   readonly?: boolean

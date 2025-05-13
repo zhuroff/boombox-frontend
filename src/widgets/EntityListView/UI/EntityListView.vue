@@ -2,7 +2,7 @@
   <div class="template">
     <transition name="fade">
       <Loader
-        v-if="!isFetched"
+        v-if="!isFetched || isFetching"
         mode="light"
       />
     </transition>
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed, watchEffect, watch } from 'vue'
 import { Header } from '~widgets/Header'
 import { Paginator, usePaginator } from '~widgets/Paginator'
 import { EntityCardList } from '~widgets/EntityCardList'
@@ -67,7 +67,6 @@ import { useGetList } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 
 import useGlobalStore from '~/store/global'
-// import useSnackbar from '~/hooks/useSnackbar'
 
 interface Props {
   entityKey: string
@@ -76,6 +75,7 @@ interface Props {
   isDraggable?: boolean 
   isDeletable?: boolean
   withSearch?: boolean
+  isRefresh?: boolean
 }
 
 const props = defineProps<Props>()
@@ -109,8 +109,7 @@ const listQueryConfig = computed(() => ({
   requestConfig: paginationState
 }))
 
-const { data, isFetched } = useGetList<BasicEntity>(listQueryConfig, dbService)
-// const { setSnackbarMessage } = useSnackbar()
+const { data, refetch, isFetched, isFetching } = useGetList<BasicEntity>(listQueryConfig, dbService)
 
 const deletePayload = ref<DeletePayload | null>(null)
 
@@ -136,4 +135,13 @@ watchEffect(() => {
     updatePaginationConfig('totalPages', data.value?.pagination.totalPages || 0)
   }
 })
+
+watch(
+  () => props.isRefresh,
+  (value) => {
+    if (value) {
+      refetch()
+    }
+  }
+)
 </script>

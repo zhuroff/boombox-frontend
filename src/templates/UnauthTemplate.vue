@@ -29,6 +29,14 @@ const formSchema = new Map<string, FormSchemaProperty>([
     type: 'email',
     label: {
       labelText: 'loginForm.email'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      if (!value) {
+        this.errorMessages?.push('loginForm.emailRequired')
+      }
+
+      return this.errorMessages?.length || 0
     }
   }],
   ['password', {
@@ -39,6 +47,14 @@ const formSchema = new Map<string, FormSchemaProperty>([
     type: 'password',
     label: {
       labelText: 'loginForm.password'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      if (!value) {
+        this.errorMessages?.push('loginForm.passwordRequired')
+      }
+
+      return this.errorMessages?.length || 0
     }
   }]
 ])

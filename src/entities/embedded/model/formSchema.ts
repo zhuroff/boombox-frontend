@@ -1,4 +1,4 @@
-import type { FormSchemaProperty } from '~shared/model/types'
+import type { FormSchemaProperty } from '~widgets/Form/model/types'
 
 const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
   ['title', {
@@ -9,6 +9,16 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     type: 'text',
     label: {
       labelText: 'embeddedForm.title'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      this.errorMessages.length = 0
+
+      if (!value) {
+        this.errorMessages.push('embeddedForm.titleRequired')
+      }
+
+      return this.errorMessages.length
     }
   }],
   ['artist', {
@@ -20,6 +30,16 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     refKey: 'artists',
     label: {
       labelText: 'embeddedForm.artist'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      this.errorMessages.length = 0
+
+      if (!value) {
+        this.errorMessages.push('embeddedForm.artistRequired')
+      }
+
+      return this.errorMessages.length
     }
   }],
   ['genre', {
@@ -31,6 +51,16 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     refKey: 'genres',
     label: {
       labelText: 'embeddedForm.genre'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      this.errorMessages.length = 0
+
+      if (!value) {
+        this.errorMessages.push('embeddedForm.genreRequired')
+      }
+
+      return this.errorMessages.length
     }
   }],
   ['period', {
@@ -42,6 +72,16 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     refKey: 'periods',
     label: {
       labelText: 'embeddedForm.period'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      this.errorMessages.length = 0
+
+      if (!value) {
+        this.errorMessages.push('embeddedForm.periodRequired')
+      }
+
+      return this.errorMessages.length
     }
   }],
   ['frame', {
@@ -52,6 +92,20 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     type: 'textarea',
     label: {
       labelText: 'embeddedForm.frame'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      this.errorMessages.length = 0
+
+      if (!value) {
+        this.errorMessages.push('embeddedForm.frameRequired')
+      }
+
+      if (!String(value).startsWith('<iframe') || !String(value).endsWith('</iframe>')) {
+        this.errorMessages.push('embeddedForm.frameInvalid')
+      }
+
+      return this.errorMessages.length
     }
   }]
 ])

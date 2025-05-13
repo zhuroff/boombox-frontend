@@ -1,7 +1,7 @@
 <template>
   <label
     :for="targetId"
-    class="label"
+    :class="[{'--error': !!errors?.length}, 'label']"
   >
     <span
       v-if="!!labelText && ['top', 'left'].includes(labelTextPosition)"
@@ -16,6 +16,13 @@
     >
       {{ localize(labelText) }}
     </span>
+    <small
+      v-for="error in errors"
+      :key="error"
+      class="label__error"
+    >
+      {{ localize(error) }}
+    </small>
   </label>
 </template>
 
@@ -24,6 +31,7 @@ import { computed } from 'vue'
 import useGlobalStore from '~/store/global'
 
 interface Props {
+  errors?: string[]
   labelText?: string
   size?: ElementSize
   labelTextPosition?: ElementPosition
@@ -52,31 +60,36 @@ const stateClasses = computed(() => ([
 </script>
 
 <style setup lang="scss">
+@use '~/scss/variables' as var;
+
 .label {
   display: block;
   height: auto;
   position: relative;
 
-  &.--top,
-  &.--bottom {
+  &__text {
+    display: block;
+    height: auto !important;
 
-    .label__text {
-      display: block;
-    }
-  }
-
-  &.--top {
-
-    .label__text {
+    &.--top {
       margin-bottom: 0.35rem;
     }
-  }
 
-  &.--bottom {
-
-    .label__text {
+    &.--bottom {
       margin-top: 0.35rem;
     }
+  }
+
+  &.--error {
+    .label__text {
+      color: var.$error;
+    }
+  }
+
+  &__error {
+    display: block;
+    color: var.$error;
+    margin-top: 0.25rem;
   }
 }
 </style>

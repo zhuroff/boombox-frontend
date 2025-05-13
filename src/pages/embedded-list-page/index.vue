@@ -4,6 +4,7 @@
     placeholderPreview="/img/album.webp"
     pageHeadingKey="headings.albumsPage"
     :isDeletable="true"
+    :isRefresh="isCreatedEntityFetched"
   >
     <template #header>
       <Button
@@ -33,28 +34,63 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { EntityListView } from '~widgets/EntityListView'
+import { useCreateEntity } from '~shared/model'
 import useGlobalStore from '~/store/global'
 import { Button } from '~shared/UI'
 import { Modal } from '~shared/UI'
 import { Form } from '~widgets/Form'
 import type { FormPayload } from '~widgets/Form/model/types'
 import { embeddedAlbumFormSchema } from '~entities/embedded'
+import { DatabaseService } from '~shared/api'
+import useSnackbar from '~/hooks/useSnackbar'
 
-const { globalGetters: { authConfig } } = useGlobalStore()
+const dbService = new DatabaseService()
+
+const { globalGetters: { authConfig, localize } } = useGlobalStore()
+const { setSnackbarMessage } = useSnackbar()
 
 const isCreateMode = ref(false)
+const entityKey = ref('embedded')
+const formData = ref<FormPayload | null>(null)
+const formSchema = reactive(embeddedAlbumFormSchema)
 
-const formSchema = embeddedAlbumFormSchema
+const isCreatingEnabled = computed(() => !!formData.value)
+const isAdmin = computed(() => authConfig.value.user?.role === 'admin')
 
-const isAdmin = computed(() => (
-  authConfig.value.user?.role === 'admin'
-))
+const {
+  isFetched: isCreatedEntityFetched
+} = useCreateEntity<any, FormPayload>(
+  entityKey,
+  formData,
+  dbService,
+  isCreatingEnabled
+)
 
-const createEmbeddedAlbum = (formData: FormPayload) => {
-  console.log(formData)
+const createEmbeddedAlbum = (formPayload: FormPayload) => {
+  let errorCount = 0
+
+  for (const [key] of formSchema.entries()) {
+    const formPayloadValue = formPayload[key] || ''
+    errorCount += formSchema.get(key)?.validator?.(formPayloadValue) || 0
+  }
+
+  if (errorCount === 0) {
+    formData.value = formPayload
+    isCreateMode.value = false
+  }  
 }
+
+watch(
+  isCreatedEntityFetched,
+  () => {
+    setSnackbarMessage({
+      message: localize('embeddedForm.entityCreated'),
+      type: 'success'
+    })
+  }
+)
 </script>
 
 <style lang="scss" scoped>

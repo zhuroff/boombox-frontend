@@ -2,6 +2,7 @@
   <div class="field">
     <FieldLabel
       :labelText="property.label?.labelText"
+      :errors="property.errorMessages"
     >
       <template #formInput>
         <component :is="fieldComponent" />
@@ -41,6 +42,7 @@ const fieldComponent = computed(() => {
                 name: props.property.name,
                 placeholder: props.property.placeholder,
                 refKey: props.property.refKey,
+                isError: !!props.property.errorMessages?.length,
                 onSelectOption: (value: string) => {
                   emit('setFormProperty', [props.property.name, value])
                 }
@@ -52,6 +54,7 @@ const fieldComponent = computed(() => {
                 name: props.property.name,
                 type: props.property.type,
                 placeholder: props.property.placeholder,
+                isError: !!props.property.errorMessages?.length,
                 onOnInput: (value: string) => {
                   emit('setFormProperty', [props.property.name, value])
                 }
@@ -65,6 +68,7 @@ const fieldComponent = computed(() => {
           name: props.property.name,
           type: props.property.type,
           placeholder: props.property.placeholder,
+          isError: !!props.property.errorMessages?.length,
           onOnInput: (value: string) => {
             emit('setFormProperty', [props.property.name, value])
           }

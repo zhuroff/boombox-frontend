@@ -103,3 +103,12 @@ export const getTimestamp = (value: number, unit: 's' | 'm' | 'h') => {
       throw new Error('Invalid unit. Use "h" for hours, "m" for minutes, or "s" for seconds.')
   }
 }
+
+export const cleanAndCapitalize = (str: string): string => {
+  const trimmedStr = str.trim().replace(/\s+/g, ' ')
+  return trimmedStr
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+}
+

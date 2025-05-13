@@ -2,7 +2,7 @@
   <li class="cardlist__item">
     <router-link
       class="cardlist__item-link"
-      :to="{ path: `/${entityKey}/${card._id}` }"
+      :to="{ path: `/${dynamicEntityKey}/${card._id}` }"
     >
       <div class="cardlist__item-image">
         <div
@@ -48,7 +48,7 @@
       isInverted
       isRounded
       className="cardlist__item-action"
-      @click="() => $emit('deleteEntity', { id: card._id, entityKey })"
+      @click="() => $emit('deleteEntity', { id: card._id, dynamicEntityKey })"
     />
   </li>
 </template>
@@ -75,6 +75,10 @@ const {
 
 const isAdmin = computed(() => (
   authConfig.value.user?.role === 'admin'
+))
+
+const dynamicEntityKey = computed(() => (
+  'frame' in props.card ? 'embedded' : props.entityKey || 'albums'
 ))
 
 const cardCaption = computed(() => (

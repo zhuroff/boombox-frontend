@@ -65,18 +65,24 @@ export const localesBY: LocaleDictionary = {
   embeddedForm: {
     title: 'Назва альбому',
     titlePlaceholder: 'Увядзiце назву альбому',
+    titleRequired: 'Назва альбому абавязковая',
     artist: 'Артыст',
     artistPlaceholder: 'Увядзiце iмя артыста',
+    artistRequired: 'Імя артыста абавязковае',
     genre: 'Жанр',
     genrePlaceholder: 'Увядзiце назву жанру',
+    genreRequired: 'Назва жанру абавязковая',
     period: 'Год выдання',
     periodPlaceholder: 'Увядзiце год выдання',
+    periodRequired: 'Год выдання абавязковы',
     frame: 'Код фрэйму',
     framePlaceholder: 'Увядзiце код фрэйму',
+    frameRequired: 'Код фрэйму абавязковы',
+    frameInvalid: 'Недапушчальны код фрэйму',
     collections: 'У калекцыi',
-    notFound: 'Нiчога не знойдзена ў катэгорыi {x}. Стварыце новую катэгорыю.',
     addAlbum: 'Дадаць альбом',
-    submit: 'Стварыць альбом'
+    submit: 'Стварыць альбом',
+    entityCreated: 'Альбом паспяхова створаны'
   },
   loginForm: {
     email: 'Email',

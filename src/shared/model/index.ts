@@ -1,3 +1,5 @@
 export { default as useGetList } from './useGetList'
 export { default as useGetPage } from './useGetPage'
 export { default as useSearch } from './useSearch'
+export { default as useCreateEntity } from './useCreateEntity'
+export { default as useUpdateEntity } from './useUpdateEntity'

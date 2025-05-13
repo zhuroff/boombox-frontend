@@ -1,5 +1,5 @@
 <template>
-  <div class="reflist">
+  <div :class="[{'--disabled': isCreatingEntity}, 'reflist']">
     <TextInput
       type="text"
       :name="name"
@@ -12,6 +12,15 @@
           ? debouncedAssigning(value.trim())
           : refQuery = ''
       }"
+    />
+
+    <Button
+      v-if="refQuery || selectedOption"
+      type="button"
+      icon="close"
+      class="reflist__clear"
+      isText
+      @click="clearInput"
     />
 
     <transition name="fade">
@@ -28,32 +37,28 @@
         >
           {{ option.label }}
         </li>
-      </ul>
-    </transition>
-
-    <transition name="fade">
-      <div
-        v-if="isCreateMode"
-        class="reflist__create"
-      >
-        <Button
-          type="button"
-          size="small"
-          :label="createButtonLocale"
+        <li
+          v-if="canBeCreated"
+          class="reflist__option --create"
           @click="createNewEntity"
-        />
-      </div>
+        >
+          <span>
+            {{ localize('createEntityLabel', name, searchQuery) }}
+          </span>
+        </li>
+      </ul>
     </transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useSearch } from '~shared/model'
+import { ref, computed, watch } from 'vue'
+import { useSearch, useCreateEntity } from '~shared/model'
 import type { Option } from '~shared/model/types'
 import { TextInput, Button } from '~shared/UI'
 import { DatabaseService } from '~/shared/api'
-import { debounce } from '~/utils'
+import { cleanAndCapitalize, debounce } from '~/utils'
+import useGlobalStore from '~/store/global'
 
 interface Props {
   modelValue?: string
@@ -75,8 +80,13 @@ const emit = defineEmits<{
 
 const dbService = new DatabaseService()
 
+const {
+  globalGetters: { localize }
+} = useGlobalStore()
+
 const refQuery = ref(props.modelValue || '')
 const selectedOption = ref<Option | null>(null)
+const isNewEntityQueryEnabled = ref(false)
 
 const selectOption = (option: Option) => {
   selectedOption.value = option
@@ -86,13 +96,24 @@ const selectOption = (option: Option) => {
 }
 
 const debouncedAssigning = debounce((value: string) => {
-  refQuery.value = value
+  refQuery.value = cleanAndCapitalize(value)
 }, 700)
 
 const searchQuery = computed(() => refQuery.value)
 const searchEntityKey = computed(() => props.refKey)
+const creatingPayload = computed(() => ({ value: refQuery.value }))
 
 const { searchResults, isSearchFetched } = useSearch(searchQuery, dbService, searchEntityKey)
+
+const {
+  data: createdEntity,
+  isFetching: isCreatingEntity
+} = useCreateEntity<Entity, { value: string }>(
+  searchEntityKey,
+  creatingPayload,
+  dbService,
+  isNewEntityQueryEnabled
+)
 
 const refList = computed(() => {
   return searchResults.value?.[0]?.data.map(({ _id, title }) => ({
@@ -102,20 +123,35 @@ const refList = computed(() => {
 })
 
 const isListOpen = computed(() => (
-  refQuery.value && isSearchFetched.value && refList.value.length > 0
+  refQuery.value && isSearchFetched.value && !isNewEntityQueryEnabled.value
 ))
 
-const isCreateMode = computed(() => (
-  refQuery.value && isSearchFetched.value && refList.value.length === 0
+const canBeCreated = computed(() => (
+  refQuery.value
+  && !searchResults.value?.[0]?.data.some(({ title }) => title === refQuery.value)
 ))
 
-const createButtonLocale = computed<[string, Array<string>]>(() => (
-  ['createEntityLabel', [props.name, searchQuery.value]]
-))
+const clearInput = () => {
+  refQuery.value = ''
+  selectedOption.value = null
+}
 
 const createNewEntity = () => {
-  console.log(searchQuery.value)
+  isNewEntityQueryEnabled.value = true
 }
+
+watch(
+  createdEntity,
+  (newVal) => {
+    if (newVal) {
+      isNewEntityQueryEnabled.value = false
+      selectOption({
+        label: newVal.title,
+        value: newVal._id
+      })
+    }
+  }
+)
 </script>
 
 <style lang="scss" scoped>
@@ -124,6 +160,13 @@ const createNewEntity = () => {
 .reflist {
   position: relative;
   width: 100%;
+
+  &__clear {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+  }
 
   &__options {
     position: absolute;
@@ -157,24 +200,15 @@ const createNewEntity = () => {
     &:hover {
       background: var.$paleMD;
     }
+
+    &.--create {
+      color: var.$info;
+    }
   }
 
-  &__create {
-    padding: 1rem;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background-color: var.$paleLW;
-    box-shadow: var.$shadowMedium;
-    border-bottom-left-radius: var.$borderRadiusSM;
-    border-bottom-right-radius: var.$borderRadiusSM;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &.--disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 </style> 

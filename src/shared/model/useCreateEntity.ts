@@ -6,9 +6,9 @@ const useCreateEntity = <T, U>(
   entityKey: Ref<string>,
   payload: Ref<U | null>,
   dbService: DatabaseService,
-  isEnabled: ComputedRef<boolean>
+  isEnabled: Ref<boolean> | ComputedRef<boolean>
 ) => {
-  const { refetch, isFetched, isError, data, error, isFetching } = useQuery<ListPageResponse<T>>({
+  const { refetch, isFetched, isError, data, error, isFetching } = useQuery<T>({
     queryKey: [entityKey],
     retry: 3,
     enabled: isEnabled,
