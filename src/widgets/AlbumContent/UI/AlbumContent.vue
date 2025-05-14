@@ -1,7 +1,7 @@
 <template>
   <div class="album">
     <slot name="hero"></slot>
-    <div class="album__content">
+    <div :class="`album__content --${cardsTemplate}`">
       <div
         class="album__main"
         ref="albumContent"
@@ -10,7 +10,7 @@
       </div>
       <div
         v-for="{ name, docs } in relatedAlbums"
-        class="album__related"
+        :class="`album__related --${cardsTemplate}`"
       >
         <div class="album__related-title">
           {{ localize('moreOf') }} {{ name }}
@@ -20,12 +20,12 @@
           :entityKey="entityKey"
           :isDraggable="false"
           :isDeletable="false"
-          template="col"
+          :template="cardsTemplate"
           placeholderPreview="/img/album.webp"
         />
       </div>
     </div>
-    <footer class="album__footer">
+    <footer :class="`album__footer --${cardsTemplate}`">
       <slot name="footer"></slot>
     </footer>
   </div>
@@ -33,14 +33,17 @@
 
 <script setup lang="ts">
 import useGlobalStore from '~/store/global'
-import { EntityCardList } from '~widgets/EntityCardList'
+import { EntityCardList } from '~features/cardlist'
 
 interface Props {
   relatedAlbums: RelatedAlbums[]
   entityKey: string
+  cardsTemplate?: 'col' | 'row' | 'offset'
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  cardsTemplate: 'col'
+})
 
 const { globalGetters: { localize } } = useGlobalStore()
 </script>
@@ -65,17 +68,23 @@ const { globalGetters: { localize } } = useGlobalStore()
     }
 
     @include var.media('>=laptop') {
-      display: grid;
-      grid-template-columns: calc(100% - (19.48% * 2) - 2rem) 19.48% 19.48%;
-      gap: 1rem;
+      &:not(.--row) {
+        display: grid;
+        grid-template-columns: calc(100% - (19.48% * 2) - 2rem) 19.48% 19.48%;
+        gap: 1rem;
+      }
     }
 
     @include var.media('>=desktop-lg') {
-      grid-template-columns: calc(100% - (260px * 2) - 2rem) 260px 260px;
+      &:not(.--row) {
+        grid-template-columns: calc(100% - (260px * 2) - 2rem) 260px 260px;
+      }
     }
 
     @include var.media('>=desktop-hg') {
-      max-width: 1700px;
+      &:not(.--row) {
+        max-width: 1700px;
+      }
     }
   }
 
@@ -103,10 +112,26 @@ const { globalGetters: { localize } } = useGlobalStore()
       text-align: center;
       margin-bottom: 0.75rem;
     }
+
+    &.--row {
+      max-width: calc(100% - var.$coverWidth - var.$mainPadding + var.$basicPadding);
+      margin-left: auto;
+      margin-bottom: var.$mainPadding;
+
+      .album__related-title {
+        text-align: left;
+        margin-left: var.$basicPadding;
+      }
+    }
   }
 
   &__footer {
     margin: var.$mainPadding;
+
+    &.--row {
+      max-width: calc(100% - var.$coverWidth - (var.$mainPadding * 2) - (var.$basicPadding * 2));
+      margin-left: auto;
+    }
   }
 }
 </style>

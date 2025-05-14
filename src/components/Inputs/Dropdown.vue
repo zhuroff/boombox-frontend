@@ -235,7 +235,7 @@ const applyValue = (option: DropdownItem) => {
           width: 1.75rem;
 
           & + .dropdown__options-label {
-            margin-left: 10px;
+            margin-left: var.$basicPadding;
           }
         }
       }

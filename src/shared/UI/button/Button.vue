@@ -129,7 +129,7 @@ const stateClasses = computed(() => [
       width: 1.75rem;
 
       & + .button__label {
-        margin-left: 10px;
+        margin-left: var.$basicPadding;
       }
     }
   }

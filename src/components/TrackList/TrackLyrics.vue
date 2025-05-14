@@ -84,9 +84,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
+import { useSnackbar } from '~shared/model'
 import { Loader, Button, TextareaInput } from '~shared/UI'
 import useGlobalStore from '~/store/global'
-import useSnackbar from '~/hooks/useSnackbar'
 import type { TrackLyricsResponse } from '~/types/Track'
 import trackServices from '~/services/track.services'
 
@@ -182,7 +182,7 @@ onMounted(() => {
 
 .lyrics {
   background-color: var.$paleLT;
-  border-radius: 10px;
+  border-radius: var.$basicPadding;
   width: 100%;
   max-width: 768px;
   height: calc(100vh - 50px);
@@ -247,7 +247,7 @@ onMounted(() => {
   }
 
   &__item {
-    margin-bottom: 10px;
+    margin-bottom: var.$basicPadding;
     display: flex;
     position: relative;
 
@@ -261,7 +261,7 @@ onMounted(() => {
 
     &_content {
       flex: 1 1 0;
-      margin-left: 10px;
+      margin-left: var.$basicPadding;
     }
 
     &_title {

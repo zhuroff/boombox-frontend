@@ -2,7 +2,7 @@
   <VueDraggableNext
     handle=".--drag"
     tag="ul"
-    :class="[`cardlist --${props.template}`]"
+    :class="[`cardlist --${template}`]"
     :animation="300"
     :disabled="!isDraggable"
     @end="(event) => emit('orderChanged', event)"
@@ -69,7 +69,7 @@ const entityCardComponent = computed(() => (
 .cardlist {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var.$basicPadding;
 
   &.--col {
     flex-direction: column;
@@ -97,40 +97,40 @@ const entityCardComponent = computed(() => (
     }
 
     @include var.media('<tablet') {
-      width: calc(50% - 10px);
+      width: calc(50% - var.$basicPadding);
     }
 
     @include var.media('>=tablet', '<desktop') {
-      width: calc(33.3333% - 10px);
+      width: calc(33.3333% - var.$basicPadding);
     }
 
     @include var.media('>=desktop', '<desktop-md') {
       &.--row {
-        width: calc(25% - 10px);
+        width: calc(25% - var.$basicPadding);
       }
 
       &.--offset {
-        width: calc(33.3333% - 10px);
+        width: calc(33.3333% - var.$basicPadding);
       }
     }
 
     @include var.media('>=desktop-md', '<=desktop-lg') {
       &.--row {
-        width: calc(20% - 10px);
+        width: calc(20% - var.$basicPadding);
       }
 
       &.--offset {
-        width: calc(33.3333% - 10px);
+        width: calc(33.3333% - var.$basicPadding);
       }
     }
 
     @include var.media('>=desktop-lg') {
       &.--row {
-        width: calc(16.6666% - 10px);
+        width: calc(16.6666% - var.$basicPadding);
       }
 
       &.--offset {
-        width: calc(20% - 10px);  
+        width: calc(20% - var.$basicPadding);  
       }
     }
 
@@ -152,7 +152,7 @@ const entityCardComponent = computed(() => (
       height: 100%;
 
       @include var.media('>=desktop') {
-        padding: 0 10px;
+        padding: 0 var.$basicPadding;
       }
     }
 
@@ -178,7 +178,7 @@ const entityCardComponent = computed(() => (
       @include var.media('>=desktop') {
         &:not(.--fixed) {
           &:hover {
-            transform: translateX(-10px);
+            transform: translateX(-#{var.$basicPadding});
             transition: transform 0.3s var.$animation;
 
             & + .cardlist__item-vinyl {

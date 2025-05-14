@@ -1,10 +1,10 @@
-import { computed, ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import type { DatabaseService } from '~shared/api'
 import { useGetList, useGetPage } from '~shared/model'
 
-const useAlbum = (dbService: DatabaseService) => {
+const useAlbum = (dbService: DatabaseService, entityKey?: Ref<string>) => {
   const preRandomState = ref('')
-  const pageEntityKey = ref('albums')
+  const pageEntityKey = ref(entityKey ||'albums')
 
   const relatedAlbumsReqConfig: RequestConfig = {
     page: 1,

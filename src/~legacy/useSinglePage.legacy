@@ -6,7 +6,7 @@ import type { BasicEntity, ResponseMessage } from '~/types/Common'
 // @ts-expect-error: fix
 import type { ListPageResponse } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
-import useSnackbar from './useSnackbar'
+import useSnackbar from '../shared/model/useSnackbar'
 import BookletState from '~/classes/BookletState'
 import dbServices from '~/services/database.services'
 import cloudServices from '~/services/cloud.services'

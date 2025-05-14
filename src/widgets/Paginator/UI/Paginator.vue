@@ -130,8 +130,8 @@ const switchLimit = (payload: [string, number | string | null]) => {
   &__select {
     height: 40px;
     min-width: 40px;
-    padding: 0 10px;
-    margin: 0 10px;
+    padding: 0 var.$basicPadding;
+    margin: 0 var.$basicPadding;
     cursor: pointer;
     text-align: center;
     border: 0;

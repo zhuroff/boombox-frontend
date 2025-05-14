@@ -273,7 +273,7 @@ onUnmounted(() => {
       .player__right {
         width: auto;
         padding-bottom: 0;
-        padding-right: 10px;
+        padding-right: var.$basicPadding;
 
         &-content {
           justify-content: flex-end;
@@ -629,7 +629,7 @@ onUnmounted(() => {
     align-items: center;
 
     @include var.media('<laptop') {
-      padding: 10px 25px;
+      padding: var.$basicPadding 25px;
       width: 100vw;
     }
 
@@ -637,9 +637,9 @@ onUnmounted(() => {
       appearance: none;
       background-color: var.$white;
       cursor: pointer;
-      margin: 0 10px;
+      margin: 0 var.$basicPadding;
       border: 0;
-      border-radius: 10px;
+      border-radius: var.$basicPadding;
 
       @include var.media('<laptop') {
         flex: 1 1 0;
@@ -648,19 +648,19 @@ onUnmounted(() => {
 
       @include var.media('>=laptop') {
         width: 326px;
-        height: 10px;
+        height: var.$basicPadding;
       }
 
       &::-webkit-progress-bar {
         border: 0;
-        border-radius: 10px;
+        border-radius: var.$basicPadding;
 
         @include var.media('<laptop') {
           height: 5px;
         }
 
         @include var.media('>=laptop') {
-          height: 10px;
+          height: var.$basicPadding;
         }
       }
 
@@ -736,7 +736,7 @@ onUnmounted(() => {
 
     &-range {
       position: absolute;
-      right: -10px;
+      right: -#{var.$basicPadding};
       top: 0;
       height: 100%;
       padding: 0 40px 0 15px;
@@ -755,8 +755,8 @@ onUnmounted(() => {
       &::-webkit-slider-runnable-track {
         background-color: var.$accent;
         width: 100%;
-        height: 10px;
-        border-radius: 10px;
+        height: var.$basicPadding;
+        border-radius: var.$basicPadding;
       }
 
       &::-webkit-slider-thumb {

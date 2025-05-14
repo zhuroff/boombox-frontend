@@ -6,16 +6,15 @@
       @callSearchBlock="isSearchMode = true"
       @addToCollection="addToCollection"
       @getWikiInfo="getWikiInfo"
+      @deleteAlbum="deleteAlbum"
     >
-      <template #hero>
-        <div class="album__hero-heading">
-          <strong class="album__hero-title">
-            {{ album.title }}
-          </strong>
-        </div>
+      <template #heading>
+        <h1 class="album__hero-heading">
+          {{ album.title }}
+        </h1>
       </template>
-      <slot name="info"></slot>
     </component>
+
     <Modal
       :isModalActive="isSearchMode"
       @closeModal="isSearchMode = false"
@@ -49,6 +48,7 @@ interface Emits {
   (e: 'getRandomAlbum'): void
   (e: 'addToCollection'): void
   (e: 'getWikiInfo'): void
+  (e: 'deleteAlbum'): void
 }
 
 const props = defineProps<Props>()
@@ -114,6 +114,7 @@ const PageHeadComponent = computed(() => {
 const getRandomAlbum = () => emit('getRandomAlbum')
 const addToCollection = () => emit('addToCollection')
 const getWikiInfo = () => emit('getWikiInfo')
+const deleteAlbum = () => emit('deleteAlbum')
 </script>
 
 <style lang="scss">
@@ -160,47 +161,11 @@ const getWikiInfo = () => emit('getWikiInfo')
       flex-direction: column;
     }
 
-    &-head {
-      display: flex;
-    }
-
-    &-summary {
-      color: var.$paleDP;
-      line-height: 1.5;
-    }
-
     &-heading {
-      color: var.$paleDP;
       margin: 0.5rem 0 1.75rem;
       max-width: 850px;
-    }
-
-    &-title {
       color: var.$warning;
       @include var.serif(2.25rem);
-    }
-
-    &-category {
-      color: inherit;
-
-      &.--link {
-        color: var.$white;
-      }
-
-      &[disabled=true] {
-        pointer-events: none;
-        cursor: default;
-      }
-    }
-
-    &-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: flex-end;
-      position: absolute;
-      bottom: 0;
-      right: 0;
     }
   }
 }

@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import type { ResponseMessage } from '~/types/Common'
 import type { GatheringCreateReq, GatheringCreateRes, GatheringUpdateRes } from '~/types/ReqRes'
 import useGlobalStore from '~/store/global'
-import useSnackbar from './useSnackbar'
+import { useSnackbar } from '~shared/model'
 import dbServices from '~/services/database.services'
 
 export const useGathering = <T>() => {

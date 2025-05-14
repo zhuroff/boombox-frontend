@@ -5,7 +5,7 @@
     />
   </div>
   <div class="album__hero-info">
-    <slot name="hero"></slot>
+    <slot name="heading"></slot>
     <div class="album__hero-summary">
       {{ localize('conjugated.tracks.plural') }}:&nbsp;
       <span class="album__hero-category">{{ album.tracks.length }}</span>

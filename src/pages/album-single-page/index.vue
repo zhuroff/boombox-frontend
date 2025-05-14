@@ -42,7 +42,7 @@
       :isModalActive="isCollectionsModalEnabled"
       @closeModal="isCollectionsModalEnabled = false"
     >
-      <GatheringBlock
+      <Gathering
         :albumId="album?._id"
         :isFetching="isGatheringFetching"
         :gatherings="collections"
@@ -64,7 +64,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { useAlbum, AlbumContent } from '~features/album'
+import { useAlbum, AlbumContent } from '~widgets/AlbumContent'
+import { PageHeadAdapter } from '~widgets/PageHeads'
+import { Gathering } from '~widgets/Gathering'
+
 import { useCollections } from '~features/collection'
 import { DiscogsTable } from '~features/discogs'
 import { WikiFrame } from '~features/wiki'
@@ -72,8 +75,6 @@ import { WikiFrame } from '~features/wiki'
 import { Modal, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 
-import PageHeadAdapter from '~/components/PageHeadAdapter/PageHeadAdapter.vue'
-import GatheringBlock from '~/components/Gatherings/GatheringBlock.vue'
 import TrackList from '~/components/TrackList/TrackList.vue'
 
 const dbService = new DatabaseService()

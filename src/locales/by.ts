@@ -188,5 +188,12 @@ export const localesBY: LocaleDictionary = {
     emptyGenres: 'Калекцыі пакуль няма',
     emptyYears: 'Перыядаў пакуль няма'
   },
-  createEntityLabel: 'Стварыць iстоту "{x}" з назвай: "{x}"'
+  createEntityLabel: 'Стварыць iстоту "{x}" з назвай: "{x}"',
+  heroActions: {
+    search: 'Пошук',
+    wiki: 'Атрымаць iнфармацыю з Вiкіпедыі',
+    addToCollection: 'Дадаць у калекцыю',
+    getRandomAlbum: 'Выпадковы альбом',
+    deleteAlbum: 'Выдаліць альбом'
+  }
 }

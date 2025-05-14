@@ -188,5 +188,12 @@ export const localesEN: LocaleDictionary = {
     emptyGenres: 'There are no any collection yet',
     emptyYears: 'There are no any periods yet'
   },
-  createEntityLabel: 'Create entity "{x}" with name: "{x}"'
+  createEntityLabel: 'Create entity "{x}" with name: "{x}"',
+  heroActions: {
+    search: 'Search',
+    wiki: 'Get wiki info',
+    addToCollection: 'Add to collection',
+    getRandomAlbum: 'Get random album',
+    deleteAlbum: 'Delete album'
+  }
 }

@@ -21,7 +21,7 @@
 import { ref } from 'vue'
 import Sidebar from '~/components/Sidebar.vue'
 import Player from '~/components/Player/Player.vue'
-import Snackbar from '~/components/Snackbar.vue'
+import { Snackbar } from '~shared/UI'
 
 const main = ref(null)
 const isNavOpened = ref(false)

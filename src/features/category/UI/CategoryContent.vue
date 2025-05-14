@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { CategoryHero } from '~widgets/CategoryHero'
-import { EntityCardList } from '~widgets/EntityCardList'
+import { EntityCardList } from '~features/cardlist'
 
 interface Props {
   isFetched: boolean

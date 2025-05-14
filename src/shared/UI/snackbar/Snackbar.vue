@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import useSnackbar from '~/hooks/useSnackbar'
+import { useSnackbar } from '~shared/model'
 
 const { snackbarQueue, closeSnackbar } = useSnackbar()
 </script>
@@ -40,7 +40,7 @@ const { snackbarQueue, closeSnackbar } = useSnackbar()
     background-color: var.$black;
     padding: 15px 20px;
     border-radius: 7px;
-    margin-top: 10px;
+    margin-top: var.$basicPadding;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.4);
   }
 

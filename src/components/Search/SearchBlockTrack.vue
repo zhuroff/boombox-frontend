@@ -121,7 +121,7 @@ const {
       margin-left: auto;
 
       & > * {
-        margin-left: 10px;
+        margin-left: var.$basicPadding;
       }
 
       .tracklist__row-cell {

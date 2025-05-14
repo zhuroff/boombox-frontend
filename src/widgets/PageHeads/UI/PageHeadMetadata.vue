@@ -1,13 +1,6 @@
 <template>
-  <div class="album__hero-cover">
-    <div
-      v-html="album.frame"
-      class="album__frame"
-    />
-  </div>
-  <div class="album__hero-info">
-    <slot name="hero"></slot>
-    <div class="album__hero-summary">
+  <div class="album__hero-metadata">
+    <div class="album__hero-metadata-row">
       {{ localize('embeddedForm.artist') }}:&nbsp;
       <RouterLink
         v-if="album.artist?.title"
@@ -17,7 +10,9 @@
       >
         {{ album.artist.title }}
       </RouterLink>
-      <br />
+    </div>
+
+    <div class="album__hero-metadata-row">
       {{ localize('embeddedForm.period') }}:&nbsp;
       <RouterLink
         v-if="album.period?.title"
@@ -27,7 +22,9 @@
       >
         {{ album.period.title }}
       </RouterLink>
-      <br />
+    </div>
+
+    <div class="album__hero-metadata-row">
       {{ localize('embeddedForm.genre') }}:&nbsp;
       <RouterLink
         v-if="album.genre?._id"
@@ -38,46 +35,63 @@
         {{ album.genre.title }}
       </RouterLink>
     </div>
-    <div class="album__hero-actions">
-      <Button
-        icon="loupe"
-        isRounded
-        isInverted
-        @click="callSearchBlock"
-      />
-      <Button
-        icon="wiki"
-        isRounded
-        isInverted
-      />
-      <Button
-        icon="target"
-        isRounded
-        isInverted
-        @click="getRandomAlbum"
-      />
+
+    <div
+      v-if="'tracks' in album"
+      class="album__hero-metadata-row"
+    >
+      {{ localize('conjugated.tracks.plural') }}:&nbsp;
+      <span class="album__hero-category">
+        {{ album.tracks.length }}
+      </span>
+    </div>
+
+    <div
+      v-if="length"
+      class="album__hero-metadata-row"
+    >
+      {{ localize('totalLength') }}:&nbsp;
+      <span class="album__hero-category">
+        {{ length }}
+    </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import useGlobalStore from '~/store/global'
-import { Button } from '~shared/UI'
 
 interface Props {
-  album: Embedded
+  album: Album | Embedded
+  length?: string
 }
-
-interface Emits {
-  (e: 'getRandomAlbum'): void
-  (e: 'callSearchBlock'): void
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
 
 const { globalGetters: { localize } } = useGlobalStore()
 
-const getRandomAlbum = () => emit('getRandomAlbum')
-const callSearchBlock = () => emit('callSearchBlock')
+defineProps<Props>()
 </script>
+
+<style scoped lang="scss">
+@use '~/scss/variables' as var;
+
+.album__hero {
+
+  &-metadata {
+    color: var.$paleDP;
+    line-height: 1.5;
+  }
+
+  &-category {
+    color: inherit;
+
+    &.--link {
+      color: var.$white;
+    }
+
+    &[disabled=true] {
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+}
+</style>
