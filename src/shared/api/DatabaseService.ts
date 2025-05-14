@@ -71,6 +71,19 @@ export default class DatabaseService {
     }
   }
 
+  deleteEntity = async <T>(entityKey: string, id: string | null) => {
+    if (!id) {
+      throw new Error('Entity id is not defined')
+    }
+
+    try {
+      const response = await api.delete<T>(`/api/${entityKey}/${id}`)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
   search = async (payload: SearchPayload) => {
     try {
       const response = await api.post<SearchResultState[]>(`/api/search`, payload)

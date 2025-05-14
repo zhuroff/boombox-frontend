@@ -27,7 +27,7 @@
           :isDraggable="isDraggable"
           :isDeletable="isDeletable"
           :placeholderPreview="placeholderPreview"
-          @deleteEntity="confirmDelete"
+          @deleteEntity="(payload: DeletePayload) => deletedEntityId = payload.id"
         />
         <Paginator
           v-if="isPaginated"
@@ -38,17 +38,16 @@
       </section>
     </transition-group>
     <Modal
-      v-if="isDeletable && deletePayload"
-      :isModalActive="deletePayload !== null"
-      @closeModal="deletePayload = null"
+      :isModalActive="!!isDeletable && !!deletedEntityId"
+      @closeModal="deletedEntityId = null"
     >
       <Confirmation
         :message="localize('delConfirmMessage')"
-        @confirm="deleteConfirm"
-        @reject="deletePayload = null"
+        @confirm="isDeleteConfirmed = true"
+        @reject="deletedEntityId = null"
       >
         <Loader
-          v-if="deletePayload.isPending"
+          v-if="isDeleting"
           mode="light"
         />
       </Confirmation>
@@ -63,7 +62,7 @@ import { Paginator, usePaginator } from '~widgets/Paginator'
 import { EntityCardList } from '~widgets/EntityCardList'
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import { useGetList } from '~shared/model'
+import { useGetList, useDeleteEntity } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 
 import useGlobalStore from '~/store/global'
@@ -82,6 +81,9 @@ const props = defineProps<Props>()
 const dbService = new DatabaseService()
 
 const { globalGetters: { localize } } = useGlobalStore()
+
+const deletedEntityId = ref<string | null>(null)
+const isDeleteConfirmed = ref(false)
 
 const docsLimit = ref((() => {
   const cachedDocsLimit = localStorage.getItem(`docs-limit:${props.entityKey}`)
@@ -110,24 +112,21 @@ const listQueryConfig = computed(() => ({
 }))
 
 const { data, refetch, isFetched, isFetching } = useGetList<BasicEntity>(listQueryConfig, dbService)
-
-const deletePayload = ref<DeletePayload | null>(null)
+const {
+  isFetched: isDeleted,
+  isFetching: isDeleting
+} = useDeleteEntity<BasicEntity>(
+  props.entityKey,
+  deletedEntityId,
+  dbService,
+  isDeleteConfirmed
+)
 
 const docsCount = computed(() => String(data.value?.pagination.totalDocs || 0))
 
 const isPaginated = computed(() => (
   isFetched.value && data.value?.pagination.totalPages > 1
 ))
-
-const confirmDelete = (payload: DeletePayload) => {
-  deletePayload.value = payload
-}
-
-const deleteConfirm = () => {
-  if (!deletePayload.value) return
-
-  deletePayload.value.isPending = true
-}
 
 watchEffect(() => {
   if (isFetched.value) {
@@ -141,6 +140,16 @@ watch(
   (value) => {
     if (value) {
       refetch()
+    }
+  }
+)
+
+watch(
+  () => isDeleted.value,
+  (value) => {
+    if (value) {
+      deletedEntityId.value = null
+      isDeleteConfirmed.value = false
     }
   }
 )

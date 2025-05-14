@@ -27,11 +27,11 @@ export default {
     return response.data
   },
 
-  async deleteEntity<T>(entityKey: string, id: string): Promise<T> {
-    const response = await api.delete<T>(`/api/${entityKey}/${id}`)
-    // commonServices.errorChecker(response.status)
-    return response.data
-  },
+  // async deleteEntity<T>(entityKey: string, id: string): Promise<T> {
+  //   const response = await api.delete<T>(`/api/${entityKey}/${id}`)
+  //   // commonServices.errorChecker(response.status)
+  //   return response.data
+  // },
 
   // async getEntityList<T>(entityKey: string, config: RequestConfig) {
   //   const response = await api.post<T>(`/api/${entityKey}`, config)

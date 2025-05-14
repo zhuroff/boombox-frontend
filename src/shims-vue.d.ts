@@ -201,7 +201,6 @@ interface BasicEntity {
 interface DeletePayload {
   id: string
   entityKey: string
-  isPending?: boolean
 }
 
 interface AlbumItem extends Required<BasicEntity> {
