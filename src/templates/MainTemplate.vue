@@ -21,7 +21,7 @@
 import { ref } from 'vue'
 import Sidebar from '~/components/Sidebar.vue'
 import Player from '~/components/Player/Player.vue'
-import Snackbar from '~/components/Snackbar.vue'
+import { Snackbar } from '~shared/UI'
 
 const main = ref(null)
 const isNavOpened = ref(false)
@@ -110,6 +110,12 @@ const navHandler = () => {
 
   .content {
     padding: 2rem 1rem var.$mainPadding 1rem;
+
+    @include var.media('>=laptop') {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - (var.$desktopHeaderHeight + var.$playerHeight));
+    }
   }
 }
 </style>

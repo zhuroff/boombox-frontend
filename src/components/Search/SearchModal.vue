@@ -42,7 +42,7 @@ import useGlobalStore from '~/store/global'
 import SearchWrapper from './SearchWrapper.vue'
 import SearchResults from './SearchResults.vue'
 import SearchBlock from './SearchBlock.vue'
-import TextInput from '../Form/TextInput.vue'
+import { TextInput } from '~shared/UI'
 import SearchBlockTrack from './SearchBlockTrack.vue'
 
 interface Props {

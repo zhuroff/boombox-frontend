@@ -1,6 +1,6 @@
 <template>
   <div class="search__results">
-    <Preloader
+    <Loader
       v-if="isFetching"
       mode="light"
     />
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import Preloader from '~/components/Preloader.vue'
+import { Loader } from '~shared/UI'
 
 interface Props {
   isEmpty: boolean

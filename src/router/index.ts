@@ -3,78 +3,74 @@ import { createRouter, createWebHistory, RouterView } from 'vue-router'
 const routes: Array<any> = [
   {
     path: '/',
-    name: 'home',
-    component: import(/* webpackChunkName: 'home' */ '~/pages/index.vue')
+    name: 'home-page',
+    component: () => import(/* webpackChunkName: 'home-page' */ '~/pages/index.vue')
   },
   {
     path: '/albums',
-    name: 'albums',
     component: RouterView,
     children: [
       {
         path: '/albums',
-        name: 'album-list',
+        name: 'album-list-page',
         meta: { navLocaleKey: 'albums' },
-        component: () => import(/* webpackChunkName: 'album-list' */ '~/pages/albums/AlbumsList.vue')
+        component: () => import(/* webpackChunkName: 'album-list-page' */ '~pages/album-list-page/index.vue')
       },
       {
         path: '/albums/:id',
-        name: 'album-page',
-        component: () => import(/* webpackChunkName: 'album-page' */ '~/pages/albums/SinglePage/index.vue')
+        name: 'album-single-page',
+        component: () => import(/* webpackChunkName: 'album-single-page' */ '~/pages/album-single-page/index.vue')
       }
     ]
   },
   {
     path: '/embedded',
-    name: 'embedded',
     component: RouterView,
     children: [
       {
         path: '/embedded',
-        name: 'embedded-list',
+        name: 'embedded-list-page',
         meta: { navLocaleKey: 'embedded' },
-        component: () => import(/* webpackChunkName: 'embedded-list' */ '~/pages/embedded/EmbeddedsList.vue')
+        component: () => import(/* webpackChunkName: 'embedded-list-page' */ '~/pages/embedded-list-page/index.vue')
       },
       {
         path: '/embedded/:id',
-        name: 'embedded-single',
-        component: () => import(/* webpackChunkName: 'embedded-single' */ '~/pages/embedded/EmbeddedPage.vue')
+        name: 'embedded-single-page',
+        component: () => import(/* webpackChunkName: 'embedded-single-page' */ '~/pages/embedded-single-page/index.vue')
       }
     ]
   },
   {
     path: '/compilations',
-    name: 'compilations',
     component: RouterView,
     children: [
       {
         path: '/compilations',
-        name: 'compilation-list',
+        name: 'compilation-list-page',
         meta: { navLocaleKey: 'compilations' },
-        component: () => import(/* webpackChunkName: 'compilation-list' */ '~/pages/compilations/CompilationsList.vue')
+        component: () => import(/* webpackChunkName: 'compilation-list-page' */ '~/pages/compilation-list-page/index.vue')
       },
       {
         path: '/compilations/:id',
-        name: 'compilation-single',
-        component: () => import(/* webpackChunkName: 'compilation-single' */ '~/pages/compilations/CompilationPage.vue')
+        name: 'compilation-single-page',
+        component: () => import(/* webpackChunkName: 'compilation-single-page' */ '~/pages/compilation-single-page/index.vue')
       }
     ]
   },
   {
     path: '/collections',
-    name: 'collections',
     component: RouterView,
     children: [
       {
         path: '/collections',
-        name: 'collection-list',
+        name: 'collection-list-page',
         meta: { navLocaleKey: 'collections' },
-        component: () => import(/* webpackChunkName: 'collection-list' */ '~/pages/collections/CollectionList.vue')
+        component: () => import(/* webpackChunkName: 'collection-list-page' */ '~/pages/collection-list-page/index.vue')
       },
       {
         path: '/collections/:id',
-        name: 'collection-single',
-        component: () => import(/* webpackChunkName: 'collection-single' */ '~/pages/collections/CollectionSingle.vue')
+        name: 'collection-single-page',
+        component: () => import(/* webpackChunkName: 'collection-single-page' */ '~/pages/collection-single-page/index.vue')
       }
     ]
   },
@@ -103,55 +99,52 @@ const routes: Array<any> = [
   },
   {
     path: '/artists',
-    name: 'artists',
     component: RouterView,
     children: [
       {
         path: '/artists',
-        name: 'artist-list',
+        name: 'artist-list-page',
         meta: { navLocaleKey: 'artists' },
-        component: () => import(/* webpackChunkName: 'artist-list' */ '~/pages/artists/ArtistList.vue')
+        component: () => import(/* webpackChunkName: 'artist-list-page' */ '~/pages/artist-list-page/index.vue')
       },
       {
         path: '/artists/:id',
-        name: 'artist-page',
-        component: () => import(/* webpackChunkName: 'artist-page' */ '~/pages/artists/ArtistPage.vue')
+        name: 'artist-single-page',
+        component: () => import(/* webpackChunkName: 'artist-single-page' */ '~/pages/artist-single-page/index.vue')
       }
     ]
   },
   {
     path: '/genres',
-    name: 'genres',
     component: RouterView,
     children: [
       {
         path: '/genres',
-        name: 'genre-list',
+        name: 'genre-list-page',
         meta: { navLocaleKey: 'genres' },
-        component: () => import(/* webpackChunkName: 'genre-list' */ '~/pages/genres/GenreList.vue')
+        component: () => import(/* webpackChunkName: 'genre-list-page' */ '~/pages/genre-list-page/index.vue')
       },
       {
         path: '/genres/:id',
-        name: 'genre-single',
-        component: () => import(/* webpackChunkName: 'genre-single' */ '~/pages/genres/GenreSingle.vue')
+        name: 'genre-single-page',
+        component: () => import(/* webpackChunkName: 'genre-single-page' */ '~/pages/genre-single-page/index.vue')
       }
     ]
   },
   {
     path: '/periods',
-    name: 'periods',
     component: RouterView,
     children: [
       {
         path: '/periods',
-        name: 'period-list',
+        name: 'period-list-page',
         meta: { navLocaleKey: 'periods' },
-        component: () => import(/* webpackChunkName: 'period-list' */ '~/pages/periods/PeriodList.vue')
+        component: () => import(/* webpackChunkName: 'period-list-page' */ '~/pages/period-list-page/index.vue')
       },
       {
         path: '/periods/:id',
-        name: 'period-single',
-        component: () => import(/* webpackChunkName: 'period-single' */ '~/pages/periods/PeriodSingle.vue')
+        name: 'period-single-page',
+        component: () => import(/* webpackChunkName: 'period-single-page' */ '~/pages/period-single-page/index.vue')
       }
     ]
   },

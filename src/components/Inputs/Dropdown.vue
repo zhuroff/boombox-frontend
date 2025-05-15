@@ -51,8 +51,7 @@ import { computed, ref } from 'vue'
 import type { ComputedRef, Ref, StyleValue } from 'vue'
 import type { DropdownItem } from '~/types/Common'
 import useGlobalStore from '~/store/global'
-import Button from '../Button.vue'
-import Sprite from '../Sprite/Sprite.vue'
+import { Button, Sprite } from '~shared/UI'
 
 interface Props {
   items: DropdownItem[]
@@ -235,7 +234,7 @@ const applyValue = (option: DropdownItem) => {
           width: 1.75rem;
 
           & + .dropdown__options-label {
-            margin-left: 10px;
+            margin-left: var.$basicPadding;
           }
         }
       }

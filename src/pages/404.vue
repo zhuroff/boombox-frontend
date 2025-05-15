@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import useGlobalStore from '~/store/global'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 
 const router = useRouter()
 

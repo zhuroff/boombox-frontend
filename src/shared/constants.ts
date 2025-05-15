@@ -1,0 +1,1 @@
+export const DEFAULT_PAGE_DOCS_LIMIT = 30

@@ -1,7 +1,7 @@
 export const localesEN: LocaleDictionary = {
   languages: {
     en: 'English',
-    by: 'Belarusian'
+    by: 'Беларуская'
   },
   cancel: 'Cancel',
   delete: 'Delete',
@@ -65,15 +65,24 @@ export const localesEN: LocaleDictionary = {
   embeddedForm: {
     title: 'Album title',
     titlePlaceholder: 'Enter the album title',
+    titleRequired: 'Album title is required',
     artist: 'Artist',
     artistPlaceholder: 'Enter the artist name',
+    artistRequired: 'Artist name is required',
     genre: 'Genre',
+    genrePlaceholder: 'Enter the genre title',
+    genreRequired: 'Genre title is required',
     period: 'Period',
+    periodPlaceholder: 'Enter the year of release',
+    periodRequired: 'Year of release is required',
     frame: 'Frame code',
+    framePlaceholder: 'Enter the frame code snippet',
+    frameRequired: 'Frame code is required',
+    frameInvalid: 'Invalid frame code',
     collections: 'In collection',
-    notFound: 'Nothing was found among {x}. Create a new one.',
     addAlbum: 'Add album',
-    submit: 'Create album'
+    submit: 'Create album',
+    entityCreated: 'Embedded album was successfully created'
   },
   loginForm: {
     email: 'Email',
@@ -178,5 +187,13 @@ export const localesEN: LocaleDictionary = {
   toy: {
     emptyGenres: 'There are no any collection yet',
     emptyYears: 'There are no any periods yet'
+  },
+  createEntityLabel: 'Create entity "{x}" with name: "{x}"',
+  heroActions: {
+    search: 'Search',
+    wiki: 'Get wiki info',
+    addToCollection: 'Add to collection',
+    getRandomAlbum: 'Get random album',
+    deleteAlbum: 'Delete album'
   }
 }

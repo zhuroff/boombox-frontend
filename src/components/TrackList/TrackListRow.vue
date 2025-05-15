@@ -65,14 +65,14 @@
 import { ref, computed } from 'vue'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 import TrackItemAdd from './TrackItemAdd.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
 import TrackItemCompilation from './TrackItemCompilation.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
-import Modal from '~/components/Modal.vue'
+import { Modal } from '~shared/UI'
 import TrackLyrics from './TrackLyrics.vue'
 
 interface Props {

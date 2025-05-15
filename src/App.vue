@@ -3,7 +3,7 @@
     v-if="isAuthChecking"
     class="app-preloading"
   >
-    <Preloader mode="light" />
+    <Loader mode="light" />
   </div>
   <component
     v-else
@@ -15,9 +15,9 @@
 
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
+import { Loader } from '~shared/UI'
 import api from '~/api'
 import useGlobalStore from '~/store/global'
-import Preloader from '~/components/Preloader.vue'
 import MainTemplate from '~/templates/MainTemplate.vue'
 import UnauthTemplate from '~/templates/UnauthTemplate.vue'
 

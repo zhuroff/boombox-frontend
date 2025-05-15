@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import usePlaylist from '~/store/playlist'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import { Sprite } from '~shared/UI'
 
 const {
   playerActions: { crackleSwitch }

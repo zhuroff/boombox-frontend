@@ -11,9 +11,9 @@
 </template>
 
 <script setup lang="ts">
+import { Form, type FormPayload, type FormSchemaProperty } from '~widgets/form'
 import api from '../api'
 import useGlobalStore from '~/store/global'
-import Form from '~/components/Form/Form.vue'
 
 const {
   globalActions: { setAuthConfig }
@@ -22,27 +22,43 @@ const {
 const formSchema = new Map<string, FormSchemaProperty>([
   ['email', {
     id: 'login-email',
-    name: 'loginForm.email',
+    name: 'email',
     placeholder: 'loginForm.emailPlaceholder',
     required: true,
     type: 'email',
     label: {
       labelText: 'loginForm.email'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      if (!value) {
+        this.errorMessages?.push('loginForm.emailRequired')
+      }
+
+      return this.errorMessages?.length || 0
     }
   }],
   ['password', {
     id: 'login-password',
-    name: 'loginForm.password',
+    name: 'password',
     placeholder: 'loginForm.passwordPlaceholder',
     required: true,
     type: 'password',
     label: {
       labelText: 'loginForm.password'
+    },
+    errorMessages: [],
+    validator<T = string>(value: T) {
+      if (!value) {
+        this.errorMessages?.push('loginForm.passwordRequired')
+      }
+
+      return this.errorMessages?.length || 0
     }
   }]
 ])
 
-const login = async (formData: CustomFormData) => {
+const login = async (formData: FormPayload) => {
   try {
     const { data } = await api.post<AuthResponse>('api/users/login', formData)
     setAuthConfig('isAuthenticated', true)
@@ -69,6 +85,7 @@ const login = async (formData: CustomFormData) => {
     padding: 25px;
     width: 100%;
     max-width: 500px;
+    height: auto;
 
     .form {
       display: flex;

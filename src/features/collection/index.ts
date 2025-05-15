@@ -1,0 +1,1 @@
+export { default as useCollections } from './model/useCollections'

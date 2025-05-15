@@ -105,35 +105,7 @@ interface LocaleDictionary {
   [key: string]: string | LocaleDictionary
 }
 
-interface Pagination {
-  totalDocs: number
-  totalPages: number
-  page: number
-}
-
 type SortingValue = Record<string, 1 | -1>
-
-interface UsePaginationProps {
-  isRouted?: boolean
-}
-
-interface PaginationState extends Pick<Pagination, 'page'> {
-  limit: number
-  sort: SortingValue
-}
-
-interface PaginationConfig {
-  limiter?: number[]
-  increment?: true
-  decrement?: true
-  selected?: number
-  totalDocs: number,
-  totalPages: number
-}
-
-type PaginationStateSetter = <T extends keyof PaginationState>(key: T, value: PaginationState[T]) => void
-
-type PaginationConfigSetter = <T extends keyof PaginationConfig>(key: T, value: PaginationConfig[T]) => void
 
 interface RandomEntityReqFilter {
   from: string
@@ -152,7 +124,6 @@ type RequestConfig = PaginationState & {
 }
 
 interface UseEntityListPayload {
-  // qEntity: string
   entityKey: string
   requestConfig: RequestConfig
 }
@@ -230,7 +201,6 @@ interface BasicEntity {
 interface DeletePayload {
   id: string
   entityKey: string
-  isPending?: boolean
 }
 
 interface AlbumItem extends Required<BasicEntity> {
@@ -343,66 +313,6 @@ type ElementSize = 'small' | 'medium' | 'large'
 
 type ElementPosition = 'top' | 'right' | 'bottom' | 'left'
 
-interface InputLabelConfig {
-  labelText: string
-  labelTextPosition?: 'right' | 'left'
-  size?: ElementSize
-  isError?: boolean
-}
-
-interface BaseInputFieldSchema {
-  name: string
-  id?: string
-  required?: boolean
-  disabled?: boolean
-  readonly?: boolean
-  refKey?: string
-  defaultValue?: string
-  size?: ElementSize
-  label?: InputLabelConfig
-}
-
-interface TextInputFieldSchema extends BaseInputFieldSchema {
-  type: 'text' | 'email' | 'password'
-  placeholder?: string
-}
-
-interface TextareaInputFieldSchema extends BaseInputFieldSchema {
-  type: 'textarea'
-  placeholder?: string
-  rows?: number
-}
-
-interface NumberInputFieldSchema extends BaseInputFieldSchema {
-  type: 'number' | 'range'
-  minValue?: number
-  maxValue?: number
-  placeholder?: string
-}
-
-interface CheckboxInputFieldSchema extends BaseInputFieldSchema {
-  type: 'checkbox' | 'radio'
-}
-
-interface FileInputFieldSchema extends BaseInputFieldSchema {
-  type: 'file'
-}
-
-interface SelectInputFieldSchema extends BaseInputFieldSchema {
-  type: 'select' | 'multiselect'
-  options: Array<{ label: string, value: string }>
-}
-
-type FormSchemaProperty = 
-  | TextInputFieldSchema
-  | TextareaInputFieldSchema
-  | NumberInputFieldSchema
-  | CheckboxInputFieldSchema
-  | FileInputFieldSchema
-  | SelectInputFieldSchema
-  
-type CustomFormData = Record<string, string | File>
-
 interface SearchPayload {
   query: string
   key?: string
@@ -418,69 +328,6 @@ interface SearchResultState {
 interface WikiSearchResult {
   title: string
   pageid: number
-}
-
-interface DiscogsReleaseRow {
-  id: number
-  country: string
-  cover: string
-  releaseFormat: string[]
-  genre: string[]
-  label: string[]
-  pageURL: string
-  releaseTitle: string
-  releaseYear: string
-}
-
-interface DiscogsData {
-  results: Map<number, DiscogsReleaseRow>
-  isFetched: boolean
-}
-
-interface DiscogsCompanies {
-  id: number
-  catno: string
-  entity_type_name: string
-  name: string
-}
-
-interface DiscogsArtists {
-  id: number
-  name: string
-  role: string
-  tracks: string
-}
-
-interface DiscogsIdentifiers {
-  description: string
-  type: string
-  value: string
-}
-
-interface DiscogsTracklist {
-  position: string
-  duration: string
-  title: string
-  type_: string
-}
-
-interface DiscogsVideos {
-  description: string
-  duration: number
-  embed: boolean
-  title: string
-  uri: string
-}
-
-interface DiscogsResponse {
-  pagination: Pagination
-  data: DiscogsReleaseRow[]
-}
-
-interface DiscogsQueryConfig {
-  artist: string
-  album: string
-  page: number
 }
 
 interface TableConfig<T, U> {

@@ -31,7 +31,7 @@ import { computed } from 'vue'
 import type { BasicEntity } from '~/types/Common'
 import useGlobalStore from '~/store/global'
 import CollectionEntity from '~/classes/CollectionEntity'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 
 interface Props {
   card: CollectionEntity<BasicEntity>

@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import usePlaylist from '~/store/playlist'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import { Sprite } from '~shared/UI'
 
 const {
   playerGetters: { playingTrack },

@@ -48,14 +48,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { BasicEntity } from '~/types/Common'
-import { useListPage } from '~/hooks/useListPage'
+// import { useListPage } from '~/hooks/useListPage'
 import useGlobalStore from '~/store/global'
 import type { CompilationEntityRes } from '~/types/ReqRes'
 import CompilationItem from '~/classes/CompilationItem'
-import Button from '~/components/Button.vue'
+import { Button } from '~shared/UI'
 // import GatheringTabs from '~/components/GatheringTabs.vue'
-import Confirmation from '~/components/Confirmation.vue'
-import Modal from '~/components/Modal.vue'
+import { Modal, Confirmation } from '~shared/UI'
 
 interface Props {
   trackID: string
@@ -73,10 +72,13 @@ const {
   globalGetters: { localize }
 } = useGlobalStore()
 
-const { fetchData, pagePagination } = useListPage<
-  CompilationEntityRes<BasicEntity>,
-  CompilationItem<BasicEntity>
->(CompilationItem, '', '')
+// Temp
+const fetchData = async (x: string) => Promise.resolve() as any
+
+// const { fetchData, pagePagination } = useListPage<
+//   CompilationEntityRes<BasicEntity>,
+//   CompilationItem<BasicEntity>
+// >(CompilationItem, '', '')
 
 const isCompilationLoading = ref(false)
 const entityToDelete = ref<string | null>(null)

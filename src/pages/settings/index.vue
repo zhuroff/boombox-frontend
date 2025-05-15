@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <transition name="fade">
-      <Preloader
+      <Loader
         v-if="!isPageLoaded || isReloading"
         mode="light"
       />
@@ -147,10 +147,9 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { localeIntlCodes } from '~/utils'
 import useGlobalStore from '~/store/global'
-import useSnackbar from '~/hooks/useSnackbar'
 import userFormSchema from '~/schemas/userFormSchema.json'
-import Preloader from '~/components/Preloader.vue'
-import Button from '~/components/Button.vue'
+import { Loader, Button } from '~shared/UI'
+import { useSnackbar } from '~shared/model'
 import Dropdown from '~/components/Inputs/Dropdown.vue'
 // import Form from '~/components/Form/Form.vue'
 import api from '~/api'
@@ -413,7 +412,7 @@ onMounted(() => {
     margin-bottom: var.$mainPadding;
 
     &-heading {
-      @include serif(1.75rem);
+      @include var.serif(1.75rem);
       margin-bottom: .5rem;
     }
   }
@@ -434,7 +433,7 @@ onMounted(() => {
     }
 
     &-cell {
-      padding: 5px 10px;
+      padding: 5px var.$basicPadding;
       border-right: 1px solid var.$paleMD;
 
       &:first-child {
