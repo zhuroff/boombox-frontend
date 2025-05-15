@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { MinimumAlbumInfo } from '~shared/model/types'
+import type { MinimumAlbumInfo } from '~shared/model'
 import { Loader } from '~shared/UI'
 import useGlobalStore from '~/store/global'
 import useWiki from '../model/useWiki'

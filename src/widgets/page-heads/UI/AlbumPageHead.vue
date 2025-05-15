@@ -1,26 +1,31 @@
 <template>
   <div class="album__hero-cover">
-    <div
-      v-html="album.frame"
-      class="album__frame"
-    />
+    <CoverArt :cover="album.coverURL || coverPlaceholders('album')"/>
   </div>
 
   <div class="album__hero-info">
     <slot name="heading"></slot>
-    <PageHeadMetadata :album="album" />
+
+    <PageHeadMetadata
+      :album="album"
+      :length="length"
+    />
+
     <PageHeadActions :actions="actions" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { coverPlaceholders } from '~/utils'
+import CoverArt from '~/components/CoverArt.vue'
 import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'
-import type { ActionPropertyItem, HeadEmits } from '../model/types'
+import type { ActionPropertyItem, HeadEmits } from '~widgets/page-heads'
 
 interface Props {
-  album: Embedded
+  album: Album
+  length: string
 }
 
 defineProps<Props>()
@@ -28,8 +33,8 @@ const emit = defineEmits<HeadEmits>()
 
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')
+const addToCollection = () => emit('addToCollection')
 const getWikiInfo = () => emit('getWikiInfo')
-const deleteAlbum = () => emit('deleteAlbum')
 
 const actions: ActionPropertyItem[] = reactive([
   {
@@ -43,14 +48,14 @@ const actions: ActionPropertyItem[] = reactive([
     action: getWikiInfo
   },
   {
+    icon: 'add-box',
+    title: 'heroActions.addToCollection',
+    action: addToCollection
+  },
+  {
     icon: 'target',
     title: 'heroActions.getRandomAlbum',
     action: getRandomAlbum
-  },
-  {
-    icon: 'delete',
-    title: 'heroActions.deleteAlbum',
-    action: deleteAlbum
   }
 ])
 </script>

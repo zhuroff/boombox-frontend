@@ -54,8 +54,8 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useGathering, AlbumContent } from '~widgets/AlbumContent'
-import { PageHeadAdapter } from '~widgets/PageHeads'
+import { useGathering, AlbumContent } from '~widgets/album-content'
+import { PageHeadAdapter } from '~widgets/page-heads'
 
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'

@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import type { StyleValue } from 'vue'
-import type { TextInputFieldSchema } from '~widgets/Form/model/types'
+import type { TextInputFieldSchema } from '~widgets/form/model/types'
 import useGlobalStore from '~/store/global'
 
 interface Props {

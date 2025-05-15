@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import type { Option } from '~shared/model/types'
+import type { Option } from '~shared/model'
 import useGlobalStore from '~/store/global'
 
 interface Props {

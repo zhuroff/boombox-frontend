@@ -35,13 +35,12 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from 'vue'
-import { EntityListView } from '~widgets/EntityListView'
+import { EntityListView } from '~widgets/entity-list-view'
 import { useCreateEntity, useSnackbar } from '~shared/model'
 import useGlobalStore from '~/store/global'
 import { Button } from '~shared/UI'
 import { Modal } from '~shared/UI'
-import { Form } from '~widgets/Form'
-import type { FormPayload } from '~widgets/Form/model/types'
+import { Form, type FormPayload } from '~widgets/form'
 import { embeddedAlbumFormSchema } from '~entities/embedded'
 import { DatabaseService } from '~shared/api'
 

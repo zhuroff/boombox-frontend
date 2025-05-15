@@ -64,9 +64,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { useAlbum, AlbumContent } from '~widgets/AlbumContent'
-import { PageHeadAdapter } from '~widgets/PageHeads'
-import { Gathering } from '~widgets/Gathering'
+import { useAlbum, AlbumContent } from '~widgets/album-content'
+import { PageHeadAdapter } from '~widgets/page-heads'
+import { Gathering } from '~widgets/gathering'
 
 import { useCollections } from '~features/collection'
 import { DiscogsTable } from '~features/discogs'

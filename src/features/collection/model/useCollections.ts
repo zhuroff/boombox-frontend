@@ -1,5 +1,5 @@
 import { computed, onUnmounted, ref, watch, type Ref } from 'vue'
-import { usePaginator } from '~widgets/Paginator'
+import { usePaginator } from '~widgets/paginator'
 import { useGetList, useCreateEntity, useUpdateEntity } from '~/shared/model'
 import type DatabaseService from '~/shared/api/DatabaseService'
 

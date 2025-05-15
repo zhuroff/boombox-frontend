@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { CategoryHero } from '~widgets/CategoryHero'
+import { CategoryHero } from '~widgets/category-hero'
 import { EntityCardList } from '~features/cardlist'
 
 interface Props {

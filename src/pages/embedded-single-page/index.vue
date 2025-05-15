@@ -58,8 +58,8 @@
 import { computed, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useAlbum, AlbumContent } from '~widgets/AlbumContent'
-import { PageHeadAdapter } from '~widgets/PageHeads'
+import { useAlbum, AlbumContent } from '~widgets/album-content'
+import { PageHeadAdapter } from '~widgets/page-heads'
 
 import { WikiFrame } from '~features/wiki'
 import { DiscogsTable } from '~features/discogs'

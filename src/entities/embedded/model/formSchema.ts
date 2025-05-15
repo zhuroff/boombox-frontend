@@ -1,4 +1,4 @@
-import type { FormSchemaProperty } from '~widgets/Form/model/types'
+import type { FormSchemaProperty } from '~widgets/form'
 
 const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
   ['title', {
@@ -12,6 +12,10 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     },
     errorMessages: [],
     validator<T = string>(value: T) {
+      if (!this.errorMessages) {
+        return 0
+      }
+
       this.errorMessages.length = 0
 
       if (!value) {
@@ -33,6 +37,10 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     },
     errorMessages: [],
     validator<T = string>(value: T) {
+      if (!this.errorMessages) {
+        return 0
+      }
+
       this.errorMessages.length = 0
 
       if (!value) {
@@ -54,6 +62,10 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     },
     errorMessages: [],
     validator<T = string>(value: T) {
+      if (!this.errorMessages) {
+        return 0
+      }
+
       this.errorMessages.length = 0
 
       if (!value) {
@@ -75,6 +87,10 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     },
     errorMessages: [],
     validator<T = string>(value: T) {
+      if (!this.errorMessages) {
+        return 0
+      }
+
       this.errorMessages.length = 0
 
       if (!value) {
@@ -95,6 +111,10 @@ const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
     },
     errorMessages: [],
     validator<T = string>(value: T) {
+      if (!this.errorMessages) {
+        return 0
+      }
+      
       this.errorMessages.length = 0
 
       if (!value) {

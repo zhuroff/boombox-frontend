@@ -1,6 +1,6 @@
 import { computed, ref, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import type { MinimumAlbumInfo } from '~shared/model/types'
+import type { MinimumAlbumInfo } from '~shared/model'
 import wiki from 'wikipedia'
 
 const useWiki = (entity: MinimumAlbumInfo) => {

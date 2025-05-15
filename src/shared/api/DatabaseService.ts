@@ -58,7 +58,7 @@ export default class DatabaseService {
     }
   }
 
-  updateEntity = async <T, U>(entityKey: string, payload: U | null) => {
+  updateEntity = async <T, U>(entityKey: string, payload?: U | null) => {
     if (!payload) {
       throw new Error('Query payload is not defined')
     }

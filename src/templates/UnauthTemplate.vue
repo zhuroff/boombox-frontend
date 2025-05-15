@@ -11,8 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormPayload, FormSchemaProperty } from '~widgets/Form/model/types'
-import { Form } from '~widgets/Form'
+import { Form, type FormPayload, type FormSchemaProperty } from '~widgets/form'
 import api from '../api'
 import useGlobalStore from '~/store/global'
 

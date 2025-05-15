@@ -20,9 +20,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Paginator } from '~widgets/Paginator'
+import { Paginator } from '~widgets/paginator'
 import { Table } from '~shared/UI'
-import type { MinimumAlbumInfo } from '~shared/model/types'
+import type { MinimumAlbumInfo } from '~shared/model'
 import useDiscogs from '../model/useDiscogs'
 import DiscogsService from '../api/DiscogsService'
 

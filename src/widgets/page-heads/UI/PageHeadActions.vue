@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { Button } from '~shared/UI'
 import useGlobalStore from '~/store/global'
-import type { ActionPropertyItem } from '../model/types'
+import type { ActionPropertyItem } from '~widgets/page-heads'
 
 interface Props {
   actions: ActionPropertyItem[]

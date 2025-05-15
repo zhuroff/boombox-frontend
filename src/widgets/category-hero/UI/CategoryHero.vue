@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { useUploadImage } from '~widgets/CategoryHero'
+import { useUploadImage } from '~widgets/category-hero'
 import { PosterUploader, AvatarUploader, CategoryTitleEditor } from '~entities/category'
 import { hostString } from '~/utils'
 import useGlobalStore from '~/store/global'

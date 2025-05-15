@@ -1,6 +1,8 @@
 import { CRACKLE_PATH } from "~/global"
 import cloudServices from "~/services/cloud.services"
-import databaseServices from "~/services/database.services"
+import { DatabaseService } from "~/shared/api"
+
+const databaseService = new DatabaseService()
 
 const actions = (state: PlayerState) => {
   const setTrackState = (track: AlbumTrack) => {
@@ -166,7 +168,7 @@ const actions = (state: PlayerState) => {
     if (duration === Infinity) return
 
     try {
-      await databaseServices.updateEntity(`tracks/${trackID}/duration`, { duration })
+      await databaseService.updateEntity(`tracks/${trackID}/duration`, { duration })
       setTrackDuration({ trackID, duration })
     } catch (error) {
       throw error
@@ -184,7 +186,7 @@ const actions = (state: PlayerState) => {
 
   const incrementListeningCounter = async (trackID: string) => {
     try {
-      await databaseServices.updateEntity(`tracks/${trackID}/listened`)
+      await databaseService.updateEntity(`tracks/${trackID}/listened`)
       updateListeningCounter(trackID)
     } catch (error) {
       console.error(error)

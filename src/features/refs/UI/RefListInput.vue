@@ -53,8 +53,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useSearch, useCreateEntity } from '~shared/model'
-import type { Option } from '~shared/model/types'
+import { useSearch, useCreateEntity, type Option } from '~shared/model'
 import { TextInput, Button } from '~shared/UI'
 import { DatabaseService } from '~/shared/api'
 import { cleanAndCapitalize, debounce } from '~/utils'

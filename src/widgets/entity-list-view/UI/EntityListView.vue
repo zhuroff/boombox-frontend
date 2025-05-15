@@ -57,8 +57,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watchEffect, watch } from 'vue'
-import { Header } from '~widgets/Header'
-import { Paginator, usePaginator } from '~widgets/Paginator'
+import { Header } from '~widgets/header'
+import { Paginator, usePaginator } from '~widgets/paginator'
 import { EntityCardList } from '~features/cardlist'
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { DatabaseService } from '~shared/api'

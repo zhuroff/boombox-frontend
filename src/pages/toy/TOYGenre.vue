@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import type { CloudEntity, CloudEntityRes, TrackRes } from '~/types/ReqRes'
-import { Header } from '~widgets/Header'
+import { Header } from '~widgets/header'
 import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
 import cloudServices from '~/services/cloud.services'
