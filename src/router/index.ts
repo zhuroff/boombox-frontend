@@ -42,19 +42,18 @@ const routes: Array<any> = [
   },
   {
     path: '/compilations',
-    name: 'compilations',
     component: RouterView,
     children: [
       {
         path: '/compilations',
-        name: 'compilation-list',
+        name: 'compilation-list-page',
         meta: { navLocaleKey: 'compilations' },
-        component: () => import(/* webpackChunkName: 'compilation-list' */ '~/pages/compilations/CompilationsList.vue')
+        component: () => import(/* webpackChunkName: 'compilation-list-page' */ '~/pages/compilation-list-page/index.vue')
       },
       {
         path: '/compilations/:id',
-        name: 'compilation-single',
-        component: () => import(/* webpackChunkName: 'compilation-single' */ '~/pages/compilations/CompilationPage.vue')
+        name: 'compilation-single-page',
+        component: () => import(/* webpackChunkName: 'compilation-single-page' */ '~/pages/compilation-single-page/index.vue')
       }
     ]
   },

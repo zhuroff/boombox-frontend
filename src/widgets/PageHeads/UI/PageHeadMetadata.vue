@@ -1,6 +1,9 @@
 <template>
   <div class="album__hero-metadata">
-    <div class="album__hero-metadata-row">
+    <div
+      v-if="'artist' in album"
+      class="album__hero-metadata-row"
+    >
       {{ localize('embeddedForm.artist') }}:&nbsp;
       <RouterLink
         v-if="album.artist?.title"
@@ -12,7 +15,10 @@
       </RouterLink>
     </div>
 
-    <div class="album__hero-metadata-row">
+    <div
+      v-if="'period' in album"
+      class="album__hero-metadata-row"
+    >
       {{ localize('embeddedForm.period') }}:&nbsp;
       <RouterLink
         v-if="album.period?.title"
@@ -24,7 +30,10 @@
       </RouterLink>
     </div>
 
-    <div class="album__hero-metadata-row">
+    <div
+      v-if="'genre' in album"
+      class="album__hero-metadata-row"
+    >
       {{ localize('embeddedForm.genre') }}:&nbsp;
       <RouterLink
         v-if="album.genre?._id"
@@ -62,7 +71,7 @@
 import useGlobalStore from '~/store/global'
 
 interface Props {
-  album: Album | Embedded
+  album: Album | Embedded | Compilation
   length?: string
 }
 

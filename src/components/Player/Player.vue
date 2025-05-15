@@ -105,8 +105,7 @@ import PlayerSound from './PlayerSound.vue'
 import PlayerExternal from './PlayerExternal.vue'
 import PlayerList from './PlayerList.vue'
 import Overlay from '../Overlay.vue'
-import Sprite from '../Sprite/Sprite.vue'
-import { Button } from '~shared/UI'
+import { Button, Sprite } from '~shared/UI'
 
 type PlayerKeyNav = 'Space' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown'
 

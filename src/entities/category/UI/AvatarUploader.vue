@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import { Sprite } from '~shared/UI'
 
 interface Props {
   isAdmin: boolean

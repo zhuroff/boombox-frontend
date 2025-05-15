@@ -26,7 +26,6 @@
       </div>
     </div>
     <footer :class="`album__footer --${cardsTemplate}`">
-      <slot name="footer"></slot>
     </footer>
   </div>
 </template>
@@ -36,8 +35,8 @@ import useGlobalStore from '~/store/global'
 import { EntityCardList } from '~features/cardlist'
 
 interface Props {
-  relatedAlbums: RelatedAlbums[]
   entityKey: string
+  relatedAlbums?: RelatedAlbums[]
   cardsTemplate?: 'col' | 'row' | 'offset'
 }
 

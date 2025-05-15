@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { computed, type StyleValue } from 'vue'
 import useGlobalStore from '~/store/global'
-import Sprite from '~/components/Sprite/Sprite.vue'
+import { Sprite } from '~shared/UI'
 
 interface Props {
   label?: string | [string, Array<string>]

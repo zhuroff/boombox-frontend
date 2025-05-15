@@ -84,6 +84,15 @@ export default class DatabaseService {
     }
   }
 
+  reorderEntities = async <T, U>(entityKey: string, id: string, payload: U) => {
+    try {
+      const response = await api.patch<T>(`/api/${entityKey}/${id}/reorder`, payload)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
   search = async (payload: SearchPayload) => {
     try {
       const response = await api.post<SearchResultState[]>(`/api/search`, payload)

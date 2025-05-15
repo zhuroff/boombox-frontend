@@ -51,8 +51,7 @@ import { computed, ref } from 'vue'
 import type { ComputedRef, Ref, StyleValue } from 'vue'
 import type { DropdownItem } from '~/types/Common'
 import useGlobalStore from '~/store/global'
-import { Button } from '~shared/UI'
-import Sprite from '../Sprite/Sprite.vue'
+import { Button, Sprite } from '~shared/UI'
 
 interface Props {
   items: DropdownItem[]

@@ -4,53 +4,54 @@
       :cover="album.avatar ? hostString(album.avatar) : coverPlaceholders('album')"
     />
   </div>
+
   <div class="album__hero-info">
     <slot name="heading"></slot>
-    <div class="album__hero-summary">
-      {{ localize('conjugated.tracks.plural') }}:&nbsp;
-      <span class="album__hero-category">{{ album.tracks.length }}</span>
-      <br />
-      {{ localize('totalLength') }}:&nbsp;
-      <span class="album__hero-category">{{ length }}</span>
-    </div>
-    <div class="album__hero-actions">
-      <Button
-        icon="loupe"
-        isRounded
-        isInverted
-        @click="callSearchBlock"
-      />
-      <Button
-        icon="target"
-        isRounded
-        isInverted
-        @click="getRandomAlbum"
-      />
-    </div>
+
+    <PageHeadMetadata
+      :album="album"
+      :length="length"
+    />
+
+    <PageHeadActions :actions="actions" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue'
 import { hostString, coverPlaceholders } from '~/utils'
-import useGlobalStore from '~/store/global'
 import CoverArt from '~/components/CoverArt.vue'
-import { Button } from '~shared/UI'
+import PageHeadMetadata from './PageHeadMetadata.vue'
+import PageHeadActions from './PageHeadActions.vue'
+import type { ActionPropertyItem, HeadEmits } from '../model/types'
 
 interface Props {
   album: Compilation
   length: string
 }
 
-interface Emits {
-  (e: 'getRandomAlbum'): void
-  (e: 'callSearchBlock'): void
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
-
-const { globalGetters: { localize } } = useGlobalStore()
+defineProps<Props>()
+const emit = defineEmits<HeadEmits>()
 
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')
+const deleteAlbum = () => emit('deleteAlbum')
+
+const actions: ActionPropertyItem[] = reactive([
+  {
+    icon: 'loupe',
+    title: 'heroActions.search',
+    action: callSearchBlock
+  },
+  {
+    icon: 'target',
+    title: 'heroActions.getRandomAlbum',
+    action: getRandomAlbum
+  },
+  {
+    icon: 'delete',
+    title: 'heroActions.deleteAlbum',
+    action: deleteAlbum
+  }
+])
 </script>

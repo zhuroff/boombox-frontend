@@ -43,9 +43,8 @@
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue'
 import type { BookletSlideState } from '~/types/Album'
-import { Modal, Loader } from '~shared/UI'
+import { Modal, Loader, Sprite } from '~shared/UI'
 import BookletState from '~/classes/BookletState'
-import Sprite from '~/components/Sprite/Sprite.vue'
 import Slider from '~/components/Slider.vue'
 
 interface Props {
