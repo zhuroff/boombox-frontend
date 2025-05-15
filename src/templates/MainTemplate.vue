@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Sidebar from '~/components/Sidebar.vue'
+import { Sidebar } from '~widgets/sidebar'
 import Player from '~/components/Player/Player.vue'
 import { Snackbar } from '~shared/UI'
 
