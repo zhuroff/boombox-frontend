@@ -1,7 +1,7 @@
 <template>
-  <li class="card__toy">
+  <li class="toy-genre__card">
     <router-link
-      class="card__toy-link"
+      class="toy-genre__card-link"
       :to="{ path: `/${rootPath}/${card.path}` }"
     >
       <span>{{ card.title }}</span>
@@ -23,7 +23,7 @@ defineProps<Props>()
 <style lang="scss" scoped>
 @use '~/scss/variables' as var;
 
-.card__toy {
+.toy-genre__card {
   border-radius: var.$borderRadiusMD;
   background-color: var.$black;
   border: 1px solid var.$black;
@@ -44,12 +44,12 @@ defineProps<Props>()
   }
 
   &-link {
-    @include serif(2.5rem);
+    @include var.serif(2.5rem);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    color: $paleLT;
+    color: var.$paleLT;
     height: 100%;
     z-index: 10;
     transition: color 0.5s var.$animation;
@@ -78,8 +78,8 @@ defineProps<Props>()
       transition: max-height 0.5s var.$animation;
     }
 
-    .card__toy-link {
-      color: $black;
+    .toy-genre__card-link {
+      color: var.$black;
       transition: color 0.5s var.$animation;
 
       span {

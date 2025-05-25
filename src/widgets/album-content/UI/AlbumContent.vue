@@ -26,6 +26,7 @@
       </div>
     </div>
     <footer :class="`album__footer --${cardsTemplate}`">
+      <slot name="footer"></slot>
     </footer>
   </div>
 </template>

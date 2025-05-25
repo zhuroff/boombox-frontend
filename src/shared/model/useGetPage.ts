@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { useQueryClient } from '@tanstack/vue-query'
 import type { DatabaseService } from '~shared/api'
 
-const useGetPage = <T extends Entity>(
+const useGetPage = <T extends Entity & { genre?: Partial<Entity>, period?: Partial<Entity> }>(
   entityKey: Ref<string>,
   dbService: DatabaseService,
   preRandomState?: Ref<string>
@@ -16,6 +16,10 @@ const useGetPage = <T extends Entity>(
   const routePath = computed(() => {
     if (preRandomState?.value) {
       return 'random'
+    }
+    
+    if ('genre' in route.params) {
+      return `${route.params.genre}/${route.params.id}`
     }
 
     return typeof route.params.id === 'string'
@@ -35,8 +39,12 @@ const useGetPage = <T extends Entity>(
   watch(
     [isFetched, data],
     ([newFetched, newData]) => {
+      const newRoute = 'genre' in route.params
+        ? `${newData?.genre?.title}/${newData?.period?.title}`
+        : newData?._id
+      
       if (newFetched && preRandomState?.value) {
-        router.replace(`/${entityKey.value}/${newData?._id}`)
+        router.replace(`/${entityKey.value}/${newRoute}`)
       }
     },
   )

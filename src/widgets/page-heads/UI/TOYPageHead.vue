@@ -1,7 +1,8 @@
 <template>
   <div class="album__hero-cover">
     <CoverArt
-      :cover="album.avatar ? hostString(album.avatar) : coverPlaceholders('album')"
+      :cover="album.coverURL || coverPlaceholders('album')"
+      :entity="albumEntity"
     />
   </div>
 
@@ -18,24 +19,30 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { hostString, coverPlaceholders } from '~/utils'
+import { reactive, computed } from 'vue'
+import { coverPlaceholders } from '~/utils'
 import { CoverArt } from '~widgets/cover-art'
 import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'
 import type { ActionPropertyItem, HeadEmits } from '~widgets/page-heads'
 
 interface Props {
-  album: Compilation
+  album: TOYAlbum
   length: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<HeadEmits>()
 
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')
-const deleteAlbum = () => emit('deleteAlbum')
+
+const albumEntity = computed(() => ({
+  cloudURL: props.album.cloudURL,
+  path: props.album.path,
+  _id: props.album._id,
+  title: props.album.title
+}))
 
 const actions: ActionPropertyItem[] = reactive([
   {
@@ -47,11 +54,6 @@ const actions: ActionPropertyItem[] = reactive([
     icon: 'target',
     title: 'heroActions.getRandomAlbum',
     action: getRandomAlbum
-  },
-  {
-    icon: 'delete',
-    title: 'heroActions.deleteAlbum',
-    action: deleteAlbum
   }
 ])
 </script>

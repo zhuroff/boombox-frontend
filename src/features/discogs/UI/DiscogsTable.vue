@@ -29,7 +29,7 @@ import DiscogsService from '../api/DiscogsService'
 const discogsService = new DiscogsService()
 
 interface Props {
-  entity: MinimumAlbumInfo
+  entity: MinimumAlbumInfo | MinimumAlbumInfo[]
 }
 
 const props = defineProps<Props>()

@@ -6,13 +6,19 @@
     >
       {{ localize('embeddedForm.artist') }}:&nbsp;
       <RouterLink
-        v-if="album.artist?.title"
+        v-if="album.artist?._id"
         :to="`/artists/${album.artist._id}`"
         :disabled="!album.artist._id"
         class="album__hero-category --link"
       >
         {{ album.artist.title }}
       </RouterLink>
+      <span
+        v-else
+        class="album__hero-category --link"
+      >
+        {{ album.artist.title }}
+      </span>
     </div>
 
     <div
@@ -21,13 +27,19 @@
     >
       {{ localize('embeddedForm.period') }}:&nbsp;
       <RouterLink
-        v-if="album.period?.title"
+        v-if="album.period?._id"
         :to="`/periods/${album.period._id}`"
         :disabled="!album.period._id"
         class="album__hero-category --link"
       >
         {{ album.period.title }}
       </RouterLink>
+      <span
+        v-else
+        class="album__hero-category --link"
+      >
+        {{ album.period.title }}
+      </span>
     </div>
 
     <div
@@ -43,6 +55,12 @@
       >
         {{ album.genre.title }}
       </RouterLink>
+      <span
+        v-else
+        class="album__hero-category --link"
+      >
+        {{ album.genre.title }}
+      </span>
     </div>
 
     <div
@@ -71,7 +89,7 @@
 import useGlobalStore from '~/store/global'
 
 interface Props {
-  album: Album | Embedded | Compilation
+  album: UnifiedAlbum
   length?: string
 }
 

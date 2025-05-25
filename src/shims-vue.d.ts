@@ -57,7 +57,7 @@ interface Embedded extends Entity {
   inCollections?: Entity[]
 }
 
-type UnifiedAlbum = Album | Embedded | Compilation
+type UnifiedAlbum = Album | Embedded | Compilation | TOYAlbum
 
 interface Track extends Entity {
   fileName: string
@@ -209,8 +209,9 @@ interface AlbumItem extends Required<BasicEntity> {
   period: BasicEntity
   tracks: AlbumTrack[]
   inCollections: BasicEntity[]
-  coverURL?: string
   folderName: string
+  path: string
+  coverURL?: string
 }
 
 interface EmbeddedItem extends Omit<AlbumItem, 'tracks'> {

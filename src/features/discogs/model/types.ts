@@ -14,4 +14,5 @@ export interface DiscogsQueryConfig {
   artist: string
   album: string
   page: number
+  isMasterOnly?: boolean
 }

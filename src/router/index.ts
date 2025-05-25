@@ -76,24 +76,23 @@ const routes: Array<any> = [
   },
   {
     path: '/toy',
-    name: 'toy-root',
     meta: { navLocaleKey: 'toy' },
     component: RouterView,
     children: [
       {
         path: '/toy',
-        name: 'toy-list',
-        component: () => import(/* webpackChunkName: 'toy-list' */ '~/pages/toy/TOYList.vue')
+        name: 'toy-genres-page',
+        component: () => import(/* webpackChunkName: 'toy-genres-page' */ '~/pages/toy-genres-page/index.vue')
       },
       {
         path: '/toy/:genre',
-        name: 'toy-genre',
-        component: () => import(/* webpackChunkName: 'toy-genre' */ '~/pages/toy/TOYGenre.vue')
+        name: 'toy-years-page',
+        component: () => import(/* webpackChunkName: 'toy-years-page' */ '~/pages/toy-years-page/index.vue')
       },
       {
-        path: '/toy/:genre/:year',
-        name: 'toy-year',
-        component: () => import(/* webpackChunkName: 'toy-year' */ '~/pages/toy/TOYYear.vue')
+        path: '/toy/:genre/:id',
+        name: 'toy-album-page',
+        component: () => import(/* webpackChunkName: 'toy-album-page' */ '~/pages/toy-album-page/index.vue')
       }
     ]
   },

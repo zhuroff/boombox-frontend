@@ -1,6 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import type DatabaseService from '~/shared/api/DatabaseService'
+import type { DatabaseService } from '~shared/api'
 
 const useGetList = <T>(
   payload: ComputedRef<UseEntityListPayload>,

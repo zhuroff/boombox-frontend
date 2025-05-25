@@ -1,0 +1,85 @@
+import { computed, ref, type ComputedRef } from 'vue'
+import type { RouteParamsGeneric } from 'vue-router'
+import type { DatabaseService } from '~shared/api'
+import { useGetList, useGetPage } from '~shared/model'
+
+const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteParamsGeneric>) => {
+  const preRandomState = ref('')
+  const pageEntityKey = ref('toy')
+
+  const relatedAlbumsReqConfig: RequestConfig = {
+    page: 1,
+    limit: 5,
+    isRandom: 1,
+    path: 'MelodyMap/TOY'
+  }
+
+  const yearsConfig = computed<UseEntityListPayload>(() => (
+    album.value
+      ? {
+          entityKey: pageEntityKey.value,
+          requestConfig: {
+            ...relatedAlbumsReqConfig,
+            filter: {
+              from: 'years',
+              value: routeParams.value.id,
+              excluded: { genre: routeParams.value.genre }
+            }
+          }
+        }
+      : {} as UseEntityListPayload
+  ))
+  
+  const genresConfig = computed<UseEntityListPayload>(() => (
+    album.value
+      ? {
+          entityKey: pageEntityKey.value,
+          requestConfig: {
+            ...relatedAlbumsReqConfig,
+            filter: {
+              from: 'genres',
+              value: routeParams.value.genre,
+              excluded: { year: routeParams.value.id }
+            }
+          }
+        }
+      : {} as UseEntityListPayload
+  ))
+
+  const isAlbumReady = computed(() => (
+    Boolean(album.value) && isAlbumFetched.value
+  ))
+
+  const {
+    data: album,
+    isFetched: isAlbumFetched
+  } = useGetPage<TOYAlbum>(
+    pageEntityKey,
+    dbService,
+    preRandomState
+  )
+
+  const { data: relatedAlbumsByYear } = useGetList<Album>(yearsConfig, dbService, isAlbumReady)
+
+  const { data: relatedAlbumsByGenre } = useGetList<Album>(genresConfig, dbService, isAlbumReady)
+
+  const relatedAlbums = computed<RelatedAlbums[]>(() => ([
+    {
+      docs: relatedAlbumsByYear.value?.docs || [],
+      name: String(routeParams.value.id)
+    },
+    {
+      docs: relatedAlbumsByGenre.value?.docs || [],
+      name: String(routeParams.value.genre)
+    }
+  ]).filter(({ docs }) => !!docs.length))
+
+  return {
+    album,
+    isAlbumReady,
+    preRandomState,
+    relatedAlbums
+  }
+}
+
+export default useTOYAlbum

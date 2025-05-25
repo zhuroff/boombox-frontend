@@ -32,6 +32,7 @@ interface Album extends Entity {
   artist: Entity
   genre: Entity
   period: Entity
+  path: string
   created?: string
   modified?: string
   tracks: Track[]
@@ -39,6 +40,10 @@ interface Album extends Entity {
 }
 
 type AlbumShort = Required<Pick<Album, '_id' | 'title' | 'cloudURL' | 'folderName'>>
+
+interface TOYAlbum extends Omit<Album, 'inCollections'> {
+  metadataContent: MinimumAlbumInfo[] | null
+}
 
 // embedded
 interface Embedded extends Entity {

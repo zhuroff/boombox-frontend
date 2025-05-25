@@ -30,13 +30,14 @@
 
 <script setup lang="ts">
 import { h, computed, ref } from 'vue'
-import DatabaseService from '~/shared/api/DatabaseService'
+import { DatabaseService } from '~shared/api'
 import { useSearch } from '~shared/model'
+import { Modal } from '~shared/UI'
 import useGlobalStore from '~/store/global'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
-import { Modal } from '~shared/UI'
+import TOYPageHead from './TOYPageHead.vue'
 import SearchModal from '~/components/Search/SearchModal.vue'
 
 interface Props {
@@ -93,8 +94,14 @@ const totalTracksTime = computed(() => {
   return formattedTime
 })
 
-const renderAlbumHeadComponent = (album: Album) => {
-  return h(AlbumPageHead, { album, length: totalTracksTime.value })
+const isRegularAlbum = (album: UnifiedAlbum): album is Album => {
+  return 'artist' in album && '_id' in album.artist
+}
+
+const renderAlbumHeadComponent = (album: Album | TOYAlbum) => {
+  return isRegularAlbum(album)
+    ? h(AlbumPageHead, { album, length: totalTracksTime.value })
+    : h(TOYPageHead, { album, length: '' })
 }
 
 const renderCompilationHeadComponent = (album: Compilation) => {

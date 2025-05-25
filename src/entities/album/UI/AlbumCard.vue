@@ -2,7 +2,7 @@
   <li class="cardlist__item">
     <router-link
       class="cardlist__item-link"
-      :to="{ path: `/${dynamicEntityKey}/${card._id}` }"
+      :to="routePath"
     >
       <div class="cardlist__item-image">
         <div
@@ -80,6 +80,14 @@ const isAdmin = computed(() => (
 const dynamicEntityKey = computed(() => (
   'frame' in props.card ? 'embedded' : props.entityKey || 'albums'
 ))
+
+const routePath = computed(() => {
+  const id = props.card._id || 'path' in props.card && props.card.path.replace('MelodyMap/TOY/', '')
+
+  return {
+    path: `/${dynamicEntityKey.value}/${id}`
+  }
+})
 
 const cardCaption = computed(() => (
   'artist' in props.card && props.card.artist

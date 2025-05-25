@@ -4,10 +4,10 @@ import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type DiscogsService from '~/features/discogs/api/DiscogsService'
 import { usePaginator, type PaginationState } from '~widgets/paginator'
 import type { MinimumAlbumInfo } from '~shared/model'
-import type { DiscogsReleaseRow } from './types'
+import type { DiscogsReleaseRow, DiscogsQueryConfig } from './types'
 import { discogsTableSchema } from '~features/discogs'
 
-const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) => {
+const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo | MinimumAlbumInfo[]) => {
   const discogsFilters = reactive<TableFilters>({
     country: [],
     releaseYear: [],
@@ -31,10 +31,20 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
     updatePaginationState
   } = usePaginator({ isRouted: false })
 
-  const discogsPayloadConfig = computed(() => ({
-    artist: entity.albumArtist,
-    album: entity.albumTitle
-  }))
+  const discogsPayloadConfig = computed<DiscogsQueryConfig | DiscogsQueryConfig[]>(() => {
+    if (Array.isArray(entity)) {
+      return entity.map(item => ({
+        artist: item.albumArtist,
+        album: item.albumTitle,
+        page: 1
+      }))
+    }
+    return {
+      artist: entity.albumArtist,
+      album: entity.albumTitle,
+      page: 1
+    }
+  })
 
   const isDiscogsReqEnabled = computed(() => !!entity)
 
@@ -87,7 +97,9 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
 
   const setDiscogsPagination = (payload: Partial<PaginationState>) => {
     Object.entries(payload).forEach(([key, value]) => {
-      discogsPagination[key as keyof PaginationState] = value
+      if (key in discogsPagination) {
+        (discogsPagination[key as keyof PaginationState] as any) = value
+      }
     })
   }
 
@@ -113,20 +125,35 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo) =>
   }
 
   const { isFetching: isDiscogsFetching } = useQuery<DiscogsReleaseRow[]>({
-    retry: 3,
+    retry: 1,
     enabled: isDiscogsReqEnabled,
     refetchOnWindowFocus: false,
     queryKey: [entity],
-    queryFn: () => (
-      discogsService.getData({ ...discogsPayloadConfig.value, page: 1 })
-        .then((data) => {
-          discogsResults.value = data
-          setDiscogsFilters(data)
-          updatePaginationConfig('totalDocs', data.length)
-          updatePaginationConfig('totalPages', Math.ceil(data.length / discogsPagination.limit))
-          return data
-        })
-    )
+    queryFn: async () => {
+      if (Array.isArray(entity)) {
+        const configs = discogsPayloadConfig.value as DiscogsQueryConfig[]
+        const results = await Promise.all(
+          configs.map((config) => 
+            discogsService.getData({ ...config, page: 1, isMasterOnly: true })
+          )
+        )
+        
+        const combinedResults = results.flat()
+        discogsResults.value = combinedResults
+        setDiscogsFilters(combinedResults)
+        updatePaginationConfig('totalDocs', combinedResults.length)
+        updatePaginationConfig('totalPages', Math.ceil(combinedResults.length / discogsPagination.limit))
+        return combinedResults
+      } else {
+        const config = discogsPayloadConfig.value as DiscogsQueryConfig
+        const data = await discogsService.getData({ ...config, page: 1 })
+        discogsResults.value = data
+        setDiscogsFilters(data)
+        updatePaginationConfig('totalDocs', data.length)
+        updatePaginationConfig('totalPages', Math.ceil(data.length / discogsPagination.limit))
+        return data
+      }
+    }
   })
 
   return {
