@@ -39,6 +39,7 @@ import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import TOYPageHead from './TOYPageHead.vue'
 import SearchModal from '~/components/Search/SearchModal.vue'
+import { isRegularAlbum } from '~/utils'
 
 interface Props {
   album: UnifiedAlbum
@@ -93,10 +94,6 @@ const totalTracksTime = computed(() => {
 
   return formattedTime
 })
-
-const isRegularAlbum = (album: UnifiedAlbum): album is Album => {
-  return 'artist' in album && '_id' in album.artist
-}
 
 const renderAlbumHeadComponent = (album: Album | TOYAlbum) => {
   return isRegularAlbum(album)

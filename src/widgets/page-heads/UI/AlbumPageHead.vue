@@ -1,8 +1,9 @@
 <template>
   <div class="album__hero-cover">
     <CoverArt
+      entityKey="albums"
       :cover="album.coverURL || coverPlaceholders('album')"
-      :entity="albumEntity"
+      :entity="album"
     />
   </div>
 
@@ -19,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from 'vue'
+import { reactive } from 'vue'
 import { coverPlaceholders } from '~/utils'
 import { CoverArt } from '~widgets/cover-art'
 import PageHeadMetadata from './PageHeadMetadata.vue'
@@ -31,20 +32,13 @@ interface Props {
   length: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<HeadEmits>()
 
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')
 const addToCollection = () => emit('addToCollection')
 const getWikiInfo = () => emit('getWikiInfo')
-
-const albumEntity = computed(() => ({
-  cloudURL: props.album.cloudURL,
-  path: props.album.path,
-  _id: props.album._id,
-  title: props.album.title
-}))
 
 const actions: ActionPropertyItem[] = reactive([
   {

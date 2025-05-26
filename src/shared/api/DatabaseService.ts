@@ -93,6 +93,15 @@ export default class DatabaseService {
     }
   }
 
+  getCloudFiles = async <T>(entityKey: string, path: string, query: string) => {
+    try {
+      const response = await api.get<T>(`/api/${entityKey}/${path}?${query}`)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
   search = async (payload: SearchPayload) => {
     try {
       const response = await api.post<SearchResultState[]>(`/api/search`, payload)

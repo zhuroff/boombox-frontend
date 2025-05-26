@@ -112,3 +112,10 @@ export const cleanAndCapitalize = (str: string): string => {
     .join(' ')
 }
 
+export const isRegularAlbum = (album: UnifiedAlbum): album is Album => {
+  return 'artist' in album && '_id' in album.artist
+}
+
+export const isTOYAlbum = (album: UnifiedAlbum): album is TOYAlbum => {
+  return 'metadataContent' in album
+}

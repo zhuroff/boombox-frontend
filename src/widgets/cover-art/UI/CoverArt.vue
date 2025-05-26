@@ -6,24 +6,29 @@
       referrerpolicy="no-referrer"
       @click="toggleBookletModal"
     >
-    <!-- <transition name="fade">
+    <transition name="fade">
       <Modal
-        v-if="booklet?.isActive"
-        :isModalActive="booklet?.isActive"
+        :isModalActive="isActive"
         @closeModal="closeBookletModal"
       >
         <Loader
-          v-if="!booklet.isFetched"
+          v-if="isFetching"
           mode="dark"
         />
+        <div
+          v-else-if="!booklet.items.length"
+          class="cover__booklet-empty"
+        >
+          <p>Album has no booklet</p>
+        </div>
         <Slider
           v-else
-          :data="booklet.items.map(({ url }) => url)"
+          :data="booklet.items"
           :isFullSlideSet="isFullSlideSet"
           @slideChanged="slideChanged"
         />
       </Modal>
-    </transition> -->
+    </transition>
     <form
       v-if="uploadable"
       class="cover__upload"
@@ -41,26 +46,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, type Ref } from 'vue'
+import { ref, computed, type Ref } from 'vue'
 import type { BookletSlideState } from '~/types/Album'
-import { Modal, Loader, Sprite } from '~shared/UI'
-import Slider from '~/components/Slider.vue'
+import { Modal, Loader, Sprite, Slider } from '~shared/UI'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
 
 interface Props {
+  entityKey: string
   cover?: string
-  // booklet?: BookletState
   uploadable?: boolean
   uploadSlug?: string
-  entity?: Entity & { path: string }
+  entity?: UnifiedAlbum
 }
 
 interface Emits {
-  (e: 'coverClick'): void
-  (e: 'closeBookletModal'): void
   (e: 'uploadImage', image: File): void
-  (e: 'slideChanged', data: BookletSlideState): void
 }
 
 const dbService = new DatabaseService()
@@ -71,10 +72,13 @@ const emit = defineEmits<Emits>()
 const coverElement: Ref<null | HTMLInputElement> = ref(null)
 const isFullSlideSet = ref(false)
 
-const { data: booklet, isActive } = useCoverArt(dbService, props.entity)
+const entity = computed(() => props.entity)
 
+const { booklet, isActive, isFetching, loadMoreImages, resetBooklet } = useCoverArt(props.entityKey, entity, dbService)
+console.log(booklet)
 const closeBookletModal = () => {
-  emit('closeBookletModal')
+  isActive.value = false
+  resetBooklet()
 }
 
 const toggleBookletModal = () => {
@@ -87,18 +91,9 @@ const setCover = () => {
   }
 }
 
-const slideChanged = (data: BookletSlideState) => {
-  emit('slideChanged', data)
+const slideChanged = (payload: BookletSlideState) => {
+  loadMoreImages(payload.slidingToIndex)
 }
-
-// watch(
-//   () => props.booklet,
-//   (val) => {
-//     if (val?.isCompleted) {
-//       isFullSlideSet.value = true
-//     }
-//   }
-// )
 </script>
 
 <style lang="scss">
@@ -145,6 +140,15 @@ const slideChanged = (data: BookletSlideState) => {
       height: var.$coverWidth;
       border-radius: var.$borderRadiusSM;
     }
+  }
+
+  &__booklet-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var.$warning;
+    @include var.serif(3rem);
   }
 
   &__upload {

@@ -66,7 +66,7 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo | M
   const filteredDiscogsPagination = computed(() => ({
     ...discogsPagination,
     totalDocs: filteredDiscogsData.value.length,
-    totalPages: Math.ceil(filteredDiscogsData.value.length / discogsPagination.limit),
+    totalPages: Math.floor(filteredDiscogsData.value.length / discogsPagination.limit),
   }))
 
   const preparedDiscogsData = computed(() => (
@@ -142,7 +142,7 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo | M
         discogsResults.value = combinedResults
         setDiscogsFilters(combinedResults)
         updatePaginationConfig('totalDocs', combinedResults.length)
-        updatePaginationConfig('totalPages', Math.ceil(combinedResults.length / discogsPagination.limit))
+        updatePaginationConfig('totalPages', Math.floor(combinedResults.length / discogsPagination.limit))
         return combinedResults
       } else {
         const config = discogsPayloadConfig.value as DiscogsQueryConfig
@@ -150,7 +150,7 @@ const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo | M
         discogsResults.value = data
         setDiscogsFilters(data)
         updatePaginationConfig('totalDocs', data.length)
-        updatePaginationConfig('totalPages', Math.ceil(data.length / discogsPagination.limit))
+        updatePaginationConfig('totalPages', Math.floor(data.length / discogsPagination.limit))
         return data
       }
     }

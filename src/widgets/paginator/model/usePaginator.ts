@@ -9,7 +9,7 @@ import type {
 } from '~widgets/paginator'
 
 const usePaginator = ({
-  docsLimit = 30,
+  docsLimit = 15,
   docsSort = { title: 1 },
   isRouted = true,
   localStorageKey
