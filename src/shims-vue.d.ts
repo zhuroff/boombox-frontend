@@ -5,12 +5,6 @@ declare module '*.vue' {
   export default component
 }
 
-enum UserRole {
-  admin = 'admin',
-  developer = 'developer',
-  guest = 'guest'
-}
-
 interface Entity {
   _id: string
   title: string
@@ -74,14 +68,6 @@ interface Track extends Entity {
   period: Entity
 }
 
-interface User {
-  _id: string
-  login: string
-  email: string
-  role: UserRole
-  dateCreated: string
-}
-
 interface Token {
   _id: string
   user: User
@@ -94,15 +80,10 @@ interface Token {
  */
 
 type UserRoles = 'admin' | 'user'
-type LocaleKeys = 'en' | 'by'
 
 interface AuthRefreshResponse {
   accessToken: string
   user: UserResponse
-}
-
-interface LocaleDictionary {
-  [key: string]: string | LocaleDictionary
 }
 
 type SortingValue = Record<string, 1 | -1>
@@ -129,10 +110,10 @@ interface UseEntityListPayload {
 }
 
 interface SyncResponse {
-  added: number
-  updated: number
-  deleted: number
-  invalid: Record<string, string>[] | 0
+  added: Album[]
+  updated: Album[]
+  deleted: Album[]
+  invalid: Record<string, string>[]
 }
 
 interface GlobalState {
@@ -156,19 +137,6 @@ interface AuthData {
   login: string
   password: string
 }
-
-interface User {
-  login: string
-  email: string
-  role: UserRoles
-}
-
-interface UserCreating extends User {
-  password: string
-  passwordConfirm: string
-}
-
-type UserResponse = User & { _id: string }
 
 interface AuthResponse {
   accessToken: string

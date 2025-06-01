@@ -43,8 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import usePlaylist from '~/store/playlist'
 import AlbumTrack from '~/classes/AlbumTrack'
 import TrackItemPlay from '~/components/TrackList/TrackItemPlay.vue'
@@ -57,9 +56,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const {
   playerGetters: { currentPlaylistTracks },

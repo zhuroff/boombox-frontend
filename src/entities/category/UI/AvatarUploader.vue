@@ -25,9 +25,9 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import { Sprite } from '~shared/UI'
+import { useUser } from '~entities/user'
 
 interface Props {
-  isAdmin: boolean
   avatarUrl: string | null
   entityTitle: string
 }
@@ -38,6 +38,8 @@ interface Emits {
 
 defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const { isAdmin } = useUser()
 
 const avatarElement: Ref<null | HTMLInputElement> = ref(null)
 

@@ -56,8 +56,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { hostString } from '~/utils'
-import useGlobalStore from '~/store/global'
 import { Button } from '~shared/UI'
+import { useUser } from '~entities/user'
 
 interface Props {
   card: AlbumItem | CollectedItem | EmbeddedItem
@@ -69,13 +69,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const {
-  globalGetters: { authConfig }
-} = useGlobalStore()
-
-const isAdmin = computed(() => (
-  authConfig.value.user?.role === 'admin'
-))
+const { isAdmin } = useUser()
 
 const dynamicEntityKey = computed(() => (
   'frame' in props.card ? 'embedded' : props.entityKey || 'albums'

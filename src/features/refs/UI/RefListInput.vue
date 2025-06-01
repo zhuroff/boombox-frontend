@@ -57,7 +57,7 @@ import { useSearch, useCreateEntity, type Option } from '~shared/model'
 import { TextInput, Button } from '~shared/UI'
 import { DatabaseService } from '~/shared/api'
 import { cleanAndCapitalize, debounce } from '~/utils'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   modelValue?: string
@@ -79,9 +79,7 @@ const emit = defineEmits<{
 
 const dbService = new DatabaseService()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const refQuery = ref(props.modelValue || '')
 const selectedOption = ref<Option | null>(null)

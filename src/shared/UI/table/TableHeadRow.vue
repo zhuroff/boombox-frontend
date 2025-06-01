@@ -4,7 +4,7 @@
       v-for="cell in cells"
       :key="cell.key"
       :cell="cell"
-      :filter="filters[cell.key]"
+      :filter="filters?.[cell.key]"
       :filtersState="filtersState"
       :localeRootKey="localeRootKey"
       @updateFilterValue="(value) => emit('updateFilterValue', value)"
@@ -18,9 +18,9 @@ import TableHeadCell from './TableHeadCell.vue'
 
 interface Props {
   cells: TableHeadConfig<JSONSchema4>[]
-  filters: TableFilters
   localeRootKey: string
-  filtersState: Record<string, string | number | null>
+  filters?: TableFilters
+  filtersState?: Record<string, string | number | null>
 }
 
 interface Emits {

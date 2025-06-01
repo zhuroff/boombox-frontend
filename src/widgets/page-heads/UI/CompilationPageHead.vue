@@ -2,6 +2,8 @@
   <div class="album__hero-cover">
     <CoverArt
       entityKey="compilations"
+      uploadSlug="compilations"
+      uploadable
       :cover="album.avatar ? hostString(album.avatar) : coverPlaceholders('album')"
     />
   </div>

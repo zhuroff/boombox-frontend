@@ -47,7 +47,7 @@
         />
       </div>
     </div>
-    <transition name="slide-in">
+    <!-- <transition name="slide-in">
       <Overlay v-if="isPlaylistOpen">
         <ul class="overlay__list">
           <VueDraggableNext
@@ -84,7 +84,7 @@
           </VueDraggableNext>
         </ul>
       </Overlay>
-    </transition>
+    </transition> -->
   </section>
 </template>
 
@@ -104,8 +104,7 @@ import PlayerCrackle from './PlayerCrackle.vue'
 import PlayerSound from './PlayerSound.vue'
 import PlayerExternal from './PlayerExternal.vue'
 import PlayerList from './PlayerList.vue'
-import Overlay from '../Overlay.vue'
-import { Button, Sprite } from '~shared/UI'
+// import { Button, Sprite } from '~shared/UI'
 
 type PlayerKeyNav = 'Space' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown'
 

@@ -23,7 +23,7 @@
 import { computed, ref, onMounted } from 'vue'
 import type { StyleValue } from 'vue'
 import type { TextInputFieldSchema } from '~widgets/form/model/types'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   name: string
@@ -58,9 +58,7 @@ const emit = defineEmits<Emits>()
 
 const textInputElement = ref<null | HTMLInputElement>(null)
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const stateClasses = computed(() => [
   'input-field',

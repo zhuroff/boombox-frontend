@@ -60,9 +60,3 @@ export interface RefPayload<T> {
   refEntityKey: string
   refEntityValue: T
 }
-
-export interface DropdownItem {
-  path: string
-  value: string
-  icon?: string
-}

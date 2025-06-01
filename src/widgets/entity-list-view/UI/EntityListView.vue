@@ -65,7 +65,7 @@ import { DatabaseService } from '~shared/api'
 import { useGetList, useDeleteEntity } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   entityKey: string
@@ -80,7 +80,7 @@ interface Props {
 const props = defineProps<Props>()
 const dbService = new DatabaseService()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 
 const deletedEntityId = ref<string | null>(null)
 const isDeleteConfirmed = ref(false)

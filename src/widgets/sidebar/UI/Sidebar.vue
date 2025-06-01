@@ -34,9 +34,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import useGlobalStore from '~/store/global'
-import router from '~/router'
+import router from '~/app/routes'
 import { Button, Sprite } from '~shared/UI'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   isExpanded: boolean
@@ -49,21 +49,19 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const burgerClick = () => emit('burgerClick')
 
-const navbar = computed(() => (
-  router
+const navbar = computed(() => {
+  return router
     .getRoutes()
     .filter(({ meta }) => meta?.navLocaleKey)
     .map(({ meta, path }) => ({
       title: localize(`navigation.${meta.navLocaleKey as string}`),
       route: path.replace('/', '')
     }))
-))
+})
 </script>
 
 <style lang="scss" scoped>

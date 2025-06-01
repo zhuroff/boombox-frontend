@@ -14,12 +14,10 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import { Button } from '~shared/UI'
 
 const router = useRouter()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 </script>

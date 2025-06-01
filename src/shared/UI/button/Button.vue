@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed, type StyleValue } from 'vue'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import { Sprite } from '~shared/UI'
 
 interface Props {
@@ -47,9 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
   isDisabled: false
 })
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const stateClasses = computed(() => [
   'button',
@@ -114,7 +112,7 @@ const stateClasses = computed(() => [
       width: 1.25rem;
 
       & + .button__label {
-        margin-left: 5px;
+        margin-left: var.$fieldPadding;
       }
     }
   }
@@ -177,6 +175,7 @@ const stateClasses = computed(() => [
   &__label {
     display: block;
     margin: 0 .75rem;
+    white-space: nowrap;
   }
 
   &[disabled] {

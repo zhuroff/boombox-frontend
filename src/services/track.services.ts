@@ -1,4 +1,4 @@
-import api from '~/api'
+import api from '~/app/api'
 import type { ResponseMessage } from '~/types/Common'
 import type { TrackLyricsData, TrackLyricsResponse } from '~/types/Track'
 

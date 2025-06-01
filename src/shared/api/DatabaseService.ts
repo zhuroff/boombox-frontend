@@ -1,4 +1,11 @@
-import api from '~/api'
+import api from '~app/api'
+import type { User } from '~entities/user/model/types'
+import type { FormPayload } from '~widgets/form'
+
+export interface AuthRefreshResponse {
+  user: User
+  accessToken: string
+}
 
 export default class DatabaseService {
   #configToQueryString(config: RequestConfig) {
@@ -24,6 +31,50 @@ export default class DatabaseService {
     appendParams(config)
 
     return params.toString()
+  }
+
+  refresh = async () => {
+    try {
+      const response = await api.get<AuthRefreshResponse>('/api/users/refresh')
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  login = async (payload: FormPayload) => {
+    try {
+      const response = await api.post<AuthResponse>('/api/users/login', payload)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  logout = async () => {
+    try {
+      await api.post('/api/users/logout')
+    } catch (error) {
+      throw error
+    }
+  }
+
+  createUser = async (userData: FormPayload) => {
+    try {
+      const response = await api.post<User>('/api/users/create', userData)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  getUsers = async () => {
+    try {
+      const response = await api.get<User[]>('/api/users')
+      return response.data
+    } catch (error) {
+      throw error
+    }
   }
 
   getEntityList = async <T>(entityKey: string, config: RequestConfig) => {
@@ -105,6 +156,15 @@ export default class DatabaseService {
   search = async (payload: SearchPayload) => {
     try {
       const response = await api.post<SearchResultState[]>(`/api/search`, payload)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  sync = async () => {
+    try {
+      const response = await api.post('/api/sync')
       return response.data
     } catch (error) {
       throw error

@@ -49,7 +49,7 @@
 import { ref } from 'vue'
 import type { BasicEntity } from '~/types/Common'
 // import { useListPage } from '~/hooks/useListPage'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import type { CompilationEntityRes } from '~/types/ReqRes'
 import CompilationItem from '~/classes/CompilationItem'
 import { Button } from '~shared/UI'
@@ -68,9 +68,7 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 // Temp
 const fetchData = async (x: string) => Promise.resolve() as any

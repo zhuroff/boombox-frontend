@@ -1,7 +1,6 @@
 <template>
   <div class="hero">
     <PosterUploader
-      :isAdmin="isAdmin"
       :posterUrl="data.poster ? host(data.poster) : null"
       :entityTitle="data.title"
       @uploadPoster="uploadAndShowImage"
@@ -9,7 +8,6 @@
     <div class="hero__info">
       <AvatarUploader
         v-if="!noAvatar"
-        :isAdmin="isAdmin"
         :avatarUrl="data.avatar ? host(data.avatar) : null"
         :entityTitle="data.title"
         @uploadAvatar="uploadAndShowImage"
@@ -37,11 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useUploadImage } from '~widgets/category-hero'
 import { PosterUploader, AvatarUploader, CategoryTitleEditor } from '~entities/category'
 import { hostString } from '~/utils'
-import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
 import { Button } from '~shared/UI'
 import AlbumPage from '~/classes/AlbumPage'
@@ -64,8 +61,6 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { globalGetters: { authConfig } } = useGlobalStore()
-
 const uploadService = new UploadService()
 
 const { uploadImage } = useUploadImage(props.entityKey, uploadService)
@@ -76,10 +71,6 @@ const {
 } = usePlaylist()
 
 const waveAlbum = ref<null | AlbumPage>(null)
-
-const isAdmin = computed(() => (
-  authConfig.value.user?.role === 'admin'
-))
 
 const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
   const [type, file] = payload

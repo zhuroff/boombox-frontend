@@ -1,6 +1,6 @@
 <template>
-  <td class="table__head-cell">
-    <span v-if="!filter?.length">{{ cell.heading }}</span>
+  <td :class="cellClass">
+    <span v-if="!filter?.length || !filtersState">{{ cell.heading }}</span>
     <Select
       v-else
       size="small"
@@ -16,21 +16,32 @@
 
 <script setup lang="ts">
 import type { JSONSchema4 } from 'json-schema'
+import { computed } from 'vue'
 import { Select } from '~shared/UI'
 
 interface Props {
   cell: TableHeadConfig<JSONSchema4>
-  filter?: string[]
-  filtersState: Record<string, string | number | null>
   localeRootKey: string
+  filter?: string[]
+  filtersState?: Record<string, string | number | null>
 }
 
 interface Emits {
   (e: 'updateFilterValue', value: [string, string | number | null]): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const cellClass = computed(() => {
+  const classArray = ['table__head-cell']
+
+  if (props.cell.schema?.props?.align) {
+    classArray.push(`--${props.cell.schema.props.align}`)
+  }
+
+  return classArray
+})
 </script>
 
 <style lang="scss" scoped>
@@ -43,6 +54,14 @@ const emit = defineEmits<Emits>()
 
   span {
     font-size: 0.875rem;
+  }
+
+  &.--right {
+    text-align: right;
+  }
+
+  &.--center {
+    text-align: center;
   }
 }
 </style>

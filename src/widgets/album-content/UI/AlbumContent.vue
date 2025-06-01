@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import { EntityCardList } from '~features/cardlist'
 
 interface Props {
@@ -45,7 +45,7 @@ withDefaults(defineProps<Props>(), {
   cardsTemplate: 'col'
 })
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 </script>
 
 <style lang="scss">

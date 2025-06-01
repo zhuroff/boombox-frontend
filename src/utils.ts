@@ -82,11 +82,6 @@ export const categoryKeyDict: Record<string, string> = {
   collections: 'collection',
 }
 
-export const localeIntlCodes: Record<LocaleKeys, Intl.LocalesArgument> = {
-  en: 'en-US',
-  by: 'ru-RU'
-}
-
 export const getTimestamp = (value: number, unit: 's' | 'm' | 'h') => {
   const MS_IN_SECOND = 1000
   const MS_IN_MINUTE = MS_IN_SECOND * 60

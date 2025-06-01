@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   errors?: string[]
@@ -45,9 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'medium'
 })
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const stateClasses = computed(() => ([
   'label__text',

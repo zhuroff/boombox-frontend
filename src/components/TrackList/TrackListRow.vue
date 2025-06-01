@@ -63,7 +63,6 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import useGlobalStore from '~/store/global'
 import usePlaylist from '~/store/playlist'
 import { Button } from '~shared/UI'
 import TrackItemAdd from './TrackItemAdd.vue'
@@ -74,6 +73,7 @@ import TrackItemCompilation from './TrackItemCompilation.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
 import { Modal } from '~shared/UI'
 import TrackLyrics from './TrackLyrics.vue'
+import { useUser } from '~entities/user'
 
 interface Props {
   track: Track
@@ -86,15 +86,13 @@ interface Props {
 const props = defineProps<Props>()
 
 const {
-  globalGetters: { authConfig }
-} = useGlobalStore()
-
-const {
   playerGetters: { playingTrack, currentPlaylist }
 } = usePlaylist()
 
 const isModalActive = ref(false)
 const isTOYEditable = ref(false)
+
+const { isAdmin } = useUser()
 
 const trackArtistAndTitle = computed(() => (
   `${props.track.artist.title} - ${props.track.title}`
@@ -107,10 +105,6 @@ const isPlayingTrack = computed(() => (
 const isNotCurrentPlaylist = computed(() => (
   // @ts-expect-error: fix
   currentPlaylist.value?._id && props.albumID !== currentPlaylist.value._id
-))
-
-const isAdmin = computed(() => (
-  authConfig.value.user?.role === 'admin'
 ))
 
 const lyricsModalSwitcher = () => {

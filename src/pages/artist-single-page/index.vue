@@ -29,13 +29,13 @@ import type { UploadImageResult } from '~entities/upload/model/types'
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 const dbService = new DatabaseService()
 
 const pageEntityKey = ref('artists')
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 
 const {
   category,

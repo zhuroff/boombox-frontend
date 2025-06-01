@@ -1,4 +1,4 @@
-import { CRACKLE_PATH } from "~/global"
+import { CRACKLE_PATH } from '../../shared/constants'
 import cloudServices from "~/services/cloud.services"
 import { DatabaseService } from "~/shared/api"
 

@@ -86,16 +86,16 @@
 </template>
 
 <script setup lang="ts">
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   album: UnifiedAlbum
   length?: string
 }
 
-const { globalGetters: { localize } } = useGlobalStore()
-
 defineProps<Props>()
+
+const { localize } = useTranslate()
 </script>
 
 <style scoped lang="scss">

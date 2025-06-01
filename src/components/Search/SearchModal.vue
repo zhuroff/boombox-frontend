@@ -38,7 +38,7 @@
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
 import { debounce, hostString, coverPlaceholders } from '~/utils'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import SearchWrapper from './SearchWrapper.vue'
 import SearchResults from './SearchResults.vue'
 import SearchBlock from './SearchBlock.vue'
@@ -57,7 +57,7 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 
 const debouncedSearch = debounce((value: string) => {
   emit('onSearch', value)

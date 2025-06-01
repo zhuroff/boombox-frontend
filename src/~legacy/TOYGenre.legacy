@@ -84,37 +84,6 @@ const playWave = () => {
   }
 }
 
-const fetchTOYYears = async () => {
-  try {
-    const years: string[] = []
-    const genreFolder = await cloudServices.getFolderContent({
-      path: '',
-      cloudURL: String(import.meta.env.VITE_TOY_CLOUD),
-      root: encodeURIComponent(`TOY/${route.params.genre}`)
-    })
-
-    genreFolder.items.forEach((item) => {
-      if (!item.mimeType && item.title.length === 4) {
-        years.push(item.title)
-        genreFolders.set(
-          item.title,
-          {
-            ...item,
-            path: decodeURIComponent(item.path).replace('MelodyMap/TOY/', '')
-          }
-        )
-        
-      }
-    })
-
-    getTOYWave(years)
-  } catch (error) {
-    console.error(error)
-  } finally {
-    isPageLoading.value = false
-  }
-}
-
 const getTOYWave = async (years: string[]) => {
   try {
     const tracks = await cloudServices.getRandomTracks({
@@ -152,26 +121,4 @@ const setTOYWave = (tracks: CloudEntityRes['items'], title: string) => {
   })
   setPlayerPlaylist(waveAlbum.value)
 }
-
-watch(
-  route,
-  (value) => {
-    if (value.params?.genre) {
-      fetchTOYYears()
-    }
-  },
-  { immediate: true, deep: true }
-)
 </script>
-
-<style lang="scss" scoped>
-.toygenres {
-
-  &__list {
-    padding: 25px;
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(10, 1fr);
-  }
-}
-</style>

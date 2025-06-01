@@ -42,7 +42,7 @@ import { TOYYearCard } from '~entities/toy'
 import { Loader, Button } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import type { CloudEntity } from '~/types/ReqRes'
 
 const dbService = new DatabaseService()
@@ -58,10 +58,7 @@ const yearsConfig = computed(() => ({
   requestConfig: { path: `MelodyMap/TOY/${encodeURIComponent(String(route.params.genre))}` }
 }))
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
-
+const { localize } = useTranslate()
 const { data: years, isFetching, isFetched } = useGetList<CloudEntity>(yearsConfig, dbService)
 
 const playWave = () => {

@@ -38,7 +38,7 @@
 import { ref, computed } from 'vue'
 import type { MinimumAlbumInfo } from '~shared/model'
 import { Loader } from '~shared/UI'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import useWiki from '../model/useWiki'
 
 interface Props {
@@ -47,7 +47,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 
 const {
   isWikiSearching,

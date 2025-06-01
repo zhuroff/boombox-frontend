@@ -37,17 +37,20 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { EntityListView } from '~widgets/entity-list-view'
 import { useCreateEntity, useSnackbar } from '~shared/model'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import { Button } from '~shared/UI'
 import { Modal } from '~shared/UI'
 import { Form, type FormPayload } from '~widgets/form'
 import { embeddedAlbumFormSchema } from '~entities/embedded'
 import { DatabaseService } from '~shared/api'
+import { useUser } from '~entities/user'
 
 const dbService = new DatabaseService()
 
-const { globalGetters: { authConfig, localize } } = useGlobalStore()
+const { localize } = useTranslate()
 const { setSnackbarMessage } = useSnackbar()
+
+const { isAdmin } = useUser()
 
 const isCreateMode = ref(false)
 const entityKey = ref('embedded')
@@ -55,7 +58,6 @@ const formData = ref<FormPayload | null>(null)
 const formSchema = reactive(embeddedAlbumFormSchema)
 
 const isCreatingEnabled = computed(() => !!formData.value)
-const isAdmin = computed(() => authConfig.value.user?.role === 'admin')
 
 const {
   isFetched: isCreatedEntityFetched

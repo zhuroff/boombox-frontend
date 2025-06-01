@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { hostString } from '~/utils'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import CategoryItem from '~/classes/CategoryItem'
 
 interface Props {
@@ -32,6 +32,6 @@ interface Props {
 
 defineProps<Props>()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 const host = (pathname: string) => hostString(pathname)
 </script>

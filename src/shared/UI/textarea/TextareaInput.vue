@@ -19,8 +19,8 @@
 <script setup lang="ts">
 import { onMounted, computed, watchEffect, ref } from 'vue'
 import type { Ref, StyleValue } from 'vue'
-import type { TextareaInputFieldSchema } from '~/shared/model/types'
-import useGlobalStore from '~/store/global'
+import type { TextareaInputFieldSchema } from '~widgets/form'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   name: string
@@ -49,9 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const textareaElement: Ref<null | HTMLTextAreaElement> = ref(null)
 const text = ref<string>(props.defaultValue || '')

@@ -68,7 +68,7 @@ import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 const dbService = new DatabaseService()
 
@@ -78,7 +78,7 @@ const isDeleteModalEnabled = ref(false)
 const isDeleteConfirmed = ref(false)
 const router = useRouter()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 const { setSnackbarMessage } = useSnackbar()
 
 const {

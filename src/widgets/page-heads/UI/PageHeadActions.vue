@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { Button } from '~shared/UI'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import type { ActionPropertyItem } from '~widgets/page-heads'
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
 
 defineProps<Props>()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 </script>
 
 <style scoped lang="scss">

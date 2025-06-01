@@ -1,9 +1,3 @@
-enum UserRole {
-  admin = 'admin',
-  developer = 'developer',
-  guest = 'guest'
-}
-
 interface Entity {
   _id: string
   title: string
@@ -68,14 +62,6 @@ interface Track extends Entity {
   artist: Entity
   genre: Entity
   period: Entity
-}
-
-interface User {
-  _id: string
-  login: string
-  email: string
-  role: UserRole
-  dateCreated: string
 }
 
 interface Token {

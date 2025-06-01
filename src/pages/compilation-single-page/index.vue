@@ -63,11 +63,11 @@ import { DatabaseService } from '~shared/api'
 
 import TrackList from '~/components/TrackList/TrackList.vue'
 
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 const dbService = new DatabaseService()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 const { setSnackbarMessage } = useSnackbar()
 
 const entityKey = ref('compilations')

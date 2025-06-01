@@ -1,4 +1,4 @@
-import api from '~/api'
+import api from '~/app/api'
 import type { DiscogsQueryConfig, DiscogsReleaseRow } from '../model/types'
 
 export default class DiscogsService {

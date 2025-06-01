@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import type { Option } from '~shared/model'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   options: Array<string | number> | Option[]
@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 
 const stateClasses = computed(() => [
   'select',

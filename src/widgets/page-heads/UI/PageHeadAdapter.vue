@@ -33,7 +33,7 @@ import { h, computed, ref } from 'vue'
 import { DatabaseService } from '~shared/api'
 import { useSearch } from '~shared/model'
 import { Modal } from '~shared/UI'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
@@ -56,7 +56,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { globalGetters: { localize } } = useGlobalStore()
+const { localize } = useTranslate()
 
 const dbService = new DatabaseService()
 

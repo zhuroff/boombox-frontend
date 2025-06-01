@@ -19,7 +19,7 @@
           v-else-if="!booklet.items.length"
           class="cover__booklet-empty"
         >
-          <p>Album has no booklet</p>
+          <p>{{ localize('noBooklet') }}</p>
         </div>
         <Slider
           v-else
@@ -51,6 +51,7 @@ import type { BookletSlideState } from '~/types/Album'
 import { Modal, Loader, Sprite, Slider } from '~shared/UI'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   entityKey: string
@@ -69,19 +70,22 @@ const dbService = new DatabaseService()
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+const { localize } = useTranslate()
+
 const coverElement: Ref<null | HTMLInputElement> = ref(null)
 const isFullSlideSet = ref(false)
 
 const entity = computed(() => props.entity)
 
 const { booklet, isActive, isFetching, loadMoreImages, resetBooklet } = useCoverArt(props.entityKey, entity, dbService)
-console.log(booklet)
+
 const closeBookletModal = () => {
   isActive.value = false
   resetBooklet()
 }
 
 const toggleBookletModal = () => {
+  if (props.uploadable) return
   isActive.value = true
 }
 
@@ -183,6 +187,10 @@ const slideChanged = (payload: BookletSlideState) => {
       .icon {
         color: var.$white;
       }
+    }
+
+    &:hover {
+      opacity: 1;
     }
   }
 }

@@ -8,6 +8,8 @@
       v-for="cell in rowCells"
       :key="cell.key"
       :cell="cell"
+      :row="row"
+      @onEmit="<T>(payload: T) => emit('onEmit', payload)"
     />
   </tr>
 </template>
@@ -22,7 +24,12 @@ interface Props {
   schema: JSONSchema4
 }
 
+interface Emits {
+  <T>(e: 'onEmit', data: T): void
+}
+
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
 const rowCells = computed<TableCellConfig<JSONSchema4TypeName, JSONSchema4>[]>(() => (
   props.schema.order.map((key: string) => ({

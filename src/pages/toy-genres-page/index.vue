@@ -27,14 +27,12 @@ import { TOYGenreCard } from '~entities/toy'
 import { Loader } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import useGlobalStore from '~/store/global'
+import { useTranslate } from '~features/localization'
 import type { CloudEntity } from '~/types/ReqRes'
 
 const dbService = new DatabaseService()
 
-const {
-  globalGetters: { localize }
-} = useGlobalStore()
+const { localize } = useTranslate()
 
 const genresConfig = computed(() => ({
   entityKey: 'toy',
