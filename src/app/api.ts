@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { hostString } from '~/utils'
+import { cleanUser } from '~entities/user'
 
 const api = axios.create({
   baseURL: hostString(''),
@@ -13,34 +14,29 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
     return config
   },
   (error) => {
+    console.log(1, error)
     return Promise.reject(error)
   }
 )
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response
+  },
   (error) => {
     if (error.response?.status === 403) {
-      localStorage.removeItem('token')
+      cleanUser()
+      updateAuthHeaders()
     }
     return Promise.reject(error)
   }
 )
 
 export const updateAuthHeaders = () => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    api.defaults.headers.common.Authorization = `Bearer ${token}`
-  } else {
-    delete api.defaults.headers.common.Authorization
-  }
+  delete api.defaults.headers.common.Authorization
 }
 
 export default api

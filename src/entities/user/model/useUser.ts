@@ -15,6 +15,10 @@ const createUser = (user?: User): User => {
   }
 }
 
+export const cleanUser = () => {
+  user.value = createUser()
+}
+
 const user = ref(createUser())
 
 const isAuthChecking = ref(true)
@@ -24,8 +28,7 @@ const isListener = computed(() => user.value.role === UserRole.listener)
 const isGuest = computed(() => user.value.role === UserRole.guest)
 const isAuthorized = computed(() => {
   const currentUser = user.value
-  const token = localStorage.getItem('token')
-  return !!token && !!currentUser._id
+  return !!currentUser._id
 })
 
 export const useUser = () => {
@@ -47,12 +50,10 @@ export const useUserApi = (dbService: DatabaseService) => {
     mutationFn: dbService.refresh,
     onSuccess: (data) => {
       user.value = createUser(data.user)
-      localStorage.setItem('token', data.accessToken)
       updateAuthHeaders()
     },
     onError: () => {
       user.value = createUser()
-      localStorage.removeItem('token')
       updateAuthHeaders()
     }
   })
@@ -74,7 +75,6 @@ export const useUserApi = (dbService: DatabaseService) => {
     mutationFn: (credentials: FormPayload) => dbService.login(credentials),
     onSuccess: (data: AuthResponse) => {
       user.value = createUser(data.user)
-      localStorage.setItem('token', data.accessToken)
       updateAuthHeaders()
       queryClient.invalidateQueries({ queryKey: ['currentUser'] })
     }
@@ -85,7 +85,6 @@ export const useUserApi = (dbService: DatabaseService) => {
     mutationFn: dbService.logout,
     onSuccess: () => {
       user.value = createUser()
-      localStorage.removeItem('token')
       updateAuthHeaders()
       queryClient.invalidateQueries({ queryKey: ['currentUser'] })
     }
