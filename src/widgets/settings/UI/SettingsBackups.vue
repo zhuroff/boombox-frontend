@@ -1,10 +1,5 @@
 <template>
-  <SettingsActions @passBackups="setBackups" />
-
-  <section
-    v-if="backupsTableState.rows.length"  
-    class="settings__section"
-  >
+  <section class="settings__section">
     <h2 class="settings__section-heading">
       {{ localize('headings.backups') }}
     </h2>
@@ -12,28 +7,28 @@
     <Table
       :tableState="backupsTableState"
       :localeRootKey="'backups'"
-      @onEmit="setBackups"
+      @onEmit="(data) => emit('passBackups', data)"
     />
   </section>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { SettingsActions, backupsTableSchema } from '~features/settings'
 import { useTranslate } from '~features/localization'
 import { Table } from '~shared/UI'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 
-const backupsTableState = reactive<TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>>({
-  rows: [],
-  schema: backupsTableSchema
-})
+interface Props {
+  backupsTableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>
+}
+
+interface Emits {
+  (e: 'passBackups', data: string[]): void
+}
+
+defineProps<Props>()
+const emit = defineEmits<Emits>()
 
 const { localize } = useTranslate()
-
-const setBackups = (data: string[]) => {
-  backupsTableState.rows = data.map((timestamp) => ({ timestamp }))
-}
 </script>
 
 <style lang="scss" scoped>

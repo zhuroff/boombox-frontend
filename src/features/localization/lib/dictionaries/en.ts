@@ -131,17 +131,15 @@ export const localesEN: LocaleDictionary = {
       passwordsDoNotMatch: 'Passwords do not match'
     }
   },
+  users: {
+    delete: 'Delete user',
+    id: 'ID',
+    login: 'Login',
+    email: 'Email',
+    role: 'Role'
+  },
   formLabels: {
     errorRequired: 'This field is required'
-  },
-  table: {
-    empty: 'No data',
-    theads: {
-      id: 'ID',
-      login: 'Login',
-      email: 'Email',
-      role: 'Role',
-    }
   },
   unknown: 'Unknown',
   moreOf: 'More of',

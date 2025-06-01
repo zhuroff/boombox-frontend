@@ -131,17 +131,15 @@ export const localesBY: LocaleDictionary = {
       passwordsDoNotMatch: 'Паролі не супадаюць'
     }
   },
+  users: {
+    delete: 'Выдаліць карыстальніка',
+    id: 'ID',
+    login: 'Логін',
+    email: 'Электронная пошта',
+    role: 'Роля'
+  },
   formLabels: {
     errorRequired: 'Гэта поле абавязковае'
-  },
-  table: {
-    empty: 'Няма дадзеных',
-    theads: {
-      id: 'ID',
-      login: 'Логін',
-      email: 'Email',
-      role: 'Роля',
-    }
   },
   unknown: 'Невядома',
   moreOf: 'Яшчэ альбомы',

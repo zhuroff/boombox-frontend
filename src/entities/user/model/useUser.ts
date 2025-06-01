@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { updateAuthHeaders } from '~app/api'
 import { UserRole, type User } from './types'
 import type { DatabaseService } from '~shared/api'
@@ -99,12 +99,23 @@ export const useUserApi = (dbService: DatabaseService) => {
     }
   })
 
-  // Get all users query
-  const { data: users, isLoading: isLoadingUsers } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => dbService.getUsers(),
-    enabled: computed(() => user.value.role === UserRole.admin)
+  // Get all users mutation
+  const { mutateAsync: getUsersMutation, isPending: isLoadingUsers } = useMutation({
+    mutationFn: dbService.getUsers,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['users'], data)
+    }
   })
+
+  // Delete user mutation
+  const { mutateAsync: deleteUserMutation, isPending: isDeletingUser } = useMutation({
+    mutationFn: (userId: string) => dbService.deleteEntity<User>('users', userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    }
+  })
+
+  const users = computed(() => queryClient.getQueryData(['users']))
 
   return {
     users,
@@ -112,10 +123,13 @@ export const useUserApi = (dbService: DatabaseService) => {
     isLoggingOut,
     isCreatingUser,
     isLoadingUsers,
+    isDeletingUser,
     isRefreshing,
     login: loginMutation,
     logout: logoutMutation,
     createUser: createUserMutation,
+    getUsers: getUsersMutation,
+    deleteUser: deleteUserMutation,
     checkAuthorization
   }
 }

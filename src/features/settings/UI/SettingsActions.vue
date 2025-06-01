@@ -6,7 +6,7 @@
     />
     <Button
       label="settings.showUsers"
-      @click="showUsers"
+      @click="handleGetUsers"
     />
     <BackupActions
       action="create"
@@ -33,23 +33,23 @@ import { DatabaseService } from '~shared/api'
 import { LanguageSwitcher } from '~features/localization'
 
 interface Emits {
-  (e: 'passBackups', data: any): void
+  <T>(e: 'passBackups', data: T): void
+  <T>(e: 'passUsers', data: T): void
 }
 
 const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
 
-const { logout, createUser } = useUserApi(dbService)
+const { logout, createUser, getUsers, users } = useUserApi(dbService)
 
-
+const handleGetUsers = async () => {
+  await getUsers()
+  emit('passUsers', users.value)
+}
 
 const showUserForm = () => {
   console.log('showUserForm')
-}
-
-const showUsers = () => {
-  console.log('showUsers')
 }
 </script>
 
