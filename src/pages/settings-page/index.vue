@@ -66,7 +66,7 @@ const setUsers = (data: User[]) => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .settings {
   padding: 0 var.$basicPadding;

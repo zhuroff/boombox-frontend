@@ -26,7 +26,7 @@ const {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .tracklist__row {
 

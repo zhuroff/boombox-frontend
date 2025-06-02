@@ -86,7 +86,7 @@ const emitTextareaValue = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .textarea-field {
   overflow-y: hidden;

@@ -8,7 +8,7 @@
       v-if="isEmpty"
       class="search__empty"
     >
-      There are no results
+      {{ localize('search.empty') }}
     </div>
     <div
       v-else
@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import { useTranslate } from '~features/localization'
 import { Loader } from '~shared/UI'
 
 interface Props {
@@ -28,10 +29,12 @@ interface Props {
 }
 
 defineProps<Props>()
+
+const { localize } = useTranslate()
 </script>
 
 <style scoped lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .search {
 

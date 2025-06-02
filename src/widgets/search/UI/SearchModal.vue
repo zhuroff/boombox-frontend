@@ -25,11 +25,11 @@
       </SearchResults>
     </template>
     <template #footer>
-      By album &nbsp;&bull;&nbsp;
-      By artist &nbsp;&bull;&nbsp;
-      By genre &nbsp;&bull;&nbsp;
-      By period &nbsp;&bull;&nbsp;
-      By track
+      {{ localize('search.byAlbum') }} &nbsp;&bull;&nbsp;
+      {{ localize('search.byArtist') }} &nbsp;&bull;&nbsp;
+      {{ localize('search.byGenre') }} &nbsp;&bull;&nbsp;
+      {{ localize('search.byPeriod') }} &nbsp;&bull;&nbsp;
+      {{ localize('search.byTrack') }}
     </template>
   </SearchWrapper>
 </template>

@@ -83,7 +83,7 @@ const fieldComponent = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .field {
 

@@ -3,7 +3,10 @@
     <div
       v-if="!!heading"
       class="search__block-title"
-    >{{ heading }}</div>
+    >
+      {{ heading }}
+    </div>
+
     <ul class="search__block-list">
       <li
         v-for="item in block.data"
@@ -33,7 +36,7 @@ defineProps<Props>()
 </script>
 
 <style scoped lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .search__block {
   padding: 0.75rem 0;

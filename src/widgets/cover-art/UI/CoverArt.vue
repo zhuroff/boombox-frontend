@@ -47,11 +47,18 @@
 
 <script setup lang="ts">
 import { ref, computed, type Ref } from 'vue'
-import type { BookletSlideState } from '~/types/Album'
-import { Modal, Loader, Sprite, Slider } from '~shared/UI'
+import { Modal, Loader, Sprite } from '~shared/UI'
+import { Slider } from '~features/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
 import { useTranslate } from '~features/localization'
+
+interface BookletSlideState {
+  currentSlideIndex: number
+  prevSlideIndex: number
+  slidesCount: number
+  slidingToIndex: number
+}
 
 interface Props {
   entityKey: string
@@ -101,7 +108,7 @@ const slideChanged = (payload: BookletSlideState) => {
 </script>
 
 <style lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .cover {
   z-index: 10;

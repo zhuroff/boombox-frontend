@@ -65,7 +65,7 @@ const navbar = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .aside {
   flex: none;

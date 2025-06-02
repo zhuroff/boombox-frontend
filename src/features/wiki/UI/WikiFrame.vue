@@ -70,7 +70,7 @@ const selectWikiResult = (id: number) => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .wikiframe {
   width: calc(100vw - 20px);

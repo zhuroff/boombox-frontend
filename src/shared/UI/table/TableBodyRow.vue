@@ -59,7 +59,7 @@ const rowClickHandler = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .table__row {
   border-bottom: 1px solid var.$paleMD;

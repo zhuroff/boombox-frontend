@@ -65,7 +65,7 @@ const entityCardComponent = computed(() => (
 </script>
 
 <style lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .cardlist {
   display: flex;

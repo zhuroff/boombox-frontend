@@ -38,7 +38,7 @@ import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import TOYPageHead from './TOYPageHead.vue'
-import SearchModal from '~/components/Search/SearchModal.vue'
+import { SearchModal } from '~widgets/search'
 import { isRegularAlbum } from '~/utils'
 
 interface Props {
@@ -122,7 +122,7 @@ const deleteAlbum = () => emit('deleteAlbum')
 </script>
 
 <style lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .album {
   &__hero {

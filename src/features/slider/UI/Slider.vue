@@ -26,7 +26,13 @@
 
 <script setup lang="ts">
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
-import type { BookletSlideState } from '~/types/Album'
+
+interface BookletSlideState {
+  currentSlideIndex: number
+  prevSlideIndex: number
+  slidesCount: number
+  slidingToIndex: number
+}
 
 interface Props {
   data: string[]
@@ -46,7 +52,7 @@ const handleSlideStart = (data: BookletSlideState) => {
 </script>
 
 <style lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 @import 'vue3-carousel/dist/carousel.css';
 
 .slider {

@@ -62,7 +62,7 @@ const stateClasses = computed(() => [
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .button {
   border: 1px solid var.$black;

@@ -58,7 +58,7 @@ const stateClasses = computed(() => ([
 </script>
 
 <style setup lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .label {
   display: block;

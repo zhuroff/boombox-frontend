@@ -66,7 +66,7 @@ const contentSections = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .synclist {
   padding: var.$mainPadding;

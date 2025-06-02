@@ -45,7 +45,7 @@ const cellClass = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .table__head-cell {
   font-weight: 600;

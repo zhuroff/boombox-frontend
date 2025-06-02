@@ -30,7 +30,3 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 </script>
-
-<style lang="scss" scoped>
-@use '~/scss/variables' as var;
-</style>

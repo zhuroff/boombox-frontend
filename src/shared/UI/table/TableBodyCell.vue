@@ -118,7 +118,7 @@ const cellClass = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .table__body-cell {
   padding: 0.25rem;

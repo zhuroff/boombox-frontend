@@ -15,7 +15,7 @@
         :isFetching="isSearchFetching"
         :results="searchResults"
         @onSearch="onSearch"
-      ></SearchModal>
+      />
     </Modal>
     <slot></slot>
   </header>
@@ -26,7 +26,7 @@ import { ref } from 'vue'
 import { Modal, Button } from '~shared/UI'
 import { useSearch } from '~shared/model'
 import { DatabaseService } from '~/shared/api'
-import SearchModal from '~/components/Search/SearchModal.vue'
+import { SearchModal } from '~widgets/search'
 
 interface Props {
   heading: string
@@ -48,7 +48,7 @@ const onSearch = (value: string) => {
 </script>
 
 <style lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .header {
   display: flex;

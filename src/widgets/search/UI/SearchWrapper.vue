@@ -28,7 +28,7 @@ defineProps<Props>()
 </script>
 
 <style scoped lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .search {
   background-color: var.$white;

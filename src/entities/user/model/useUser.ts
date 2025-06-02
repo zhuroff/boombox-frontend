@@ -53,7 +53,7 @@ export const useUserApi = (dbService: DatabaseService) => {
       updateAuthHeaders()
     },
     onError: () => {
-      user.value = createUser()
+      cleanUser()
       updateAuthHeaders()
     }
   })
@@ -84,7 +84,7 @@ export const useUserApi = (dbService: DatabaseService) => {
   const { mutateAsync: logoutMutation, isPending: isLoggingOut } = useMutation({
     mutationFn: dbService.logout,
     onSuccess: () => {
-      user.value = createUser()
+      cleanUser()
       updateAuthHeaders()
       queryClient.invalidateQueries({ queryKey: ['currentUser'] })
     }

@@ -32,10 +32,7 @@
 <script setup lang="ts">
 import { computed, ref, h } from 'vue'
 import { hostString } from '~/utils'
-import SearchWrapper from '~/components/Search/SearchWrapper.vue'
-import SearchCreate from '~/components/Search/SearchCreate.vue'
-import SearchResults from '~/components/Search/SearchResults.vue'
-import SearchBlock from '~/components/Search/SearchBlock.vue'
+import { SearchWrapper, SearchCreate, SearchResults, SearchBlock } from '~/widgets/search'
 import { Sprite } from '~shared/UI'
 
 interface Props {

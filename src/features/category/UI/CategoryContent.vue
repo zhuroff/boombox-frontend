@@ -41,7 +41,7 @@ const albumList = computed<BasicEntity[]>(() => (
 </script>
 
 <style lang="scss" scoped>
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .category {
 

@@ -180,7 +180,13 @@ export const localesBY: LocaleDictionary = {
     more: 'кампiляцый'
   },
   search: {
-    placeholder: 'Пошук...'
+    placeholder: 'Пошук...',
+    byAlbum: 'Па альбому',
+    byArtist: 'Па артысту',
+    byGenre: 'Па жанру',
+    byPeriod: 'Па перыяду',
+    byTrack: 'Па трэку',
+    empty: 'Няма вынікаў пошуку'
   },
   player: {
     playNow: 'Граць зараз',

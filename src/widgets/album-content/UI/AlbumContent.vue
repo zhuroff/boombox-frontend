@@ -49,7 +49,7 @@ const { localize } = useTranslate()
 </script>
 
 <style lang="scss">
-@use '~/scss/variables' as var;
+@use '~/app/styles/variables' as var;
 
 .album {
   flex: 1 1 0;

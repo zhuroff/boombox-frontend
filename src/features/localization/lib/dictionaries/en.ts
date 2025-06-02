@@ -180,7 +180,13 @@ export const localesEN: LocaleDictionary = {
     more: 'compilations'
   },
   search: {
-    placeholder: 'Search...'
+    placeholder: 'Search...',
+    byAlbum: 'By album',
+    byArtist: 'By artist',
+    byGenre: 'By genre',
+    byPeriod: 'By period',
+    byTrack: 'By track',
+    empty: 'There are no results'
   },
   player: {
     playNow: 'Play now',
