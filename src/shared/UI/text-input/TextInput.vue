@@ -24,6 +24,7 @@ import { computed, ref, onMounted } from 'vue'
 import type { StyleValue } from 'vue'
 import type { TextInputFieldSchema } from '~widgets/form/model/types'
 import { useTranslate } from '~features/localization'
+import type { ElementSize } from '~shared/lib'
 
 interface Props {
   name: string

@@ -2,12 +2,13 @@ import { computed, onUnmounted, ref, watch, type Ref } from 'vue'
 import { usePaginator } from '~widgets/paginator'
 import { useGetList, useCreateEntity, useUpdateEntity } from '~/shared/model'
 import type DatabaseService from '~/shared/api/DatabaseService'
+import type { Album, GatheringBasic, GatheringCreateReq, GatheringUpdateReq, ListPageResponse } from '~shared/lib'
 
 const useCollections = (album: Ref<Album, Album> | Ref<undefined, undefined>, dbService: DatabaseService) => {
   const collections = ref<GatheringBasic[]>([])
   const collectionEntityKey = ref('collections')
   const isCollectionsModalEnabled = ref(false)
-  const newCollectionPayload = ref<GatheringCreateReq | null>(null)
+  const newCollectionPayload = ref<GatheringCreateReq<Album> | null>(null)
   const collectionUpdatePayload = ref<GatheringUpdateReq | null>(null)
 
   const { paginationState: collectionsPagination } = usePaginator({ isRouted: false })
@@ -42,7 +43,7 @@ const useCollections = (album: Ref<Album, Album> | Ref<undefined, undefined>, db
   const {
     data: increasedCollections,
     isFetching: isNewCollectionCreating,
-  } = useCreateEntity<ListPageResponse<GatheringBasic>, GatheringCreateReq>(
+  } = useCreateEntity<ListPageResponse<GatheringBasic>, GatheringCreateReq<Album>>(
     collectionEntityKey,
     newCollectionPayload,
     dbService,

@@ -1,3 +1,5 @@
+import type { ElementSize } from '~shared/lib'
+
 export interface InputLabelConfig {
   labelText: string
   labelTextPosition?: 'right' | 'left'

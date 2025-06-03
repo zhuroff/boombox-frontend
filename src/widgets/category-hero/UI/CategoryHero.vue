@@ -13,7 +13,7 @@
         @uploadAvatar="uploadAndShowImage"
       />
       <div class="hero__content">
-        <CategoryTitleEditor
+        <CategoryTitle
           :isEditable="!!isEditable"
           :heroTitle="props.data.title"
           :description="description"
@@ -36,14 +36,13 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useUploadImage } from '~widgets/category-hero'
-import { PosterUploader, AvatarUploader, CategoryTitleEditor } from '~entities/category'
+import { useImageUploader, type EntityImagesKeys } from '~shared/model'
+import { PosterUploader, AvatarUploader } from '~features/uploading'
+import { CategoryTitle } from '~features/category'
 import { hostString } from '~/utils'
 import usePlaylist from '~/store/playlist'
 import { Button } from '~shared/UI'
-import AlbumPage from '~/classes/AlbumPage'
-import { UploadService } from '~shared/api'
-import type { EntityImagesKeys } from '~entities/upload/model/types'
+import { UploadService } from '~features/uploading'
 
 interface Props {
   data: Category
@@ -63,14 +62,14 @@ const emit = defineEmits<Emits>()
 
 const uploadService = new UploadService()
 
-const { uploadImage } = useUploadImage(props.entityKey, uploadService)
+const { uploadImage } = useImageUploader(props.entityKey, uploadService)
 
 const {
   playerGetters: { currentPlaylist, playingTrack },
   playerActions: { setPlayerPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
 } = usePlaylist()
 
-const waveAlbum = ref<null | AlbumPage>(null)
+const waveAlbum = ref<null | any /* AlbumPage class */>(null)
 
 const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
   const [type, file] = payload
@@ -79,7 +78,7 @@ const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
     throw new Error('File payload is not defined')
   }
 
-  uploadImage(type, file)
+  uploadImage<EntityImagesKeys, Category>(type, file)
     .then((data) => {
       if (!data?.[type]) {
         throw new Error(`Response data or ${type} of data is not defined`)
@@ -124,14 +123,12 @@ const getCategoryWave = async () => {
 const playWave = () => {
   if (!waveAlbum.value) return
   if (!playingTrack.value?._id) {
-    // @ts-expect-error: fix
     playTrack(waveAlbum.value.tracks[0])
     togglePlayerVisibility()
   } else {
     // @ts-expect-error: fix
     if (currentPlaylist.value?._id !== props.entityKey) {
       setPlayerPlaylist(waveAlbum.value)
-      // @ts-expect-error: fix
       playTrack(waveAlbum.value.tracks[0])
       togglePlayerVisibility()
     }

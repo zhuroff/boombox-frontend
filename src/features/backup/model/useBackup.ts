@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { BackupService } from '~features/backup'
 import { useSnackbar } from '~shared/model'
-import type { BackupAction, BackupActionConfig } from '~features/backup/model/types'
+import type { BackupAction, BackupActionConfig } from '~/features/backup/lib/types'
 import { useTranslate } from '~features/localization'
 
 const useBackup = (action: BackupAction, backupService: BackupService, payload?: string) => {

@@ -1,11 +1,7 @@
-import api from '~app/api'
+import { api } from '~/shared/api'
 import type { User } from '~entities/user/model/types'
 import type { FormPayload } from '~widgets/form'
-
-export interface AuthRefreshResponse {
-  user: User
-  accessToken: string
-}
+import type { AuthRefreshResponse, SearchPayload } from '../lib'
 
 export default class DatabaseService {
   #configToQueryString(config: RequestConfig) {
@@ -44,7 +40,7 @@ export default class DatabaseService {
 
   login = async (payload: FormPayload) => {
     try {
-      const response = await api.post<AuthResponse>('/api/users/login', payload)
+      const response = await api.post<AuthRefreshResponse>('/api/users/login', payload)
       return response.data
     } catch (error) {
       throw error

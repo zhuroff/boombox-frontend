@@ -1,4 +1,4 @@
-import type { BasicEntity } from '~/types/Common'
+import type { Entity } from '~shared/lib'
 import AlbumTrack from '~/classes/AlbumTrack'
 
 export interface Playlist {
@@ -6,6 +6,6 @@ export interface Playlist {
   title: string
   tracks: AlbumTrack[]
   albumCover?: string
-  artist?: BasicEntity
-  period?: BasicEntity
+  artist?: Entity
+  period?: Entity
 }

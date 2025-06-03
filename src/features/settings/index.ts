@@ -1,4 +1,0 @@
-export { default as useSync } from './model/useSync'
-export { default as SyncAction } from './UI/SyncAction.vue'
-export { default as BackupActions } from './UI/BackupActions.vue'
-export { default as SettingsActions } from './UI/SettingsActions.vue'

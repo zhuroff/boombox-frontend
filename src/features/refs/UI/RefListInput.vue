@@ -53,11 +53,12 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useSearch, useCreateEntity, type Option } from '~shared/model'
+import { useSearch, useCreateEntity } from '~shared/model'
 import { TextInput, Button } from '~shared/UI'
 import { DatabaseService } from '~/shared/api'
 import { cleanAndCapitalize, debounce } from '~/utils'
 import { useTranslate } from '~features/localization'
+import type { ElementSize, Entity, Option } from '~shared/lib'
 
 interface Props {
   modelValue?: string

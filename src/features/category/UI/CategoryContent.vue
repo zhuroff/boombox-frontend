@@ -23,6 +23,7 @@
 import { computed } from 'vue'
 import { CategoryHero } from '~widgets/category-hero'
 import { EntityCardList } from '~features/cardlist'
+import type { Category, Entity } from '~shared/lib'
 
 interface Props {
   isFetched: boolean
@@ -35,7 +36,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const albumList = computed<BasicEntity[]>(() => (
+const albumList = computed<Entity[]>(() => (
   [...(props.data?.albums || []), ...(props.data?.embeddedAlbums || [])]
 ))
 </script>

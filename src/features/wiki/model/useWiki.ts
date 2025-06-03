@@ -1,9 +1,9 @@
 import { computed, ref, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type { MinimumAlbumInfo } from '~shared/model'
-import wiki from 'wikipedia'
+import type WikiService from '../api/WikiService'
 
-const useWiki = (entity: MinimumAlbumInfo) => {
+const useWiki = (entity: MinimumAlbumInfo, wikiService: WikiService) => {
   const wikiFrameURL = ref('')
   const wikiPageID = ref<string | null>(null)
   const wikiFrameResults = ref(null)
@@ -42,7 +42,7 @@ const useWiki = (entity: MinimumAlbumInfo) => {
      wikiLang = 'ru'
     }
 
-    wiki.setLang(wikiLang)
+    wikiService.setLang(wikiLang)
     return true
   }
 
@@ -55,7 +55,7 @@ const useWiki = (entity: MinimumAlbumInfo) => {
     queryKey: [entity],
     queryFn: () => {
       if (prepareSearchParams()) {
-        return wiki.search(`${entity.albumArtist} - ${entity.albumTitle}`)
+        return wikiService.search(`${entity.albumArtist} - ${entity.albumTitle}`)
       }
 
       throw new Error('Wiki search params is not defined')
@@ -72,7 +72,7 @@ const useWiki = (entity: MinimumAlbumInfo) => {
     refetchOnWindowFocus: false,
     queryKey: [wikiPageID],
     queryFn: () => {
-      return wiki.page(String(wikiPageID.value))
+      return wikiService.getPage(String(wikiPageID.value))
     }
   })
 

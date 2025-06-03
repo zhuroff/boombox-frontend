@@ -48,7 +48,7 @@ import usePlaylist from '~/store/playlist'
 import AlbumTrack from '~/classes/AlbumTrack'
 import TrackItemPlay from '~/components/TrackList/TrackItemPlay.vue'
 import { Button } from '~shared/UI'
-import type { TrackRes } from '~/types/ReqRes'
+import type { TrackRes } from '~shared/lib'
 
 interface Props {
   track: TrackRes

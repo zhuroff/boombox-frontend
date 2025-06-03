@@ -1,4 +1,5 @@
 import { computed, ref, type Ref } from 'vue'
+import type { Album, RelatedAlbums } from '~/shared/lib'
 import type { DatabaseService } from '~shared/api'
 import { useGetList, useGetPage } from '~shared/model'
 

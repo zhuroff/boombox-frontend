@@ -4,6 +4,7 @@
       <SettingsActions
         @passBackups="setBackups"
         @passUsers="setUsers"
+        @passSyncData="setSyncData"
       />
       <SettingsBackups
         v-if="backupsTableState.rows.length"
@@ -15,32 +16,32 @@
         :usersTableState="usersTableState"
         @passUsers="setUsers"
       />
-      
-      <!-- <section
-        v-if="isAdmin"
-        class="settings__section"
-      >
-        <h2 class="settings__section-heading">{{ localize('headings.createUser') }}</h2>
-        <div class="settings__form">
-          <Form
-            :schema="userSchema"
-            :isResetAfterSubmit="true"
-            :style="{ gap: '0.5rem', display: 'flex', flexDirection: 'column', maxWidth: '50%' }"
-            @formSubmit="createUser"
-          />
-        </div>
-      </section> -->
     </div>
+    <Modal
+      :isModalActive="showSyncDataModal"
+      @closeModal="handleCloseSyncDataModal"
+    >
+      <AlbumSyncList
+        v-if="!!syncData"
+        :sections="syncData"
+      />
+    </Modal>
   </section>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { SettingsActions } from '~features/settings'
-import { SettingsBackups, SettingsUsers } from '~widgets/settings'
+import { reactive, ref } from 'vue'
+import { SettingsActions, SettingsBackups, SettingsUsers } from '~widgets/settings'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import { backupsTableSchema } from '~features/backup'
 import { usersTableSchema, type User } from '~entities/user'
+import { AlbumSyncList, type SyncDataPayload } from '~features/sync'
+import { Modal } from '~shared/UI'
+import type { TableConfig, SyncResponse } from '~shared/lib'
+
+const showSyncDataModal = ref(false)
+const syncData = ref<SyncResponse | null>(null)
+const syncDataReset = ref<() => void>(() => {})
 
 const backupsTableState = reactive<TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>>({
   rows: [],
@@ -62,6 +63,17 @@ const setUsers = (data: User[]) => {
     email: user.email,
     role: user.role
   }))
+}
+
+const setSyncData = (payload: SyncDataPayload) => {
+  syncData.value = payload.data
+  syncDataReset.value = payload.reset
+  showSyncDataModal.value = true
+}
+
+const handleCloseSyncDataModal = () => {
+  showSyncDataModal.value = false
+  syncDataReset.value?.()
 }
 </script>
 

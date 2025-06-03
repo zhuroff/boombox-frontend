@@ -21,6 +21,7 @@ import { onMounted, computed, watchEffect, ref } from 'vue'
 import type { Ref, StyleValue } from 'vue'
 import type { TextareaInputFieldSchema } from '~widgets/form'
 import { useTranslate } from '~features/localization'
+import type { ElementSize } from '~shared/lib'
 
 interface Props {
   name: string

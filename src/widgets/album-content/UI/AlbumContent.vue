@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import { useTranslate } from '~features/localization'
 import { EntityCardList } from '~features/cardlist'
+import type { RelatedAlbums } from '~shared/lib'
 
 interface Props {
   entityKey: string

@@ -27,9 +27,10 @@ import { computed } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { AlbumCard } from '~entities/album'
 import { CategoryCard } from '~entities/category'
+import type { Entity, DeletePayload } from '~shared/lib'
 
 interface Props {
-  entities: BasicEntity[]
+  entities: Entity[]
   entityKey: string
   isDraggable?: boolean
   isDeletable?: boolean

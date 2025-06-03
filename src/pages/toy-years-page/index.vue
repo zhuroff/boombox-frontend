@@ -43,7 +43,7 @@ import { Loader, Button } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 import { useTranslate } from '~features/localization'
-import type { CloudEntity } from '~/types/ReqRes'
+import type { CloudEntity } from '~shared/lib'
 
 const dbService = new DatabaseService()
 

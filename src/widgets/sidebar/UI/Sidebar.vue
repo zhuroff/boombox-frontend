@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import router from '~/app/routes'
+import { useRouter } from 'vue-router'
 import { Button, Sprite } from '~shared/UI'
 import { useTranslate } from '~features/localization'
 
@@ -50,6 +50,8 @@ defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { localize } = useTranslate()
+
+const router = useRouter()
 
 const burgerClick = () => emit('burgerClick')
 

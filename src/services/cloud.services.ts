@@ -1,4 +1,4 @@
-import api from '~/app/api'
+import { api } from '~/shared/api'
 // import commonServices from './common.services'
 import type { CloudEntity, CloudEntityReq, CloudEntityReqExt, CloudEntityReqFile, CloudEntityReqRandom, CloudEntityRes } from '~/types/ReqRes'
 

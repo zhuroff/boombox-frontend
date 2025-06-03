@@ -5,100 +5,8 @@ declare module '*.vue' {
   export default component
 }
 
-interface Entity {
-  _id: string
-  title: string
-  dateCreated?: string
-  cloudURL?: string
-}
 
-interface Category extends Entity {
-  poster?: string
-  avatar?: string
-  albums: Album[]
-  embeddedAlbums?: Embedded[]
-}
-
-interface GatheringBasic extends Entity {
-  avatar?: string
-  entities: string[]
-}
-
-interface Compilation extends GatheringBasic {
-  poster?: string
-  tracks: Track[]
-}
-
-interface Album extends Entity {
-  folderName: string
-  artist: Entity
-  genre: Entity
-  period: Entity
-  created?: string
-  modified?: string
-  coverURL?: string
-  tracks: Track[]
-  inCollections?: Entity[]
-}
-
-type AlbumShort = Required<Pick<Album, '_id' | 'title' | 'cloudURL' | 'folderName'>>
-
-interface Embedded extends Entity {
-  artist: Entity
-  genre: Entity
-  period: Entity
-  frame: string
-  inCollections?: Entity[]
-}
-
-type UnifiedAlbum = Album | Embedded | Compilation | TOYAlbum
-
-interface Track extends Entity {
-  fileName: string
-  created?: string
-  modified?: string
-  duration?: number
-  path: string
-  mimeType?: string
-  listened: number
-  inAlbum: AlbumShort
-  inCompilations: Entity[]
-  artist: Entity
-  genre: Entity
-  period: Entity
-}
-
-interface Token {
-  _id: string
-  user: User
-  refreshToken: string
-}
-
-/**
- * =================================================================
- * =================================================================
- */
-
-type UserRoles = 'admin' | 'user'
-
-interface AuthRefreshResponse {
-  accessToken: string
-  user: UserResponse
-}
-
-type SortingValue = Record<string, 1 | -1>
-
-interface RandomEntityReqFilter {
-  from: string
-  key: string
-  name: string
-  excluded?: Record<string, string>
-}
-
-interface RelatedAlbumsReqFilter extends RandomEntityReqFilter {
-  value: string
-}
-
+/*
 type RequestConfig = PaginationState & {
   isRandom?: true | 1
   filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
@@ -107,19 +15,6 @@ type RequestConfig = PaginationState & {
 interface UseEntityListPayload {
   entityKey: string
   requestConfig: RequestConfig
-}
-
-interface SyncResponse {
-  added: Album[]
-  updated: Album[]
-  deleted: Album[]
-  invalid: Record<string, string>[]
-}
-
-interface GlobalState {
-  currentLocale: LocaleKeys
-  authConfig: AuthConfig
-  readonly locales: Map<LocaleKeys, LocaleDictionary> 
 }
 
 interface PlayerState {
@@ -131,83 +26,6 @@ interface PlayerState {
 
 interface PlayerPlaylist {
   tracks: AlbumTrack[]
-}
-
-interface AuthData {
-  login: string
-  password: string
-}
-
-interface AuthResponse {
-  accessToken: string
-  refreshToken: string
-  user: UserResponse
-}
-
-interface AuthConfig {
-  isAuthenticated?: boolean
-  user?: UserResponse
-}
-
-interface ListPageResponse<T> {
-  docs: T[],
-  pagination: Pagination
-}
-
-interface Snackbar {
-  message: string
-  type: 'warning' | 'success' | 'error' | 'info'
-  time?: number
-}
-
-interface BasicEntity {
-  _id: string
-  title: string
-  cloudURL?: string
-}
-
-interface DeletePayload {
-  id: string
-  entityKey: string
-}
-
-interface AlbumItem extends Required<BasicEntity> {
-  artist: BasicEntity
-  genre: BasicEntity
-  period: BasicEntity
-  tracks: AlbumTrack[]
-  inCollections: BasicEntity[]
-  folderName: string
-  path: string
-  coverURL?: string
-}
-
-interface EmbeddedItem extends Omit<AlbumItem, 'tracks'> {
-  frame: string
-}
-
-interface CollectedItem extends BasicEntity {
-  avatar?: string
-  poster?: string
-}
-
-type UnifiedAlbumPage = AlbumItem | EmbeddedItem | CompilationPage
-
-type UnifiedAlbumEntity = AlbumItem | EmbeddedItem | CompilationItem
-
-interface RelatedAlbums {
-  name: string
-  docs: Album[]
-}
-
-// interface RelatedCompilations {
-//   name: string
-//   docs: CompilationItem<BasicEntity>[]
-// }
-
-interface UnifiedRelatedAlbums {
-  name: string
-  docs: UnifiedAlbumEntity[]
 }
 
 interface AlbumTrack extends Required<BasicEntity> {
@@ -251,72 +69,4 @@ interface TrackProgress {
   progressTime: number
 }
 
-interface EmbeddedPayload {
-  artist: string
-  frame: string
-  genre: string
-  period: string
-  title: string
-}
-
-interface ReorderPayload {
-  entityID: string
-  oldOrder: number
-  newOrder: number
-}
-
-interface GatheringCreateReq {
-  title: string,
-  entityID: string
-}
-
-interface GatheringUpdateReq {
-  gatheringID: string
-  entityType: string
-  entityID: string
-  isInList: boolean
-  order?: number
-}
-
-type ElementSize = 'small' | 'medium' | 'large'
-
-type ElementPosition = 'top' | 'right' | 'bottom' | 'left'
-
-interface SearchPayload {
-  query: string
-  key?: string
-}
-
-type SearchResultData = AlbumItem | CategoryItem | TrackRes
-
-interface SearchResultState {
-  key: string
-  data: SearchResultData[]
-}
-
-interface WikiSearchResult {
-  title: string
-  pageid: number
-}
-
-interface TableConfig<T, U> {
-  rows: T[]
-  schema: U
-  pagination?: Pagination
-  setPagination?: (payload: Partial<Pagination>) => void
-}
-
-interface TableCellConfig<T, U> {
-  key: string
-  value: T
-  schema: U
-}
-
-interface TableHeadConfig<T> {
-  key: string
-  heading: string
-  schema: T | undefined
-  filter: T | undefined
-}
-
-type TableFilters = Record<string, string[]>
+*/

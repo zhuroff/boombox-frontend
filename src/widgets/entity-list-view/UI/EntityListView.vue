@@ -64,6 +64,7 @@ import { Modal, Loader, Confirmation } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import { useGetList, useDeleteEntity } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
+import type { Entity, DeletePayload } from '~shared/lib'
 
 import { useTranslate } from '~features/localization'
 
@@ -111,11 +112,11 @@ const listQueryConfig = computed(() => ({
   requestConfig: paginationState
 }))
 
-const { data, refetch, isFetched, isFetching } = useGetList<BasicEntity>(listQueryConfig, dbService)
+const { data, refetch, isFetched, isFetching } = useGetList<Entity>(listQueryConfig, dbService)
 const {
   isFetched: isDeleted,
   isFetching: isDeleting
-} = useDeleteEntity<BasicEntity>(
+} = useDeleteEntity<Entity>(
   props.entityKey,
   deletedEntityId,
   dbService,

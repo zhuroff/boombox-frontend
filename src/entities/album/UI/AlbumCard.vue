@@ -1,38 +1,11 @@
 <template>
   <li class="cardlist__item">
-    <router-link
-      class="cardlist__item-link"
-      :to="routePath"
-    >
-      <div class="cardlist__item-image">
-        <div
-          v-if="'frame' in card && card.frame"
-          v-html="card.frame"
-          class="cardlist__item-cover --blind"
-        />
-        <img
-          v-else
-          :src="cardCover"
-          :alt="card.title"
-          referrerpolicy="no-referrer"
-          class="cardlist__item-cover"
-        />
-        <img
-          src="/img/vinyl.png"
-          alt="vinyl placeholder"
-          class="cardlist__item-vinyl"
-        />
-      </div>
-      <div class="cardlist__item-title">
-        {{ card.title }}
-      </div>
-      <div
-        v-if="cardCaption"
-        class="cardlist__item-info"
-      >
-        {{ cardCaption }}
-      </div>
-    </router-link>
+    <CardPreview
+      :routePath="routePath"
+      :cardTitle="card.title"
+      :cardCover="cardCover"
+      :cardCaption="cardCaption"
+    />
     <Button
       v-if="isAdmin && isDraggable"
       icon="drag"
@@ -56,11 +29,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { hostString } from '~/utils'
-import { Button } from '~shared/UI'
+import { Button, CardPreview } from '~shared/UI'
 import { useUser } from '~entities/user'
+import type { UnifiedAlbum } from '~shared/lib'
 
 interface Props {
-  card: AlbumItem | CollectedItem | EmbeddedItem
+  card: UnifiedAlbum
   entityKey: string
   isDraggable?: boolean
   isDeletable?: boolean
@@ -76,7 +50,7 @@ const dynamicEntityKey = computed(() => (
 ))
 
 const routePath = computed(() => {
-  const id = props.card._id || 'path' in props.card && props.card.path.replace('MelodyMap/TOY/', '')
+  const id = props.card._id || ('path' in props.card ? props.card.path.replace('MelodyMap/TOY/', '') : '')
 
   return {
     path: `/${dynamicEntityKey.value}/${id}`
@@ -86,7 +60,7 @@ const routePath = computed(() => {
 const cardCaption = computed(() => (
   'artist' in props.card && props.card.artist
     ? `${props.card.artist.title } / ${props.card.period.title} / ${props.card.genre.title}`
-    : null
+    : undefined
 ))
 
 const cardCover = computed(() => (

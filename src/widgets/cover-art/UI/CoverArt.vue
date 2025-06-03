@@ -52,6 +52,7 @@ import { Slider } from '~features/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
 import { useTranslate } from '~features/localization'
+import type { UnifiedAlbum } from '~shared/lib'
 
 interface BookletSlideState {
   currentSlideIndex: number

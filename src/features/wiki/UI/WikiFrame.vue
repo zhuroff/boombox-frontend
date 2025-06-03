@@ -39,7 +39,7 @@ import { ref, computed } from 'vue'
 import type { MinimumAlbumInfo } from '~shared/model'
 import { Loader } from '~shared/UI'
 import { useTranslate } from '~features/localization'
-import useWiki from '../model/useWiki'
+import { useWiki, WikiService } from '~features/wiki'
 
 interface Props {
   entity: MinimumAlbumInfo
@@ -49,13 +49,15 @@ const props = defineProps<Props>()
 
 const { localize } = useTranslate()
 
+const wikiService = new WikiService()
+
 const {
   isWikiSearching,
   isWikiPageLoading,
   wikiSearchResults,
   wikiFrameURL,
   wikiPageID
-} = useWiki(props.entity)
+} = useWiki(props.entity, wikiService)
 
 const selected = ref<number>(-1)
 

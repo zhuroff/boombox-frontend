@@ -1,37 +1,42 @@
 <template>
   <li class="cardlist__item">
-    <router-link
-      class="cardlist__item-link"
-      :to="`/${entityKey}/${card._id}`"
-    >
-      <img
-        :src="card.avatar ? host(card.avatar) : placeholderPreview"
-        :alt="card.title"
-        class="cardlist__item-cover --fixed --rounded"
-      >
-      <div class="cardlist__item-title">
-        {{ card.title }}
-      </div>
-      <div class="cardlist__item-info">
-        {{ localize('navigation.albums') }}: {{ card.albums }}
-      </div>
-    </router-link>
+    <CardPreview
+      :routePath="routePath"
+      :cardCover="cardCover"
+      :cardTitle="card.title"
+      :withVinyl="false"
+      :cardCaption="cardCaption"
+      :coverClasses="['--fixed', '--rounded']"
+    />
   </li>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { hostString } from '~/utils'
 import { useTranslate } from '~features/localization'
-import CategoryItem from '~/classes/CategoryItem'
+import { CardPreview } from '~shared/UI'
 
 interface Props {
-  card: CategoryItem
+  card: any /* CategoryItem */
   placeholderPreview: string
   entityKey: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const { localize } = useTranslate()
 const host = (pathname: string) => hostString(pathname)
+
+const routePath = computed(() => ({
+  path: `/${props.entityKey}/${props.card._id}`
+}))
+
+const cardCover = computed(() => (
+  props.card.avatar ? host(props.card.avatar) : props.placeholderPreview
+))
+
+const cardCaption = computed(() => (
+  `${localize('navigation.albums')}: ${props.card.albums}`
+))
 </script>

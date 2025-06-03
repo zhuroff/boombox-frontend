@@ -3,9 +3,9 @@ import { useQuery } from '@tanstack/vue-query'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type DiscogsService from '~/features/discogs/api/DiscogsService'
 import { usePaginator, type PaginationState } from '~widgets/paginator'
-import type { MinimumAlbumInfo } from '~shared/model'
-import type { DiscogsReleaseRow, DiscogsQueryConfig } from './types'
+import type { DiscogsReleaseRow, DiscogsQueryConfig } from '../lib/types'
 import { discogsTableSchema } from '~features/discogs'
+import type { MinimumAlbumInfo, TableConfig, TableFilters } from '~shared/lib'
 
 const useDiscogs = (discogsService: DiscogsService, entity: MinimumAlbumInfo | MinimumAlbumInfo[]) => {
   const discogsFilters = reactive<TableFilters>({

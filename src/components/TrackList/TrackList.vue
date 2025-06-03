@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-import type { DraggableEvent } from '~/types/Common'
+import type { DraggableEvent, ReorderPayload, GatheringUpdateReq } from '~shared/lib'
 import { VueDraggableNext } from 'vue-draggable-next'
 import usePlaylist from '~/store/playlist'
 import TrackListRow from './TrackListRow.vue'

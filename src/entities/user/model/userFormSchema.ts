@@ -1,0 +1,54 @@
+import type { JSONSchema4 } from 'json-schema'
+
+const userFormSchema: JSONSchema4 = {
+  type: "object",
+  title: "New user form",
+  properties: {
+    login: {
+      type: "string",
+      title: "userForm.login",
+      required: true
+    },
+    role: {
+      type: "string",
+      element: "select",
+      title: "userForm.role",
+      required: true,
+      width: "100%",
+      properties: {
+        admin: {
+          type: "string",
+          title: "userForm.admin"
+        },
+        user: {
+          type: "string",
+          title: "userForm.user"
+        },
+        listener: {
+          type: "string",
+          title: "userForm.listener"
+        }
+      }
+    },
+    email: {
+      type: "string",
+      format: "email",
+      title: "userForm.email",
+      required: true
+    },
+    password: {
+      type: "string",
+      format: "password",
+      title: "userForm.password",
+      required: true
+    },
+    passwordConfirm: {
+      type: "string",
+      format: "password",
+      title: "userForm.passwordConfirm",
+      required: true
+    }
+  }
+}
+
+export default userFormSchema

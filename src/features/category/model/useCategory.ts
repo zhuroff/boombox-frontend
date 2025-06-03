@@ -1,6 +1,7 @@
 import type { Ref } from 'vue'
 import type { DatabaseService } from '~shared/api'
 import { useGetPage } from '~shared/model'
+import type { Category } from '~shared/lib'
 
 const useCategory = (categoryKey: Ref<string>, dbService: DatabaseService) => {
   const { data, isFetched, queryClient, queryKey } = useGetPage<Category>(categoryKey, dbService)

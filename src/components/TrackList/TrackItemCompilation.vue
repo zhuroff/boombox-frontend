@@ -47,11 +47,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { BasicEntity } from '~/types/Common'
 // import { useListPage } from '~/hooks/useListPage'
 import { useTranslate } from '~features/localization'
-import type { CompilationEntityRes } from '~/types/ReqRes'
-import CompilationItem from '~/classes/CompilationItem'
+// import type { CompilationEntityRes } from '~/types/ReqRes'
+// import CompilationItem from '~/classes/CompilationItem'
 import { Button } from '~shared/UI'
 // import GatheringTabs from '~/components/GatheringTabs.vue'
 import { Modal, Confirmation } from '~shared/UI'
@@ -80,7 +79,7 @@ const fetchData = async (x: string) => Promise.resolve() as any
 
 const isCompilationLoading = ref(false)
 const entityToDelete = ref<string | null>(null)
-const compilations = ref<CompilationItem<BasicEntity>[] | undefined>(undefined)
+const compilations = ref<any /* CompilationItem<BasicEntity> */[] | undefined>(undefined)
 
 const openCompilationsModal = async () => {
   isCompilationLoading.value = true
