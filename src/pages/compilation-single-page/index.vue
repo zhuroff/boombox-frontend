@@ -2,29 +2,29 @@
   <section class="template">
     <transition name="fade">
       <Loader
-        v-if="!isGatheringFetched"
+        v-if="!isFetched"
         mode="light"
       />
     </transition>
 
     <transition name="fade">
       <AlbumContent
-        v-if="gathering"
+        v-if="compilation"
         entityKey="compilations"
       >
         <template #hero>
           <PageHeadAdapter
-            :album="gathering"
-            @getRandomAlbum="() => preRandomState = gathering?._id || ''"
+            :album="compilation"
+            @getRandomAlbum="() => preRandomState = compilation?._id || ''"
             @deleteAlbum="isDeleteModalEnabled = true"
           />
         </template>
 
         <template #content>
           <TrackList
-            v-if="'tracks' in gathering"
-            :tracks="gathering.tracks"
-            :albumID="gathering._id"
+            v-if="'tracks' in compilation"
+            :tracks="compilation.tracks"
+            :albumID="compilation._id"
             @trackOrderChanged="changeTracksOrder"
             @removeTrackFromCompilation="removeTrackFromCompilation"
           />
@@ -54,16 +54,17 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useGathering, AlbumContent } from '~widgets/album-content'
+import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 
-import TrackList from '~/components/TrackList/TrackList.vue'
+import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
+import { useCompilation } from '~entities/compilation'
 
 const dbService = new DatabaseService()
 
@@ -76,12 +77,12 @@ const isDeleteConfirmed = ref(false)
 const router = useRouter()
 
 const {
-  gathering,
-  isGatheringFetched,
+  compilation,
+  isFetched,
   preRandomState,
-} = useGathering<Compilation>(dbService, entityKey)
+} = useCompilation(dbService)
 
-const currentCompilationId = computed(() => gathering.value?._id || null)
+const currentCompilationId = computed(() => compilation.value?._id || null)
 
 const changeTracksOrder = (payload: ReorderPayload) => {
   // emit('trackOrderChanged', payload)

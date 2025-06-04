@@ -58,17 +58,19 @@
 import { computed, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useAlbum, AlbumContent } from '~widgets/album-content'
+import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 
-import { WikiFrame } from '~features/wiki'
-import { DiscogsTable } from '~features/discogs'
+import { WikiFrame } from '~usecases/wiki'
+import { DiscogsTable } from '~usecases/discogs'
+
+import { useAlbum } from '~entities/album'
 
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 
 const dbService = new DatabaseService()
 

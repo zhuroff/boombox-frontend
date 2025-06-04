@@ -14,7 +14,7 @@
 import { computed } from 'vue'
 import { Sprite } from '~shared/UI'
 import type { DropdownItem } from '~shared/lib'
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 
 interface Props {
   option: DropdownItem

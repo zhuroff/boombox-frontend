@@ -16,7 +16,7 @@ import { h, computed } from 'vue'
 import type { FormSchemaProperty } from '~widgets/form'
 import FieldLabel from './FieldLabel.vue'
 import { TextInput, TextareaInput } from '~shared/UI'
-import { RefListInput } from '~features/refs'
+import { RefListInput } from '~usecases/refs'
 
 interface Props {
   property: FormSchemaProperty

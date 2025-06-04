@@ -48,10 +48,10 @@
 <script setup lang="ts">
 import { ref, computed, type Ref } from 'vue'
 import { Modal, Loader, Sprite } from '~shared/UI'
-import { Slider } from '~features/slider'
+import { Slider } from '~usecases/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 import type { UnifiedAlbum } from '~shared/lib'
 
 interface BookletSlideState {

@@ -36,13 +36,13 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useImageUploader, type EntityImagesKeys } from '~shared/model'
-import { PosterUploader, AvatarUploader } from '~features/uploading'
-import { CategoryTitle } from '~features/category'
+import { useImageUploader, type EntityImagesKeys } from '~usecases/uploading'
+import { PosterUploader, AvatarUploader } from '~usecases/uploading'
+import { CategoryTitle } from '~usecases/category'
 import { hostString } from '~/utils'
 import usePlaylist from '~/store/playlist'
 import { Button } from '~shared/UI'
-import { UploadService } from '~features/uploading'
+import { UploadService } from '~usecases/uploading'
 
 interface Props {
   data: Category

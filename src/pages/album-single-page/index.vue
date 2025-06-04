@@ -64,18 +64,20 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { useAlbum, AlbumContent } from '~widgets/album-content'
+import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 import { Gathering } from '~widgets/gathering'
 
-import { useCollections } from '~features/collection'
-import { DiscogsTable } from '~features/discogs'
-import { WikiFrame } from '~features/wiki'
+import { useCollections } from '~usecases/collection'
+import { DiscogsTable } from '~usecases/discogs'
+import { WikiFrame } from '~usecases/wiki'
+
+import { useAlbum } from '~entities/album'
 
 import { Modal, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 
-import TrackList from '~/components/TrackList/TrackList.vue'
+import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
 const dbService = new DatabaseService()
 

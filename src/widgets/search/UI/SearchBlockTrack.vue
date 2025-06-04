@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslate } from '~features/localization'
-import usePlaylist from '~/store/playlist'
-import AlbumTrack from '~/classes/AlbumTrack'
-import TrackItemPlay from '~/components/TrackList/TrackItemPlay.vue'
+import { useTranslate } from '~usecases/localization'
+// import usePlaylist from '~/store/playlist'
+// import AlbumTrack from '~/classes/AlbumTrack'
+import TrackItemPlay from '~/~legacy/components/TrackList/TrackItemPlay.vue'
 import { Button } from '~shared/UI'
 import type { TrackRes } from '~shared/lib'
 
@@ -58,10 +58,10 @@ const props = defineProps<Props>()
 
 const { localize } = useTranslate()
 
-const {
-  playerGetters: { currentPlaylistTracks },
-  playerActions: { playTrackNext, addToEndOfList, removeTrackFromPlaylist }
-} = usePlaylist()
+// const {
+//   playerGetters: { currentPlaylistTracks },
+//   playerActions: { playTrackNext, addToEndOfList, removeTrackFromPlaylist }
+// } = usePlaylist()
 
 // const trackToPlay = computed(() => (
 //   new AlbumTrack(props.track, 0, props.track.coverURL, true)

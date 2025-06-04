@@ -5,23 +5,7 @@
       :cardTitle="card.title"
       :cardCover="cardCover"
       :cardCaption="cardCaption"
-    />
-    <Button
-      v-if="isAdmin && isDraggable"
-      icon="drag"
-      size="small"
-      isInverted
-      isRounded
-      className="cardlist__item-action --drag"
-    />
-    <Button
-      v-if="isAdmin && isDeletable"
-      icon="delete"
-      size="small"
-      isInverted
-      isRounded
-      className="cardlist__item-action"
-      @click="() => $emit('deleteEntity', { id: card._id, dynamicEntityKey })"
+      :cardFrame="'frame' in card ? card.frame : undefined"
     />
   </li>
 </template>
@@ -29,21 +13,22 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { hostString } from '~/utils'
-import { Button, CardPreview } from '~shared/UI'
-import { useUser } from '~entities/user'
-import type { UnifiedAlbum } from '~shared/lib'
+import { CardPreview } from '~shared/UI'
+import type { AlbumBasic } from '../lib/types'
+import type { EmbeddedBasic } from '~entities/embedded'
+import type { CompilationBasic } from '~entities/compilation'
+import type { CollectionBasic } from '~entities/collection'
+import type { TOYAlbumBasic } from '~entities/toy'
 
-interface Props {
-  card: UnifiedAlbum
+type UnifiedAlbumCard = AlbumBasic | EmbeddedBasic | CompilationBasic | CollectionBasic | TOYAlbumBasic
+
+type Props = {
+  card: UnifiedAlbumCard
   entityKey: string
-  isDraggable?: boolean
-  isDeletable?: boolean
   placeholderPreview: string
 }
 
 const props = defineProps<Props>()
-
-const { isAdmin } = useUser()
 
 const dynamicEntityKey = computed(() => (
   'frame' in props.card ? 'embedded' : props.entityKey || 'albums'

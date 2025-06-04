@@ -46,12 +46,12 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTOYAlbum } from '~entities/toy'
-import { DiscogsTable } from '~features/discogs'
+import { DiscogsTable } from '~usecases/discogs'
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 import { DatabaseService } from '~shared/api'
 import { Loader } from '~shared/UI'
-import TrackList from '~/components/TrackList/TrackList.vue'
+import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
 const dbService = new DatabaseService()
 const route = useRoute()

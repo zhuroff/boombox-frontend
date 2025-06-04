@@ -33,9 +33,9 @@
 import { reactive, ref } from 'vue'
 import { SettingsActions, SettingsBackups, SettingsUsers } from '~widgets/settings'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
-import { backupsTableSchema } from '~features/backup'
+import { backupsTableSchema } from '~usecases/backup'
 import { usersTableSchema, type User } from '~entities/user'
-import { AlbumSyncList, type SyncDataPayload } from '~features/sync'
+import { AlbumSyncList, type SyncDataPayload } from '~usecases/sync'
 import { Modal } from '~shared/UI'
 import type { TableConfig, SyncResponse } from '~shared/lib'
 

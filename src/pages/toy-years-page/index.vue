@@ -42,7 +42,7 @@ import { TOYYearCard } from '~entities/toy'
 import { Loader, Button } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 import type { CloudEntity } from '~shared/lib'
 
 const dbService = new DatabaseService()

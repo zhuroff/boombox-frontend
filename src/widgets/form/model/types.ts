@@ -59,5 +59,3 @@ export type FormSchemaProperty =
   | CheckboxInputFieldSchema
   | FileInputFieldSchema
   | SelectInputFieldSchema
-  
-export type FormPayload = Record<string, string | File>

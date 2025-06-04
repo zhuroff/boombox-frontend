@@ -14,13 +14,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { hostString } from '~/utils'
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 import { CardPreview } from '~shared/UI'
+import type { CategoryBasic } from '../lib/types'
 
 interface Props {
-  card: any /* CategoryItem */
-  placeholderPreview: string
+  card: CategoryBasic
   entityKey: string
+  placeholderPreview: string
 }
 
 const props = defineProps<Props>()

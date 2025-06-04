@@ -9,10 +9,10 @@
 
     <transition name="fade">
       <CategoryContent
-        v-if="isFetched && category"
+        v-if="isFetched && collection"
         :isFetched="isFetched"
         :pageEntityKey="pageEntityKey"
-        :data="category"
+        :data="collection"
         :totalCounts="totalCounts"
         :setUploadedImage="setUploadedImage"
         defaultPreview="/img/album.webp"
@@ -23,13 +23,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { CategoryContent, useCategory } from '~features/category'
+import { CategoryContent } from '~widgets/category-content'
+import { useCollection } from '~entities/collection'
 import type { UploadImageResult } from '~entities/upload/model/types'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 
 const dbService = new DatabaseService()
 
@@ -38,18 +39,18 @@ const pageEntityKey = ref('collections')
 const { localize } = useTranslate()
 
 const {
-  category,
+  collection,
   isFetched,
-  updateCategoryValue
-} = useCategory(pageEntityKey, dbService)
+  updateCollectionValue
+} = useCollection(dbService)
 
 const totalCounts = computed(() => (
-  localize('totalAlbums') + `: ${(category.value?.albums?.length || 0) + (category.value?.embeddedAlbums?.length || 0)}`
+  localize('totalAlbums') + `: ${(collection.value?.entities?.length || 0)}`
 ))
 
 const setUploadedImage = (payload: UploadImageResult) => {
-  if (category.value) {
-    updateCategoryValue(payload.key, payload.url)
+  if (collection.value) {
+    updateCollectionValue(payload.key, payload.url)
   }
 }
 </script>

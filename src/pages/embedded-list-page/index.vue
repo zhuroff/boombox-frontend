@@ -35,9 +35,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from 'vue'
-import { EntityListView } from '~widgets/entity-list-view'
+import { EntityListView } from '~views/entity-list-view'
 import { useCreateEntity, useSnackbar } from '~shared/model'
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 import { Button } from '~shared/UI'
 import { Modal } from '~shared/UI'
 import { Form, type FormPayload } from '~widgets/form'

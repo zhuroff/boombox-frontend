@@ -1,1 +1,0 @@
-export { default as EntityCardList } from './UI/EntityCardList.vue'

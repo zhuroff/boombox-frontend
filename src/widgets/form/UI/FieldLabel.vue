@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ElementSize, ElementPosition } from '~shared/lib'
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 
 interface Props {
   errors?: string[]

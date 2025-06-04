@@ -26,50 +26,26 @@ export type Option = {
   value: string
 }
 
-export type Album = Entity & {
-  folderName: string
-  artist: Entity
-  genre: Entity
-  period: Entity
-  created?: string
-  modified?: string
-  coverURL?: string
-  tracks: Track[]
-  path: string
-  inCollections?: Entity[]
-}
 
-export type TOYAlbum = Omit<Album, 'inCollections'> & {
-  metadataContent: MinimumAlbumInfo[] | null
-}
 
-export type Track = Entity & {
-  fileName: string
-  created?: string
-  modified?: string
-  duration?: number
-  path: string
-  mimeType?: string
-  listened: number
-  inAlbum: Album
-  inCompilations: Entity[]
-  artist: Entity
-  genre: Entity
-  period: Entity
-}
 
-export type Embedded = Entity & {
-  artist: Entity
-  genre: Entity
-  period: Entity
-  frame: string
-  inCollections?: Entity[]
-}
 
-export type GatheringBasic = Entity & {
-  avatar?: string
-  entities: string[]
-}
+// export type Track = Entity & {
+//   fileName: string
+//   created?: string
+//   modified?: string
+//   duration?: number
+//   path: string
+//   mimeType?: string
+//   listened: number
+//   inAlbum: Album
+//   inCompilations: Entity[]
+//   artist: Entity
+//   genre: Entity
+//   period: Entity
+// }
+
+
 
 export type GatheringUpdateReq = {
   gatheringID: string
@@ -84,7 +60,7 @@ export type Compilation = GatheringBasic & {
   tracks: Track[]
 }
 
-export type UnifiedAlbum = Album | Embedded | Compilation | TOYAlbum
+// export type UnifiedAlbum = Album | Embedded | Compilation | TOYAlbum
 
 export type Category = Entity & {
   poster?: string
@@ -223,3 +199,5 @@ export type SearchPayload = {
   query: string
   key?: string
 }
+
+export type FormPayload = Record<string, string | File>

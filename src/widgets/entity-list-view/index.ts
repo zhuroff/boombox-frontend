@@ -1,1 +1,0 @@
-export { default as EntityListView } from './UI/EntityListView.vue'

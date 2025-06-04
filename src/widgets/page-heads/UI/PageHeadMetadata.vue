@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 
 interface Props {
   album: UnifiedAlbum

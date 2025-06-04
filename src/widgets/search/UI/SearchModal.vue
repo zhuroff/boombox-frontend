@@ -38,7 +38,7 @@
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
 import { debounce, hostString, coverPlaceholders } from '~/utils'
-import { useTranslate } from '~features/localization'
+import { useTranslate } from '~usecases/localization'
 import SearchWrapper from './SearchWrapper.vue'
 import SearchResults from './SearchResults.vue'
 import SearchBlock from './SearchBlock.vue'

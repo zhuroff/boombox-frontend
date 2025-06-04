@@ -1,17 +1,21 @@
 <template>
   <Loader v-if="isRefreshing" mode="light" />
-  <Authorized v-else-if="isAuthorized" />
-  <Unauthorized v-else />
+  <AuthorizedView v-else-if="isAuthorized" />
+  <UnauthorizedView v-else />
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import { Loader } from '~shared/UI'
-import { useTranslate } from '~features/localization'
+
+import { AuthorizedView } from '~views/authorized-view'
+import { UnauthorizedView } from '~views/unauthorized-view'
+
+import { useTranslate } from '~usecases/localization'
+
 import { useUserApi, useUser } from '~entities/user'
+
+import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import Authorized from './providers/Authorized.vue'
-import Unauthorized from './providers/Unauthorized.vue'
 
 const { checkAndSetLocale } = useTranslate()
 

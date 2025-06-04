@@ -3,6 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import { useQueryClient } from '@tanstack/vue-query'
 import type { DatabaseService } from '~shared/api'
+import type { Entity } from '../lib'
 
 const useGetPage = <T extends Entity & { genre?: Partial<Entity>, period?: Partial<Entity> }>(
   entityKey: Ref<string>,
