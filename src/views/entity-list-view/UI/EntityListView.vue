@@ -64,7 +64,7 @@ import { ref, computed, watchEffect, watch } from 'vue'
 
 import { Header } from '~widgets/header'
 import { Paginator, usePaginator } from '~widgets/paginator'
-import { EntityCardList } from '~widgets/entity-cards'
+import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 
 import { useTranslate } from '~usecases/localization'
 
@@ -72,7 +72,7 @@ import { DatabaseService } from '~shared/api'
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useGetList, useDeleteEntity } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
-import type { Entity, DeletePayload } from '~shared/lib'
+import type { DeletePayload } from '~shared/lib'
 
 type Props = {
   entityKey: string
@@ -119,11 +119,12 @@ const listQueryConfig = computed(() => ({
   requestConfig: paginationState
 }))
 
-const { data, refetch, isFetched, isFetching } = useGetList<Entity>(listQueryConfig, dbService)
+const { data, refetch, isFetched, isFetching } = useGetList<UnifiedEntityCard>(listQueryConfig, dbService)
+
 const {
   isFetched: isDeleted,
   isFetching: isDeleting
-} = useDeleteEntity<Entity>(
+} = useDeleteEntity<UnifiedEntityCard>(
   props.entityKey,
   deletedEntityId,
   dbService,
@@ -133,7 +134,7 @@ const {
 const docsCount = computed(() => String(data.value?.pagination.totalDocs || 0))
 
 const isPaginated = computed(() => (
-  isFetched.value && data.value?.pagination.totalPages > 1
+  isFetched.value && Number(data.value?.pagination.totalPages) > 1
 ))
 
 watchEffect(() => {

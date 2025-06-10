@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import usePlaylist from '~/store/playlist'
+import usePlaylist from '../../store/playlist'
 import { Button } from '~shared/UI'
 
 interface Props {

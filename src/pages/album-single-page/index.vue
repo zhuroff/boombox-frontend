@@ -76,6 +76,7 @@ import { useAlbum } from '~entities/album'
 
 import { Modal, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
+import type { ReorderPayload } from '~shared/lib'
 
 import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
@@ -107,7 +108,7 @@ const changeTracksOrder = (payload: ReorderPayload) => {
   // emit('trackOrderChanged', payload)
 }
 
-const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+const removeTrackFromCompilation = (payload: any /* GatheringUpdateReq */) => {
   // emit('removeTrackFromCompilation', payload)
 }
 </script>

@@ -12,23 +12,20 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { hostString } from '~/utils'
+import { useTranslate } from '~usecases/localization'
 import { CardPreview } from '~shared/UI'
-import type { AlbumBasic } from '../lib/types'
-import type { EmbeddedBasic } from '~entities/embedded'
-import type { CompilationBasic } from '~entities/compilation'
-import type { CollectionBasic } from '~entities/collection'
-import type { TOYAlbumBasic } from '~entities/toy'
-
-type UnifiedAlbumCard = AlbumBasic | EmbeddedBasic | CompilationBasic | CollectionBasic | TOYAlbumBasic
+import { hostString, assertNever } from '~/utils'
+import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
 
 type Props = {
-  card: UnifiedAlbumCard
+  card: ExcludeFromUnifiedEntityCard<'CategoryBasic'>
   entityKey: string
   placeholderPreview: string
 }
 
 const props = defineProps<Props>()
+
+const { localize } = useTranslate()
 
 const dynamicEntityKey = computed(() => (
   'frame' in props.card ? 'embedded' : props.entityKey || 'albums'
@@ -42,15 +39,32 @@ const routePath = computed(() => {
   }
 })
 
-const cardCaption = computed(() => (
-  'artist' in props.card && props.card.artist
-    ? `${props.card.artist.title } / ${props.card.period.title} / ${props.card.genre.title}`
-    : undefined
-))
+const cardCaption = computed(() => {
+  switch (props.card.kind) {
+    case 'album':
+    case 'embedded':
+      return `${props.card.artist.title } / ${props.card.period.title} / ${props.card.genre.title}`
+    case 'collection':
+    case 'compilation':
+      return localize('collections.cardCaption')
+    default:
+      assertNever(props.card)
+      return ''
+  }
+})
 
-const cardCover = computed(() => (
-  'avatar' in props.card && props.card.avatar
-    ? hostString(props.card.avatar)
-    : ('coverURL' in props.card && props.card.coverURL) || props.placeholderPreview
-))
+const cardCover = computed(() => {
+  switch (props.card.kind) {
+    case 'album':
+      return props.card.coverURL || props.placeholderPreview
+    case 'compilation':
+    case 'collection':
+      return props.card.avatar ? hostString(props.card.avatar) : props.placeholderPreview
+    case 'embedded':
+      return props.placeholderPreview
+    default:
+      assertNever(props.card)
+      return props.placeholderPreview
+  }
+})
 </script>

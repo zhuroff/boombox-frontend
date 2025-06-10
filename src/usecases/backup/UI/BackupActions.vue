@@ -8,9 +8,8 @@
 
 <script setup lang="ts">
 import { watch } from 'vue'
-import { useBackup, BackupService } from '~usecases/backup'
 import { Button } from '~shared/UI'
-import type { BackupAction } from '~usecases/backup/lib/types'
+import { useBackup, BackupService, type BackupAction } from '~usecases/backup'
 
 interface Props {
   action: BackupAction

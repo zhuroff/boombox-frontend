@@ -1,10 +1,10 @@
 <template>
-  <section class="section">
-    <div class="section__center">
+  <section class="content">
+    <div class="unknown-page">
       <h1>{{ localize('pageNotFound') }}</h1>
       <div>
         <Button
-          :label="localize('goBack')"
+          label="goBack"
           @click="() => router.back()"
         />
       </div>
@@ -21,3 +21,19 @@ const router = useRouter()
 
 const { localize } = useTranslate()
 </script>
+
+<style lang="scss" scoped>
+@use '~app/styles/variables' as var;
+
+.unknown-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    @include var.serif(2rem);
+    margin-bottom: 1rem;
+  }
+}
+</style>

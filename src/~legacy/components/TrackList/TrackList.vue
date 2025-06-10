@@ -23,7 +23,7 @@
 import { reactive, computed } from 'vue'
 import type { DraggableEvent, ReorderPayload, GatheringUpdateReq } from '~shared/lib'
 import { VueDraggableNext } from 'vue-draggable-next'
-import usePlaylist from '~/store/playlist'
+import usePlaylist from '../../store/playlist'
 import TrackListRow from './TrackListRow.vue'
 
 interface Props {

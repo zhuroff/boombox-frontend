@@ -10,7 +10,7 @@ const backupsTableSchema: JSONSchema4 = {
     },
     restore: {
       type: 'object',
-      component: '/src/features/settings/UI/BackupActions.vue',
+      component: '/src/usecases/backup/UI/BackupActions.vue',
       props: {
         action: 'restore',
         size: 'small',
@@ -20,7 +20,7 @@ const backupsTableSchema: JSONSchema4 = {
     },
     delete: {
       type: 'object',
-      component: '/src/features/settings/UI/BackupActions.vue',
+      component: '/src/usecases/backup/UI/BackupActions.vue',
       props: {
         action: 'delete',
         size: 'small',

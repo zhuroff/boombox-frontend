@@ -107,10 +107,12 @@ export const cleanAndCapitalize = (str: string): string => {
     .join(' ')
 }
 
-export const isRegularAlbum = (album: UnifiedAlbum): album is Album => {
-  return 'artist' in album && '_id' in album.artist
-}
+export const assertNever = (value: never, isError = false) => {
+  console.warn('Impossible value:', value)
 
-export const isTOYAlbum = (album: UnifiedAlbum): album is TOYAlbum => {
-  return 'metadataContent' in album
+  if (isError) {
+    throw new Error('Impossible value')
+  }
+
+  return undefined
 }

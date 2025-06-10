@@ -52,7 +52,7 @@ import { Slider } from '~usecases/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
 import { useTranslate } from '~usecases/localization'
-import type { UnifiedAlbum } from '~shared/lib'
+import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
 
 interface BookletSlideState {
   currentSlideIndex: number
@@ -66,7 +66,7 @@ interface Props {
   cover?: string
   uploadable?: boolean
   uploadSlug?: string
-  entity?: UnifiedAlbum
+  entity?: ExcludeFromUnifiedEntityCard<'CategoryBasic'>
 }
 
 interface Emits {

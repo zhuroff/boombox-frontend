@@ -5,8 +5,7 @@ export type EmbeddedBasic = Entity & {
   genre: Entity
   period: Entity
   frame: string
+  kind: 'embedded'
 }
 
-export type EmbeddedFull = EmbeddedBasic & {
-  dateCreated: string
-}
+export type EmbeddedFull = EmbeddedBasic

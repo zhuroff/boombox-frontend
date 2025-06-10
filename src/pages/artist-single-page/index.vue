@@ -25,12 +25,12 @@
 import { computed, ref } from 'vue'
 import { CategoryContent } from '~widgets/category-content'
 import { useCategory } from '~entities/category'
-import type { UploadImageResult } from '~entities/upload/model/types'
+
+import { useTranslate } from '~usecases/localization'
+import type { UploadImageResult } from '~usecases/uploading'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-
-import { useTranslate } from '~usecases/localization'
 
 const dbService = new DatabaseService()
 

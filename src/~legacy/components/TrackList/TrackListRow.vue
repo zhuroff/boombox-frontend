@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import usePlaylist from '~/store/playlist'
+import usePlaylist from '../../store/playlist'
 import { Button } from '~shared/UI'
 import TrackItemAdd from './TrackItemAdd.vue'
 import TrackItemPlay from './TrackItemPlay.vue'

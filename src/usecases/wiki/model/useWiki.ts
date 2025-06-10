@@ -1,7 +1,8 @@
 import { computed, ref, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import type { MinimumAlbumInfo } from '~shared/model'
+import type { MinimumAlbumInfo } from '~shared/lib'
 import type WikiService from '../api/WikiService'
+import type { wikiSearchResult } from 'wikipedia'
 
 const useWiki = (entity: MinimumAlbumInfo, wikiService: WikiService) => {
   const wikiFrameURL = ref('')
@@ -49,7 +50,7 @@ const useWiki = (entity: MinimumAlbumInfo, wikiService: WikiService) => {
   const {
     isFetching: isWikiSearching,
     data: wikiSearchResults
-  } = useQuery<{ results: WikiSearchResult[] }>({
+  } = useQuery<{ results: wikiSearchResult[] }>({
     retry: 3,
     refetchOnWindowFocus: false,
     queryKey: [entity],

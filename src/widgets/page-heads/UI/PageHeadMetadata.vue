@@ -87,9 +87,10 @@
 
 <script setup lang="ts">
 import { useTranslate } from '~usecases/localization'
+import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 
 interface Props {
-  album: UnifiedAlbum
+  album: UnifiedEntityFullCard
   length?: string
 }
 

@@ -15,7 +15,7 @@ const usersTableSchema: JSONSchema4 = {
     },
     delete: {
       type: 'object',
-      component: '/src/features/user/UI/DeleteUserButton.vue',
+      component: '/src/usecases/user/UI/DeleteUserButton.vue',
       props: {
         size: 'small',
         align: 'right',

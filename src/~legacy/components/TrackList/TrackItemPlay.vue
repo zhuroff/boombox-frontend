@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import usePlaylist from '~/store/playlist'
+import usePlaylist from '../../store/playlist'
 import { Button } from '~shared/UI'
 
 interface Props {

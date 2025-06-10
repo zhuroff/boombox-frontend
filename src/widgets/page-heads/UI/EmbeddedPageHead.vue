@@ -18,9 +18,10 @@ import { reactive } from 'vue'
 import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'
 import type { ActionPropertyItem, HeadEmits } from '~widgets/page-heads'
+import type { EmbeddedFull } from '~/entities/embedded'
 
 interface Props {
-  album: Embedded
+  album: EmbeddedFull
 }
 
 defineProps<Props>()

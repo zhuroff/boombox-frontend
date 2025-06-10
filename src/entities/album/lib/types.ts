@@ -7,6 +7,7 @@ export type AlbumBasic = Entity & {
   period: Entity
   coverURL?: string
   path: string
+  kind: 'album'
 }
 
 export type AlbumFull = AlbumBasic & {

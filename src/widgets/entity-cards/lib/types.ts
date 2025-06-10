@@ -1,15 +1,28 @@
-import type { Entity } from '~shared/lib'
 import type { CollectionBasic } from '~entities/collection'
-import type { AlbumBasic } from '~entities/album'
-import type { CompilationBasic } from '~entities/compilation'
+import type { AlbumBasic, AlbumFull } from '~entities/album'
+import type { CompilationBasic, CompilationFull } from '~entities/compilation'
 import type { CategoryBasic } from '~entities/category'
-import type { EmbeddedBasic } from '~entities/embedded'
-import type { TOYAlbumBasic } from '~entities/toy'
+import type { EmbeddedBasic, EmbeddedFull } from '~entities/embedded'
+import type { TOYAlbumBasic, TOYAlbumFull } from '~entities/toy'
 
-export type UnifiedEntityCard<T extends Entity = Entity> = T extends AlbumBasic ? AlbumBasic :
-  T extends EmbeddedBasic ? EmbeddedBasic :
-  T extends CategoryBasic ? CategoryBasic :
-  T extends CollectionBasic ? CollectionBasic :
-  T extends CompilationBasic ? CompilationBasic :
-  T extends TOYAlbumBasic ? TOYAlbumBasic :
-  Entity
+type EntityMap = {
+  AlbumBasic: AlbumBasic
+  EmbeddedBasic: EmbeddedBasic
+  CategoryBasic: CategoryBasic
+  CollectionBasic: CollectionBasic
+  CompilationBasic: CompilationBasic
+  TOYAlbumBasic: TOYAlbumBasic
+}
+
+type EntityFullMap = {
+  AlbumFull: AlbumFull
+  EmbeddedFull: EmbeddedFull
+  CompilationFull: CompilationFull
+  TOYAlbumFull: TOYAlbumFull
+}
+
+export type UnifiedEntityCard = EntityMap[keyof EntityMap]
+
+export type ExcludeFromUnifiedEntityCard<T extends keyof EntityMap> = Exclude<UnifiedEntityCard, EntityMap[T]>
+
+export type UnifiedEntityFullCard = EntityFullMap[keyof EntityFullMap]

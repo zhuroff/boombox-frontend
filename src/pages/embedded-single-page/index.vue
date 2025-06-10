@@ -64,7 +64,7 @@ import { PageHeadAdapter } from '~widgets/page-heads'
 import { WikiFrame } from '~usecases/wiki'
 import { DiscogsTable } from '~usecases/discogs'
 
-import { useAlbum } from '~entities/album'
+import { useEmbedded } from '~entities/embedded'
 
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
@@ -88,7 +88,7 @@ const {
   isAlbumReady,
   preRandomState,
   relatedAlbums
-} = useAlbum(dbService, entityKey)
+} = useEmbedded(dbService)
 
 const minimumAlbumData = computed(() => ({
   albumTitle: album.value?.title || '',

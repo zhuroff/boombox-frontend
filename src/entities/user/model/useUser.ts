@@ -1,7 +1,8 @@
 import { computed, ref } from 'vue'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { updateAuthHeaders, type DatabaseService } from '~shared/api'
-import { UserRole, type User, type FormPayload, type AuthRefreshResponse } from '~shared/lib'
+import type { FormPayload } from '~shared/lib'
+import { UserRole, type User, type AuthRefreshResponse } from '../lib/types'
 
 const createUser = (user?: User): User => {
   return {
@@ -9,7 +10,6 @@ const createUser = (user?: User): User => {
     login: user?.login || '',
     email: user?.email || '',
     role: user?.role || UserRole.guest,
-    dateCreated: user?.dateCreated || ''
   }
 }
 

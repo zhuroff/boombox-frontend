@@ -1,5 +1,7 @@
 import { computed, ref, type ComputedRef } from 'vue'
 import type { RouteParamsGeneric } from 'vue-router'
+import type { TOYAlbumFull, TOYAlbumBasic } from '../lib/types'
+import type { RelatedAlbums, RequestConfig, UseEntityListPayload } from '~shared/lib'
 import type { DatabaseService } from '~shared/api'
 import { useGetList, useGetPage } from '~shared/model'
 
@@ -53,17 +55,17 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
   const {
     data: album,
     isFetched: isAlbumFetched
-  } = useGetPage<TOYAlbum>(
+  } = useGetPage<TOYAlbumFull>(
     pageEntityKey,
     dbService,
     preRandomState
   )
 
-  const { data: relatedAlbumsByYear } = useGetList<Album>(yearsConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByYear } = useGetList<TOYAlbumBasic>(yearsConfig, dbService, isAlbumReady)
 
-  const { data: relatedAlbumsByGenre } = useGetList<Album>(genresConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByGenre } = useGetList<TOYAlbumBasic>(genresConfig, dbService, isAlbumReady)
 
-  const relatedAlbums = computed<RelatedAlbums[]>(() => ([
+  const relatedAlbums = computed<RelatedAlbums<TOYAlbumBasic>[]>(() => ([
     {
       docs: relatedAlbumsByYear.value?.docs || [],
       name: String(routeParams.value.id)

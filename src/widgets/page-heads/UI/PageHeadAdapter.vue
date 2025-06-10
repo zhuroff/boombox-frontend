@@ -39,10 +39,11 @@ import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import TOYPageHead from './TOYPageHead.vue'
 import { SearchModal } from '~widgets/search'
-import { isRegularAlbum } from '~/utils'
+import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
+import { assertNever } from '~/utils'
 
 interface Props {
-  album: UnifiedAlbum
+  album: UnifiedEntityFullCard
   withSearch?: boolean
 }
 
@@ -95,24 +96,21 @@ const totalTracksTime = computed(() => {
   return formattedTime
 })
 
-const renderAlbumHeadComponent = (album: Album | TOYAlbum) => {
-  return isRegularAlbum(album)
-    ? h(AlbumPageHead, { album, length: totalTracksTime.value })
-    : h(TOYPageHead, { album, length: '' })
-}
-
-const renderCompilationHeadComponent = (album: Compilation) => {
-  return h(CompilationPageHead, { album, length: totalTracksTime.value })
-}
-
 const PageHeadComponent = computed(() => {
-  if ('tracks' in props.album) {
-    return 'artist' in props.album
-      ? renderAlbumHeadComponent(props.album)
-      : renderCompilationHeadComponent(props.album)
+  switch (props.album.kind) {
+    case 'album':
+      return (
+        'metadataContent' in props.album
+          ? h(TOYPageHead, { album: props.album, length: '' })
+          : h(AlbumPageHead, { album: props.album, length: totalTracksTime.value })
+      )
+    case 'embedded':
+      return h(EmbeddedPageHead, { album: props.album })
+    case 'compilation':
+      return h(CompilationPageHead, { album: props.album, length: totalTracksTime.value })
+    default:
+      assertNever(props.album)
   }
-
-  return h(EmbeddedPageHead, { album: props.album })
 })
 
 const getRandomAlbum = () => emit('getRandomAlbum')

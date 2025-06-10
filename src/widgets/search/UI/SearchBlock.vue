@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import type { RendererElement, RendererNode, VNode } from 'vue'
+import type { SearchResultState } from '~shared/lib'
 
 interface Props {
   block: SearchResultState

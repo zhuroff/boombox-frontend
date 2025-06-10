@@ -44,7 +44,8 @@ import SearchResults from './SearchResults.vue'
 import SearchBlock from './SearchBlock.vue'
 import { TextInput } from '~shared/UI'
 import SearchBlockTrack from './SearchBlockTrack.vue'
-import type { Album } from '~shared/lib'
+import type { SearchResultState } from '~shared/lib'
+import type { AlbumBasic } from '~/entities/album'
 
 interface Props {
   isFetching: boolean
@@ -73,7 +74,7 @@ const getRowComponent = (key: string, data: SearchResultData) => {
         [
           h(
             'img',
-            { src: (data as Album).coverURL },
+            { src: (data as AlbumBasic).coverURL },
           ),
           h(
             'div',
@@ -82,12 +83,12 @@ const getRowComponent = (key: string, data: SearchResultData) => {
               h(
                 'strong',
                 {},
-                (data as Album).title
+                (data as AlbumBasic).title
               ),
               h(
                 'span',
                 {},
-                (data as Album).artist?.title
+                (data as AlbumBasic).artist?.title
               )
             ]
           )

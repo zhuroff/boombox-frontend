@@ -3,6 +3,7 @@ import type { Entity } from '~shared/lib'
 
 export type CompilationBasic = Entity & {
   avatar?: string
+  kind: 'compilation'
 }
 
 export type CompilationFull = CompilationBasic & {

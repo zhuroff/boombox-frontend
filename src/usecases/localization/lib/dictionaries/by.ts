@@ -21,7 +21,7 @@ export const localesBY: LocaleDictionary = {
   save: 'Захаваць',
   offline: 'Няма далучэння да Iнтэрнэту',
   delConfirmMessage: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
-  pageNotFound: 'Старонка не знайдзена',
+  pageNotFound: 'Старонка не знойдзена',
   noBooklet: 'Альбом не мае буклета',
   goBack: 'Назад',
   navigation: {
@@ -164,7 +164,7 @@ export const localesBY: LocaleDictionary = {
     removed: 'Альбом паспяхова выдалены з калекцыі',
     added: 'Альбом паспяхова дададзены ў калекцыю',
     reordered: 'Парадак альбомаў паспяхова зменены',
-    cardCaption: 'Альбомаў у калекцыі',
+    cardCaption: 'Розныя артысты',
     drop: 'Калекцыя паспяхова выдалена'
   },
   compilations: {
@@ -175,7 +175,7 @@ export const localesBY: LocaleDictionary = {
     removed: 'Трэк паспяхова выдалены з компіляцыі',
     added: 'Трэк паспяхова дададзены ў компіляцыю',
     reordered: 'Парадак трэкаў паспяхова зменены',
-    cardCaption: 'Трэкаў у компіляцыі',
+    cardCaption: 'Розныя артысты',
     drop: 'Компіляцыя паспяхова выдалена',
     more: 'кампiляцый'
   },

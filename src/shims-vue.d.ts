@@ -7,16 +7,6 @@ declare module '*.vue' {
 
 
 /*
-type RequestConfig = PaginationState & {
-  isRandom?: true | 1
-  filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
-}
-
-interface UseEntityListPayload {
-  entityKey: string
-  requestConfig: RequestConfig
-}
-
 interface PlayerState {
   currentPlaylist: PlayerPlaylist | null
   reservedPlaylist: PlayerPlaylist | null

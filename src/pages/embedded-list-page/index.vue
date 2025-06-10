@@ -40,10 +40,11 @@ import { useCreateEntity, useSnackbar } from '~shared/model'
 import { useTranslate } from '~usecases/localization'
 import { Button } from '~shared/UI'
 import { Modal } from '~shared/UI'
-import { Form, type FormPayload } from '~widgets/form'
+import { Form } from '~widgets/form'
 import { embeddedAlbumFormSchema } from '~entities/embedded'
 import { DatabaseService } from '~shared/api'
 import { useUser } from '~entities/user'
+import type { FormPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 

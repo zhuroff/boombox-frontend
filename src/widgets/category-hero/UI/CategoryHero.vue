@@ -13,7 +13,7 @@
         @uploadAvatar="uploadAndShowImage"
       />
       <div class="hero__content">
-        <CategoryTitle
+        <EditableHeading
           :isEditable="!!isEditable"
           :heroTitle="props.data.title"
           :description="description"
@@ -38,14 +38,16 @@
 import { onMounted, ref } from 'vue'
 import { useImageUploader, type EntityImagesKeys } from '~usecases/uploading'
 import { PosterUploader, AvatarUploader } from '~usecases/uploading'
-import { CategoryTitle } from '~usecases/category'
+import { EditableHeading } from '~shared/UI'
 import { hostString } from '~/utils'
-import usePlaylist from '~/store/playlist'
+import usePlaylist from '~/~legacy/store/playlist'
 import { Button } from '~shared/UI'
 import { UploadService } from '~usecases/uploading'
+import type { CategoryFull } from '~entities/category'
+import type { CollectionFull } from '~entities/collection'
 
 interface Props {
-  data: Category
+  data: CategoryFull | CollectionFull
   entityKey: string
   description: string
   noAvatar?: boolean
@@ -78,7 +80,7 @@ const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
     throw new Error('File payload is not defined')
   }
 
-  uploadImage<EntityImagesKeys, Category>(type, file)
+  uploadImage<EntityImagesKeys, CategoryFull>(type, file)
     .then((data) => {
       if (!data?.[type]) {
         throw new Error(`Response data or ${type} of data is not defined`)
@@ -126,7 +128,6 @@ const playWave = () => {
     playTrack(waveAlbum.value.tracks[0])
     togglePlayerVisibility()
   } else {
-    // @ts-expect-error: fix
     if (currentPlaylist.value?._id !== props.entityKey) {
       setPlayerPlaylist(waveAlbum.value)
       playTrack(waveAlbum.value.tracks[0])

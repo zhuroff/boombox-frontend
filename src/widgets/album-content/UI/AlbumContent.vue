@@ -33,12 +33,12 @@
 
 <script setup lang="ts">
 import { useTranslate } from '~usecases/localization'
-import { EntityCardList } from '~usecases/cardlist'
+import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 import type { RelatedAlbums } from '~shared/lib'
 
 interface Props {
   entityKey: string
-  relatedAlbums?: RelatedAlbums[]
+  relatedAlbums?: RelatedAlbums<UnifiedEntityCard>[]
   cardsTemplate?: 'col' | 'row' | 'offset'
 }
 

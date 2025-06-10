@@ -1,16 +1,16 @@
 <template>
-  <div class="category__title">
+  <div class="editable__heading">
     <input
       v-if="isEditable"
       type="text"
-      class="category__title-input"
+      class="editable__heading-input"
       v-model="localHeroTitle"
     >
     <div
       v-else
-      class="category__title-block"
+      class="editable__heading-block"
     >{{ localHeroTitle }}</div>
-    <div class="category__title-footer">
+    <div class="editable__heading-footer">
       {{ description }}
     </div>
   </div>
@@ -49,7 +49,7 @@ watch(localHeroTitle, (newValue) => {
 <style scoped lang="scss">
 @use '~/app/styles/variables' as var;
 
-.category__title {
+.editable__heading {
 
   &-input {
     color: inherit

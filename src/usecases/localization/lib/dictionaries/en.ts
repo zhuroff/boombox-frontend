@@ -164,8 +164,8 @@ export const localesEN: LocaleDictionary = {
     removed: 'Album successfully removed from collection',
     added: 'Album successfully added to collection',
     reordered: 'Albums order successfully changed',
-    cardCaption: 'Albums in collection',
-    drop: 'Collection successfully deleted'
+    drop: 'Collection successfully deleted',
+    cardCaption: 'Various Artists'
   },
   compilations: {
     add: 'Add to compilation',
@@ -175,7 +175,7 @@ export const localesEN: LocaleDictionary = {
     removed: 'Track successfully removed from compilation',
     added: 'Track successfully added to compilation',
     reordered: 'Tracks order successfully changed',
-    cardCaption: 'Tracks in compilation',
+    cardCaption: 'Various Artists',
     drop: 'Compilation successfully deleted',
     more: 'compilations'
   },

@@ -1,7 +1,7 @@
 import { api } from '~/shared/api'
-import type { User } from '~entities/user/model/types'
-import type { FormPayload } from '~widgets/form'
-import type { AuthRefreshResponse, SearchPayload } from '../lib'
+import type { User, AuthRefreshResponse } from '~entities/user'
+import type { FormPayload, RequestConfig } from '~shared/lib'
+import type { SearchPayload, SearchResultState } from '../lib'
 
 export default class DatabaseService {
   #configToQueryString(config: RequestConfig) {

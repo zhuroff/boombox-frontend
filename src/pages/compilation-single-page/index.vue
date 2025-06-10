@@ -60,6 +60,7 @@ import { PageHeadAdapter } from '~widgets/page-heads'
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
+import type { ReorderPayload } from '~shared/lib'
 
 import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
@@ -88,7 +89,7 @@ const changeTracksOrder = (payload: ReorderPayload) => {
   // emit('trackOrderChanged', payload)
 }
 
-const removeTrackFromCompilation = (payload: GatheringUpdateReq) => {
+const removeTrackFromCompilation = (payload: any /* GatheringUpdateReq */) => {
   // emit('removeTrackFromCompilation', payload)
 }
 

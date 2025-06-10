@@ -1,7 +1,11 @@
 import { computed, ref, type Ref, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type { DatabaseService } from '~shared/api'
-import { isRegularAlbum, isTOYAlbum } from '~/utils'
+import { isRegularAlbum } from '~entities/album'
+import { isTOYAlbum } from '~entities/toy'
+import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
+
+type UnifiedAlbum = ExcludeFromUnifiedEntityCard<'CategoryBasic'>
 
 type QueryPredicate = (album: UnifiedAlbum | undefined) => boolean
 type QueryFormatter = (album: UnifiedAlbum) => string

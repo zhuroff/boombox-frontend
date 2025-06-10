@@ -25,7 +25,7 @@
 import { computed, ref } from 'vue'
 import { CategoryContent } from '~widgets/category-content'
 import { useCollection } from '~entities/collection'
-import type { UploadImageResult } from '~entities/upload/model/types'
+import type { UploadImageResult } from '~usecases/uploading'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
@@ -45,7 +45,7 @@ const {
 } = useCollection(dbService)
 
 const totalCounts = computed(() => (
-  localize('totalAlbums') + `: ${(collection.value?.entities?.length || 0)}`
+  localize('totalAlbums') + `: ${(collection.value?.albums?.length || 0)}`
 ))
 
 const setUploadedImage = (payload: UploadImageResult) => {

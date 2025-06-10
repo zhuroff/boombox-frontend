@@ -24,8 +24,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { CategoryContent } from '~widgets/category-content'
-import { useCategory } from '~usecases/category'
-import type { UploadImageResult } from '~entities/upload/model/types'
+import { useCategory } from '~entities/category'
+import type { UploadImageResult } from '~usecases/uploading'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'

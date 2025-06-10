@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import { BackupService } from '~usecases/backup'
 import { useSnackbar } from '~shared/model'
-import type { BackupAction, BackupActionConfig } from '~/features/backup/lib/types'
 import { useTranslate } from '~usecases/localization'
+import type { BackupAction, BackupActionConfig } from '../lib/types'
+import type BackupService from '../api/BackupService'
 
 const useBackup = (action: BackupAction, backupService: BackupService, payload?: string) => {
   const isEnabled = ref(false)

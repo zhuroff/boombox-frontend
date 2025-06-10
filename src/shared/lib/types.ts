@@ -1,7 +1,8 @@
+import type { AlbumBasic } from '~entities/album'
+
 export type Entity = {
   _id: string
   title: string
-  dateCreated?: string
   cloudURL?: string
 }
 
@@ -26,7 +27,26 @@ export type Option = {
   value: string
 }
 
+export type RandomEntityReqFilter = {
+  from: string
+  key: string
+  name: string
+  excluded?: Record<string, string>
+}
 
+export type RelatedAlbumsReqFilter = RandomEntityReqFilter & {
+  value: string
+}
+
+export type RequestConfig = PaginationState & {
+  isRandom?: true | 1
+  filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
+}
+
+export type UseEntityListPayload = {
+  entityKey: string
+  requestConfig: RequestConfig
+}
 
 
 
@@ -53,20 +73,6 @@ export type GatheringUpdateReq = {
   entityID: string
   isInList: boolean
   order?: number
-}
-
-export type Compilation = GatheringBasic & {
-  poster?: string
-  tracks: Track[]
-}
-
-// export type UnifiedAlbum = Album | Embedded | Compilation | TOYAlbum
-
-export type Category = Entity & {
-  poster?: string
-  avatar?: string
-  albums: Album[]
-  embeddedAlbums?: Embedded[]
 }
 
 type SearchResultData = Album | Category | Track
@@ -116,14 +122,14 @@ export type TrackRes = Required<Entity> & {
   artist: Entity
   genre: Entity
   period: Entity
-  inAlbum: Pick<Album, '_id' | 'title' | 'cloudURL' | 'folderName' | 'period' | 'genre'>
+  inAlbum: AlbumBasic
   inCompilations?: Entity[]
 }
 
 export type SyncResponse = {
-  added: Album[]
-  updated: Album[]
-  deleted: Album[]
+  added: AlbumBasic[]
+  updated: AlbumBasic[]
+  deleted: AlbumBasic[]
   invalid: Record<string, string>[]
 }
 
@@ -166,29 +172,9 @@ export type Snackbar = {
   time?: number
 }
 
-export type RelatedAlbums = {
+export type RelatedAlbums<T> = {
   name: string
-  docs: Album[]
-}
-
-export enum UserRole {
-  admin = 'admin',
-  listener = 'listener',
-  guest = 'guest'
-}
-
-export interface User {
-  _id: string
-  login: string
-  email: string
-  role: UserRole
-  dateCreated: string
-}
-
-export type AuthRefreshResponse = {
-  user: User
-  accessToken: string
-  refreshToken: string
+  docs: T[]
 }
 
 export type ElementSize = 'small' | 'medium' | 'large'

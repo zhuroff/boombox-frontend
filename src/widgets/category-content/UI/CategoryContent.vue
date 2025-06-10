@@ -22,9 +22,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { CategoryHero } from '~widgets/category-hero'
-import { EntityCardList } from '~usecases/cardlist'
-import type { Category, Entity } from '~shared/lib'
-import type { CollectionBasic } from '~entities/collection'
+import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
+import type { CategoryFull } from '~entities/category'
+import type { CollectionFull } from '~entities/collection'
 
 interface Props {
   isFetched: boolean
@@ -32,14 +32,17 @@ interface Props {
   pageEntityKey: string
   setUploadedImage: any
   defaultPreview: string
-  data: CategoryBasic | CollectionBasic
+  data: CategoryFull | CollectionFull
 }
 
 const props = defineProps<Props>()
 
-const albumList = computed<Entity[]>(() => (
-  [...(props.data?.albums || []), ...(props.data?.embeddedAlbums || [])]
-))
+const albumList = computed<UnifiedEntityCard[]>(() => {
+  const albums = props.data.albums
+  const embeddedAlbums = 'embeddedAlbums' in props.data ? props.data.embeddedAlbums : []
+
+  return [...albums, ...embeddedAlbums]
+})
 </script>
 
 <style lang="scss" scoped>

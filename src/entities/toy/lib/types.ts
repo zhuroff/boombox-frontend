@@ -1,5 +1,8 @@
-import type { AlbumBasic } from '~entities/album'
+import type { MinimumAlbumInfo } from '~shared/lib'
+import type { AlbumBasic, AlbumFull } from '~entities/album'
 
-export type TOYAlbumBasic = AlbumBasic & {
-  metadataContent: any /* MinimumAlbumInfo[] */ | null
+export type TOYAlbumBasic = Omit<AlbumBasic, 'cloudURL'>
+
+export type TOYAlbumFull = Omit<AlbumFull, 'inCollections' | 'cloudURL'> & {
+  metadataContent: MinimumAlbumInfo | null
 }
