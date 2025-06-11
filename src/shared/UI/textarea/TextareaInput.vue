@@ -17,11 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, watchEffect, ref } from 'vue'
-import type { Ref, StyleValue } from 'vue'
-import type { TextareaInputFieldSchema } from '~widgets/form'
-import { useTranslate } from '~features/localization'
-import type { ElementSize } from '~shared/lib'
+import { onMounted, computed, watchEffect, ref, type Ref, type StyleValue } from 'vue'
+import { useLocalization, type ElementSize, type TextareaInputFieldSchema } from '~shared/lib'
 
 interface Props {
   name: string
@@ -50,7 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const textareaElement: Ref<null | HTMLTextAreaElement> = ref(null)
 const text = ref<string>(props.defaultValue || '')

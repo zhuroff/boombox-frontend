@@ -1,13 +1,15 @@
 import type { ElementSize } from '~shared/lib'
 
-export interface InputLabelConfig {
+export type FormPayload = Record<string, string | File>
+
+export type InputLabelConfig = {
   labelText: string
   labelTextPosition?: 'right' | 'left'
   size?: ElementSize
   isError?: boolean
 }
 
-export interface BaseInputFieldSchema {
+export type BaseInputFieldSchema = {
   name: string
   id?: string
   errorMessages?: string[]
@@ -21,33 +23,33 @@ export interface BaseInputFieldSchema {
   label?: InputLabelConfig
 }
 
-export interface TextInputFieldSchema extends BaseInputFieldSchema {
+export type TextInputFieldSchema = BaseInputFieldSchema & {
   type: 'text' | 'email' | 'password'
   placeholder?: string
 }
 
-export interface TextareaInputFieldSchema extends BaseInputFieldSchema {
+export type TextareaInputFieldSchema = BaseInputFieldSchema & {
   type: 'textarea'
   placeholder?: string
   rows?: number
 }
 
-interface NumberInputFieldSchema extends BaseInputFieldSchema {
+export type NumberInputFieldSchema = BaseInputFieldSchema & {
   type: 'number' | 'range'
   minValue?: number
   maxValue?: number
   placeholder?: string
 }
 
-interface CheckboxInputFieldSchema extends BaseInputFieldSchema {
+export type CheckboxInputFieldSchema = BaseInputFieldSchema & {
   type: 'checkbox' | 'radio'
 }
 
-interface FileInputFieldSchema extends BaseInputFieldSchema {
+export type FileInputFieldSchema = BaseInputFieldSchema & {
   type: 'file'
 }
 
-interface SelectInputFieldSchema extends BaseInputFieldSchema {
+export type SelectInputFieldSchema = BaseInputFieldSchema & {
   type: 'select' | 'multiselect'
   options: Array<{ label: string, value: string }>
 }

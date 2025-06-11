@@ -86,7 +86,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '~shared/model'
 import { Loader, Button, TextareaInput } from '~shared/UI'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import type { TrackLyricsResponse } from '~/types/Track'
 import trackServices from '~/~legacy/services/track.services'
 
@@ -97,7 +97,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const { setSnackbarMessage } = useSnackbar()
 

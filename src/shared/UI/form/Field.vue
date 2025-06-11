@@ -13,10 +13,9 @@
 
 <script setup lang="ts">
 import { h, computed } from 'vue'
-import type { FormSchemaProperty } from '~widgets/form'
+import type { FormSchemaProperty } from '~shared/lib'
+import { TextInput, TextareaInput, RefField } from '~shared/UI'
 import FieldLabel from './FieldLabel.vue'
-import { TextInput, TextareaInput } from '~shared/UI'
-import { RefListInput } from '~features/refs'
 
 interface Props {
   property: FormSchemaProperty
@@ -37,7 +36,7 @@ const fieldComponent = computed(() => {
       return (
         props.property.refKey
           ? h(
-              RefListInput,
+              RefField,
               {
                 name: props.property.name,
                 placeholder: props.property.placeholder,

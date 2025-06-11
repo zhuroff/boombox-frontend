@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslate } from '~features/localization'
+import { useLocalization, type TableConfig } from '~shared/lib'
 import { Table } from '~shared/UI'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type { User } from '~entities/user'
@@ -29,7 +29,7 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 </script>
 
 <style lang="scss" scoped>

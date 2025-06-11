@@ -1,6 +1,7 @@
 import { localeConfigEN, localesEN } from './en'
 import { localeConfigBY, localesBY } from './by'
-import { LocaleKeys, type LocaleItem, type LocaleDictionary } from '../types'
+import { type LocaleDictionary } from '../types'
+import { LocaleKeys, type LocaleItem } from '~shared/lib'
 
 export const locales: Map<LocaleKeys, LocaleItem> = new Map([
   [LocaleKeys.EN, localeConfigEN],

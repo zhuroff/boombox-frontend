@@ -60,16 +60,15 @@ import { PageHeadAdapter } from '~widgets/page-heads'
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import type { ReorderPayload } from '~shared/lib'
+import { useLocalization, type ReorderPayload } from '~shared/lib'
 
 import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
-import { useTranslate } from '~features/localization'
 import { useCompilation } from '~entities/compilation'
 
 const dbService = new DatabaseService()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
 
 const entityKey = ref('compilations')

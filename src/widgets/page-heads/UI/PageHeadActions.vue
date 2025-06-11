@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { Button } from '~shared/UI'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import type { ActionPropertyItem } from '~widgets/page-heads'
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
 
 defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 </script>
 
 <style scoped lang="scss">

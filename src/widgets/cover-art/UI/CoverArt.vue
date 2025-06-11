@@ -51,7 +51,7 @@ import { Modal, Loader, Sprite } from '~shared/UI'
 import { Slider } from '~features/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
 
 interface BookletSlideState {
@@ -78,7 +78,7 @@ const dbService = new DatabaseService()
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const coverElement: Ref<null | HTMLInputElement> = ref(null)
 const isFullSlideSet = ref(false)

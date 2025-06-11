@@ -29,14 +29,13 @@ import type { UploadImageResult } from '~features/uploading'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
 const pageEntityKey = ref('collections')
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const {
   collection,

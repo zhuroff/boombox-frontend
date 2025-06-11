@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import { CardPreview } from '~shared/UI'
 import { hostString, assertNever } from '~/utils'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
@@ -25,7 +25,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const dynamicEntityKey = computed(() => (
   'frame' in props.card ? 'embedded' : props.entityKey || 'albums'

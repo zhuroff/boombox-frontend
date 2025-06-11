@@ -28,8 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue'
-import type { StyleValue } from 'vue'
+import { computed, ref, onMounted, onUnmounted, type StyleValue } from 'vue'
 import type { DropdownItem } from '~shared/lib'
 import DropdownTrigger from './DropdownTrigger.vue'
 import DropdownOption from './DropdownOption.vue'

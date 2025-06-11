@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { getUUID } from '~/utils'
-import type { Snackbar } from '../lib'
+import type { Snackbar } from '~shared/lib'
 
 const snackbarQueue = reactive(new Map<string, Snackbar>())
 

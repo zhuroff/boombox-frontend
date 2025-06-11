@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed, type StyleValue } from 'vue'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import { Sprite } from '~shared/UI'
 
 interface Props {
@@ -47,7 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
   isDisabled: false
 })
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const stateClasses = computed(() => [
   'button',

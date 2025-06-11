@@ -63,17 +63,13 @@
 import { ref, computed, watchEffect, watch } from 'vue'
 
 import { Header } from '~widgets/header'
-import { Paginator } from '~shared/UI'
-import { usePaginator } from '~shared/model'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 
-import { useTranslate } from '~features/localization'
-
+import { useLocalization, type DeletePayload } from '~shared/lib'
 import { DatabaseService } from '~shared/api'
-import { Modal, Loader, Confirmation } from '~shared/UI'
-import { useGetList, useDeleteEntity } from '~shared/model'
+import { Modal, Loader, Confirmation, Paginator } from '~shared/UI'
+import { useGetList, useDeleteEntity, usePaginator } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
-import type { DeletePayload } from '~shared/lib'
 
 type Props = {
   entityKey: string
@@ -89,7 +85,7 @@ const props = defineProps<Props>()
 
 const dbService = new DatabaseService()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const deletedEntityId = ref<string | null>(null)
 const isDeleteConfirmed = ref(false)

@@ -38,7 +38,7 @@
 import { ref, computed } from 'vue'
 import type { MinimumAlbumInfo } from '~shared/lib'
 import { Loader } from '~shared/UI'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import { useWiki, WikiService } from '~features/wiki'
 
 interface Props {
@@ -47,7 +47,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const wikiService = new WikiService()
 

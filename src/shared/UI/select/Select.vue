@@ -24,11 +24,10 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import type { Option, TableFilters } from '~shared/lib'
-import { useTranslate } from '~features/localization'
+import { useLocalization, type TableFilters, type SelectInputFieldSchema } from '~shared/lib'
 
 interface Props {
-  options: Array<string | number> | Option[]
+  options: Array<string | number> | SelectInputFieldSchema['options']
   selected: Record<keyof TableFilters, null | string | number>
   entityKey: string
   localeKey?: string
@@ -50,7 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const stateClasses = computed(() => [
   'select',

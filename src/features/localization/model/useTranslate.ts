@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 import { dictionaries, locales } from '../lib/dictionaries'
-import { LocaleKeys, type LocaleDictionary, type LocaleItem } from '../lib/types'
+import { type LocaleDictionary } from '../lib/types'
+
+import { setLocalizationService, LocaleKeys, type LocaleItem } from '~shared/lib'
 
 const currentLocale = ref<LocaleItem>(locales.get(LocaleKeys.EN) as LocaleItem)
 
@@ -44,6 +46,14 @@ const useTranslate = () => {
     
     return value.replace(/{x}/g, () => String(vars.shift() ?? '{...}'))
   }
+
+  setLocalizationService({
+    locales,
+    localize,
+    setLocale,
+    currentLocale,
+    checkAndSetLocale
+  })
 
   return {
     localize,

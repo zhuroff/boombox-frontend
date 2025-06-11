@@ -1,14 +1,14 @@
 import { computed, ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '~shared/model'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import type { BackupAction, BackupActionConfig } from '../lib/types'
 import type BackupService from '../api/BackupService'
 
 const useBackup = (action: BackupAction, backupService: BackupService, payload?: string) => {
   const isEnabled = ref(false)
   const { setSnackbarMessage } = useSnackbar()
-  const { localize } = useTranslate()
+  const { localize } = useLocalization()
 
   const createBackupHandler = async () => {
     try {

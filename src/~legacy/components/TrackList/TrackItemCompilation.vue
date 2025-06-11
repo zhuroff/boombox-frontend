@@ -48,12 +48,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 // import { useListPage } from '~/hooks/useListPage'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 // import type { CompilationEntityRes } from '~/types/ReqRes'
 // import CompilationItem from '~/classes/CompilationItem'
-import { Button } from '~shared/UI'
 // import GatheringTabs from '~/components/GatheringTabs.vue'
-import { Modal, Confirmation } from '~shared/UI'
+import { Modal, Confirmation, Button } from '~shared/UI'
 
 interface Props {
   trackID: string
@@ -67,7 +66,7 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 // Temp
 const fetchData = async (x: string) => Promise.resolve() as any

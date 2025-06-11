@@ -69,8 +69,7 @@ import { useEmbedded } from '~entities/embedded'
 import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
@@ -80,7 +79,7 @@ const isDeleteModalEnabled = ref(false)
 const isDeleteConfirmed = ref(false)
 const router = useRouter()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
 
 const {

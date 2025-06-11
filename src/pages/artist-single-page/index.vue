@@ -26,17 +26,17 @@ import { computed, ref } from 'vue'
 import { CategoryContent } from '~widgets/category-content'
 import { useCategory } from '~entities/category'
 
-import { useTranslate } from '~features/localization'
 import type { UploadImageResult } from '~features/uploading'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
+import { useLocalization } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
 const pageEntityKey = ref('artists')
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const {
   category,

@@ -28,8 +28,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { ElementSize, ElementPosition } from '~shared/lib'
-import { useTranslate } from '~features/localization'
+import { useLocalization, type ElementSize, type ElementPosition } from '~shared/lib'
 
 interface Props {
   errors?: string[]
@@ -46,7 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'medium'
 })
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const stateClasses = computed(() => ([
   'label__text',

@@ -20,11 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
-import type { StyleValue } from 'vue'
-import type { TextInputFieldSchema } from '~widgets/form/model/types'
-import { useTranslate } from '~features/localization'
-import type { ElementSize } from '~shared/lib'
+import { computed, ref, onMounted, type StyleValue } from 'vue'
+import { useLocalization, type ElementSize, type TextInputFieldSchema } from '~shared/lib'
 
 interface Props {
   name: string
@@ -59,7 +56,7 @@ const emit = defineEmits<Emits>()
 
 const textInputElement = ref<null | HTMLInputElement>(null)
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const stateClasses = computed(() => [
   'input-field',

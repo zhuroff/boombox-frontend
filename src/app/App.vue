@@ -10,14 +10,13 @@ import { onBeforeMount } from 'vue'
 import { AuthorizedView } from '~views/authorized-view'
 import { UnauthorizedView } from '~views/unauthorized-view'
 
-import { useTranslate } from '~features/localization'
-
 import { useUserApi, useUser } from '~entities/user'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
+import { useLocalization } from '~shared/lib'
 
-const { checkAndSetLocale } = useTranslate()
+const { checkAndSetLocale } = useLocalization()
 
 const dbService = new DatabaseService()
 const { checkAuthorization, isRefreshing } = useUserApi(dbService)

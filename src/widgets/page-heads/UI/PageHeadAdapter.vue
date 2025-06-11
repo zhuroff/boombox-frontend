@@ -32,12 +32,13 @@
 import { h, computed, ref } from 'vue'
 import { DatabaseService } from '~shared/api'
 import { Modal } from '~shared/UI'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
+import { useSearch } from '~shared/model'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import TOYPageHead from './TOYPageHead.vue'
-import { SearchModal, useSearch } from '~widgets/search'
+import { SearchModal } from '~widgets/search'
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 import { assertNever } from '~/utils'
 
@@ -56,7 +57,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const dbService = new DatabaseService()
 

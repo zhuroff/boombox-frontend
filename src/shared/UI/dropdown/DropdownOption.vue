@@ -13,8 +13,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Sprite } from '~shared/UI'
-import type { DropdownItem } from '~shared/lib'
-import { useTranslate } from '~features/localization'
+import { useLocalization, type DropdownItem } from '~shared/lib'
 
 interface Props {
   option: DropdownItem
@@ -29,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'medium',
 })
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const emit = defineEmits<Emits>()
 

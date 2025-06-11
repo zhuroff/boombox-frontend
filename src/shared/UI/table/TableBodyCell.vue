@@ -10,8 +10,8 @@
 <script setup lang="ts">
 import { h, computed, defineAsyncComponent, defineEmits } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useLocalization, type TableCellConfig } from '~shared/lib'
 import type { JSONSchema4, JSONSchema4Type, JSONSchema4TypeName } from 'json-schema'
-import { useTranslate } from '~features/localization'
 
 interface Props {
   cell: TableCellConfig<JSONSchema4TypeName, JSONSchema4>
@@ -31,7 +31,7 @@ const dateConfig = {
   second: '2-digit'
 } as const
 
-const { currentLocale } = useTranslate()
+const { currentLocale } = useLocalization()
 
 const formatValue = (value: JSONSchema4TypeName, schema: JSONSchema4) => {
   if (schema.format === 'date-time') {

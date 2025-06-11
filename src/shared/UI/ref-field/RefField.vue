@@ -1,5 +1,5 @@
 <template>
-  <div :class="[{'--disabled': isCreatingEntity}, 'reflist']">
+  <div :class="[{'--disabled': isCreatingEntity}, 'ref-field']">
     <TextInput
       type="text"
       :name="name"
@@ -18,50 +18,36 @@
       v-if="refQuery || selectedOption"
       type="button"
       icon="close"
-      class="reflist__clear"
+      class="ref-field__clear"
       isText
       @click="clearInput"
     />
 
     <transition name="fade">
-      <ul
+      <RefList
         v-if="isListOpen"
-        class="reflist__options"
-        :class="`--${size}`"
-      >
-        <li
-          v-for="option in refList"
-          :key="option.value"
-          class="reflist__option"
-          @click="selectOption(option)"
-        >
-          {{ option.label }}
-        </li>
-        <li
-          v-if="canBeCreated"
-          class="reflist__option --create"
-          @click="createNewEntity"
-        >
-          <span>
-            {{ localize('createEntityLabel', name, searchQuery) }}
-          </span>
-        </li>
-      </ul>
+        :name="name"
+        :size="size"
+        :searchQuery="searchQuery"
+        :refList="refList"
+        :canBeCreated="canBeCreated"
+        @selectOption="selectOption"
+        @createNewEntity="createNewEntity"
+      />
     </transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useCreateEntity } from '~shared/model'
-import { useSearch } from '~widgets/search'
+import { cleanAndCapitalize, debounce } from '~/utils'
+import { useCreateEntity, useSearch } from '~shared/model'
 import { TextInput, Button } from '~shared/UI'
 import { DatabaseService } from '~/shared/api'
-import { cleanAndCapitalize, debounce } from '~/utils'
-import { useTranslate } from '~features/localization'
-import type { ElementSize, Entity, Option } from '~shared/lib'
+import type { ElementSize, Entity, SelectInputFieldSchema } from '~shared/lib'
+import RefList from './RefList.vue'
 
-interface Props {
+type Props = {
   modelValue?: string
   placeholder?: string
   size?: ElementSize
@@ -70,24 +56,24 @@ interface Props {
   refKey: string
 }
 
+type Emits = {
+  (e: 'update:modelValue', value: string): void
+  (e: 'selectOption', value: string): void
+}
+
 const props = withDefaults(defineProps<Props>(), {
   size: 'medium'
 })
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-  (e: 'selectOption', value: string): void
-}>()
+const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
 
-const { localize } = useTranslate()
-
 const refQuery = ref(props.modelValue || '')
-const selectedOption = ref<Option | null>(null)
+const selectedOption = ref<SelectInputFieldSchema['options'][number] | null>(null)
 const isNewEntityQueryEnabled = ref(false)
 
-const selectOption = (option: Option) => {
+const selectOption = (option: SelectInputFieldSchema['options'][number]) => {
   selectedOption.value = option
   refQuery.value = ''
   emit('update:modelValue', option.value)
@@ -156,7 +142,7 @@ watch(
 <style lang="scss" scoped>
 @use '~/app/styles/variables' as var;
 
-.reflist {
+.ref-field {
   position: relative;
   width: 100%;
 
@@ -167,47 +153,9 @@ watch(
     z-index: 1000;
   }
 
-  &__options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var.$paleLW;
-    border-bottom-left-radius: var.$borderRadiusSM;
-    border-bottom-right-radius: var.$borderRadiusSM;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    box-shadow: var.$shadowMedium;
-    height: auto;
-    max-height: 10rem;
-    overflow-y: auto;
-    z-index: 1000;
-
-    &.--small {
-      font-size: 0.875rem;
-    }
-
-    &.--large {
-      font-size: 1.125rem;
-    }
-  }
-
-  &__option {
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-
-    &:hover {
-      background: var.$paleMD;
-    }
-
-    &.--create {
-      color: var.$info;
-    }
-  }
-
   &.--disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 }
-</style> 
+</style>

@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import { Form, type FormSchemaProperty } from '~widgets/form'
+import { Form } from '~shared/UI'
 import { useUserApi } from '~entities/user'
 import { DatabaseService } from '~shared/api'
-import type { FormPayload } from '~shared/lib'
+import type { FormPayload, FormSchemaProperty } from '~shared/lib'
 
 const dbService = new DatabaseService()
 const { login, isLoggingIn } = useUserApi(dbService)

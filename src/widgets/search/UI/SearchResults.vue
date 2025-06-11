@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import { Loader } from '~shared/UI'
 
 interface Props {
@@ -30,7 +30,7 @@ interface Props {
 
 defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 </script>
 
 <style scoped lang="scss">

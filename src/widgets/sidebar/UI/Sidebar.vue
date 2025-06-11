@@ -36,7 +36,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Button, Sprite } from '~shared/UI'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 
 interface Props {
   isExpanded: boolean
@@ -49,7 +49,7 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const router = useRouter()
 

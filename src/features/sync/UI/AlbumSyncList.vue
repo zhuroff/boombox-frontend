@@ -46,9 +46,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import AlbumSyncRow from './AlbumSyncRow.vue'
-import type { SyncResponse } from '~shared/lib'
+import type { SyncResponse } from '~features/sync'
 
 interface Props {
   sections: SyncResponse
@@ -56,7 +56,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const contentSections = computed(() => {
   return (

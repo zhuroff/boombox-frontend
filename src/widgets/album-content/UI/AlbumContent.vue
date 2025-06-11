@@ -32,9 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslate } from '~features/localization'
+import { useLocalization, type RelatedAlbums } from '~shared/lib'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
-import type { RelatedAlbums } from '~shared/lib'
 
 interface Props {
   entityKey: string
@@ -46,7 +45,7 @@ withDefaults(defineProps<Props>(), {
   cardsTemplate: 'col'
 })
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 </script>
 
 <style lang="scss">

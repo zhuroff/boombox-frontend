@@ -27,12 +27,11 @@ import { TOYGenreCard } from '~entities/toy'
 import { Loader } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~features/localization'
-import type { CloudEntity, UseEntityListPayload } from '~shared/lib'
+import { useLocalization, type CloudEntity, type UseEntityListPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const genresConfig = computed<UseEntityListPayload>(() => ({
   entityKey: 'toy',

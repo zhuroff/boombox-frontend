@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import usePlaylist from '../../store/playlist'
 import { Button } from '~shared/UI'
 
@@ -43,7 +43,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const {
   playerGetters: { currentPlaylistTracks },

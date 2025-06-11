@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import type { SyncResponse } from '~shared/lib'
+import type { SyncResponse } from '~features/sync'
 import type { DatabaseService } from '~shared/api'
 
 const useSync = (dbService: DatabaseService) => {

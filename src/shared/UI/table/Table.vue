@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import TableHeadRow from './TableHeadRow.vue'
 import TableBodyRow from './TableBodyRow.vue'
 
@@ -45,7 +45,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 
 const tableHeader = computed<TableHeadConfig<JSONSchema4>[]>(() => (
   props.tableState.schema.order.map((key: string) => ({

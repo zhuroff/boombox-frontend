@@ -1,4 +1,5 @@
-import { LocaleKeys, type LocaleDictionary, type LocaleItem } from '../types'
+import { type LocaleDictionary } from '../types'
+import { LocaleKeys, type LocaleItem } from '~shared/lib'
 
 export const localeConfigEN: LocaleItem = {
   intlName: 'en-GB',

@@ -42,8 +42,7 @@ import { TOYYearCard } from '~entities/toy'
 import { Loader, Button } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~features/localization'
-import type { CloudEntity, UseEntityListPayload } from '~shared/lib'
+import { useLocalization, type CloudEntity, type UseEntityListPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
@@ -63,7 +62,7 @@ const yearsConfig = computed<UseEntityListPayload>(() => ({
   }
 }))
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 const { data: years, isFetching, isFetched } = useGetList<CloudEntity>(yearsConfig, dbService)
 
 const playWave = () => {

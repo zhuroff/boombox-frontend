@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { JSONSchema4, JSONSchema4Type, JSONSchema4TypeName } from 'json-schema'
+import type { TableCellConfig } from '~shared/lib'
 import TableBodyCell from './TableBodyCell.vue'
 
 interface Props {

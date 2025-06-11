@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { FormPayload, FormSchemaProperty } from '~widgets/form'
+import type { FormPayload, FormSchemaProperty } from '~shared/lib'
 import { Button } from '~shared/UI'
 import Field from './Field.vue'
 

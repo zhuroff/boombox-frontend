@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { hostString } from '~/utils'
-import { useTranslate } from '~features/localization'
+import { useLocalization } from '~shared/lib'
 import { CardPreview } from '~shared/UI'
 import type { CategoryBasic } from '../lib/types'
 
@@ -26,7 +26,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { localize } = useTranslate()
+const { localize } = useLocalization()
 const host = (pathname: string) => hostString(pathname)
 
 const routePath = computed(() => ({

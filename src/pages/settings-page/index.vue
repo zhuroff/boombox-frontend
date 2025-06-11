@@ -35,9 +35,9 @@ import { SettingsActions, SettingsBackups, SettingsUsers } from '~widgets/settin
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import { backupsTableSchema } from '~features/backup'
 import { usersTableSchema, type User } from '~entities/user'
-import { AlbumSyncList, type SyncDataPayload } from '~features/sync'
+import { AlbumSyncList, type SyncDataPayload, type SyncResponse } from '~features/sync'
 import { Modal } from '~shared/UI'
-import type { TableConfig, SyncResponse } from '~shared/lib'
+import type { TableConfig } from '~shared/lib'
 
 const showSyncDataModal = ref(false)
 const syncData = ref<SyncResponse | null>(null)

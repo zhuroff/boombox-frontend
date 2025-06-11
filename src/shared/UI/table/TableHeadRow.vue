@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import type { JSONSchema4 } from 'json-schema'
+import type { TableFilters, TableHeadConfig } from '~shared/lib'
 import TableHeadCell from './TableHeadCell.vue'
 
 interface Props {

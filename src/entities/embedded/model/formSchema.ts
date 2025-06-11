@@ -1,4 +1,4 @@
-import type { FormSchemaProperty } from '~widgets/form'
+import type { FormSchemaProperty } from '~shared/lib'
 
 const embeddedAlbumFormSchema = new Map<string, FormSchemaProperty>([
   ['title', {
