@@ -29,11 +29,11 @@
 
 <script setup lang="ts">
 import { Button } from '~shared/UI'
-import { SyncAction } from '~usecases/sync'
-import { BackupActions } from '~usecases/backup'
+import { SyncAction } from '~features/sync'
+import { BackupActions } from '~features/backup'
 import { useUserApi } from '~entities/user'
 import { DatabaseService } from '~shared/api'
-import { LanguageSwitcher } from '~usecases/localization'
+import { LanguageSwitcher } from '~features/localization'
 
 interface Emits {
   <T>(e: 'passBackups', data: T): void

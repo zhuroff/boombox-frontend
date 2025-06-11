@@ -24,8 +24,8 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import type { Option } from '~shared/model'
-import { useTranslate } from '~usecases/localization'
+import type { Option, TableFilters } from '~shared/lib'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   options: Array<string | number> | Option[]

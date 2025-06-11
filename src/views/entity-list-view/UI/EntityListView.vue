@@ -63,10 +63,11 @@
 import { ref, computed, watchEffect, watch } from 'vue'
 
 import { Header } from '~widgets/header'
-import { Paginator, usePaginator } from '~widgets/paginator'
+import { Paginator } from '~shared/UI'
+import { usePaginator } from '~shared/model'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 
 import { DatabaseService } from '~shared/api'
 import { Modal, Loader, Confirmation } from '~shared/UI'

@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { Button } from '~shared/UI'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import type { ActionPropertyItem } from '~widgets/page-heads'
 
 interface Props {

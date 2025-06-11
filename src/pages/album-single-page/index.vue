@@ -66,11 +66,11 @@ import { computed, ref } from 'vue'
 
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
+import { DiscogsTable } from '~widgets/discogs'
 import { Gathering } from '~widgets/gathering'
 
-import { useCollections } from '~usecases/collection'
-import { DiscogsTable } from '~usecases/discogs'
-import { WikiFrame } from '~usecases/wiki'
+import { useCollections } from '~features/collection'
+import { WikiFrame } from '~features/wiki'
 
 import { useAlbum } from '~entities/album'
 

@@ -86,7 +86,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useSnackbar } from '~shared/model'
 import { Loader, Button, TextareaInput } from '~shared/UI'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import type { TrackLyricsResponse } from '~/types/Track'
 import trackServices from '~/~legacy/services/track.services'
 

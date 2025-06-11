@@ -1,4 +1,5 @@
 import type { AlbumBasic } from '~entities/album'
+import type { Pagination, PaginationState } from '~shared/lib'
 
 export type Entity = {
   _id: string
@@ -75,13 +76,6 @@ export type GatheringUpdateReq = {
   order?: number
 }
 
-type SearchResultData = Album | Category | Track
-
-export type SearchResultState = {
-  key: string
-  data: SearchResultData[]
-}
-
 export type SortingValue = Record<string, 1 | -1>
 
 export type DraggableEvent = {
@@ -133,12 +127,6 @@ export type SyncResponse = {
   invalid: Record<string, string>[]
 }
 
-export type Pagination = {
-  totalDocs: number
-  totalPages: number
-  page: number
-}
-
 export type TableConfig<T, U> = {
   rows: T[]
   schema: U
@@ -180,10 +168,5 @@ export type RelatedAlbums<T> = {
 export type ElementSize = 'small' | 'medium' | 'large'
 
 export type ElementPosition = 'top' | 'right' | 'bottom' | 'left'
-
-export type SearchPayload = {
-  query: string
-  key?: string
-}
 
 export type FormPayload = Record<string, string | File>

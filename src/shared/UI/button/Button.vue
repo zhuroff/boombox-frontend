@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed, type StyleValue } from 'vue'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import { Sprite } from '~shared/UI'
 
 interface Props {

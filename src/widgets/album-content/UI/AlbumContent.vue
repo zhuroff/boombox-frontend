@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 import type { RelatedAlbums } from '~shared/lib'
 

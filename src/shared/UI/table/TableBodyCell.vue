@@ -11,7 +11,7 @@
 import { h, computed, defineAsyncComponent, defineEmits } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { JSONSchema4, JSONSchema4Type, JSONSchema4TypeName } from 'json-schema'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 
 interface Props {
   cell: TableCellConfig<JSONSchema4TypeName, JSONSchema4>

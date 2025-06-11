@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 // import { useListPage } from '~/hooks/useListPage'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 // import type { CompilationEntityRes } from '~/types/ReqRes'
 // import CompilationItem from '~/classes/CompilationItem'
 import { Button } from '~shared/UI'

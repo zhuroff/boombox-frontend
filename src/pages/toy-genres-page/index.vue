@@ -27,16 +27,21 @@ import { TOYGenreCard } from '~entities/toy'
 import { Loader } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~usecases/localization'
-import type { CloudEntity } from '~shared/lib'
+import { useTranslate } from '~features/localization'
+import type { CloudEntity, UseEntityListPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
 const { localize } = useTranslate()
 
-const genresConfig = computed(() => ({
+const genresConfig = computed<UseEntityListPayload>(() => ({
   entityKey: 'toy',
-  requestConfig: { path: 'MelodyMap/TOY' }
+  requestConfig: {
+    path: 'MelodyMap/TOY',
+    limit: 100,
+    page: 1,
+    sort: { name: 1 }
+  }
 }))
 
 const { data: genres, isFetching, isFetched } = useGetList<CloudEntity>(genresConfig, dbService)

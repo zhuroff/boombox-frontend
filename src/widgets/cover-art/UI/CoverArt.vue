@@ -48,10 +48,10 @@
 <script setup lang="ts">
 import { ref, computed, type Ref } from 'vue'
 import { Modal, Loader, Sprite } from '~shared/UI'
-import { Slider } from '~usecases/slider'
+import { Slider } from '~features/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
 
 interface BookletSlideState {

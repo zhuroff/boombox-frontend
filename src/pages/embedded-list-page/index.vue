@@ -37,7 +37,7 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { EntityListView } from '~views/entity-list-view'
 import { useCreateEntity, useSnackbar } from '~shared/model'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import { Button } from '~shared/UI'
 import { Modal } from '~shared/UI'
 import { Form } from '~widgets/form'

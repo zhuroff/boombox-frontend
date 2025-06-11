@@ -42,8 +42,8 @@ import { TOYYearCard } from '~entities/toy'
 import { Loader, Button } from '~shared/UI'
 import { useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useTranslate } from '~usecases/localization'
-import type { CloudEntity } from '~shared/lib'
+import { useTranslate } from '~features/localization'
+import type { CloudEntity, UseEntityListPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
@@ -53,9 +53,14 @@ const waveAlbum = ref<null | any>(null)
 
 const heading = computed(() => String(route.params.genre))
 
-const yearsConfig = computed(() => ({
+const yearsConfig = computed<UseEntityListPayload>(() => ({
   entityKey: 'toy',
-  requestConfig: { path: `MelodyMap/TOY/${encodeURIComponent(String(route.params.genre))}` }
+  requestConfig: {
+    path: `MelodyMap/TOY/${encodeURIComponent(String(route.params.genre))}`,
+    limit: 100,
+    page: 1,
+    sort: { name: 1 }
+  }
 }))
 
 const { localize } = useTranslate()

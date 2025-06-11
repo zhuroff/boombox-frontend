@@ -60,9 +60,9 @@ import { useRouter } from 'vue-router'
 
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
+import { DiscogsTable } from '~widgets/discogs'
 
-import { WikiFrame } from '~usecases/wiki'
-import { DiscogsTable } from '~usecases/discogs'
+import { WikiFrame } from '~features/wiki'
 
 import { useEmbedded } from '~entities/embedded'
 
@@ -70,7 +70,7 @@ import { Modal, Loader, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 
 const dbService = new DatabaseService()
 

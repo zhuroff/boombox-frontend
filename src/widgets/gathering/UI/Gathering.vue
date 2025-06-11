@@ -34,7 +34,8 @@ import { computed, ref, h } from 'vue'
 import { hostString } from '~/utils'
 import { SearchWrapper, SearchCreate, SearchResults, SearchBlock } from '~/widgets/search'
 import { Sprite } from '~shared/UI'
-import type { GatheringBasic, GatheringUpdateReq, SearchResultState } from '~shared/lib'
+import type { GatheringBasic, GatheringUpdateReq } from '~shared/lib'
+import type { SearchResultState } from '~widgets/search'
 
 interface Props {
   isFetching: boolean

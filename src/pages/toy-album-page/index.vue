@@ -46,7 +46,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTOYAlbum } from '~entities/toy'
-import { DiscogsTable } from '~usecases/discogs'
+import { DiscogsTable } from '~widgets/discogs'
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 import { DatabaseService } from '~shared/api'

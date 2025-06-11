@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import { Loader } from '~shared/UI'
 
 interface Props {

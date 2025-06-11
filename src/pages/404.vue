@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import { Button } from '~shared/UI'
 
 const router = useRouter()

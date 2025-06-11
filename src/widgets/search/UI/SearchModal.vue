@@ -38,13 +38,13 @@
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
 import { debounce, hostString, coverPlaceholders } from '~/utils'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import SearchWrapper from './SearchWrapper.vue'
 import SearchResults from './SearchResults.vue'
 import SearchBlock from './SearchBlock.vue'
 import { TextInput } from '~shared/UI'
 import SearchBlockTrack from './SearchBlockTrack.vue'
-import type { SearchResultState } from '~shared/lib'
+import type { SearchResultState, SearchResultData } from '../lib/types'
 import type { AlbumBasic } from '~/entities/album'
 
 interface Props {

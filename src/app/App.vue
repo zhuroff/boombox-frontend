@@ -10,7 +10,7 @@ import { onBeforeMount } from 'vue'
 import { AuthorizedView } from '~views/authorized-view'
 import { UnauthorizedView } from '~views/unauthorized-view'
 
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 
 import { useUserApi, useUser } from '~entities/user'
 

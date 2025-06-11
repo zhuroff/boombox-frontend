@@ -64,7 +64,7 @@ import type { ReorderPayload } from '~shared/lib'
 
 import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import { useCompilation } from '~entities/compilation'
 
 const dbService = new DatabaseService()

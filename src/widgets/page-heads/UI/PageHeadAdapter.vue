@@ -31,14 +31,13 @@
 <script setup lang="ts">
 import { h, computed, ref } from 'vue'
 import { DatabaseService } from '~shared/api'
-import { useSearch } from '~shared/model'
 import { Modal } from '~shared/UI'
-import { useTranslate } from '~usecases/localization'
+import { useTranslate } from '~features/localization'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import TOYPageHead from './TOYPageHead.vue'
-import { SearchModal } from '~widgets/search'
+import { SearchModal, useSearch } from '~widgets/search'
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 import { assertNever } from '~/utils'
 
