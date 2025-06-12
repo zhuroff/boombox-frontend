@@ -1,6 +1,6 @@
 <template>  
   <textarea
-    :placeholder="localize(placeholder || '')"
+    :placeholder="placeholder"
     :class="stateClasses"
     :rows="rows"
     :disabled="disabled"
@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import { onMounted, computed, watchEffect, ref, type Ref, type StyleValue } from 'vue'
-import { useLocalization } from '~shared/model'
 import type { ElementSize, TextareaInputFieldSchema } from '~shared/lib'
 
 interface Props {
@@ -47,8 +46,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
-
-const { localize } = useLocalization()
 
 const textareaElement: Ref<null | HTMLTextAreaElement> = ref(null)
 const text = ref<string>(props.modelValue || '')

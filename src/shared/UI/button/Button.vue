@@ -13,11 +13,7 @@
       v-if="label"
       class="button__label"
     >
-      {{
-        Array.isArray(label)
-          ? localize(label[0], ...label[1])
-          : localize(label)
-      }}
+      {{ label }}
     </span>
     <slot></slot>
   </button>
@@ -25,11 +21,10 @@
 
 <script setup lang="ts">
 import { computed, type StyleValue } from 'vue'
-import { useLocalization } from '~shared/model'
 import { Sprite } from '~shared/UI'
 
 interface Props {
-  label?: string | [string, Array<string>]
+  label?: string
   icon?: string
   size?: 'small' | 'medium' | 'large'
   style?: StyleValue
@@ -46,8 +41,6 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'button',
   isDisabled: false
 })
-
-const { localize } = useLocalization()
 
 const stateClasses = computed(() => [
   'button',

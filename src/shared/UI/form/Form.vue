@@ -13,10 +13,7 @@
       />
     </div>
     <footer class="form__footer">
-      <Button
-        type="submit"
-        :label="submitButtonLocale"
-      />
+      <slot name="submit"></slot>
     </footer>
   </form>
 </template>
@@ -24,12 +21,10 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
 import type { FormPayload, FormSchemaProperty } from '~shared/lib'
-import { Button } from '~shared/UI'
 import Field from './Field.vue'
 
 interface Props {
   formSchema: Map<string, FormSchemaProperty>
-  submitButtonLocale?: string
 }
 
 interface Emits {
@@ -38,9 +33,7 @@ interface Emits {
   (e: 'resetForm'): void
 }
 
-withDefaults(defineProps<Props>(), {
-  submitButtonLocale: 'submit'
-})
+defineProps<Props>()
 
 const emit = defineEmits<Emits>()
 

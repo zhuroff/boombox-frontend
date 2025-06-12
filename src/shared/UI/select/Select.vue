@@ -1,37 +1,28 @@
 <template>
   <select
     :class="stateClasses"
-    v-model="localSelected[entityKey]"
+    :name="entityKey"
+    autocomplete="off"
+    v-model="localSelected"
   >
-    <option v-if="localeKey">
-      {{ localize(`${localeKey}.${entityKey}`) }}
-    </option>
     <option
-      v-for="option in options"
-      :key="typeof option === 'object' ? option.value : option"
-      :value="option"
+      v-for="option in normalizedOptions"
+      :key="option.value"
+      :value="option.value"
     >
-      {{
-        typeof option === 'object'
-          ? localize(option.label)
-          : option === 'unknown'
-            ? localize('unknown')
-            : option
-      }}
+      {{ option.label }}
     </option>
   </select>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { useLocalization } from '~shared/model'
-import type { TableFilters, SelectInputFieldSchema } from '~shared/lib'
+import type { SelectInputFieldSchema } from '~shared/lib'
 
 interface Props {
   options: Array<string | number> | SelectInputFieldSchema['options']
-  selected: Record<keyof TableFilters, null | string | number>
   entityKey: string
-  localeKey?: string
+  modelValue?: string | number | null
   className?: string
   isMarkedSelected?: boolean
   isInverted?: boolean
@@ -40,7 +31,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'update:select', payload: [string, string | number | null]): void
+  (e: 'passSelectedValue', payload: [string, string | number | null | undefined]): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -50,12 +41,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const { localize } = useLocalization()
-
 const stateClasses = computed(() => [
   'select',
   {
-    '--active': props.isMarkedSelected && !!props.selected[props.entityKey],
+    '--active': props.isMarkedSelected && (!!props.modelValue && props.modelValue !== normalizedOptions.value[0].value),
     '--inverted': props.isInverted,
     '--text': props.isText
   },
@@ -63,17 +52,41 @@ const stateClasses = computed(() => [
   props.className,
 ])
 
-const localSelected = ref({
-  ...props.selected,
-  [props.entityKey]: props.selected[props.entityKey] || localize(`${props.localeKey}.${props.entityKey}`)
+const normalizedOptions = computed(() => {
+  return props.options.map((option) => {
+    if (typeof option === 'object') {
+      return {
+        label: option.label,
+        value: option.value
+      }
+    } else {
+      return {
+        label: option,
+        value: option
+      }
+    }
+  })
 })
+
+const localSelected = ref<string | number | null | undefined>(props.modelValue || normalizedOptions.value[0].value)
 
 watch(
   localSelected,
   (value) => {
-    emit('update:select', [props.entityKey, value[props.entityKey]])
+    if (value !== normalizedOptions.value[0].value) {
+      emit('passSelectedValue', [props.entityKey, value])
+    }
   },
-  { immediate: false, deep: true }
+  { immediate: false }
+)
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (!value) {
+      localSelected.value = normalizedOptions.value[0].value
+    }
+  }
 )
 </script>
 
@@ -93,8 +106,11 @@ watch(
   font-weight: 700;
   outline: none;
 
-  option:first-of-type {
-    display: none;
+  option {
+
+    &:first-of-type {
+      display: none;
+    }
   }
 
   &.--active {

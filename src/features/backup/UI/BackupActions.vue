@@ -1,7 +1,7 @@
 <template>
   <Button
     :size="size"
-    :label="targetAction?.label"
+    :label="targetAction?.label && localize(targetAction.label)"
     @click="isEnabled = true"
   />
 </template>
@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { watch } from 'vue'
 import { Button } from '~shared/UI'
+import { useLocalization } from '~shared/model'
 import { useBackup, BackupService, type BackupAction } from '~features/backup'
 
 interface Props {
@@ -27,6 +28,8 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>()
 
 const service = new BackupService()
+
+const { localize } = useLocalization()
 
 const {
   data,

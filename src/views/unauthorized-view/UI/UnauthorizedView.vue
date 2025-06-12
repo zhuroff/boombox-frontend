@@ -3,63 +3,37 @@
     <main class="main --unauth">
       <Form
         :formSchema="formSchema"
-        submitButtonLocale="signIn"
         :isLoading="isLoggingIn"
         @formSubmit="handleLogin"
-      />
+      >
+        <template #submit>
+          <Button
+            type="submit"
+            :label="localize('signIn')"
+          />
+        </template>
+      </Form>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Form } from '~shared/UI'
-import { useUserApi, UserService } from '~entities/user'
+import { reactive } from 'vue'
+import { Form, Button } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import type { FormPayload, FormSchemaProperty } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import { useUserApi, UserService } from '~entities/user'
+import { authFormSchema } from '~features/authorization'
+import type { FormPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 const userService = new UserService()
 
+const { localize } = useLocalization()
+
+const formSchema = reactive(authFormSchema(localize))
+
 const { login, isLoggingIn } = useUserApi(userService, dbService)
-
-const formSchema = new Map<string, FormSchemaProperty>([
-  ['email', {
-    id: 'login-email',
-    name: 'email',
-    placeholder: 'loginForm.emailPlaceholder',
-    required: true,
-    type: 'email',
-    label: {
-      labelText: 'loginForm.email'
-    },
-    errorMessages: [],
-    validator<T = string>(value: T) {
-      if (!value) {
-        this.errorMessages?.push('loginForm.emailRequired')
-      }
-
-      return this.errorMessages?.length || 0
-    }
-  }],
-  ['password', {
-    id: 'login-password',
-    name: 'password',
-    placeholder: 'loginForm.passwordPlaceholder',
-    required: true,
-    type: 'password',
-    label: {
-      labelText: 'loginForm.password'
-    },
-    errorMessages: [],
-    validator<T = string>(value: T) {
-      if (!value) {
-        this.errorMessages?.push('loginForm.passwordRequired')
-      }
-
-      return this.errorMessages?.length || 0
-    }
-  }]
-])
 
 const handleLogin = async (formData: FormPayload) => {
   try {

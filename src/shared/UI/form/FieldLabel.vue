@@ -7,28 +7,27 @@
       v-if="!!labelText && ['top', 'left'].includes(labelTextPosition)"
       :class="stateClasses"
     >
-      {{ localize(labelText) }}
+      {{ labelText }}
     </span>
     <slot name="formInput"></slot>
     <span
       v-if="!!labelText && ['right', 'bottom', undefined].includes(labelTextPosition)"
       :class="stateClasses"
     >
-      {{ localize(labelText) }}
+      {{ labelText }}
     </span>
     <small
       v-for="error in errors"
       :key="error"
       class="label__error"
     >
-      {{ localize(error) }}
+      {{ error }}
     </small>
   </label>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocalization } from '~shared/model'
 import type { ElementSize, ElementPosition } from '~shared/lib'
 
 interface Props {
@@ -45,8 +44,6 @@ const props = withDefaults(defineProps<Props>(), {
   labelTextPosition: 'top',
   size: 'medium'
 })
-
-const { localize } = useLocalization()
 
 const stateClasses = computed(() => ([
   'label__text',

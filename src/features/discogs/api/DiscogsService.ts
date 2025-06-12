@@ -1,4 +1,4 @@
-import { api } from '~/shared/api'
+import { api } from '~shared/api'
 import type { DiscogsQueryConfig, DiscogsReleaseRow } from '../lib/types'
 
 export default class DiscogsService {

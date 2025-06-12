@@ -15,7 +15,7 @@
     >
       <Button
         size="medium"
-        label="player.waveButton"
+        :label="localize('player.waveButton')"
         :disabled="!waveAlbum?.tracks?.length"
         @click="playWave"
       />

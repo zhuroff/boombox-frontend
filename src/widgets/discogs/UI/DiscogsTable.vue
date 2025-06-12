@@ -1,30 +1,33 @@
 <template>
+  <Button
+    v-if="isTableReady && isFiltersApplied"
+    size="small"
+    :label="localize('discogsTable.resetFilters')"
+    :onClick="resetDiscogsFilters"
+  />
   <Table
-    v-if="discogsTableState.rows.length"
-    :tableState="discogsTableState"
-    :tableFilters="discogsFilters"
-    :tableFiltersState="discogsFiltersState"
-    localeRootKey="discogsTable"
-    @updateFilterValue="(value) => setDiscogsFilterValue(value)"
-  >
-    <template #tfoot>
-      <Paginator
-        v-if="isTablePaginated"
-        :paginationState="discogsPagination"
-        :paginationConfig="paginationConfig"
-        :updatePaginationState="updatePaginationState"
-      />
-    </template>
-  </Table>
+    v-if="isTableReady"
+    :rows="paginatedDiscogsData"
+    :filters="discogsFilters"
+    :schema="discogsTableSchema"
+    :headerConfig="tableHeaderConfig"
+    :isActionable="true"
+    @tableRowClick="handleTableRowClick"
+  />
+  <Paginator
+    v-if="isTableReady"
+    :paginationState="paginationState"
+    :paginationConfig="paginationConfig"
+    :updatePaginationState="updatePaginationState"
+  />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Paginator } from '~shared/UI'
-import { Table } from '~shared/UI'
-import type { MinimumAlbumInfo } from '~shared/lib'
-import useDiscogs from '../model/useDiscogs'
-import DiscogsService from '../api/DiscogsService'
+import { h, computed, watch } from 'vue'
+import { Button, Table, Paginator, Select } from '~shared/UI'
+import { usePaginator, useLocalization } from '~shared/model'
+import { useDiscogs, discogsTableSchema, DiscogsService } from '~features/discogs'
+import type { MinimumAlbumInfo, TableHeaderConfig, TableRow } from '~shared/lib'
 
 const discogsService = new DiscogsService()
 
@@ -34,17 +37,114 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const {
-  discogsTableState,
-  discogsPagination,
-  paginationConfig,
-  discogsFiltersState,
-  setDiscogsFilterValue,
-  updatePaginationState,
-  discogsFilters
-} = useDiscogs(discogsService, props.entity)
+const { localize } = useLocalization()
 
-const isTablePaginated = computed(() => (
-  Number(discogsTableState.value.pagination?.totalPages) > 1
+const discogsPayload = computed(() => {
+  if (Array.isArray(props.entity)) {
+    return props.entity.map(item => ({
+      artist: item.albumArtist,
+      album: item.albumTitle,
+      isMasterOnly: true,
+      page: 1
+    }))
+  }
+  
+  return {
+    artist: props.entity.albumArtist,
+    album: props.entity.albumTitle,
+    page: 1
+  }
+})
+
+const {
+  setDiscogsFilterValue,
+  resetDiscogsFilters,
+  discogsFiltersState,
+  filteredDiscogsData,
+  isDiscogsFetched,
+  discogsFilters
+} = useDiscogs(discogsService, discogsPayload)
+
+const {
+  paginationState,
+  paginationConfig,
+  updatePaginationConfig,
+  updatePaginationState
+} = usePaginator({ isRouted: false, docsLimit: 30 })
+
+const discogsPagination = computed(() => ({
+  ...paginationState,
+  totalDocs: filteredDiscogsData.value.length,
+  totalPages: Math.floor(filteredDiscogsData.value.length / paginationState.limit),
+}))
+
+const paginatedDiscogsData = computed(() => (
+  [...filteredDiscogsData.value]
+    .splice(
+      (discogsPagination.value.page - 1) * discogsPagination.value.limit,
+      discogsPagination.value.limit
+    )
 ))
+
+const isTableReady = computed(() => (
+  isDiscogsFetched.value && paginatedDiscogsData.value.length
+))
+
+const isFiltersApplied = computed(() => (
+  Object.values(discogsFiltersState).some((value) => value !== null)
+))
+
+const tableHeaderConfig = computed<TableHeaderConfig[]>(() => (
+  discogsTableSchema.order.map((key) => {
+    const filter = discogsTableSchema.filters?.[key]
+    const heading = localize(`discogsTable.${key}`)
+
+    if (!filter) {
+      return {
+        key,
+        element: h('span', {}, heading)
+      }
+    }
+
+    return {
+      key,
+      element: h(
+        Select,
+        {
+          options: [
+            heading,
+            ...discogsFilters[key]
+          ],
+          modelValue: discogsFiltersState[key],
+          localeKey: 'discogsTable',
+          entityKey: key,
+          size: 'small',
+          onPassSelectedValue: (value) => {
+            setDiscogsFilterValue(value)
+            updatePaginationState('page', 1)
+          }
+        }
+      )
+    }
+  })
+))
+
+const handleTableRowClick = (row: TableRow) => {
+  window.open(String(row.pageURL))
+}
+
+watch(
+  filteredDiscogsData,
+  (value) => {
+    if (!value) return
+    updatePaginationConfig('totalDocs', value.length)
+    updatePaginationConfig('totalPages', Math.ceil(value.length / paginationState.limit))
+  }
+)
 </script>
+
+<style lang="scss" scoped>
+.table {
+  margin-top: 1rem;
+}
+</style>

@@ -2,7 +2,7 @@
   <input
     :id="id"
     :class="stateClasses"
-    :placeholder="localize(placeholder || '')"
+    :placeholder="placeholder"
     :style="style"
     :type="type"
     :name="name"
@@ -12,16 +12,15 @@
     ref="textInputElement"
     autocomplete="off"
     @input="(e) => {
-      const value = (e.target as HTMLInputElement).value;
-      emit('update:modelValue', value);
-      emit('onInput', value);
+      const value = (e.target as HTMLInputElement).value
+      emit('update:modelValue', value)
+      emit('onInput', value)
     }"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted, type StyleValue } from 'vue'
-import { useLocalization } from '~shared/model'
 import type { ElementSize, TextInputFieldSchema } from '~shared/lib'
 
 interface Props {
@@ -56,8 +55,6 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>()
 
 const textInputElement = ref<null | HTMLInputElement>(null)
-
-const { localize } = useLocalization()
 
 const stateClasses = computed(() => [
   'input-field',

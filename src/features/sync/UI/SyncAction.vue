@@ -1,6 +1,6 @@
 <template>
   <Button
-    label="settings.synchronize"
+    :label="localize('settings.synchronize')"
     @click="handleSync"
   />
   <Loader
@@ -14,6 +14,7 @@ import { onUnmounted, watch } from 'vue'
 import { useSync, type SyncDataPayload } from '~features/sync'
 import { Button, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
+import { useLocalization } from '~shared/model'
 
 interface Emits {
   (e: 'passSyncData', payload: SyncDataPayload): void
@@ -22,6 +23,8 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
+
+const { localize } = useLocalization()
 
 const {
   data,

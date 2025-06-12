@@ -45,15 +45,23 @@
       :isModalActive="!!isDeletable && !!deletedEntityId"
       @closeModal="deletedEntityId = null"
     >
-      <Confirmation
-        :message="localize('delConfirmMessage')"
-        @confirm="isDeleteConfirmed = true"
-        @reject="deletedEntityId = null"
-      >
-        <Loader
-          v-if="isDeleting"
-          mode="light"
-        />
+      <Confirmation :message="localize('delConfirmMessage')">
+        <template #actions>
+          <Button
+            :label="localize('delete')"
+            @click="isDeleteConfirmed = true"
+          />
+          <Button
+            :label="localize('cancel')"
+            @click="deletedEntityId = null"
+          />
+        </template>
+        <template #loader>
+          <Loader
+            v-if="isDeleting"
+            mode="light"
+          />
+        </template>
       </Confirmation>
     </Modal>
   </div>
@@ -66,7 +74,7 @@ import { Header } from '~widgets/header'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 
 import { DatabaseService } from '~shared/api'
-import { Modal, Loader, Confirmation, Paginator } from '~shared/UI'
+import { Modal, Loader, Confirmation, Button, Paginator } from '~shared/UI'
 import { useLocalization, useGetList, useDeleteEntity, usePaginator } from '~shared/model'
 import type { DeletePayload } from '~shared/lib'
 

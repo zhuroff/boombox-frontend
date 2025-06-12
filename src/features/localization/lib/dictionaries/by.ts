@@ -88,7 +88,8 @@ export const localesBY: LocaleDictionary = {
     releaseTitle: 'Назва',
     releaseYear: 'Год',
     releaseFormat: 'Фармат',
-    label: 'Лэйбл'
+    label: 'Лэйбл',
+    resetFilters: 'Скінуць фільтры'
   },
   embeddedForm: {
     title: 'Назва альбому',

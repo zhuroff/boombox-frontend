@@ -169,7 +169,6 @@ const fetchTrackLyrics = async () => {
 }
 
 onMounted(() => {
-  // @ts-expect-error: fix
   !props.track.isTOY && fetchTrackLyrics()
 })
 </script>

@@ -5,6 +5,7 @@
     </h2>
 
     <Table
+      :localize="localize"
       :tableState="backupsTableState"
       :localeRootKey="'backups'"
       @onEmit="(data) => emit('passBackups', data)"

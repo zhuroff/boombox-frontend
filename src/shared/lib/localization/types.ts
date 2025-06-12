@@ -15,7 +15,7 @@ export type LocaleItem = {
 export type LocalizationConfig = {
   locales: Map<string, LocaleItem>
   currentLocale: Ref<LocaleItem>
-  localize(path: string, ...vars: string[]): string
-  setLocale(locale: LocaleItem): void
-  checkAndSetLocale(): void
+  localize: (path: string, ...vars: string[]) => string
+  setLocale: (locale: LocaleItem) => void
+  checkAndSetLocale: () => void
 }

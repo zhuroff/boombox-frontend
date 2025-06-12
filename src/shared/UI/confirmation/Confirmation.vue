@@ -2,22 +2,13 @@
   <div class="confirmation">
     <div class="confirmation__message">{{ message }}</div>
     <div class="confirmation__actions">
-      <Button
-        label="delete"
-        @click="() => $emit('confirm')"
-      />
-      <Button
-        label="cancel"
-        @click="() => $emit('reject')"
-      />
+      <slot name="actions"></slot>
     </div>
-    <slot></slot>
+    <slot name="loader"></slot>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '~shared/UI'
-
 interface Props {
   message: string
 }

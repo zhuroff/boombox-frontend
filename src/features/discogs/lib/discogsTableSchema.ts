@@ -1,6 +1,6 @@
-import type { JSONSchema4 } from 'json-schema'
+import type { TableSchema } from '~shared/lib'
 
-const discogsTableSchema: JSONSchema4 = {
+const discogsTableSchema: TableSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
   properties: {
@@ -9,8 +9,6 @@ const discogsTableSchema: JSONSchema4 = {
     },
     country: {
       type: 'string',
-      minLength: 2,
-      maxLength: 2
     },
     cover: {
       type: 'string',

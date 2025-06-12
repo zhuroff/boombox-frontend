@@ -10,7 +10,7 @@
       <Button
         v-if="isAdmin"
         icon="plus"
-        label="embeddedForm.addAlbum"
+        :label="localize('embeddedForm.addAlbum')"
         isInverted
         :style="{ marginLeft: '1rem' }"
         @click="isCreateMode = !isCreateMode"
@@ -24,11 +24,17 @@
         <div class="embedded__create">
           <Form
             :formSchema="formSchema"
-            submitButtonLocale="embeddedForm.submit"
             @formSubmit="createEmbeddedAlbum"
             @passRefQuery="setRefQuery"
             @resetForm="resetForm"
-          />
+          >
+            <template #submit>
+              <Button
+                type="submit"
+                :label="localize('embeddedForm.submit')"
+              />
+            </template>
+          </Form>
         </div>
         <Loader
           v-if="isCreatingEntity"
@@ -84,7 +90,7 @@ const formData = ref<FormPayload | null>(null)
 const isNewEntityQueryEnabled = ref(false)
 const refEntityName = ref('')
 const refValueSetter = ref<(payload: [string, string | File]) => void>()
-const formSchema = reactive(embeddedAlbumFormSchema)
+const formSchema = reactive(embeddedAlbumFormSchema(localize))
 
 const isCreatingEnabled = computed(() => !!formData.value)
 

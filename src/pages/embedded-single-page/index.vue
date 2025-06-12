@@ -40,15 +40,23 @@
       :isModalActive="isDeleteModalEnabled"
       @closeModal="isDeleteModalEnabled = false"
     >
-      <Confirmation
-        :message="localize('delConfirmMessage')"
-        @confirm="isDeleteConfirmed = true"
-        @reject="isDeleteModalEnabled = false"
-      >
-        <Loader
-          v-if="isAlbumDeleting"
-          mode="light"
-        />
+      <Confirmation :message="localize('delConfirmMessage')">
+        <template #actions>
+          <Button
+            :label="localize('delete')"
+            @click="isDeleteConfirmed = true"
+          />
+          <Button
+            :label="localize('cancel')"
+            @click="isDeleteModalEnabled = false"
+          />
+        </template>
+        <template #loader>
+          <Loader
+            v-if="isAlbumDeleting"
+            mode="light"
+          />
+        </template>
       </Confirmation>
     </Modal>
   </section>
@@ -66,7 +74,7 @@ import { WikiFrame } from '~features/wiki'
 
 import { useEmbedded } from '~entities/embedded'
 
-import { Modal, Loader, Confirmation } from '~shared/UI'
+import { Modal, Loader, Button, Confirmation } from '~shared/UI'
 import { useDeleteEntity, useSnackbar, useLocalization } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 

@@ -1,60 +1,49 @@
 <template>
   <table class="table">
-    <thead class="table__head">
-      <TableHeadRow
-        :cells="tableHeader"
-        :filters="tableFilters"
-        :filtersState="tableFiltersState"
-        :localeRootKey="localeRootKey"
-        @updateFilterValue="(value) => emit('updateFilterValue', value)"
-      />
+    <thead
+      v-if="!isHeadless"
+      class="table__head"
+    >
+      <TableHeadRow :cells="headerConfig" />
     </thead>
+
     <tbody class="table__body">
       <TableBodyRow
-        v-for="row in tableState.rows"
+        v-for="row in rows"
+        :key="row.id"
         :row="row"
-        :schema="tableState.schema"
-        @onEmit="<T>(payload: T) => emit('onEmit', payload)"
+        :schema="schema"
+        :isActionable="isActionable"
+        @tableRowClick="(row) => emit('tableRowClick', row)"
       />
     </tbody>
-    <tfoot class="table__footer">
-      <slot name="tfoot"></slot>
-    </tfoot>
   </table>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
-import { useLocalization } from '~shared/model'
+import type { TableSchema, TableFilters, TableRow, TableHeaderConfig } from '~shared/lib'
 import TableHeadRow from './TableHeadRow.vue'
 import TableBodyRow from './TableBodyRow.vue'
 
-interface Props {
-  tableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>
-  tableFilters?: TableFilters
-  tableFiltersState?: Record<string, string | number | null>
-  localeRootKey: string
+type Props = {
+  rows: TableRow[]
+  filters: TableFilters
+  schema: TableSchema,
+  headerConfig: TableHeaderConfig[]
+  isHeadless?: boolean
+  isActionable?: boolean
 }
 
-interface Emits {
-  <T>(e: 'onEmit', data: T): void
-  (e: 'updateFilterValue', value: [string, string | number | null]): void
+type Emits = {
+  (e: 'tableRowClick', payload: TableRow): void
 }
 
-const props = defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  isHeadless: false,
+  isActionable: false
+})
+
 const emit = defineEmits<Emits>()
-
-const { localize } = useLocalization()
-
-const tableHeader = computed<TableHeadConfig<JSONSchema4>[]>(() => (
-  props.tableState.schema.order.map((key: string) => ({
-    key,
-    heading: localize(`${props.localeRootKey}.${key}`),
-    schema: props.tableState.schema.properties?.[key],
-    filter: props.tableState.schema.filters?.[key]
-  }))
-))
 </script>
 
 <style lang="scss">

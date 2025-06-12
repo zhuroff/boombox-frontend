@@ -1,33 +1,52 @@
 <template>
-  <tr class="table__row">
-    <TableHeadCell
+  <tr class="table__head-row">
+    <th
       v-for="cell in cells"
       :key="cell.key"
-      :cell="cell"
-      :filter="filters?.[cell.key]"
-      :filtersState="filtersState"
-      :localeRootKey="localeRootKey"
-      @updateFilterValue="(value) => emit('updateFilterValue', value)"
-    />
+    >
+      <component :is="cell.element" />
+    </th>
   </tr>
 </template>
 
 <script setup lang="ts">
-import type { JSONSchema4 } from 'json-schema'
-import type { TableFilters, TableHeadConfig } from '~shared/lib'
-import TableHeadCell from './TableHeadCell.vue'
+import type { TableHeaderConfig } from '~shared/lib'
 
-interface Props {
-  cells: TableHeadConfig<JSONSchema4>[]
-  localeRootKey: string
-  filters?: TableFilters
-  filtersState?: Record<string, string | number | null>
-}
-
-interface Emits {
-  (e: 'updateFilterValue', value: [string, string | number | null]): void
+type Props = {
+  cells: TableHeaderConfig[]
 }
 
 defineProps<Props>()
-const emit = defineEmits<Emits>()
 </script>
+
+<style lang="scss" scoped>
+@use '~/app/styles/variables' as var;
+
+.table__head-row {
+  background-color: var.$paleMD;
+
+  th {
+    font-weight: 600;
+    padding: 0.75rem 0;
+    vertical-align: middle;
+    font-size: 0.875rem;
+
+    &.--right {
+      text-align: right;
+    }
+
+    &.--center {
+      text-align: center;
+    }
+
+    &:first-of-type {
+      padding-left: 0.75rem;
+      border-top-left-radius: var.$borderRadiusSM;
+    }
+
+    &:last-of-type {
+      border-top-right-radius: var.$borderRadiusSM;
+    }
+  }
+}
+</style>

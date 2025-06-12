@@ -24,7 +24,7 @@
             v-if="entityKey !== 'collections'"
             size="medium"
             isInverted
-            label="player.waveButton"
+            :label="localize('player.waveButton')"
             :disabled="!waveAlbum?.tracks?.length"
             @click="playWave"
           />
@@ -39,6 +39,7 @@ import { onMounted, ref } from 'vue'
 import { useImageUploader, type EntityImagesKeys } from '~features/uploading'
 import { PosterUploader, AvatarUploader } from '~features/uploading'
 import { EditableHeading } from '~shared/UI'
+import { useLocalization } from '~shared/model'
 import { hostString } from '~/utils'
 import usePlaylist from '~/~legacy/store/playlist'
 import { Button } from '~shared/UI'
@@ -63,6 +64,8 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const uploadService = new UploadService()
+
+const { localize } = useLocalization()
 
 const { uploadImage } = useImageUploader(props.entityKey, uploadService)
 

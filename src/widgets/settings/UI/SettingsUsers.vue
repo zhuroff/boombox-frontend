@@ -5,6 +5,7 @@
     </h2>
 
     <Table
+      :localize="localize"
       :tableState="usersTableState"
       :localeRootKey="'users'"
       @onEmit="(data) => emit('passUsers', data)"
@@ -15,9 +16,8 @@
 <script setup lang="ts">
 import { Table } from '~shared/UI'
 import { useLocalization } from '~shared/model'
-import type { TableConfig } from '~shared/lib'
+import type { TableConfig, User } from '~shared/lib'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
-import type { User } from '~entities/user'
 
 interface Props {
   usersTableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>

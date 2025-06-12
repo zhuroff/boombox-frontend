@@ -1,11 +1,11 @@
 <template>
   <div class="settings__actions">
     <Button
-      label="settings.createUser"
+      :label="localize('settings.createUser')"
       @click="showUserForm"
     />
     <Button
-      label="settings.showUsers"
+      :label="localize('settings.showUsers')"
       @click="handleGetUsers"
     />
     <BackupActions
@@ -20,7 +20,7 @@
       @passSyncData="(data) => emit('passSyncData', data)"
     />
     <Button
-      label="settings.logout"
+      :label="localize('settings.logout')"
       @click="logout"
     />
     <LanguageSwitcher />
@@ -33,6 +33,7 @@ import { SyncAction } from '~features/sync'
 import { BackupActions } from '~features/backup'
 import { useUserApi, UserService } from '~entities/user'
 import { DatabaseService } from '~shared/api'
+import { useLocalization } from '~shared/model'
 import { LanguageSwitcher } from '~features/localization'
 
 interface Emits {
@@ -45,6 +46,8 @@ const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
 const userService = new UserService()
+
+const { localize } = useLocalization()
 
 const { logout, createUser, getUsers, users } = useUserApi(userService, dbService)
 

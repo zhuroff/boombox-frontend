@@ -36,11 +36,24 @@
       :isModalActive="entityToDelete !== null"
       @closeModal="delReject"
     >
-      <Confirmation
-        :message="localize('compilations.trackDelConfirmation')"
-        @confirm="removeTrackFromCompilation"
-        @reject="delReject"
-      />
+      <Confirmation :message="localize('compilations.trackDelConfirmation')">
+        <template #actions>
+          <Button
+            :label="localize('delete')"
+            @click="removeTrackFromCompilation"
+          />
+          <Button
+            :label="localize('cancel')"
+            @click="delReject"
+          />
+        </template>
+        <!-- <template #loader>
+          <Loader
+            v-if="isAlbumDeleting"
+            mode="light"
+          />
+        </template> -->
+      </Confirmation>
     </Modal>
   </div>
 </template>

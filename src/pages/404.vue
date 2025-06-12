@@ -4,7 +4,7 @@
       <h1>{{ localize('pageNotFound') }}</h1>
       <div>
         <Button
-          label="goBack"
+          :label="localize('goBack')"
           @click="() => router.back()"
         />
       </div>

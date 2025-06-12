@@ -88,7 +88,8 @@ export const localesEN: LocaleDictionary = {
     releaseTitle: 'Title',
     releaseYear: 'Year',
     releaseFormat: 'Format',
-    label: 'Label'
+    label: 'Label',
+    resetFilters: 'Reset filters'
   },
   embeddedForm: {
     title: 'Album title',
