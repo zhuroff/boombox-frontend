@@ -1,19 +1,19 @@
 <template>
   <ul
-    class="action-list"
+    class="droplist"
     :class="`--${size}`"
   >
     <li
       v-for="option in data"
       :key="option.value"
-      class="action-list__option"
+      class="droplist__option"
       @click="() => emit('selectOption', option)"
     >
       {{ option.label }}
     </li>
     <li
       v-if="canBeCreated"
-      class="action-list__option --create"
+      class="droplist__option --create"
       @click="() => emit('createNewEntity')"
     >
       <span>
@@ -52,7 +52,7 @@ const { localize } = useLocalization()
 <style lang="scss" scoped>
 @use '~/app/styles/variables' as var;
 
-.action-list {
+.droplist {
   background-color: var.$paleLW;
   border-bottom-left-radius: var.$borderRadiusSM;
   border-bottom-right-radius: var.$borderRadiusSM;

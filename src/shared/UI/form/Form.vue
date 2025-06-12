@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import type { FormPayload, FormSchemaProperty } from '~shared/lib'
 import { Button } from '~shared/UI'
 import Field from './Field.vue'
@@ -35,9 +35,10 @@ interface Props {
 interface Emits {
   (e: 'formSubmit', value: FormPayload): void
   (e: 'passRefQuery', payload: [Record<string, string>, typeof setFormProperty]): void
+  (e: 'resetForm'): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   submitButtonLocale: 'submit'
 })
 
@@ -53,6 +54,11 @@ const setFormProperty = (payload: [string, string | File]) => {
 const passRefQuery = (payload: Record<string, string>) => {
   emit('passRefQuery', [payload, setFormProperty])
 }
+
+onUnmounted(() => {
+  formState.value = {}
+  emit('resetForm')
+})
 </script>
 
 <style lang="scss">

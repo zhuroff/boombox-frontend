@@ -75,19 +75,6 @@ watch(
     }
   }
 )
-
-// watch(
-//   createdEntity,
-//   (newVal) => {
-//     if (newVal) {
-//       isNewEntityQueryEnabled.value = false
-//       selectOption({
-//         label: newVal.title,
-//         value: newVal._id
-//       })
-//     }
-//   }
-// )
 </script>
 
 <style lang="scss" scoped>

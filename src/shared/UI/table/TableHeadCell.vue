@@ -17,8 +17,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Select } from '~shared/UI'
-import type { JSONSchema4 } from 'json-schema'
 import type { TableHeadConfig } from '~shared/lib'
+import type { JSONSchema4 } from 'json-schema'
 
 interface Props {
   cell: TableHeadConfig<JSONSchema4>

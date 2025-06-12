@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import { Sprite } from '~shared/UI'
-import { useUser } from '~entities/user'
+import { useUser } from '~shared/model'
 
 interface Props {
   posterUrl: string | null

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { hostString } from '~/utils'
-import { cleanUser } from '~entities/user'
+import { cleanUser } from '~shared/model'
 
 export const api = axios.create({
   baseURL: hostString(''),

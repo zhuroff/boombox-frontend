@@ -27,6 +27,7 @@
             submitButtonLocale="embeddedForm.submit"
             @formSubmit="createEmbeddedAlbum"
             @passRefQuery="setRefQuery"
+            @resetForm="resetForm"
           />
         </div>
         <Loader
@@ -60,10 +61,9 @@ import { EntityListView } from '~views/entity-list-view'
 
 import { DatabaseService } from '~shared/api'
 import { Button, Modal, Form, DropList, Loader } from '~shared/UI'
-import { useLocalization, useCreateEntity, useSnackbar } from '~shared/model'
+import { useLocalization, useCreateEntity, useSnackbar, useUser } from '~shared/model'
 import type { Entity, FormPayload, SelectInputFieldSchema } from '~shared/lib'
 
-import { useUser } from '~entities/user'
 import { embeddedAlbumFormSchema } from '~entities/embedded'
 
 import { useSearch, SearchService } from '~features/search'
@@ -140,6 +140,16 @@ const selectOption = (payload: SelectInputFieldSchema['options'][number]) => {
 
 const createNewEntity = () => {
   isNewEntityQueryEnabled.value = true
+}
+
+const resetForm = () => {
+  for (const [key] of formSchema.entries()) {
+    const targetFormProperty = formSchema.get(key)
+
+    if (targetFormProperty) {
+      targetFormProperty.defaultValue = ''
+    }
+  }
 }
 
 const creatingPayload = computed(() => ({ value: refQuery.value }))

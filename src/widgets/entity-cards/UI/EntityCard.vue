@@ -28,9 +28,9 @@ import { h, computed, type Component } from 'vue'
 
 import { AlbumCard } from '~entities/album'
 import { CategoryCard } from '~entities/category'
-import { useUser } from '~entities/user'
 
 import { Button } from '~shared/UI'
+import { useUser } from '~shared/model'
 import type { DeletePayload } from '~shared/lib'
 
 import type { UnifiedEntityCard } from '../lib/types'

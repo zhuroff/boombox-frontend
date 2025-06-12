@@ -64,16 +64,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import usePlaylist from '../../store/playlist'
-import { Button } from '~shared/UI'
+import { Button, Modal } from '~shared/UI'
+import { useUser } from '~shared/model'
 import TrackItemAdd from './TrackItemAdd.vue'
 import TrackItemPlay from './TrackItemPlay.vue'
 import TrackItemTitle from './TrackItemTitle.vue'
 import TrackItemDuration from './TrackItemDuration.vue'
 import TrackItemCompilation from './TrackItemCompilation.vue'
 import TrackItemDisable from './TrackItemDisable.vue'
-import { Modal } from '~shared/UI'
 import TrackLyrics from './TrackLyrics.vue'
-import { useUser } from '~entities/user'
 
 interface Props {
   track: Track

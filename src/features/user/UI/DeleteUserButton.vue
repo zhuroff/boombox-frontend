@@ -7,8 +7,9 @@
 
 <script setup lang="ts">
 import { Button } from '~shared/UI'
-import { useUser, useUserApi, UserService } from '~entities/user'
+import { useUserApi, UserService } from '~entities/user'
 import { DatabaseService } from '~shared/api'
+import { useUser } from '~shared/model'
 
 const dbService = new DatabaseService()
 const userService = new UserService()

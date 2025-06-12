@@ -1,5 +1,5 @@
+export { useUserApi } from './model/useUser'
 export { default as usersTableSchema } from './model/usersTableSchema'
 export { default as userFormSchema } from './model/userFormSchema'
-export { useUser, cleanUser, useUserApi } from './model/useUser'
 export { default as UserService } from './api/UserService'
 export * from './lib/types'

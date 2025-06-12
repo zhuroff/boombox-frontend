@@ -10,11 +10,11 @@ import { onBeforeMount } from 'vue'
 import { AuthorizedView } from '~views/authorized-view'
 import { UnauthorizedView } from '~views/unauthorized-view'
 
-import { useUserApi, useUser, UserService } from '~entities/user'
+import { useUserApi, UserService } from '~entities/user'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/model'
+import { useLocalization, useUser } from '~shared/model'
 
 const { checkAndSetLocale } = useLocalization()
 

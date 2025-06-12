@@ -1,48 +1,14 @@
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
-import { DatabaseService, updateAuthHeaders } from '~shared/api'
-import { UserRole, type User, type AuthRefreshResponse } from '../lib/types'
+import { updateAuthHeaders, type DatabaseService } from '~shared/api'
+import { useUser, createUser, cleanUser } from '~shared/model'
+import { type User, type AuthRefreshResponse } from '~shared/lib'
 import type { UserService } from '~entities/user'
 import type { FormPayload } from '~shared/lib'
 
-const createUser = (user?: User): User => {
-  return {
-    _id: user?._id || '',
-    login: user?.login || '',
-    email: user?.email || '',
-    role: user?.role || UserRole.guest,
-  }
-}
-
-export const cleanUser = () => {
-  user.value = createUser()
-}
-
-const user = ref(createUser())
-
-const isAuthChecking = ref(true)
-
-const isAdmin = computed(() => user.value.role === UserRole.admin)
-const isListener = computed(() => user.value.role === UserRole.listener)
-const isGuest = computed(() => user.value.role === UserRole.guest)
-const isAuthorized = computed(() => {
-  const currentUser = user.value
-  return !!currentUser._id
-})
-
-export const useUser = () => {
-  return {
-    user,
-    isAdmin,
-    isListener,
-    isGuest,
-    isAuthorized,
-    isAuthChecking
-  }
-}
-
 export const useUserApi = (userService: UserService, dbService: DatabaseService) => {
   const queryClient = useQueryClient()
+  const { user, isAuthChecking } = useUser()
 
   // Refresh mutation
   const { mutateAsync: refreshMutation, isPending: isRefreshing } = useMutation({
