@@ -29,7 +29,7 @@ import type { UploadImageResult } from '~features/uploading'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 
 const dbService = new DatabaseService()
 

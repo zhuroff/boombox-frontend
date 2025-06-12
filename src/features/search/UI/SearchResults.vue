@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import { Loader } from '~shared/UI'
 
 interface Props {

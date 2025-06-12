@@ -30,17 +30,15 @@
 
 <script setup lang="ts">
 import { h, computed, ref } from 'vue'
-import { DatabaseService } from '~shared/api'
 import { Modal } from '~shared/UI'
-import { useLocalization } from '~shared/lib'
-import { useSearch } from '~shared/model'
+import { useLocalization } from '~shared/model'
+import { useSearch, SearchService, SearchModal } from '~features/search'
+import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
+import { assertNever } from '~/utils'
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import TOYPageHead from './TOYPageHead.vue'
-import { SearchModal } from '~widgets/search'
-import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
-import { assertNever } from '~/utils'
 
 interface Props {
   album: UnifiedEntityFullCard
@@ -59,12 +57,12 @@ const emit = defineEmits<Emits>()
 
 const { localize } = useLocalization()
 
-const dbService = new DatabaseService()
+const searchService = new SearchService()
 
 const searchQuery = ref('')
 const isSearchMode = ref(false)
 
-const { searchResults, isSearchFetching } = useSearch(searchQuery, dbService)
+const { searchResults, isSearchFetching } = useSearch(searchQuery, searchService)
 
 const onSearch = (value: string) => {
   searchQuery.value = value

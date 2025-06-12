@@ -36,7 +36,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Button, Sprite } from '~shared/UI'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 
 interface Props {
   isExpanded: boolean

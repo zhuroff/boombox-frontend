@@ -13,7 +13,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Sprite } from '~shared/UI'
-import { useLocalization, type DropdownItem } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import type { DropdownItem } from '~shared/lib'
 
 interface Props {
   option: DropdownItem

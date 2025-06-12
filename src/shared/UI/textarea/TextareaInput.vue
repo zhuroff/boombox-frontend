@@ -18,13 +18,14 @@
 
 <script setup lang="ts">
 import { onMounted, computed, watchEffect, ref, type Ref, type StyleValue } from 'vue'
-import { useLocalization, type ElementSize, type TextareaInputFieldSchema } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import type { ElementSize, TextareaInputFieldSchema } from '~shared/lib'
 
 interface Props {
   name: string
   type: TextareaInputFieldSchema['type']
   size?: ElementSize
-  defaultValue?: string
+  modelValue?: string
   id?: string
   isError?: boolean
   rows?: number
@@ -50,7 +51,7 @@ const emit = defineEmits<Emits>()
 const { localize } = useLocalization()
 
 const textareaElement: Ref<null | HTMLTextAreaElement> = ref(null)
-const text = ref<string>(props.defaultValue || '')
+const text = ref<string>(props.modelValue || '')
 
 const stateClasses = computed(() => [
   'textarea-field',
@@ -73,7 +74,7 @@ onMounted(() => {
 })
 
 watchEffect(() => {
-  text.value = props.defaultValue || ''
+  text.value = props.modelValue || ''
   setTimeout(resizeTextarea, 0)
 })
 

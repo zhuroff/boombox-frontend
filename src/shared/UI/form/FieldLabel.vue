@@ -28,7 +28,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocalization, type ElementSize, type ElementPosition } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import type { ElementSize, ElementPosition } from '~shared/lib'
 
 interface Props {
   errors?: string[]

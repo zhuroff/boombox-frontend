@@ -58,9 +58,9 @@ import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 
 import { Modal, Loader, Confirmation } from '~shared/UI'
-import { useDeleteEntity, useSnackbar } from '~shared/model'
+import { useDeleteEntity, useLocalization, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useLocalization, type ReorderPayload } from '~shared/lib'
+import type { ReorderPayload } from '~shared/lib'
 
 import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 

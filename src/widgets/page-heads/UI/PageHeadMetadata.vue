@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 
 interface Props {

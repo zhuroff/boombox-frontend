@@ -9,6 +9,7 @@
         :key="key"
         :property="property"
         @setFormProperty="setFormProperty"
+        @passRefQuery="passRefQuery"
       />
     </div>
     <footer class="form__footer">
@@ -33,9 +34,10 @@ interface Props {
 
 interface Emits {
   (e: 'formSubmit', value: FormPayload): void
+  (e: 'passRefQuery', payload: [Record<string, string>, typeof setFormProperty]): void
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   submitButtonLocale: 'submit'
 })
 
@@ -46,6 +48,10 @@ const formState = ref<FormPayload>({})
 const setFormProperty = (payload: [string, string | File]) => {
   const [key, value] = payload
   formState.value[key] = value
+}
+
+const passRefQuery = (payload: Record<string, string>) => {
+  emit('passRefQuery', [payload, setFormProperty])
 }
 </script>
 

@@ -23,10 +23,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useSearch } from '~shared/model'
 import { Modal, Button } from '~shared/UI'
-import { DatabaseService } from '~/shared/api'
-import { SearchModal } from '~widgets/search'
+import { useSearch, SearchService, SearchModal } from '~features/search'
 
 interface Props {
   heading: string
@@ -35,12 +33,12 @@ interface Props {
 
 defineProps<Props>()
 
-const dbService = new DatabaseService()
+const searchService = new SearchService()
 
 const searchQuery = ref('')
 const isSearchMode = ref(false)
 
-const { searchResults, isSearchFetching } = useSearch(searchQuery, dbService)
+const { searchResults, isSearchFetching } = useSearch(searchQuery, searchService)
 
 const onSearch = (value: string) => {
   searchQuery.value = value

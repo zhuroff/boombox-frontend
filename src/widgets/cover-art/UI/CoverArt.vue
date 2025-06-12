@@ -51,7 +51,7 @@ import { Modal, Loader, Sprite } from '~shared/UI'
 import { Slider } from '~features/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
 
 interface BookletSlideState {

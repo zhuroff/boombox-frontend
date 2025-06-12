@@ -38,7 +38,7 @@
 import { ref, computed } from 'vue'
 import type { MinimumAlbumInfo } from '~shared/lib'
 import { Loader } from '~shared/UI'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import { useWiki, WikiService } from '~features/wiki'
 
 interface Props {

@@ -67,9 +67,8 @@ import { WikiFrame } from '~features/wiki'
 import { useEmbedded } from '~entities/embedded'
 
 import { Modal, Loader, Confirmation } from '~shared/UI'
-import { useDeleteEntity, useSnackbar } from '~shared/model'
+import { useDeleteEntity, useSnackbar, useLocalization } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/lib'
 
 const dbService = new DatabaseService()
 

@@ -9,7 +9,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocalization, LocaleKeys } from '~shared/lib'
+import { LocaleKeys } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import { Dropdown } from '~shared/UI'
 import type { DropdownItem } from '~shared/lib'
 

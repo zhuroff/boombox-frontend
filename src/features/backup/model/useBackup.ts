@@ -1,7 +1,6 @@
 import { computed, ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import { useSnackbar } from '~shared/model'
-import { useLocalization } from '~shared/lib'
+import { useSnackbar, useLocalization } from '~shared/model'
 import type { BackupAction, BackupActionConfig } from '../lib/types'
 import type BackupService from '../api/BackupService'
 

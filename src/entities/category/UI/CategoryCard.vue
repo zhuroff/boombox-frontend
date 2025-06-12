@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { hostString } from '~/utils'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import { CardPreview } from '~shared/UI'
 import type { CategoryBasic } from '../lib/types'
 

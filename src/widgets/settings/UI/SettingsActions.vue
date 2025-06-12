@@ -31,7 +31,7 @@
 import { Button } from '~shared/UI'
 import { SyncAction } from '~features/sync'
 import { BackupActions } from '~features/backup'
-import { useUserApi } from '~entities/user'
+import { useUserApi, UserService } from '~entities/user'
 import { DatabaseService } from '~shared/api'
 import { LanguageSwitcher } from '~features/localization'
 
@@ -44,8 +44,9 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
+const userService = new UserService()
 
-const { logout, createUser, getUsers, users } = useUserApi(dbService)
+const { logout, createUser, getUsers, users } = useUserApi(userService, dbService)
 
 const handleGetUsers = async () => {
   await getUsers()

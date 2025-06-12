@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 // import usePlaylist from '~/store/playlist'
 // import AlbumTrack from '~/classes/AlbumTrack'
 import TrackItemPlay from '~/~legacy/components/TrackList/TrackItemPlay.vue'

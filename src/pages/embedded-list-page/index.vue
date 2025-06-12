@@ -26,24 +26,50 @@
             :formSchema="formSchema"
             submitButtonLocale="embeddedForm.submit"
             @formSubmit="createEmbeddedAlbum"
+            @passRefQuery="setRefQuery"
           />
         </div>
+        <Loader
+          v-if="isCreatingEntity"
+          mode="light"
+        />
       </Modal>
     </template>
   </EntityListView>
+  <transition name="fade">
+    <Teleport
+      v-if="isListOpen"
+      :to="`[data-ref=${refEntityKey}]`"
+    >
+      <DropList
+        :name="refEntityKey"
+        :query="refQuery"
+        :data="refList"
+        :canBeCreated="canBeCreated"
+        @selectOption="selectOption"
+        @createNewEntity="createNewEntity"
+      />
+    </Teleport>
+  </transition>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from 'vue'
+
 import { EntityListView } from '~views/entity-list-view'
-import { useCreateEntity, useSnackbar } from '~shared/model'
-import { useLocalization, type FormPayload } from '~shared/lib'
-import { Button, Modal, Form } from '~shared/UI'
-import { embeddedAlbumFormSchema } from '~entities/embedded'
+
 import { DatabaseService } from '~shared/api'
+import { Button, Modal, Form, DropList, Loader } from '~shared/UI'
+import { useLocalization, useCreateEntity, useSnackbar } from '~shared/model'
+import type { Entity, FormPayload, SelectInputFieldSchema } from '~shared/lib'
+
 import { useUser } from '~entities/user'
+import { embeddedAlbumFormSchema } from '~entities/embedded'
+
+import { useSearch, SearchService } from '~features/search'
 
 const dbService = new DatabaseService()
+const searchService = new SearchService()
 
 const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
@@ -52,7 +78,12 @@ const { isAdmin } = useUser()
 
 const isCreateMode = ref(false)
 const entityKey = ref('embedded')
+const refQuery = ref('')
+const refEntityKey = ref('')
 const formData = ref<FormPayload | null>(null)
+const isNewEntityQueryEnabled = ref(false)
+const refEntityName = ref('')
+const refValueSetter = ref<(payload: [string, string | File]) => void>()
 const formSchema = reactive(embeddedAlbumFormSchema)
 
 const isCreatingEnabled = computed(() => !!formData.value)
@@ -80,6 +111,67 @@ const createEmbeddedAlbum = (formPayload: FormPayload) => {
   }  
 }
 
+const setRefQuery = (payload: [
+  Record<string, string>,
+  (payload: [string, string | File]) => void]
+) => {
+  const { refKey, name, value } = payload[0]
+  const callback = payload[1]
+
+  refQuery.value = value
+  refEntityKey.value = refKey
+  refEntityName.value = name
+  refValueSetter.value = callback
+}
+
+const selectOption = (payload: SelectInputFieldSchema['options'][number]) => {
+  refValueSetter.value?.([refEntityName.value, payload.value])
+
+  const targetFormProperty = formSchema.get(refEntityName.value)
+
+  if (targetFormProperty) {
+    targetFormProperty.defaultValue = payload.label
+  }
+
+  refQuery.value = ''
+  refEntityKey.value = ''
+  refEntityName.value = ''
+}
+
+const createNewEntity = () => {
+  isNewEntityQueryEnabled.value = true
+}
+
+const creatingPayload = computed(() => ({ value: refQuery.value }))
+
+const { searchResults, isSearchFetched } = useSearch(refQuery, searchService, refEntityKey)
+
+const {
+  data: createdEntity,
+  isFetching: isCreatingEntity
+} = useCreateEntity<Entity, { value: string }>(
+  refEntityKey,
+  creatingPayload,
+  dbService,
+  isNewEntityQueryEnabled
+)
+
+const isListOpen = computed(() => (
+  refQuery.value && isSearchFetched.value && !isNewEntityQueryEnabled.value
+))
+
+const canBeCreated = computed(() => !!(
+  refQuery.value
+  && !searchResults.value?.[0]?.data.some(({ title }) => title === refQuery.value)
+))
+
+const refList = computed(() => {
+  return searchResults.value?.[0]?.data.map(({ _id, title }) => ({
+    label: title,
+    value: _id
+  })) || []
+})
+
 watch(
   isCreatedEntityFetched,
   () => {
@@ -87,6 +179,19 @@ watch(
       message: localize('embeddedForm.entityCreated'),
       type: 'success'
     })
+  }
+)
+
+watch(
+  createdEntity,
+  (newVal) => {
+    if (newVal) {
+      isNewEntityQueryEnabled.value = false
+      selectOption({
+        label: newVal.title,
+        value: newVal._id
+      })
+    }
   }
 )
 </script>

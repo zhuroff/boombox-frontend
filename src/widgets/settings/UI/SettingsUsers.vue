@@ -13,8 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalization, type TableConfig } from '~shared/lib'
 import { Table } from '~shared/UI'
+import { useLocalization } from '~shared/model'
+import type { TableConfig } from '~shared/lib'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type { User } from '~entities/user'
 

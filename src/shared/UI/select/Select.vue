@@ -24,7 +24,8 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { useLocalization, type TableFilters, type SelectInputFieldSchema } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import type { TableFilters, SelectInputFieldSchema } from '~shared/lib'
 
 interface Props {
   options: Array<string | number> | SelectInputFieldSchema['options']

@@ -1,7 +1,5 @@
-import { api } from '~/shared/api'
-import type { User, AuthRefreshResponse } from '~entities/user'
-import type { FormPayload, RequestConfig } from '~shared/lib'
-import type { SearchPayload, SearchResultState } from '~widgets/search'
+import { api } from '~shared/api'
+import type { RequestConfig } from '~shared/lib'
 
 export default class DatabaseService {
   #configToQueryString(config: RequestConfig) {
@@ -27,50 +25,6 @@ export default class DatabaseService {
     appendParams(config)
 
     return params.toString()
-  }
-
-  refresh = async () => {
-    try {
-      const response = await api.get<AuthRefreshResponse>('/api/users/refresh')
-      return response.data
-    } catch (error) {
-      throw error
-    }
-  }
-
-  login = async (payload: FormPayload) => {
-    try {
-      const response = await api.post<AuthRefreshResponse>('/api/users/login', payload)
-      return response.data
-    } catch (error) {
-      throw error
-    }
-  }
-
-  logout = async () => {
-    try {
-      await api.post('/api/users/logout')
-    } catch (error) {
-      throw error
-    }
-  }
-
-  createUser = async (userData: FormPayload) => {
-    try {
-      const response = await api.post<User>('/api/users/create', userData)
-      return response.data
-    } catch (error) {
-      throw error
-    }
-  }
-
-  getUsers = async () => {
-    try {
-      const response = await api.get<User[]>('/api/users')
-      return response.data
-    } catch (error) {
-      throw error
-    }
   }
 
   getEntityList = async <T>(entityKey: string, config: RequestConfig) => {
@@ -143,15 +97,6 @@ export default class DatabaseService {
   getCloudFiles = async <T>(entityKey: string, path: string, query: string) => {
     try {
       const response = await api.get<T>(`/api/${entityKey}/${path}?${query}`)
-      return response.data
-    } catch (error) {
-      throw error
-    }
-  }
-
-  search = async (payload: SearchPayload) => {
-    try {
-      const response = await api.post<SearchResultState[]>(`/api/search`, payload)
       return response.data
     } catch (error) {
       throw error

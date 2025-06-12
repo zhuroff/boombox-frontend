@@ -13,12 +13,14 @@
 
 <script setup lang="ts">
 import { Form } from '~shared/UI'
-import { useUserApi } from '~entities/user'
+import { useUserApi, UserService } from '~entities/user'
 import { DatabaseService } from '~shared/api'
 import type { FormPayload, FormSchemaProperty } from '~shared/lib'
 
 const dbService = new DatabaseService()
-const { login, isLoggingIn } = useUserApi(dbService)
+const userService = new UserService()
+
+const { login, isLoggingIn } = useUserApi(userService, dbService)
 
 const formSchema = new Map<string, FormSchemaProperty>([
   ['email', {

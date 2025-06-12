@@ -46,9 +46,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocalization } from '~shared/lib'
-import AlbumSyncRow from './AlbumSyncRow.vue'
+import { useLocalization } from '~shared/model'
 import type { SyncResponse } from '~features/sync'
+import AlbumSyncRow from './AlbumSyncRow.vue'
 
 interface Props {
   sections: SyncResponse

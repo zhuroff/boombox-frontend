@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 // import { useListPage } from '~/hooks/useListPage'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 // import type { CompilationEntityRes } from '~/types/ReqRes'
 // import CompilationItem from '~/classes/CompilationItem'
 // import GatheringTabs from '~/components/GatheringTabs.vue'

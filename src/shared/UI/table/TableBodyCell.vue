@@ -10,7 +10,8 @@
 <script setup lang="ts">
 import { h, computed, defineAsyncComponent, defineEmits } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useLocalization, type TableCellConfig } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import type { TableCellConfig } from '~shared/lib'
 import type { JSONSchema4, JSONSchema4Type, JSONSchema4TypeName } from 'json-schema'
 
 interface Props {

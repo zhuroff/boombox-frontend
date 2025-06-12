@@ -40,9 +40,9 @@ import { useRoute } from 'vue-router'
 import { Header } from '~widgets/header'
 import { TOYYearCard } from '~entities/toy'
 import { Loader, Button } from '~shared/UI'
-import { useGetList } from '~shared/model'
+import { useGetList, useLocalization } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useLocalization, type CloudEntity, type UseEntityListPayload } from '~shared/lib'
+import type { CloudEntity, UseEntityListPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 

@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import TableHeadRow from './TableHeadRow.vue'
 import TableBodyRow from './TableBodyRow.vue'
 

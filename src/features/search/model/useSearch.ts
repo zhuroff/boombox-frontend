@@ -1,17 +1,16 @@
 import { watch, type Ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import type DatabaseService from '~shared/api/DatabaseService'
-import type { SearchResultState } from '../../widgets/search/lib/types'
+import type { SearchResultState, SearchService } from '~features/search'
 
 const useSearch = (
   query: Ref<string>,
-  dbService: DatabaseService,
+  searchService: SearchService,
   entityKey?: Ref<string>
 ) => {
   const { refetch, isFetched, isFetching, data, error } = useQuery<SearchResultState[]>({
     queryKey: [query, entityKey],
     refetchOnWindowFocus: false,
-    queryFn: () => dbService.search({ query: query.value, key: entityKey?.value }),
+    queryFn: () => searchService.search({ query: query.value, key: entityKey?.value }),
     enabled: false,
     retry: 3
   })

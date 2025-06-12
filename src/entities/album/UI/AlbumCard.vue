@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import { CardPreview } from '~shared/UI'
 import { hostString, assertNever } from '~/utils'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'

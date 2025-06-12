@@ -7,11 +7,12 @@
 
 <script setup lang="ts">
 import { Button } from '~shared/UI'
-import { useUser, useUserApi } from '~entities/user'
+import { useUser, useUserApi, UserService } from '~entities/user'
 import { DatabaseService } from '~shared/api'
 
 const dbService = new DatabaseService()
+const userService = new UserService()
 
-const { deleteUser } = useUserApi(dbService)
+const { deleteUser } = useUserApi(userService, dbService)
 const { isAdmin } = useUser()
 </script>

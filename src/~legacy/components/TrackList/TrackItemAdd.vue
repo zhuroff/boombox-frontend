@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocalization } from '~shared/lib'
+import { useLocalization } from '~shared/model'
 import usePlaylist from '../../store/playlist'
 import { Button } from '~shared/UI'
 

@@ -30,7 +30,7 @@
         className="lyrics__text"
         name="lyrics"
         type="textarea"
-        :defaultValue="lyrics || undefined"
+        :modelValue="lyrics || undefined"
         :placeholder="localize('lyrics.placeholder')"
         @setTextareaValue="updateLyrics"
       />
@@ -68,7 +68,7 @@
               >{{ localize('lyrics.save') }}</button> -->
               <TextareaInput
                 v-if="expandedLyrics === index"
-                :defaultValue="item.lyrics"
+                :modelValue="item.lyrics"
                 name="lyrics"
                 type="textarea"
                 className="lyrics__text"
@@ -84,9 +84,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { useSnackbar } from '~shared/model'
+import { useSnackbar, useLocalization } from '~shared/model'
 import { Loader, Button, TextareaInput } from '~shared/UI'
-import { useLocalization } from '~shared/lib'
 import type { TrackLyricsResponse } from '~/types/Track'
 import trackServices from '~/~legacy/services/track.services'
 

@@ -21,7 +21,8 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, type StyleValue } from 'vue'
-import { useLocalization, type ElementSize, type TextInputFieldSchema } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import type { ElementSize, TextInputFieldSchema } from '~shared/lib'
 
 interface Props {
   name: string

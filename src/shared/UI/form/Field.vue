@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 import { h, computed } from 'vue'
-import type { FormSchemaProperty } from '~shared/lib'
 import { TextInput, TextareaInput, RefField } from '~shared/UI'
+import type { FormSchemaProperty } from '~shared/lib'
 import FieldLabel from './FieldLabel.vue'
 
 interface Props {
@@ -23,6 +23,7 @@ interface Props {
 
 interface Emits {
   <T>(e: 'setFormProperty', payload: [string, T]): void
+  (e: 'passRefQuery', payload: Record<string, string>): void
 }
 
 const props = defineProps<Props>()
@@ -39,11 +40,15 @@ const fieldComponent = computed(() => {
               RefField,
               {
                 name: props.property.name,
+                modelValue: props.property.defaultValue,
                 placeholder: props.property.placeholder,
                 refKey: props.property.refKey,
                 isError: !!props.property.errorMessages?.length,
-                onSelectOption: (value: string) => {
-                  emit('setFormProperty', [props.property.name, value])
+                onPassRefQuery: (value: Record<string, string>) => {
+                  emit('passRefQuery', {
+                    ...value,
+                    refKey: String(props.property.refKey)
+                  })
                 }
               }
             )
@@ -51,6 +56,7 @@ const fieldComponent = computed(() => {
               TextInput,
               {
                 name: props.property.name,
+                modelValue: props.property.defaultValue,
                 type: props.property.type,
                 placeholder: props.property.placeholder,
                 isError: !!props.property.errorMessages?.length,
@@ -65,6 +71,7 @@ const fieldComponent = computed(() => {
         TextareaInput,
         {
           name: props.property.name,
+          modelValue: props.property.defaultValue,
           type: props.property.type,
           placeholder: props.property.placeholder,
           isError: !!props.property.errorMessages?.length,
@@ -82,8 +89,6 @@ const fieldComponent = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@use '~/app/styles/variables' as var;
-
 .field {
 
   &__set {

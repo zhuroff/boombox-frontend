@@ -32,7 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalization, type RelatedAlbums } from '~shared/lib'
+import { useLocalization } from '~shared/model'
+import type { RelatedAlbums } from '~shared/lib'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 
 interface Props {

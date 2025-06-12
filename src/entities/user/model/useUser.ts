@@ -1,8 +1,9 @@
 import { computed, ref } from 'vue'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
-import { updateAuthHeaders, type DatabaseService } from '~shared/api'
-import type { FormPayload } from '~shared/lib'
+import { DatabaseService, updateAuthHeaders } from '~shared/api'
 import { UserRole, type User, type AuthRefreshResponse } from '../lib/types'
+import type { UserService } from '~entities/user'
+import type { FormPayload } from '~shared/lib'
 
 const createUser = (user?: User): User => {
   return {
@@ -40,12 +41,12 @@ export const useUser = () => {
   }
 }
 
-export const useUserApi = (dbService: DatabaseService) => {
+export const useUserApi = (userService: UserService, dbService: DatabaseService) => {
   const queryClient = useQueryClient()
 
   // Refresh mutation
   const { mutateAsync: refreshMutation, isPending: isRefreshing } = useMutation({
-    mutationFn: dbService.refresh,
+    mutationFn: userService.refresh,
     onSuccess: (data) => {
       user.value = createUser(data.user)
       updateAuthHeaders()
@@ -70,7 +71,7 @@ export const useUserApi = (dbService: DatabaseService) => {
 
   // Login mutation
   const { mutateAsync: loginMutation, isPending: isLoggingIn } = useMutation({
-    mutationFn: (credentials: FormPayload) => dbService.login(credentials),
+    mutationFn: (credentials: FormPayload) => userService.login(credentials),
     onSuccess: (data: AuthRefreshResponse) => {
       user.value = createUser(data.user)
       updateAuthHeaders()
@@ -80,7 +81,7 @@ export const useUserApi = (dbService: DatabaseService) => {
 
   // Logout mutation
   const { mutateAsync: logoutMutation, isPending: isLoggingOut } = useMutation({
-    mutationFn: dbService.logout,
+    mutationFn: userService.logout,
     onSuccess: () => {
       cleanUser()
       updateAuthHeaders()
@@ -90,7 +91,7 @@ export const useUserApi = (dbService: DatabaseService) => {
 
   // Create user mutation
   const { mutateAsync: createUserMutation, isPending: isCreatingUser } = useMutation({
-    mutationFn: (userData: FormPayload) => dbService.createUser(userData),
+    mutationFn: (userData: FormPayload) => userService.createUser(userData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
     }
@@ -98,7 +99,7 @@ export const useUserApi = (dbService: DatabaseService) => {
 
   // Get all users mutation
   const { mutateAsync: getUsersMutation, isPending: isLoadingUsers } = useMutation({
-    mutationFn: dbService.getUsers,
+    mutationFn: userService.getUsers,
     onSuccess: (data) => {
       queryClient.setQueryData(['users'], data)
     }

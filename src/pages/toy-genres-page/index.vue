@@ -25,9 +25,9 @@
 import { computed } from 'vue'
 import { TOYGenreCard } from '~entities/toy'
 import { Loader } from '~shared/UI'
-import { useGetList } from '~shared/model'
+import { useLocalization, useGetList } from '~shared/model'
 import { DatabaseService } from '~shared/api'
-import { useLocalization, type CloudEntity, type UseEntityListPayload } from '~shared/lib'
+import type { CloudEntity, UseEntityListPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
