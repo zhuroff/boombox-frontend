@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { cleanAndCapitalize, debounce } from '~/utils'
+import { cleanAndCapitalize, debounce } from '~shared/utils'
 import { TextInput, Button } from '~shared/UI'
 import type { ElementSize, SelectInputFieldSchema } from '~shared/lib'
 

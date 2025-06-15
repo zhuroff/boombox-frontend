@@ -1,22 +1,19 @@
 import { reactive } from 'vue'
-import { getUUID } from '~/utils'
 import type { Snackbar } from '~shared/lib'
 
-const snackbarQueue = reactive(new Map<string, Snackbar>())
+const snackbarQueue = reactive(new Set<Snackbar>())
 
 const useSnackbar = () => {
-  const setSnackbarMessage = (snackbar: Snackbar) => {
-    const snackbarID = getUUID()
-
-    snackbarQueue.set(snackbarID, snackbar)
+  const setSnackbarMessage = (message: Snackbar) => {
+    snackbarQueue.add(message)
 
     setTimeout(() => {
-      snackbarQueue.delete(snackbarID)
-    }, snackbar.time || 5000)
+      snackbarQueue.delete(message)
+    }, message.time || 5000)
   }
 
-  const closeSnackbar = (id: string) => {
-    snackbarQueue.delete(id)
+  const closeSnackbar = (message: Snackbar) => {
+    snackbarQueue.delete(message)
   }
 
   return {

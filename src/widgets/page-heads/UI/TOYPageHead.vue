@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { coverPlaceholders } from '~/utils'
+import { coverPlaceholders } from '~shared/utils'
 import { CoverArt } from '~widgets/cover-art'
 import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'

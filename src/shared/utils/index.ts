@@ -1,15 +1,3 @@
-export const isObjectsEquals = <T>(a: T, b: T): boolean => {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
-
-export const getUUID = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0
-    const v = c === 'x' ? r : (r & 0x3) | 0x8
-    return v.toString(16)
-  })
-}
-
 export const hostString = (pathname: string) => {
   const host = import.meta.env.DEV
     ? import.meta.env.VITE_DEV_HOST
@@ -33,12 +21,6 @@ export const coverPlaceholders = (slug: string) => {
   }
 }
 
-export const slugify = (str: string) => (
-  str.toLowerCase()
-    .replace(/[^a-zа-я0-9\s]+/g, '').trim()
-    .replace(/\s+/g, '-').trim()
-)
-
 export function debounce <T extends (...args: any[]) => void>(
   callback: T,
   delay: number = 500
@@ -61,42 +43,6 @@ export const secondsToMinutes = (duration?: number) => {
   const seconds = Math.floor(duration - minutes * 60)
 
   return `${minutes}:${seconds >= 10 ? seconds : `0${seconds}`}`
-}
-
-export const toCapitalize = (str: string) => (
-  str.split(' ')
-    .map((word) => word.toLowerCase().charAt(0).toUpperCase() + word.toLowerCase().slice(1))
-    .join(' ')
-)
-
-export const reduceString = (str: string, length: number) => (
-  str.length <= length
-    ? str
-    : str.slice(0, length).trim() + '...'
-)
-
-export const categoryKeyDict: Record<string, string> = {
-  genres: 'genre',
-  artists: 'artist',
-  periods: 'period',
-  collections: 'collection',
-}
-
-export const getTimestamp = (value: number, unit: 's' | 'm' | 'h') => {
-  const MS_IN_SECOND = 1000
-  const MS_IN_MINUTE = MS_IN_SECOND * 60
-  const MS_IN_HOUR = MS_IN_MINUTE * 60
-
-  switch (unit) {
-    case 'h':
-      return value * MS_IN_HOUR
-    case 'm':
-      return value * MS_IN_MINUTE
-    case 's':
-      return value * MS_IN_SECOND
-    default:
-      throw new Error('Invalid unit. Use "h" for hours, "m" for minutes, or "s" for seconds.')
-  }
 }
 
 export const cleanAndCapitalize = (str: string): string => {

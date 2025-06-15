@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { hostString } from '~/utils'
+import { hostString } from '~shared/utils'
 import { cleanUser } from '~shared/model'
 
 export const api = axios.create({

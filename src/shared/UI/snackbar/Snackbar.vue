@@ -2,14 +2,14 @@
   <div class="snackbar">
     <transition-group name="flyUp">
       <div
-        v-for="([id, item]) in snackbarQueue"
-        :key="id"
+        v-for="(item) in snackbarQueue"
+        :key="item.message"
         class="snackbar__item"
       >
         <div class="snackbar__text" v-html="item.message" />
         <button
           :class="`snackbar__action --${item.type}`"
-          @click="() => closeSnackbar(id)"
+          @click="() => closeSnackbar(item)"
         >OK</button>
       </div>
     </transition-group>

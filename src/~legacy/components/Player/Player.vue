@@ -92,9 +92,9 @@
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import type { DraggableEvent, ReorderPayload } from '~shared/lib'
 import { VueDraggableNext } from 'vue-draggable-next'
-import { secondsToMinutes } from '~/utils'
-import usePlaylist from '~/store/playlist'
-import AlbumTrack from '~/classes/AlbumTrack'
+import { secondsToMinutes } from '~shared/utils'
+import usePlaylist from '~/~legacy/store/playlist'
+// import AlbumTrack from '~/~legacy/AlbumTrack.legacy'
 import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
 import PlayerPrevTrack from './PlayerPrevTrack.vue'
 import PlayerNextTrack from './PlayerNextTrack.vue'
@@ -166,7 +166,7 @@ const togglePlaylistState = () => {
   isPlaylistOpen.value = !isPlaylistOpen.value
 }
 
-const playCurrentTrack = (track: AlbumTrack) => {
+const playCurrentTrack = (track: any /* AlbumTrack */) => {
   playTrack(track)
   togglePlayerVisibility()
 }

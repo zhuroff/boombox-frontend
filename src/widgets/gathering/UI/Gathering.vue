@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { computed, ref, h } from 'vue'
-import { hostString } from '~/utils'
+import { hostString } from '~shared/utils'
 import { SearchWrapper, SearchCreate, SearchResults, SearchBlock, type SearchResultState } from '~features/search'
 import { Sprite } from '~shared/UI'
 import type { GatheringBasic, GatheringUpdateReq } from '~shared/lib'

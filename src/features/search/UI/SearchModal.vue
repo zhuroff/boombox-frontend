@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
-import { debounce, hostString, coverPlaceholders } from '~/utils'
+import { debounce, hostString, coverPlaceholders } from '~shared/utils'
 import { useLocalization } from '~shared/model'
 import { TextInput } from '~shared/UI'
 import SearchWrapper from './SearchWrapper.vue'
