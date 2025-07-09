@@ -1,0 +1,1 @@
+export { default as authFormSchema } from './model/authFormSchema'

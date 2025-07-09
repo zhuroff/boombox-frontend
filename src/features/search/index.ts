@@ -1,0 +1,8 @@
+export { default as useSearch } from './model/useSearch'
+export { default as SearchService } from './api/SearchService'
+export { default as SearchBlock } from './UI/SearchBlock.vue'
+export { default as SearchCreate } from './UI/SearchCreate.vue'
+export { default as SearchModal } from './UI/SearchModal.vue'
+export { default as SearchResults } from './UI/SearchResults.vue'
+export { default as SearchWrapper } from './UI/SearchWrapper.vue'
+export * from './lib/types'
