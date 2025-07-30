@@ -9,6 +9,7 @@ const useCategory = (categoryKey: Ref<string>, dbService: DatabaseService) => {
   const updateCategoryValue = <T extends keyof CategoryFull>(key: T, value: CategoryFull[T]) => {
     queryClient.setQueryData<CategoryFull>(queryKey, (oldData) => {
       if (!oldData) return oldData
+
       return {
         ...oldData,
         [key]: value,

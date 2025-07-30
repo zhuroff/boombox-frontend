@@ -227,5 +227,13 @@ export const localesBY: LocaleDictionary = {
     addToCollection: 'Дадаць у калекцыю',
     getRandomAlbum: 'Выпадковы альбом',
     deleteAlbum: 'Выдаліць альбом'
+  },
+  trackActions: {
+    getLyrics: 'Знайсцi тэкст песнi',
+    disableTrack: 'Дэактываваць трэк',
+    enableTrack: 'Актываваць трэк',
+    toPlaylist: 'Дадаць у плэйлiст',
+    removeFromPlaylist: 'Выдаліць з плэйлiста',
+    toCompilation: 'Дадаць у кампіляцыю'
   }
 }

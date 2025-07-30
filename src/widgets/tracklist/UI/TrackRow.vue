@@ -48,12 +48,26 @@
       />
     </transition>
   </div>
+  <transition name="fade">
+    <Modal
+      v-if="isLyricsModalActive"
+      :isModalActive="isLyricsModalActive"
+      @closeModal="toggleLyricsModal"
+    >
+      <TrackLyrics
+        :heading="trackArtistAndTitle"
+        :track="track"
+      />
+    </Modal>
+  </transition>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted, watch } from 'vue'
-import { Button, DropList } from '~shared/UI'
+import { useLocalization } from '~shared/model'
+import { Button, DropList, Modal } from '~shared/UI'
 import TrackPlayControl from './TrackPlayControl.vue'
+import TrackLyrics from './TrackLyrics.vue'
 import type { SelectInputFieldSchema } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
 
@@ -66,6 +80,10 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
   isTOYTrack: false
 })
+
+const { localize } = useLocalization()
+
+const isLyricsModalActive = ref(false)
 
 const isActionsOpen = ref(false)
 const isTrackDisabled = ref(false)
@@ -82,8 +100,12 @@ const trackDuration = computed(() => {
   return `${minutes}:${seconds}`
 })
 
+const toggleLyricsModal = () => {
+  isLyricsModalActive.value = !isLyricsModalActive.value
+}
+
 const trackActions: Record<typeof trackOptions.value[number]['value'], () => void> = {
-  getLyrics: () => console.log('getLyrics'),
+  getLyrics: toggleLyricsModal,
   disableTrack: () => isTrackDisabled.value = !isTrackDisabled.value,
   toPlaylist: () => console.log('toPlaylist'),
   toCompilation: () => console.log('toCompilation')
@@ -91,30 +113,37 @@ const trackActions: Record<typeof trackOptions.value[number]['value'], () => voi
 
 const trackOptions = computed(() => (() => {
   const options = [
-    { label: 'Get lyrics', value: 'getLyrics' }
+    {
+      label: localize('trackActions.getLyrics'),
+      value: 'getLyrics'
+    }
   ]
 
   if (!isTrackPlaying.value) {
     options.push({
-      label: isTrackDisabled.value ? 'Enable track' : 'Disable track',
+      label: localize(isTrackDisabled.value ? 'trackActions.enableTrack' : 'trackActions.disableTrack'),
       value: 'disableTrack'
     })
   }
 
   options.push({
-    label: isTrackInPlaylist.value ? 'Remove from playlist' : 'Add to playlist',
+    label: localize(isTrackInPlaylist.value ? 'trackActions.removeFromPlaylist' : 'trackActions.toPlaylist'),
     value: 'toPlaylist'
   })
 
   if (!props.isTOYTrack) {
     options.push({
-      label: 'Add to compilation',
+      label: localize('trackActions.toCompilation'),
       value: 'toCompilation'
     })
   }
 
   return options
 })())
+
+const trackArtistAndTitle = computed(() => (
+  `${props.track.artist.title} - ${props.track.title}`
+))
 
 const handleClickOutside = (event: MouseEvent) => {
   if (droplistRef.value?.$el && !droplistRef.value.$el.contains(event.target as Node)) {

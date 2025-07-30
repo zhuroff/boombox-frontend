@@ -71,6 +71,7 @@ import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 import { DiscogsTable } from '~widgets/discogs'
 import { Gathering } from '~widgets/gathering'
+import { TrackList } from '~widgets/tracklist'
 
 import { useCollections } from '~features/collection'
 import { WikiFrame } from '~features/wiki'
@@ -80,8 +81,6 @@ import { useAlbum } from '~entities/album'
 import { Modal, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import type { ReorderPayload } from '~shared/lib'
-
-import TrackList from '~widgets/tracklist/UI/TrackList.vue'
 
 const dbService = new DatabaseService()
 

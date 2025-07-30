@@ -227,5 +227,13 @@ export const localesEN: LocaleDictionary = {
     addToCollection: 'Add to collection',
     getRandomAlbum: 'Get random album',
     deleteAlbum: 'Delete album'
+  },
+  trackActions: {
+    getLyrics: 'Get lyrics',
+    disableTrack: 'Disable track',
+    enableTrack: 'Enable track',
+    toPlaylist: 'Add to playlist',
+    removeFromPlaylist: 'Remove from playlist',
+    toCompilation: 'Add to compilation'
   }
 }
