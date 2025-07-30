@@ -23,12 +23,15 @@
         </template>
 
         <template #content>
-          <TrackList
+          <!-- <TrackList
             v-if="'tracks' in album"
             :tracks="album.tracks"
             :albumID="album._id"
             @trackOrderChanged="changeTracksOrder"
             @removeTrackFromCompilation="removeTrackFromCompilation"
+          /> -->
+          <TrackList
+            :tracks="album.tracks"
           />
         </template>
 
@@ -78,7 +81,7 @@ import { Modal, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import type { ReorderPayload } from '~shared/lib'
 
-import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
+import TrackList from '~widgets/tracklist/UI/TrackList.vue'
 
 const dbService = new DatabaseService()
 

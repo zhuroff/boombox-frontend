@@ -4,9 +4,9 @@
       <TextInput
         name="search"
         type="text"
-        placeholder="search.placeholder"
         size="large"
         isFocused
+        :placeholder="localize('search.placeholder')"
         @onInput="debouncedSearch"
       />
       <SearchResults

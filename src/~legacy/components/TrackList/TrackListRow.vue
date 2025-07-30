@@ -5,7 +5,7 @@
       // { '--disabled': track.isDisabled },
       'tracklist__row'
     ]">
-      <div class="tracklist__row-cell --drag">
+      <!-- <div class="tracklist__row-cell --drag">
         <Button
           icon="drag"
           size="small"
@@ -14,9 +14,8 @@
         />
       </div>
       <div class="tracklist__row-cell --order">
-        <!-- {{ track.order || index + 1 }} -->
         {{ index + 1 }}
-      </div>
+      </div> -->
       <TrackItemAdd
         v-if="isNotCurrentPlaylist"
         :track="track"
@@ -25,7 +24,7 @@
         :track="track"
         :isTOY="isTOY"
       />
-      <TrackItemTitle
+      <!-- <TrackItemTitle
         :title="track.title"
         :id="track._id"
         @callLyricsModal="lyricsModalSwitcher"
@@ -33,7 +32,7 @@
       <TrackItemDuration
         v-if="!isTOY"
         :duration="track.duration"
-      />
+      /> -->
       <TrackItemCompilation
         v-if="isAdmin && !isTOY"
         :trackID="track._id"
@@ -102,7 +101,6 @@ const isPlayingTrack = computed(() => (
 ))
 
 const isNotCurrentPlaylist = computed(() => (
-  // @ts-expect-error: fix
   currentPlaylist.value?._id && props.albumID !== currentPlaylist.value._id
 ))
 
