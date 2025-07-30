@@ -5,7 +5,7 @@
       type="text"
       size="large"
       :value="inputValue"
-      :placeholder="inputPlaceholder"
+      :placeholder="localize(inputPlaceholder)"
       :isError="!!error"
       @onInput="(value) => emit('passInputValue', value)"
     />
@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import { Button, TextInput } from '~shared/UI'
+import { useLocalization } from '~shared/model'
 
 interface Props {
   error: string | null
@@ -38,8 +39,11 @@ interface Emits {
   (e: 'passInputValue', value: string): void
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  inputPlaceholder: 'search.placeholder',
+})
 const emit = defineEmits<Emits>()
+const { localize } = useLocalization()
 </script>
 
 <style scoped lang="scss">

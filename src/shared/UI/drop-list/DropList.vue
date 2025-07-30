@@ -63,6 +63,7 @@ const { localize } = useLocalization()
   width: 100%;
   max-height: 10rem;
   overflow-y: auto;
+  padding: 0.5rem 0;
 
   &.--small {
     font-size: 0.875rem;
