@@ -142,7 +142,7 @@ const trackOptions = computed(() => (() => {
 })())
 
 const trackArtistAndTitle = computed(() => (
-  `${props.track.artist.title} - ${props.track.title}`
+  `${props.track.artist.title.replace('Various Artists - ', '')} - ${props.track.title}`
 ))
 
 const handleClickOutside = (event: MouseEvent) => {

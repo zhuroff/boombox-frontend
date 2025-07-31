@@ -163,6 +163,10 @@ const stateClasses = computed(() => [
         fill: var.$paleLT;
       }
     }
+
+    .button__label {
+      margin: 0;
+    }
   }
 
   &__label {

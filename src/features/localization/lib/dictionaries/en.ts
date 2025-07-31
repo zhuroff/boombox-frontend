@@ -152,7 +152,9 @@ export const localesEN: LocaleDictionary = {
     placeholder: 'You can add lyrics manually in this field, or use the search button above',
     expand: 'Expand content',
     collapse: 'Collapse content',
-    save: 'Save lyrics'
+    save: 'Save lyrics',
+    saved: 'Lyrics successfully saved',
+    error: 'No lyrics found'
   },
   wiki: {
     notFound: 'Nothing was found in Wikipedia',

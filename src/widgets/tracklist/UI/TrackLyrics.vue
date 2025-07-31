@@ -2,37 +2,37 @@
   <div class="lyrics">
     <header class="lyrics__header">
       <div class="lyrics__heading">
-        {{ heading.replace('Various Artists - ', '') }}
+        {{ heading }}
       </div>
 
       <Button
         :label="localize('lyrics.get')"
-        :disabled="isFetching"
+        :disabled="isFetchingExternalLyrics"
         isInverted
-        @click="fetchLyrics"
+        @click="() => fetchExternalLyrics(heading).catch(fetchErrorHandler)"
       />
     </header>
 
     <div class="lyrics__content">
       <transition name="fade">
         <Loader
-          v-if="isFetching"
+          v-if="isFetchingExternalLyrics"
           mode="light"
         />
       </transition>
 
       <transition
         name="flyUp"
-        v-if="!isFetching"
+        v-if="!isFetchingExternalLyrics"
       >
         <div
-          v-if="!lyricsLocal && !fetchedLyrics.length"
+          v-if="!lyricsLocal && !externalLyrics.length"
           class="lyrics__empty"
         >{{ localize('lyrics.empty') }}</div>
       </transition>
 
       <TextareaInput
-        v-if="!isFetching && !fetchedLyrics.length"
+        v-if="!isFetchingExternalLyrics && !externalLyrics.length"
         className="lyrics__text"
         name="lyrics"
         type="textarea"
@@ -42,15 +42,15 @@
       />
 
       <div
-        v-if="!isFetching"
+        v-if="!isFetchingExternalLyrics"
         class="lyrics__results"
       >
         <ul
-          v-if="fetchedLyrics.length"
+          v-if="externalLyrics.length"
           class="lyrics__list"
         >
           <li
-            v-for="(item, index) in fetchedLyrics"
+            v-for="(item, index) in externalLyrics"
             :key="index"
             class="lyrics__item"
           >
@@ -64,25 +64,22 @@
                 {{ item.artist }} - {{ item.title }}
               </div>
 
-              <button
-                class="lyrics__item_action"
+              <Button
+                size="small"
+                isText
+                :style="lyricsActionStyle"
+                :label="expandCollapseLabel(index)"
                 @click="expandLyrics(index)"
-              >
-                <span v-if="expandedLyrics === null || expandedLyrics !== index">
-                  {{ localize('lyrics.expand') }}
-                </span>
+              />&nbsp;&nbsp;              
 
-                <span v-if="expandedLyrics !== null && expandedLyrics === index">
-                  {{ localize('lyrics.collapse') }}
-                </span>
-              </button>
+              <Button
+                size="small"
+                isText
+                :style="lyricsActionStyle"
+                :label="localize('lyrics.save')"
+                @click="saveLyrics(item.lyrics).then(postSaveHandler)"
+              />
 
-              <!-- <span v-if="!track.isTOY">&nbsp;/&nbsp;</span>
-              <button
-                v-if="!track.isTOY"
-                class="lyrics__item_action"
-                @click="saveLyrics(item.lyrics)"
-              >{{ localize('lyrics.save') }}</button> -->
               <TextareaInput
                 v-if="expandedLyrics === index"
                 :modelValue="item.lyrics"
@@ -100,13 +97,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useTrack } from '~entities/track'
 import { useSnackbar, useLocalization } from '~shared/model'
 import { Loader, Button, TextareaInput } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import { debounce } from '~shared/utils'
-import type { TrackBasic, ExternalTrackLyricsResponse } from '~entities/track'
+import type { TrackBasic } from '~entities/track'
 
 interface Props {
   heading: string
@@ -123,35 +120,45 @@ const dbService = new DatabaseService()
 
 const lyricsLocal = ref<null | string>(null)
 const expandedLyrics = ref<null | number>(null)
-const isFetching = ref(false)
-const fetchedLyrics = reactive<ExternalTrackLyricsResponse[]>([])
 
-const { lyricsRes, saveLyrics } = useTrack(props.track._id, dbService)
+const {
+  lyricsRes,
+  saveLyrics,
+  fetchExternalLyrics,
+  isFetchingExternalLyrics,
+  externalLyrics
+} = useTrack(props.track._id, dbService)
+
+const lyricsActionStyle = {
+  color: 'var(--paleDP)',
+  padding: 0,
+  fontSize: '0.625rem',
+  height: '1.625rem'
+}
 
 const updateLyrics = debounce((value?: string) => {
   saveLyrics(value || '')
 }, 1000)
 
-const setFoundLyrics = (data: ExternalTrackLyricsResponse[]) => {
-  isFetching.value = false
-  fetchedLyrics.push(...data)
+const postSaveHandler = () => {
+  externalLyrics.value = []
+  setSnackbarMessage({
+    message: localize('lyrics.saved'),
+    type: 'success'
+  })
 }
 
-const setNotFoundLyricsError = (error: { message: string }) => {
-  isFetching.value = false
-
+const fetchErrorHandler = () => {
   setSnackbarMessage({
-    message: error.message,
+    message: localize('lyrics.error'),
     type: 'error'
   })
 }
 
-const fetchLyrics = () => {
-  isFetching.value = true
-
-  // trackServices.searchLyrics(props.heading.replace('Various Artists', ''))
-  //   .then((result) => setFoundLyrics(result))
-  //   .catch((error) => setNotFoundLyricsError(error))
+const expandCollapseLabel = (index: number) => {
+  return expandedLyrics.value === null || expandedLyrics.value !== index
+    ? localize('lyrics.expand')
+    : localize('lyrics.collapse')
 }
 
 const expandLyrics = (index: number) => {
@@ -161,11 +168,6 @@ const expandLyrics = (index: number) => {
       : index
 }
 
-// const fetchTrackLyrics = async () => {
-//   // trackServices.fetchLyrics(props.track._id)
-//   //   .then((data) => lyrics.value = data)
-//   //   .catch((error) => console.dir(error))
-// }
 watch(
   lyricsRes,
   (newValue) => {
@@ -265,14 +267,6 @@ watch(
       color: var.$dark;
       font-weight: 600;
       font-size: 18px;
-    }
-
-    &_action {
-      padding: 5px 0;
-      background-color: transparent;
-      outline: none;
-      border: 0;
-      color: var.$paleDP;
     }
   }
 }
