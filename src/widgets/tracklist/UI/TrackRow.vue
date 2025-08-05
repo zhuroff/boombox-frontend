@@ -48,14 +48,47 @@
       />
     </transition>
   </div>
+  <transition name="fade">
+    <Modal
+      v-if="isLyricsModalActive"
+      :isModalActive="isLyricsModalActive"
+      @closeModal="toggleLyricsModal"
+    >
+      <TrackLyrics
+        :heading="trackArtistAndTitle"
+        :track="track"
+      />
+    </Modal>
+  </transition>
+  <transition name="fade">
+    <Modal
+      :isModalActive="isCompilationsModalEnabled"
+      @closeModal="isCompilationsModalEnabled = false"
+    >
+      <Gathering
+        :entityID="track._id"
+        :isFetching="isGatheringFetching"
+        :gatherings="compilations"
+        inputPlaceholder="compilations.namePlaceholder"
+        placeholderImage="/img/album.webp"
+        @onSelectGathering="selectCompilation"
+        @onCreateGathering="createCompilation"
+      />
+    </Modal>
+  </transition>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted, watch } from 'vue'
-import { Button, DropList } from '~shared/UI'
+import { useLocalization } from '~shared/model'
+import { Button, DropList, Modal } from '~shared/UI'
+import { DatabaseService } from '~shared/api'
+import { Gathering } from '~widgets/gathering'
 import TrackPlayControl from './TrackPlayControl.vue'
+import TrackLyrics from './TrackLyrics.vue'
 import type { SelectInputFieldSchema } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
+import { useCompilations } from '~features/compilation'
 
 type Props = {
   track: TrackBasic
@@ -67,12 +100,26 @@ const props = withDefaults(defineProps<Props>(), {
   isTOYTrack: false
 })
 
+const dbService = new DatabaseService()
+
+const { localize } = useLocalization()
+
+const isLyricsModalActive = ref(false)
+
 const isActionsOpen = ref(false)
 const isTrackDisabled = ref(false)
 const isTrackInPlaylist = ref(false)
 const isTrackPlaying = ref(false)
 const isTrackPaused = ref(false)
 const droplistRef = ref<InstanceType<typeof DropList> | null>(null)
+
+const {
+  compilations,
+  selectCompilation,
+  createCompilation,
+  isGatheringFetching,
+  isCompilationsModalEnabled
+} = useCompilations(props.track, dbService)
 
 const trackDuration = computed(() => {
   if (!props.track.duration) return '--/--'
@@ -82,39 +129,54 @@ const trackDuration = computed(() => {
   return `${minutes}:${seconds}`
 })
 
+const toggleLyricsModal = () => {
+  isLyricsModalActive.value = !isLyricsModalActive.value
+}
+
+const showCompilationModal = () => {
+  isCompilationsModalEnabled.value = true
+}
+
 const trackActions: Record<typeof trackOptions.value[number]['value'], () => void> = {
-  getLyrics: () => console.log('getLyrics'),
+  getLyrics: toggleLyricsModal,
   disableTrack: () => isTrackDisabled.value = !isTrackDisabled.value,
   toPlaylist: () => console.log('toPlaylist'),
-  toCompilation: () => console.log('toCompilation')
+  toCompilation: showCompilationModal
 }
 
 const trackOptions = computed(() => (() => {
   const options = [
-    { label: 'Get lyrics', value: 'getLyrics' }
+    {
+      label: localize('trackActions.getLyrics'),
+      value: 'getLyrics'
+    }
   ]
 
   if (!isTrackPlaying.value) {
     options.push({
-      label: isTrackDisabled.value ? 'Enable track' : 'Disable track',
+      label: localize(isTrackDisabled.value ? 'trackActions.enableTrack' : 'trackActions.disableTrack'),
       value: 'disableTrack'
     })
   }
 
   options.push({
-    label: isTrackInPlaylist.value ? 'Remove from playlist' : 'Add to playlist',
+    label: localize(isTrackInPlaylist.value ? 'trackActions.removeFromPlaylist' : 'trackActions.toPlaylist'),
     value: 'toPlaylist'
   })
 
   if (!props.isTOYTrack) {
     options.push({
-      label: 'Add to compilation',
+      label: localize('trackActions.toCompilation'),
       value: 'toCompilation'
     })
   }
 
   return options
 })())
+
+const trackArtistAndTitle = computed(() => (
+  `${props.track.artist.title.replace('Various Artists - ', '')} - ${props.track.title}`
+))
 
 const handleClickOutside = (event: MouseEvent) => {
   if (droplistRef.value?.$el && !droplistRef.value.$el.contains(event.target as Node)) {

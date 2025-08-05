@@ -152,7 +152,9 @@ export const localesBY: LocaleDictionary = {
     placeholder: 'Вы можаце дадаць тэкст уручную ў гэтым полі або скарыстацца кнопкай пошуку вышэй',
     expand: 'Пашырыць змест',
     collapse: 'Згарнуць змест',
-    save: 'Захаваць тэкст'
+    save: 'Захаваць тэкст',
+    saved: 'Тэкст паспяхова захаваны',
+    error: 'Тэкст не знойдзены'
   },
   wiki: {
     notFound: 'Нічога не знойдзена ў Вікіпедыі',
@@ -227,5 +229,13 @@ export const localesBY: LocaleDictionary = {
     addToCollection: 'Дадаць у калекцыю',
     getRandomAlbum: 'Выпадковы альбом',
     deleteAlbum: 'Выдаліць альбом'
+  },
+  trackActions: {
+    getLyrics: 'Знайсцi тэкст песнi',
+    disableTrack: 'Дэактываваць трэк',
+    enableTrack: 'Актываваць трэк',
+    toPlaylist: 'Дадаць у плэйлiст',
+    removeFromPlaylist: 'Выдаліць з плэйлiста',
+    toCompilation: 'Дадаць у кампіляцыю'
   }
 }

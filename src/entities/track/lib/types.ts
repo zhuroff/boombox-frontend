@@ -9,3 +9,15 @@ export type TrackBasic = Entity & {
   genre: Entity
   period: Entity
 }
+
+export type ExternalTrackLyricsResponse = {
+  artist: string
+  lyrics: string
+  thumbnail: string
+  title: string
+}
+
+export type TrackLyricsResponse = {
+  lyrics: string | null
+}
+

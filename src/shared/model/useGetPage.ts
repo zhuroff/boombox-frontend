@@ -1,7 +1,6 @@
 import { computed, reactive, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useQuery } from '@tanstack/vue-query'
-import { useQueryClient } from '@tanstack/vue-query'
+import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import type { DatabaseService } from '~shared/api'
 import type { Entity } from '../lib'
 
