@@ -60,16 +60,35 @@
       />
     </Modal>
   </transition>
+  <transition name="fade">
+    <Modal
+      :isModalActive="isCompilationsModalEnabled"
+      @closeModal="isCompilationsModalEnabled = false"
+    >
+      <Gathering
+        :entityID="track._id"
+        :isFetching="isGatheringFetching"
+        :gatherings="compilations"
+        inputPlaceholder="compilations.namePlaceholder"
+        placeholderImage="/img/album.webp"
+        @onSelectGathering="selectCompilation"
+        @onCreateGathering="createCompilation"
+      />
+    </Modal>
+  </transition>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted, watch } from 'vue'
 import { useLocalization } from '~shared/model'
 import { Button, DropList, Modal } from '~shared/UI'
+import { DatabaseService } from '~shared/api'
+import { Gathering } from '~widgets/gathering'
 import TrackPlayControl from './TrackPlayControl.vue'
 import TrackLyrics from './TrackLyrics.vue'
 import type { SelectInputFieldSchema } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
+import { useCompilations } from '~features/compilation'
 
 type Props = {
   track: TrackBasic
@@ -81,6 +100,8 @@ const props = withDefaults(defineProps<Props>(), {
   isTOYTrack: false
 })
 
+const dbService = new DatabaseService()
+
 const { localize } = useLocalization()
 
 const isLyricsModalActive = ref(false)
@@ -91,6 +112,14 @@ const isTrackInPlaylist = ref(false)
 const isTrackPlaying = ref(false)
 const isTrackPaused = ref(false)
 const droplistRef = ref<InstanceType<typeof DropList> | null>(null)
+
+const {
+  compilations,
+  selectCompilation,
+  createCompilation,
+  isGatheringFetching,
+  isCompilationsModalEnabled
+} = useCompilations(props.track, dbService)
 
 const trackDuration = computed(() => {
   if (!props.track.duration) return '--/--'
@@ -104,11 +133,15 @@ const toggleLyricsModal = () => {
   isLyricsModalActive.value = !isLyricsModalActive.value
 }
 
+const showCompilationModal = () => {
+  isCompilationsModalEnabled.value = true
+}
+
 const trackActions: Record<typeof trackOptions.value[number]['value'], () => void> = {
   getLyrics: toggleLyricsModal,
   disableTrack: () => isTrackDisabled.value = !isTrackDisabled.value,
   toPlaylist: () => console.log('toPlaylist'),
-  toCompilation: () => console.log('toCompilation')
+  toCompilation: showCompilationModal
 }
 
 const trackOptions = computed(() => (() => {

@@ -46,7 +46,7 @@
       @closeModal="isCollectionsModalEnabled = false"
     >
       <Gathering
-        :albumId="album?._id"
+        :entityID="album?._id || ''"
         :isFetching="isGatheringFetching"
         :gatherings="collections"
         inputPlaceholder="collections.namePlaceholder"

@@ -1,21 +1,25 @@
 import { computed, onUnmounted, ref, watch, type Ref } from 'vue'
 import { usePaginator, useGetList, useCreateEntity, useUpdateEntity } from '~shared/model'
-import type { DatabaseService } from '~shared/api'
 import type { AlbumBasic } from '~entities/album'
-import type { GatheringBasic, GatheringCreateReq, GatheringUpdateReq, ListPageResponse } from '~shared/lib'
+import type { CollectionBasic } from '~entities/collection'
+import type { DatabaseService } from '~shared/api'
+import type { ListPageResponse, NewGatheringPayload, UpdateGatheringPayload } from '~shared/lib'
 
-const useCollections = (album: Ref<AlbumBasic, AlbumBasic> | Ref<undefined, undefined>, dbService: DatabaseService) => {
-  const collections = ref<GatheringBasic[]>([])
+const useCollections = (
+  album: Ref<AlbumBasic, AlbumBasic> | Ref<undefined, undefined>,
+  dbService: DatabaseService
+) => {
+  const collections = ref<CollectionBasic[]>([])
   const collectionEntityKey = ref('collections')
   const isCollectionsModalEnabled = ref(false)
-  const newCollectionPayload = ref<GatheringCreateReq<AlbumBasic> | null>(null)
-  const collectionUpdatePayload = ref<GatheringUpdateReq | null>(null)
+  const newCollectionPayload = ref<NewGatheringPayload | null>(null)
+  const collectionUpdatePayload = ref<UpdateGatheringPayload | null>(null)
 
   const { paginationState: collectionsPagination } = usePaginator({ isRouted: false })
 
   const collectionsConfig = computed(() => ({
     pageID: album.value?._id,
-    entityKey: 'collections',
+    entityKey: collectionEntityKey.value,
     requestConfig: collectionsPagination
   }))
 
@@ -34,7 +38,7 @@ const useCollections = (album: Ref<AlbumBasic, AlbumBasic> | Ref<undefined, unde
   const {
     data: initialCollections,
     isFetching: isCollectionsFetching,
-  } = useGetList<GatheringBasic>(
+  } = useGetList<CollectionBasic>(
     collectionsConfig,
     dbService,
     isCollectionsModalEnabled
@@ -43,7 +47,7 @@ const useCollections = (album: Ref<AlbumBasic, AlbumBasic> | Ref<undefined, unde
   const {
     data: increasedCollections,
     isFetching: isNewCollectionCreating,
-  } = useCreateEntity<ListPageResponse<GatheringBasic>, GatheringCreateReq<AlbumBasic>>(
+  } = useCreateEntity<ListPageResponse<CollectionBasic>, NewGatheringPayload>(
     collectionEntityKey,
     newCollectionPayload,
     dbService,
@@ -53,21 +57,21 @@ const useCollections = (album: Ref<AlbumBasic, AlbumBasic> | Ref<undefined, unde
   const {
     data: updatedCollections,
     isFetching: isCollectionUpdating,
-  } = useUpdateEntity<GatheringBasic, GatheringUpdateReq>(
+  } = useUpdateEntity<CollectionBasic, UpdateGatheringPayload>(
     collectionEntityKey,
     collectionUpdatePayload,
     dbService,
     isUpdateCollectionQueryEnabled
   )
 
-  const selectCollection = (payload: Pick<GatheringUpdateReq, 'isInList' | 'gatheringID'>) => {
+  const selectCollection = (payload: Pick<UpdateGatheringPayload, 'isInList' | 'gatheringID'>) => {
     if (!album.value?._id) {
       throw new Error('Album has not been fetched yet')
     }
   
     collectionUpdatePayload.value = {
       ...payload,
-      entityType: 'collections',
+      entityType: collectionEntityKey.value,
       entityID: album.value._id,
       order: payload.isInList ? -1 : 1
     }

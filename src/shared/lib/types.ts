@@ -15,20 +15,6 @@ import type { AlbumBasic } from '~entities/album'
 //   period: Entity
 // }
 
-export type GatheringUpdateReq = {
-  gatheringID: string
-  entityType: string
-  entityID: string
-  isInList: boolean
-  order?: number
-}
-
-export type GatheringCreateReq<T> = {
-  entityType: string
-  entityID: string
-  results: T[]
-}
-
 export type TrackRes = Required<Entity> & {
   path: string
   coverURL?: string

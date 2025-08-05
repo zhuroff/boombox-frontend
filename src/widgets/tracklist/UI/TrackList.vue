@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import type { DraggableEvent, ReorderPayload, GatheringUpdateReq } from '~shared/lib'
+import type { DraggableEvent, ReorderPayload } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
 import TrackRow from './TrackRow.vue'
 

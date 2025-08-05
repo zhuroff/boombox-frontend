@@ -32,21 +32,23 @@
 <script setup lang="ts">
 import { computed, ref, h } from 'vue'
 import { hostString } from '~shared/utils'
-import { SearchWrapper, SearchCreate, SearchResults, SearchBlock, type SearchResultState } from '~features/search'
+import { SearchWrapper, SearchCreate, SearchResults, SearchBlock, type SearchResultState, type SearchResultData } from '~features/search'
 import { Sprite } from '~shared/UI'
-import type { GatheringBasic, GatheringUpdateReq } from '~shared/lib'
+import type { CollectionBasic } from '~entities/collection'
+import type { CompilationBasic } from '~entities/compilation'
+import type { UpdateGatheringPayload } from '~shared/lib'
 
 interface Props {
   isFetching: boolean
   placeholderImage: string
-  albumId: string | undefined
-  gatherings: GatheringBasic[] | undefined
+  entityID: string
+  gatherings: CollectionBasic[] | CompilationBasic[]
   inputPlaceholder: string
 }
 
 interface Emits {
   (e: 'onCreateGathering', title: string): void
-  (e: 'onSelectGathering', payload: Pick<GatheringUpdateReq, 'isInList' | 'gatheringID'>): void
+  (e: 'onSelectGathering', payload: Pick<UpdateGatheringPayload, 'isInList' | 'gatheringID'>): void
 }
 
 const props = defineProps<Props>()
@@ -58,7 +60,7 @@ const coveredGatherings = computed(() => (
   props.gatherings?.map((el) => ({
     ...el,
     avatar: el.avatar ? hostString(el.avatar) : props.placeholderImage,
-    isInCollection: el.entities.some((id) => id === props.albumId)
+    isInGathering: el.entities.some((id) => id === props.entityID)
   }))
 ))
 
@@ -87,17 +89,19 @@ const gatheringBlocks = computed<SearchResultState[]>(() => [{
   data: coveredGatherings.value || []
 }])
 
-const getRowComponent = (key: string, data: any) => {
+const getRowComponent = (_: string, data: SearchResultData) => {
+  const isInGathering: boolean = 'isInGathering' in data ? !!data.isInGathering : false
+
   return h(
     'div',
     {
       class: 'search__block-action',
-      onClick: () => selectGathering(data.isInCollection, data._id)
+      onClick: () => selectGathering(isInGathering, data._id)
     },
     [
       h(
         'img',
-        { src: data.avatar }
+        { src: 'avatar' in data ? data.avatar : props.placeholderImage }
       ),
       h(
         'strong',
@@ -107,8 +111,8 @@ const getRowComponent = (key: string, data: any) => {
       h(
         Sprite,
         {
-          name: data.isInCollection ? 'check' : 'plus',
-          class: [{ '--active' : data.isInCollection }]
+          name: isInGathering ? 'check' : 'plus',
+          class: [{ '--active' : isInGathering }]
         }
       )
     ]
