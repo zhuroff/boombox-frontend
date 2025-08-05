@@ -1,14 +1,12 @@
 <template>
-  <li class="cardlist__item">
-    <CardPreview
-      :routePath="routePath"
-      :cardCover="cardCover"
-      :cardTitle="card.title"
-      :withVinyl="false"
-      :cardCaption="cardCaption"
-      :coverClasses="['--fixed', '--rounded']"
-    />
-  </li>
+  <CardPreview
+    :routePath="routePath"
+    :cardCover="cardCover"
+    :cardTitle="card.title"
+    :withVinyl="false"
+    :cardCaption="cardCaption"
+    :coverClasses="['--fixed', '--rounded']"
+  />
 </template>
 
 <script setup lang="ts">

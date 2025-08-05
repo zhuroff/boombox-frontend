@@ -56,6 +56,7 @@
     >
       <TrackLyrics
         :heading="trackArtistAndTitle"
+        :possibleToSave="!isTOYTrack"
         :track="track"
       />
     </Modal>
@@ -80,6 +81,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted, watch } from 'vue'
+import { useCompilations } from '~features/compilation'
 import { useLocalization } from '~shared/model'
 import { Button, DropList, Modal } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
@@ -88,7 +90,6 @@ import TrackPlayControl from './TrackPlayControl.vue'
 import TrackLyrics from './TrackLyrics.vue'
 import type { SelectInputFieldSchema } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
-import { useCompilations } from '~features/compilation'
 
 type Props = {
   track: TrackBasic
@@ -175,7 +176,9 @@ const trackOptions = computed(() => (() => {
 })())
 
 const trackArtistAndTitle = computed(() => (
-  `${props.track.artist.title.replace('Various Artists - ', '')} - ${props.track.title}`
+  props.isTOYTrack
+    ? props.track.title
+    : `${props.track.artist.title} - ${props.track.title}`
 ))
 
 const handleClickOutside = (event: MouseEvent) => {

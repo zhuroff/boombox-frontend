@@ -1,5 +1,6 @@
 import type { Ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
+import type { ListPageResponse } from '../lib'
 import type DatabaseService from '~/shared/api/DatabaseService'
 
 const useDeleteEntity = <T>(
@@ -8,8 +9,8 @@ const useDeleteEntity = <T>(
   dbService: DatabaseService,
   isEnabled: Ref<boolean>
 ) => {
-  const { refetch, isFetched, isError, data, error, isFetching } = useQuery<ListPageResponse<T>>({
-    queryKey: [entityKey],
+  const { isFetched, isError, data, error, isFetching } = useQuery<ListPageResponse<T>>({
+    queryKey: ['delete', entityKey],
     retry: 3,
     enabled: isEnabled,
     refetchOnWindowFocus: false,
@@ -21,7 +22,6 @@ const useDeleteEntity = <T>(
   return {
     isFetching,
     isFetched,
-    refetch,
     isError,
     error,
     data

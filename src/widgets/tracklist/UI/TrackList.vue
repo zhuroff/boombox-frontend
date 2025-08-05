@@ -10,6 +10,7 @@
         :key="track._id"
         :track="track"
         :order="index + 1"
+        :isTOYTrack="isTOYTracks"
       />
     </VueDraggableNext>
   </div>
@@ -25,10 +26,12 @@ import TrackRow from './TrackRow.vue'
 type Props = {
   tracks: TrackBasic[]
   isDraggable?: boolean
+  isTOYTracks?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isDraggable: true,
+  isTOYTracks: false
 })
 
 const dragOptions = computed(() => ({

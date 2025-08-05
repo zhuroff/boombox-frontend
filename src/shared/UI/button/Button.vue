@@ -31,6 +31,7 @@ interface Props {
   type?: 'button' | 'submit'
   className?: string
   isInverted?: boolean
+  isBorderless?: boolean
   isText?: boolean
   isRounded?: boolean
   isDisabled?: boolean
@@ -47,7 +48,8 @@ const stateClasses = computed(() => [
   {
     '--inverted': props.isInverted,
     '--rounded': props.isRounded,
-    '--text': props.isText
+    '--text': props.isText,
+    '--borderless': props.isBorderless
   },
   `--${props.size}`,
   props.className,
@@ -166,6 +168,18 @@ const stateClasses = computed(() => [
 
     .button__label {
       margin: 0;
+    }
+  }
+
+  &.--borderless {
+    border: 0;
+
+    &:hover {
+      background-color: var.$dark;
+
+      .icon {
+        fill: var.$white;
+      }
     }
   }
 

@@ -15,10 +15,10 @@
       v-if="isAdmin && isDeletable"
       icon="delete"
       size="small"
-      isInverted
       isRounded
+      isBorderless
       className="cardlist__item-action"
-      @click="deleteEntity"
+      @click="isAdmin && isDeletable ? deleteEntity() : null"
     />
   </li>
 </template>

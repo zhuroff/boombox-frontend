@@ -77,7 +77,6 @@ import { DatabaseService } from '~shared/api'
 import { Modal, Loader, Confirmation, Button, Paginator } from '~shared/UI'
 import { useLocalization, useGetList, useDeleteEntity, usePaginator } from '~shared/model'
 import type { DeletePayload } from '~shared/lib'
-
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 
 type Props = {
@@ -153,6 +152,7 @@ watchEffect(() => {
 watch(
   () => props.isRefresh,
   (value) => {
+    console.log('isRefresh', value)
     if (value) {
       refetch()
     }
@@ -165,6 +165,7 @@ watch(
     if (value) {
       deletedEntityId.value = null
       isDeleteConfirmed.value = false
+      refetch()
     }
   }
 )

@@ -21,12 +21,15 @@
         </template>
 
         <template #content>
-          <TrackList
+          <!-- <TrackList
             v-if="'tracks' in compilation"
             :tracks="compilation.tracks"
             :albumID="compilation._id"
             @trackOrderChanged="changeTracksOrder"
             @removeTrackFromCompilation="removeTrackFromCompilation"
+          /> -->
+          <TrackList
+            :tracks="compilation.tracks"
           />
         </template>
       </AlbumContent>
@@ -64,13 +67,12 @@ import { useRouter } from 'vue-router'
 
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
+import { TrackList } from '~widgets/tracklist'
 
 import { Modal, Loader, Confirmation, Button } from '~shared/UI'
 import { useDeleteEntity, useLocalization, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 import type { ReorderPayload } from '~shared/lib'
-
-import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
 import { useCompilation } from '~entities/compilation'
 
