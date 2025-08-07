@@ -39,13 +39,14 @@ import { onMounted, ref } from 'vue'
 import { useImageUploader, type EntityImagesKeys } from '~features/uploading'
 import { PosterUploader, AvatarUploader } from '~features/uploading'
 import { EditableHeading } from '~shared/UI'
-import { useLocalization } from '~shared/model'
+import { useLocalization, useSnackbar } from '~shared/model'
 import { hostString } from '~shared/utils'
 import usePlaylist from '~/~legacy/store/playlist'
 import { Button } from '~shared/UI'
 import { UploadService } from '~features/uploading'
 import type { CategoryFull } from '~entities/category'
 import type { CollectionFull } from '~entities/collection'
+import type { AxiosError } from 'axios'
 
 interface Props {
   data: CategoryFull | CollectionFull
@@ -66,6 +67,7 @@ const emit = defineEmits<Emits>()
 const uploadService = new UploadService()
 
 const { localize } = useLocalization()
+const { setSnackbarMessage } = useSnackbar()
 
 const { uploadImage } = useImageUploader(props.entityKey, uploadService)
 
@@ -94,7 +96,13 @@ const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
         url: data[type]
       })
     })
-    .catch(console.error)
+    .catch((error: AxiosError<{ error: string }>) => {
+      const errMessage = error.response?.data.error
+      setSnackbarMessage({
+        message: localize(`errors.${errMessage}`),
+        type: 'error'
+      })
+    })
 }
 
 const getCategoryWave = async () => {

@@ -4,7 +4,7 @@
     placeholderPreview="/img/album.webp"
     pageHeadingKey="headings.albumsPage"
     :isDeletable="true"
-    :isRefresh="isCreatedEntityFetched"
+    :isRefresh="createdEntity && 'frame' in createdEntity"
   >
     <template #header>
       <Button
@@ -54,7 +54,7 @@
         :data="refList"
         :canBeCreated="canBeCreated"
         @selectOption="selectOption"
-        @createNewEntity="createNewEntity"
+        @createNewEntity="createNewFieldEntity"
       />
     </Teleport>
   </transition>
@@ -70,7 +70,7 @@ import { Button, Modal, Form, DropList, Loader } from '~shared/UI'
 import { useLocalization, useCreateEntity, useSnackbar, useUser } from '~shared/model'
 import type { Entity, FormPayload, SelectInputFieldSchema } from '~shared/lib'
 
-import { embeddedAlbumFormSchema } from '~entities/embedded'
+import { embeddedAlbumFormSchema, type EmbeddedBasic } from '~entities/embedded'
 
 import { useSearch, SearchService } from '~features/search'
 
@@ -87,20 +87,17 @@ const entityKey = ref('embedded')
 const refQuery = ref('')
 const refEntityKey = ref('')
 const formData = ref<FormPayload | null>(null)
-const isNewEntityQueryEnabled = ref(false)
 const refEntityName = ref('')
 const refValueSetter = ref<(payload: [string, string | File]) => void>()
 const formSchema = reactive(embeddedAlbumFormSchema(localize))
 
-const isCreatingEnabled = computed(() => !!formData.value)
-
 const {
-  isFetched: isCreatedEntityFetched
-} = useCreateEntity<any, FormPayload>(
+  createdEntity: createdEntity,
+  createEntity: createNewEntity,
+  isCreating: isCreatingEntity
+} = useCreateEntity<Entity | EmbeddedBasic, FormPayload>(
   entityKey,
-  formData,
-  dbService,
-  isCreatingEnabled
+  dbService
 )
 
 const createEmbeddedAlbum = (formPayload: FormPayload) => {
@@ -114,7 +111,8 @@ const createEmbeddedAlbum = (formPayload: FormPayload) => {
   if (errorCount === 0) {
     formData.value = formPayload
     isCreateMode.value = false
-  }  
+    createNewEntity(formData.value)
+  }
 }
 
 const setRefQuery = (payload: [
@@ -144,8 +142,11 @@ const selectOption = (payload: SelectInputFieldSchema['options'][number]) => {
   refEntityName.value = ''
 }
 
-const createNewEntity = () => {
-  isNewEntityQueryEnabled.value = true
+const createNewFieldEntity = () => {
+  createNewEntity({
+    value: creatingPayload.value.value,
+    __entityKey: refEntityKey.value
+  })
 }
 
 const resetForm = () => {
@@ -162,18 +163,8 @@ const creatingPayload = computed(() => ({ value: refQuery.value }))
 
 const { searchResults, isSearchFetched } = useSearch(refQuery, searchService, refEntityKey)
 
-const {
-  data: createdEntity,
-  isFetching: isCreatingEntity
-} = useCreateEntity<Entity, { value: string }>(
-  refEntityKey,
-  creatingPayload,
-  dbService,
-  isNewEntityQueryEnabled
-)
-
 const isListOpen = computed(() => (
-  refQuery.value && isSearchFetched.value && !isNewEntityQueryEnabled.value
+  refQuery.value && isSearchFetched.value
 ))
 
 const canBeCreated = computed(() => !!(
@@ -189,23 +180,19 @@ const refList = computed(() => {
 })
 
 watch(
-  isCreatedEntityFetched,
-  () => {
-    setSnackbarMessage({
-      message: localize('embeddedForm.entityCreated'),
-      type: 'success'
-    })
-  }
-)
-
-watch(
   createdEntity,
-  (newVal) => {
-    if (newVal) {
-      isNewEntityQueryEnabled.value = false
+  (value) => {
+    if (!value) return
+
+    if ('frame' in value) {
+      setSnackbarMessage({
+        message: localize('embeddedForm.entityCreated'),
+        type: 'success'
+      })
+    } else {
       selectOption({
-        label: newVal.title,
-        value: newVal._id
+        label: value.title,
+        value: value._id
       })
     }
   }

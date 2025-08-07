@@ -11,6 +11,7 @@
         :track="track"
         :order="index + 1"
         :isTOYTrack="isTOYTracks"
+        @refetchTracklist="emit('refetchTracklist')"
       />
     </VueDraggableNext>
   </div>
@@ -28,6 +29,12 @@ type Props = {
   isDraggable?: boolean
   isTOYTracks?: boolean
 }
+
+type Emits = {
+  (e: 'refetchTracklist'): void
+}
+
+const emit = defineEmits<Emits>()
 
 const props = withDefaults(defineProps<Props>(), {
   isDraggable: true,

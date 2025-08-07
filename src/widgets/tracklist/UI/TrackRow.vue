@@ -72,7 +72,7 @@
         :gatherings="compilations"
         inputPlaceholder="compilations.namePlaceholder"
         placeholderImage="/img/album.webp"
-        @onSelectGathering="selectCompilation"
+        @onSelectGathering="(payload) => selectCompilation(payload).then(() => emit('refetchTracklist'))"
         @onCreateGathering="createCompilation"
       />
     </Modal>
@@ -97,9 +97,15 @@ type Props = {
   isTOYTrack?: boolean
 }
 
+type Emits = {
+  (e: 'refetchTracklist'): void
+}
+
 const props = withDefaults(defineProps<Props>(), {
   isTOYTrack: false
 })
+
+const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
 

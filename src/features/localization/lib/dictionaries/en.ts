@@ -237,5 +237,12 @@ export const localesEN: LocaleDictionary = {
     toPlaylist: 'Add to playlist',
     removeFromPlaylist: 'Remove from playlist',
     toCompilation: 'Add to compilation'
+  },
+  errors: {
+    file_upload_error: 'File upload error',
+    file_size_exceeded_5mb: 'File size exceeded 5MB',
+    file_count_exceeded: 'File count exceeded',
+    unexpected_file_field: 'Unexpected file field',
+    only_webp_allowed: 'Only webp images are allowed'
   }
 }
