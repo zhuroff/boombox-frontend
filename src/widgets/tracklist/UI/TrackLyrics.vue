@@ -23,7 +23,7 @@
 
       <transition
         name="flyUp"
-        v-if="!isFetchingExternalLyrics"
+        v-if="possibleToSave && !isFetchingExternalLyrics"
       >
         <div
           v-if="!lyricsLocal && !externalLyrics.length"
@@ -32,7 +32,7 @@
       </transition>
 
       <TextareaInput
-        v-if="!isFetchingExternalLyrics && !externalLyrics.length"
+        v-if="possibleToSave && !isFetchingExternalLyrics && !externalLyrics.length"
         className="lyrics__text"
         name="lyrics"
         type="textarea"
@@ -73,11 +73,12 @@
               />&nbsp;&nbsp;              
 
               <Button
+                v-if="possibleToSave"
                 size="small"
                 isText
                 :style="lyricsActionStyle"
                 :label="localize('lyrics.save')"
-                @click="saveLyrics(item.lyrics).then(postSaveHandler)"
+                @click="possibleToSave ? saveLyrics(item.lyrics).then(postSaveHandler) : null"
               />
 
               <TextareaInput
@@ -108,6 +109,7 @@ import type { TrackBasic } from '~entities/track'
 interface Props {
   heading: string
   track: TrackBasic
+  possibleToSave: boolean
 }
 
 const props = defineProps<Props>()

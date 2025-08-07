@@ -3,6 +3,7 @@
     entityKey="collections"
     placeholderPreview="/img/album.webp"
     pageHeadingKey="headings.collectionsPage"
+    isDeletable
   />
 </template>
 

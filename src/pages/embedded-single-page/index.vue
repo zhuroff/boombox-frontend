@@ -44,7 +44,7 @@
         <template #actions>
           <Button
             :label="localize('delete')"
-            @click="isDeleteConfirmed = true"
+            @click="deleteEntity"
           />
           <Button
             :label="localize('cancel')"
@@ -53,7 +53,7 @@
         </template>
         <template #loader>
           <Loader
-            v-if="isAlbumDeleting"
+            v-if="isDeleting"
             mode="light"
           />
         </template>
@@ -83,7 +83,6 @@ const dbService = new DatabaseService()
 const entityKey = ref('embedded')
 const isWikiFrameEnabled = ref(false)
 const isDeleteModalEnabled = ref(false)
-const isDeleteConfirmed = ref(false)
 const router = useRouter()
 
 const { localize } = useLocalization()
@@ -104,12 +103,13 @@ const minimumAlbumData = computed(() => ({
 const currentAlbumId = computed(() => album.value?._id || null)
 
 const {
-  isFetched: isAlbumDeleted,
-  isFetching: isAlbumDeleting
-} = useDeleteEntity(entityKey, currentAlbumId, dbService, isDeleteConfirmed)
+  deletedEntity,
+  deleteEntity,
+  isDeleting
+} = useDeleteEntity(entityKey, currentAlbumId, dbService)
 
 watch(
-  () => isAlbumDeleted.value,
+  deletedEntity,
   (isDeleted) => {
     if (isDeleted) {
       setSnackbarMessage({

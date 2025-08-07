@@ -24,10 +24,8 @@
 
         <template #content>
           <TrackList
-            v-if="'tracks' in album"
             :tracks="album.tracks"
-            :albumID="album.title"
-            isTOY
+            isTOYTracks
           />
         </template>
 
@@ -49,9 +47,9 @@ import { useTOYAlbum } from '~entities/toy'
 import { DiscogsTable } from '~widgets/discogs'
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
+import { TrackList } from '~widgets/tracklist'
 import { DatabaseService } from '~shared/api'
 import { Loader } from '~shared/UI'
-import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
 
 const dbService = new DatabaseService()
 const route = useRoute()

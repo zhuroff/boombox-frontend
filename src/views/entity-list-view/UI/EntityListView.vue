@@ -49,7 +49,7 @@
         <template #actions>
           <Button
             :label="localize('delete')"
-            @click="isDeleteConfirmed = true"
+            @click="deleteEntity"
           />
           <Button
             :label="localize('cancel')"
@@ -77,7 +77,6 @@ import { DatabaseService } from '~shared/api'
 import { Modal, Loader, Confirmation, Button, Paginator } from '~shared/UI'
 import { useLocalization, useGetList, useDeleteEntity, usePaginator } from '~shared/model'
 import type { DeletePayload } from '~shared/lib'
-
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 
 type Props = {
@@ -97,7 +96,6 @@ const dbService = new DatabaseService()
 const { localize } = useLocalization()
 
 const deletedEntityId = ref<string | null>(null)
-const isDeleteConfirmed = ref(false)
 
 const docsLimit = ref((() => {
   const cachedDocsLimit = localStorage.getItem(`docs-limit:${props.entityKey}`)
@@ -128,13 +126,13 @@ const listQueryConfig = computed(() => ({
 const { data, refetch, isFetched, isFetching } = useGetList<UnifiedEntityCard>(listQueryConfig, dbService)
 
 const {
-  isFetched: isDeleted,
-  isFetching: isDeleting
+  deletedEntity,
+  deleteEntity,
+  isDeleting
 } = useDeleteEntity<UnifiedEntityCard>(
   props.entityKey,
   deletedEntityId,
   dbService,
-  isDeleteConfirmed
 )
 
 const docsCount = computed(() => String(data.value?.pagination.totalDocs || 0))
@@ -153,18 +151,16 @@ watchEffect(() => {
 watch(
   () => props.isRefresh,
   (value) => {
-    if (value) {
-      refetch()
-    }
+    if (value) refetch()
   }
 )
 
 watch(
-  () => isDeleted.value,
+  deletedEntity,
   (value) => {
     if (value) {
       deletedEntityId.value = null
-      isDeleteConfirmed.value = false
+      refetch()
     }
   }
 )

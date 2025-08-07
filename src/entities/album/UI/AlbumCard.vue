@@ -1,13 +1,11 @@
 <template>
-  <li class="cardlist__item">
-    <CardPreview
-      :routePath="routePath"
-      :cardTitle="card.title"
-      :cardCover="cardCover"
-      :cardCaption="cardCaption"
-      :cardFrame="'frame' in card ? card.frame : undefined"
-    />
-  </li>
+  <CardPreview
+    :routePath="routePath"
+    :cardTitle="card.title"
+    :cardCover="cardCover"
+    :cardCaption="cardCaption"
+    :cardFrame="'frame' in card ? card.frame : undefined"
+  />
 </template>
 
 <script setup lang="ts">

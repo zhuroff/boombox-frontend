@@ -1,4 +1,4 @@
-import { ref, computed, watch, onUnmounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useCreateEntity, useGetList, usePaginator, useUpdateEntity } from '~shared/model'
 import type { CompilationBasic } from '~entities/compilation'
 import type { TrackBasic } from '~entities/track'
@@ -12,8 +12,6 @@ const useCompilations = (
   const compilations = ref<CompilationBasic[]>([])
   const compilationEntityKey = ref('compilations')
   const isCompilationsModalEnabled = ref(false)
-  const newCompilationPayload = ref<NewGatheringPayload | null>(null)
-  const compilationUpdatePayload = ref<UpdateGatheringPayload | null>(null)
 
   const { paginationState: compilationsPagination } = usePaginator({ isRouted: false })
 
@@ -23,16 +21,8 @@ const useCompilations = (
     requestConfig: compilationsPagination
   }))
 
-  const isNewCompilationQueryEnabled = computed(() => (
-    !!newCompilationPayload.value
-  ))
-  
-  const isUpdateCompilationQueryEnabled = computed(() => (
-    !!compilationUpdatePayload.value
-  ))
-
   const isGatheringFetching = computed(() => (
-    isNewCompilationCreating.value || isCompilationUpdating.value || isCompilationsFetching.value
+    isCreating.value || isUpdating.value || isCompilationsFetching.value
   ))
 
   const {
@@ -45,47 +35,42 @@ const useCompilations = (
   )
 
   const {
-    data: increasedCompilations,
-    isFetching: isNewCompilationCreating,
+    createdEntity,
+    createEntity,
+    isCreating
   } = useCreateEntity<ListPageResponse<CompilationBasic>, NewGatheringPayload>(
     compilationEntityKey,
-    newCompilationPayload,
-    dbService,
-    isNewCompilationQueryEnabled
+    dbService
   )
   
   const {
-    data: updatedCompilations,
-    isFetching: isCompilationUpdating,
-  } = useUpdateEntity<CompilationBasic, UpdateGatheringPayload>(
+    updatedEntity,
+    updateEntity,
+    isUpdating
+  } = useUpdateEntity<ListPageResponse<CompilationBasic>, UpdateGatheringPayload>(
     compilationEntityKey,
-    compilationUpdatePayload,
-    dbService,
-    isUpdateCompilationQueryEnabled
+    dbService
   )
 
-  const selectCompilation = (payload: Pick<UpdateGatheringPayload, 'isInList' | 'gatheringID'>) => {
-    compilationUpdatePayload.value = {
+  const selectCompilation = async (payload: Pick<UpdateGatheringPayload, 'isInList' | 'gatheringID'>) => {
+    await updateEntity({
       ...payload,
       entityType: compilationEntityKey.value,
       entityID: track._id,
       order: payload.isInList ? -1 : 1
-    }
+    })
   }
   
   const createCompilation = (title: string) => {
-    newCompilationPayload.value = {
+    createEntity({
       title,
       entityID: track._id
-    }
+    })
   }
 
   watch(
-    [initialCompilations, updatedCompilations, increasedCompilations],
+    [initialCompilations, updatedEntity, createdEntity],
     ([a, b, c], [oldA, oldB, oldC]) => {
-      newCompilationPayload.value = null
-      compilationUpdatePayload.value = null
-      
       if (!!a && a !== oldA) {
         compilations.value = a?.docs
       } else if (!!b && b !== oldB) {
@@ -95,11 +80,6 @@ const useCompilations = (
       }
     }
   )
-
-  onUnmounted(() => {
-    newCompilationPayload.value = null
-    compilationUpdatePayload.value = null
-  })
 
   return {
     compilations,

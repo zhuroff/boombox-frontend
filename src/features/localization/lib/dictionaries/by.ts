@@ -237,5 +237,12 @@ export const localesBY: LocaleDictionary = {
     toPlaylist: 'Дадаць у плэйлiст',
     removeFromPlaylist: 'Выдаліць з плэйлiста',
     toCompilation: 'Дадаць у кампіляцыю'
+  },
+  errors: {
+    file_upload_error: 'Памылка загрузкі файла',
+    file_size_exceeded_5mb: 'Памер файла перавышае 5МБ',
+    file_count_exceeded: 'Памер файла перавышае 5МБ',
+    unexpected_file_field: 'Нечаканае поле файла',
+    only_webp_allowed: 'Дапушчальны тып файла: webp'
   }
 }

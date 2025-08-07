@@ -14,7 +14,7 @@
         :pageEntityKey="pageEntityKey"
         :data="collection"
         :totalCounts="totalCounts"
-        :setUploadedImage="setUploadedImage"
+        :setUploadedImage="refetch"
         defaultPreview="/img/album.webp"
       />
     </transition>
@@ -24,32 +24,22 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { CategoryContent } from '~widgets/category-content'
-import { useCollection } from '~entities/collection'
-import type { UploadImageResult } from '~features/uploading'
+import { useGetPage } from '~shared/model'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import { useLocalization } from '~shared/model'
+
+import type { CollectionFull } from '~entities/collection'
 
 const dbService = new DatabaseService()
 
 const pageEntityKey = ref('collections')
 
 const { localize } = useLocalization()
-
-const {
-  collection,
-  isFetched,
-  updateCollectionValue
-} = useCollection(dbService)
+const { data: collection, isFetched, refetch } = useGetPage<CollectionFull>(pageEntityKey, dbService)
 
 const totalCounts = computed(() => (
   localize('totalAlbums') + `: ${(collection.value?.albums?.length || 0)}`
 ))
-
-const setUploadedImage = (payload: UploadImageResult) => {
-  if (collection.value) {
-    updateCollectionValue(payload.key, payload.url)
-  }
-}
 </script>

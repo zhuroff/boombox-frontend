@@ -10,6 +10,8 @@
         :key="track._id"
         :track="track"
         :order="index + 1"
+        :isTOYTrack="isTOYTracks"
+        @refetchTracklist="emit('refetchTracklist')"
       />
     </VueDraggableNext>
   </div>
@@ -25,10 +27,18 @@ import TrackRow from './TrackRow.vue'
 type Props = {
   tracks: TrackBasic[]
   isDraggable?: boolean
+  isTOYTracks?: boolean
 }
+
+type Emits = {
+  (e: 'refetchTracklist'): void
+}
+
+const emit = defineEmits<Emits>()
 
 const props = withDefaults(defineProps<Props>(), {
   isDraggable: true,
+  isTOYTracks: false
 })
 
 const dragOptions = computed(() => ({

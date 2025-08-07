@@ -16,7 +16,7 @@ const useImageUploader = (entityKey: string, uploadService: UploadService) => {
     try {
       return await uploadService.uploadImage<T, U>(payload)
     } catch (e) {
-      console.error(e)
+      throw e
     }
   }
 

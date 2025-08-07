@@ -24,8 +24,8 @@
 <script setup lang="ts">
 import { VueDraggableNext } from 'vue-draggable-next'
 import type { DeletePayload } from '~shared/lib'
-import EntityCard from './EntityCard.vue'
 import type { UnifiedEntityCard } from '../lib/types'
+import EntityCard from './EntityCard.vue'
 
 type Props = {
   entities: UnifiedEntityCard[]

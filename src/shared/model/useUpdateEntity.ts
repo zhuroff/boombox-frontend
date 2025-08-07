@@ -1,28 +1,32 @@
-import type { ComputedRef, Ref } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
+import type { Ref } from 'vue'
 import type DatabaseService from '~/shared/api/DatabaseService'
 
 const useUpdateEntity = <T, U>(
   entityKey: Ref<string>,
-  payload: Ref<U | null>,
   dbService: DatabaseService,
-  isEnabled: ComputedRef<boolean>
 ) => {
-  const { refetch, isFetched, isError, data, error, isFetching } = useQuery<ListPageResponse<T>>({
-    queryKey: [entityKey],
-    retry: 3,
-    enabled: isEnabled,
-    refetchOnWindowFocus: false,
-    queryFn: () => dbService.updateEntity(entityKey.value, payload.value)
+  const queryClient = useQueryClient()
+
+  const {
+    mutateAsync: updateEntity,
+    isPending: isUpdating,
+    error: updateEntityError,
+    data: updatedEntity
+  } = useMutation({
+    mutationFn: (payload: U) => (
+      dbService.updateEntity<T, U>(entityKey.value, payload)
+    ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [entityKey] })
+    }
   })
 
   return {
-    isFetching,
-    isFetched,
-    refetch,
-    isError,
-    error,
-    data
+    updateEntityError,
+    updatedEntity,
+    updateEntity,
+    isUpdating
   }
 }
 

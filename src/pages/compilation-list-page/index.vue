@@ -3,7 +3,7 @@
     entityKey="compilations"
     placeholderPreview="/img/album.webp"
     pageHeadingKey="headings.albumsPage"
-    :isDeletable="true"
+    isDeletable
   />
 </template>
 

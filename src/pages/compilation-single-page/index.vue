@@ -22,11 +22,8 @@
 
         <template #content>
           <TrackList
-            v-if="'tracks' in compilation"
             :tracks="compilation.tracks"
-            :albumID="compilation._id"
-            @trackOrderChanged="changeTracksOrder"
-            @removeTrackFromCompilation="removeTrackFromCompilation"
+            @refetchTracklist="refetch"
           />
         </template>
       </AlbumContent>
@@ -40,7 +37,7 @@
         <template #actions>
           <Button
             :label="localize('delete')"
-            @click="isDeleteConfirmed = true"
+            @click="deleteEntity"
           />
           <Button
             :label="localize('cancel')"
@@ -49,7 +46,7 @@
         </template>
         <template #loader>
           <Loader
-            v-if="isAlbumDeleting"
+            v-if="isDeleting"
             mode="light"
           />
         </template>
@@ -64,15 +61,13 @@ import { useRouter } from 'vue-router'
 
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
+import { TrackList } from '~widgets/tracklist'
 
 import { Modal, Loader, Confirmation, Button } from '~shared/UI'
-import { useDeleteEntity, useLocalization, useSnackbar } from '~shared/model'
+import { useDeleteEntity, useGetPage, useLocalization, useSnackbar } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 import type { ReorderPayload } from '~shared/lib'
-
-import TrackList from '~/~legacy/components/TrackList/TrackList.vue'
-
-import { useCompilation } from '~entities/compilation'
+import type { CompilationFull } from '~entities/compilation'
 
 const dbService = new DatabaseService()
 
@@ -80,40 +75,33 @@ const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
 
 const entityKey = ref('compilations')
+const preRandomState = ref('')
 const isDeleteModalEnabled = ref(false)
-const isDeleteConfirmed = ref(false)
 const router = useRouter()
 
-const {
-  compilation,
-  isFetched,
-  preRandomState,
-} = useCompilation(dbService)
+const { data: compilation, isFetched, refetch } = useGetPage<CompilationFull>(entityKey, dbService, preRandomState)
 
 const currentCompilationId = computed(() => compilation.value?._id || null)
+
+const {
+  deletedEntity,
+  deleteEntity,
+  isDeleting
+} = useDeleteEntity(entityKey, currentCompilationId, dbService)
 
 const changeTracksOrder = (payload: ReorderPayload) => {
   // emit('trackOrderChanged', payload)
 }
 
-const removeTrackFromCompilation = (payload: any /* GatheringUpdateReq */) => {
-  // emit('removeTrackFromCompilation', payload)
-}
-
-const {
-  isFetched: isAlbumDeleted,
-  isFetching: isAlbumDeleting
-} = useDeleteEntity(entityKey, currentCompilationId, dbService, isDeleteConfirmed)
-
 watch(
-  () => isAlbumDeleted.value,
+  deletedEntity,
   (isDeleted) => {
     if (isDeleted) {
       setSnackbarMessage({
         message: localize('deletedEmbeddedMessage'),
         type: 'success'
       })
-      router.push('/embedded')
+      router.push('/compilations')
     }
   }
 )
