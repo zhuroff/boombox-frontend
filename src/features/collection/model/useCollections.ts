@@ -18,7 +18,7 @@ const useCollections = (
   const collectionsConfig = computed(() => ({
     pageID: album.value?._id,
     entityKey: collectionEntityKey.value,
-    requestConfig: collectionsPagination
+    requestConfig: collectionsPagination.value
   }))
 
   const isGatheringFetching = computed(() => (

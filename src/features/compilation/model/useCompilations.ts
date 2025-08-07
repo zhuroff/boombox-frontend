@@ -18,7 +18,7 @@ const useCompilations = (
   const compilationsConfig = computed(() => ({
     pageID: track._id,
     entityKey: compilationEntityKey.value,
-    requestConfig: compilationsPagination
+    requestConfig: compilationsPagination.value
   }))
 
   const isGatheringFetching = computed(() => (

@@ -1,5 +1,6 @@
-import { reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { DEFAULT_PAGE_DOCS_LIMIT } from '../constants'
 import type {
   UsePaginationProps,
   PaginationState,
@@ -9,18 +10,18 @@ import type {
 } from '~shared/lib'
 
 const usePaginator = ({
-  docsLimit = 15,
-  docsSort = { title: 1 },
+  docsLimit = ref(DEFAULT_PAGE_DOCS_LIMIT),
+  docsSort = ref({ title: 1 }),
   isRouted = true,
   localStorageKey
 }: UsePaginationProps) => {
   const { query } = useRoute()
   const router = useRouter()
 
-  const paginationState: PaginationState = reactive({
+  const paginationState = ref<PaginationState>({
     page: Number(query.page) || 1,
-    limit: docsLimit,
-    sort: docsSort
+    limit: docsLimit.value,
+    sort: docsSort.value
   })
 
   const paginationConfig: PaginationConfig = reactive({
@@ -29,23 +30,24 @@ const usePaginator = ({
     decrement: true,
     totalDocs: 0,
     totalPages: 0,
-    selected: paginationState.limit
+    selected: paginationState.value.limit
   })
   
   const updatePaginationState: PaginationStateSetter = (key, value) => {
-    paginationState[key] = value
+    paginationState.value[key] = value
 
     switch(key) {
       case 'page':
         changeRouteQuery({ page: String(value) })
         break
       case 'limit':
-        paginationState.page = 1
+        paginationState.value.page = 1
         changeRouteQuery({ page: '1' })
 
         if (localStorageKey) {
           localStorage.setItem(localStorageKey, value.toString())
         }
+
         break
     }
   }
@@ -61,7 +63,7 @@ const usePaginator = ({
 
   onMounted(() => {
     if (!query.page) {
-      changeRouteQuery({ page: paginationState.page })
+      changeRouteQuery({ page: paginationState.value.page })
     }
   })
 
