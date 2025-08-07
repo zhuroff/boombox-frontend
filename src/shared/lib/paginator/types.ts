@@ -1,3 +1,4 @@
+import type { Ref } from 'vue'
 import type { SortingValue } from '~shared/lib'
 
 export type Pagination = {
@@ -7,8 +8,8 @@ export type Pagination = {
 }
 
 export type UsePaginationProps = {
-  docsLimit?: number
-  docsSort?: SortingValue
+  docsLimit?: Ref<number>
+  docsSort?: Ref<SortingValue>
   isRouted?: boolean
   localStorageKey?: string
 }

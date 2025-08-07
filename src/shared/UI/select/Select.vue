@@ -31,7 +31,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'passSelectedValue', payload: [string, string | number | null | undefined]): void
+  (e: 'passSelectedValue', payload: [string, string | number | null]): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -68,12 +68,12 @@ const normalizedOptions = computed(() => {
   })
 })
 
-const localSelected = ref<string | number | null | undefined>(props.modelValue || normalizedOptions.value[0].value)
+const localSelected = ref<string | number | null>(props.modelValue || normalizedOptions.value[0].value)
 
 watch(
   localSelected,
-  (value) => {
-    if (value !== normalizedOptions.value[0].value) {
+  (value, prevValue) => {
+    if (value !== prevValue) {
       emit('passSelectedValue', [props.entityKey, value])
     }
   },

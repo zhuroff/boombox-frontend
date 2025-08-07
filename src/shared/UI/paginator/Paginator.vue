@@ -4,10 +4,10 @@
       v-if="paginationConfig.limiter?.length"
       :options="paginationConfig.limiter"
       :isMarkedSelected="false"
-      :selected="selectedLimit"
+      :modelValue="selectedLimit.paginationLimit"
       entityKey="paginationLimit"
       isText
-      @update:select="switchLimit"
+      @passSelectedValue="switchLimit"
     />
     <Button
       v-if="paginationConfig.decrement"
@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { PaginationState, PaginationConfig, PaginationStateSetter } from '~shared/lib'
 import { Select, Button } from '~shared/UI'
 
@@ -62,7 +62,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const localPage = ref(props.paginationState.page)
+const localPage = computed(() => props.paginationState.page)
 
 const buttons = computed(() => {
   const minButton = Math.max(1, localPage.value - 2)

@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { h, computed, watch } from 'vue'
+import { h, computed, watch, type ComputedRef } from 'vue'
 import { Button, Table, Paginator, Select } from '~shared/UI'
 import { usePaginator, useLocalization } from '~shared/model'
 import { useDiscogs, discogsTableSchema, DiscogsService } from '~features/discogs'
@@ -70,20 +70,24 @@ const {
   paginationConfig,
   updatePaginationConfig,
   updatePaginationState
-} = usePaginator({ isRouted: false, docsLimit: 30 })
+} = usePaginator({ isRouted: false })
 
 const discogsPagination = computed(() => ({
-  ...paginationState,
+  ...paginationState.value,
   totalDocs: filteredDiscogsData.value.length,
-  totalPages: Math.floor(filteredDiscogsData.value.length / paginationState.limit),
+  totalPages: Math.floor(filteredDiscogsData.value.length / paginationState.value.limit),
 }))
 
-const paginatedDiscogsData = computed(() => (
+const paginatedDiscogsData: ComputedRef<TableRow[]> = computed(() => (
   [...filteredDiscogsData.value]
     .splice(
       (discogsPagination.value.page - 1) * discogsPagination.value.limit,
       discogsPagination.value.limit
     )
+    .map(row => ({
+      ...row,
+      id: String(row.id)
+    }))
 ))
 
 const isTableReady = computed(() => (
@@ -138,7 +142,7 @@ watch(
   (value) => {
     if (!value) return
     updatePaginationConfig('totalDocs', value.length)
-    updatePaginationConfig('totalPages', Math.ceil(value.length / paginationState.limit))
+    updatePaginationConfig('totalPages', Math.ceil(value.length / paginationState.value.limit))
   }
 )
 </script>

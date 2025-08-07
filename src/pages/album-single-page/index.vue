@@ -23,16 +23,7 @@
         </template>
 
         <template #content>
-          <!-- <TrackList
-            v-if="'tracks' in album"
-            :tracks="album.tracks"
-            :albumID="album._id"
-            @trackOrderChanged="changeTracksOrder"
-            @removeTrackFromCompilation="removeTrackFromCompilation"
-          /> -->
-          <TrackList
-            :tracks="album.tracks"
-          />
+          <TrackList :tracks="album.tracks" />
         </template>
 
         <template #footer>
