@@ -59,7 +59,7 @@ export default class DatabaseService {
     }
   }
 
-  updateEntity = async <T, U>(entityKey: string, payload?: U | null) => {
+  updateEntity = async <T, U>(entityKey: string, payload: U) => {
     if (!payload) {
       throw new Error('Query payload is not defined')
     }
@@ -94,7 +94,7 @@ export default class DatabaseService {
     }
   }
 
-  getCloudFiles = async <T>(entityKey: string, path: string, query: string) => {
+  getCloudFiles = async <T>(entityKey: string, path: string, query = '') => {
     try {
       const response = await api.get<T>(`/api/${entityKey}/${path}?${query}`)
       return response.data

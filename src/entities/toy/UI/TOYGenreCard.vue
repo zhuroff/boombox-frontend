@@ -52,6 +52,7 @@ defineProps<Props>()
     color: var.$paleLT;
     height: 100%;
     z-index: 10;
+    text-align: center;
     transition: color 0.5s var.$animation;
 
     span {

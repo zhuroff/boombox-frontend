@@ -5,36 +5,47 @@
     </h2>
 
     <Table
-      :localize="localize"
-      :tableState="usersTableState"
-      :localeRootKey="'users'"
-      @onEmit="(data) => emit('passUsers', data)"
+      :rows="usersTableState.rows"
+      :schema="usersTableState.schema"
+      :headerConfig="tableHeaderConfig"
+      @onEmit="(data: User[]) => emit('passUsers', data)"
     />
   </section>
 </template>
 
 <script setup lang="ts">
+import { h, computed } from 'vue'
 import { Table } from '~shared/UI'
 import { useLocalization } from '~shared/model'
-import type { TableConfig, User } from '~shared/lib'
-import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
+import type { BasicTableState, TableHeaderConfig, User } from '~shared/lib'
 
 interface Props {
-  usersTableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>
+  usersTableState: BasicTableState
 }
 
 interface Emits {
   (e: 'passUsers', data: User[]): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { localize } = useLocalization()
+
+const tableHeaderConfig = computed<TableHeaderConfig[]>(() => (
+  props.usersTableState.schema.order.map((key) => {
+    const heading = localize(`usersTable.${key}`)
+
+    return {
+      key,
+      element: h('span', {}, heading)
+    }
+  })
+))
 </script>
 
 <style lang="scss" scoped>
-@use '~/app/styles/variables' as var;
+@use '~app/styles/variables' as var;
 
 .settings__section {
   grid-area: users;

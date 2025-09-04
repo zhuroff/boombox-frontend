@@ -140,7 +140,7 @@ const orderChanged = (event: DraggableEvent) => {
   const payload: ReorderPayload = {
     oldOrder: event.oldIndex,
     newOrder: event.newIndex,
-    entityID: currentPlaylist.value?._id
+    // entityID: currentPlaylist.value?._id
   }
 
   changePlaylistOrder(payload)

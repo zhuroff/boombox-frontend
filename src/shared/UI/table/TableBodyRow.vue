@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { h } from 'vue'
+import { defineAsyncComponent, h } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type { LocaleItem, TableRow, TableSchema } from '~shared/lib'
@@ -100,6 +100,19 @@ const cellComponent = (key: keyof TableRow) => {
       'td',
       {},
       renderElement(key, schemaConfig)
+    )
+  }
+
+  if ('component' in schemaConfig) {
+    return h(
+      'td',
+      {},
+      h(
+        defineAsyncComponent(() => import(`${schemaConfig.component}`)),
+        {
+          ...(schemaConfig.props || {})
+        }
+      )
     )
   }
 

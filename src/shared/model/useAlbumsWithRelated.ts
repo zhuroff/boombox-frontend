@@ -61,6 +61,7 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
 
   const {
     data: album,
+    refetch: refetchAlbumPage,
     isFetched: isAlbumFetched
   } = useGetPage<T>(
     pageEntityKey,
@@ -85,6 +86,7 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
 
   return {
     album,
+    refetchAlbumPage,
     isAlbumReady,
     preRandomState,
     relatedAlbums

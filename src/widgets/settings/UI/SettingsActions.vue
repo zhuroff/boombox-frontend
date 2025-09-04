@@ -10,14 +10,14 @@
     />
     <BackupActions
       action="create"
-      @onEmit="(data) => emit('passBackups', data)"
+      @onEmit="<T>(data: T) => emit('passBackups', data)"
     />
     <BackupActions
       action="get"
-      @onEmit="(data) => emit('passBackups', data)"
+      @onEmit="<T>(data: T) => emit('passBackups', data)"
     />
     <SyncAction
-      @passSyncData="(data) => emit('passSyncData', data)"
+      @passSyncData="<T>(data: T) => emit('passSyncData', data)"
     />
     <Button
       :label="localize('settings.logout')"
@@ -62,7 +62,7 @@ const showUserForm = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/app/styles/variables' as var;
+@use '~app/styles/variables' as var;
 
 .settings__actions {
   margin-bottom: var.$mainPadding;

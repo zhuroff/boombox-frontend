@@ -70,8 +70,8 @@ const useDiscogs = (discogsService: DiscogsService, payload: Ref<DiscogsQueryCon
     }
   })
 
-  const filteredDiscogsData = computed(() => (
-    [...(discogsData.value || [])]
+  const filteredDiscogsData = computed(() => {
+    return [...(discogsData.value || [])]
       .filter((row) => {
         return (
           Object.entries(discogsFiltersState)
@@ -87,7 +87,7 @@ const useDiscogs = (discogsService: DiscogsService, payload: Ref<DiscogsQueryCon
             })
         )
       })
-  ))
+  })
 
   watch(
     discogsData,

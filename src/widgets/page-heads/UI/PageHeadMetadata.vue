@@ -107,6 +107,7 @@ const { localize } = useLocalization()
   &-metadata {
     color: var.$paleDP;
     line-height: 1.5;
+    margin-top: auto;
   }
 
   &-category {

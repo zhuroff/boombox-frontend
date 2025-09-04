@@ -14,6 +14,7 @@ import SpritePlus from './SpritePlus.vue'
 import SpriteMinus from './SpriteMinus.vue'
 import SpritePlaying from './SpritePlaying.vue'
 import SpriteDrag from './SpriteDrag.vue'
+import SpritePencil from './SpritePencil.vue'
 import SpriteChevronRight from './SpriteChevronRight.vue'
 import SpriteChevronLeft from './SpriteChevronLeft.vue'
 import SpriteChevronRightDouble from './SpriteChevronRightDouble.vue'
@@ -61,6 +62,7 @@ const IconsMap = new Map([
   ['minus', SpriteMinus],
   ['playing', SpritePlaying],
   ['drag', SpriteDrag],
+  ['pencil', SpritePencil],
   ['chevron-right', SpriteChevronRight],
   ['chevron-left', SpriteChevronLeft],
   ['chevron-right-double', SpriteChevronRightDouble],

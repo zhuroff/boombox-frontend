@@ -17,6 +17,7 @@
         <template #hero>
           <PageHeadAdapter
             :album="album"
+            isEditable
             @getRandomAlbum="() => preRandomState = album?._id || ''"
             @getWikiInfo="isWikiFrameEnabled = true"
             @deleteAlbum="isDeleteModalEnabled = true"

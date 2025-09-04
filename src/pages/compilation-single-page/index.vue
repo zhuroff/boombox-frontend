@@ -15,6 +15,7 @@
         <template #hero>
           <PageHeadAdapter
             :album="compilation"
+            isEditable
             @getRandomAlbum="() => preRandomState = compilation?._id || ''"
             @deleteAlbum="isDeleteModalEnabled = true"
           />
@@ -24,6 +25,7 @@
           <TrackList
             :tracks="compilation.tracks"
             @refetchTracklist="refetch"
+            @trackOrderChanged="changeTracksOrder"
           />
         </template>
       </AlbumContent>
@@ -64,8 +66,9 @@ import { PageHeadAdapter } from '~widgets/page-heads'
 import { TrackList } from '~widgets/tracklist'
 
 import { Modal, Loader, Confirmation, Button } from '~shared/UI'
-import { useDeleteEntity, useGetPage, useLocalization, useSnackbar } from '~shared/model'
+import { useDeleteEntity, useGetPage, useLocalization, useSnackbar, useUpdateEntity } from '~shared/model'
 import { DatabaseService } from '~shared/api'
+
 import type { ReorderPayload } from '~shared/lib'
 import type { CompilationFull } from '~entities/compilation'
 
@@ -79,9 +82,15 @@ const preRandomState = ref('')
 const isDeleteModalEnabled = ref(false)
 const router = useRouter()
 
-const { data: compilation, isFetched, refetch } = useGetPage<CompilationFull>(entityKey, dbService, preRandomState)
+const {
+  data: compilation,
+  isFetched,
+  refetch
+} = useGetPage<CompilationFull>(entityKey, dbService, preRandomState)
 
 const currentCompilationId = computed(() => compilation.value?._id || null)
+
+const { reorderEntities } = useUpdateEntity(entityKey, dbService, currentCompilationId)
 
 const {
   deletedEntity,
@@ -90,7 +99,8 @@ const {
 } = useDeleteEntity(entityKey, currentCompilationId, dbService)
 
 const changeTracksOrder = (payload: ReorderPayload) => {
-  // emit('trackOrderChanged', payload)
+  reorderEntities(payload)
+    .then(() => refetch())
 }
 
 watch(

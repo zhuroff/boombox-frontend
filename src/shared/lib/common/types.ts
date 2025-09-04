@@ -65,7 +65,6 @@ export type DraggableEvent = {
 }
 
 export type ReorderPayload = {
-  entityID: string
   oldOrder: number
   newOrder: number
 }

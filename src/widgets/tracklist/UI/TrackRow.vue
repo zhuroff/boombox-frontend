@@ -19,7 +19,10 @@
         className="trackrow__action"
         :isDisabled="isTrackDisabled"
       />
-      <TrackPlayControl v-else />
+      <TrackPlayControl
+        v-else
+        :track="track"
+      />
       <div
         :title="track.title"
         class="trackrow__cell --title"
@@ -82,6 +85,7 @@
 <script setup lang="ts">
 import { ref, computed, onUnmounted, watch } from 'vue'
 import { useCompilations } from '~features/compilation'
+import { usePlayer } from '~features/player'
 import { useLocalization } from '~shared/model'
 import { Button, DropList, Modal } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
@@ -110,6 +114,7 @@ const emit = defineEmits<Emits>()
 const dbService = new DatabaseService()
 
 const { localize } = useLocalization()
+const { playingTrack } = usePlayer()
 
 const isLyricsModalActive = ref(false)
 
@@ -132,7 +137,7 @@ const trackDuration = computed(() => {
   if (!props.track.duration) return '--/--'
 
   const minutes = Math.floor(props.track.duration / 60)
-  const seconds = Math.floor(props.track.duration % 60)
+  const seconds = Math.floor(props.track.duration % 60).toString().padStart(2, '0')
   return `${minutes}:${seconds}`
 })
 

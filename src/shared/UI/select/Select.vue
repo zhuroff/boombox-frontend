@@ -73,7 +73,7 @@ const localSelected = ref<string | number | null>(props.modelValue || normalized
 watch(
   localSelected,
   (value, prevValue) => {
-    if (value !== prevValue) {
+    if (value !== prevValue && value !== normalizedOptions.value[0].value) {
       emit('passSelectedValue', [props.entityKey, value])
     }
   },

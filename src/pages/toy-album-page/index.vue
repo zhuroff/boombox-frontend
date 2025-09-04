@@ -26,6 +26,7 @@
           <TrackList
             :tracks="album.tracks"
             isTOYTracks
+            @trackOrderChanged="changeTracksOrder"
           />
         </template>
 
@@ -50,6 +51,7 @@ import { PageHeadAdapter } from '~widgets/page-heads'
 import { TrackList } from '~widgets/tracklist'
 import { DatabaseService } from '~shared/api'
 import { Loader } from '~shared/UI'
+import type { ReorderPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 const route = useRoute()
@@ -62,4 +64,8 @@ const {
   preRandomState,
   relatedAlbums
 } = useTOYAlbum(dbService, routeParams)
+
+const changeTracksOrder = (payload: ReorderPayload) => {
+  console.log(payload)
+}
 </script>

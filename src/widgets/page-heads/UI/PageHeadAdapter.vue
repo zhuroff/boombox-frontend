@@ -10,7 +10,27 @@
     >
       <template #heading>
         <h1 class="album__hero-heading">
-          {{ album.title }}
+          <div
+            ref="headingRef"
+            :contenteditable="isEditable && isEditMode"
+            @input="setNewTitle"
+          >{{ album.title }}</div>
+
+          <Button
+            v-if="isEditable && !isEditMode"
+            icon="pencil"
+            isInverted
+            isRounded
+            @click="activateEditMode"
+          />
+
+          <Button
+            v-if="isEditable && isEditMode"
+            icon="save"
+            isInverted
+            isRounded
+            @click="saveNewTitle"
+          />
         </h1>
       </template>
     </component>
@@ -29,20 +49,24 @@
 </template>
 
 <script setup lang="ts">
-import { h, computed, ref } from 'vue'
-import { Modal } from '~shared/UI'
-import { useLocalization } from '~shared/model'
+import { h, computed, ref, nextTick } from 'vue'
 import { useSearch, SearchService, SearchModal } from '~features/search'
-import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
+
+import { Modal, Button } from '~shared/UI'
+import { useLocalization } from '~shared/model'
 import { assertNever } from '~shared/utils'
+
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
 import EmbeddedPageHead from './EmbeddedPageHead.vue'
 import TOYPageHead from './TOYPageHead.vue'
 
+import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
+
 interface Props {
   album: UnifiedEntityFullCard
   withSearch?: boolean
+  isEditable?: boolean
 }
 
 interface Emits {
@@ -50,6 +74,7 @@ interface Emits {
   (e: 'addToCollection'): void
   (e: 'getWikiInfo'): void
   (e: 'deleteAlbum'): void
+  (e: 'saveNewTitle'): void
 }
 
 const props = defineProps<Props>()
@@ -61,6 +86,9 @@ const searchService = new SearchService()
 
 const searchQuery = ref('')
 const isSearchMode = ref(false)
+const isEditMode = ref(false)
+const newTitle = ref(props.album.title)
+const headingRef = ref<HTMLDivElement>()
 
 const { searchResults, isSearchFetching } = useSearch(searchQuery, searchService)
 
@@ -115,6 +143,23 @@ const getRandomAlbum = () => emit('getRandomAlbum')
 const addToCollection = () => emit('addToCollection')
 const getWikiInfo = () => emit('getWikiInfo')
 const deleteAlbum = () => emit('deleteAlbum')
+
+const setNewTitle = (e: Event) => {
+  const target = e.target as HTMLDivElement
+  newTitle.value = target.innerText
+}
+
+const saveNewTitle = () => {
+  console.log(newTitle.value)
+  isEditMode.value = false
+}
+
+const activateEditMode = () => {
+  isEditMode.value = true
+  nextTick(() => {
+    headingRef.value?.focus()
+  })
+}
 </script>
 
 <style lang="scss">
@@ -166,6 +211,16 @@ const deleteAlbum = () => emit('deleteAlbum')
       max-width: 850px;
       color: var.$warning;
       @include var.serif(2.25rem);
+
+      .button {
+        opacity: 0;
+      }
+
+      &:hover {
+        .button {
+          opacity: 1;
+        }
+      }
     }
   }
 }

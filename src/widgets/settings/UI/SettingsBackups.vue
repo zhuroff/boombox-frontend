@@ -5,36 +5,49 @@
     </h2>
 
     <Table
-      :localize="localize"
-      :tableState="backupsTableState"
-      :localeRootKey="'backups'"
-      @onEmit="(data) => emit('passBackups', data)"
+      :rows="backupsTableState.rows"
+      :schema="backupsTableState.schema"
+      :headerConfig="tableHeaderConfig"
+      @onEmit="(data: string[]) => emit('passBackups', data)"
     />
   </section>
 </template>
 
 <script setup lang="ts">
+import { h, computed } from 'vue'
 import { useLocalization } from '~shared/model'
 import { Table } from '~shared/UI'
-import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
-import type { TableConfig } from '~shared/lib'
+import type { BasicTableState, TableHeaderConfig } from '~shared/lib'
 
 interface Props {
-  backupsTableState: TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>
+  backupsTableState: BasicTableState
 }
 
 interface Emits {
   (e: 'passBackups', data: string[]): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { localize } = useLocalization()
+
+const tableHeaderConfig = computed<TableHeaderConfig[]>(() => {
+  const { order } = props.backupsTableState.schema
+
+  return order.map((key) => {
+    const heading = localize(`backupsTable.${key}`)
+
+    return {
+      key,
+      element: h('span', {}, heading)
+    }
+  })
+})
 </script>
 
 <style lang="scss" scoped>
-@use '~/app/styles/variables' as var;
+@use '~app/styles/variables' as var;
 
 .settings__section {
   grid-area: backups;

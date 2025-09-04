@@ -1,13 +1,13 @@
 <template>
   <Button
-    v-if="isOnLoading"
+    v-if="isTrackFetching"
     icon="spinner"
     size="small"
     isText
     className="trackrow__action"
   />
   <Button
-    v-else-if="isPlaying && !isOnHover"
+    v-else-if="isTrackPlaying"
     icon="playing"
     size="small"
     isText
@@ -15,12 +15,12 @@
     @mouseenter="isOnHover = true"
   />
   <Button
-    v-else-if="isPaused || (isPlaying && isOnHover)"
+    v-else-if="isTrackPaused"
     icon="pause"
     size="small"
     isText
     className="trackrow__action"
-    @click="isPaused ? playFurther() : setOnPause()"
+    @click="playPauseTrack"
     @mouseleave="isOnHover = false"
   />
   <Button
@@ -29,36 +29,36 @@
     size="small"
     isText
     className="trackrow__action"
-    @click="playTrack"
+    @click="() => playTrack(track)"
   />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { usePlayer } from '~features/player'
 import { Button } from '~shared/UI'
+import type { TrackBasic } from '~entities/track'
 
-const isOnLoading = ref(false)
-const isPlaying = ref(false)
-const isPaused = ref(false)
+type Props = {
+  track: TrackBasic
+}
+
+const props = defineProps<Props>()
+
 const isOnHover = ref(false)
 
-const setOnPause = () => {
-  isPaused.value = true
-  isPlaying.value = false
-}
+const { isTrackFetching, playTrack, playPauseTrack, playingTrack } = usePlayer()
 
-const playFurther = () => {
-  isPaused.value = false
-  isPlaying.value = true
-}
+const isTrackPlaying = computed(() => (
+  playingTrack.value?._id === props.track._id
+  && playingTrack.value.isOnPlaying
+  && !playingTrack.value.isOnPause
+  && !isOnHover.value
+))
 
-const playTrack = () => {
-  // TEMP:
-  isOnLoading.value = true
-
-  setTimeout(() => {
-    isOnLoading.value = false
-    isPlaying.value = true
-  }, 3000)
-}
+const isTrackPaused = computed(() => (
+  playingTrack.value?._id === props.track._id
+  && playingTrack.value.isOnPause
+  || isOnHover.value
+))
 </script>

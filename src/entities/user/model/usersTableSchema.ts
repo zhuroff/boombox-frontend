@@ -1,6 +1,6 @@
-import type { JSONSchema4 } from 'json-schema'
+import type { TableSchema } from '~shared/lib'
 
-const usersTableSchema: JSONSchema4 = {
+const usersTableSchema: TableSchema = {
   type: 'object',
   order: ['id', 'email', 'role', 'delete'],
   properties: {

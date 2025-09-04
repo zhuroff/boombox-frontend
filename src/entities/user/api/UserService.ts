@@ -1,6 +1,5 @@
 import { api } from '~shared/api'
-import type { User, AuthRefreshResponse } from '~entities/user'
-import type { FormPayload } from '~shared/lib'
+import type { User, AuthRefreshResponse, FormPayload } from '~shared/lib'
 
 export default class UserService {
   refresh = async () => {

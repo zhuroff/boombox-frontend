@@ -32,29 +32,28 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { SettingsActions, SettingsBackups, SettingsUsers } from '~widgets/settings'
-import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import { backupsTableSchema } from '~features/backup'
-import { usersTableSchema, type User } from '~entities/user'
+import { usersTableSchema } from '~entities/user'
 import { AlbumSyncList, type SyncDataPayload, type SyncResponse } from '~features/sync'
 import { Modal } from '~shared/UI'
-import type { TableConfig } from '~shared/lib'
+import type { User, BasicTableState } from '~shared/lib'
 
 const showSyncDataModal = ref(false)
 const syncData = ref<SyncResponse | null>(null)
 const syncDataReset = ref<() => void>(() => {})
 
-const backupsTableState = reactive<TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>>({
+const backupsTableState = reactive<BasicTableState>({
   rows: [],
   schema: backupsTableSchema
 })
 
-const usersTableState = reactive<TableConfig<Record<string, JSONSchema4Type>, JSONSchema4>>({
+const usersTableState = reactive<BasicTableState>({
   rows: [],
   schema: usersTableSchema
 })
 
 const setBackups = (data: string[]) => {
-  backupsTableState.rows = data.map((timestamp) => ({ timestamp }))
+  backupsTableState.rows = data.map((timestamp) => ({ timestamp, id: String(timestamp) }))
 }
 
 const setUsers = (data: User[]) => {
@@ -78,7 +77,7 @@ const handleCloseSyncDataModal = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/app/styles/variables' as var;
+@use '~app/styles/variables' as var;
 
 .settings {
   padding: 0 var.$basicPadding;

@@ -1,6 +1,6 @@
-import type { JSONSchema4 } from 'json-schema'
+import type { TableSchema } from '~shared/lib'
 
-const backupsTableSchema: JSONSchema4 = {
+const backupsTableSchema: TableSchema = {
   type: 'object',
   order: ['timestamp', 'restore', 'delete'],
   properties: {

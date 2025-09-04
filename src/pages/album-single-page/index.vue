@@ -23,7 +23,10 @@
         </template>
 
         <template #content>
-          <TrackList :tracks="album.tracks" />
+          <TrackList
+            :tracks="album.tracks"
+            @trackOrderChanged="changeTracksOrder"
+          />
         </template>
 
         <template #footer>
@@ -56,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
@@ -65,6 +68,7 @@ import { Gathering } from '~widgets/gathering'
 import { TrackList } from '~widgets/tracklist'
 
 import { useCollections } from '~features/collection'
+import { usePlaylistService } from '~features/player'
 import { WikiFrame } from '~features/wiki'
 
 import { useAlbum } from '~entities/album'
@@ -74,6 +78,8 @@ import { DatabaseService } from '~shared/api'
 import type { ReorderPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
+
+const { initPlaylist } = usePlaylistService()
 
 const {
   album,
@@ -98,10 +104,17 @@ const minimumAlbumData = computed(() => ({
 }))
 
 const changeTracksOrder = (payload: ReorderPayload) => {
-  // emit('trackOrderChanged', payload)
+  console.log(payload)
 }
 
 const removeTrackFromCompilation = (payload: any /* GatheringUpdateReq */) => {
   // emit('removeTrackFromCompilation', payload)
 }
+
+watch(
+  isAlbumReady,
+  () => {
+    initPlaylist(album.value?.tracks)
+  }
+)
 </script>
