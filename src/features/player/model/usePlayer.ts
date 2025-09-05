@@ -65,6 +65,14 @@ const usePlayer = () => {
     playingTrack.value.isOnPause = !playingTrack.value.isOnPause
   }
 
+  const setTrackPosition = (value: number) => {
+    if (!playingTrackRef.value) return
+
+    progressLine.value = value
+    progressTime.value = value * (playingTrack.value?.duration || 1)    
+    playingTrackRef.value.currentTime = progressTime.value
+  }
+
   return {
     playNext,
     playTrack,
@@ -73,7 +81,8 @@ const usePlayer = () => {
     playingTrack,
     playPauseTrack,
     isTrackFetching,
-    isPlayerExpanded
+    isPlayerExpanded,
+    setTrackPosition
   }
 }
 

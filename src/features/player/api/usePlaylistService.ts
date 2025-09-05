@@ -23,6 +23,7 @@ const usePlaylistService = () => {
     const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => ({
       ...track,
       order: ++index,
+      albumId: album._id,
       albumKind: album.title.startsWith('TOY') ? 'toy' : album.kind,
       albumCover
     }))

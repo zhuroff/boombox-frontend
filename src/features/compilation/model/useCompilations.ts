@@ -1,5 +1,6 @@
 import { ref, computed, watch } from 'vue'
-import { useCreateEntity, useGetList, usePaginator, useUpdateEntity } from '~shared/model'
+import { useCreateEntity, useGetList, useUpdateEntity } from '~shared/model'
+import { usePaginator } from '~features/paginator'
 import type { CompilationBasic } from '~entities/compilation'
 import type { TrackBasic } from '~entities/track'
 import type { DatabaseService } from '~shared/api'

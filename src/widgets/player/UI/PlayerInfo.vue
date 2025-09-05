@@ -36,12 +36,11 @@ const { progressTime, playingTrack } = usePlayer()
 const albumRoute = computed(() => {
   switch(playingTrack.value?.albumKind) {
     case 'toy':
-      console.log(playingTrack.value)
       return `/toy/${playingTrack.value?.genre.title}/${playingTrack.value?.period.title}`
     case 'album':
-      return `/albums/${playingTrack.value?.inAlbum._id}`
+      return `/albums/${playingTrack.value?.albumId}`
     case 'compilation':
-      return `/compilations/${playingTrack.value?.inAlbum._id}`
+      return `/compilations/${playingTrack.value.albumId}`
     default:
       return ''
   }

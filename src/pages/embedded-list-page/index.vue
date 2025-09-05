@@ -66,13 +66,14 @@ import { ref, reactive, computed, watch } from 'vue'
 import { EntityListView } from '~views/entity-list-view'
 
 import { DatabaseService } from '~shared/api'
-import { Button, Modal, Form, DropList, Loader } from '~shared/UI'
+import { Button, Modal, DropList, Loader } from '~shared/UI'
 import { useLocalization, useCreateEntity, useSnackbar, useUser } from '~shared/model'
 import type { Entity, FormPayload, SelectInputFieldSchema } from '~shared/lib'
 
 import { embeddedAlbumFormSchema, type EmbeddedBasic } from '~entities/embedded'
 
 import { useSearch, SearchService } from '~features/search'
+import { Form } from '~features/form'
 
 const dbService = new DatabaseService()
 const searchService = new SearchService()

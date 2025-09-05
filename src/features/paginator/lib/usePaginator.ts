@@ -1,6 +1,6 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { DEFAULT_PAGE_DOCS_LIMIT } from '../constants'
+import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 import type {
   UsePaginationProps,
   PaginationState,

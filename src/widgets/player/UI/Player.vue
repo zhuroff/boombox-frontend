@@ -1,12 +1,14 @@
 <template>
   <section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
     <PlayerInfo />
+    <PlayerControlPanel />
   </section>
 </template>
 
 <script setup lang="ts">
 import { usePlayer } from '~features/player'
 import PlayerInfo from './PlayerInfo.vue'
+import PlayerControlPanel from './PlayerControlPanel.vue'
 
 const { isPlayerExpanded } = usePlayer()
 </script>

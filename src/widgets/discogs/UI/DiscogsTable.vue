@@ -24,9 +24,11 @@
 
 <script setup lang="ts">
 import { h, computed, watch, type ComputedRef } from 'vue'
-import { Button, Table, Paginator, Select } from '~shared/UI'
-import { usePaginator, useLocalization } from '~shared/model'
+import { Button, Select } from '~shared/UI'
+import { useLocalization } from '~shared/model'
 import { useDiscogs, discogsTableSchema, DiscogsService } from '~features/discogs'
+import { Paginator, usePaginator } from '~features/paginator'
+import { Table } from '~features/table'
 import type { MinimumAlbumInfo, TableHeaderConfig, TableRow } from '~shared/lib'
 
 const discogsService = new DiscogsService()

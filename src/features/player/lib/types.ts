@@ -3,6 +3,7 @@ import type { TrackBasic } from '~entities/track'
 export type PlaylistTrack = TrackBasic & {
   order: number
   albumKind: string
+  albumId: string
   albumCover?: string
   isOnRepeat?: boolean
   streamURL?: string

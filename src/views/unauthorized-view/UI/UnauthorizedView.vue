@@ -19,11 +19,12 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { Form, Button } from '~shared/UI'
+import { Button } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import { useLocalization } from '~shared/model'
 import { useUserApi, UserService } from '~entities/user'
 import { authFormSchema } from '~features/authorization'
+import { Form } from '~features/form'
 import type { FormPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()

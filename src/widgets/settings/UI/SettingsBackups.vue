@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { h, computed } from 'vue'
 import { useLocalization } from '~shared/model'
-import { Table } from '~shared/UI'
+import { Table } from '~features/table'
 import type { BasicTableState, TableHeaderConfig } from '~shared/lib'
 
 interface Props {

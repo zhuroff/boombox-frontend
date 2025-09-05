@@ -73,9 +73,11 @@ import { ref, computed, watchEffect, watch } from 'vue'
 import { Header } from '~widgets/header'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
 
+import { Paginator, usePaginator } from '~features/paginator'
+
 import { DatabaseService } from '~shared/api'
-import { Modal, Loader, Confirmation, Button, Paginator } from '~shared/UI'
-import { useLocalization, useGetList, useDeleteEntity, usePaginator } from '~shared/model'
+import { Modal, Loader, Confirmation, Button } from '~shared/UI'
+import { useLocalization, useGetList, useDeleteEntity } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 import type { DeletePayload } from '~shared/lib'
 
