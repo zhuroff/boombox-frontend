@@ -61,6 +61,8 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
+import { usePlaylistService } from '~features/player'
+
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 import { TrackList } from '~widgets/tracklist'
@@ -76,6 +78,7 @@ const dbService = new DatabaseService()
 
 const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
+const { initPlaylist } = usePlaylistService()
 
 const entityKey = ref('compilations')
 const preRandomState = ref('')
@@ -113,6 +116,13 @@ watch(
       })
       router.push('/compilations')
     }
+  }
+)
+
+watch(
+  isFetched,
+  () => {
+    compilation.value && initPlaylist(compilation.value)
   }
 )
 </script>

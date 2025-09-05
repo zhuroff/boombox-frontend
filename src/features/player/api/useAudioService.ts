@@ -37,7 +37,7 @@ const useAudioService = (dbService: DatabaseService) => {
 
   const checkAndSetDuration = () => {
     const { duration } = playingTrackRef.value || {}
-    if (!duration || !playingTrack.value?.inAlbum || playingTrack.value.duration) return
+    if (!playingTrack.value || !duration || playingTrack.value.albumKind === 'toy' || playingTrack.value.duration) return
     
     playingTrack.value.duration = duration
     setTrackDuration(playingTrack.value._id, duration)

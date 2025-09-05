@@ -119,11 +119,6 @@ const actions = (state: PlayerState) => {
 
   //     updateListeningProgress({ progressLine, progressTime })
 
-  //     if (!isCounterIncremented && progressLine > 0.75) {
-  //       incrementListeningCounter(_id)
-  //       isCounterIncremented = true
-  //     }
-
   //     if (progressLine >= 1) {
   //       if (isOnRepeat) {
   //         playAudio(track, cb)
@@ -183,15 +178,6 @@ const actions = (state: PlayerState) => {
 
   //   state.playingTrack.progressLine = progressLine
   //   state.playingTrack.progressTime = progressTime
-  // }
-
-  // const incrementListeningCounter = async (trackID: string) => {
-  //   try {
-  //     await databaseService.updateEntity(`tracks/${trackID}/listened`)
-  //     updateListeningCounter(trackID)
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
   // }
 
   // const updateListeningCounter = (id: string) => {

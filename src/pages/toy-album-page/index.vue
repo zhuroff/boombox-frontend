@@ -42,9 +42,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTOYAlbum } from '~entities/toy'
+import { usePlaylistService } from '~features/player'
 import { DiscogsTable } from '~widgets/discogs'
 import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
@@ -65,7 +66,16 @@ const {
   relatedAlbums
 } = useTOYAlbum(dbService, routeParams)
 
+const { initPlaylist } = usePlaylistService()
+
 const changeTracksOrder = (payload: ReorderPayload) => {
   console.log(payload)
 }
+
+watch(
+  isAlbumReady,
+  () => {
+    album.value && initPlaylist(album.value)
+  }
+)
 </script>

@@ -50,15 +50,17 @@ const isOnHover = ref(false)
 const { isTrackFetching, playTrack, playPauseTrack, playingTrack } = usePlayer()
 
 const isTrackPlaying = computed(() => (
-  playingTrack.value?._id === props.track._id
-  && playingTrack.value.isOnPlaying
-  && !playingTrack.value.isOnPause
-  && !isOnHover.value
+  playingTrack.value &&
+  playingTrack.value._id === props.track._id &&
+  playingTrack.value.isOnPlaying &&
+  !playingTrack.value.isOnPause &&
+  !isOnHover.value
 ))
 
 const isTrackPaused = computed(() => (
-  playingTrack.value?._id === props.track._id
-  && playingTrack.value.isOnPause
-  || isOnHover.value
+  playingTrack.value &&
+  playingTrack.value._id === props.track._id &&
+  playingTrack.value.isOnPause ||
+  isOnHover.value
 ))
 </script>

@@ -1,4 +1,6 @@
 import { ref } from 'vue'
+import { hostString, coverPlaceholders } from '~shared/utils'
+import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 import type { TrackBasic } from '~entities/track'
 import type { PlaylistTrack } from '~features/player'
 
@@ -7,12 +9,22 @@ const secondaryPlaylist = ref<PlaylistTrack[]>([])
 const isPlaylistActive = ref(false)
 
 const usePlaylistService = () => {
-  const initPlaylist = (tracks: TrackBasic[] | undefined) => {
-    if (!tracks?.length) return
+  const initPlaylist = (album: UnifiedEntityFullCard) => {
+    if (album.kind === 'embedded') return
 
-    const playerTracks = tracks.map<PlaylistTrack>((track, index) => ({
+    const albumCover = album.kind === 'album'
+      ? album.coverURL
+        ? album.coverURL
+        : coverPlaceholders('album')
+      : album.avatar
+        ? hostString(album.avatar)
+        : coverPlaceholders('album')
+
+    const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => ({
       ...track,
-      order: ++index
+      order: ++index,
+      albumKind: album.title.startsWith('TOY') ? 'toy' : album.kind,
+      albumCover
     }))
 
     if (!primaryPlaylist.value.length || !isPlaylistActive.value) {
@@ -22,7 +34,7 @@ const usePlaylistService = () => {
     }
   }
 
-  const searchTrackInPlaylists = (track: TrackBasic): PlaylistTrack => {
+  const searchTrackInPlaylists = (track: TrackBasic): PlaylistTrack | undefined => {
     let targetTrack = primaryPlaylist.value.find(({ _id }) => _id === track._id)
 
     if (!targetTrack) {
@@ -31,14 +43,10 @@ const usePlaylistService = () => {
       if (targetTrack) {
         primaryPlaylist.value = secondaryPlaylist.value
         secondaryPlaylist.value = []
-      } else {
-        targetTrack = {
-          ...track,
-          order: 1
-        }
-
-        primaryPlaylist.value = [targetTrack]
       }
+      
+      console.error('Track not found in playlists')
+      return
     }
 
     return targetTrack

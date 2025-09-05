@@ -114,7 +114,7 @@ const removeTrackFromCompilation = (payload: any /* GatheringUpdateReq */) => {
 watch(
   isAlbumReady,
   () => {
-    initPlaylist(album.value?.tracks)
+    album.value && initPlaylist(album.value)
   }
 )
 </script>

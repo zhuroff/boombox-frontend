@@ -12,7 +12,7 @@
         <component :is="Component" />
       </router-view>
     </main>
-    <!-- <Player /> -->
+    <Player />
     <Snackbar />
   </div>
 </template>
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Sidebar } from '~widgets/sidebar'
-// import Player from '~/~legacy/components/Player/Player.vue'
+import { Player } from '~widgets/player'
 import { Snackbar } from '~shared/UI'
 
 const main = ref(null)
@@ -32,7 +32,7 @@ const navHandler = () => {
 </script>
 
 <style lang="scss">
-@use '~/app/styles/variables' as var;
+@use '~app/styles/variables' as var;
 
 .container {
   height: 100vh;

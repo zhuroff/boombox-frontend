@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import useAudioService from '../api/useAudioService'
 import usePlaylistService from '../api/usePlaylistService'
 import { DatabaseService } from '~shared/api'
@@ -6,6 +7,8 @@ import type { TrackBasic } from '~entities/track'
 const dbService = new DatabaseService()
 
 const usePlayer = () => {
+  const isPlayerExpanded = ref(false)
+
   const {
     playingTrack,
     isTrackFetching,
@@ -39,6 +42,7 @@ const usePlayer = () => {
     playingTrackRef.value = null
 
     const targetTrack = searchTrackInPlaylists(track)
+    if (!targetTrack) return
 
     playingTrack.value = targetTrack
     
@@ -68,7 +72,8 @@ const usePlayer = () => {
     progressTime,
     playingTrack,
     playPauseTrack,
-    isTrackFetching
+    isTrackFetching,
+    isPlayerExpanded
   }
 }
 
