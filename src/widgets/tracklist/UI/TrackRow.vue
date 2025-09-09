@@ -1,23 +1,23 @@
 <template>
-  <div :class="[{ '--paused': isTrackPaused, '--playing': isTrackPlaying }, 'trackrow']">
-    <div :class="[{ '--disabled': isTrackDisabled }, 'trackrow__container']">
+  <div :class="trackRowClassList">
+    <div :class="[{ '--disabled': track?.idDisabled }, 'trackrow__container']">
       <Button
         icon="drag"
         size="small"
         isText
         className="trackrow__action --drag"
-        :isDisabled="isTrackDisabled"
+        :isDisabled="track?.idDisabled"
       />
       <div class="trackrow__cell --numeric">
         {{ order }}
       </div>
       <Button
-        v-if="isTrackDisabled"
+        v-if="track?.idDisabled"
         icon="disable"
         size="small"
         isText
         className="trackrow__action"
-        :isDisabled="isTrackDisabled"
+        :isDisabled="track?.idDisabled"
       />
       <TrackPlayControl
         v-else
@@ -84,8 +84,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted, watch } from 'vue'
-import { useCompilations } from '~features/compilation'
 import { usePlayer } from '~features/player'
+import { useCompilations } from '~features/compilation'
+import { usePlaylistService, type PlaylistTrack } from '~features/player'
 import { useLocalization } from '~shared/model'
 import { Button, DropList, Modal } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
@@ -93,10 +94,9 @@ import { Gathering } from '~widgets/gathering'
 import TrackPlayControl from './TrackPlayControl.vue'
 import TrackLyrics from './TrackLyrics.vue'
 import type { SelectInputFieldSchema } from '~shared/lib'
-import type { TrackBasic } from '~entities/track'
 
 type Props = {
-  track: TrackBasic
+  track: PlaylistTrack
   order: number
   isTOYTrack?: boolean
 }
@@ -114,15 +114,11 @@ const emit = defineEmits<Emits>()
 const dbService = new DatabaseService()
 
 const { localize } = useLocalization()
-const { playingTrack } = usePlayer()
-
-const isLyricsModalActive = ref(false)
+const { playingTrack, playingTrackIndex } = usePlayer()
+const { toggleTrackAvailability, isTrackInPlaylist, addTrackToPlaylist } = usePlaylistService()
 
 const isActionsOpen = ref(false)
-const isTrackDisabled = ref(false)
-const isTrackInPlaylist = ref(false)
-const isTrackPlaying = ref(false)
-const isTrackPaused = ref(false)
+const isLyricsModalActive = ref(false)
 const droplistRef = ref<InstanceType<typeof DropList> | null>(null)
 
 const {
@@ -132,6 +128,14 @@ const {
   isGatheringFetching,
   isCompilationsModalEnabled
 } = useCompilations(props.track, dbService)
+
+const trackRowClassList = computed(() => [
+  'trackrow',
+  {
+    '--paused': playingTrack.value?._id === props.track._id && playingTrack.value?.isOnPause,
+    '--playing': playingTrack.value?._id === props.track._id && !playingTrack.value?.isOnPause
+  }
+])
 
 const trackDuration = computed(() => {
   if (!props.track.duration) return '--/--'
@@ -151,9 +155,10 @@ const showCompilationModal = () => {
 
 const trackActions: Record<typeof trackOptions.value[number]['value'], () => void> = {
   getLyrics: toggleLyricsModal,
-  disableTrack: () => isTrackDisabled.value = !isTrackDisabled.value,
-  toPlaylist: () => console.log('toPlaylist'),
-  toCompilation: showCompilationModal
+  toCompilation: showCompilationModal,
+  disableTrack: () => toggleTrackAvailability(props.track),
+  playNext: () => addTrackToPlaylist(props.track, playingTrackIndex.value),
+  toPlaylist: () => addTrackToPlaylist(props.track)
 }
 
 const trackOptions = computed(() => (() => {
@@ -164,17 +169,26 @@ const trackOptions = computed(() => (() => {
     }
   ]
 
-  if (!isTrackPlaying.value) {
+  if (playingTrack.value?._id !== props.track._id) {
     options.push({
-      label: localize(isTrackDisabled.value ? 'trackActions.enableTrack' : 'trackActions.disableTrack'),
+      label: localize(props.track?.idDisabled ? 'trackActions.enableTrack' : 'trackActions.disableTrack'),
       value: 'disableTrack'
     })
-  }
 
-  options.push({
-    label: localize(isTrackInPlaylist.value ? 'trackActions.removeFromPlaylist' : 'trackActions.toPlaylist'),
-    value: 'toPlaylist'
-  })
+    if (!isTrackInPlaylist(props.track._id)) {
+      options.push({
+        label: localize('trackActions.toPlaylist'),
+        value: 'toPlaylist'
+      })
+
+      if (!!playingTrack.value?._id) {
+        options.push({
+          label: localize('trackActions.playNext'),
+          value: 'playNext'
+        })
+      }
+    }
+  }
 
   if (!props.isTOYTrack) {
     options.push({
@@ -292,7 +306,7 @@ onUnmounted(() => {
       transition: fill 0.2s ease;
 
       &.spinner {
-        stroke: var.$black;
+        stroke: var.$white;
       }
     }
 
@@ -317,7 +331,17 @@ onUnmounted(() => {
   }
 
   &.--paused {
-    background-color: var.$paleLW;
+
+    .trackrow__container {
+      background-color: var.$paleDP;
+      border-radius: var.$borderRadiusSM;
+      color: var.$white;
+    }
+
+    .icon {
+      color: var.$white;
+      fill: var.$white;
+    }
   }
 
   .droplist {

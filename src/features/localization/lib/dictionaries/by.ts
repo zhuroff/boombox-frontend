@@ -234,6 +234,7 @@ export const localesBY: LocaleDictionary = {
     getLyrics: 'Знайсцi тэкст песнi',
     disableTrack: 'Дэактываваць трэк',
     enableTrack: 'Актываваць трэк',
+    playNext: 'Граць наступным',
     toPlaylist: 'Дадаць у плэйлiст',
     removeFromPlaylist: 'Выдаліць з плэйлiста',
     toCompilation: 'Дадаць у кампіляцыю'

@@ -120,9 +120,9 @@ watch(
 )
 
 watch(
-  isFetched,
-  () => {
-    compilation.value && initPlaylist(compilation.value)
+  [isFetched, compilation],
+  ([isFetched, compilation]) => {
+    isFetched && compilation && initPlaylist(compilation)
   }
 )
 </script>

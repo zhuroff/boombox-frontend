@@ -26,7 +26,7 @@
             isInverted
             :label="localize('player.waveButton')"
             :disabled="!waveAlbum?.tracks?.length"
-            @click="playWave"
+            @click="() => {/* playWave */}"
           />
         </div>
       </div>
@@ -41,7 +41,7 @@ import { PosterUploader, AvatarUploader } from '~features/uploading'
 import { EditableHeading } from '~shared/UI'
 import { useLocalization, useSnackbar } from '~shared/model'
 import { hostString } from '~shared/utils'
-import usePlaylist from '~/~legacy/store/playlist'
+// import usePlaylist from '~/~legacy/store/playlist'
 import { Button } from '~shared/UI'
 import { UploadService } from '~features/uploading'
 import type { CategoryFull } from '~entities/category'
@@ -71,10 +71,10 @@ const { setSnackbarMessage } = useSnackbar()
 
 const { uploadImage } = useImageUploader(props.entityKey, uploadService)
 
-const {
-  playerGetters: { currentPlaylist, playingTrack },
-  playerActions: { setPlayerPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
-} = usePlaylist()
+// const {
+//   playerGetters: { currentPlaylist, playingTrack },
+//   playerActions: { setPlayerPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
+// } = usePlaylist()
 
 const waveAlbum = ref<null | any /* AlbumPage class */>(null)
 
@@ -133,23 +133,23 @@ const getCategoryWave = async () => {
   // }
 }
 
-const playWave = () => {
-  if (!waveAlbum.value) return
-  if (!playingTrack.value?._id) {
-    playTrack(waveAlbum.value.tracks[0])
-    togglePlayerVisibility()
-  } else {
-    if (currentPlaylist.value?._id !== props.entityKey) {
-      setPlayerPlaylist(waveAlbum.value)
-      playTrack(waveAlbum.value.tracks[0])
-      togglePlayerVisibility()
-    }
+// const playWave = () => {
+//   if (!waveAlbum.value) return
+//   if (!playingTrack.value?._id) {
+//     playTrack(waveAlbum.value.tracks[0])
+//     togglePlayerVisibility()
+//   } else {
+//     if (currentPlaylist.value?._id !== props.entityKey) {
+//       setPlayerPlaylist(waveAlbum.value)
+//       playTrack(waveAlbum.value.tracks[0])
+//       togglePlayerVisibility()
+//     }
 
-    playingTrack.value.isOnPause
-      ? continuePlay()
-      : setTrackOnPause()
-  }
-}
+//     playingTrack.value.isOnPause
+//       ? continuePlay()
+//       : setTrackOnPause()
+//   }
+// }
 
 const host = (pathname: string) => hostString(pathname)
 

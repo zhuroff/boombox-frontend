@@ -73,9 +73,9 @@ const changeTracksOrder = (payload: ReorderPayload) => {
 }
 
 watch(
-  isAlbumReady,
-  () => {
-    album.value && initPlaylist(album.value)
+  [isAlbumReady, album],
+  ([isAlbumReady, album]) => {
+    isAlbumReady && album && initPlaylist(album)
   }
 )
 </script>

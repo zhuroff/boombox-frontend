@@ -1,45 +1,7 @@
 <template>
   <section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
-    <!-- <div
-      class="player__left"
-      @click="collapseExpandPlayer"
-    > -->
-    <div
-      class="player__left"
-      v-if="!playingTrack"
-    />
-    <RouterLink
-      v-else
-      class="player__left"
-      :to="{ path: `/albums/${playingTrack?.albumID}` }"
-    >
-      <div
-        v-if="playingTrack.progressTime > 0"
-        class="player__left-content"
-      >
-        <img
-          :src="playingTrack.cover"
-          :alt="playingTrack.title"
-          class="player__cover"
-        />
-        <div class="player__title">
-          <div class="player__title-track">{{ playingTrack.title }}</div>
-          <div class="player__title-artist">
-            {{ playingTrack.artistName }} <br> ({{ playingTrack.albumName }}{{ playingTrack.year ? `, ${playingTrack.year}` : `` }})
-          </div>
-        </div>
-      </div>
-    </RouterLink>
     <div class="player__right">
       <div v-if="playingTrack?.progressTime" class="player__right-content">
-        <PlayerRepeatTrack />
-        <PlayerPrevTrack />
-        <PlayerPlayPause />
-        <PlayerNextTrack />
-        <PlayerProgressBar />
-        <PlayerRepeatTrack isMobile />
-        <PlayerCrackle />
-        <PlayerSound />
         <PlayerExternal />
         <PlayerList
           :isActive="isPlaylistOpen"
@@ -93,26 +55,14 @@ import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import type { DraggableEvent, ReorderPayload } from '~shared/lib'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { secondsToMinutes } from '~shared/utils'
-import usePlaylist from '~/~legacy/store/playlist'
-// import AlbumTrack from '~/~legacy/AlbumTrack.legacy'
-import PlayerRepeatTrack from './PlayerRepeatTrack.vue'
-import PlayerPrevTrack from './PlayerPrevTrack.vue'
-import PlayerNextTrack from './PlayerNextTrack.vue'
-import PlayerPlayPause from './PlayerPlayPause.vue'
-import PlayerProgressBar from './PlayerProgressBar.vue'
-import PlayerCrackle from './PlayerCrackle.vue'
-import PlayerSound from './PlayerSound.vue'
 import PlayerExternal from './PlayerExternal.vue'
 import PlayerList from './PlayerList.vue'
-// import { Button, Sprite } from '~shared/UI'
 
 type PlayerKeyNav = 'Space' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown'
 
 const {
   playerGetters: {
     playingTrack,
-    currentPlaylist,
-    currentPlaylistTracks,
     isPlayerExpanded
   },
   playerActions: {

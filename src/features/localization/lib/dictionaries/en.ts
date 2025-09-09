@@ -234,6 +234,7 @@ export const localesEN: LocaleDictionary = {
     getLyrics: 'Get lyrics',
     disableTrack: 'Disable track',
     enableTrack: 'Enable track',
+    playNext: 'Play next',
     toPlaylist: 'Add to playlist',
     removeFromPlaylist: 'Remove from playlist',
     toCompilation: 'Add to compilation'

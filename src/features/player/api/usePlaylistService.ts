@@ -6,7 +6,7 @@ import type { PlaylistTrack } from '~features/player'
 
 const primaryPlaylist = ref<PlaylistTrack[]>([])
 const secondaryPlaylist = ref<PlaylistTrack[]>([])
-const isPlaylistActive = ref(false)
+const isPlayingStarted = ref(false)
 
 const usePlaylistService = () => {
   const initPlaylist = (album: UnifiedEntityFullCard) => {
@@ -28,36 +28,95 @@ const usePlaylistService = () => {
       albumCover
     }))
 
-    if (!primaryPlaylist.value.length || !isPlaylistActive.value) {
+    if (!primaryPlaylist.value.length || !isPlayingStarted.value) {
       primaryPlaylist.value = playerTracks
     } else {
       secondaryPlaylist.value = playerTracks
     }
   }
 
-  const searchTrackInPlaylists = (track: TrackBasic): PlaylistTrack | undefined => {
+  const replacePlaylist = () => {
+    primaryPlaylist.value = secondaryPlaylist.value
+    secondaryPlaylist.value = []
+  }
+
+  const searchTrackInPlaylists = (track: TrackBasic, callback?: () => void): PlaylistTrack | undefined => {
     let targetTrack = primaryPlaylist.value.find(({ _id }) => _id === track._id)
 
     if (!targetTrack) {
       targetTrack = secondaryPlaylist.value.find(({ _id }) => _id === track._id)
 
-      if (targetTrack) {
-        primaryPlaylist.value = secondaryPlaylist.value
-        secondaryPlaylist.value = []
+      if (!targetTrack) {
+        console.error('Track not found in playlists')
+        return
       }
       
-      console.error('Track not found in playlists')
-      return
+      callback?.()
     }
 
     return targetTrack
   }
 
-  const getNextTrack = (playingTrackId: string | undefined) => {
-    const currentTrackIndex = primaryPlaylist.value.findIndex(({ _id }) => _id === playingTrackId)
+  const getNextTrack = (playingTrackId: string | undefined): PlaylistTrack | undefined => {
+    if (!playingTrackId) return
+    
+    let playlist = primaryPlaylist
+    let currentTrackIndex = playlist.value.findIndex(({ _id }) => _id === playingTrackId)
 
-    if (currentTrackIndex === -1) return
-    return primaryPlaylist.value[currentTrackIndex + 1]
+    if (currentTrackIndex === -1) {
+      playlist = secondaryPlaylist
+      currentTrackIndex = playlist.value.findIndex(({ _id }) => _id === playingTrackId)
+    }
+
+    if (currentTrackIndex === playlist.value.length - 1) return
+
+    const targetTrack = playlist.value[currentTrackIndex + 1]
+
+    if (!targetTrack) return
+
+    return (
+      targetTrack.idDisabled
+        ? getNextTrack(targetTrack._id)
+        : targetTrack
+    )
+  }
+
+  const getPrevTrack = (playingTrackId: string | undefined): PlaylistTrack | undefined => {
+    if (!playingTrackId) return
+
+    let playlist = primaryPlaylist
+    let currentTrackIndex = playlist.value.findIndex(({ _id }) => _id === playingTrackId)
+
+    if (currentTrackIndex === -1) {
+      playlist = secondaryPlaylist
+      currentTrackIndex = playlist.value.findIndex(({ _id }) => _id === playingTrackId)
+    }
+
+    if (currentTrackIndex === 0) return
+
+    const targetTrack = playlist.value[currentTrackIndex - 1]
+
+    if (!targetTrack) return
+
+    return (
+      targetTrack.idDisabled
+        ? getPrevTrack(targetTrack._id)
+        : targetTrack
+    )
+  }
+
+  const isTrackInPlaylist = (trackId: string) => {
+    return primaryPlaylist.value.some(({ _id }) => _id === trackId)
+  }
+
+  const addTrackToPlaylist = (track: TrackBasic, currentIndex?: number) => {
+    const targetTrack = searchTrackInPlaylists(track)
+
+    if (typeof currentIndex !== 'number') {      
+      targetTrack && primaryPlaylist.value.push(targetTrack)
+    } else {
+      targetTrack && primaryPlaylist.value.splice(currentIndex + 1, 0, targetTrack)
+    }
   }
 
   const setTrackDuration = (trackId: string, duration: number) => {
@@ -68,12 +127,25 @@ const usePlaylistService = () => {
     }
   }
 
+  const toggleTrackAvailability = (track: TrackBasic) => {
+    const targetTrack = searchTrackInPlaylists(track)
+
+    if (!targetTrack) return
+    targetTrack.idDisabled = !targetTrack.idDisabled
+  }
+
   return {
     initPlaylist,
     getNextTrack,
+    getPrevTrack,
+    toggleTrackAvailability,
+    replacePlaylist,
     primaryPlaylist,
-    isPlaylistActive,
+    isPlayingStarted,
     setTrackDuration,
+    secondaryPlaylist,
+    isTrackInPlaylist,
+    addTrackToPlaylist,
     searchTrackInPlaylists
   }
 }

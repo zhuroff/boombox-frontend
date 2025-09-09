@@ -2,6 +2,7 @@
   <button
     :style="style"
     :type="type"
+    :title="title"
     :class="stateClasses"
     :disabled="isDisabled"
   >
@@ -28,6 +29,7 @@ interface Props {
   icon?: string
   size?: 'small' | 'medium' | 'large'
   style?: StyleValue
+  title?: string
   type?: 'button' | 'submit'
   className?: string
   isInverted?: boolean

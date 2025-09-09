@@ -3,7 +3,7 @@
     width="24px"
     height="24px"
     viewBox="0 0 24 24"
-    class="icon-vinyl"
+    class="icon icon-vinyl"
   >
     <path
       fill="currentColor"

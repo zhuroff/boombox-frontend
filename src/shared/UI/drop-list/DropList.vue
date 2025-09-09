@@ -61,9 +61,10 @@ const { localize } = useLocalization()
   box-shadow: var.$shadowMedium;
   height: auto;
   width: 100%;
-  max-height: 10rem;
+  max-height: 12rem;
   overflow-y: auto;
   padding: 0.5rem 0;
+  color: var.$black;
 
   &.--small {
     font-size: 0.875rem;

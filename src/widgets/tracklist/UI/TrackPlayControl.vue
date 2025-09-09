@@ -1,6 +1,6 @@
 <template>
   <Button
-    v-if="isTrackFetching"
+    v-if="fetchingTrackId === track._id"
     icon="spinner"
     size="small"
     isText
@@ -47,7 +47,7 @@ const props = defineProps<Props>()
 
 const isOnHover = ref(false)
 
-const { isTrackFetching, playTrack, playPauseTrack, playingTrack } = usePlayer()
+const { playTrack, playPauseTrack, playingTrack, fetchingTrackId } = usePlayer()
 
 const isTrackPlaying = computed(() => (
   playingTrack.value &&

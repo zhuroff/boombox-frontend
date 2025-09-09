@@ -1,28 +1,33 @@
-import { ref, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useMutation } from '@tanstack/vue-query'
 import { useUpdateEntity } from '~shared/model'
-import usePlaylistService from '../api/usePlaylistService'
+import usePlaylistService from './usePlaylistService'
 import type { PlaylistTrack } from '~features/player'
 import type { DatabaseService } from '~shared/api'
 import type { ListPageResponse } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
 
 const playingTrack = ref<PlaylistTrack | null>(null)
+const crackleAudioRef = ref<HTMLAudioElement>(new Audio('/media/vinyl_01.wav'))
 const playingTrackRef = ref<HTMLAudioElement | null>(null)
+const trackVolume = ref(1)
 const progressLine = ref(0)
 const progressTime = ref(0)
+const isTrackMuted = ref(false)
+const isVinylMode = ref(false)
+const fetchingTrackId = ref<string | null>(null)
 
 const useAudioService = (dbService: DatabaseService) => {
   const entityKey = ref('tracks')
 
-  const { getNextTrack, setTrackDuration } = usePlaylistService()
+  const { isPlayingStarted, getNextTrack, setTrackDuration } = usePlaylistService()
 
   const { updateEntity } = useUpdateEntity<ListPageResponse<TrackBasic>, Partial<TrackBasic>>(
     entityKey,
     dbService
   )
 
-  const { mutate: fetchTrackStreamURL, isPending: isTrackFetching } = useMutation<string>({
+  const { mutate: fetchTrackStreamURL } = useMutation<string>({
     mutationFn: () => {
       return dbService.getCloudFiles<string>(
         entityKey.value,
@@ -35,33 +40,50 @@ const useAudioService = (dbService: DatabaseService) => {
     }
   })
 
+  const destroyPlayingTrack = () => {
+    playingTrack.value = null
+    playingTrackRef.value?.pause()
+    playingTrackRef.value = null
+  }
+
   const checkAndSetDuration = () => {
     const { duration } = playingTrackRef.value || {}
-    if (!playingTrack.value || !duration || playingTrack.value.albumKind === 'toy' || playingTrack.value.duration) return
+    if (!playingTrack.value || !duration || duration === Infinity || playingTrack.value.duration) return
     
     playingTrack.value.duration = duration
     setTrackDuration(playingTrack.value._id, duration)
-    updateEntity({ _id: playingTrack.value._id, duration })
+
+    if (playingTrack.value.albumKind !== 'toy') {
+      updateEntity({ _id: playingTrack.value._id, duration })
+    }
   }
 
   const playTrackStream = (src: string) => {
     playingTrack.value!.streamURL = src
     playingTrackRef.value = new Audio(src)
-    playingTrackRef.value.play().then(checkAndSetDuration)
+    playingTrackRef.value.volume = trackVolume.value
+    playingTrackRef.value.play()
+      .then(checkAndSetDuration)
+      .then(() => playingTrackRef.value && playingStateHandler(playingTrackRef.value))
+      .then(() => playingTrack.value && (playingTrack.value.isOnPlaying = true))
+      .then(() => fetchingTrackId.value = null)
+      .catch(console.error)
   }
 
   const playNextTrack = (track: PlaylistTrack | undefined) => {
-    if (track) {
-      playingTrack.value = track
-      !track.streamURL 
-        ? fetchTrackStreamURL()
-        : playTrackStream(track.streamURL)
-    } else {
-      playingTrack.value = null
-    }
+    destroyPlayingTrack()
+    if (!track) return
+
+    fetchingTrackId.value = track._id
+    playingTrack.value = track
+    !track.streamURL 
+      ? fetchTrackStreamURL()
+      : playTrackStream(track.streamURL)
   }
 
   const playingStateHandler = (audio: HTMLAudioElement) => {
+    isPlayingStarted.value = true
+
     audio.ontimeupdate = () => {
       progressTime.value = audio.currentTime
       progressLine.value = audio.currentTime / audio.duration
@@ -77,24 +99,26 @@ const useAudioService = (dbService: DatabaseService) => {
     }
   }
 
-  watch(
-    playingTrackRef,
-    (audio) => {
-      if (!audio) return
-      playingStateHandler(audio)
-      playingTrack.value && (playingTrack.value.isOnPlaying = true)
-    }
-  )
+  onMounted(() => {
+    trackVolume.value = Number(localStorage.getItem('playerVolume')) || 1
+    crackleAudioRef.value.volume = trackVolume.value
+    crackleAudioRef.value.loop = true
+  })
 
   return {
+    trackVolume,
+    isVinylMode,
+    isTrackMuted,
     playingTrack,
     progressLine,
     progressTime,
     playNextTrack,
-    isTrackFetching,
+    fetchingTrackId,
     playingTrackRef,
+    crackleAudioRef,
     playTrackStream,
-    fetchTrackStreamURL
+    fetchTrackStreamURL,
+    destroyPlayingTrack
   }
 }
 

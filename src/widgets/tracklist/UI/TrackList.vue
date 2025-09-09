@@ -18,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type ComputedRef } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import { usePlaylistService } from '~features/player'
+import { usePlaylistService, type PlaylistTrack } from '~features/player'
 import TrackRow from './TrackRow.vue'
 
 import type { DraggableEvent, ReorderPayload } from '~shared/lib'
@@ -42,7 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
   isTOYTracks: false
 })
 
-const { primaryPlaylist} = usePlaylistService()
+const { primaryPlaylist, secondaryPlaylist } = usePlaylistService()
 
 const dragOptions = computed(() => ({
   animation: 300
@@ -57,13 +57,15 @@ const orderChanged = (event: DraggableEvent) => {
   emit('trackOrderChanged', payload)
 }
 
-const trackList = computed(() => {
-  const playlistMap = new Map(primaryPlaylist.value.map((track) => [track._id, track]))
+const trackList: ComputedRef<PlaylistTrack[]> = computed(() => {
+  const primaryPlaylistMap = new Map<string, PlaylistTrack>(primaryPlaylist.value.map((track) => [track._id, track]))
+  const secondaryPlaylistMap = new Map<string, PlaylistTrack>(secondaryPlaylist.value.map((track) => [track._id, track]))
 
-  return props.tracks.map((track) => {
-    const playlistTrack = playlistMap.get(track._id)
+  return props.tracks.map<PlaylistTrack>((track) => {
+    const playlistTrack = (primaryPlaylistMap.get(track._id) || secondaryPlaylistMap.get(track._id))!
+
     return {
-      ...track,
+      ...(playlistTrack),
       duration: playlistTrack?.duration || track.duration
     }
   })
