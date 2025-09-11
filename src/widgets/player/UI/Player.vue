@@ -1,16 +1,20 @@
 <template>
-  <section :class="[{ '--expanded': isPlayerExpanded }, 'player']">
+  <section :class="[{ '--expanded': isPlaylistExpanded }, 'player']">
     <PlayerInfo />
     <PlayerControlPanel />
+    <transition name="slide-in">
+      <PlayerPlaylist v-if="isPlaylistExpanded" />
+    </transition>
   </section>
 </template>
 
 <script setup lang="ts">
 import { usePlayer } from '~features/player'
 import PlayerInfo from './PlayerInfo.vue'
+import PlayerPlaylist from './PlayerPlaylist.vue'
 import PlayerControlPanel from './PlayerControlPanel.vue'
 
-const { isPlayerExpanded } = usePlayer()
+const { isPlaylistExpanded } = usePlayer()
 </script>
 
 <style lang="scss">

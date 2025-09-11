@@ -61,24 +61,29 @@ const { localize } = useLocalization()
     padding: var.$mainPadding;
     position: relative;
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
-      margin-top: 100vw;
       background-color: var.$paleLT;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       &:not(.--row) {
         display: grid;
-        grid-template-columns: calc(100% - (19.48% * 2) - 2rem) 19.48% 19.48%;
+        grid-template-columns: 1fr 200px 200px;
         gap: 1rem;
+      }
+    }
+
+    @include var.media('>=desktop-md') {
+      &:not(.--row) {
+        grid-template-columns: 1fr 250px 250px;
       }
     }
 
     @include var.media('>=desktop-lg') {
       &:not(.--row) {
-        grid-template-columns: calc(100% - (260px * 2) - 2rem) 260px 260px;
+        grid-template-columns: 1fr 275px 275px;
       }
     }
 

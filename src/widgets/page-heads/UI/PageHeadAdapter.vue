@@ -210,7 +210,14 @@ const activateEditMode = () => {
       margin: 0.5rem 0 1.75rem;
       max-width: 850px;
       color: var.$warning;
-      @include var.serif(2.25rem);
+
+      @include var.media('<desktop-md') {
+        @include var.serif(1.75rem);
+      }
+
+      @include var.media('>=desktop-md') {
+        @include var.serif(2.25rem);
+      }
 
       .button {
         opacity: 0;

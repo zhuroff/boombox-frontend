@@ -5,10 +5,9 @@ import { DatabaseService } from '~shared/api'
 import type { TrackBasic } from '~entities/track'
 
 const dbService = new DatabaseService()
+const isPlaylistExpanded = ref(false)
 
 const usePlayer = () => {
-  const isPlayerExpanded = ref(false)
-
   const {
     trackVolume,
     isVinylMode,
@@ -62,6 +61,7 @@ const usePlayer = () => {
       return playingTrackRef.value?.play()
     }
 
+    fetchingTrackId.value = track._id
     destroyPlayingTrack()
 
     const targetTrack = searchTrackInPlaylists(track, replacePlaylist)
@@ -137,7 +137,7 @@ const usePlayer = () => {
     playingTrackIndex,
     isPrevTrackAvailable,
     isNextTrackAvailable,
-    isPlayerExpanded,
+    isPlaylistExpanded,
     setTrackPosition,
     toggleVinylMode,
     setSoundVolume,

@@ -64,6 +64,8 @@
           icon="playlist"
           title="Show playlist"
           isRounded
+          :class="[{ '--active' : isPlaylistExpanded }]"
+          @click="isPlaylistExpanded = !isPlaylistExpanded"
         />
       </div>
     </div>
@@ -83,6 +85,7 @@ const {
   progressTime,
   progressLine,
   toggleVinylMode,
+  isPlaylistExpanded,
   isNextTrackAvailable,
   isPrevTrackAvailable,
   setTrackPosition,

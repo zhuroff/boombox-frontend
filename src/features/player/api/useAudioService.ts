@@ -30,8 +30,8 @@ const useAudioService = (dbService: DatabaseService) => {
   const { mutate: fetchTrackStreamURL } = useMutation<string>({
     mutationFn: () => {
       return dbService.getCloudFiles<string>(
-        entityKey.value,
-        `audio/${playingTrack.value?.path}`,
+        `${entityKey.value}/audio`,
+        `${playingTrack.value?.path}`,
         `cloudURL=${playingTrack.value?.cloudURL}`
       )
     },
