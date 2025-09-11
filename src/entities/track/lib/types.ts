@@ -11,6 +11,7 @@ export type TrackBasic = Entity & {
   artist: Entity
   genre: Entity
   period: Entity
+  coverURL?: string
 }
 
 export type ExternalTrackLyricsResponse = {

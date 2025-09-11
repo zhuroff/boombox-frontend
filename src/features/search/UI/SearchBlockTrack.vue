@@ -10,66 +10,55 @@
         {{ track.artist.title }} - {{ track.inAlbum.title }}
       </span>
     </div>
-    <!-- <div class="input-search__results-actions">
-      <TrackItemPlay
-        :track="trackToPlay"
+    <div class="input-search__results-actions">
+      <Button
+        :icon="!playingTrack || playingTrack._id !== track._id ? 'play' : 'playing'"
+        :isBorderless="playingTrack?._id === track._id"
+        :isDisabled="playingTrack?._id === track._id"
         :title="localize('player.playNow')"
-        :isTOY="false"
-        isSearched
+        @click="playNow"
       />
-      <Button 
-        v-if="!isOutAlbumAdded"
-        icon="chevron-right"
-        size="small"
+      <Button
+        v-if="!!playingTrack && !isTrackInPlaylist(track._id)"
+        icon="next"
         :title="localize('player.playNext')"
-        @click="() => playTrackNext(trackToPlay)"
+        @click="() => addTrackToPlaylist(track, playingTrackIndex)"
       />
       <Button
-        v-if="!isOutAlbumAdded"
-        icon="chevron-right-double"
-        size="small"
+        v-if="!!playingTrack && !isTrackInPlaylist(track._id)"
+        icon="playlist"
         :title="localize('player.addToList')"
-        @click="() => addToEndOfList(trackToPlay)"
+        @click="() => addTrackToPlaylist(track)"
       />
-      <Button
-        v-if="isOutAlbumAdded"
-        icon="playlist-remove"
-        size="small"
-        :title="localize('player.removeFromList')"
-        @click="() => removeTrackFromPlaylist(trackToPlay._id)"
-      />
-    </div>  -->
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useLocalization } from '~shared/model'
-// import usePlaylist from '~/store/playlist'
-// import AlbumTrack from '~/classes/AlbumTrack'
-import TrackItemPlay from '~/~legacy/components/TrackList/TrackItemPlay.vue'
 import { Button } from '~shared/UI'
-import type { TrackRes } from '~shared/lib'
+import { usePlayer } from '~features/player'
+import { usePlaylistService } from '~features/player'
+import type { TrackBasic } from '~entities/track'
 
 interface Props {
-  track: TrackRes
+  track: TrackBasic
 }
 
 const props = defineProps<Props>()
 
 const { localize } = useLocalization()
+const { playingTrack, playingTrackIndex, playTrack, playNext } = usePlayer()
+const { isTrackInPlaylist, addTrackToPlaylist } = usePlaylistService()
 
-// const {
-//   playerGetters: { currentPlaylistTracks },
-//   playerActions: { playTrackNext, addToEndOfList, removeTrackFromPlaylist }
-// } = usePlaylist()
-
-// const trackToPlay = computed(() => (
-//   new AlbumTrack(props.track, 0, props.track.coverURL, true)
-// ))
-
-// const isOutAlbumAdded = computed(() => (
-//   currentPlaylistTracks.value.some(({ _id }) => _id === trackToPlay.value._id)
-// ))
+const playNow = () => {
+  if (isTrackInPlaylist(props.track._id)) {
+    playTrack(props.track)
+  } else {
+    addTrackToPlaylist(props.track, playingTrackIndex.value)
+    !!playingTrack.value ? playNext() : playTrack(props.track)
+  }
+}
 </script>
 
 <style lang="scss">
@@ -131,17 +120,21 @@ const { localize } = useLocalization()
         padding: 0;
         width: 2rem !important;
         height: 2rem !important;
-        border: 1px solid var.$paleDP;
-        fill: var.$paleDP;
-
-        &:hover {
-          background-color: var.$paleDP;
-          fill: var.$white;
+        border: 1px solid var.$dark;
+        
+        .icon {
+          fill: var.$dark;
+          color: var.$dark;
         }
 
+        &:hover,
         &.--active {
-          background-color: var.$paleDP;
-          fill: var.$white;
+          background-color: var.$dark;
+          
+          .icon {
+            fill: var.$white;
+            color: var.$white;
+          }
         }
       }
     }

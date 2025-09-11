@@ -46,6 +46,7 @@ import SearchBlock from './SearchBlock.vue'
 import SearchBlockTrack from './SearchBlockTrack.vue'
 import type { SearchResultState, SearchResultData } from '../lib/types'
 import type { AlbumBasic } from '~entities/album'
+import type { TrackBasic } from '~/entities/track'
 
 interface Props {
   isFetching: boolean
@@ -97,7 +98,7 @@ const getRowComponent = (key: string, data: SearchResultData) => {
     case 'tracks':
       return h(
         SearchBlockTrack,
-        { track: data as any }
+        { track: data as TrackBasic }
       )
     default:
       return h(

@@ -16,7 +16,7 @@
 
     <div class="playlist__track-info">
       <strong>{{ trackTitle }}</strong>
-      <div>
+      <div class="playlist__track-sign">
         <span>{{ track.artist.title }} | </span>
         <span>{{ track.inAlbum.title }}</span>
       </div>
@@ -31,6 +31,7 @@
       size="small"
       isText
       isInverted
+      :isDisabled="isTrackPlaying"
       @click.stop="() => toggleTrackAvailability(track)"
     />
   </li>
@@ -85,8 +86,8 @@ const isTrackPlaying = computed(() => {
       transition: color 0.1s var.$animation;
     }
 
-    span,
-    time {
+    time,
+    .playlist__track-sign {
       color: var.$white;
       transition: color 0.1s var.$animation;
     }
@@ -131,28 +132,26 @@ const isTrackPlaying = computed(() => {
   &-info {
     line-height: 1.2;
     width: calc(100% - 110px);
-    padding-right: 1rem;
+    margin-right: 1rem;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 
     strong {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
       font-size: 0.875rem;
-      color: var.$black;
       transition: all 0.1s var.$animation;
     }
 
     span {
       font-size: 0.75rem;
-      color: var.$black;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
       transition: all 0.1s var.$animation;
     }
+  }
+
+  &-sign {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: var.$black;
   }
 
   &-duration {
@@ -167,6 +166,10 @@ const isTrackPlaying = computed(() => {
 
     .icon {
       color: var.$black;
+    }
+
+    &[disabled] {
+      opacity: 0.2;
     }
   }
 }

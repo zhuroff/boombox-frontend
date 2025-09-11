@@ -2,7 +2,31 @@ import { ref } from 'vue'
 import { hostString, coverPlaceholders } from '~shared/utils'
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 import type { TrackBasic } from '~entities/track'
+import type { EmbeddedFull } from '~entities/embedded'
 import type { PlaylistTrack } from '~features/player'
+import type { AlbumFull } from '~/entities/album'
+
+const createPlaylistTrack = (
+  album: Exclude<UnifiedEntityFullCard, EmbeddedFull>,
+  track: TrackBasic,
+  index = 0
+): PlaylistTrack => {
+  const albumCover = album.kind === 'album'
+    ? album.coverURL
+      ? album.coverURL
+      : coverPlaceholders('album')
+    : album.avatar
+      ? hostString(album.avatar)
+      : coverPlaceholders('album')
+
+  return {
+    ...track,
+    order: ++index,
+    albumId: album._id,
+    albumKind: album.title.startsWith('TOY') ? 'toy' : album.kind,
+    albumCover
+  }
+}
 
 const primaryPlaylist = ref<PlaylistTrack[]>([])
 const secondaryPlaylist = ref<PlaylistTrack[]>([])
@@ -12,21 +36,9 @@ const usePlaylistService = () => {
   const initPlaylist = (album: UnifiedEntityFullCard) => {
     if (album.kind === 'embedded') return
 
-    const albumCover = album.kind === 'album'
-      ? album.coverURL
-        ? album.coverURL
-        : coverPlaceholders('album')
-      : album.avatar
-        ? hostString(album.avatar)
-        : coverPlaceholders('album')
-
-    const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => ({
-      ...track,
-      order: ++index,
-      albumId: album._id,
-      albumKind: album.title.startsWith('TOY') ? 'toy' : album.kind,
-      albumCover
-    }))
+    const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => (
+      createPlaylistTrack(album, track, index)
+    ))
 
     if (!primaryPlaylist.value.length || !isPlayingStarted.value) {
       primaryPlaylist.value = playerTracks
@@ -47,7 +59,7 @@ const usePlaylistService = () => {
       targetTrack = secondaryPlaylist.value.find(({ _id }) => _id === track._id)
 
       if (!targetTrack) {
-        console.error('Track not found in playlists')
+        console.warn('Track not found in playlists')
         return
       }
       
@@ -110,7 +122,19 @@ const usePlaylistService = () => {
   }
 
   const addTrackToPlaylist = (track: TrackBasic, currentIndex?: number) => {
-    const targetTrack = searchTrackInPlaylists(track)
+    let targetTrack = searchTrackInPlaylists(track)
+
+    if (!targetTrack) {
+      targetTrack = createPlaylistTrack(
+        {
+          ...track.inAlbum,
+          coverURL: track.coverURL,
+          kind: 'album'
+        } as AlbumFull,
+        track,
+        currentIndex
+      )
+    }
 
     if (typeof currentIndex !== 'number') {      
       targetTrack && primaryPlaylist.value.push(targetTrack)
