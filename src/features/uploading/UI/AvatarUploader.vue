@@ -10,10 +10,14 @@
       v-if="isAdmin"
       class="avatar__form"
     >
-      <label class="avatar__label">
+      <label
+        v-if="!isMobile"
+        class="avatar__label"
+      >
         <input
           type="file"
           ref="avatarElement"
+          :disabled="isMobile"
           @change="upload"
         >
         <Sprite name="camera" />
@@ -25,7 +29,7 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import { Sprite } from '~shared/UI'
-import { useUser } from '~shared/model'
+import { useUser, useDevice } from '~shared/model'
 
 interface Props {
   avatarUrl: string | null
@@ -40,6 +44,7 @@ defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { isAdmin } = useUser()
+const { isMobile } = useDevice()
 
 const avatarElement: Ref<null | HTMLInputElement> = ref(null)
 

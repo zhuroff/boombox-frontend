@@ -1,10 +1,12 @@
 <template>
   <div class="settings__actions">
     <Button
+      v-if="!isMobile"
       :label="localize('settings.createUser')"
       @click="showUserForm"
     />
     <Button
+      v-if="!isMobile"
       :label="localize('settings.showUsers')"
       @click="handleGetUsers"
     />
@@ -13,6 +15,7 @@
       @onEmit="<T>(data: T) => emit('passBackups', data)"
     />
     <BackupActions
+      v-if="!isMobile"
       action="get"
       @onEmit="<T>(data: T) => emit('passBackups', data)"
     />
@@ -33,7 +36,7 @@ import { SyncAction } from '~features/sync'
 import { BackupActions } from '~features/backup'
 import { useUserApi, UserService } from '~entities/user'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/model'
+import { useLocalization, useDevice } from '~shared/model'
 import { LanguageSwitcher } from '~features/localization'
 
 interface Emits {
@@ -48,6 +51,7 @@ const dbService = new DatabaseService()
 const userService = new UserService()
 
 const { localize } = useLocalization()
+const { isMobile } = useDevice()
 
 const { logout, createUser, getUsers, users } = useUserApi(userService, dbService)
 

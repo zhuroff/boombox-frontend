@@ -1,3 +1,4 @@
+export { default as useDevice } from './useDevice'
 export { default as useGetList } from './useGetList'
 export { default as useGetPage } from './useGetPage'
 export { default as useSnackbar } from './useSnackbar'

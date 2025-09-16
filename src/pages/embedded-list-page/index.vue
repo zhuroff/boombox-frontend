@@ -8,7 +8,7 @@
   >
     <template #header>
       <Button
-        v-if="isAdmin"
+        v-if="isAdmin && !isMobile"
         icon="plus"
         :label="localize('embeddedForm.addAlbum')"
         isInverted
@@ -67,7 +67,7 @@ import { EntityListView } from '~views/entity-list-view'
 
 import { DatabaseService } from '~shared/api'
 import { Button, Modal, DropList, Loader } from '~shared/UI'
-import { useLocalization, useCreateEntity, useSnackbar, useUser } from '~shared/model'
+import { useLocalization, useCreateEntity, useSnackbar, useUser, useDevice } from '~shared/model'
 import type { Entity, FormPayload, SelectInputFieldSchema } from '~shared/lib'
 
 import { embeddedAlbumFormSchema, type EmbeddedBasic } from '~entities/embedded'
@@ -80,7 +80,7 @@ const searchService = new SearchService()
 
 const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
-
+const { isMobile } = useDevice()
 const { isAdmin } = useUser()
 
 const isCreateMode = ref(false)

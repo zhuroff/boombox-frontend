@@ -7,12 +7,12 @@
         @passSyncData="setSyncData"
       />
       <SettingsBackups
-        v-if="backupsTableState.rows.length"
+        v-if="backupsTableState.rows.length && !isMobile"
         :backupsTableState="backupsTableState"
         @passBackups="setBackups"
       />
       <SettingsUsers
-        v-if="usersTableState.rows.length"
+        v-if="usersTableState.rows.length && !isMobile"
         :usersTableState="usersTableState"
         @passUsers="setUsers"
       />
@@ -35,12 +35,15 @@ import { SettingsActions, SettingsBackups, SettingsUsers } from '~widgets/settin
 import { backupsTableSchema } from '~features/backup'
 import { usersTableSchema } from '~entities/user'
 import { AlbumSyncList, type SyncDataPayload, type SyncResponse } from '~features/sync'
+import { useDevice } from '~shared/model'
 import { Modal } from '~shared/UI'
 import type { User, BasicTableState } from '~shared/lib'
 
 const showSyncDataModal = ref(false)
 const syncData = ref<SyncResponse | null>(null)
 const syncDataReset = ref<() => void>(() => {})
+
+const { isMobile } = useDevice()
 
 const backupsTableState = reactive<BasicTableState>({
   rows: [],

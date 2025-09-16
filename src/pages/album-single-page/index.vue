@@ -10,7 +10,7 @@
     <transition name="fade">
       <AlbumContent
         v-if="album"
-        :relatedAlbums="relatedAlbums"
+        :relatedAlbums="!isMobile ? relatedAlbums : []"
         entityKey="albums"
       >
         <template #hero>
@@ -29,7 +29,7 @@
           />
         </template>
 
-        <template #footer>
+        <template v-if="!isMobile" #footer>
           <DiscogsTable :entity="minimumAlbumData" />
         </template>
       </AlbumContent>
@@ -75,10 +75,12 @@ import { useAlbum } from '~entities/album'
 
 import { Modal, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
+import { useDevice } from '~shared/model'
 import type { ReorderPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
+const { isMobile } = useDevice()
 const { initPlaylist } = usePlaylistService()
 
 const {
@@ -105,10 +107,6 @@ const minimumAlbumData = computed(() => ({
 
 const changeTracksOrder = (payload: ReorderPayload) => {
   console.log(payload)
-}
-
-const removeTrackFromCompilation = (payload: any /* GatheringUpdateReq */) => {
-  // emit('removeTrackFromCompilation', payload)
 }
 
 watch(
