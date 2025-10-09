@@ -10,7 +10,7 @@
     <transition name="fade">
       <AlbumContent
         v-if="album"
-        :relatedAlbums="relatedAlbums"
+        :relatedAlbums="!isMobile ? relatedAlbums : []"
         entityKey="toy"
       >
         <template #hero>
@@ -31,7 +31,7 @@
         </template>
 
         <template
-          v-if="album.metadataContent"
+          v-if="!isMobile && album.metadataContent"
           #footer
         >
           <DiscogsTable :entity="album.metadataContent" />
@@ -51,11 +51,14 @@ import { AlbumContent } from '~widgets/album-content'
 import { PageHeadAdapter } from '~widgets/page-heads'
 import { TrackList } from '~widgets/tracklist'
 import { DatabaseService } from '~shared/api'
+import { useDevice } from '~shared/model'
 import { Loader } from '~shared/UI'
 import type { ReorderPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 const route = useRoute()
+
+const { isMobile } = useDevice()
 
 const routeParams = computed(() => route.params)
 

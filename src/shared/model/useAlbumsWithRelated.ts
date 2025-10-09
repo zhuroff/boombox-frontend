@@ -1,15 +1,17 @@
 import { computed, type Ref } from 'vue'
+import { useGetList, useGetPage, useDevice } from '~shared/model'
 import type { AlbumBasic, AlbumFull } from '~entities/album'
 import type { EmbeddedFull } from '~entities/embedded'
 import type { RelatedAlbums, RequestConfig, UseEntityListPayload } from '~shared/lib'
 import type { DatabaseService } from '~shared/api'
-import { useGetList, useGetPage } from '~shared/model'
 
 const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
   pageEntityKey: Ref<string>,
   dbService: DatabaseService,
   preRandomState: Ref<string>
 ) => {
+  const { isMobile } = useDevice()
+
   const relatedAlbumsReqConfig: RequestConfig = {
     page: 1,
     limit: 5,
@@ -55,9 +57,8 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
       : {} as UseEntityListPayload
   ))
 
-  const isAlbumReady = computed(() => (
-    Boolean(album.value) && isAlbumFetched.value
-  ))
+  const isAlbumReady = computed(() => !!album.value && isAlbumFetched.value)
+  const isReadyForRelated = computed(() => isAlbumReady.value && !isMobile.value)
 
   const {
     data: album,
@@ -69,9 +70,17 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
     preRandomState
   )
 
-  const { data: relatedAlbumsByArtist } = useGetList<AlbumBasic>(artistConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByArtist } = useGetList<AlbumBasic>(
+    artistConfig,
+    dbService,
+    isReadyForRelated
+  )
 
-  const { data: relatedAlbumsByGenre } = useGetList<AlbumBasic>(genreConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByGenre } = useGetList<AlbumBasic>(
+    genreConfig,
+    dbService,
+    isReadyForRelated
+  )
 
   const relatedAlbums = computed<RelatedAlbums<AlbumBasic>[]>(() => ([
     {

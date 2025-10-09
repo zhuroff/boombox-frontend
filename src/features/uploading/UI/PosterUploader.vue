@@ -10,10 +10,14 @@
       v-if="isAdmin"
       class="poster__form"
     >
-      <label class="poster__label">
+      <label
+        v-if="!isMobile"
+        class="poster__label"
+      >
         <input
           type="file"
           ref="posterElement"
+          :disabled="isMobile"
           @change="upload"
         >
         <Sprite name="camera" />
@@ -26,7 +30,7 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import { Sprite } from '~shared/UI'
-import { useUser } from '~shared/model'
+import { useUser, useDevice } from '~shared/model'
 
 interface Props {
   posterUrl: string | null
@@ -41,6 +45,7 @@ defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { isAdmin } = useUser()
+const { isMobile } = useDevice()
 
 const posterElement: Ref<null | HTMLInputElement> = ref(null)
 

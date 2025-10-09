@@ -4,7 +4,7 @@
       v-if="playingTrack?.isOnPlaying"
       class="player__control-panel"
     >
-      <div class="player__control-group">
+      <div class="player__control-group --main">
         <Button
           icon="previous"
           title="Play previous track"
@@ -109,14 +109,14 @@ const searchOnYouTube = () => {
 
   &__control {
     
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       position: relative;
       z-index: 100;
       width: 100%;
       padding-bottom: 50px;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       background-color: var.$dark;
       width: calc(100% - var.$asideWidth);
       padding: 0 25px;
@@ -129,7 +129,7 @@ const searchOnYouTube = () => {
       height: 100%;
       justify-content: space-between;
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         flex-wrap: wrap;
         justify-content: center;
       }
@@ -158,6 +158,14 @@ const searchOnYouTube = () => {
       display: flex;
       align-items: center;
       gap: var.$basicPadding;
+
+      &.--main {
+
+        @include var.media('<desktop') {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
     }
   }
 }

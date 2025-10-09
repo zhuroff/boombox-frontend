@@ -1,11 +1,13 @@
 import { computed, ref, type ComputedRef } from 'vue'
+import { useGetList, useGetPage, useDevice } from '~shared/model'
 import type { RouteParamsGeneric } from 'vue-router'
 import type { TOYAlbumFull, TOYAlbumBasic } from '../lib/types'
 import type { RelatedAlbums, RequestConfig, UseEntityListPayload } from '~shared/lib'
 import type { DatabaseService } from '~shared/api'
-import { useGetList, useGetPage } from '~shared/model'
 
 const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteParamsGeneric>) => {
+  const { isMobile } = useDevice()
+
   const preRandomState = ref('')
   const pageEntityKey = ref('toy')
 
@@ -13,6 +15,7 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
     page: 1,
     limit: 5,
     isRandom: 1,
+    sort: { year: 1 },
     path: 'MelodyMap/TOY'
   }
 
@@ -48,9 +51,8 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
       : {} as UseEntityListPayload
   ))
 
-  const isAlbumReady = computed(() => (
-    Boolean(album.value) && isAlbumFetched.value
-  ))
+  const isAlbumReady = computed(() =>  !!album.value && isAlbumFetched.value)
+  const isReadyForRelated = computed(() => isAlbumReady.value && !isMobile.value)
 
   const {
     data: album,
@@ -61,9 +63,17 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
     preRandomState
   )
 
-  const { data: relatedAlbumsByYear } = useGetList<TOYAlbumBasic>(yearsConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByYear } = useGetList<TOYAlbumBasic>(
+    yearsConfig,
+    dbService,
+    isReadyForRelated
+  )
 
-  const { data: relatedAlbumsByGenre } = useGetList<TOYAlbumBasic>(genresConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByGenre } = useGetList<TOYAlbumBasic>(
+    genresConfig,
+    dbService,
+    isReadyForRelated
+  )
 
   const relatedAlbums = computed<RelatedAlbums<TOYAlbumBasic>[]>(() => ([
     {

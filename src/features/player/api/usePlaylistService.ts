@@ -47,6 +47,22 @@ const usePlaylistService = () => {
     }
   }
 
+  const initWavePlaylist = (tracks: TrackBasic[]) => {
+    primaryPlaylist.value = tracks.map<PlaylistTrack>((track, index) => {
+      const album: AlbumFull = {
+        ...track.inAlbum,
+        coverURL: track.coverURL,
+        artist: track.artist,
+        period: track.period,
+        genre: track.genre,
+        path: track.path,
+        kind: 'album',
+        tracks: [track]
+      }
+      return createPlaylistTrack(album, track, index)
+    })
+  }
+
   const replacePlaylist = () => {
     primaryPlaylist.value = secondaryPlaylist.value
     secondaryPlaylist.value = []
@@ -162,15 +178,16 @@ const usePlaylistService = () => {
     initPlaylist,
     getNextTrack,
     getPrevTrack,
-    toggleTrackAvailability,
     replacePlaylist,
     primaryPlaylist,
+    initWavePlaylist,
     isPlayingStarted,
     setTrackDuration,
     secondaryPlaylist,
     isTrackInPlaylist,
     addTrackToPlaylist,
-    searchTrackInPlaylists
+    searchTrackInPlaylists,
+    toggleTrackAvailability
   }
 }
 

@@ -2,6 +2,7 @@
   <div :class="trackRowClassList">
     <div :class="[{ '--disabled': track?.idDisabled }, 'trackrow__container']">
       <Button
+        v-if="!isMobile"
         icon="drag"
         size="small"
         isText
@@ -87,7 +88,7 @@ import { ref, computed, onUnmounted, watch } from 'vue'
 import { usePlayer } from '~features/player'
 import { useCompilations } from '~features/compilation'
 import { usePlaylistService, type PlaylistTrack } from '~features/player'
-import { useLocalization } from '~shared/model'
+import { useLocalization, useDevice } from '~shared/model'
 import { Button, DropList, Modal } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import { Gathering } from '~widgets/gathering'
@@ -113,6 +114,7 @@ const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 const { playingTrack, playingTrackIndex } = usePlayer()
 const { toggleTrackAvailability, isTrackInPlaylist, addTrackToPlaylist } = usePlaylistService()
@@ -294,7 +296,7 @@ onUnmounted(() => {
     width: var.$elementHeightSM;
     flex: none;
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       padding: 0;
     }
 

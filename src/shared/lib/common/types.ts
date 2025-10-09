@@ -51,6 +51,7 @@ export type RelatedAlbums<T> = {
 
 export type RequestConfig = PaginationState & {
   isRandom?: true | 1
+  path?: string
   filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
 }
 

@@ -1,15 +1,9 @@
 <template>
   <aside :class="[{ '--opened': isExpanded }, 'aside']">
-    <Button
-      className="aside__burger"
-      :icon="isExpanded ? 'close' : 'burger'"
-      isText
-      @click="burgerClick"
-    />
     <router-link
       class="aside__homelink"
       to="/"
-      @click="burgerClick"
+      @click="collapsePlayer"
     >
       <Sprite name="vinyl" />
       <span>MelodyMap</span>
@@ -24,7 +18,7 @@
           <router-link
             :to="`/${item.route}`"
             class="aside__nav-link"
-            @click="burgerClick"
+            @click="collapsePlayer"
           >{{ item.title }}</router-link>
         </li>
       </ul>
@@ -35,30 +29,34 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { Button, Sprite } from '~shared/UI'
+import { usePlayer } from '~features/player'
+import { useDevice } from '~shared/model'
+import { Sprite } from '~shared/UI'
 import { useLocalization } from '~shared/model'
 
 interface Props {
   isExpanded: boolean
 }
 
-interface Emits {
-  (e: 'burgerClick'): void
-}
-
 defineProps<Props>()
-const emit = defineEmits<Emits>()
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
+const { screensaveMode, isPlaylistExpanded } = usePlayer()
 
 const router = useRouter()
 
-const burgerClick = () => emit('burgerClick')
+const collapsePlayer = () => {
+  screensaveMode.value = false
+  isPlaylistExpanded.value = false
+}
 
 const navbar = computed(() => {
   return router
     .getRoutes()
-    .filter(({ meta }) => meta?.navLocaleKey)
+    .filter(({ meta }) => (
+      meta?.navLocaleKey && (!isMobile.value || meta.navLocaleKey !== 'settings')
+    ))
     .map(({ meta, path }) => ({
       title: localize(`navigation.${meta.navLocaleKey as string}`),
       route: path.replace('/', '')
@@ -72,53 +70,25 @@ const navbar = computed(() => {
 .aside {
   flex: none;
   z-index: 2000;
-  background-color: var.$dark;
   overflow: auto;
 
-  @include var.media('<laptop') {
-    position: relative;
-    width: var.$asideWidthMobile;
-    height: 100vh;
-    top: 0;
-    right: 0;
-    padding-top: 50px;
-    transition: transform 0.75s var.$animation;
-    background-color: var.$accent;
-    order: 1;
-
-    &.--opened {
-      transform: translateX(-#{var.$asideWidthMobile});
-      transition: transform 0.5s var.$animation;
-    }
+  @include var.media('<desktop') {
+    position: absolute;
+    top: 54px;
+    left: 0;
+    width: 100vw;
+    overflow: auto;
+    background-color: var.$black;
   }
 
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
     position: relative;
     width: var.$asideWidth;
+    background-color: var.$dark;
   }
 
   &.--z-low {
     z-index: 1000;
-  }
-
-  &__burger {
-    
-    @include var.media('<laptop') {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      padding: 0 !important;
-
-      .icon {
-        width: 2rem !important;
-        fill: var.$white;
-        color: var.$white;
-      }
-    }
-
-    @include var.media('>=laptop') {
-      display: none !important;
-    }
   }
 
   &__homelink {
@@ -128,15 +98,11 @@ const navbar = computed(() => {
     text-transform: uppercase;
     letter-spacing: 1px;
 
-    @include var.media('<laptop') {
-      justify-content: flex-start;
-      height: 50px;
-      padding: 0 1rem;
-      font-size: 1rem;
-      color: var.$white;
+    @include var.media('<desktop') {
+      display: none;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       height: 70px;
       padding: 0 25px;
       font-size: 1.15rem;
@@ -145,11 +111,11 @@ const navbar = computed(() => {
 
     .icon-vinyl {
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         display: none;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         width: 24px;
         height: 24px;
         margin-right: 0.5rem;
@@ -162,27 +128,51 @@ const navbar = computed(() => {
 
   &__nav {
 
+    &-list {
+      @include var.media('<desktop') {
+        display: flex;
+      }
+    }
+
+    &-item {
+      @include var.media('<desktop') {
+        padding: 0 0.5rem;
+
+        &:first-of-type {
+          padding-left: 1rem;
+        }
+
+        &:last-of-type {
+          padding-right: 1rem;
+        }
+      }
+    }
+
     &-link {
-      line-height: 3;
       display: block;
       transition: all 0.2s ease;
+      line-height: 3;
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         text-align: right;
-        color: var.$white;
-        padding: 0 1rem;
+        color: var.$paleMD;
+        font-size: 0.875rem;
+
+        &.router-link-active {
+          color: var.$warning;
+        }
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         color: var.$white;
         padding: 0 var.$mainPadding;
-      }
 
-      &:hover,
-      &.router-link-active {
-        transition: all 0.2s ease;
-        background-color: var.$paleLT;
-        color: var.$dark;
+        &:hover,
+        &.router-link-active {
+          transition: all 0.2s ease;
+          background-color: var.$paleLT;
+          color: var.$dark;
+        }
       }
     }
   }

@@ -25,16 +25,19 @@
         />
       </div>
     </div>
-    <footer :class="`album__footer --${cardsTemplate}`">
+    <footer
+      v-if="!isMobile"
+      :class="`album__footer --${cardsTemplate}`"
+    >
       <slot name="footer"></slot>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useLocalization } from '~shared/model'
-import type { RelatedAlbums } from '~shared/lib'
+import { useLocalization, useDevice } from '~shared/model'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
+import type { RelatedAlbums } from '~shared/lib'
 
 interface Props {
   entityKey: string
@@ -46,6 +49,7 @@ withDefaults(defineProps<Props>(), {
   cardsTemplate: 'col'
 })
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 </script>
 
@@ -58,16 +62,23 @@ const { localize } = useLocalization()
 
   &__content {
     flex: 1 1 0;
-    padding: var.$mainPadding;
-    position: relative;
+    position: relative;    
 
     @include var.media('<desktop') {
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
       background-color: var.$paleLT;
+      margin-top: 100vw;
+      padding: var.$minPadding;
+
+      @include var.media('landscape') {
+        margin-top: 80vh;
+      }
     }
 
     @include var.media('>=desktop') {
+      padding: var.$mainPadding;
+
       &:not(.--row) {
         display: grid;
         grid-template-columns: 1fr 200px 200px;
@@ -106,7 +117,7 @@ const { localize } = useLocalization()
 
   &__related {
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       margin-bottom: var.$mainPadding;
       display: flex;
       flex-direction: column;

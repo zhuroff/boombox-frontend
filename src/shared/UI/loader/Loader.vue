@@ -57,11 +57,11 @@ defineProps<Props>()
   &.--light {
     background-color: var.$transLight;
 
-    // @include var.media('<laptop') {
+    // @include var.media('<desktop') {
     //   height: 100%;
     // }
 
-    // @include var.media('>=laptop') {
+    // @include var.media('>=desktop') {
     //   height: calc(100% - var.$playerHeight);
     // }
   }

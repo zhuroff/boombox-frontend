@@ -1,10 +1,12 @@
 import { computed, ref } from 'vue'
+import { DatabaseService } from '~shared/api'
 import useAudioService from '../api/useAudioService'
 import usePlaylistService from '../api/usePlaylistService'
-import { DatabaseService } from '~shared/api'
 import type { TrackBasic } from '~entities/track'
 
 const dbService = new DatabaseService()
+
+const screensaveMode = ref(false)
 const isPlaylistExpanded = ref(false)
 
 const usePlayer = () => {
@@ -74,6 +76,8 @@ const usePlayer = () => {
     } else {
       playTrackStream(targetTrack.streamURL)
     }
+
+    screensaveMode.value = true
   }
 
   const playPauseTrack = () => {
@@ -138,6 +142,7 @@ const usePlayer = () => {
     isPrevTrackAvailable,
     isNextTrackAvailable,
     isPlaylistExpanded,
+    screensaveMode,
     setTrackPosition,
     toggleVinylMode,
     setSoundVolume,

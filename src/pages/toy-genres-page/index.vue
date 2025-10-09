@@ -47,11 +47,20 @@ const { data: genres, isFetching, isFetched } = useGetList<CloudEntity>(genresCo
 </script>
 
 <style lang="scss" scoped>
+@use '~app/styles/variables' as var;
+
 .toy-genres {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  height: 100%;
-  padding: 25px;
+
+  @include var.media('<desktop') {
+    margin-top: 7rem;
+  }
+
+  @include var.media('>=desktop') {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    height: 100%;
+    padding: var.$mainPadding;
+  }
 }
 </style>

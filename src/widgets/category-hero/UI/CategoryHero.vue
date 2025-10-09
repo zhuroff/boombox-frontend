@@ -25,8 +25,8 @@
             size="medium"
             isInverted
             :label="localize('player.waveButton')"
-            :disabled="!waveAlbum?.tracks?.length"
-            @click="() => {/* playWave */}"
+            :disabled="!waveTracks?.length"
+            @click="() => playTrack(waveTracks[0])"
           />
         </div>
       </div>
@@ -35,15 +35,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, watchEffect } from 'vue'
 import { useImageUploader, type EntityImagesKeys } from '~features/uploading'
 import { PosterUploader, AvatarUploader } from '~features/uploading'
+import { usePlaylistService } from '~features/player'
+import { useWaving } from '~features/waving'
+import { usePlayer } from '~features/player'
 import { EditableHeading } from '~shared/UI'
 import { useLocalization, useSnackbar } from '~shared/model'
 import { hostString } from '~shared/utils'
-// import usePlaylist from '~/~legacy/store/playlist'
 import { Button } from '~shared/UI'
 import { UploadService } from '~features/uploading'
+import { DatabaseService } from '~shared/api'
 import type { CategoryFull } from '~entities/category'
 import type { CollectionFull } from '~entities/collection'
 import type { AxiosError } from 'axios'
@@ -65,18 +68,14 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const uploadService = new UploadService()
+const dbService = new DatabaseService()
 
 const { localize } = useLocalization()
+const { playTrack } = usePlayer()
 const { setSnackbarMessage } = useSnackbar()
-
+const { initWavePlaylist } = usePlaylistService()
+const { fetchWaving, waveTracks } = useWaving(dbService)
 const { uploadImage } = useImageUploader(props.entityKey, uploadService)
-
-// const {
-//   playerGetters: { currentPlaylist, playingTrack },
-//   playerActions: { setPlayerPlaylist, togglePlayerVisibility, playTrack, continuePlay, setTrackOnPause }
-// } = usePlaylist()
-
-const waveAlbum = ref<null | any /* AlbumPage class */>(null)
 
 const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
   const [type, file] = payload
@@ -105,56 +104,16 @@ const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
     })
 }
 
-const getCategoryWave = async () => {
-  // try {
-  //   const tracks = await dbServices.getEntityList<TrackRes[]>(
-  //     'tracks/wave',
-  //     {
-  //       page: 1,
-  //       limit: 50,
-  //       sort: { createdAt: -1 },
-  //       filter: {
-  //         from: props.entityKey,
-  //         key: `${categoryKeyDict[props.entityKey]}.title`,
-  //         name: props.data.title
-  //       }
-  //     }
-  //   )
-
-  //   waveAlbum.value = new AlbumPage({
-  //     _id: props.entityKey,
-  //     title: `Wave by ${categoryKeyDict[props.entityKey]}: ${props.data.title}`,
-  //     tracks
-  //   })
-
-  //   setPlayerPlaylist(waveAlbum.value)
-  // } catch (error) {
-  //   console.error(error)
-  // }
-}
-
-// const playWave = () => {
-//   if (!waveAlbum.value) return
-//   if (!playingTrack.value?._id) {
-//     playTrack(waveAlbum.value.tracks[0])
-//     togglePlayerVisibility()
-//   } else {
-//     if (currentPlaylist.value?._id !== props.entityKey) {
-//       setPlayerPlaylist(waveAlbum.value)
-//       playTrack(waveAlbum.value.tracks[0])
-//       togglePlayerVisibility()
-//     }
-
-//     playingTrack.value.isOnPause
-//       ? continuePlay()
-//       : setTrackOnPause()
-//   }
-// }
-
 const host = (pathname: string) => hostString(pathname)
 
+watchEffect(() => {
+  if (waveTracks.value.length) {
+    initWavePlaylist(waveTracks.value)
+  }
+})
+
 onMounted(() => {
-  getCategoryWave()
+  fetchWaving([props.entityKey, props.data.title])
 })
 </script>
 

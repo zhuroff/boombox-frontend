@@ -16,8 +16,9 @@
       <Button
         size="medium"
         :label="localize('player.waveButton')"
-        :disabled="!waveAlbum?.tracks?.length"
-        @click="playWave"
+        :disabled="!waveTracks?.length"
+        isInverted
+        @click="() => playTrack(waveTracks[0])"
       />
     </Header>
     <ul class="toy-years__list">
@@ -35,21 +36,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, watchEffect, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Header } from '~widgets/header'
 import { TOYYearCard } from '~entities/toy'
 import { Loader, Button } from '~shared/UI'
 import { useGetList, useLocalization } from '~shared/model'
+import { usePlaylistService } from '~features/player'
+import { useWaving } from '~features/waving'
+import { usePlayer } from '~features/player'
 import { DatabaseService } from '~shared/api'
 import type { CloudEntity, UseEntityListPayload } from '~shared/lib'
 
-const dbService = new DatabaseService()
-
 const route = useRoute()
-
-const waveAlbum = ref<null | any>(null)
-
+const dbService = new DatabaseService()
 const heading = computed(() => String(route.params.genre))
 
 const yearsConfig = computed<UseEntityListPayload>(() => ({
@@ -64,14 +64,29 @@ const yearsConfig = computed<UseEntityListPayload>(() => ({
 
 const { localize } = useLocalization()
 const { data: years, isFetching, isFetched } = useGetList<CloudEntity>(yearsConfig, dbService)
+const { playTrack } = usePlayer()
+const { initWavePlaylist } = usePlaylistService()
+const { fetchWaving, waveTracks } = useWaving(dbService, 'toy/wave')
 
-const playWave = () => {
-  console.log('playWave')
-}
+watchEffect(() => {
+  if (waveTracks.value.length) {
+    initWavePlaylist(waveTracks.value)
+  }
+})
+
+onMounted(() => {
+  fetchWaving(['toy', encodeURIComponent(String(route.params.genre))])
+})
 </script>
 
 <style lang="scss" scoped>
+@use '~/app/styles/variables' as var;
+
 .toy-years {
+
+  .button {
+    margin-left: var.$mainPadding;
+  }
 
   &__list {
     padding: 25px;
