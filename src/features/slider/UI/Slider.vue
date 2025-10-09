@@ -101,13 +101,13 @@ const handleSlideStart = (data: BookletSlideState) => {
         }
       }
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         transform: translate(0, -50%);
         width: 50px;
         height: 50px;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         transform: translate(25px, -50%);
         width: 75px;
         height: 75px;
@@ -124,13 +124,13 @@ const handleSlideStart = (data: BookletSlideState) => {
         transition: color 0.2s var.$animation;
       }
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         transform: translate(0, -50%);
         width: 50px;
         height: 50px;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         transform: translate(-25px, -50%);
         width: 75px;
         height: 75px;

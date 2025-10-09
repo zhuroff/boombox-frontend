@@ -64,7 +64,7 @@ const trackSign = computed(() => {
     flex: none;
     transition: all 0.3s var.$animation;
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       position: relative;
       z-index: 100;
       padding-top: 70px;
@@ -91,22 +91,18 @@ const trackSign = computed(() => {
 
       &:after {
         content: '';
-        width: 15px;
-        height: 15px;
+        width: var.$elementHeightXS;
+        height: var.$elementHeightXS;
         border-radius: 50%;
-        background-color: var.$black;
+        background-color: var.$paleLW;
         position: absolute;
         left: 50%;
-        top: calc(50% - 30px);
-        transform: translate(-50%, -50%);
-
-        @include var.media('landscape') {
-          top: calc(50% - -45px);
-        }
+        top: 13rem;
+        transform: translateX(-50%);
       }
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       background-color: var.$accent;
       position: absolute;
       left: 0;
@@ -125,13 +121,13 @@ const trackSign = computed(() => {
 
     &-content {
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         height: 100%;
         display: flex;
         flex-direction: column;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         display: flex;
         align-items: center;
       }
@@ -140,7 +136,7 @@ const trackSign = computed(() => {
 
   &__cover {
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       border-radius: 50%;
       width: 94px;
       height: 94px;
@@ -153,7 +149,7 @@ const trackSign = computed(() => {
       animation: rotating 5s linear infinite;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       width: 40px;
       height: 40px;
       border-radius: 3px;
@@ -164,13 +160,13 @@ const trackSign = computed(() => {
   &__title {
     color: var.$white;
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       text-align: center;
       margin-top: auto;
       padding: 0 25px 40px;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       margin-left: 12px;
       width: calc(100% - 50px);
     }
@@ -178,12 +174,12 @@ const trackSign = computed(() => {
     &-track {
       font-weight: 600;
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         font-size: 20px;
         margin-bottom: 5px;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         font-size: 14px;
         overflow: hidden;
         white-space: nowrap;
@@ -193,11 +189,11 @@ const trackSign = computed(() => {
 
     &-sign {
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         font-size: 14px;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         font-size: 12px;
         overflow: hidden;
         white-space: nowrap;

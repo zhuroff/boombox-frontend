@@ -57,9 +57,8 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
       : {} as UseEntityListPayload
   ))
 
-  const isAlbumReady = computed(() => (
-    !!album.value && isAlbumFetched.value && !isMobile.value
-  ))
+  const isAlbumReady = computed(() => !!album.value && isAlbumFetched.value)
+  const isReadyForRelated = computed(() => isAlbumReady.value && !isMobile.value)
 
   const {
     data: album,
@@ -74,13 +73,13 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
   const { data: relatedAlbumsByArtist } = useGetList<AlbumBasic>(
     artistConfig,
     dbService,
-    isAlbumReady
+    isReadyForRelated
   )
 
   const { data: relatedAlbumsByGenre } = useGetList<AlbumBasic>(
     genreConfig,
     dbService,
-    isAlbumReady
+    isReadyForRelated
   )
 
   const relatedAlbums = computed<RelatedAlbums<AlbumBasic>[]>(() => ([

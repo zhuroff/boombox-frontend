@@ -41,7 +41,7 @@ const changeSoundVolume = (event: Event) => {
   z-index: 10;
   overflow: hidden;
 
-  @include var.media('<laptop') {
+  @include var.media('<desktop') {
     height: auto;
   }
 

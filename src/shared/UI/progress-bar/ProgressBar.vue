@@ -69,7 +69,7 @@ const setProgressValue = (event: MouseEvent) => {
   display: flex;
   align-items: center;
 
-  @include var.media('<laptop') {
+  @include var.media('<desktop') {
     padding: var.$basicPadding 25px;
     width: 100vw;
   }
@@ -82,12 +82,12 @@ const setProgressValue = (event: MouseEvent) => {
     border: 0;
     border-radius: var.$basicPadding;
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       flex: 1 1 0;
       height: 5px;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       width: 326px;
       height: var.$basicPadding;
     }
@@ -96,11 +96,11 @@ const setProgressValue = (event: MouseEvent) => {
       border: 0;
       border-radius: var.$basicPadding;
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         height: 5px;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         height: var.$basicPadding;
       }
     }

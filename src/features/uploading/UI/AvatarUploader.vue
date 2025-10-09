@@ -61,11 +61,11 @@ const upload = () => {
   position: relative;
   z-index: 3;
 
-  @include var.media('<tablet') {
+  @include var.media('<desktop') {
     display: none;
   }
 
-  @include var.media('>=tablet') {
+  @include var.media('>=desktop') {
     width: 10rem;
     height: 10rem;
     border-radius: 50%;

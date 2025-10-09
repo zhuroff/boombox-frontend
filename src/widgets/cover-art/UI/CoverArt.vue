@@ -115,7 +115,7 @@ const slideChanged = (payload: BookletSlideState) => {
   z-index: 10;
   position: relative;
 
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
     width: var.$coverWidth;
   }
 
@@ -129,7 +129,7 @@ const slideChanged = (payload: BookletSlideState) => {
 
   & + .button {
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       width: auto;
       position: absolute;
       right: 25px;
@@ -143,12 +143,13 @@ const slideChanged = (payload: BookletSlideState) => {
     object-fit: cover;
     cursor: pointer;
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       width: 100%;
       height: auto;
+      max-height: 100vh;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       height: var.$coverWidth;
       border-radius: var.$borderRadiusSM;
     }

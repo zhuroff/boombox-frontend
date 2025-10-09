@@ -70,9 +70,8 @@ watchEffect(() => {
   &__close {
     @include var.buttonClose;
 
-    @include var.media('<laptop') {
-      left: var.$mainPadding;
-      right: auto;
+    @include var.media('<desktop') {
+      top: 0.25rem;
     }
   }
 }

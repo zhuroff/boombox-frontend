@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'sass:string';
+@use 'sass:meta';
 
 :root {
   --paleDP: #828c9b;
@@ -27,23 +28,24 @@ $borderRadiusSM: 3px;
 $borderRadiusMD: 5px;
 $borderRadiusLG: 7px;
 
+$elementHeightXS: 0.5rem;
 $elementHeightSM: 1.875rem;
 $elementHeightMD: 2.375rem;
 $elementHeightLG: 2.875rem;
 
-$containerWidth: 1198px;
-$asideWidth: 250px;
+$containerWidth: 74.875rem;
+$asideWidth: 15.625rem;
 $desktopHeaderHeight: 4.375rem;
-$asideWidthMobile: 140px;
-$albumAsideWidth: 500px;
-$playerHeight: 62px;
-$coverWidth: 350px;
+$asideWidthMobile: 8.75rem;
+$albumAsideWidth: 31.25rem;
+$playerHeight: 3.875rem;
+$coverWidth: 21.875rem;
 
 $minPadding: 1rem;
 $basicPadding: 0.625rem;
-$fieldPadding: 8px;
-$mainPadding: 25px;
-$doublePadding: 50px;
+$fieldPadding: 0.5rem;
+$mainPadding: 1.563rem;
+$doublePadding: 3.125rem;
 
 $animation: cubic-bezier(.06,.28,.26,.81);
 
@@ -84,8 +86,6 @@ $shadowMedium: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 $breakpoints: (
-  'tablet': 768px,
-  'laptop': 1024px,
   'desktop': 1280px,
   'desktop-md': 1536px,
   'desktop-lg': 1780px,
@@ -122,6 +122,14 @@ $breakpoints: (
     @return null;
   }
 
+  @if meta.type-of($value) == 'string' and string.index($value, '(') == 1 {
+    @return $value;
+  }
+
+  @if $operator == 'max' {
+    $value: $value - 1px;
+  }
+
   @return '(#{$operator}-width: #{$value})';
 }
 
@@ -130,7 +138,16 @@ $breakpoints: (
   $condition2: if($query2 != null, parse-condition($query2), null);
 
   @if $condition1 != null and ($query2 == null or $condition2 != null) {
-    $mediaQuery: 'screen and #{$condition1}';
+    $isFullQuery1: meta.type-of($condition1) == 'string' and string.index($condition1, '(') == 1;
+    
+    $mediaQuery: '';
+    
+    @if $isFullQuery1 {
+      $mediaQuery: $condition1;
+    } @else {
+      $mediaQuery: 'screen and #{$condition1}';
+    }
+    
     @if $condition2 != null {
       $mediaQuery: '#{$mediaQuery} and #{$condition2}';
     }

@@ -51,9 +51,8 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
       : {} as UseEntityListPayload
   ))
 
-  const isAlbumReady = computed(() => (
-    !!album.value && isAlbumFetched.value && !isMobile.value
-  ))
+  const isAlbumReady = computed(() =>  !!album.value && isAlbumFetched.value)
+  const isReadyForRelated = computed(() => isAlbumReady.value && !isMobile.value)
 
   const {
     data: album,
@@ -64,9 +63,17 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
     preRandomState
   )
 
-  const { data: relatedAlbumsByYear } = useGetList<TOYAlbumBasic>(yearsConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByYear } = useGetList<TOYAlbumBasic>(
+    yearsConfig,
+    dbService,
+    isReadyForRelated
+  )
 
-  const { data: relatedAlbumsByGenre } = useGetList<TOYAlbumBasic>(genresConfig, dbService, isAlbumReady)
+  const { data: relatedAlbumsByGenre } = useGetList<TOYAlbumBasic>(
+    genresConfig,
+    dbService,
+    isReadyForRelated
+  )
 
   const relatedAlbums = computed<RelatedAlbums<TOYAlbumBasic>[]>(() => ([
     {

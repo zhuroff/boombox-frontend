@@ -99,11 +99,11 @@ const deleteEntity = () => {
     }
   }
 
-  @include var.media('<tablet') {
+  @include var.media('<desktop') {
     width: calc(50% - var.$basicPadding);
   }
 
-  @include var.media('>=tablet', '<desktop') {
+  @include var.media('>=desktop', '<desktop') {
     width: calc(33.3333% - var.$basicPadding);
   }
 

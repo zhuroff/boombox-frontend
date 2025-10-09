@@ -37,7 +37,7 @@ defineProps<Props>()
   align-self: flex-start;
   overflow: hidden;
 
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
     max-width: 650px;
   }
 

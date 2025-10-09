@@ -54,28 +54,19 @@ const onSearch = (value: string) => {
   align-items: center;
   position: relative;
 
-  @include var.media('<laptop') {
-    background-color: var.$dark;
-    color: var.$white;
+  @include var.media('<desktop') {
     position: relative;
-    padding: 25px 25px 0;
-
-    &:after {
-      content: '';
-      width: 100vw;
-      height: 75vh;
-      background: linear-gradient(to bottom, var.$dark, var.$white);
-      position: absolute;
-      left: 0;
-      top: 100%;
-    }
+    padding: 1rem 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     .dropdown {
       display: none;
     }
   }
 
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
     padding: 0 25px;
     background-color: var.$dark;
     height: var.$desktopHeaderHeight;
@@ -85,16 +76,16 @@ const onSearch = (value: string) => {
   }
 
   &__heading {
+    color: var.$paleMD;
 
-    @include var.media('<tablet') {
-      @include var.serif(1.5rem);
+    @include var.media('<desktop') {
+      @include var.serif(1rem);
       margin-right: 1rem;
     }
 
-    @include var.media('>=tablet') {
+    @include var.media('>=desktop') {
       @include var.serif(1.75rem);
       margin-right: auto;
-      color: var.$paleMD;
     }
   }
 }

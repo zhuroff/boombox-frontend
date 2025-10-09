@@ -1,9 +1,6 @@
 <template>
   <div class="container">
-    <Sidebar
-      :isExpanded="isNavOpened"
-      @burgerClick="navHandler"
-    />
+    <Sidebar :isExpanded="isNavOpened" />
     <main
       ref="main"
       :class="[{ '--offset': isNavOpened }, 'main']"
@@ -25,93 +22,48 @@ import { Snackbar } from '~shared/UI'
 
 const main = ref(null)
 const isNavOpened = ref(false)
-
-const navHandler = () => {
-  isNavOpened.value = !isNavOpened.value
-}
 </script>
 
 <style lang="scss">
 @use '~app/styles/variables' as var;
 
 .container {
-  height: 100vh;
   display: flex;
-  overflow: hidden;
   position: relative;
 
-  @include var.media('<laptop') {
-    background-color: var.$accent;
-  }
-
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
     background-color: var.$paleLT;
+    overflow: hidden;
+    height: 100vh;
   }
 }
 
 .main {
   flex: none;
-  position: relative;
-  z-index: 1000;
-  background-color: var.$paleLT;
-  overflow: auto;
 
-  @include var.media('<laptop') {
+  @include var.media('<desktop') {
     width: 100vw;
-    height: 100vh;
-    left: 0;
-    clip-path: circle(100%);
-    transition: all 0.75s var.$animation;
-    padding-bottom: 60px;
-
-    &.--offset {
-      clip-path: circle(34%);
-      left: -#{var.$asideWidthMobile};
-      transition: all 0.5s var.$animation;
-      filter: grayscale(1);
-      animation: rotating 5s linear infinite;
-
-      &:before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100px;
-        height: 100px;
-        background-color: var.$black;
-        border-radius: 50%;
-        border: 4px solid var.$paleDP;
-        z-index: 1;
-        animation: appearance 0.75s var.$animation;
-      }
-
-      &:after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 30px;
-        height: 30px;
-        background-color: var.$white;
-        border-radius: 50%;
-        border: 2px solid var.$dark;
-        z-index: 2;
-        animation: appearance 0.75s var.$animation;
-      }
-    }
+    min-height: 100vh;
+    background-color: var.$black;
   }
 
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
+    position: relative;
+    z-index: 1000;
+    overflow: auto;
     width: calc(100% - var.$asideWidth);
     height: calc(100vh - var.$playerHeight);
+    background-color: var.$paleLT;
   }
 
   .content {
     padding: 2rem 1rem var.$mainPadding 1rem;
 
-    @include var.media('>=laptop') {
+    @include var.media('<desktop') {
+      margin-top: 1.5rem;
+    }
+
+    @include var.media('>=desktop') {
       display: flex;
       flex-direction: column;
       min-height: calc(100vh - (var.$desktopHeaderHeight + var.$playerHeight));

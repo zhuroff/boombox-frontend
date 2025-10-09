@@ -1,5 +1,5 @@
 <template>
-  <section :class="[{ '--expanded': isPlaylistExpanded }, 'player']">
+  <section :class="[{ '--screensave': screensaveMode && isMobile }, 'player']">
     <PlayerInfo />
     <PlayerControlPanel />
     <transition name="slide-in">
@@ -9,12 +9,14 @@
 </template>
 
 <script setup lang="ts">
+import { useDevice } from '~shared/model'
 import { usePlayer } from '~features/player'
 import PlayerInfo from './PlayerInfo.vue'
 import PlayerPlaylist from './PlayerPlaylist.vue'
 import PlayerControlPanel from './PlayerControlPanel.vue'
 
-const { isPlaylistExpanded } = usePlayer()
+const { isMobile } = useDevice()
+const { screensaveMode, isPlaylistExpanded } = usePlayer()
 </script>
 
 <style lang="scss">
@@ -25,13 +27,13 @@ const { isPlaylistExpanded } = usePlayer()
   bottom: 0;
   z-index: 2000;
 
-  @include var.media('<laptop') {
+  @include var.media('<desktop') {
     left: 0;
     box-shadow: var.$shadowMedium;
     display: grid;
     width: 100vw;
 
-    &.--expanded {
+    &.--screensave {
       height: 100vh;
       grid-template-columns: 100%;
       grid-template-rows: 73vh 27vh;
@@ -52,8 +54,8 @@ const { isPlaylistExpanded } = usePlayer()
       }
     }
 
-    &:not(.--expanded) {
-      height: 60px;
+    &:not(.--screensave) {
+      height: 0;
       background-color: var.$dark;
       grid-template-columns: 1fr 150px;
 
@@ -131,7 +133,7 @@ const { isPlaylistExpanded } = usePlayer()
     }
   }
 
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
     height: var.$playerHeight;
     display: flex;
     width: calc(100vw - var.$asideWidth);

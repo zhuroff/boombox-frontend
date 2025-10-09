@@ -1,5 +1,12 @@
 <template>
   <section class="playlist">
+    <Button
+      v-if="isMobile"
+      icon="close"
+      isText
+      className="playlist__collapse"
+      @click="isPlaylistExpanded = false"
+    />
     <ul class="playlist__tracks">
       <VueDraggableNext
         handle=".playlist__track"
@@ -20,7 +27,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import { usePlaylistService } from '~features/player'
+import { usePlaylistService, usePlayer } from '~features/player'
+import { Button } from '~shared/UI'
+import { useDevice } from '~shared/model'
 import PlayerPlaylistTrack from './PlayerPlaylistTrack.vue'
 import type { DraggableEvent, ReorderPayload } from '~shared/lib'
 
@@ -29,6 +38,8 @@ const dragOptions = {
   disabled: false
 }
 
+const { isMobile } = useDevice()
+const { isPlaylistExpanded } = usePlayer()
 const { primaryPlaylist } = usePlaylistService()
 
 const enabledTracksOnly = computed(() => {
@@ -52,18 +63,24 @@ const orderChanged = (event: DraggableEvent) => {
 .playlist {
   position: fixed;
   z-index: 2000;
-  width: 35vw;
+  width: 100vw;
   right: 0;
-  bottom: var.$playerHeight;
+  top: 0;
   background-color: var.$white;
-  height: calc(100vh - var.$playerHeight);
+  height: 100vh;
   overflow: auto;
   border-radius: 0;
   transition: all 0.5s var.$animation;
   box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%);
 
-  @include var.media('>=laptop') {
+  @include var.media('<desktop') {
+    padding-top: var.$doublePadding;
+  }
+
+  @include var.media('>=desktop') {
     width: calc(19.48% * 2 - 4rem);
+    height: calc(100vh - var.$playerHeight);
+    bottom: var.$playerHeight;
   }
 
   @include var.media('>=desktop') {
@@ -100,6 +117,12 @@ const orderChanged = (event: DraggableEvent) => {
 
   &__tracks {
     overflow: hidden;
+  }
+
+  &__collapse {
+    position: absolute;
+    top: var.$minPadding;
+    left: var.$minPadding;
   }
 }
 </style>

@@ -169,7 +169,7 @@ const activateEditMode = () => {
   &__hero {
     background-color: var.$dark;
 
-    @include var.media('<laptop') {
+    @include var.media('<desktop') {
       position: fixed;
       top: 0;
       left: 0;
@@ -177,7 +177,7 @@ const activateEditMode = () => {
       height: 100vw;
     }
 
-    @include var.media('>=laptop') {
+    @include var.media('>=desktop') {
       position: relative;
       display: flex;
       padding: 25px;
@@ -188,11 +188,11 @@ const activateEditMode = () => {
       position: relative;
       z-index: 9000;
 
-      @include var.media('<laptop') {
+      @include var.media('<desktop') {
         width: 100%;
       }
 
-      @include var.media('>=laptop') {
+      @include var.media('>=desktop') {
         width: var.$coverWidth;
       }
     }
@@ -204,6 +204,10 @@ const activateEditMode = () => {
       flex: 1 1 0;
       display: flex;
       flex-direction: column;
+
+      @include var.media('<desktop') {
+        display: none;
+      }
     }
 
     &-heading {

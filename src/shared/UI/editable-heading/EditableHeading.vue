@@ -64,11 +64,11 @@ watch(localHeroTitle, (newValue) => {
     background-color: transparent;
     width: 100%;
 
-    @include var.media('<tablet') {
+    @include var.media('<desktop') {
       @include var.serif(2rem);
     }
 
-    @include var.media('>=tablet') {
+    @include var.media('>=desktop') {
       @include var.serif(3rem);
     }
   }

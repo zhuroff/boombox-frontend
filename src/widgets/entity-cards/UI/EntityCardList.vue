@@ -68,7 +68,7 @@ const emit = defineEmits<Emits>()
     flex-direction: row;
   }
 
-  @include var.media('>=laptop') {
+  @include var.media('>=desktop') {
     margin-bottom: auto;
   }
 }

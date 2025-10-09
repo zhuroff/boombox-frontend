@@ -10,7 +10,7 @@
     <transition name="fade">
       <AlbumContent
         v-if="album"
-        :relatedAlbums="relatedAlbums"
+        :relatedAlbums="!isMobile ? relatedAlbums : []"
         entityKey="toy"
       >
         <template #hero>
