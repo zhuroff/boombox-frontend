@@ -56,12 +56,12 @@ export const localesBY: LocaleDictionary = {
     }
   },
   headings: {
-    albumsPage: 'Усяго альбомаў у калекцыі: {x}',
+    albumsPage: 'Усяго альбомаў: {x}',
     collectionsPage: 'Усяго калекцый: {x}',
-    compilationsPage: 'Усяго кампіляцый у калекцыі: {x}',
-    artistsPage: 'Усяго артыстаў у калекцыі: {x}',
-    genresPage: 'Усяго жанраў у калекцыі: {x}',
-    periodsPage: 'Усяго перыядаў у калекцыі: {x}',
+    compilationsPage: 'Усяго кампіляцый: {x}',
+    artistsPage: 'Усяго артыстаў: {x}',
+    genresPage: 'Усяго жанраў: {x}',
+    periodsPage: 'Усяго перыядаў: {x}',
     backups: 'Створаныя бэкапы',
     users: 'Карыстальнікі'
   },

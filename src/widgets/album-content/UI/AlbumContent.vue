@@ -1,7 +1,10 @@
 <template>
   <div class="album">
     <slot name="hero"></slot>
-    <div :class="`album__content --${cardsTemplate}`">
+    <div
+      v-if="!noMobileContent || !isMobile"
+      :class="`album__content --${cardsTemplate}`"
+    >
       <div
         class="album__main"
         ref="albumContent"
@@ -43,10 +46,12 @@ interface Props {
   entityKey: string
   relatedAlbums?: RelatedAlbums<UnifiedEntityCard>[]
   cardsTemplate?: 'col' | 'row' | 'offset'
+  noMobileContent?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
-  cardsTemplate: 'col'
+  cardsTemplate: 'col',
+  noMobileContent: false
 })
 
 const { isMobile } = useDevice()
@@ -60,6 +65,10 @@ const { localize } = useLocalization()
   flex: 1 1 0;
   position: relative;
 
+  @include var.media('<desktop') {
+    min-height: 100vh;
+  }
+
   &__content {
     flex: 1 1 0;
     position: relative;    
@@ -67,9 +76,10 @@ const { localize } = useLocalization()
     @include var.media('<desktop') {
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
-      background-color: var.$paleLT;
-      margin-top: 100vw;
+      background-color: var.$paleLW;
+      margin-top: calc(100vw + 1rem);
       padding: var.$minPadding;
+      z-index: 9000;
 
       @include var.media('landscape') {
         margin-top: 80vh;
@@ -111,8 +121,28 @@ const { localize } = useLocalization()
 
   &__frame {
     position: relative;
-    margin-bottom: var.$mainPadding;
-    width: var.$coverWidth;
+
+    @include var.media('<desktop') {
+      width: 100vw;
+      padding: calc(42px + 1rem) 1rem 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: var.$black;
+
+      iframe {
+        width: 100% !important;
+        max-width: 400px !important;
+        border-radius: var.$borderRadiusMD;
+        overflow: hidden;
+      }
+    }
+
+    @include var.media('>=desktop') {
+      width: var.$coverWidth;
+      margin-bottom: var.$mainPadding;
+    }
   }
 
   &__related {

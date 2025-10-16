@@ -79,7 +79,7 @@ const onSearch = (value: string) => {
     color: var.$paleMD;
 
     @include var.media('<desktop') {
-      @include var.serif(1rem);
+      @include var.serif(1.25rem);
       margin-right: 1rem;
     }
 

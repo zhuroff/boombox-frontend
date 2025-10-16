@@ -52,7 +52,11 @@ const { data: genres, isFetching, isFetched } = useGetList<CloudEntity>(genresCo
 .toy-genres {
 
   @include var.media('<desktop') {
-    margin-top: 7rem;
+    margin-top: 4rem;
+    padding: 0 var.$minPadding var.$mainPadding;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   @include var.media('>=desktop') {

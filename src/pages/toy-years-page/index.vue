@@ -79,20 +79,63 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use '~/app/styles/variables' as var;
 
 .toy-years {
 
+  @include var.media('<desktop') {
+    padding-top: var.$doublePadding;
+  }
+
+  .header {
+
+    @include var.media('<desktop') {
+      display: flex;
+      flex-direction: column;
+      gap: var.$minPadding;
+
+      & > * {
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+
   .button {
-    margin-left: var.$mainPadding;
+
+    &.--rounded {
+      @include var.media('<desktop') {
+        order: -1;
+        margin-bottom: var.$basicPadding;
+      }
+    }
+
+    @include var.media('>=desktop') {
+      margin-left: var.$mainPadding;
+    }
   }
 
   &__list {
     padding: 25px;
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(10, 1fr);
+
+    @include var.media('<desktop') {
+      grid-template-columns: repeat(3, 1fr);
+
+      @include var.media('landscape') {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    @include var.media('>=desktop') {
+      grid-template-columns: repeat(8, 1fr);
+    }
+
+    @include var.media('>=desktop-md') {
+      grid-template-columns: repeat(10, 1fr);
+    }
   }
 }
 </style>

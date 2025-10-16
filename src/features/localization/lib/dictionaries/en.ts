@@ -56,12 +56,12 @@ export const localesEN: LocaleDictionary = {
     }
   },
   headings: {
-    albumsPage: 'Total albums in the collection: {x}',
+    albumsPage: 'Total albums: {x}',
     collectionsPage: 'Total collections: {x}',
     compilationsPage: 'Total compilations: {x}',
-    artistsPage: 'Total artists in the collection: {x}',
-    genresPage: 'Total genres in the collection: {x}',
-    periodsPage: 'Total periods in the collection: {x}',
+    artistsPage: 'Total artists: {x}',
+    genresPage: 'Total genres: {x}',
+    periodsPage: 'Total periods: {x}',
     backups: 'Backups',
     users: 'Users'
   },

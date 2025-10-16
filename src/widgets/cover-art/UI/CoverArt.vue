@@ -51,7 +51,7 @@ import { Modal, Loader, Sprite } from '~shared/UI'
 import { Slider } from '~features/slider'
 import { useCoverArt } from '~widgets/cover-art'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/model'
+import { useDevice, useLocalization } from '~shared/model'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
 
 interface BookletSlideState {
@@ -78,6 +78,7 @@ const dbService = new DatabaseService()
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 
 const coverElement: Ref<null | HTMLInputElement> = ref(null)
@@ -93,7 +94,7 @@ const closeBookletModal = () => {
 }
 
 const toggleBookletModal = () => {
-  if (props.uploadable) return
+  if (props.uploadable || isMobile.value) return
   isActive.value = true
 }
 
@@ -114,6 +115,16 @@ const slideChanged = (payload: BookletSlideState) => {
 .cover {
   z-index: 10;
   position: relative;
+
+  @include var.media('<desktop') {
+    position: fixed;
+    top: calc(42px + 1rem);
+    left: 1rem;
+    width: calc(100vw - 2rem);
+    height: calc(100vw - 2rem);
+    border-radius: var.$borderRadiusMD;
+    overflow: hidden;
+  }
 
   @include var.media('>=desktop') {
     width: var.$coverWidth;

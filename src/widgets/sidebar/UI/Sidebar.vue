@@ -1,5 +1,5 @@
 <template>
-  <aside :class="[{ '--opened': isExpanded }, 'aside']">
+  <aside :class="[{ '--top-aligned': isTopAligned }, 'aside']">
     <router-link
       class="aside__homelink"
       to="/"
@@ -34,17 +34,24 @@ import { useDevice } from '~shared/model'
 import { Sprite } from '~shared/UI'
 import { useLocalization } from '~shared/model'
 
-interface Props {
-  isExpanded: boolean
-}
-
-defineProps<Props>()
-
 const { isMobile } = useDevice()
 const { localize } = useLocalization()
 const { screensaveMode, isPlaylistExpanded } = usePlayer()
 
 const router = useRouter()
+
+const mobileNavbarTopSections = new Set([
+  'album-single-page',
+  'embedded-single-page',
+  'compilation-single-page',
+  'collection-single-page',
+  'toy-genres-page',
+  'toy-years-page',
+  'toy-album-page',
+  'artist-single-page',
+  'genre-single-page',
+  'period-single-page'
+])
 
 const collapsePlayer = () => {
   screensaveMode.value = false
@@ -62,6 +69,11 @@ const navbar = computed(() => {
       route: path.replace('/', '')
     }))
 })
+
+const isTopAligned = computed(() => (
+  isMobile.value &&
+  mobileNavbarTopSections.has(String(router.currentRoute.value.name))
+))
 </script>
 
 <style lang="scss" scoped>
@@ -78,7 +90,11 @@ const navbar = computed(() => {
     left: 0;
     width: 100vw;
     overflow: auto;
-    background-color: var.$black;
+    z-index: 9100;
+
+    &.--top-aligned {
+      top: 0;
+    }
   }
 
   @include var.media('>=desktop') {
@@ -128,9 +144,14 @@ const navbar = computed(() => {
 
   &__nav {
 
+    @include var.media('<desktop') {
+      display: flex;
+    }
+
     &-list {
       @include var.media('<desktop') {
         display: flex;
+        margin: 0 auto;
       }
     }
 

@@ -13,6 +13,7 @@
         :relatedAlbums="relatedAlbums"
         entityKey="albums"
         cardsTemplate="row"
+        noMobileContent
       >
         <template #hero>
           <PageHeadAdapter

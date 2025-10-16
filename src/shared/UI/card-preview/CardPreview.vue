@@ -2,7 +2,7 @@
   <component
     :is="cardElement"
     :to="routePath"
-    class="cardlist__item-link"
+    :class="[{ '--rounded' : coverClasses.includes('--rounded') }, 'cardlist__item-link']"
   >
     <div class="cardlist__item-image">
       <div
@@ -69,11 +69,17 @@ const cardElement = computed(() => (
   &-link {
     display: flex;
     flex-direction: column;
-    text-align: center;
     position: relative;
     height: 100%;
 
+    @include var.media('<desktop') {
+      &.--rounded {
+        text-align: center;
+      }
+    }
+
     @include var.media('>=desktop') {
+      text-align: center;
       padding: 0 var.$basicPadding;
     }
   }
@@ -149,39 +155,23 @@ const cardElement = computed(() => (
   }
 
   &-title {
+    @include var.cardHeading();
 
     @include var.media('<desktop') {
-      display: none
+      color: var.$paleMD;
     }
+  }
 
-    @include var.media('>=desktop') {
-      @include var.cardHeading();
-    }
-    }
-
-    &-info {
+  &-info {
+    @include var.cardCaption();
 
     @include var.media('<desktop') {
-      display: none
+      color: var.$paleDP;
     }
 
     @include var.media('>=desktop') {
       @include var.cardCaption();
     }
   }
-
-  // &__cover {
-
-  //   &_label {
-  //     position: relative;
-  //     z-index: 1;
-
-  //     .icon {
-  //       width: 50px;
-  //       height: 50px;
-  //       color: var.$white;
-  //     }
-  //   }
-  // }
 }
 </style>

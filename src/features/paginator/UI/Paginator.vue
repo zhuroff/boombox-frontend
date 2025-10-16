@@ -110,6 +110,10 @@ const switchLimit = (payload: [string, number | string | null]) => {
   .button {
     width: var.$elementHeightMD;
     height: var.$elementHeightMD;
+    
+    @include var.media('<desktop') {
+      color: var.$paleDP;
+    }
 
     &[disabled] {
       opacity: 0.5;
@@ -118,8 +122,16 @@ const switchLimit = (payload: [string, number | string | null]) => {
 
     &.--current {
       border-radius: var.$borderRadiusSM;
-      background-color: var.$dark;
-      color: var.$white;
+
+      @include var.media('<desktop') {
+        background-color: var.$paleDP;
+        color: var.$dark;
+      }
+
+      @include var.media('>=desktop') {
+        background-color: var.$dark;
+        color: var.$white;
+      }
     }
   }
 

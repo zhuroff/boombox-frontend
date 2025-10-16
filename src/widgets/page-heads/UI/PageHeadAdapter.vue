@@ -166,16 +166,9 @@ const activateEditMode = () => {
 @use '~/app/styles/variables' as var;
 
 .album {
+
   &__hero {
     background-color: var.$dark;
-
-    @include var.media('<desktop') {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vw;
-    }
 
     @include var.media('>=desktop') {
       position: relative;

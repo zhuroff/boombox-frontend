@@ -100,7 +100,8 @@ const deleteEntity = () => {
   }
 
   @include var.media('<desktop') {
-    width: calc(50% - var.$basicPadding);
+    width: calc(50% - var.$basicPadding / 2);
+    margin-bottom: 0.75rem;
   }
 
   @include var.media('>=desktop', '<desktop') {

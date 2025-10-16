@@ -1,6 +1,7 @@
 <template>
   <div class="hero">
     <PosterUploader
+      v-if="!isMobile"
       :posterUrl="data.poster ? host(data.poster) : null"
       :entityTitle="data.title"
       @uploadPoster="uploadAndShowImage"
@@ -42,7 +43,7 @@ import { usePlaylistService } from '~features/player'
 import { useWaving } from '~features/waving'
 import { usePlayer } from '~features/player'
 import { EditableHeading } from '~shared/UI'
-import { useLocalization, useSnackbar } from '~shared/model'
+import { useDevice, useLocalization, useSnackbar } from '~shared/model'
 import { hostString } from '~shared/utils'
 import { Button } from '~shared/UI'
 import { UploadService } from '~features/uploading'
@@ -70,6 +71,7 @@ const emit = defineEmits<Emits>()
 const uploadService = new UploadService()
 const dbService = new DatabaseService()
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 const { playTrack } = usePlayer()
 const { setSnackbarMessage } = useSnackbar()
@@ -122,8 +124,11 @@ onMounted(() => {
 
 .hero {
   width: 100%;
-  height: 300px;
   position: relative;
+
+  @include var.media('>=desktop') {
+    height: 300px;
+  }
 
   &:hover {
 
@@ -134,27 +139,48 @@ onMounted(() => {
   }
 
   &__info {
-    position: absolute;
-    bottom: 25px;
-    left: 0;
-    width: 0;
-    display: flex;
-    align-items: center;
     width: 100%;
+
+    @include var.media('<desktop') {
+      display: flex;
+      align-items: center;
+    }
+
+    @include var.media('>=desktop') {
+      position: absolute;
+      bottom: 25px;
+      left: 0;
+    }
   }
 
   &__content {
-    padding: 0.5rem 25px 1rem 13rem;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var.$transBlack;
     width: 100%;
-    box-shadow: var.$shadowMedium;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @include var.media('<desktop') {
+      flex-direction: column;
+      padding: calc(42px + 1rem) 1rem 1rem 1rem;
+      text-align: center;
+    }
+
+    @include var.media('>=desktop') {
+      padding: 0.5rem 25px 1rem 13rem;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: var.$shadowMedium;
+      background-color: var.$transBlack;
+    }
+
+    &-actions {
+
+      @include var.media('<desktop') {
+        margin-top: 0.75rem;
+      }
+    }
   }
 }
 </style>

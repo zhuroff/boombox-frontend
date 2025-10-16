@@ -51,7 +51,14 @@ const albumList = computed<UnifiedEntityCard[]>(() => {
 .category {
 
   &__content {
-    padding: var.$mainPadding;
+
+    @include var.media('<desktop') {
+      padding: var.$minPadding var.$minPadding var.$mainPadding;
+    }
+
+    @include var.media('>=desktop') {
+      padding: var.$mainPadding;
+    }
   }
 }
 </style>

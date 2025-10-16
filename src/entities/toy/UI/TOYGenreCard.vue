@@ -77,7 +77,7 @@ defineProps<Props>()
 
     @include var.media('<desktop') {
       @include var.serif(1.25rem);
-      line-height: 3;
+      line-height: 1.75;
     }
 
     @include var.media('>=desktop') {

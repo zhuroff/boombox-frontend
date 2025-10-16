@@ -65,7 +65,8 @@ watch(localHeroTitle, (newValue) => {
     width: 100%;
 
     @include var.media('<desktop') {
-      @include var.serif(2rem);
+      @include var.serif(2.5rem);
+      margin-bottom: 0.5rem;
     }
 
     @include var.media('>=desktop') {

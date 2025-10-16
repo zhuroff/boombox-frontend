@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <Sidebar :isExpanded="isNavOpened" />
+    <Sidebar />
     <main
       ref="main"
-      :class="[{ '--offset': isNavOpened }, 'main']"
+      class="main"
     >
       <router-view v-slot="{ Component }">
         <component :is="Component" />
@@ -21,7 +21,6 @@ import { Player } from '~widgets/player'
 import { Snackbar } from '~shared/UI'
 
 const main = ref(null)
-const isNavOpened = ref(false)
 </script>
 
 <style lang="scss">
