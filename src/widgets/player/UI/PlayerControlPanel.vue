@@ -37,8 +37,8 @@
         />
       </div>
 
-      <div class="player__control-group">
-        <PlayerSound />
+      <div :class="[{ '--screensave': screensaveMode }, 'player__control-group']">
+        <PlayerSound v-if="!isMobile" />
         <Button
           icon="vinyl"
           title="Activate vinyl mode"
@@ -75,7 +75,10 @@
 <script setup lang="ts">
 import { usePlayer } from '~features/player'
 import { Button, ProgressBar } from '~shared/UI'
+import { useDevice } from '~shared/model'
 import PlayerSound from './PlayerSound.vue'
+
+const { isMobile } = useDevice()
 
 const {
   playNext,
@@ -84,6 +87,7 @@ const {
   playingTrack,
   progressTime,
   progressLine,
+  screensaveMode,
   toggleVinylMode,
   isPlaylistExpanded,
   isNextTrackAvailable,
@@ -164,6 +168,22 @@ const searchOnYouTube = () => {
         @include var.media('<desktop') {
           flex-wrap: wrap;
           justify-content: center;
+        }
+      }
+
+      &:not(.--main):not(.--screensave) {
+        & > *:not(:last-of-type) {
+          @include var.media('<desktop') {
+            display: none;
+          }
+        }
+
+        & > *:last-of-type {
+          @include var.media('<desktop') {
+            position: absolute;
+            left: 1rem;
+            top: 0.25rem;
+          }
         }
       }
     }

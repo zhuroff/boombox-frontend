@@ -25,7 +25,7 @@
         <template #content>
           <TrackList
             :tracks="album.tracks"
-            @trackOrderChanged="changeTracksOrder"
+            @trackOrderChanged="changePlaylistOrder"
           />
         </template>
 
@@ -76,12 +76,11 @@ import { useAlbum } from '~entities/album'
 import { Modal, Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import { useDevice } from '~shared/model'
-import type { ReorderPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
 const { isMobile } = useDevice()
-const { initPlaylist } = usePlaylistService()
+const { initPlaylist, changePlaylistOrder } = usePlaylistService()
 
 const {
   album,
@@ -104,10 +103,6 @@ const minimumAlbumData = computed(() => ({
   albumTitle: album.value?.title || '',
   albumArtist: album.value?.artist?.title || ''
 }))
-
-const changeTracksOrder = (payload: ReorderPayload) => {
-  console.log(payload)
-}
 
 watch(
   [isAlbumReady, album],

@@ -1,5 +1,13 @@
 <template>
   <section :class="[{ '--screensave': screensaveMode && isMobile }, 'player']">
+    <Button
+      v-if="isMobile"
+      icon="chevron-down"
+      className="player__collapse"
+      size="large"
+      isText
+      @click="screensaveMode = !screensaveMode"
+    />
     <PlayerInfo />
     <PlayerControlPanel />
     <transition name="slide-in">
@@ -11,6 +19,7 @@
 <script setup lang="ts">
 import { useDevice } from '~shared/model'
 import { usePlayer } from '~features/player'
+import { Button } from '~shared/UI'
 import PlayerInfo from './PlayerInfo.vue'
 import PlayerPlaylist from './PlayerPlaylist.vue'
 import PlayerControlPanel from './PlayerControlPanel.vue'
@@ -25,15 +34,15 @@ const { screensaveMode, isPlaylistExpanded } = usePlayer()
 .player {
   position: fixed;
   bottom: 0;
-  z-index: 2000;
+  z-index: 9999;
 
   @include var.media('<desktop') {
     left: 0;
     box-shadow: var.$shadowMedium;
-    display: grid;
     width: 100vw;
 
     &.--screensave {
+      display: grid;
       height: 100vh;
       grid-template-columns: 100%;
       grid-template-rows: 73vh 27vh;
@@ -55,9 +64,24 @@ const { screensaveMode, isPlaylistExpanded } = usePlayer()
     }
 
     &:not(.--screensave) {
-      height: 0;
-      background-color: var.$dark;
+      height: 3.5rem;
+      background-color: var.$black;
       grid-template-columns: 1fr 150px;
+      display: flex;
+      align-items: center;
+
+      .player__info,
+      .player__progress {
+        display: none;
+      }
+
+      .player__collapse {
+        top: 0.25rem;
+      }
+
+      .player__control {
+        padding-bottom: 0;
+      }
 
       .player__left {
         padding-top: 0;
@@ -94,6 +118,10 @@ const { screensaveMode, isPlaylistExpanded } = usePlayer()
         }
       }
 
+      .player__collapse {
+        transform: rotate(180deg);
+      }
+
       .player__cover {
         width: 50px;
         height: 50px;
@@ -123,12 +151,24 @@ const { screensaveMode, isPlaylistExpanded } = usePlayer()
         }
       }
 
-      .player__progress,
       .player__crackle,
       .player__sound,
-      .player__youtube,
-      .player__repeat {
+      .player__youtube {
         display: none;
+      }
+    }
+  }
+
+  &__collapse {
+
+    @include var.media('<desktop') {
+      position: absolute;
+      top: 0;
+      right: var.$minPadding;
+      z-index: 1000;
+
+      .icon {
+        fill: var.$white;
       }
     }
   }

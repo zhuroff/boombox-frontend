@@ -40,7 +40,7 @@ const dragOptions = {
 
 const { isMobile } = useDevice()
 const { isPlaylistExpanded } = usePlayer()
-const { primaryPlaylist } = usePlaylistService()
+const { primaryPlaylist, changePlaylistOrder } = usePlaylistService()
 
 const enabledTracksOnly = computed(() => {
   return primaryPlaylist.value.filter((track) => !track.idDisabled)
@@ -51,9 +51,8 @@ const orderChanged = (event: DraggableEvent) => {
     oldOrder: event.oldIndex,
     newOrder: event.newIndex,
   }
-  console.log(payload)
 
-  // changePlaylistOrder(payload)
+  changePlaylistOrder(payload)
 }
 </script>
 
@@ -74,7 +73,8 @@ const orderChanged = (event: DraggableEvent) => {
   box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%);
 
   @include var.media('<desktop') {
-    padding-top: var.$doublePadding;
+    padding-top: var.$mainPadding;
+    padding-bottom: var.$mainPadding;
   }
 
   @include var.media('>=desktop') {
@@ -121,8 +121,16 @@ const orderChanged = (event: DraggableEvent) => {
 
   &__collapse {
     position: absolute;
-    top: var.$minPadding;
-    left: var.$minPadding;
+
+    @include var.media('<desktop') {
+      top: 0;
+      right: 0.25rem;
+    }
+
+    @include var.media('>=desktop') {
+      top: var.$minPadding;
+      left: var.$minPadding;
+    }
   }
 }
 </style>

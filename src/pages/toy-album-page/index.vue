@@ -26,7 +26,7 @@
           <TrackList
             :tracks="album.tracks"
             isTOYTracks
-            @trackOrderChanged="changeTracksOrder"
+            @trackOrderChanged="changePlaylistOrder"
           />
         </template>
 
@@ -53,7 +53,6 @@ import { TrackList } from '~widgets/tracklist'
 import { DatabaseService } from '~shared/api'
 import { useDevice } from '~shared/model'
 import { Loader } from '~shared/UI'
-import type { ReorderPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 const route = useRoute()
@@ -69,11 +68,7 @@ const {
   relatedAlbums
 } = useTOYAlbum(dbService, routeParams)
 
-const { initPlaylist } = usePlaylistService()
-
-const changeTracksOrder = (payload: ReorderPayload) => {
-  console.log(payload)
-}
+const { initPlaylist, changePlaylistOrder } = usePlaylistService()
 
 watch(
   [isAlbumReady, album],

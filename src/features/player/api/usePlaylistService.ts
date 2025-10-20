@@ -4,7 +4,8 @@ import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 import type { TrackBasic } from '~entities/track'
 import type { EmbeddedFull } from '~entities/embedded'
 import type { PlaylistTrack } from '~features/player'
-import type { AlbumFull } from '~/entities/album'
+import type { AlbumFull } from '~entities/album'
+import type { ReorderPayload } from '~shared/lib'
 
 const createPlaylistTrack = (
   album: Exclude<UnifiedEntityFullCard, EmbeddedFull>,
@@ -174,6 +175,12 @@ const usePlaylistService = () => {
     targetTrack.idDisabled = !targetTrack.idDisabled
   }
 
+  const changePlaylistOrder = (payload: ReorderPayload) => {
+    const targetTrack = primaryPlaylist.value[payload.oldOrder]
+    primaryPlaylist.value.splice(payload.oldOrder, 1)
+    primaryPlaylist.value.splice(payload.newOrder, 0, targetTrack)
+  }
+
   return {
     initPlaylist,
     getNextTrack,
@@ -186,6 +193,7 @@ const usePlaylistService = () => {
     secondaryPlaylist,
     isTrackInPlaylist,
     addTrackToPlaylist,
+    changePlaylistOrder,
     searchTrackInPlaylists,
     toggleTrackAvailability
   }

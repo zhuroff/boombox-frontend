@@ -44,6 +44,7 @@ const main = ref(null)
     width: 100vw;
     min-height: 100vh;
     background-color: var.$black;
+    padding-bottom: 3.5rem;
   }
 
   @include var.media('>=desktop') {
@@ -59,7 +60,7 @@ const main = ref(null)
     padding: 2rem 1rem var.$mainPadding 1rem;
 
     @include var.media('<desktop') {
-      margin-top: 1.5rem;
+      margin-top: 2rem;
     }
 
     @include var.media('>=desktop') {

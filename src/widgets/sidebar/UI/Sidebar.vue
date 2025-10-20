@@ -91,9 +91,11 @@ const isTopAligned = computed(() => (
     width: 100vw;
     overflow: auto;
     z-index: 9100;
+    background-color: var.$black;
 
     &.--top-aligned {
       top: 0;
+      position: fixed;
     }
   }
 
@@ -178,6 +180,7 @@ const isTopAligned = computed(() => (
         text-align: right;
         color: var.$paleMD;
         font-size: 0.875rem;
+        line-height: 4;
 
         &.router-link-active {
           color: var.$warning;
