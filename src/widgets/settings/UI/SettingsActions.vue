@@ -1,26 +1,24 @@
 <template>
   <div class="settings__actions">
     <Button
-      v-if="!isMobile"
+      isDisabled
       :label="localize('settings.createUser')"
       @click="showUserForm"
     />
     <Button
-      v-if="!isMobile"
       :label="localize('settings.showUsers')"
       @click="handleGetUsers"
     />
     <BackupActions
       action="create"
-      @onEmit="<T>(data: T) => emit('passBackups', data)"
+      @onEmit="backupDataEmit"
     />
     <BackupActions
-      v-if="!isMobile"
       action="get"
-      @onEmit="<T>(data: T) => emit('passBackups', data)"
+      @onEmit="backupDataEmit"
     />
     <SyncAction
-      @passSyncData="<T>(data: T) => emit('passSyncData', data)"
+      @passSyncData="syncDataEmit"
     />
     <Button
       :label="localize('settings.logout')"
@@ -36,7 +34,7 @@ import { SyncAction } from '~features/sync'
 import { BackupActions } from '~features/backup'
 import { useUserApi, UserService } from '~entities/user'
 import { DatabaseService } from '~shared/api'
-import { useLocalization, useDevice } from '~shared/model'
+import { useLocalization } from '~shared/model'
 import { LanguageSwitcher } from '~features/localization'
 
 interface Emits {
@@ -51,9 +49,12 @@ const dbService = new DatabaseService()
 const userService = new UserService()
 
 const { localize } = useLocalization()
-const { isMobile } = useDevice()
 
-const { logout, createUser, getUsers, users } = useUserApi(userService, dbService)
+const { logout, getUsers, users } = useUserApi(userService, dbService)
+
+const backupDataEmit = <T,>(data: T) => emit('passBackups', data)
+
+const syncDataEmit = <T,>(data: T) => emit('passSyncData', data)
 
 const handleGetUsers = async () => {
   await getUsers()

@@ -245,5 +245,16 @@ export const localesEN: LocaleDictionary = {
     file_count_exceeded: 'File count exceeded',
     unexpected_file_field: 'Unexpected file field',
     only_webp_allowed: 'Only webp images are allowed'
+  },
+  usersTable: {
+    id: 'ID',
+    email: 'Email',
+    role: 'Role',
+    delete: 'Delete user',
+  },
+  backupsTable: {
+    timestamp: 'Timestamp',
+    restore: 'Restore backup',
+    delete: 'Delete backup'
   }
 }

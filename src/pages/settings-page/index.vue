@@ -56,6 +56,7 @@ const usersTableState = reactive<BasicTableState>({
 })
 
 const setBackups = (data: string[]) => {
+  console.log(data)
   backupsTableState.rows = data.map((timestamp) => ({ timestamp, id: String(timestamp) }))
 }
 

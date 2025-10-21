@@ -49,6 +49,7 @@ const useBackup = (action: BackupAction, backupService: BackupService, payload?:
       })
       return await backupService.fetchBackups()
     } catch (error) {
+      refetch()
       setSnackbarMessage({
         message: localize('settings.snackbar.deleteBackupError'),
         type: 'error'
@@ -79,7 +80,7 @@ const useBackup = (action: BackupAction, backupService: BackupService, payload?:
     return actionsMap.get(action)
   })
 
-  const { data } = useQuery<any>({
+  const { data, refetch } = useQuery<any>({
     queryKey: [action, payload],
     retry: 3,
     enabled: isEnabled,

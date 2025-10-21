@@ -27,16 +27,25 @@ const { localize } = useLocalization()
 </script>
 
 <style scoped lang="scss">
+@use '~/app/styles/variables' as var;
+
 .album__hero {
 
   &-actions {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    justify-content: flex-end;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+
+    @include var.media('<desktop') {
+      margin: 0 auto;
+    }
+
+    @include var.media('>=desktop') {
+      justify-content: flex-end;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
   }
 }
 </style>

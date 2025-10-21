@@ -161,7 +161,7 @@ onMounted(() => {
 
     @include var.media('<desktop') {
       flex-direction: column;
-      padding: calc(56px + 1rem) 1rem 1rem 1rem;
+      padding: calc(110px + 1rem) 1rem 1rem 1rem;
       text-align: center;
     }
 

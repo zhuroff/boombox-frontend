@@ -183,7 +183,7 @@ const trackOptions = computed(() => (() => {
         value: 'toPlaylist'
       })
 
-      if (!!playingTrack.value?._id) {
+      if (playingTrack.value?._id) {
         options.push({
           label: localize('trackActions.playNext'),
           value: 'playNext'

@@ -8,6 +8,7 @@
       v-for="key in schema.order"
       :key="key"
       :is="cellComponent(key)"
+      @onEmit="<T>(data: T) => emit('onEmit', data)"
     />
   </tr>
 </template>
@@ -26,6 +27,7 @@ type Props = {
 }
 
 type Emits = {
+  <T>(e: 'onEmit', payload: T): void
   (e: 'tableRowClick', payload: TableRow): void
 }
 
@@ -110,7 +112,11 @@ const cellComponent = (key: keyof TableRow) => {
       h(
         defineAsyncComponent(() => import(`${schemaConfig.component}`)),
         {
-          ...(schemaConfig.props || {})
+          ...(schemaConfig.props || {}),
+          value: schemaConfig.props?.valueRef
+            ? props.row[schemaConfig.props.valueRef]
+            : schemaConfig.props.value,
+          onOnEmit: <T>(data: T) => emit('onEmit', data)
         }
       )
     )

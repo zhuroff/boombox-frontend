@@ -15,6 +15,7 @@
         :schema="schema"
         :isActionable="isActionable"
         @tableRowClick="(row) => emit('tableRowClick', row)"
+        @onEmit="<T>(data: T) => emit('onEmit', data)"
       />
     </tbody>
   </table>
@@ -35,6 +36,7 @@ type Props = {
 }
 
 type Emits = {
+  <T>(e: 'onEmit', payload: T): void
   (e: 'tableRowClick', payload: TableRow): void
 }
 

@@ -56,7 +56,7 @@ const playNow = () => {
     playTrack(props.track)
   } else {
     addTrackToPlaylist(props.track, playingTrackIndex.value)
-    !!playingTrack.value ? playNext() : playTrack(props.track)
+    playingTrack.value ? playNext() : playTrack(props.track)
   }
 }
 </script>

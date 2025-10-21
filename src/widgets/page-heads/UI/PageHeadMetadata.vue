@@ -105,9 +105,16 @@ const { localize } = useLocalization()
 .album__hero {
 
   &-metadata {
-    color: var.$paleDP;
-    line-height: 1.5;
-    margin-top: auto;
+
+    @include var.media('<desktop') {
+      display: none;
+    }
+
+    @include var.media('>=desktop') {
+      color: var.$paleDP;
+      line-height: 1.5;
+      margin-top: auto;
+    }
   }
 
   &-category {

@@ -5,7 +5,7 @@
   >
     <Sprite v-if="option.icon" :name="option.icon" />
     <span class="dropdown__option-label">
-      {{ localize(option.path) }}
+      {{ option.path }}
     </span>
   </li>
 </template>
@@ -13,7 +13,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Sprite } from '~shared/UI'
-import { useLocalization } from '~shared/model'
 import type { DropdownItem } from '~shared/lib'
 
 interface Props {
@@ -28,8 +27,6 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   size: 'medium',
 })
-
-const { localize } = useLocalization()
 
 const emit = defineEmits<Emits>()
 

@@ -135,7 +135,7 @@ const PageHeadComponent = computed(() => {
     case 'compilation':
       return h(CompilationPageHead, { album: props.album, length: totalTracksTime.value })
     default:
-      assertNever(props.album)
+      return assertNever(props.album)
   }
 })
 
@@ -170,6 +170,11 @@ const activateEditMode = () => {
   &__hero {
     background-color: var.$dark;
 
+    @include var.media('<desktop') {
+      display: flex;
+      flex-direction: column;
+    }
+
     @include var.media('>=desktop') {
       position: relative;
       display: flex;
@@ -191,15 +196,22 @@ const activateEditMode = () => {
     }
 
     &-info {
-      padding-left: 25px;
-      position: relative;
-      z-index: 2000;
       flex: 1 1 0;
       display: flex;
       flex-direction: column;
 
       @include var.media('<desktop') {
-        display: none;
+        order: -1;
+        position: fixed;
+        z-index: 9000;;
+        width: 100%;
+        top: 4rem;
+      }
+
+      @include var.media('>=desktop') {
+        position: relative;
+        z-index: 2000;
+        padding-left: var.$mainPadding;
       }
     }
 
@@ -207,6 +219,10 @@ const activateEditMode = () => {
       margin: 0.5rem 0 1.75rem;
       max-width: 850px;
       color: var.$warning;
+
+      @include var.media('<desktop') {
+        display: none;
+      }
 
       @include var.media('<desktop-md') {
         @include var.serif(1.75rem);

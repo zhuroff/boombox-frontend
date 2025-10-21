@@ -118,7 +118,7 @@ const slideChanged = (payload: BookletSlideState) => {
 
   @include var.media('<desktop') {
     position: fixed;
-    top: calc(56px + 1rem);
+    top: calc(110px + 1rem);
     left: 1rem;
     width: calc(100vw - 2rem);
     height: calc(100vw - 2rem);

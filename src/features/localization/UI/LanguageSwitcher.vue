@@ -14,13 +14,13 @@ import { useLocalization } from '~shared/model'
 import { Dropdown } from '~shared/UI'
 import type { DropdownItem } from '~shared/lib'
 
-const { locales, currentLocale, setLocale } = useLocalization()
+const { localize, locales, currentLocale, setLocale } = useLocalization()
 
 const localesSelector = computed<DropdownItem[]>(() => {
   return (
     Array.from(locales.values())
       .map(({ locale }) => ({
-        path: `languages.${locale}`,
+        path: localize(`languages.${locale}`),
         value: locale,
         icon: `flag-${locale}`
       }))

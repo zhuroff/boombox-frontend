@@ -245,5 +245,16 @@ export const localesBY: LocaleDictionary = {
     file_count_exceeded: 'Памер файла перавышае 5МБ',
     unexpected_file_field: 'Нечаканае поле файла',
     only_webp_allowed: 'Дапушчальны тып файла: webp'
+  },
+  usersTable: {
+    id: 'ID',
+    email: 'Электронная пошта',
+    role: 'Роля',
+    delete: 'Выдаліць карыстальніка',
+  },
+  backupsTable: {
+    timestamp: 'Таймстамп',
+    restore: 'Аднавіць бэкап',
+    delete: 'Выдаліць бэкап'
   }
 }
