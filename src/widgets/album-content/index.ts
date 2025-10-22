@@ -1,0 +1,1 @@
+export { default as AlbumContent } from './UI/AlbumContent.vue'

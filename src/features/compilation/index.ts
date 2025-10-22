@@ -1,0 +1,1 @@
+export { default as useCompilations } from './model/useCompilations'

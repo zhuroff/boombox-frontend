@@ -1,0 +1,5 @@
+export { default as PosterUploader } from './UI/PosterUploader.vue'
+export { default as AvatarUploader } from './UI/AvatarUploader.vue'
+export { default as UploadService } from './api/UploadService'
+export { default as useImageUploader } from './model/useImageUploader'
+export * from './lib/types'

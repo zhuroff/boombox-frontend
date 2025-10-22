@@ -1,0 +1,74 @@
+<template>
+  <div class="search__create">
+    <TextInput
+      name="create"
+      type="text"
+      size="large"
+      :value="inputValue"
+      :placeholder="localize(inputPlaceholder)"
+      :isError="!!error"
+      @onInput="(value) => emit('passInputValue', value)"
+    />
+    <Button
+      v-if="!isSaveDisabled"
+      icon="save"
+      size="large"
+      isText
+      @click="() => emit('createEntity')"
+    />
+    <div
+      v-if="!!error"
+      class="search__error"
+    >{{ error }}</div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Button, TextInput } from '~shared/UI'
+import { useLocalization } from '~shared/model'
+
+interface Props {
+  error: string | null
+  isSaveDisabled: boolean
+  inputValue: string
+  inputPlaceholder?: string
+}
+
+interface Emits {
+  (e: 'createEntity'): void
+  (e: 'passInputValue', value: string): void
+}
+
+withDefaults(defineProps<Props>(), {
+  inputPlaceholder: 'search.placeholder',
+})
+const emit = defineEmits<Emits>()
+const { localize } = useLocalization()
+</script>
+
+<style scoped lang="scss">
+@use '~/app/styles/variables' as var;
+
+.search {
+
+  &__create {
+    position: relative;
+
+    .input-field {
+      padding-right: 2.5rem;
+    }
+
+    .button {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
+  &__error {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: var.$error;
+  }
+}
+</style>

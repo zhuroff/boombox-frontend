@@ -1,0 +1,206 @@
+<template>
+  <tr
+    class="table__body-row"
+    :style="{ cursor: isActionable ? 'pointer' : 'default' }"
+    @click="() => isActionable && emit('tableRowClick', row)"
+  >
+    <component
+      v-for="key in schema.order"
+      :key="key"
+      :is="cellComponent(key)"
+      @onEmit="onEmit"
+    />
+  </tr>
+</template>
+
+<script setup lang="ts">
+import { defineAsyncComponent, h } from 'vue'
+import { RouterLink } from 'vue-router'
+import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
+import type { LocaleItem, TableRow, TableSchema } from '~shared/lib'
+
+const componentModules = import.meta.glob<any>([
+  '/src/features/**/UI/*.vue',
+  '/src/entities/**/UI/*.vue'
+], { eager: false })
+
+const allModulesMap = new Map<string, any>()
+
+Object.keys(componentModules).forEach((path) => {
+  const loader = componentModules[path]
+  
+  allModulesMap.set(path, loader)  
+  allModulesMap.set(path.replace(/^\/src\//, '~/'), loader)  
+  allModulesMap.set(path.replace(/^\/src/, ''), loader)  
+  allModulesMap.set(path.replace(/^\/src\//, ''), loader)
+})
+
+type Props = {
+  row: TableRow
+  schema: TableSchema,
+  isActionable?: boolean
+  currentLocale?: LocaleItem
+}
+
+type Emits = {
+  <T>(e: 'onEmit', payload: T): void
+  (e: 'tableRowClick', payload: TableRow): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isActionable: false
+})
+
+const emit = defineEmits<Emits>()
+
+const onEmit = <T,>(data: T): void => {
+  emit('onEmit', data)
+}
+
+const dateConfig = {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit'
+} as const
+
+const formatValue = (value: string, schema: JSONSchema4) => {
+  if (schema.format === 'date-time' && props.currentLocale) {
+    return (
+      new Date(Number(value))
+        .toLocaleDateString(props.currentLocale.intlName, dateConfig)
+    )
+  }
+
+  return value
+}
+
+const unwrapValue = (value: JSONSchema4Type) => {
+  return Array.isArray(value) ? value.join(', ') : value ? String(value) : 'N/A'
+}
+
+const renderElement = (key: keyof TableRow, schema: JSONSchema4) => {
+  const value = unwrapValue(props.row[key])
+
+  switch(schema.element) {
+    case 'img':
+      return h(
+        'img',
+        { src: value },
+      )
+    case 'RouterLink':
+      return h(
+        RouterLink,
+        { to: value }
+      )
+    case 'a':
+      return h(
+        'a',
+        {
+          href: value,
+          target: schema.isInnerPage ? '_self' : '_blank'
+        }
+      )
+    default:
+      return h(
+        'span',
+        {},
+        formatValue(value, schema)
+      )
+  }
+}
+
+const cellComponent = (key: keyof TableRow) => {
+  const schemaConfig = props.schema.properties?.[key]
+  const value = unwrapValue(props.row[key])
+  
+  if (!schemaConfig) {
+    return h('td', {}, value)
+  }
+
+  if ('element' in schemaConfig) {
+    return h(
+      'td',
+      {},
+      renderElement(key, schemaConfig)
+    )
+  }
+
+  if ('component' in schemaConfig) {
+    const componentPath = schemaConfig.component
+    
+    const componentLoader = allModulesMap.get(componentPath)
+    
+    if (!componentLoader) {
+      console.error(`Component not found: ${componentPath}`)
+      console.error('Available components:', Array.from(allModulesMap.keys()))
+      return h('td', {}, `Component not found: ${componentPath}`)
+    }
+    
+    return h(
+      'td',
+      {},
+      h(
+        defineAsyncComponent(componentLoader as any),
+        {
+          ...(schemaConfig.props || {}),
+          value: schemaConfig.props?.valueRef
+            ? props.row[schemaConfig.props.valueRef]
+            : schemaConfig.props.value,
+          onOnEmit: onEmit
+        }
+      )
+    )
+  }
+
+  return h('td', {}, formatValue(value, schemaConfig))
+}
+</script>
+
+<style lang="scss" scoped>
+@use '~/app/styles/variables' as var;
+
+.table__body-row {
+  border-bottom: 1px solid var.$paleMD;
+  transition: background-color 0.2s var.$animation;
+
+  &:last-of-type {
+    border-bottom: none
+  }
+
+  &:nth-of-type(odd) {
+    background-color: var.$paleLW;
+  }
+
+  &:hover {
+    background-color: var.$paleMD;
+    transition: background-color 0.2s var.$animation;
+  }
+
+  td {
+    padding: 0.25rem;
+    vertical-align: middle;
+    font-size: 0.875rem;
+
+    img {
+      width: 50px;
+      height: 50px;
+      max-width: 50px;
+      max-height: 50px;
+      object-fit: contain;
+      border-radius: var.$borderRadiusSM;
+    }
+
+    span {
+      font-size: 0.875rem;
+    }
+
+    &.--right {
+      text-align: right;
+    }
+
+    &.--center {
+      text-align: center;
+    }
+  }
+}
+</style>

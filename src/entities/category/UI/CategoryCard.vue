@@ -1,0 +1,41 @@
+<template>
+  <CardPreview
+    :routePath="routePath"
+    :cardCover="cardCover"
+    :cardTitle="card.title"
+    :withVinyl="false"
+    :cardCaption="cardCaption"
+    :coverClasses="['--fixed', '--rounded']"
+  />
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { hostString } from '~shared/utils'
+import { useLocalization } from '~shared/model'
+import { CardPreview } from '~shared/UI'
+import type { CategoryBasic } from '../lib/types'
+
+interface Props {
+  card: CategoryBasic
+  entityKey: string
+  placeholderPreview: string
+}
+
+const props = defineProps<Props>()
+
+const { localize } = useLocalization()
+const host = (pathname: string) => hostString(pathname)
+
+const routePath = computed(() => ({
+  path: `/${props.entityKey}/${props.card._id}`
+}))
+
+const cardCover = computed(() => (
+  props.card.avatar ? host(props.card.avatar) : props.placeholderPreview
+))
+
+const cardCaption = computed(() => (
+  `${localize('navigation.albums')}: ${props.card.albums}`
+))
+</script>
