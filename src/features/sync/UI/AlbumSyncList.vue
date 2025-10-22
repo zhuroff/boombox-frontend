@@ -36,7 +36,9 @@
             v-for="[k, reason] in Object.entries(row)"
             :key="k"
           >
-            <strong>{{ localize(`syncResponse.invalidValue.${k}`) }}</strong>: {{ reason }}
+            <strong>
+              {{ localize(`syncResponse.invalidValue.${k}`) }}
+            </strong>: {{ reason }}
           </div>
         </li>
       </ul>
@@ -48,6 +50,7 @@
 import { computed } from 'vue'
 import { useLocalization } from '~shared/model'
 import type { SyncResponse } from '~features/sync'
+import type { AlbumBasic } from '~entities/album'
 import AlbumSyncRow from './AlbumSyncRow.vue'
 
 interface Props {
@@ -62,7 +65,7 @@ const contentSections = computed(() => {
   return (
     Object.entries(props.sections)
       .filter(([_, value]) => value.length > 0)
-  )
+  ) as [string, AlbumBasic[]][]
 })
 </script>
 

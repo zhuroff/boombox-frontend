@@ -15,7 +15,7 @@
         :schema="schema"
         :isActionable="isActionable"
         @tableRowClick="(row) => emit('tableRowClick', row)"
-        @onEmit="<T>(data: T) => emit('onEmit', data)"
+        @onEmit="onEmit"
       />
     </tbody>
   </table>
@@ -46,6 +46,10 @@ withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+
+const onEmit = <T,>(data: T): void => {
+  emit('onEmit', data)
+}
 </script>
 
 <style lang="scss">

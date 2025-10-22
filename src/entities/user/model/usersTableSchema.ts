@@ -15,7 +15,7 @@ const usersTableSchema: TableSchema = {
     },
     delete: {
       type: 'object',
-      component: '/src/features/user/UI/DeleteUserButton.vue',
+      component: '~/features/user/UI/DeleteUserButton.vue',
       props: {
         size: 'small',
         align: 'right',

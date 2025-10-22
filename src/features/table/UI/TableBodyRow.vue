@@ -8,7 +8,7 @@
       v-for="key in schema.order"
       :key="key"
       :is="cellComponent(key)"
-      @onEmit="<T>(data: T) => emit('onEmit', data)"
+      @onEmit="onEmit"
     />
   </tr>
 </template>
@@ -18,6 +18,22 @@ import { defineAsyncComponent, h } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type { LocaleItem, TableRow, TableSchema } from '~shared/lib'
+
+const componentModules = import.meta.glob<any>([
+  '/src/features/**/UI/*.vue',
+  '/src/entities/**/UI/*.vue'
+], { eager: false })
+
+const allModulesMap = new Map<string, any>()
+
+Object.keys(componentModules).forEach((path) => {
+  const loader = componentModules[path]
+  
+  allModulesMap.set(path, loader)  
+  allModulesMap.set(path.replace(/^\/src\//, '~/'), loader)  
+  allModulesMap.set(path.replace(/^\/src/, ''), loader)  
+  allModulesMap.set(path.replace(/^\/src\//, ''), loader)
+})
 
 type Props = {
   row: TableRow
@@ -36,6 +52,10 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+
+const onEmit = <T,>(data: T): void => {
+  emit('onEmit', data)
+}
 
 const dateConfig = {
   hour: '2-digit',
@@ -106,17 +126,27 @@ const cellComponent = (key: keyof TableRow) => {
   }
 
   if ('component' in schemaConfig) {
+    const componentPath = schemaConfig.component
+    
+    const componentLoader = allModulesMap.get(componentPath)
+    
+    if (!componentLoader) {
+      console.error(`Component not found: ${componentPath}`)
+      console.error('Available components:', Array.from(allModulesMap.keys()))
+      return h('td', {}, `Component not found: ${componentPath}`)
+    }
+    
     return h(
       'td',
       {},
       h(
-        defineAsyncComponent(() => import(`${schemaConfig.component}`)),
+        defineAsyncComponent(componentLoader as any),
         {
           ...(schemaConfig.props || {}),
           value: schemaConfig.props?.valueRef
             ? props.row[schemaConfig.props.valueRef]
             : schemaConfig.props.value,
-          onOnEmit: <T>(data: T) => emit('onEmit', data)
+          onOnEmit: onEmit
         }
       )
     )

@@ -1,4 +1,3 @@
-export * from './types'
 export * from './common/types'
 export * from './dropdown/types'
 export * from './form/types'

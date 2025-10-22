@@ -3,7 +3,6 @@
     <Button
       isDisabled
       :label="localize('settings.createUser')"
-      @click="showUserForm"
     />
     <Button
       :label="localize('settings.showUsers')"
@@ -59,10 +58,6 @@ const syncDataEmit = <T,>(data: T) => emit('passSyncData', data)
 const handleGetUsers = async () => {
   await getUsers()
   emit('passUsers', users.value)
-}
-
-const showUserForm = () => {
-  console.log('showUserForm')
 }
 </script>
 

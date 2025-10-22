@@ -28,22 +28,14 @@ export default class DatabaseService {
   }
 
   getEntityList = async <T>(entityKey: string, config: RequestConfig) => {
-    try {
-      const queryString = this.#configToQueryString(config)
-      const response = await api.get<T>(`/api/${entityKey}?${queryString}`)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const queryString = this.#configToQueryString(config)
+    const response = await api.get<T>(`/api/${entityKey}?${queryString}`)
+    return response.data
   }
 
   getEntityPage = async <T>(entityKey: string, path: string) => {
-    try {
-      const response = await api.get<T>(`/api/${entityKey}/${path}`)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.get<T>(`/api/${entityKey}/${path}`)
+    return response.data
   }
 
   createEntity = async <T, U>(entityKey: string, payload: U | null) => {
@@ -51,12 +43,8 @@ export default class DatabaseService {
       throw new Error('Query payload is not defined')
     }
 
-    try {
-      const response = await api.post<T>(`/api/${entityKey}/create`, payload)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.post<T>(`/api/${entityKey}/create`, payload)
+    return response.data
   }
 
   updateEntity = async <T, U>(entityKey: string, payload: U) => {
@@ -64,12 +52,8 @@ export default class DatabaseService {
       throw new Error('Query payload is not defined')
     }
     
-    try {
-      const response = await api.patch<T>(`/api/${entityKey}/update`, payload)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.patch<T>(`/api/${entityKey}/update`, payload)
+    return response.data
   }
 
   deleteEntity = async <T>(entityKey: string, id: string | null) => {
@@ -77,38 +61,22 @@ export default class DatabaseService {
       throw new Error('Entity id is not defined')
     }
 
-    try {
-      const response = await api.delete<T>(`/api/${entityKey}/${id}`)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.delete<T>(`/api/${entityKey}/${id}`)
+    return response.data
   }
 
   reorderEntities = async <T, U>(entityKey: string, id: string, payload: U) => {
-    try {
-      const response = await api.patch<T>(`/api/${entityKey}/${id}/reorder`, payload)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.patch<T>(`/api/${entityKey}/${id}/reorder`, payload)
+    return response.data
   }
 
   getCloudFiles = async <T>(entityKey: string, path: string, query = '') => {
-    try {
-      const response = await api.get<T>(`/api/${entityKey}/${path}?${query}`)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.get<T>(`/api/${entityKey}/${path}?${query}`)
+    return response.data
   }
 
-  sync = async () => {
-    try {
-      const response = await api.post('/api/sync')
-      return response.data
-    } catch (error) {
-      throw error
-    }
+  sync = async () => {  
+    const response = await api.post('/api/sync')
+    return response.data
   }
 }

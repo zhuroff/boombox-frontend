@@ -3,11 +3,7 @@ import type { SearchResultState, SearchPayload } from '~features/search'
 
 export default class SearchService {
   search = async (payload: SearchPayload) => {
-    try {
-      const response = await api.post<SearchResultState[]>(`/api/search`, payload)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.post<SearchResultState[]>(`/api/search`, payload)
+    return response.data
   }
 }

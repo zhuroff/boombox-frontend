@@ -13,11 +13,7 @@ const useImageUploader = (entityKey: string, uploadService: UploadService) => {
       id: String(route.params.id)
     }
 
-    try {
-      return await uploadService.uploadImage<T, U>(payload)
-    } catch (e) {
-      throw e
-    }
+    return await uploadService.uploadImage<T, U>(payload)
   }
 
   return { uploadImage }

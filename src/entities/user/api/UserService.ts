@@ -3,46 +3,26 @@ import type { User, AuthRefreshResponse, FormPayload } from '~shared/lib'
 
 export default class UserService {
   refresh = async () => {
-    try {
-      const response = await api.get<AuthRefreshResponse>('/api/users/refresh')
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.get<AuthRefreshResponse>('/api/users/refresh')
+    return response.data
   }
 
   login = async (payload: FormPayload) => {
-    try {
-      const response = await api.post<AuthRefreshResponse>('/api/users/login', payload)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.post<AuthRefreshResponse>('/api/users/login', payload)
+    return response.data
   }
 
   logout = async () => {
-    try {
-      await api.post('/api/users/logout')
-    } catch (error) {
-      throw error
-    }
+    await api.post('/api/users/logout')
   }
 
   createUser = async (userData: FormPayload) => {
-    try {
-      const response = await api.post<User>('/api/users/create', userData)
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.post<User>('/api/users/create', userData)
+    return response.data
   }
 
   getUsers = async () => {
-    try {
-      const response = await api.get<User[]>('/api/users')
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.get<User[]>('/api/users')
+    return response.data
   }
 }

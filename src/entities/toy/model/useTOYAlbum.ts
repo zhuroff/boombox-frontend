@@ -19,8 +19,8 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
     path: 'MelodyMap/TOY'
   }
 
-  const yearsConfig = computed<UseEntityListPayload>(() => (
-    album.value
+  const yearsConfig = computed(() => (
+    (album.value
       ? {
           entityKey: pageEntityKey.value,
           requestConfig: {
@@ -32,11 +32,11 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
             }
           }
         }
-      : {} as UseEntityListPayload
+      : {}) as unknown as UseEntityListPayload
   ))
   
-  const genresConfig = computed<UseEntityListPayload>(() => (
-    album.value
+  const genresConfig = computed(() => (
+    (album.value
       ? {
           entityKey: pageEntityKey.value,
           requestConfig: {
@@ -48,7 +48,7 @@ const useTOYAlbum = (dbService: DatabaseService, routeParams: ComputedRef<RouteP
             }
           }
         }
-      : {} as UseEntityListPayload
+      : {}) as unknown as UseEntityListPayload
   ))
 
   const isAlbumReady = computed(() =>  !!album.value && isAlbumFetched.value)

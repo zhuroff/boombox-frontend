@@ -13,6 +13,7 @@
       </div>
       <div
         v-for="{ name, docs } in relatedAlbums"
+        :key="name"
         :class="`album__related --${cardsTemplate}`"
       >
         <div class="album__related-title">

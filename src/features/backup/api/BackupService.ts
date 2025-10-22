@@ -2,20 +2,12 @@ import { api } from '~shared/api'
 
 export default class BackupService {
   fetchBackups = async () => {
-    try {
-      const response = await api.get('/api/backup')
-      return response.data
-    } catch (error) {
-      throw error
-    }
+    const response = await api.get('/api/backup')
+    return response.data
   }
 
   createBackup = async () => {
-    try {
-      await api.post('/api/backup/save')
-    } catch (error) {
-      throw error
-    }
+    await api.post('/api/backup/save')
   }
 
   restoreBackup = async (timestamp?: string) => {
@@ -23,11 +15,7 @@ export default class BackupService {
       throw new Error('Backup timestamp is not defined')
     }
 
-    try {
-      await api.post(`/api/backup/restore/${timestamp}`)
-    } catch (error) {
-      throw error
-    }
+    await api.post(`/api/backup/restore/${timestamp}`)
   }
 
   deleteBackup = async (timestamp?: string) => {
@@ -35,10 +23,6 @@ export default class BackupService {
       throw new Error('Backup timestamp is not defined')
     }
 
-    try {
-      await api.delete(`/api/backup/${timestamp}`)
-    } catch (error) {
-      throw error
-    }
+    await api.delete(`/api/backup/${timestamp}`)
   }
 }

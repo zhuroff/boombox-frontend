@@ -150,7 +150,6 @@ const setNewTitle = (e: Event) => {
 }
 
 const saveNewTitle = () => {
-  console.log(newTitle.value)
   isEditMode.value = false
 }
 

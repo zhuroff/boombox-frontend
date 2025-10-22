@@ -17,8 +17,10 @@
 </template>
 
 <script setup lang="ts">
+import type { AlbumBasic } from '~entities/album'
+
 interface Props {
-  album: Album
+  album: AlbumBasic
   isRoute: boolean
 }
 
