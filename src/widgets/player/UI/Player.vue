@@ -181,7 +181,7 @@ const { screensaveMode, isPlaylistExpanded } = usePlayer()
   }
 
   &.--z-low {
-    z-index: 0;
+    z-index: 1000;
   }
 }
 </style>
