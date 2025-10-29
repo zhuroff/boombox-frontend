@@ -148,7 +148,8 @@ const usePlayer = () => {
     toggleVinylMode,
     setSoundVolume,
     isTrackMuted,
-    isVinylMode
+    isVinylMode,
+    isSwitchingTrack
   }
 }
 

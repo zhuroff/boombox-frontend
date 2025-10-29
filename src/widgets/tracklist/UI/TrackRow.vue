@@ -152,7 +152,9 @@ const trackDuration = computed(() => {
 
 const trackRowActionHandler = () => {
   if (props.track.idDisabled) return
-  playingTrack.value ? playPauseTrack() : playTrack(props.track)
+  playingTrack.value && playingTrack.value._id === props.track._id
+    ? playPauseTrack()
+    : playTrack(props.track)
 }
 
 const toggleLyricsModal = () => {

@@ -2,6 +2,7 @@ import { ref, onMounted } from 'vue'
 import { useMutation } from '@tanstack/vue-query'
 import { useUpdateEntity } from '~shared/model'
 import { proxyCloudUrl } from '~shared/lib'
+import { CRACKLE_PATH } from '~shared/constants'
 import usePlaylistService from './usePlaylistService'
 import type { PlaylistTrack } from '~features/player'
 import type { DatabaseService } from '~shared/api'
@@ -9,7 +10,7 @@ import type { ListPageResponse } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
 
 const playingTrack = ref<PlaylistTrack | null>(null)
-const crackleAudioRef = ref<HTMLAudioElement>(new Audio('/media/vinyl_01.wav'))
+const crackleAudioRef = ref<HTMLAudioElement>(new Audio(CRACKLE_PATH))
 const playingTrackRef = ref<HTMLAudioElement | null>(null)
 const trackVolume = ref(1)
 const progressLine = ref(0)
