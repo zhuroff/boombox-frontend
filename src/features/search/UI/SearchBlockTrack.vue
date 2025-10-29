@@ -2,7 +2,7 @@
   <div class="input-search__results-track">
     <img
       :alt="track.inAlbum.title"
-      :src="track?.coverURL || '/img/album.webp'"
+      :src="trackCover"
     >
     <div>
       <strong>{{ track.title }}</strong>
@@ -35,7 +35,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useLocalization } from '~shared/model'
+import { proxyCloudUrl } from '~shared/lib'
 import { Button } from '~shared/UI'
 import { usePlayer } from '~features/player'
 import { usePlaylistService } from '~features/player'
@@ -50,6 +52,8 @@ const props = defineProps<Props>()
 const { localize } = useLocalization()
 const { playingTrack, playingTrackIndex, playTrack, playNext } = usePlayer()
 const { isTrackInPlaylist, addTrackToPlaylist } = usePlaylistService()
+
+const trackCover = computed(() => proxyCloudUrl(props.track.coverURL) || '/img/album.webp')
 
 const playNow = () => {
   if (isTrackInPlaylist(props.track._id)) {

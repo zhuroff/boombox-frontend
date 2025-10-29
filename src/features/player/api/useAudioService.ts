@@ -1,6 +1,7 @@
 import { ref, onMounted } from 'vue'
 import { useMutation } from '@tanstack/vue-query'
 import { useUpdateEntity } from '~shared/model'
+import { proxyCloudUrl } from '~shared/lib'
 import usePlaylistService from './usePlaylistService'
 import type { PlaylistTrack } from '~features/player'
 import type { DatabaseService } from '~shared/api'
@@ -60,7 +61,9 @@ const useAudioService = (dbService: DatabaseService) => {
 
   const playTrackStream = (src: string) => {
     playingTrack.value!.streamURL = src
-    playingTrackRef.value = new Audio(src)
+    const proxyURL = proxyCloudUrl(src) || src
+    
+    playingTrackRef.value = new Audio(proxyURL)
     playingTrackRef.value.volume = trackVolume.value
     playingTrackRef.value.play()
       .then(checkAndSetDuration)

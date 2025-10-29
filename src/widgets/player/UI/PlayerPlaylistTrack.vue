@@ -5,7 +5,7 @@
   >
     <div class="playlist__track-cover">
       <img
-        :src="track.albumCover"
+        :src="proxiedAlbumCover"
         referrerpolicy="no-referrer"
       />
       <Sprite
@@ -41,6 +41,7 @@
 import { computed } from 'vue'
 import { usePlayer, type PlaylistTrack } from '~features/player'
 import { usePlaylistService } from '~features/player'
+import { proxyCloudUrl } from '~shared/lib'
 import { secondsToMinutes } from '~shared/utils'
 import { Sprite, Button } from '~shared/UI'
 
@@ -53,6 +54,8 @@ const props = defineProps<Props>()
 
 const { playTrack, playingTrack } = usePlayer()
 const { toggleTrackAvailability } = usePlaylistService()
+
+const proxiedAlbumCover = computed(() => proxyCloudUrl(props.track.albumCover))
 
 const trackTitle = computed(() => (
   (props.order < 10 ? `0${props.order}` : props.order) + `. ${props.track.title}`

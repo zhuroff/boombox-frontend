@@ -13,7 +13,7 @@
       class="player__info-content"
     >
       <img
-        :src="playingTrack.albumCover"
+        :src="proxiedAlbumCover"
         :alt="playingTrack.title"
         class="player__cover"
       />
@@ -30,8 +30,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { usePlayer } from '~features/player'
+import { proxyCloudUrl } from '~shared/lib'
 
 const { progressTime, playingTrack } = usePlayer()
+
+const proxiedAlbumCover = computed(() => proxyCloudUrl(playingTrack.value?.albumCover))
 
 const albumRoute = computed(() => {
   switch(playingTrack.value?.albumKind) {

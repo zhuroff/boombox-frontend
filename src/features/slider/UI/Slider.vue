@@ -7,7 +7,7 @@
       @slide-start="handleSlideStart"
     >
       <Slide
-        v-for="item in data"
+        v-for="item in proxiedData"
         :key="item"
       >
         <div class="carousel__item">
@@ -25,7 +25,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
+import { proxyCloudUrl } from '~shared/lib'
 
 interface BookletSlideState {
   currentSlideIndex: number
@@ -43,8 +45,10 @@ interface Emits {
   (e: 'slideChanged', data: BookletSlideState): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const proxiedData = computed(() => props.data.map(url => proxyCloudUrl(url) || url))
 
 const handleSlideStart = (data: BookletSlideState) => {
   emit('slideChanged', data)
