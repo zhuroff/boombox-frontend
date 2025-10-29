@@ -17,6 +17,7 @@ const progressTime = ref(0)
 const isTrackMuted = ref(false)
 const isVinylMode = ref(false)
 const fetchingTrackId = ref<string | null>(null)
+const isSwitchingTrack = ref(false)
 
 const useAudioService = (dbService: DatabaseService) => {
   const entityKey = ref('tracks')
@@ -28,6 +29,16 @@ const useAudioService = (dbService: DatabaseService) => {
     dbService
   )
 
+  const { mutateAsync: fetchTrackStreamURLAsync } = useMutation<string>({
+    mutationFn: () => {
+      return dbService.getCloudFiles<string>(
+        `${entityKey.value}/audio`,
+        `${playingTrack.value?.path}`,
+        `cloudURL=${playingTrack.value?.cloudURL}`
+      )
+    }
+  })
+  
   const { mutate: fetchTrackStreamURL } = useMutation<string>({
     mutationFn: () => {
       return dbService.getCloudFiles<string>(
@@ -42,63 +53,108 @@ const useAudioService = (dbService: DatabaseService) => {
   })
 
   const destroyPlayingTrack = () => {
-    playingTrack.value = null
-    playingTrackRef.value?.pause()
-    playingTrackRef.value = null
+    // Очищаем обработчики событий перед уничтожением элемента
+    if (playingTrackRef.value) {
+      playingTrackRef.value.pause()
+      playingTrackRef.value.onended = null
+      playingTrackRef.value.ontimeupdate = null
+      playingTrackRef.value = null
+    }
+    // Не сбрасываем playingTrack здесь, так как это делается в playNextTrack
   }
 
-  const checkAndSetDuration = () => {
+  const checkAndSetDuration = (trackId: string) => {
     const { duration } = playingTrackRef.value || {}
-    if (!playingTrack.value || !duration || duration === Infinity || playingTrack.value.duration) return
+    if (!duration || duration === Infinity) return
     
-    playingTrack.value.duration = duration
-    setTrackDuration(playingTrack.value._id, duration)
+    // Используем переданный trackId вместо playingTrack.value._id,
+    // так как playingTrack.value может уже указывать на другой трек
+    const currentTrack = playingTrack.value
+    
+    // Проверяем, что это все еще тот же трек
+    if (!currentTrack || currentTrack._id !== trackId || currentTrack.duration) return
+    
+    currentTrack.duration = duration
+    setTrackDuration(trackId, duration)
 
-    if (playingTrack.value.albumKind !== 'toy') {
-      updateEntity({ _id: playingTrack.value._id, duration })
+    if (currentTrack.albumKind !== 'toy') {
+      updateEntity({ _id: trackId, duration })
     }
   }
 
   const playTrackStream = (src: string) => {
-    playingTrack.value!.streamURL = src
+    if (!playingTrack.value) return
+    
+    const currentTrackId = playingTrack.value._id
+    playingTrack.value.streamURL = src
     const proxyURL = proxyCloudUrl(src) || src
     
     playingTrackRef.value = new Audio(proxyURL)
     playingTrackRef.value.volume = trackVolume.value
     playingTrackRef.value.play()
-      .then(checkAndSetDuration)
-      .then(() => playingTrackRef.value && playingStateHandler(playingTrackRef.value))
+      .then(() => checkAndSetDuration(currentTrackId))
+      .then(() => playingTrackRef.value && playingStateHandler(playingTrackRef.value, currentTrackId))
       .then(() => playingTrack.value && (playingTrack.value.isOnPlaying = true))
-      .then(() => fetchingTrackId.value = null)
-      .catch(console.error)
+      .then(() => {
+        fetchingTrackId.value = null
+        // Сбрасываем флаг после успешного запуска воспроизведения
+        setTimeout(() => {
+          if (playingTrack.value?._id === currentTrackId) {
+            isSwitchingTrack.value = false
+          }
+        }, 100)
+      })
+      .catch((error) => {
+        console.error(error)
+        isSwitchingTrack.value = false
+      })
   }
 
   const playNextTrack = (track: PlaylistTrack | undefined) => {
-    destroyPlayingTrack()
+    // Защита от множественных одновременных вызовов
+    if (isSwitchingTrack.value) return
     if (!track) return
 
+    isSwitchingTrack.value = true
+    destroyPlayingTrack()
+    
     fetchingTrackId.value = track._id
     playingTrack.value = track
-    !track.streamURL 
-      ? fetchTrackStreamURL()
-      : playTrackStream(track.streamURL)
+    
+    if (!track.streamURL) {
+      // Используем mutateAsync для обработки ошибок
+      fetchTrackStreamURLAsync()
+        .then((src) => {
+          playTrackStream(src)
+        })
+        .catch((error) => {
+          console.error('Failed to fetch track stream URL:', error)
+          isSwitchingTrack.value = false
+        })
+    } else {
+      playTrackStream(track.streamURL)
+    }
   }
 
-  const playingStateHandler = (audio: HTMLAudioElement) => {
+  const playingStateHandler = (audio: HTMLAudioElement, trackId: string) => {
     isPlayingStarted.value = true
+
+    // Обработка события ended - срабатывает только один раз при окончании трека
+    audio.onended = () => {
+      // Проверяем, что это все еще тот же трек (защита от гонки состояний)
+      if (playingTrack.value?._id !== trackId || isSwitchingTrack.value) return
+      
+      if (playingTrack.value.isOnRepeat) {
+        playTrackStream(playingTrack.value.streamURL!)
+      } else {
+        const nextTrack = getNextTrack(trackId)
+        playNextTrack(nextTrack)
+      }
+    }
 
     audio.ontimeupdate = () => {
       progressTime.value = audio.currentTime
       progressLine.value = audio.currentTime / audio.duration
-
-      if (progressLine.value >= 1) {
-        if (playingTrack.value?.isOnRepeat) {
-          playTrackStream(playingTrack.value.streamURL!)
-        } else {
-          const nextTrack = getNextTrack(playingTrack.value?._id)
-          playNextTrack(nextTrack)
-        }
-      }
     }
   }
 
@@ -121,7 +177,8 @@ const useAudioService = (dbService: DatabaseService) => {
     crackleAudioRef,
     playTrackStream,
     fetchTrackStreamURL,
-    destroyPlayingTrack
+    destroyPlayingTrack,
+    isSwitchingTrack
   }
 }
 
