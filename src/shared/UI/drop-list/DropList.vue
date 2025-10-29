@@ -1,5 +1,6 @@
 <template>
   <ul
+    @click.stop
     class="droplist"
     :class="`--${size}`"
   >

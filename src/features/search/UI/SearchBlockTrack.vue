@@ -79,8 +79,10 @@ const playNow = () => {
       transition: background-color 0.3s var.$animation;
 
       &:hover {
-        background-color: var.$paleLT;
-        transition: background-color 0.3s var.$animation;
+        @include var.media('>=desktop') {
+          background-color: var.$paleLT;
+          transition: background-color 0.3s var.$animation;
+        }
       }
 
       img {

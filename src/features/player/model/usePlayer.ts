@@ -60,7 +60,6 @@ const usePlayer = () => {
   }
 
   const playTrack = (track: TrackBasic) => {
-    // Защита от конфликтов с авто-переключением
     if (isSwitchingTrack.value) return
     
     if (track._id === playingTrack.value?._id) {
@@ -80,8 +79,6 @@ const usePlayer = () => {
     } else {
       playTrackStream(targetTrack.streamURL)
     }
-
-    screensaveMode.value = true
   }
 
   const playPauseTrack = () => {

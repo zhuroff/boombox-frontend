@@ -147,8 +147,10 @@ const searchOnYouTube = () => {
         }
 
         &:hover {
-          background-color: var.$accent;
-          border-color: var.$accent;
+          @include var.media('>=desktop') {
+            background-color: var.$accent;
+            border-color: var.$accent;
+          }
         }
 
         &.--active {
