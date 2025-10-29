@@ -3,9 +3,16 @@
     :class="[{ '--active' : isTrackPlaying }, 'playlist__track']"
     @click="() => playTrack(track)"
   >
+    <Button
+      icon="drag"
+      size="small"
+      isText
+      className="playlist__track-drag"
+      :isDisabled="track?.idDisabled"
+    />
     <div class="playlist__track-cover">
       <img
-        :src="track.albumCover"
+        :src="proxiedAlbumCover"
         referrerpolicy="no-referrer"
       />
       <Sprite
@@ -31,6 +38,7 @@
       size="small"
       isText
       isInverted
+      className="playlist__track-disable"
       :isDisabled="isTrackPlaying"
       @click.stop="() => toggleTrackAvailability(track)"
     />
@@ -41,6 +49,7 @@
 import { computed } from 'vue'
 import { usePlayer, type PlaylistTrack } from '~features/player'
 import { usePlaylistService } from '~features/player'
+import { proxyCloudUrl } from '~shared/lib'
 import { secondsToMinutes } from '~shared/utils'
 import { Sprite, Button } from '~shared/UI'
 
@@ -53,6 +62,8 @@ const props = defineProps<Props>()
 
 const { playTrack, playingTrack } = usePlayer()
 const { toggleTrackAvailability } = usePlaylistService()
+
+const proxiedAlbumCover = computed(() => proxyCloudUrl(props.track.albumCover))
 
 const trackTitle = computed(() => (
   (props.order < 10 ? `0${props.order}` : props.order) + `. ${props.track.title}`
@@ -73,12 +84,17 @@ const isTrackPlaying = computed(() => {
 .playlist__track {
   display: flex;
   align-items: center;
-  padding-right: 0;
   cursor: pointer;
-  padding: 0.25rem 0.5rem 0.25rem 0.75rem;
 
-  &.--active,
-  &:hover {
+  @include var.media('<desktop') {
+    padding: 0.25rem 0;
+  }
+
+  @include var.media('>=desktop') {
+    padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+  }
+
+  &.--active {
     background-color: var.$dark;
 
     strong {
@@ -97,6 +113,31 @@ const isTrackPlaying = computed(() => {
       .icon {
         color: var.$white;
         transition: color 0.1s var.$animation;
+      }
+    }
+  }
+
+  &:hover {
+    @include var.media('>=desktop') {
+      background-color: var.$dark;
+
+      strong {
+        color: var.$white;
+        transition: color 0.1s var.$animation;
+      }
+
+      time,
+      .playlist__track-sign {
+        color: var.$white;
+        transition: color 0.1s var.$animation;
+      }
+
+      .button {
+
+        .icon {
+          color: var.$white;
+          transition: color 0.1s var.$animation;
+        }
       }
     }
   }
@@ -160,9 +201,17 @@ const isTrackPlaying = computed(() => {
     white-space: nowrap;
     font-size: 0.875rem;
     transition: all 0.1s var.$animation;
+
+    @include var.media('<desktop') {
+      margin-right: -0.25rem;
+    }
   }
 
-  .button {
+  &-disable {
+
+    @include var.media('<desktop') {
+      padding: 0.75rem;
+    }
 
     .icon {
       color: var.$black;

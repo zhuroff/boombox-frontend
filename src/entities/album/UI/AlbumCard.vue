@@ -11,6 +11,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useLocalization } from '~shared/model'
+import { proxyCloudUrl } from '~shared/lib'
 import { CardPreview } from '~shared/UI'
 import { hostString, assertNever } from '~shared/utils'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
@@ -54,7 +55,7 @@ const cardCaption = computed(() => {
 const cardCover = computed(() => {
   switch (props.card.kind) {
     case 'album':
-      return props.card.coverURL || props.placeholderPreview
+      return proxyCloudUrl(props.card.coverURL) || props.placeholderPreview
     case 'compilation':
     case 'collection':
       return props.card.avatar ? hostString(props.card.avatar) : props.placeholderPreview

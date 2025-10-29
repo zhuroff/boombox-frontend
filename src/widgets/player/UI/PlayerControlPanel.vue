@@ -9,7 +9,7 @@
           icon="previous"
           title="Play previous track"
           isRounded
-          :isDisabled="!isPrevTrackAvailable"
+          :isDisabled="!isPrevTrackAvailable || isSwitchingTrack"
           @click="playPrev"
 
         />
@@ -24,7 +24,7 @@
           icon="next"
           title="Play next track"
           isRounded
-          :isDisabled="!isNextTrackAvailable"
+          :isDisabled="!isNextTrackAvailable || isSwitchingTrack"
           @click="playNext"
         />
         <ProgressBar
@@ -93,7 +93,8 @@ const {
   isNextTrackAvailable,
   isPrevTrackAvailable,
   setTrackPosition,
-  playPauseTrack
+  playPauseTrack,
+  isSwitchingTrack
 } = usePlayer()
 
 const searchOnYouTube = () => {
@@ -147,8 +148,10 @@ const searchOnYouTube = () => {
         }
 
         &:hover {
-          background-color: var.$accent;
-          border-color: var.$accent;
+          @include var.media('>=desktop') {
+            background-color: var.$accent;
+            border-color: var.$accent;
+          }
         }
 
         &.--active {

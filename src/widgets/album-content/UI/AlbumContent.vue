@@ -75,11 +75,11 @@ const { localize } = useLocalization()
     position: relative;    
 
     @include var.media('<desktop') {
-      border-top-left-radius: 25px;
-      border-top-right-radius: 25px;
+      border-top-left-radius: var.$borderRadiusMD;
+      border-top-right-radius: var.$borderRadiusMD;
       background-color: var.$paleLW;
-      margin-top: calc(100vw + 5.5rem);
-      padding: var.$minPadding var.$minPadding 3.5rem;
+      margin-top: calc(100vw + 7rem);
+      padding: var.$minPadding 0 3.5rem;
       z-index: 9000;
 
       @include var.media('landscape') {
@@ -137,6 +137,7 @@ const { localize } = useLocalization()
         max-width: 400px !important;
         border-radius: var.$borderRadiusMD;
         overflow: hidden;
+        margin-bottom: 3rem;
       }
     }
 
