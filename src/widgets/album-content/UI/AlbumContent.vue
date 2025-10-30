@@ -118,6 +118,7 @@ const { localize } = useLocalization()
 
   &__main {
     position: relative;
+    overflow: hidden;
   }
 
   &__frame {
