@@ -59,6 +59,7 @@ const trackSign = computed(() => {
 </script>
 
 <style lang="scss">
+@use "sass:math";
 @use '~app/styles/variables' as var;
 
 .player {
@@ -106,20 +107,10 @@ const trackSign = computed(() => {
     }
 
     @include var.media('>=desktop') {
-      background-color: var.$accent;
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: var.$asideWidth;
+      background-color: var.$dark;
       height: 100%;
-      padding: 12px 15px 12px 25px;
-
-      &:hover {
-        min-width: var.$asideWidth;
-        width: 100%;
-        z-index: 20;
-        transition: all 0.3s ease;
-      }
+      padding: 12px 15px 12px 0;
+      margin-top: math.div(var.$elementHeightXS, 1.5);
     }
 
     &-content {
@@ -167,6 +158,8 @@ const trackSign = computed(() => {
       text-align: center;
       margin-top: auto;
       padding: 0 25px 40px;
+      position: relative;
+      z-index: 100;
     }
 
     @include var.media('>=desktop') {

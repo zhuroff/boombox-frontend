@@ -108,6 +108,7 @@ const searchOnYouTube = () => {
 </script>
 
 <style lang="scss">
+@use "sass:math";
 @use '~app/styles/variables' as var;
 
 .player {
@@ -123,9 +124,8 @@ const searchOnYouTube = () => {
 
     @include var.media('>=desktop') {
       background-color: var.$dark;
-      width: calc(100% - var.$asideWidth);
-      padding: 0 25px;
-      margin-left: auto;
+      padding: 0 var.$mainPadding 0 var.$minPadding;
+      margin-top: math.div(var.$elementHeightXS, 1.5);
     }
 
     &-panel {

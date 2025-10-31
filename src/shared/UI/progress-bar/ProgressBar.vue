@@ -6,6 +6,7 @@
     >
       {{ leftTimeInMinutes }}
     </time>
+    <span class="player__progress-separator">&nbsp;/&nbsp;</span>
     <progress
       :max="1"
       :value="progressLine || 0"
@@ -63,6 +64,7 @@ const setProgressValue = (event: MouseEvent) => {
 </script>
 
 <style lang="scss">
+@use "sass:math";
 @use '~app/styles/variables' as var;
 
 .player__progress {
@@ -74,34 +76,49 @@ const setProgressValue = (event: MouseEvent) => {
     width: 100vw;
   }
 
+  &-separator {
+
+    @include var.media('<desktop') {
+      display: none;
+    }
+
+    @include var.media('>=desktop') {
+      color: var.$white;
+      opacity: 0.5;
+    }
+  }
+
   &-bar {
     appearance: none;
     background-color: var.$white;
     cursor: pointer;
-    margin: 0 var.$basicPadding;
     border: 0;
-    border-radius: var.$basicPadding;
 
     @include var.media('<desktop') {
       flex: 1 1 0;
       height: 5px;
+      border-radius: var.$basicPadding;
+      margin: 0 var.$fieldPadding;
     }
 
     @include var.media('>=desktop') {
-      width: 326px;
-      height: var.$basicPadding;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: math.div(var.$elementHeightXS, 1.5);
     }
 
     &::-webkit-progress-bar {
       border: 0;
-      border-radius: var.$basicPadding;
 
       @include var.media('<desktop') {
         height: 5px;
+        border-radius: var.$basicPadding;
       }
 
       @include var.media('>=desktop') {
-        height: var.$basicPadding;
+        height: math.div(var.$elementHeightXS, 1.5);
       }
     }
 

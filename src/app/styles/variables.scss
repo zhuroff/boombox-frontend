@@ -38,7 +38,7 @@ $asideWidth: 15.625rem;
 $desktopHeaderHeight: 4.375rem;
 $asideWidthMobile: 8.75rem;
 $albumAsideWidth: 31.25rem;
-$playerHeight: 3.875rem;
+$playerHeight: calc(3.875rem + $elementHeightXS / 1.5);
 $coverWidth: 21.875rem;
 
 $minPadding: 1rem;

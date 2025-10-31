@@ -149,6 +149,10 @@ const orderChanged = (event: DraggableEvent) => {
 
   &__tracks {
     overflow: hidden;
+
+    @include var.media('>=desktop') {
+      padding: var.$fieldPadding 0;
+    }
   }
 
   &__collapse {

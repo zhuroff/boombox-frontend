@@ -178,7 +178,8 @@ const { screensaveMode, isPlaylistExpanded, playingTrack } = usePlayer()
 
   @include var.media('>=desktop') {
     height: var.$playerHeight;
-    display: flex;
+    display: grid;
+    grid-template-columns: calc(50% - 220px / 2) 1fr;
     width: calc(100vw - var.$asideWidth);
     left: var.$asideWidth;
   }
