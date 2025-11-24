@@ -46,6 +46,8 @@ const handleLogin = async (formData: FormPayload) => {
 </script>
 
 <style lang="scss" scoped>
+@use '~/app/styles/variables' as var;
+
 .login {
   height: 100vh;
   display: flex;
@@ -59,11 +61,20 @@ const handleLogin = async (formData: FormPayload) => {
     width: 100%;
     max-width: 500px;
     height: auto;
+    background-color: var.$paleLT;
+
+    @include var.media('<desktop') {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
     .form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      width: 100%;
     }
   }
 }

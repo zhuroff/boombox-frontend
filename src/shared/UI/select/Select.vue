@@ -2,7 +2,6 @@
   <select
     :class="stateClasses"
     :name="entityKey"
-    autocomplete="off"
     v-model="localSelected"
   >
     <option
