@@ -49,7 +49,7 @@ const usePlaylistService = () => {
   }
 
   const initWavePlaylist = (tracks: TrackBasic[]) => {
-    primaryPlaylist.value = tracks.map<PlaylistTrack>((track, index) => {
+    secondaryPlaylist.value = tracks.map<PlaylistTrack>((track, index) => {
       const album: AlbumFull = {
         ...track.inAlbum,
         coverURL: track.coverURL,
