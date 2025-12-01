@@ -1,4 +1,4 @@
-import type { CollectionBasic } from '~entities/collection'
+import type { CollectionBasic, CollectionFull } from '~entities/collection'
 import type { AlbumBasic, AlbumFull } from '~entities/album'
 import type { CompilationBasic, CompilationFull } from '~entities/compilation'
 import type { CategoryBasic } from '~entities/category'
@@ -17,6 +17,7 @@ type EntityMap = {
 type EntityFullMap = {
   AlbumFull: AlbumFull
   EmbeddedFull: EmbeddedFull
+  CollectionFull: CollectionFull
   CompilationFull: CompilationFull
   TOYAlbumFull: TOYAlbumFull
 }

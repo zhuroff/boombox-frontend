@@ -28,9 +28,10 @@ import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'
 import type { ActionPropertyItem, HeadEmits } from '~widgets/page-heads'
 import type { CompilationFull } from '~entities/compilation'
+import type { CollectionFull } from '~entities/collection'
 
 interface Props {
-  album: CompilationFull
+  album: CompilationFull | CollectionFull
   length: string
 }
 

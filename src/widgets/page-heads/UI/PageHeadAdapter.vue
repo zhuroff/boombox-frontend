@@ -133,6 +133,7 @@ const PageHeadComponent = computed(() => {
     case 'embedded':
       return h(EmbeddedPageHead, { album: props.album })
     case 'compilation':
+    case 'collection':
       return h(CompilationPageHead, { album: props.album, length: totalTracksTime.value })
     default:
       return assertNever(props.album)

@@ -56,6 +56,15 @@ export default class DatabaseService {
     return response.data
   }
 
+  updateEntry = async <T, U>(entityKey: string, id: string, path: string, payload: U) => {
+    if (!payload) {
+      throw new Error('Query payload is not defined')
+    }
+
+    const response = await api.put<T>(`/api/${entityKey}/${id}/${path}`, payload)
+    return response.data
+  }
+
   deleteEntity = async <T>(entityKey: string, id: string | null) => {
     if (!id) {
       throw new Error('Entity id is not defined')

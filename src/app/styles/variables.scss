@@ -51,6 +51,7 @@ $animation: cubic-bezier(.06,.28,.26,.81);
 
 $shadowLight: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 $shadowMedium: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+$shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
 
 @mixin buttonClose {
   position: absolute;
@@ -86,6 +87,7 @@ $shadowMedium: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 $breakpoints: (
+  'mobile': 768px,
   'desktop': 1280px,
   'desktop-md': 1536px,
   'desktop-lg': 1780px,
