@@ -1,6 +1,11 @@
 import type { AlbumBasic } from '~entities/album'
 import type { Entity } from '~shared/lib'
 
+type CompilationAlbum = AlbumBasic & {
+  order: number
+  post?: string
+}
+
 export type CollectionBasic = Entity & {
   avatar?: string
   entities: string[]
@@ -8,6 +13,6 @@ export type CollectionBasic = Entity & {
 }
 
 export type CollectionFull = CollectionBasic & {
-  albums: AlbumBasic[]
+  albums: CompilationAlbum[]
   poster?: string
 }

@@ -8,7 +8,7 @@
     </transition>
 
     <transition name="fade">
-      <CategoryContent
+      <CollectionContent
         v-if="isFetched && collection"
         :isFetched="isFetched"
         :pageEntityKey="pageEntityKey"
@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { CategoryContent } from '~widgets/category-content'
+import { CollectionContent } from '~widgets/collection-content'
 import { useGetPage } from '~shared/model'
 
 import { Loader } from '~shared/UI'
