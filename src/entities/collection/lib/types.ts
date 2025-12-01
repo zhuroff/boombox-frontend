@@ -1,7 +1,7 @@
 import type { AlbumBasic } from '~entities/album'
 import type { Entity } from '~shared/lib'
 
-type CompilationAlbum = AlbumBasic & {
+export type CompilationAlbum = AlbumBasic & {
   order: number
   post?: string
 }

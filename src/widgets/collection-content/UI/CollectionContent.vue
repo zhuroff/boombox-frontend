@@ -8,13 +8,10 @@
       @setUploadedImage="setUploadedImage"
     />
     <div class="collection__content">
-      <!-- <EntityCardList
+      <CollectionDashboard
         :entities="albumList"
-        :isDraggable="false"
-        :isDeletable="false"
-        entityKey="collections"
-        placeholderPreview="/img/album.webp"
-      /> -->
+        @updatePost="updatePost"
+      />
     </div>
   </div>
 </template>
@@ -22,27 +19,31 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { CategoryHero } from '~widgets/category-hero'
-import { type UnifiedEntityCard } from '~widgets/entity-cards'
-import type { CategoryFull } from '~entities/category'
-import type { CollectionFull } from '~entities/collection'
+import type { CollectionFull, CompilationAlbum } from '~entities/collection'
+import CollectionDashboard from './CollectionDashboard.vue'
 
-interface Props {
+type Props = {
   isFetched: boolean
   totalCounts: string
   pageEntityKey: string
   setUploadedImage: any
   defaultPreview: string
-  data: CategoryFull | CollectionFull
+  data: CollectionFull
+}
+
+type Emits = {
+  <T>(e: 'saveNewPost', config: { payload: T; path: string }): void
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
-const albumList = computed<UnifiedEntityCard[]>(() => {
-  const albums = props.data.albums
-  const embeddedAlbums = 'embeddedAlbums' in props.data ? props.data.embeddedAlbums : []
+const albumList = computed<CompilationAlbum[]>(() => props.data.albums)
 
-  return [...albums, ...embeddedAlbums]
-})
+const updatePost = (payload: [string, string]) => {
+  const [post, albumId] = payload
+  emit('saveNewPost', { payload: { albumId, post }, path: 'post' })
+}
 </script>
 
 <style lang="scss" scoped>

@@ -3,6 +3,7 @@ import { hostString, coverPlaceholders } from '~shared/utils'
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 import type { TrackBasic } from '~entities/track'
 import type { EmbeddedFull } from '~entities/embedded'
+import type { CollectionFull } from '~entities/collection'
 import type { PlaylistTrack } from '~features/player'
 import type { AlbumFull } from '~entities/album'
 import type { ReorderPayload } from '~shared/lib'
@@ -34,9 +35,7 @@ const secondaryPlaylist = ref<PlaylistTrack[]>([])
 const isPlayingStarted = ref(false)
 
 const usePlaylistService = () => {
-  const initPlaylist = (album: UnifiedEntityFullCard) => {
-    if (album.kind === 'embedded') return
-
+  const initPlaylist = (album: Exclude<UnifiedEntityFullCard, EmbeddedFull | CollectionFull>) => {
     const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => (
       createPlaylistTrack(album, track, index)
     ))
@@ -49,7 +48,7 @@ const usePlaylistService = () => {
   }
 
   const initWavePlaylist = (tracks: TrackBasic[]) => {
-    primaryPlaylist.value = tracks.map<PlaylistTrack>((track, index) => {
+    secondaryPlaylist.value = tracks.map<PlaylistTrack>((track, index) => {
       const album: AlbumFull = {
         ...track.inAlbum,
         coverURL: track.coverURL,
