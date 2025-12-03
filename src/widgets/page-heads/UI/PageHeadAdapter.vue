@@ -168,14 +168,15 @@ const activateEditMode = () => {
 .album {
 
   &__hero {
-    background-color: var.$dark;
 
     @include var.media('<desktop') {
       display: flex;
       flex-direction: column;
+      background-color: transparent;
     }
 
     @include var.media('>=desktop') {
+      background-color: var.$dark;
       position: relative;
       display: flex;
       padding: 25px;
@@ -188,6 +189,10 @@ const activateEditMode = () => {
 
       @include var.media('<desktop') {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
 
       @include var.media('>=desktop') {
@@ -201,11 +206,8 @@ const activateEditMode = () => {
       flex-direction: column;
 
       @include var.media('<desktop') {
-        order: -1;
-        position: fixed;
-        z-index: 9000;;
-        width: 100%;
-        top: 4rem;
+        padding: var.$mainPadding 2rem 0;
+        text-align: center;
       }
 
       @include var.media('>=desktop') {
@@ -219,10 +221,6 @@ const activateEditMode = () => {
       margin: 0.5rem 0 1.75rem;
       max-width: 850px;
       color: var.$warning;
-
-      @include var.media('<desktop') {
-        display: none;
-      }
 
       @include var.media('<desktop-md') {
         @include var.serif(1.75rem);

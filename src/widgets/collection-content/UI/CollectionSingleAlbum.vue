@@ -73,6 +73,17 @@
         
         <div class="toolbar-group">
           <button
+            @click="editor.chain().focus().toggleBlockquote().run()"
+            :class="{ 'is-active': editor.isActive('blockquote') }"
+            title="Цитата"
+            type="button"
+          >
+            Q
+          </button>
+        </div>
+        
+        <div class="toolbar-group">
+          <button
             @click="setLink"
             :class="{ 'is-active': editor.isActive('link') }"
             title="Ссылка"
@@ -130,6 +141,11 @@ const editor = useEditor({
       }
     })
   ],
+  editorProps: {
+    attributes: {
+      spellcheck: 'false'
+    }
+  },
   onUpdate: debounce(({ editor }) => {
     const content = editor.getHTML()
     emit('updatePost', [content, props.album._id])
@@ -294,11 +310,20 @@ onUnmounted(() => {
 }
 
 :deep(.tiptap) {
-  min-height: 100px;
-  padding: 12px;
+  min-height: 222px;
+  padding: var.$mainPadding;
   border: 1px solid var.$paleLW;
   border-radius: var.$borderRadiusMD;
+  line-height: 1.5;
   outline: none;
+
+  & > *:first-child {
+    margin-top: 0 !important;
+  }
+
+  & > *:last-child {
+    margin-bottom: 0 !important;
+  }
   
   &:focus {
     box-shadow: var.$shadowInner;
@@ -311,7 +336,7 @@ onUnmounted(() => {
   }
   
   h3 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     margin: var.$minPadding 0 var.$fieldPadding;
     font-weight: bold;
   }
@@ -333,9 +358,19 @@ onUnmounted(() => {
     margin: calc(var.$fieldPadding / 2) 0;
   }
   
+  blockquote {
+    border-left: 4px solid var.$paleDP;
+    margin: var.$fieldPadding 0;
+    font-style: italic;
+    color: var.$transDark;
+    background-color: var.$paleLT;
+    padding: var.$minPadding var.$mainPadding;
+    border-radius: var.$borderRadiusMD;
+  }
+  
   a.editor-link {
     color: var.$info;
-    text-decoration: underline;
+    text-decoration: none;
     
     &:hover {
       color: var.$info;
@@ -344,14 +379,10 @@ onUnmounted(() => {
   
   p {
     margin: var.$fieldPadding 0;
-    
-    &:first-child {
-      margin-top: 0;
-    }
-    
-    &:last-child {
-      margin-bottom: 0;
-    }
+  }
+
+  i, em {
+    font-style: italic;
   }
 }
 </style>

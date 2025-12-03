@@ -259,9 +259,16 @@ onUnmounted(() => {
 @use '~/app/styles/variables' as var;
 
 .trackrow {
-  color: var.$black;
   position: relative;
   cursor: pointer;
+
+  @include var.media('<desktop') {
+    color: var.$paleLT;
+  }
+
+  @include var.media('>=desktop') {
+    color: var.$black;
+  }
 
   &__container {
     height: 3rem;

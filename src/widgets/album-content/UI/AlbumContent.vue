@@ -66,10 +66,6 @@ const { localize } = useLocalization()
   flex: 1 1 0;
   position: relative;
 
-  @include var.media('<desktop') {
-    min-height: 100vh;
-  }
-
   &__content {
     flex: 1 1 0;
     position: relative;    
@@ -77,9 +73,7 @@ const { localize } = useLocalization()
     @include var.media('<desktop') {
       border-top-left-radius: var.$borderRadiusMD;
       border-top-right-radius: var.$borderRadiusMD;
-      background-color: var.$paleLW;
-      margin-top: calc(100vw + 7rem);
-      padding: var.$minPadding 0 3.5rem;
+      padding: 0 0 var.$doublePadding + var.$mainPadding;
       z-index: 9000;
 
       @include var.media('landscape') {

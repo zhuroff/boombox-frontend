@@ -34,10 +34,10 @@ const { localize } = useLocalization()
   &-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var.$fieldPadding;
 
     @include var.media('<desktop') {
-      margin: 0 auto;
+      margin: var.$mainPadding auto;
     }
 
     @include var.media('>=desktop') {

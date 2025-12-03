@@ -55,7 +55,6 @@ const { isMobile } = useDevice()
     width: 100vw;
     min-height: 100vh;
     background-color: var.$black;
-    padding-bottom: 3.5rem;
   }
 
   @include var.media('>=desktop') {
