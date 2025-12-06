@@ -2,7 +2,7 @@
   <div class="album__hero-cover">
     <CoverArt
       entityKey="toy"
-      :cover="album.coverURL || coverPlaceholders('album')"
+      :cover="albumCover"
       :entity="album"
     />
   </div>
@@ -20,8 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { coverPlaceholders } from '~shared/utils'
+import { proxyCloudUrl } from '~shared/lib'
 import { CoverArt } from '~widgets/cover-art'
 import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'
@@ -33,8 +34,10 @@ interface Props {
   length: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<HeadEmits>()
+
+const albumCover = computed(() => proxyCloudUrl(props.album.coverURL) || coverPlaceholders('album'))
 
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')

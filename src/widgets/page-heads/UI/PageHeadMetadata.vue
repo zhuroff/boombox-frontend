@@ -107,13 +107,14 @@ const { localize } = useLocalization()
   &-metadata {
 
     @include var.media('<desktop') {
-      display: none;
+      color: var.$white;
+      line-height: 1.7;
     }
 
     @include var.media('>=desktop') {
       color: var.$paleDP;
-      line-height: 1.5;
       margin-top: auto;
+      line-height: 1.5;
     }
   }
 

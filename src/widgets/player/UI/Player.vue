@@ -1,5 +1,8 @@
 <template>
-  <section :class="[{ '--screensave': screensaveMode && isMobile }, 'player']">
+  <section
+    v-if="!isMobile || playingTrack"
+    :class="[{ '--screensave': screensaveMode && isMobile }, 'player']"
+  >
     <Button
       v-if="isMobile"
       icon="chevron-down"
@@ -25,7 +28,7 @@ import PlayerPlaylist from './PlayerPlaylist.vue'
 import PlayerControlPanel from './PlayerControlPanel.vue'
 
 const { isMobile } = useDevice()
-const { screensaveMode, isPlaylistExpanded } = usePlayer()
+const { screensaveMode, isPlaylistExpanded, playingTrack } = usePlayer()
 </script>
 
 <style lang="scss">
@@ -175,13 +178,14 @@ const { screensaveMode, isPlaylistExpanded } = usePlayer()
 
   @include var.media('>=desktop') {
     height: var.$playerHeight;
-    display: flex;
+    display: grid;
+    grid-template-columns: calc(50% - 220px / 2) 1fr;
     width: calc(100vw - var.$asideWidth);
     left: var.$asideWidth;
   }
 
   &.--z-low {
-    z-index: 0;
+    z-index: 999;
   }
 }
 </style>

@@ -9,7 +9,7 @@
           icon="previous"
           title="Play previous track"
           isRounded
-          :isDisabled="!isPrevTrackAvailable"
+          :isDisabled="!isPrevTrackAvailable || isSwitchingTrack"
           @click="playPrev"
 
         />
@@ -24,7 +24,7 @@
           icon="next"
           title="Play next track"
           isRounded
-          :isDisabled="!isNextTrackAvailable"
+          :isDisabled="!isNextTrackAvailable || isSwitchingTrack"
           @click="playNext"
         />
         <ProgressBar
@@ -93,7 +93,8 @@ const {
   isNextTrackAvailable,
   isPrevTrackAvailable,
   setTrackPosition,
-  playPauseTrack
+  playPauseTrack,
+  isSwitchingTrack
 } = usePlayer()
 
 const searchOnYouTube = () => {
@@ -107,6 +108,7 @@ const searchOnYouTube = () => {
 </script>
 
 <style lang="scss">
+@use "sass:math";
 @use '~app/styles/variables' as var;
 
 .player {
@@ -122,9 +124,8 @@ const searchOnYouTube = () => {
 
     @include var.media('>=desktop') {
       background-color: var.$dark;
-      width: calc(100% - var.$asideWidth);
-      padding: 0 25px;
-      margin-left: auto;
+      padding: 0 var.$mainPadding 0 var.$minPadding;
+      margin-top: math.div(var.$elementHeightXS, 1.5);
     }
 
     &-panel {
@@ -147,8 +148,10 @@ const searchOnYouTube = () => {
         }
 
         &:hover {
-          background-color: var.$accent;
-          border-color: var.$accent;
+          @include var.media('>=desktop') {
+            background-color: var.$accent;
+            border-color: var.$accent;
+          }
         }
 
         &.--active {

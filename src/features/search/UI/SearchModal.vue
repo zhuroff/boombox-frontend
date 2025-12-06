@@ -38,6 +38,7 @@
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
 import { debounce, hostString, coverPlaceholders } from '~shared/utils'
+import { proxyCloudUrl } from '~shared/lib'
 import { useLocalization } from '~shared/model'
 import { TextInput } from '~shared/UI'
 import SearchWrapper from './SearchWrapper.vue'
@@ -75,7 +76,7 @@ const getRowComponent = (key: string, data: SearchResultData) => {
         [
           h(
             'img',
-            { src: (data as AlbumBasic).coverURL },
+            { src: proxyCloudUrl((data as AlbumBasic).coverURL) || coverPlaceholders('album') },
           ),
           h(
             'div',

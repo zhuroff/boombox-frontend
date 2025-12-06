@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import type { Ref, ComputedRef } from 'vue'
-import type DatabaseService from '~/shared/api/DatabaseService'
+import type DatabaseService from '~shared/api/DatabaseService'
 
 const useUpdateEntity = <T, U>(
   entityKey: Ref<string>,
@@ -19,6 +19,25 @@ const useUpdateEntity = <T, U>(
     mutationFn: (payload: U) => (
       dbService.updateEntity<T, U>(entityKey.value, payload)
     ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [entityKey] })
+    }
+  })
+
+  const {
+    mutateAsync: updateEntry,
+    isPending: isEntryUpdating,
+    isSuccess: isEntryUpdated,
+    error: updateEntryError,
+    data: updatedEntry
+  } = useMutation({
+    mutationFn: (config: { payload: U; path: string }) => {
+      if (!id?.value) {
+        throw new Error('Entity id is not defined')
+      }
+
+      return dbService.updateEntry<T, U>(entityKey.value, id.value, config.path, config.payload)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [entityKey] })
     }
@@ -54,7 +73,12 @@ const useUpdateEntity = <T, U>(
     reorderEntities,
     isReordering,
     reorderEntitiesError,
-    reorderedEntities
+    reorderedEntities,
+    updateEntry,
+    isEntryUpdating,
+    isEntryUpdated,
+    updateEntryError,
+    updatedEntry
   }
 }
 

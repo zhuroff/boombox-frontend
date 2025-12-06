@@ -8,7 +8,7 @@
     </transition>
 
     <transition name="fade">
-      <CategoryContent
+      <CollectionContent
         v-if="isFetched && collection"
         :isFetched="isFetched"
         :pageEntityKey="pageEntityKey"
@@ -16,6 +16,7 @@
         :totalCounts="totalCounts"
         :setUploadedImage="refetch"
         defaultPreview="/img/album.webp"
+        @saveNewPost="saveNewPost"
       />
     </transition>
   </section>
@@ -23,8 +24,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { CategoryContent } from '~widgets/category-content'
-import { useGetPage } from '~shared/model'
+import { CollectionContent } from '~widgets/collection-content'
+import { useGetPage, useUpdateEntity } from '~shared/model'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
@@ -38,6 +39,14 @@ const pageEntityKey = ref('collections')
 
 const { localize } = useLocalization()
 const { data: collection, isFetched, refetch } = useGetPage<CollectionFull>(pageEntityKey, dbService)
+
+const collectionId = computed(() => collection.value?._id || null)
+
+const { updateEntry } = useUpdateEntity(pageEntityKey, dbService, collectionId)
+
+const saveNewPost = (config: { payload: { albumId: string; post: string }, path: 'post' }) => {
+  updateEntry(config).catch(console.error)
+}
 
 const totalCounts = computed(() => (
   localize('totalAlbums') + `: ${(collection.value?.albums?.length || 0)}`

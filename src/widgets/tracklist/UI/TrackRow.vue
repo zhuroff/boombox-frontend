@@ -1,5 +1,8 @@
 <template>
-  <div :class="trackRowClassList">
+  <div
+    :class="trackRowClassList"
+    @click="trackRowActionHandler"
+  >
     <div :class="[{ '--disabled': track?.idDisabled }, 'trackrow__container']">
       <Button
         v-if="!isMobile"
@@ -116,7 +119,7 @@ const dbService = new DatabaseService()
 
 const { isMobile } = useDevice()
 const { localize } = useLocalization()
-const { playingTrack, playingTrackIndex } = usePlayer()
+const { playingTrack, playingTrackIndex, playTrack, playPauseTrack } = usePlayer()
 const { toggleTrackAvailability, isTrackInPlaylist, addTrackToPlaylist } = usePlaylistService()
 
 const isActionsOpen = ref(false)
@@ -146,6 +149,13 @@ const trackDuration = computed(() => {
   const seconds = Math.floor(props.track.duration % 60).toString().padStart(2, '0')
   return `${minutes}:${seconds}`
 })
+
+const trackRowActionHandler = () => {
+  if (props.track.idDisabled) return
+  playingTrack.value && playingTrack.value._id === props.track._id
+    ? playPauseTrack()
+    : playTrack(props.track)
+}
 
 const toggleLyricsModal = () => {
   isLyricsModalActive.value = !isLyricsModalActive.value
@@ -249,8 +259,16 @@ onUnmounted(() => {
 @use '~/app/styles/variables' as var;
 
 .trackrow {
-  color: var.$black;
   position: relative;
+  cursor: pointer;
+
+  @include var.media('<desktop') {
+    color: var.$paleLT;
+  }
+
+  @include var.media('>=desktop') {
+    color: var.$black;
+  }
 
   &__container {
     height: 3rem;
@@ -258,10 +276,12 @@ onUnmounted(() => {
     align-items: center;
 
     &:hover:not(.--disabled) {
-      border-radius: var.$borderRadiusSM;
-      background-color: var.$dark;
-      color: var.$white;
-      transition: all 0.1s var.$animation;
+      @include var.media('>=desktop') {
+        border-radius: var.$borderRadiusSM;
+        background-color: var.$dark;
+        color: var.$white;
+        transition: all 0.1s var.$animation;
+      }
     }
 
     &.--disabled {
@@ -327,9 +347,12 @@ onUnmounted(() => {
   }
 
   &.--playing {
-    border-radius: var.$borderRadiusSM;
     background-color: var.$dark;
     color: var.$white;
+
+    @include var.media('>=desktop') {
+      border-radius: var.$borderRadiusSM;
+    }
   }
 
   &.--paused {

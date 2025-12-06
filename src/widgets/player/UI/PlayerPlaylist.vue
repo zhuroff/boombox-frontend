@@ -1,5 +1,10 @@
 <template>
-  <section class="playlist">
+  <section 
+    class="playlist"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+  >
     <Button
       v-if="isMobile"
       icon="close"
@@ -9,8 +14,8 @@
     />
     <ul class="playlist__tracks">
       <VueDraggableNext
-        handle=".playlist__track"
-        v-bind="dragOptions"
+        handle=".playlist__track-drag"
+        :animation="300"
         @end="orderChanged"
       >
         <PlayerPlaylistTrack
@@ -25,18 +30,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { usePlaylistService, usePlayer } from '~features/player'
 import { Button } from '~shared/UI'
 import { useDevice } from '~shared/model'
 import PlayerPlaylistTrack from './PlayerPlaylistTrack.vue'
 import type { DraggableEvent, ReorderPayload } from '~shared/lib'
-
-const dragOptions = {
-  animation: 300,
-  disabled: false
-}
 
 const { isMobile } = useDevice()
 const { isPlaylistExpanded } = usePlayer()
@@ -45,6 +45,38 @@ const { primaryPlaylist, changePlaylistOrder } = usePlaylistService()
 const enabledTracksOnly = computed(() => {
   return primaryPlaylist.value.filter((track) => !track.idDisabled)
 })
+
+const touchStartX = ref<number>(0)
+const touchStartY = ref<number>(0)
+const touchEndX = ref<number>(0)
+const minSwipeDistance = 50
+
+const onTouchStart = (e: TouchEvent) => {
+  if (!isMobile.value) return
+  touchStartX.value = e.touches[0].clientX
+  touchStartY.value = e.touches[0].clientY
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  if (!isMobile.value) return
+  const deltaX = Math.abs(e.touches[0].clientX - touchStartX.value)
+  const deltaY = Math.abs(e.touches[0].clientY - touchStartY.value)
+  
+  if (deltaX > deltaY && deltaX > 10) {
+    e.preventDefault()
+  }
+}
+
+const onTouchEnd = (e: TouchEvent) => {
+  if (!isMobile.value) return
+  
+  touchEndX.value = e.changedTouches[0].clientX
+  const swipeDistance = touchEndX.value - touchStartX.value
+  
+  if (swipeDistance > minSwipeDistance) {
+    isPlaylistExpanded.value = false
+  }
+}
 
 const orderChanged = (event: DraggableEvent) => {
   const payload: ReorderPayload = {
@@ -73,7 +105,7 @@ const orderChanged = (event: DraggableEvent) => {
   box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%);
 
   @include var.media('<desktop') {
-    padding-top: var.$mainPadding;
+    padding-top: 2.5rem;
     padding-bottom: var.$mainPadding;
   }
 
@@ -117,6 +149,10 @@ const orderChanged = (event: DraggableEvent) => {
 
   &__tracks {
     overflow: hidden;
+
+    @include var.media('>=desktop') {
+      padding: var.$fieldPadding 0;
+    }
   }
 
   &__collapse {

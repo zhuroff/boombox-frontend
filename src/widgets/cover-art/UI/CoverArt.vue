@@ -117,11 +117,9 @@ const slideChanged = (payload: BookletSlideState) => {
   position: relative;
 
   @include var.media('<desktop') {
-    position: fixed;
-    top: calc(110px + 1rem);
-    left: 1rem;
-    width: calc(100vw - 2rem);
-    height: calc(100vw - 2rem);
+    margin-top: var.$doublePadding + var.$mainPadding;
+    width: calc(100vmin - 2rem);
+    height: calc(100vmin - 2rem);
     border-radius: var.$borderRadiusMD;
     overflow: hidden;
   }

@@ -23,7 +23,8 @@ const usePlayer = () => {
     playNextTrack,
     progressLine,
     progressTime,
-    isTrackMuted
+    isTrackMuted,
+    isSwitchingTrack
   } = useAudioService(dbService)
   
   const {
@@ -59,6 +60,8 @@ const usePlayer = () => {
   }
 
   const playTrack = (track: TrackBasic) => {
+    if (isSwitchingTrack.value) return
+    
     if (track._id === playingTrack.value?._id) {
       return playingTrackRef.value?.play()
     }
@@ -76,8 +79,6 @@ const usePlayer = () => {
     } else {
       playTrackStream(targetTrack.streamURL)
     }
-
-    screensaveMode.value = true
   }
 
   const playPauseTrack = () => {
@@ -147,7 +148,8 @@ const usePlayer = () => {
     toggleVinylMode,
     setSoundVolume,
     isTrackMuted,
-    isVinylMode
+    isVinylMode,
+    isSwitchingTrack
   }
 }
 

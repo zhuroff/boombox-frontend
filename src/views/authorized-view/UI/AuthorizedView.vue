@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div :class="[{ '--screensave': screensaveMode && isMobile }, 'container']">
     <Sidebar />
     <main
       ref="main"
@@ -19,8 +19,12 @@ import { ref } from 'vue'
 import { Sidebar } from '~widgets/sidebar'
 import { Player } from '~widgets/player'
 import { Snackbar } from '~shared/UI'
+import { useDevice } from '~shared/model'
+import { usePlayer } from '~features/player'
 
 const main = ref(null)
+const { screensaveMode } = usePlayer()
+const { isMobile } = useDevice()
 </script>
 
 <style lang="scss">
@@ -29,6 +33,13 @@ const main = ref(null)
 .container {
   display: flex;
   position: relative;
+
+  @include var.media('<desktop') {
+    &.--screensave {
+      height: 100vh;
+      overflow: hidden;
+    }
+  }
 
   @include var.media('>=desktop') {
     background-color: var.$paleLT;
@@ -44,7 +55,6 @@ const main = ref(null)
     width: 100vw;
     min-height: 100vh;
     background-color: var.$black;
-    padding-bottom: 3.5rem;
   }
 
   @include var.media('>=desktop') {

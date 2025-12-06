@@ -10,7 +10,6 @@
     :required="required"
     :value="modelValue"
     ref="textInputElement"
-    autocomplete="off"
     @input="(e) => {
       const value = (e.target as HTMLInputElement).value
       emit('update:modelValue', value)

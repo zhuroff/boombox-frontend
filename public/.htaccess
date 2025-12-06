@@ -1,0 +1,13 @@
+# Prevent search engine indexing
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
+</IfModule>
+
+# Optional: Block known bots (uncomment if needed)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Block known bots (403 error)
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|yandex) [NC]
+  RewriteRule .* - [R=403,L]
+</IfModule>
