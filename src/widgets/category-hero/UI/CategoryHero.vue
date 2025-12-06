@@ -22,7 +22,6 @@
         />
         <div class="hero__content-actions">
           <Button
-            v-if="entityKey !== 'collections'"
             size="medium"
             isInverted
             :label="localize('player.waveButton')"
