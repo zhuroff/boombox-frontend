@@ -5,7 +5,7 @@
       class="--row"
       entityKey="albums"
       placeholderPreview="/img/album.webp"
-      :isDraggable="false"
+      :isDraggable="true"
       :isDeletable="true"
       @deleteEntity="(payload: DeletePayload) => emit('deleteEntity', payload)"
     />
@@ -263,12 +263,22 @@ onUnmounted(() => {
   border: 1px solid #e0e0e0;
   border-radius: var.$borderRadiusMD;
   flex-wrap: wrap;
+
+  @include var.media('<=mobile') {
+    gap: 0.375rem;
+    padding: 0.375rem;
+  }
   
   &-group {
     display: flex;
     gap: var.$fieldPadding;
     padding-right: var.$fieldPadding;
     border-right: 1px solid #ddd;
+
+    @include var.media('<=mobile') {
+      gap: 0.375rem;
+      padding-right: 0.375rem;
+    }
     
     &:last-child {
       border-right: none;

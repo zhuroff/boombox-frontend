@@ -17,6 +17,8 @@
         :setUploadedImage="refetch"
         defaultPreview="/img/album.webp"
         @saveNewPost="saveNewPost"
+        @orderChanged="changeAlbumsOrder"
+        @saveTitle="saveTitle"
       />
     </transition>
   </section>
@@ -32,6 +34,7 @@ import { DatabaseService } from '~shared/api'
 import { useLocalization } from '~shared/model'
 
 import type { CollectionFull } from '~entities/collection'
+import type { DraggableEvent, ReorderPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 
@@ -42,10 +45,28 @@ const { data: collection, isFetched, refetch } = useGetPage<CollectionFull>(page
 
 const collectionId = computed(() => collection.value?._id || null)
 
-const { updateEntry } = useUpdateEntity(pageEntityKey, dbService, collectionId)
+const { updateEntry, reorderEntities } = useUpdateEntity(pageEntityKey, dbService, collectionId)
 
 const saveNewPost = (config: { payload: { albumId: string; post: string }, path: 'post' }) => {
   updateEntry(config).catch(console.error)
+}
+
+const changeAlbumsOrder = (event: DraggableEvent) => {
+  const { newIndex, oldIndex } = event
+
+  if (newIndex === oldIndex) return
+
+  const payload: ReorderPayload = {
+    newOrder: newIndex,
+    oldOrder: oldIndex
+  }
+
+  reorderEntities(payload)
+}
+
+const saveTitle = (value: string) => {
+  updateEntry({ payload: { title: value }, path: 'title' })
+    .catch(console.error)
 }
 
 const totalCounts = computed(() => (

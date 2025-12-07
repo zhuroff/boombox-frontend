@@ -3,14 +3,17 @@
     <CategoryHero
       v-if="isFetched && data"
       :data="data"
+      isEditable
       :entityKey="pageEntityKey"
       :description="totalCounts"
       @setUploadedImage="setUploadedImage"
+      @saveTitle="saveTitle"
     />
     <div class="collection__content">
       <CollectionDashboard
         :entities="albumList"
         @updatePost="updatePost"
+        @orderChanged="changeAlbumsOrder"
       />
     </div>
   </div>
@@ -20,6 +23,7 @@
 import { computed } from 'vue'
 import { CategoryHero } from '~widgets/category-hero'
 import type { CollectionFull, CompilationAlbum } from '~entities/collection'
+import type { DraggableEvent } from '~/shared/lib'
 import CollectionDashboard from './CollectionDashboard.vue'
 
 type Props = {
@@ -33,6 +37,8 @@ type Props = {
 
 type Emits = {
   <T>(e: 'saveNewPost', config: { payload: T; path: string }): void
+  (e: 'orderChanged', event: DraggableEvent): void
+  (e: 'saveTitle', value: string): void
 }
 
 const props = defineProps<Props>()
@@ -43,6 +49,14 @@ const albumList = computed<CompilationAlbum[]>(() => props.data.albums)
 const updatePost = (payload: [string, string]) => {
   const [post, albumId] = payload
   emit('saveNewPost', { payload: { albumId, post }, path: 'post' })
+}
+
+const changeAlbumsOrder = (event: DraggableEvent) => {
+  emit('orderChanged', event)
+}
+
+const saveTitle = (value: string) => {
+  emit('saveTitle', value)
 }
 </script>
 

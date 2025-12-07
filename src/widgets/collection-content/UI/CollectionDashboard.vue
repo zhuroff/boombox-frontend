@@ -4,7 +4,6 @@
     tag="ul"
     :class="['collection__dashboard']"
     :animation="300"
-    :disabled="true"
     @end="(event) => emit('orderChanged', event)"
   >
     <CollectionSingleAlbum
@@ -19,7 +18,7 @@
 
 <script setup lang="ts">
 import { VueDraggableNext } from 'vue-draggable-next'
-import type { DeletePayload } from '~shared/lib'
+import type { DeletePayload, DraggableEvent } from '~shared/lib'
 import type { CompilationAlbum } from '~entities/collection'
 import CollectionSingleAlbum from './CollectionSingleAlbum.vue'
 
@@ -28,7 +27,7 @@ type Props = {
 }
 
 type Emits = {
-  (e: 'orderChanged', event: unknown): void
+  (e: 'orderChanged', event: DraggableEvent): void
   (e: 'deleteEntity', payload: DeletePayload): void
   (e: 'updatePost', payload: [string, string]): void
 }
