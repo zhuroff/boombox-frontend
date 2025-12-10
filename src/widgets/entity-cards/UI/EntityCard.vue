@@ -149,6 +149,7 @@ const deleteEntity = () => {
     z-index: 2000;
     cursor: move;
     opacity: 0;
+    color: var.$black;
     background-color: var.$paleLT;
   }
 

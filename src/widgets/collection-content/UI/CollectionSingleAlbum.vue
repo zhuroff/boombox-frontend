@@ -6,106 +6,147 @@
       entityKey="albums"
       placeholderPreview="/img/album.webp"
       :isDraggable="true"
-      :isDeletable="true"
       @deleteEntity="(payload: DeletePayload) => emit('deleteEntity', payload)"
     />
     
     <div class="editor-wrapper">
-      <div v-if="editor" class="toolbar">
-        <div class="toolbar-group">
-          <button
-            @click="editor.chain().focus().toggleBold().run()"
-            :disabled="!editor.can().chain().focus().toggleBold().run()"
-            :class="{ 'is-active': editor.isActive('bold') }"
-            title="Жирный"
-            type="button"
-          >
-            <strong>B</strong>
-          </button>
-          <button
-            @click="editor.chain().focus().toggleItalic().run()"
-            :disabled="!editor.can().chain().focus().toggleItalic().run()"
-            :class="{ 'is-active': editor.isActive('italic') }"
-            title="Курсив"
-            type="button"
-          >
-            <i>I</i>
-          </button>
+      <div v-if="editor && !isMobile" class="toolbar">
+        <div v-if="isEditMode" class="toolbar__format">
+          <div class="toolbar__group">
+            <button
+              @click="editor.chain().focus().toggleBold().run()"
+              :disabled="!editor.can().chain().focus().toggleBold().run()"
+              :class="{ 'is-active': editor.isActive('bold') }"
+              title="Жирный"
+              type="button"
+            >
+              <strong>B</strong>
+            </button>
+            <button
+              @click="editor.chain().focus().toggleItalic().run()"
+              :disabled="!editor.can().chain().focus().toggleItalic().run()"
+              :class="{ 'is-active': editor.isActive('italic') }"
+              title="Курсив"
+              type="button"
+            >
+              <i>I</i>
+            </button>
+          </div>
+          
+          <div class="toolbar__group">
+            <button
+              @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+              :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+              title="Заголовок 2"
+              type="button"
+            >
+              H2
+            </button>
+            <button
+              @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+              :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+              title="Заголовок 3"
+              type="button"
+            >
+              H3
+            </button>
+          </div>
+          
+          <div class="toolbar__group">
+            <button
+              @click="editor.chain().focus().toggleBulletList().run()"
+              :class="{ 'is-active': editor.isActive('bulletList') }"
+              title="Маркированный список"
+              type="button"
+            >
+              UL
+            </button>
+            <button
+              @click="editor.chain().focus().toggleOrderedList().run()"
+              :class="{ 'is-active': editor.isActive('orderedList') }"
+              title="Нумерованный список"
+              type="button"
+            >
+              OL
+            </button>
+          </div>
+          
+          <div class="toolbar__group">
+            <button
+              @click="editor.chain().focus().toggleBlockquote().run()"
+              :class="{ 'is-active': editor.isActive('blockquote') }"
+              title="Цитата"
+              type="button"
+            >
+              Q
+            </button>
+          </div>
+          
+          <div class="toolbar__group">
+            <button
+              @click="setLink"
+              :class="{ 'is-active': editor.isActive('link') }"
+              title="Ссылка"
+              type="button"
+            >
+              🔗
+            </button>
+          </div>
+
+          <div class="toolbar__group">
+            <Button
+              label="Save"
+              size="small"
+              @click="isEditMode = false"
+            />
+          </div>
         </div>
-        
-        <div class="toolbar-group">
-          <button
-            @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-            :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-            title="Заголовок 2"
-            type="button"
-          >
-            H2
-          </button>
-          <button
-            @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-            :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-            title="Заголовок 3"
-            type="button"
-          >
-            H3
-          </button>
-        </div>
-        
-        <div class="toolbar-group">
-          <button
-            @click="editor.chain().focus().toggleBulletList().run()"
-            :class="{ 'is-active': editor.isActive('bulletList') }"
-            title="Маркированный список"
-            type="button"
-          >
-            UL
-          </button>
-          <button
-            @click="editor.chain().focus().toggleOrderedList().run()"
-            :class="{ 'is-active': editor.isActive('orderedList') }"
-            title="Нумерованный список"
-            type="button"
-          >
-            OL
-          </button>
-        </div>
-        
-        <div class="toolbar-group">
-          <button
-            @click="editor.chain().focus().toggleBlockquote().run()"
-            :class="{ 'is-active': editor.isActive('blockquote') }"
-            title="Цитата"
-            type="button"
-          >
-            Q
-          </button>
-        </div>
-        
-        <div class="toolbar-group">
-          <button
-            @click="setLink"
-            :class="{ 'is-active': editor.isActive('link') }"
-            title="Ссылка"
-            type="button"
-          >
-            🔗
-          </button>
+
+        <div v-else class="toolbar__actions">
+          <Button
+            :label="isExpanded ? 'Collapse' : 'Expand'"
+            size="small"
+            @click="isExpanded = !isExpanded"
+          />
+
+          <Button
+            label="Edit"
+            size="small"
+            @click="isEditMode = true"
+          />
+
+          <Button
+            label="Manage"
+            size="small"
+            isDisabled
+          />
+
+          <Button
+            label="Exclude"
+            size="small"
+            isDisabled
+          />
         </div>
       </div>
       
-      <editor-content
+      <EditorContent
         :editor="editor"
-        class="collection__note"
+        :class="[
+          { '--editable' : isEditMode },
+          { '--expanded' : isExpanded || isMobile },
+          'collection__note'
+        ]"
       />
     </div>
   </li>
 </template>
 
 <script setup lang="ts">
-import { watch, onUnmounted } from 'vue'
+import { watch, onUnmounted, ref } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import { EntityCard } from '~widgets/entity-cards'
+import { Button } from '~shared/UI'
+import { useDevice } from '~shared/model'
 import { debounce } from '~shared/utils'
 import type { CompilationAlbum } from '~/entities/collection'
 import type { DeletePayload } from '~shared/lib'
@@ -123,11 +164,15 @@ type Emits = {
 }
 
 const props = defineProps<Props>()
-
 const emit = defineEmits<Emits>()
 
+const { isMobile } = useDevice()
+
+const isEditMode = ref(false)
+const isExpanded = ref(false)
+
 const editor = useEditor({
-  content: props.album.post || '',
+  content: props.album.post || 'Some description, note, or article could be here',
   extensions: [
     StarterKit.configure({
       heading: {
@@ -142,8 +187,9 @@ const editor = useEditor({
     })
   ],
   editorProps: {
+    editable: () => isEditMode.value,
     attributes: {
-      spellcheck: 'false'
+      spellcheck: 'false',
     }
   },
   onUpdate: debounce(({ editor }) => {
@@ -198,14 +244,18 @@ onUnmounted(() => {
   &__entry {
     display: flex;
     align-items: flex-start;
-    gap: var.$mainPadding;
 
     @include var.media('<=mobile') {
       flex-direction: column;
+      gap: var.$basicPadding;
 
       @include var.media('landscape') {
         flex-direction: row;
       }
+    }
+
+    @include var.media('>mobile') {
+      gap: var.$mainPadding;
     }
 
     .cardlist__item {
@@ -236,7 +286,42 @@ onUnmounted(() => {
 
   &__note {
     flex: 1 1 0;
-    background-color: var.$white;
+    position: relative;
+
+    &.--editable {
+      background-color: var.$white;
+
+      &:deep(.tiptap) {
+        padding: var.$mainPadding;
+        border: 1px solid var.$paleLW;
+      }
+    }
+
+    &:not(.--editable) {
+      overflow: hidden;
+
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 5rem;
+        width: 100%;
+        background: linear-gradient(180deg,rgba(238, 238, 238, 0.5) 0%, rgba(238, 238, 238, 1) 70%);
+      }
+
+      @include var.media('<=mobile') {
+        color: var.$white;
+      }
+    }
+
+    &.--expanded {
+      overflow: visible;
+
+      &:after {
+        content: none;
+      }
+    }
   }
 }
 
@@ -245,6 +330,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: var.$fieldPadding;
+  align-self: normal;
 
   @include var.media('<=mobile') {
     width: 100%;
@@ -256,20 +342,33 @@ onUnmounted(() => {
 }
 
 .toolbar {
-  display: flex;
-  gap: var.$fieldPadding;
   padding: var.$fieldPadding;
   background: #f5f5f5;
   border: 1px solid #e0e0e0;
   border-radius: var.$borderRadiusMD;
-  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
   @include var.media('<=mobile') {
     gap: 0.375rem;
     padding: 0.375rem;
+    top: 3.5rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: var.$fieldPadding;
+    flex-wrap: wrap;
+  }
+
+  &__format {
+    display: flex;
+    gap: var.$fieldPadding;
+    flex-wrap: wrap;
   }
   
-  &-group {
+  &__group {
     display: flex;
     gap: var.$fieldPadding;
     padding-right: var.$fieldPadding;
@@ -283,49 +382,62 @@ onUnmounted(() => {
     &:last-child {
       border-right: none;
       padding-right: 0;
+
+      @include var.media('>mobile') {
+        margin-left: auto;
+      }
     }
-  }
-  
-  button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background-color: var.$white;
-    border: 1px solid var.$paleLW;
-    border-radius: var.$borderRadiusMD;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    
-    &:hover:not(:disabled) {
-      background-color: var.$black;
-      border-color: var.$black;
+
+    .button {
+      align-self: center;
+    }
+
+    button:not(.button) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background-color: var.$white;
+      border: 1px solid var.$paleLW;
+      border-radius: var.$borderRadiusMD;
+      cursor: pointer;
+      font-size: 14px;
       transition: all 0.2s ease;
-      color: var.$paleLT;
-    }
-    
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    
-    &.is-active {
-      background-color: var.$info;
-      color: white;
-      border-color: var.$info;
+      
+      &:hover:not(:disabled) {
+        background-color: var.$black;
+        border-color: var.$black;
+        transition: all 0.2s ease;
+        color: var.$paleLT;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      
+      &.is-active {
+        background-color: var.$info;
+        color: white;
+        border-color: var.$info;
+      }
     }
   }
 }
 
 :deep(.tiptap) {
-  min-height: 222px;
-  padding: var.$mainPadding;
-  border: 1px solid var.$paleLW;
   border-radius: var.$borderRadiusMD;
   line-height: 1.5;
   outline: none;
+
+  @include var.media('<=mobile') {
+    min-height: 50px;
+  }
+
+  @include var.media('>mobile') {
+    min-height: 222px;
+  }
 
   & > *:first-child {
     margin-top: 0 !important;
@@ -379,11 +491,30 @@ onUnmounted(() => {
   }
   
   a.editor-link {
-    color: var.$info;
-    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+    display: inline-block;
+    position: relative;
     
     &:hover {
       color: var.$info;
+      transition: color 0.2s ease;
+
+      &:after {
+        border-color: var.$info;
+        transition: border-color 0.2s ease;
+      }
+    }
+
+    &:after {
+      content: '';
+      width: 100%;
+      height: 1px;
+      border-top: 1px dashed var.$paleMD;
+      transition: border-color 0.2s ease;
+      position: absolute;
+      bottom: 0.125rem;
+      left: 0;
     }
   }
   

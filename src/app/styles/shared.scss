@@ -27,3 +27,13 @@
 .--error {
   border-color: var.$error;
 }
+
+.cardlist__item {
+
+  button.--inverted {
+
+    .icon {
+      fill: var.$black !important;
+    }
+  }
+}
