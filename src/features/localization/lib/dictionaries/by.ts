@@ -256,5 +256,11 @@ export const localesBY: LocaleDictionary = {
     timestamp: 'Таймстамп',
     restore: 'Аднавіць бэкап',
     delete: 'Выдаліць бэкап'
+  },
+  snackbars: {
+    delete: {
+      success: 'Iстота паспяхова выдалена',
+      failed: 'Немагчамы вадалiць iстоту'
+    }
   }
 }

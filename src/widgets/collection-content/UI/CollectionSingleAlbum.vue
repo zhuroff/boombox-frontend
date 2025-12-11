@@ -124,7 +124,7 @@
           <Button
             label="Exclude"
             size="small"
-            isDisabled
+            @click="() => emit('excludeAlbum', album._id)"
           />
         </div>
       </div>
@@ -161,6 +161,7 @@ type Emits = {
   (e: 'orderChanged', event: unknown): void
   (e: 'deleteEntity', payload: DeletePayload): void
   (e: 'updatePost', payload: [string, string]): void
+  (e: 'excludeAlbum', id: string): void
 }
 
 const props = defineProps<Props>()

@@ -12,6 +12,7 @@
       :album="entity"
       @deleteEntity="(payload) => emit('deleteEntity', payload)"
       @updatePost="(payload) => emit('updatePost', payload)"
+      @excludeAlbum="(id) => emit('excludeAlbum', id)"
     />
   </VueDraggableNext>
 </template>
@@ -30,6 +31,7 @@ type Emits = {
   (e: 'orderChanged', event: DraggableEvent): void
   (e: 'deleteEntity', payload: DeletePayload): void
   (e: 'updatePost', payload: [string, string]): void
+  (e: 'excludeAlbum', id: string): void
 }
 
 defineProps<Props>()

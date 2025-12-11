@@ -256,5 +256,11 @@ export const localesEN: LocaleDictionary = {
     timestamp: 'Timestamp',
     restore: 'Restore backup',
     delete: 'Delete backup'
+  },
+  snackbars: {
+    delete: {
+      success: 'Entity has been removed successfully',
+      failed: 'Unable to remove entity'
+    }
   }
 }

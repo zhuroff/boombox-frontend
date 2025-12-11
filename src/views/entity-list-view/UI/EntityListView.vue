@@ -77,7 +77,7 @@ import { Paginator, usePaginator } from '~features/paginator'
 
 import { DatabaseService } from '~shared/api'
 import { Modal, Loader, Confirmation, Button } from '~shared/UI'
-import { useLocalization, useGetList, useDeleteEntity } from '~shared/model'
+import { useLocalization, useGetList, useDeleteEntity, useSnackbar } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 import type { DeletePayload } from '~shared/lib'
 
@@ -96,6 +96,7 @@ const props = defineProps<Props>()
 const dbService = new DatabaseService()
 
 const { localize } = useLocalization()
+const { setSnackbarMessage } = useSnackbar()
 
 const deletedEntityId = ref<string | null>(null)
 
@@ -153,7 +154,7 @@ watchEffect(() => {
 watch(
   () => props.isRefresh,
   (value) => {
-    if (value) refetch()
+    value && refetch()
   }
 )
 
@@ -162,6 +163,10 @@ watch(
   (value) => {
     if (value) {
       deletedEntityId.value = null
+      setSnackbarMessage({
+        message: localize(`snackbars.delete.${value.message}`),
+        type: 'success'
+      })
       refetch()
     }
   }

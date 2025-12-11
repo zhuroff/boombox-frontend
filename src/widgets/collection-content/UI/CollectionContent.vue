@@ -13,6 +13,7 @@
       <CollectionDashboard
         :entities="albumList"
         @updatePost="updatePost"
+        @excludeAlbum="excludeAlbum"
         @orderChanged="changeAlbumsOrder"
       />
     </div>
@@ -38,6 +39,7 @@ type Props = {
 type Emits = {
   <T>(e: 'saveNewPost', config: { payload: T; path: string }): void
   (e: 'orderChanged', event: DraggableEvent): void
+  (e: 'excludeAlbum', payload: { albumId: string, collectionId: string }): void
   (e: 'saveTitle', value: string): void
 }
 
@@ -53,6 +55,13 @@ const updatePost = (payload: [string, string]) => {
 
 const changeAlbumsOrder = (event: DraggableEvent) => {
   emit('orderChanged', event)
+}
+
+const excludeAlbum = (albumId: string) => {
+  emit('excludeAlbum', {
+    albumId,
+    collectionId: props.data._id
+  })
 }
 
 const saveTitle = (value: string) => {
