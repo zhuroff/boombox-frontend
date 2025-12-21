@@ -67,7 +67,7 @@ const onSearch = (value: string) => {
   }
 
   @include var.media('>=desktop') {
-    padding: 0 25px;
+    padding: 0 var.$mainPadding;
     background-color: var.$dark;
     height: var.$desktopHeaderHeight;
     position: sticky;

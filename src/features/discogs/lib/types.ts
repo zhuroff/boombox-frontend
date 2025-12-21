@@ -1,4 +1,39 @@
+export type DiscogsPagination = {
+  page: number
+  pages: number
+  per_page: number
+  items: number
+}
+
+export type DiscogsCollectionRow = {
+  id: number
+  name: string
+  count: number
+  pagination: DiscogsPagination | undefined
+  releases: DiscogsReleaseRow[]
+}
+
 export type DiscogsReleaseRow = {
+  id: number
+  artists: { id: number; name: string }[]
+  cover_image: string
+  date_added: string
+  formats: { name: string }[]
+  genres: string[]
+  styles: string[]
+  melodymap_link: string | null
+  release_url: string
+  thumb: string
+  title: string
+  year: number
+  labels: {
+    id: number
+    name: string
+    catno: string
+  }[]
+}
+
+export type DiscogsTableRow = {
   id: number
   country: string
   cover: string
@@ -9,9 +44,19 @@ export type DiscogsReleaseRow = {
   releaseYear: string
 }
 
-export type DiscogsQueryConfig = {
+export enum DiscogsCollectionFolderName {
+  Vinyl = 'Vinyl',
+  CD = 'CD',
+  Cassette = 'Cassette'
+}
+
+export type DiscogsCollectionQueryConfig = {
+  folderName: DiscogsCollectionFolderName | null
+}
+
+export type DiscogsSearchQueryConfig = {
   artist: string
   album: string
   page: number
-  isMasterOnly?: boolean
+  isMasterOnly?: 1 | 0
 }

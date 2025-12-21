@@ -179,7 +179,7 @@ const activateEditMode = () => {
       background-color: var.$dark;
       position: relative;
       display: flex;
-      padding: 25px;
+      padding: var.$mainPadding;
       height: 300px;
     }
 

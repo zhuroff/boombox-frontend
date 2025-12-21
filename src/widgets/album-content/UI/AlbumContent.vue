@@ -10,6 +10,7 @@
         ref="albumContent"
       >
         <slot name="content"></slot>
+        <slot name="note"></slot>
       </div>
       <div
         v-for="{ name, docs } in relatedAlbums"
@@ -113,6 +114,10 @@ const { localize } = useLocalization()
   &__main {
     position: relative;
     overflow: hidden;
+  }
+
+  &__note {
+    margin-top: var.$basicPadding;
   }
 
   &__frame {

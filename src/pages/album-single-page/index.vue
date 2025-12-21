@@ -29,6 +29,21 @@
           />
         </template>
 
+        <template #note>
+          <div class="album__note">
+            <TextareaInput
+              name="albumNote"
+              type="textarea"
+              v-model="albumNote"
+              :readonly="!isNoteEditable"
+              :placeholder="localize('albumNotePlaceholder')"
+              @dblclick="isNoteEditable = true"
+              @blur="isNoteEditable = false"
+              @onInput="changeAlbumNote"
+            />
+          </div>
+        </template>
+
         <template v-if="!isMobile" #footer>
           <DiscogsTable :entity="minimumAlbumData" />
         </template>
@@ -73,19 +88,22 @@ import { WikiFrame } from '~features/wiki'
 
 import { useAlbum } from '~entities/album'
 
-import { Modal, Loader } from '~shared/UI'
+import { Modal, Loader, TextareaInput } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import { useDevice } from '~shared/model'
+import { useDevice, useLocalization } from '~shared/model'
+import { debounce } from '~shared/utils'
 
 const dbService = new DatabaseService()
 
 const { isMobile } = useDevice()
+const { localize } = useLocalization()
 const { initPlaylist, changePlaylistOrder } = usePlaylistService()
 
 const {
   album,
   isAlbumReady,
   preRandomState,
+  updateAlbumNote,
   relatedAlbums
 } = useAlbum(dbService)
 
@@ -97,6 +115,8 @@ const {
   isCollectionsModalEnabled
 } = useCollections(album, dbService)
 
+const albumNote = ref('')
+const isNoteEditable = ref(false)
 const isWikiFrameEnabled = ref(false)
 
 const minimumAlbumData = computed(() => ({
@@ -104,10 +124,15 @@ const minimumAlbumData = computed(() => ({
   albumArtist: album.value?.artist?.title || ''
 }))
 
+const changeAlbumNote = debounce((value: string) => {
+  album.value?._id && updateAlbumNote([album.value._id, value])
+}, 1000)
+
 watch(
   [isAlbumReady, album],
   ([isAlbumReady, album]) => {
     isAlbumReady && album && initPlaylist(album)
+    albumNote.value = album?.note || ''
   }
 )
 </script>

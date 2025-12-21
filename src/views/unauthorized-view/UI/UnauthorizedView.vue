@@ -57,7 +57,7 @@ const handleLogin = async (formData: FormPayload) => {
 
 .main {
   &.--unauth {
-    padding: 25px;
+    padding: var.$mainPadding;
     width: 100%;
     max-width: 500px;
     height: auto;

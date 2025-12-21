@@ -159,8 +159,8 @@ const isTrackPlaying = computed(() => {
 
     .playing {
       position: absolute;
-      width: 25px;
-      height: 25px;
+      width: var.$mainPadding;
+      height: var.$mainPadding;
       z-index: 10;
       fill: var.$white;
       color: var.$white;

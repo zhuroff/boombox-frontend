@@ -1,10 +1,13 @@
-import { reactive, computed, watch, type Ref } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
+import { reactive, computed, watch, ref } from 'vue'
+import { useMutation } from '@tanstack/vue-query'
 import type DiscogsService from '../api/DiscogsService'
-import type { DiscogsQueryConfig, DiscogsReleaseRow } from '../lib/types'
+import type { DiscogsSearchQueryConfig, DiscogsTableRow, DiscogsCollectionRow, DiscogsCollectionQueryConfig } from '../lib/types'
 import type { TableFilters } from '~shared/lib'
 
-const useDiscogs = (discogsService: DiscogsService, payload: Ref<DiscogsQueryConfig | DiscogsQueryConfig[]>) => {
+const useDiscogs = (discogsService: DiscogsService) => {
+  const discogsCollection = ref<DiscogsCollectionRow[]>([])
+  const discogsSearchResults = ref<DiscogsTableRow[]>([])
+
   const discogsFiltersState = reactive<Record<keyof TableFilters, null | string | number | undefined>>({
     country: null,
     releaseYear: null,
@@ -29,7 +32,7 @@ const useDiscogs = (discogsService: DiscogsService, payload: Ref<DiscogsQueryCon
     }
   }
 
-  const setDiscogsFilters = (data: DiscogsReleaseRow[]) => {
+  const setDiscogsFilters = (data: DiscogsTableRow[]) => {
     const uniqueFilterValues = {
       country: new Set<TableFilters['country'][number]>(),
       releaseYear: new Set<TableFilters['releaseYear'][number]>(),
@@ -50,33 +53,41 @@ const useDiscogs = (discogsService: DiscogsService, payload: Ref<DiscogsQueryCon
     })
   }
 
-  const { data: discogsData, isFetched: isDiscogsFetched } = useQuery<DiscogsReleaseRow[]>({
-    retry: 1,
-    enabled: !!payload,
-    refetchOnWindowFocus: false,
-    queryKey: [payload],
-    queryFn: async () => {
-      if (Array.isArray(payload.value)) {
+  const { mutateAsync: getDiscogsCollection, isPending: isDiscogsCollectionLoading } = useMutation({
+    mutationFn: async (config: DiscogsCollectionQueryConfig) => {
+      return await discogsService.getCollection(config)
+    },
+    onSuccess: (data) => {
+      discogsCollection.value = data
+    }
+  })
+
+  const { mutateAsync: searchDiscogsData, isPending: isDiscogsSearching } = useMutation({
+    mutationFn: async (config: DiscogsSearchQueryConfig | DiscogsSearchQueryConfig[]) => {
+      if (Array.isArray(config)) {
         const results = await Promise.all(
-          payload.value.map((config) => 
-            discogsService.getData(config)
+          config.map((configItem) => 
+            discogsService.searchDiscogsData(configItem)
           )
         )
-        
+
         return results.flat()
       }
-      
-      return await discogsService.getData(payload.value)
+
+      return await discogsService.searchDiscogsData(config)
+    },
+    onSuccess: (data) => {
+      discogsSearchResults.value = data
     }
   })
 
   const filteredDiscogsData = computed(() => {
-    return [...(discogsData.value || [])]
+    return [...(discogsSearchResults.value || [])]
       .filter((row) => {
         return (
           Object.entries(discogsFiltersState)
             .every(([key, value]) => {
-              let rowValue = row[key as keyof DiscogsReleaseRow]
+              let rowValue = row[key as keyof DiscogsTableRow]
               if (!value) return true
               if (!rowValue) rowValue = 'unknown'
               return (
@@ -90,7 +101,7 @@ const useDiscogs = (discogsService: DiscogsService, payload: Ref<DiscogsQueryCon
   })
 
   watch(
-    discogsData,
+    discogsSearchResults,
     (newData) => {
       if (newData) {
         setDiscogsFilters(newData)
@@ -99,11 +110,15 @@ const useDiscogs = (discogsService: DiscogsService, payload: Ref<DiscogsQueryCon
   )
 
   return {
+    discogsCollection,
+    searchDiscogsData,
+    getDiscogsCollection,
     setDiscogsFilterValue,
+    isDiscogsCollectionLoading,
     resetDiscogsFilters,
     discogsFiltersState,
     filteredDiscogsData,
-    isDiscogsFetched,
+    isDiscogsSearching,
     discogsFilters
   }
 }

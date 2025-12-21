@@ -22,7 +22,7 @@ defineProps<Props>()
 .confirmation {
   background-color: var.$paleLT;
   border-radius: var.$borderRadiusMD;
-  padding: 25px;
+  padding: var.$mainPadding;
   position: relative;
 
   &__message {

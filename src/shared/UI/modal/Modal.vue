@@ -59,7 +59,7 @@ watchEffect(() => {
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  padding: 50px 25px;
+  padding: calc(var.$mainPadding * 2) var.$mainPadding;
   display: flex;
   justify-content: center;
   align-items: center;

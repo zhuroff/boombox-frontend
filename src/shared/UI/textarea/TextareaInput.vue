@@ -96,5 +96,11 @@ const emitTextareaValue = () => {
   &.--error {
     border-color: var.$error;
   }
+
+  &[readonly] {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+  }
 }
 </style>
