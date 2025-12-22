@@ -23,10 +23,30 @@
         </template>
 
         <template #content>
-          <TrackList
-            :tracks="album.tracks"
-            @trackOrderChanged="changePlaylistOrder"
-          />
+          <template v-if="groupedTracks.length === 1 && !groupedTracks[0].release">
+            <TrackList
+              :tracks="groupedTracks[0].tracks"
+              @trackOrderChanged="changePlaylistOrder"
+            />
+          </template>
+          <template v-else>
+            <div
+              v-for="group in groupedTracks"
+              :key="group.release || 'default'"
+              class="album__release"
+            >
+              <h3
+                v-if="group.release"
+                class="album__release-title"
+              >
+                {{ group.release }}
+              </h3>
+              <TrackList
+                :tracks="group.tracks"
+                @trackOrderChanged="changePlaylistOrder"
+              />
+            </div>
+          </template>
         </template>
 
         <template #note>
@@ -87,6 +107,7 @@ import { usePlaylistService } from '~features/player'
 import { WikiFrame } from '~features/wiki'
 
 import { useAlbum } from '~entities/album'
+import type { TrackBasic } from '~entities/track'
 
 import { Modal, Loader, TextareaInput } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
@@ -124,6 +145,45 @@ const minimumAlbumData = computed(() => ({
   albumArtist: album.value?.artist?.title || ''
 }))
 
+type TrackGroup = {
+  release: string | null
+  tracks: TrackBasic[]
+}
+
+const groupedTracks = computed<TrackGroup[]>(() => {
+  if (!album.value?.tracks) return []
+  
+  const tracks = album.value.tracks
+  
+  // Проверяем, есть ли треки с release
+  const hasReleases = tracks.some(track => track.release)
+  
+  if (!hasReleases) {
+    // Если нет релизов - возвращаем все треки как одну группу
+    return [{ release: null, tracks }]
+  }
+  
+  // Группируем треки по релизам
+  const groupsMap = new Map<string | null, typeof tracks>()
+  
+  tracks.forEach(track => {
+    const release = track.release || null
+    if (!groupsMap.has(release)) {
+      groupsMap.set(release, [])
+    }
+    const groupTracks = groupsMap.get(release)
+    if (groupTracks) {
+      groupTracks.push(track)
+    }
+  })
+  
+  // Преобразуем Map в массив объектов
+  return Array.from(groupsMap.entries()).map(([release, tracks]) => ({
+    release,
+    tracks
+  }))
+})
+
 const changeAlbumNote = debounce((value: string) => {
   album.value?._id && updateAlbumNote([album.value._id, value])
 }, 1000)
@@ -136,3 +196,27 @@ watch(
   }
 )
 </script>
+
+<style lang="scss" scoped>
+@use '~/app/styles/variables' as var;
+
+.album__release {
+  margin-top: var.$mainPadding;
+  
+  &:first-of-type {
+    @include var.media('>=desktop') {
+      margin-top: 5rem;
+    }
+  }
+
+  &-title {
+    @include var.serif(1.25rem);
+    margin-bottom: var.$fieldPadding;
+    color: var.$black;
+  }
+
+  .tracklist {
+    margin-top: 0;
+  }
+}
+</style>
