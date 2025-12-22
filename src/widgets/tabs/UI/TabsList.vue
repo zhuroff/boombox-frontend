@@ -1,6 +1,6 @@
 <template>
   <div class="tabview">
-    <div class="tabview__list">
+    <div class="tabview__tabs">
       <TabListItem
         v-for="item in items"
         :key="String(item.id)"
@@ -41,13 +41,24 @@ const activeTabData = computed(() => (
 
 .tabview {
 
-  &__list {
+  &__tabs {
     display: flex;
     border-bottom: 1px solid var.$paleDP;
+    position: sticky;
+
+    @include var.media('<desktop') {
+      top: 0;
+      background-color: var.$black;
+    }
+
+    @include var.media('>=desktop') {
+      top: var.$desktopHeaderHeight;
+      background-color: var.$paleLT;
+    }
   }
 
   &__content {
-    padding: var.$basicPadding 0;
+    padding: var.$minPadding 0;
   }
 }
 </style>

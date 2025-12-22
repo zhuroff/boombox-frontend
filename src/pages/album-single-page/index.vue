@@ -56,7 +56,7 @@
               type="textarea"
               v-model="albumNote"
               :readonly="!isNoteEditable"
-              :placeholder="localize('albumNotePlaceholder')"
+              :placeholder="localize('album.notePlaceholder')"
               @dblclick="isNoteEditable = true"
               @blur="isNoteEditable = false"
               @onInput="changeAlbumNote"
@@ -212,6 +212,7 @@ watch(
   &-title {
     @include var.serif(1.25rem);
     margin-bottom: var.$fieldPadding;
+    text-align: center;
     color: var.$black;
   }
 

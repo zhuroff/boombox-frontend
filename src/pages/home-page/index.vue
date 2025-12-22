@@ -21,7 +21,7 @@
           :items="discogsCollection"
           :activeTabId="activeTabId"
           :renderTitle="renderCollectionTitle"
-          :renderContent="renderCollectionContent"
+          :renderContent="renderCollection"
         />
       </section>
     </transition>
@@ -35,6 +35,7 @@ import { Header } from '~widgets/header'
 import { TabsList } from '~widgets/tabs'
 import { Loader, Button } from '~shared/UI'
 import { DiscogsService, useDiscogs, type DiscogsCollectionQueryConfig, type DiscogsCollectionRow } from '~features/discogs'
+import { renderCollection } from './renderCollection'
 
 const discogsService = new DiscogsService()
 
@@ -71,10 +72,6 @@ const renderCollectionTitle = (item: DiscogsCollectionRow) => (
   )
 )
 
-const renderCollectionContent = (item: DiscogsCollectionRow) => h('div', {}, [
-  h('p', item.count)
-])
-
 watchEffect(() => {
   getDiscogsCollection(queryConfig.value)
     .then((data) => {
@@ -88,5 +85,9 @@ watchEffect(() => {
 
 .content {
   padding-left: var.$mainPadding;
+}
+
+:deep(.tabview__content) {
+  @import './renderCollection.scss';
 }
 </style>

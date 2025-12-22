@@ -18,7 +18,10 @@ export type DiscogsReleaseRow = {
   artists: { id: number; name: string }[]
   cover_image: string
   date_added: string
-  formats: { name: string }[]
+  formats: {
+    name: string
+    descriptions: string[]
+  }[]
   genres: string[]
   styles: string[]
   melodymap_link: string | null

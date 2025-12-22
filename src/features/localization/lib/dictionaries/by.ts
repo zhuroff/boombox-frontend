@@ -25,6 +25,9 @@ export const localesBY: LocaleDictionary = {
   pageNotFound: 'Старонка не знойдзена',
   noBooklet: 'Альбом не мае буклета',
   goBack: 'Назад',
+  album: {
+    notePlaceholder: 'Заўвага да альбому'
+  },
   navigation: {
     albums: 'Альбомы',
     artists: 'Артысты',
@@ -262,5 +265,9 @@ export const localesBY: LocaleDictionary = {
       success: 'Iстота паспяхова выдалена',
       failed: 'Немагчамы вадалiць iстоту'
     }
+  },
+  release: {
+    added: 'Дададзена',
+    listen: 'Слухаць'
   }
 }
