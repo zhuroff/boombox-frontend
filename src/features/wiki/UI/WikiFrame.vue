@@ -87,7 +87,7 @@ const selectWikiResult = (id: number) => {
   flex-direction: column;
 
   &__results {
-    padding: 25px;
+    padding: var.$mainPadding;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 0.5rem;

@@ -179,7 +179,7 @@ const activateEditMode = () => {
       background-color: var.$dark;
       position: relative;
       display: flex;
-      padding: 25px;
+      padding: var.$mainPadding;
       height: 300px;
     }
 
@@ -206,7 +206,7 @@ const activateEditMode = () => {
       flex-direction: column;
 
       @include var.media('<desktop') {
-        padding: var.$mainPadding 2rem 0;
+        padding: var.$mainPadding var.$minPadding 0;
         text-align: center;
       }
 

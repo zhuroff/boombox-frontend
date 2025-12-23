@@ -72,7 +72,7 @@ const setProgressValue = (event: MouseEvent) => {
   align-items: center;
 
   @include var.media('<desktop') {
-    padding: var.$basicPadding 25px;
+    padding: var.$basicPadding var.$mainPadding;
     width: 100vw;
   }
 

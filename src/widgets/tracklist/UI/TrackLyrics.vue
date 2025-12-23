@@ -196,7 +196,7 @@ watch(
     align-items: center;
     justify-content: space-between;
     background-color: var.$dark;
-    padding: 25px;
+    padding: var.$mainPadding;
     position: relative;
     z-index: 10;
   }
@@ -208,7 +208,7 @@ watch(
   }
 
   &__content {
-    padding: 25px;
+    padding: var.$mainPadding;
     position: relative;
     flex-grow: 1;
     max-height: 100%;
@@ -238,12 +238,12 @@ watch(
 
   &__empty {
     text-align: center;
-    padding: 0 25px;
+    padding: 0 var.$mainPadding;
     font-size: 20px;
     overflow: hidden;
 
     & + .lyrics__text {
-      margin-top: 25px;
+      margin-top: var.$mainPadding;
     }
   }
 

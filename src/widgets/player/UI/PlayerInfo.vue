@@ -74,7 +74,7 @@ const trackSign = computed(() => {
       padding-top: 70px;
 
       @include var.media('landscape') {
-        padding-top: 25px;
+        padding-top: var.$mainPadding;
       }
 
       &:before {
@@ -157,7 +157,7 @@ const trackSign = computed(() => {
     @include var.media('<desktop') {
       text-align: center;
       margin-top: auto;
-      padding: 0 25px 40px;
+      padding: 0 var.$mainPadding 40px;
       position: relative;
       z-index: 100;
     }

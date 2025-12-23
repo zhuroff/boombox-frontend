@@ -25,6 +25,9 @@ export const localesEN: LocaleDictionary = {
   pageNotFound: 'Page not found',
   noBooklet: 'Album has no booklet',
   goBack: 'Go back',
+  album: {
+    notePlaceholder: 'Album note'
+  },
   navigation: {
     albums: 'Albums',
     artists: 'Artists',
@@ -71,7 +74,7 @@ export const localesEN: LocaleDictionary = {
     delete: 'Delete backup'
   },
   getRandomAlbum: 'Random album',
-  unknownTime: 'Not all tracks have been listened to yet',
+  unknownTime: 'N/A',
   listenedTracks: 'Total tracks listened:',
   conjugated: {
     tracks: {
@@ -262,5 +265,9 @@ export const localesEN: LocaleDictionary = {
       success: 'Entity has been removed successfully',
       failed: 'Unable to remove entity'
     }
+  },
+  release: {
+    added: 'Added',
+    listen: 'Listen'
   }
 }

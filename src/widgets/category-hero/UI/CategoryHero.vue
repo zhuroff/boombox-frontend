@@ -147,7 +147,7 @@ onMounted(() => {
 
     @include var.media('>=desktop') {
       position: absolute;
-      bottom: 25px;
+      bottom: var.$mainPadding;
       left: 0;
     }
   }
@@ -165,7 +165,7 @@ onMounted(() => {
     }
 
     @include var.media('>=desktop') {
-      padding: 0.5rem 25px 1rem 13rem;
+      padding: 0.5rem var.$mainPadding 1rem 13rem;
       position: absolute;
       left: 0;
       top: 50%;
