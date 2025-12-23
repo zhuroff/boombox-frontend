@@ -206,7 +206,7 @@ const activateEditMode = () => {
       flex-direction: column;
 
       @include var.media('<desktop') {
-        padding: var.$mainPadding 2rem 0;
+        padding: var.$mainPadding var.$minPadding 0;
         text-align: center;
       }
 

@@ -74,7 +74,7 @@ export const localesBY: LocaleDictionary = {
     delete: 'Выдаліць бэкап'
   },
   getRandomAlbum: 'Выпадковы альбом',
-  unknownTime: 'Яшчэ не ўсе трэкi праслуханы',
+  unknownTime: 'Н/В',
   listenedTracks: 'Усяго праслуханых трэкаў:',
   conjugated: {
     tracks: {

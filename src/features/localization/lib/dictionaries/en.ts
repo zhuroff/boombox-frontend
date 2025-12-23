@@ -74,7 +74,7 @@ export const localesEN: LocaleDictionary = {
     delete: 'Delete backup'
   },
   getRandomAlbum: 'Random album',
-  unknownTime: 'Not all tracks have been listened to yet',
+  unknownTime: 'N/A',
   listenedTracks: 'Total tracks listened:',
   conjugated: {
     tracks: {

@@ -14,6 +14,7 @@
         v-if="activeTabData"
         :is="renderContent(activeTabData)"
       />
+      <slot name="footer"></slot>
     </div>
   </div>
 </template>

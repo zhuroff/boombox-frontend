@@ -7,8 +7,8 @@ export type DiscogsPagination = {
 
 export type DiscogsCollectionRow = {
   id: number
-  name: string
   count: number
+  name: DiscogsCollectionFolderName
   pagination: DiscogsPagination | undefined
   releases: DiscogsReleaseRow[]
 }

@@ -1,72 +1,73 @@
 @use '~/app/styles/variables' as var;
 
-.collection {
-  display: grid;
-  gap: var.$minPadding;
-
-  @include var.media('<desktop') {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  @include var.media('>=desktop') {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include var.media('>=desktop-lg') {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  &-release {
-    display: flex;
+@mixin collection-styles {
+  .collection {
+    display: grid;
     gap: var.$minPadding;
 
-    &__cover {
-      width: 7rem;
-      height: 7rem;
-      object-fit: cover;
-      flex-shrink: 0;
-      border-radius: var.$borderRadiusSM;
-      overflow: hidden;
+    @include var.media('<desktop') {
+      grid-template-columns: repeat(1, 1fr);
     }
 
-    &__main {
-      flex: 1;
+    @include var.media('>=desktop') {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    &__title {
-      font-weight: 600;
-      display: block;
-      text-decoration: none;
-      transition: color 0.2s ease;
-      margin-bottom: var.$fieldPadding;
+    @include var.media('>=desktop-lg') {
+      grid-template-columns: repeat(3, 1fr);
+    }
 
-      @include var.media('<desktop') {
-        color: var.$white;
+    &-release {
+      display: flex;
+      gap: var.$minPadding;
+
+      &__cover {
+        width: 7rem;
+        height: 7rem;
+        object-fit: cover;
+        flex-shrink: 0;
+        border-radius: var.$borderRadiusSM;
+        overflow: hidden;
       }
 
-      @include var.media('>=desktop') {
-        color: var.$black;
+      &__main {
+        flex: 1;
       }
 
-      &:hover {
-        color: var.$accent;
+      &__title {
+        font-weight: 600;
+        display: block;
+        text-decoration: none;
         transition: color 0.2s ease;
-      }
-    }
+        margin-bottom: var.$fieldPadding;
 
-    &__info {
-      font-size: 0.875rem;
-      color: var.$paleDP;
+        @include var.media('<desktop') {
+          color: var.$white;
+        }
 
-      a {
-        color: var.$info;
-        text-decoration: underline;
+        @include var.media('>=desktop') {
+          color: var.$black;
+        }
 
         &:hover {
           color: var.$accent;
+          transition: color 0.2s ease;
+        }
+      }
+
+      &__info {
+        font-size: 0.875rem;
+        color: var.$paleDP;
+
+        a {
+          color: var.$info;
+          text-decoration: underline;
+
+          &:hover {
+            color: var.$accent;
+          }
         }
       }
     }
   }
 }
-

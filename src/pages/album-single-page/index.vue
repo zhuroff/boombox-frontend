@@ -51,15 +51,14 @@
 
         <template #note>
           <div class="album__note">
-            <TextareaInput
-              name="albumNote"
-              type="textarea"
-              v-model="albumNote"
-              :readonly="!isNoteEditable"
+            <TextEditor
+              :content="album?.note || ''"
+              :isMobile="false"
+              :formatConfig="editorFormatConfig"
               :placeholder="localize('album.notePlaceholder')"
-              @dblclick="isNoteEditable = true"
-              @blur="isNoteEditable = false"
-              @onInput="changeAlbumNote"
+              :defaultExpanded="true"
+              :defaultEditMode="true"
+              @updateContent="changeAlbumNote"
             />
           </div>
         </template>
@@ -109,7 +108,8 @@ import { WikiFrame } from '~features/wiki'
 import { useAlbum } from '~entities/album'
 import type { TrackBasic } from '~entities/track'
 
-import { Modal, Loader, TextareaInput } from '~shared/UI'
+import { Modal, Loader } from '~shared/UI'
+import { TextEditor, TextEditorFormatting, type TextEditorFormatConfig } from '~widgets/text-editor'
 import { DatabaseService } from '~shared/api'
 import { useDevice, useLocalization } from '~shared/model'
 import { debounce } from '~shared/utils'
@@ -136,9 +136,14 @@ const {
   isCollectionsModalEnabled
 } = useCollections(album, dbService)
 
-const albumNote = ref('')
-const isNoteEditable = ref(false)
 const isWikiFrameEnabled = ref(false)
+
+const editorFormatConfig: TextEditorFormatConfig = new Set([
+  TextEditorFormatting.BOLD,
+  TextEditorFormatting.ITALIC,
+  TextEditorFormatting.BLOCKQUOTE,
+  TextEditorFormatting.LINK,
+])
 
 const minimumAlbumData = computed(() => ({
   albumTitle: album.value?.title || '',
@@ -192,7 +197,6 @@ watch(
   [isAlbumReady, album],
   ([isAlbumReady, album]) => {
     isAlbumReady && album && initPlaylist(album)
-    albumNote.value = album?.note || ''
   }
 )
 </script>
