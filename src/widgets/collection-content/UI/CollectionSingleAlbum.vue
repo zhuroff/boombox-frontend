@@ -15,41 +15,21 @@
       :formatConfig="editorFormatConfig"
       @updateContent="(content: string) => emit('updatePost', [content, album._id])"
     >
-      <template #toolbar-format-actions="{ toggleEditMode }">
-        <div class="toolbar__group">
-          <Button
-            label="Save"
-            size="small"
-            @click="toggleEditMode"
-          />
+      <template #expand-controls="{ isExpanded, isEditMode, toggleExpanded }">
+        <div 
+          v-if="!isEditMode && !isExpanded"
+          class="editor-expand-trigger"
+          @click="toggleExpanded"
+        >
+          <span class="editor-expand-text">Expand article</span>
         </div>
-      </template>
 
-      <template #toolbar-actions="{ isExpanded, toggleExpanded, toggleEditMode }">
-        <div class="toolbar__actions">
-          <Button
-            :label="isExpanded ? 'Collapse' : 'Expand'"
-            size="small"
-            @click="toggleExpanded"
-          />
-
-          <Button
-            label="Edit"
-            size="small"
-            @click="toggleEditMode"
-          />
-
-          <Button
-            label="Manage"
-            size="small"
-            isDisabled
-          />
-
-          <Button
-            label="Exclude"
-            size="small"
-            @click="() => emit('excludeAlbum', album._id)"
-          />
+        <div 
+          v-if="!isEditMode && isExpanded"
+          class="editor-collapse-trigger"
+          @click="toggleExpanded"
+        >
+          <span class="editor-collapse-text">Collapse article</span>
         </div>
       </template>
     </TextEditor>
@@ -59,7 +39,6 @@
 <script setup lang="ts">
 import { EntityCard } from '~widgets/entity-cards'
 import { TextEditor, TextEditorFormatting, type TextEditorFormatConfig } from '~widgets/text-editor'
-import { Button } from '~shared/UI'
 import { useDevice } from '~shared/model'
 import type { CompilationAlbum } from '~/entities/collection'
 import type { DeletePayload } from '~shared/lib'
@@ -72,7 +51,6 @@ type Emits = {
   (e: 'orderChanged', event: unknown): void
   (e: 'deleteEntity', payload: DeletePayload): void
   (e: 'updatePost', payload: [string, string]): void
-  (e: 'excludeAlbum', id: string): void
 }
 
 const { album } = defineProps<Props>()
@@ -141,9 +119,27 @@ const editorFormatConfig: TextEditorFormatConfig = new Set([
   }
 }
 
-.toolbar__actions {
-  display: flex;
-  gap: var.$fieldPadding;
-  flex-wrap: wrap;
+.editor-expand-trigger,
+.editor-collapse-trigger {
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  transition: opacity 0.2s ease;
+  position: relative;
+  top: -1rem;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.editor-expand-text,
+.editor-collapse-text {
+  color: var.$paleDP;
+  font-size: 0.875rem;
+
+  @include var.media('<=mobile') {
+    color: var.$paleLW;
+  }
 }
 </style>

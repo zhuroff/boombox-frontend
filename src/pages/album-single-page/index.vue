@@ -57,7 +57,7 @@
               :formatConfig="editorFormatConfig"
               :placeholder="localize('album.notePlaceholder')"
               :defaultExpanded="true"
-              :defaultEditMode="true"
+              :defaultEditMode="false"
               @updateContent="changeAlbumNote"
             />
           </div>
@@ -216,8 +216,16 @@ watch(
   &-title {
     @include var.serif(1.25rem);
     margin-bottom: var.$fieldPadding;
+    padding: 0 var.$minPadding;
     text-align: center;
-    color: var.$black;
+    
+    @include var.media('<=mobile') {
+      color: var.$info;
+    }
+
+    @include var.media('>=desktop') {
+      color: var.$paleDP;
+    }
   }
 
   .tracklist {

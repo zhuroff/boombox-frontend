@@ -1,7 +1,7 @@
 <template>
-  <div class="editor-wrapper">
-    <div v-if="editor && !isMobile" class="toolbar">
-      <div v-if="isEditMode" class="toolbar__format">
+  <div ref="editorWrapper" class="editor-wrapper">
+    <div v-if="editor && !isMobile && isEditMode" class="toolbar">
+      <div class="toolbar__format">
         <div 
           v-if="hasAnyFormat(TextEditorFormatting.BOLD, TextEditorFormatting.ITALIC)"
           class="toolbar__group"
@@ -105,36 +105,30 @@
             🔗
           </button>
         </div>
-
-        <slot 
-          name="toolbar-format-actions"
-          :toggleEditMode="() => isEditMode = !isEditMode"
-        />
       </div>
-
-      <slot 
-        v-else
-        name="toolbar-actions"
-        :isEditMode="isEditMode"
-        :isExpanded="isExpanded"
-        :toggleEditMode="() => isEditMode = !isEditMode"
-        :toggleExpanded="() => isExpanded = !isExpanded"
-      />
     </div>
     
     <EditorContent
       :editor="editor"
       :class="[
         { '--editable' : isEditMode },
-        { '--expanded' : isExpanded || isMobile },
+        { '--expanded' : isExpanded },
         'editor-content'
       ]"
+      @dblclick="!isEditMode && (isEditMode = true)"
+    />
+
+    <slot 
+      name="expand-controls"
+      :isExpanded="isExpanded"
+      :isEditMode="isEditMode"
+      :toggleExpanded="() => isExpanded = !isExpanded"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, onUnmounted, ref } from 'vue'
+import { watch, onUnmounted, onMounted, ref } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import { debounce } from '~shared/utils'
 import StarterKit from '@tiptap/starter-kit'
@@ -164,9 +158,16 @@ const emit = defineEmits<Emits>()
 
 const isEditMode = ref(props.defaultEditMode)
 const isExpanded = ref(props.defaultExpanded)
+const editorWrapper = ref<HTMLElement | null>(null)
 
 const hasAnyFormat = (...formats: TextEditorFormatting[]) => {
   return formats.some(format => props.formatConfig.has(format))
+}
+
+const handleClickOutside = (event: MouseEvent) => {
+  if (isEditMode.value && editorWrapper.value && !editorWrapper.value.contains(event.target as Node)) {
+    isEditMode.value = false
+  }
 }
 
 const editor = useEditor({
@@ -227,7 +228,12 @@ watch(
   }
 )
 
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
 onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
   if (editor.value) {
     editor.value.destroy()
   }
@@ -269,14 +275,27 @@ onUnmounted(() => {
   &:not(.--editable) {
     overflow: hidden;
 
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 5rem;
-      width: 100%;
-      background: linear-gradient(180deg,rgba(238, 238, 238, 0.5) 0%, rgba(238, 238, 238, 1) 70%);
+    &:not(.--expanded) {
+
+      @include var.media('<=mobile') {
+        max-height: 0;
+        padding: 0;
+        max-height: 222px;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3.5rem;
+        width: 100%;
+        background: linear-gradient(180deg,rgba(238, 238, 238, 0.5) 0%, rgba(238, 238, 238, 1) 70%);
+
+        @include var.media('<=mobile') {
+          display: none;
+        }
+      }
     }
 
     @include var.media('<=mobile') {
@@ -378,6 +397,8 @@ onUnmounted(() => {
   border-radius: var.$borderRadiusMD;
   line-height: 1.5;
   outline: none;
+  font-family: var.$fontSerif;
+  font-size: 1.125rem;
 
   @include var.media('<=mobile') {
     min-height: 50px;
@@ -400,15 +421,13 @@ onUnmounted(() => {
   }
   
   h2 {
-    font-size: 1.5rem;
-    margin: var.$minPadding 0 var.$fieldPadding;
-    font-weight: bold;
+    @include var.serif(1.75rem);
+    margin: var.$minPadding 0;
   }
   
   h3 {
-    font-size: 1.25rem;
-    margin: var.$minPadding 0 var.$fieldPadding;
-    font-weight: bold;
+    @include var.serif(1.5rem);
+    margin: var.$minPadding 0;
   }
   
   ul, ol {
@@ -440,30 +459,7 @@ onUnmounted(() => {
   
   a.editor-link {
     color: inherit;
-    transition: color 0.2s ease;
-    display: inline-block;
-    position: relative;
-    
-    &:hover {
-      color: var.$info;
-      transition: color 0.2s ease;
-
-      &:after {
-        border-color: var.$info;
-        transition: border-color 0.2s ease;
-      }
-    }
-
-    &:after {
-      content: '';
-      width: 100%;
-      height: 1px;
-      border-top: 1px dashed var.$paleMD;
-      transition: border-color 0.2s ease;
-      position: absolute;
-      bottom: 0.125rem;
-      left: 0;
-    }
+    color: var.$info;
   }
   
   p {
