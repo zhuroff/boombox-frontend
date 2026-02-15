@@ -215,6 +215,7 @@ watch(
 
   &-title {
     @include var.serif(1.25rem);
+    line-height: 1.5;
     margin-bottom: var.$fieldPadding;
     padding: 0 var.$minPadding;
     text-align: center;

@@ -12,6 +12,5 @@ export const categoryKeyDict: Record<string, string> = {
   genres: 'genre',
   artists: 'artist',
   periods: 'period',
-  collections: 'collection',
-  toy: 'toy'
+  collections: 'collection'
 }

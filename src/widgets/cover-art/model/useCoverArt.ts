@@ -1,8 +1,7 @@
 import { computed, ref, type Ref, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import type { DatabaseService } from '~shared/api'
 import { isRegularAlbum } from '~entities/album'
-import { isTOYAlbum } from '~entities/toy'
+import type { DatabaseService } from '~shared/api'
 import type { ExcludeFromUnifiedEntityCard } from '~widgets/entity-cards'
 
 type UnifiedAlbum = ExcludeFromUnifiedEntityCard<'CategoryBasic'>
@@ -40,15 +39,6 @@ const useCoverArt = (
     [
       (album): album is UnifiedAlbum => Boolean(album && isRegularAlbum(album)),
       (album) => `${album._id}/booklet`
-    ],
-    [
-      (album): album is UnifiedAlbum => Boolean(album && isTOYAlbum(album)),
-      (album) => {
-        if (isTOYAlbum(album)) {
-          return `${album.genre.title}/${album.period.title}/booklet`
-        }
-        return ''
-      }
     ]
   ])
 

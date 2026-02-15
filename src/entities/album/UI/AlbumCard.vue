@@ -31,7 +31,7 @@ const dynamicEntityKey = computed(() => (
 ))
 
 const routePath = computed(() => {
-  const id = props.card._id || ('path' in props.card ? props.card.path.replace('MelodyMap/TOY/', '') : '')
+  const id = props.card._id
 
   return {
     path: `/${dynamicEntityKey.value}/${id}`

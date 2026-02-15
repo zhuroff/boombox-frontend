@@ -63,7 +63,6 @@
     >
       <TrackLyrics
         :heading="trackArtistAndTitle"
-        :possibleToSave="!isTOYTrack"
         :track="track"
       />
     </Modal>
@@ -102,17 +101,13 @@ import type { SelectInputFieldSchema } from '~shared/lib'
 type Props = {
   track: PlaylistTrack
   order: number
-  isTOYTrack?: boolean
 }
 
 type Emits = {
   (e: 'refetchTracklist'): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  isTOYTrack: false
-})
-
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
@@ -202,20 +197,16 @@ const trackOptions = computed(() => (() => {
     }
   }
 
-  if (!props.isTOYTrack) {
-    options.push({
-      label: localize('trackActions.toCompilation'),
-      value: 'toCompilation'
-    })
-  }
+  options.push({
+    label: localize('trackActions.toCompilation'),
+    value: 'toCompilation'
+  })
 
   return options
 })())
 
 const trackArtistAndTitle = computed(() => (
-  props.isTOYTrack
-    ? props.track.title
-    : `${props.track.artist.title} - ${props.track.title}`
+  `${props.track.artist.title} - ${props.track.title}`
 ))
 
 const handleClickOutside = (event: MouseEvent) => {

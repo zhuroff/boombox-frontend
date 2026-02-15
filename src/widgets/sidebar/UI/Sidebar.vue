@@ -3,13 +3,23 @@
     <router-link
       class="aside__homelink"
       to="/"
-      @click="collapsePlayer"
     >
       <Sprite name="vinyl" />
       <span>MelodyMap</span>
     </router-link>
     <nav class="aside__nav">
       <ul class="aside__nav-list">
+        <li
+          v-if="isMobile"
+          class="aside__nav-item"
+        >
+          <router-link
+            to="/"
+            class="aside__nav-link"
+          >
+            <Sprite name="home" />
+          </router-link>
+        </li>
         <li
           v-for="(item, index) in navbar"
           :key="index"
@@ -18,7 +28,6 @@
           <router-link
             :to="`/${item.route}`"
             class="aside__nav-link"
-            @click="collapsePlayer"
           >{{ item.title }}</router-link>
         </li>
       </ul>
@@ -29,34 +38,23 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { usePlayer } from '~features/player'
 import { useDevice } from '~shared/model'
 import { Sprite } from '~shared/UI'
 import { useLocalization } from '~shared/model'
 
+const router = useRouter()
 const { isMobile } = useDevice()
 const { localize } = useLocalization()
-const { screensaveMode, isPlaylistExpanded } = usePlayer()
-
-const router = useRouter()
 
 const mobileNavbarTopSections = new Set([
   'album-single-page',
   'embedded-single-page',
   'compilation-single-page',
   'collection-single-page',
-  'toy-genres-page',
-  'toy-years-page',
-  'toy-album-page',
   'artist-single-page',
   'genre-single-page',
   'period-single-page'
 ])
-
-const collapsePlayer = () => {
-  screensaveMode.value = false
-  isPlaylistExpanded.value = false
-}
 
 const navbar = computed(() => {
   return router
@@ -184,6 +182,17 @@ const isTopAligned = computed(() => (
 
         &.router-link-active {
           color: var.$warning;
+
+          .icon {
+            fill: var.$warning;
+          }
+        }
+
+        .icon {
+          width: 20px;
+          fill: var.$paleMD;
+          position: relative;
+          top: -2px;
         }
       }
 

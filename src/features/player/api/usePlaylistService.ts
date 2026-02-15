@@ -25,7 +25,7 @@ const createPlaylistTrack = (
     ...track,
     order: ++index,
     albumId: album._id,
-    albumKind: album.title.startsWith('TOY') ? 'toy' : album.kind,
+    albumKind: album.kind,
     albumCover
   }
 }

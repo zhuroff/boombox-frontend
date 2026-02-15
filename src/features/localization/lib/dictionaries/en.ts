@@ -36,7 +36,6 @@ export const localesEN: LocaleDictionary = {
     embedded: 'Embedded',
     collections: 'Collections',
     compilations: 'Compilations',
-    toy: 'TOY',
     settings: 'Settings',
     tracks: 'Tracks'
   },
@@ -220,10 +219,6 @@ export const localesEN: LocaleDictionary = {
       invalid_tracks_names: 'The tracks names doesn\'t match the pattern: \'Number. Track title.file extension\'',
       no_tracks: 'Album doesn\'t contain any track'
     }
-  },
-  toy: {
-    emptyGenres: 'There are no any collection yet',
-    emptyYears: 'There are no any periods yet'
   },
   createEntityLabel: 'Create entity "{x}" with name: "{x}"',
   heroActions: {

@@ -3,7 +3,6 @@ import type { AlbumBasic, AlbumFull } from '~entities/album'
 import type { CompilationBasic, CompilationFull } from '~entities/compilation'
 import type { CategoryBasic } from '~entities/category'
 import type { EmbeddedBasic, EmbeddedFull } from '~entities/embedded'
-import type { TOYAlbumBasic, TOYAlbumFull } from '~entities/toy'
 
 type EntityMap = {
   AlbumBasic: AlbumBasic
@@ -11,7 +10,6 @@ type EntityMap = {
   CategoryBasic: CategoryBasic
   CollectionBasic: CollectionBasic
   CompilationBasic: CompilationBasic
-  TOYAlbumBasic: TOYAlbumBasic
 }
 
 type EntityFullMap = {
@@ -19,7 +17,6 @@ type EntityFullMap = {
   EmbeddedFull: EmbeddedFull
   CollectionFull: CollectionFull
   CompilationFull: CompilationFull
-  TOYAlbumFull: TOYAlbumFull
 }
 
 export type UnifiedEntityCard = EntityMap[keyof EntityMap]
