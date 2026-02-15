@@ -55,6 +55,7 @@ const changeAlbumsOrder = (event: DraggableEvent) => {
   emit('orderChanged', event)
 }
 
+
 const saveTitle = (value: string) => {
   emit('saveTitle', value)
 }

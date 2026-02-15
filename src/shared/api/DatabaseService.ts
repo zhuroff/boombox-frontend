@@ -71,7 +71,13 @@ export default class DatabaseService {
     }
 
     const response = await api.delete<T>(`/api/${entityKey}/${id}`)
-    return response.data
+
+    if (response.status !== 204) {
+      console.error(response)
+      throw new Error('Unable to delete entity')
+    }
+
+    return { message: 'success' }
   }
 
   reorderEntities = async <T, U>(entityKey: string, id: string, payload: U) => {

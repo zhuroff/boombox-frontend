@@ -77,7 +77,7 @@ const trackList: ComputedRef<PlaylistTrack[]> = computed(() => {
 
 .tracklist {
   @include var.media('>=desktop') {
-    margin-top: 75px;
+    margin-top: 5rem;
   }
 }
 </style>

@@ -76,7 +76,7 @@ const handleSlideStart = (data: BookletSlideState) => {
     }
   
     &__slide {
-      padding: 25px;
+      padding: var.$mainPadding;
     }
   
     &__image {
@@ -112,7 +112,7 @@ const handleSlideStart = (data: BookletSlideState) => {
       }
 
       @include var.media('>=desktop') {
-        transform: translate(25px, -50%);
+        transform: translate(var.$mainPadding, -50%);
         width: 75px;
         height: 75px;
       }
@@ -135,7 +135,7 @@ const handleSlideStart = (data: BookletSlideState) => {
       }
 
       @include var.media('>=desktop') {
-        transform: translate(-25px, -50%);
+        transform: translate(-#{var.$mainPadding}, -50%);
         width: 75px;
         height: 75px;
       }

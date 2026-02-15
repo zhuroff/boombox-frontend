@@ -57,7 +57,7 @@ const upload = () => {
 @use '~/app/styles/variables' as var;
 
 .avatar {
-  margin: 0 25px;
+  margin: 0 var.$mainPadding;
   position: relative;
   z-index: 3;
 

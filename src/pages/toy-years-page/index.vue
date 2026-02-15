@@ -117,7 +117,7 @@ onMounted(() => {
   }
 
   &__list {
-    padding: 25px;
+    padding: var.$mainPadding;
     display: grid;
     gap: 1rem;
 

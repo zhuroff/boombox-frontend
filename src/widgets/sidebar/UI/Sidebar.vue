@@ -122,7 +122,7 @@ const isTopAligned = computed(() => (
 
     @include var.media('>=desktop') {
       height: 70px;
-      padding: 0 25px;
+      padding: 0 var.$mainPadding;
       font-size: 1.15rem;
       color: var.$paleMD;
     }

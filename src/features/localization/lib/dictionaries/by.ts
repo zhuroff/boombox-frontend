@@ -25,6 +25,9 @@ export const localesBY: LocaleDictionary = {
   pageNotFound: 'Старонка не знойдзена',
   noBooklet: 'Альбом не мае буклета',
   goBack: 'Назад',
+  album: {
+    notePlaceholder: 'Заўвага да альбому'
+  },
   navigation: {
     albums: 'Альбомы',
     artists: 'Артысты',
@@ -71,7 +74,7 @@ export const localesBY: LocaleDictionary = {
     delete: 'Выдаліць бэкап'
   },
   getRandomAlbum: 'Выпадковы альбом',
-  unknownTime: 'Яшчэ не ўсе трэкi праслуханы',
+  unknownTime: 'Н/В',
   listenedTracks: 'Усяго праслуханых трэкаў:',
   conjugated: {
     tracks: {
@@ -256,5 +259,15 @@ export const localesBY: LocaleDictionary = {
     timestamp: 'Таймстамп',
     restore: 'Аднавіць бэкап',
     delete: 'Выдаліць бэкап'
+  },
+  snackbars: {
+    delete: {
+      success: 'Iстота паспяхова выдалена',
+      failed: 'Немагчамы вадалiць iстоту'
+    }
+  },
+  release: {
+    added: 'Дададзена',
+    listen: 'Слухаць'
   }
 }

@@ -141,8 +141,8 @@ const slideChanged = (payload: BookletSlideState) => {
     @include var.media('<desktop') {
       width: auto;
       position: absolute;
-      right: 25px;
-      bottom: 25px;
+      right: var.$mainPadding;
+      bottom: var.$mainPadding;
     }
   }
 

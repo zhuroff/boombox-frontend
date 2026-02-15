@@ -2,7 +2,7 @@
   <section class="template">
     <transition name="fade">
       <Loader
-        v-if="!isFetched"
+        v-if="!isFetched || isRefetching"
         mode="light"
       />
     </transition>
@@ -21,6 +21,7 @@
         @saveTitle="saveTitle"
       />
     </transition>
+
   </section>
 </template>
 
@@ -41,7 +42,7 @@ const dbService = new DatabaseService()
 const pageEntityKey = ref('collections')
 
 const { localize } = useLocalization()
-const { data: collection, isFetched, refetch } = useGetPage<CollectionFull>(pageEntityKey, dbService)
+const { data: collection, isFetched, isRefetching, refetch } = useGetPage<CollectionFull>(pageEntityKey, dbService)
 
 const collectionId = computed(() => collection.value?._id || null)
 

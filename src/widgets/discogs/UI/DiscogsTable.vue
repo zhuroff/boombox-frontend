@@ -23,9 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import { h, computed, watch, type ComputedRef } from 'vue'
+import { h, computed, watch, watchEffect, type ComputedRef } from 'vue'
 import { Button, Select } from '~shared/UI'
-import { useLocalization } from '~shared/model'
+import { useDevice, useLocalization } from '~shared/model'
 import { useDiscogs, discogsTableSchema, DiscogsService } from '~features/discogs'
 import { Paginator, usePaginator } from '~features/paginator'
 import { Table } from '~features/table'
@@ -38,15 +38,15 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 
 const discogsPayload = computed(() => {
   if (Array.isArray(props.entity)) {
-    return props.entity.map(item => ({
+    return props.entity.map((item) => ({
       artist: item.albumArtist,
       album: item.albumTitle,
-      isMasterOnly: true,
+      isMasterOnly: 1 as const,
       page: 1
     }))
   }
@@ -54,18 +54,20 @@ const discogsPayload = computed(() => {
   return {
     artist: props.entity.albumArtist,
     album: props.entity.albumTitle,
+    isMasterOnly: 0 as const,
     page: 1
   }
 })
 
 const {
+  searchDiscogsData,
   setDiscogsFilterValue,
   resetDiscogsFilters,
   discogsFiltersState,
   filteredDiscogsData,
-  isDiscogsFetched,
+  isDiscogsSearching,
   discogsFilters
-} = useDiscogs(discogsService, discogsPayload)
+} = useDiscogs(discogsService)
 
 const {
   paginationState,
@@ -93,7 +95,7 @@ const paginatedDiscogsData: ComputedRef<TableRow[]> = computed(() => (
 ))
 
 const isTableReady = computed(() => (
-  isDiscogsFetched.value && paginatedDiscogsData.value.length
+  !isDiscogsSearching.value && paginatedDiscogsData.value.length
 ))
 
 const isFiltersApplied = computed(() => (
@@ -147,6 +149,12 @@ watch(
     updatePaginationConfig('totalPages', Math.ceil(value.length / paginationState.value.limit))
   }
 )
+
+watchEffect(() => {
+  if (discogsPayload.value && !isMobile.value) {
+    searchDiscogsData(discogsPayload.value)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

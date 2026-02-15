@@ -1,3 +1,5 @@
+import type { LocaleItem } from '../lib'
+
 export const hostString = (pathname: string) => {
   const host = import.meta.env.DEV
     ? import.meta.env.VITE_DEV_HOST
@@ -61,4 +63,12 @@ export const assertNever = (value: never, isError = false) => {
   }
 
   return undefined
+}
+
+export const formatDate = (date: string, locale: LocaleItem) => {
+  return new Date(date).toLocaleDateString(locale.intlName, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 }
