@@ -1,6 +1,17 @@
 import type { ElementSize } from '~shared/lib'
 
-export type FormPayload = Record<string, string | File>
+export type RefMultiOption = { label: string; value: string }
+
+export type RefQueryPayload = {
+  name?: string
+  value?: string
+  refKey?: string
+  onSelect?: (v: RefMultiOption) => void
+}
+
+export type RefFieldValue = { value: string; label: string }
+
+export type FormPayload = Record<string, string | File | RefMultiOption[] | RefFieldValue>
 
 export type InputLabelConfig = {
   labelText: string
@@ -18,7 +29,7 @@ export type BaseInputFieldSchema = {
   disabled?: boolean
   readonly?: boolean
   refKey?: string
-  defaultValue?: string
+  defaultValue?: string | RefMultiOption[]
   size?: ElementSize
   label?: InputLabelConfig
 }
@@ -54,10 +65,17 @@ export type SelectInputFieldSchema = BaseInputFieldSchema & {
   options: Array<{ label: string, value: string }>
 }
 
-export type FormSchemaProperty = 
+export type RefMultiFieldSchema = BaseInputFieldSchema & {
+  type: 'refMulti'
+  placeholder?: string
+  refKey: string
+}
+
+export type FormSchemaProperty =
   | TextInputFieldSchema
   | TextareaInputFieldSchema
   | NumberInputFieldSchema
   | CheckboxInputFieldSchema
   | FileInputFieldSchema
   | SelectInputFieldSchema
+  | RefMultiFieldSchema

@@ -98,20 +98,21 @@ const isTrackPlaying = computed(() => {
     background-color: var.$dark;
 
     strong {
-      color: var.$white;
+      color: var.$light;
       transition: color 0.1s var.$animation;
     }
 
     time,
     .playlist__track-sign {
-      color: var.$white;
+      color: var.$light;
       transition: color 0.1s var.$animation;
     }
 
     .button {
 
       .icon {
-        color: var.$white;
+        color: var.$light;
+        fill: var.$light;
         transition: color 0.1s var.$animation;
       }
     }
@@ -122,20 +123,20 @@ const isTrackPlaying = computed(() => {
       background-color: var.$dark;
 
       strong {
-        color: var.$white;
+        color: var.$light;
         transition: color 0.1s var.$animation;
       }
 
       time,
       .playlist__track-sign {
-        color: var.$white;
+        color: var.$light;
         transition: color 0.1s var.$animation;
       }
 
       .button {
 
         .icon {
-          color: var.$white;
+          color: var.$light;
           transition: color 0.1s var.$animation;
         }
       }
@@ -162,8 +163,8 @@ const isTrackPlaying = computed(() => {
       width: var.$mainPadding;
       height: var.$mainPadding;
       z-index: 10;
-      fill: var.$white;
-      color: var.$white;
+      fill: var.$light;
+      color: var.$light;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -192,12 +193,12 @@ const isTrackPlaying = computed(() => {
   &-sign {
     text-overflow: ellipsis;
     overflow: hidden;
-    color: var.$black;
+    color: var.$dark;
   }
 
   &-duration {
     margin-left: auto;
-    color: var.$black;
+    color: var.$dark;
     white-space: nowrap;
     font-size: 0.875rem;
     transition: all 0.1s var.$animation;
@@ -214,7 +215,7 @@ const isTrackPlaying = computed(() => {
     }
 
     .icon {
-      color: var.$black;
+      color: var.$dark;
     }
 
     &[disabled] {

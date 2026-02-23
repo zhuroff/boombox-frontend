@@ -15,6 +15,7 @@
       emit('update:modelValue', value)
       emit('onInput', value)
     }"
+    @blur="emit('blur')"
   />
 </template>
 
@@ -40,6 +41,7 @@ interface Props {
 interface Emits {
   (e: 'onInput', value: string): void
   (e: 'update:modelValue', value: string): void
+  (e: 'blur'): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -69,3 +71,13 @@ onMounted(() => {
   }
 })
 </script>
+
+<style scoped lang="scss">
+@use '~/app/styles/variables' as var;
+
+.input-field {
+  width: 100%;
+  padding: 0 var.$fieldPadding;
+  border: 1px solid var.$paleDP;
+}
+</style>

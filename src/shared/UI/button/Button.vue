@@ -62,8 +62,8 @@ const stateClasses = computed(() => [
 @use '~/app/styles/variables' as var;
 
 .button {
-  border: 1px solid var.$black;
-  color: var.$black;
+  border: 1px solid var.$dark;
+  color: var.$dark;
   background-color: transparent;
   display: inline-flex;
   align-items: center;
@@ -76,11 +76,11 @@ const stateClasses = computed(() => [
   transition: all 0.3s var.$animation;
 
   &:hover {
-    background-color: var.$black;
+    background-color: var.$dark;
     transition: all 0.3s var.$animation;
 
     &:not(.--text) {
-      color: var.$paleLT;
+      color: var.$light;
     }
   }
 
@@ -135,12 +135,12 @@ const stateClasses = computed(() => [
   }
 
   &.--inverted {
-    border-color: var.$paleLT;
-    color: var.$paleLT;
+    border-color: var.$light;
+    color: var.$light;
 
     &:hover {
-      background-color: var.$paleLT;
-      color: var.$black;
+      background-color: var.$light;
+      color: var.$dark;
 
       .icon {
         fill: var.$dark;
@@ -148,7 +148,7 @@ const stateClasses = computed(() => [
     }
 
     .icon {
-      fill: var.$white;
+      fill: var.$light;
     }
   }
 
@@ -161,10 +161,10 @@ const stateClasses = computed(() => [
     }
 
     &.--inverted {
-      color: var.$paleLT;
+      color: var.$light;
 
       .icon {
-        fill: var.$paleLT;
+        fill: var.$light;
       }
     }
 
@@ -180,7 +180,7 @@ const stateClasses = computed(() => [
       background-color: var.$dark;
 
       .icon {
-        fill: var.$white;
+        fill: var.$light;
       }
     }
   }

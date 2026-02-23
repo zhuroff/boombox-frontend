@@ -91,7 +91,7 @@ const handleSlideStart = (data: BookletSlideState) => {
       transition: color 0.2s var.$animation;
 
       &:hover {
-        color: var.$white;
+        color: var.$light;
         transition: color 0.2s var.$animation;
       }
 
@@ -124,7 +124,7 @@ const handleSlideStart = (data: BookletSlideState) => {
       transition: color 0.2s var.$animation;
 
       &:hover {
-        color: var.$white;
+        color: var.$light;
         transition: color 0.2s var.$animation;
       }
 

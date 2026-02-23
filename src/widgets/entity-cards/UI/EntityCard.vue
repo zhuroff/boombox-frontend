@@ -54,7 +54,6 @@ const cardsMap: Record<string, Component> = {
   albums: AlbumCard,
   collections: AlbumCard,
   compilations: AlbumCard,
-  embedded: AlbumCard,
   artists: CategoryCard,
   periods: CategoryCard,
   genres: CategoryCard
@@ -148,8 +147,8 @@ const deleteEntity = () => {
     z-index: 2000;
     cursor: move;
     opacity: 0;
-    color: var.$black;
-    background-color: var.$paleLT;
+    color: var.$dark;
+    background-color: var.$light;
   }
 
   &-action {
@@ -158,7 +157,7 @@ const deleteEntity = () => {
     top: 1.25rem;
     right: 2.5rem;
     z-index: 10;
-    background-color: var.$paleLT;
+    background-color: var.$light;
     transition: opacity .3s var.$animation;
   }
 }

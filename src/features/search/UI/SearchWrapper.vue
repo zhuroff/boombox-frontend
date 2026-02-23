@@ -31,7 +31,7 @@ defineProps<Props>()
 @use '~/app/styles/variables' as var;
 
 .search {
-  background-color: var.$white;
+  background-color: var.$light;
   border-radius: var.$borderRadiusMD;
   width: 100%;
   align-self: flex-start;
@@ -50,7 +50,7 @@ defineProps<Props>()
     letter-spacing: 1px;
     text-align: center;
     padding: var.$minPadding;
-    color: var.$paleLT;
+    color: var.$light;
     background-color: var.$dark;
   }
 

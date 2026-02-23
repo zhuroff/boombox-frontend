@@ -180,7 +180,7 @@ watch(
 @use '~/app/styles/variables' as var;
 
 .lyrics {
-  background-color: var.$paleLT;
+  background-color: var.$light;
   border-radius: var.$basicPadding;
   width: 100%;
   max-width: 768px;
@@ -202,7 +202,7 @@ watch(
   &__heading {
     font-weight: 600;
     font-size: 20px;
-    color: var.$white;
+    color: var.$light;
   }
 
   &__content {
@@ -214,7 +214,7 @@ watch(
 
     .loader {
       position: absolute;
-      background: var.$white;
+      background: var.$light;
       z-index: 100;
       width: 100%;
       height: 100%;
@@ -231,7 +231,7 @@ watch(
     margin-top: 1rem;
     padding: 0 !important;
     border: none !important;
-    background-color: var.$paleLT;
+    background-color: var.$light;
   }
 
   &__empty {

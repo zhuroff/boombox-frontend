@@ -20,7 +20,7 @@ defineProps<Props>()
 @use '~/app/styles/variables' as var;
 
 .confirmation {
-  background-color: var.$paleLT;
+  background-color: var.$light;
   border-radius: var.$borderRadiusMD;
   padding: var.$mainPadding;
   position: relative;
@@ -28,7 +28,7 @@ defineProps<Props>()
   &__message {
     text-align: center;
     margin-bottom: 1rem;
-    color: var.$black;
+    color: var.$dark;
     font-weight: 600;
   }
 

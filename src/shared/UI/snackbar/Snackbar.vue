@@ -37,7 +37,7 @@ const { snackbarQueue, closeSnackbar } = useSnackbar()
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var.$black;
+    background-color: var.$dark;
     padding: 15px 20px;
     border-radius: 7px;
     margin-top: var.$basicPadding;
@@ -45,7 +45,7 @@ const { snackbarQueue, closeSnackbar } = useSnackbar()
   }
 
   &__text {
-    color: var.$white;
+    color: var.$light;
     margin-right: 15px;
   }
 
@@ -59,15 +59,11 @@ const { snackbarQueue, closeSnackbar } = useSnackbar()
     }
 
     &.--warning {
-      color: var.$warning;
+      color: var.$accent;
     }
 
     &.--error {
       color: var.$error;
-    }
-
-    &.--info {
-      color: var.$info;
     }
   }
 }

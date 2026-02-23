@@ -44,6 +44,7 @@ type Props = {
 
 type Emits = {
   (e: 'passRefQuery', value: Record<string, string>): void
+  (e: 'update:modelValue', value: string): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -65,6 +66,7 @@ const debouncedAssigning = debounce((value: string) => {
 const clearInput = () => {
   refQuery.value = ''
   selectedOption.value = null
+  emit('update:modelValue', '')
 }
 
 watch(

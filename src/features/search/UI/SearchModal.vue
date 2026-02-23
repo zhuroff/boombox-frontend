@@ -90,7 +90,7 @@ const getRowComponent = (key: string, data: SearchResultData) => {
               h(
                 'span',
                 {},
-                (data as AlbumBasic).artist?.title
+                (data as AlbumBasic).artists?.map((a) => a.title).join(', ')
               )
             ]
           )

@@ -1,11 +1,10 @@
 import { computed, type Ref } from 'vue'
 import { useGetList, useGetPage, useDevice } from '~shared/model'
 import type { AlbumBasic, AlbumFull } from '~entities/album'
-import type { EmbeddedFull } from '~entities/embedded'
 import type { RelatedAlbums, RequestConfig, UseEntityListPayload } from '~shared/lib'
 import type { DatabaseService } from '~shared/api'
 
-const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
+const useAlbumsWithRelated = <T extends AlbumFull>(
   pageEntityKey: Ref<string>,
   dbService: DatabaseService,
   preRandomState: Ref<string>
@@ -19,18 +18,24 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
     isRandom: 1
   }
 
+  const primaryArtist = computed(() => {
+    const a = album.value
+    if (!a) return undefined
+    if (a.kind === 'album') return a.artists?.[0]
+    return undefined
+  })
+
   const artistConfig = computed<UseEntityListPayload>(() => (
-    album.value
+    album.value && primaryArtist.value
       ? {
-          qEntity: 'relatedAlbumsByArtist',
           entityKey: 'albums',
           requestConfig: {
             ...relatedAlbumsReqConfig,
             filter: {
               from: 'artists',
-              key: 'artist._id',
-              name: album.value?.artist.title,
-              value: album.value?.artist._id,
+              key: 'artists._id',
+              name: primaryArtist.value.title,
+              value: primaryArtist.value._id,
               excluded: { _id: album.value?._id }
             }
           }
@@ -41,7 +46,6 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
   const genreConfig = computed<UseEntityListPayload>(() => (
     album.value
       ? {
-          qEntity: 'relatedAlbumsNyGenre',
           entityKey: 'albums',
           requestConfig: {
             ...relatedAlbumsReqConfig,
@@ -50,7 +54,10 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
               key: 'genre._id',
               name: album.value.genre.title,
               value: album.value.genre._id,
-              excluded: { _id: album.value._id, 'artist>_id': album.value.artist._id }
+              excluded: {
+                _id: album.value._id,
+                ...(primaryArtist.value?._id && { 'artists>_id': primaryArtist.value._id })
+              }
             }
           }
         }
@@ -85,7 +92,7 @@ const useAlbumsWithRelated = <T extends AlbumFull | EmbeddedFull>(
   const relatedAlbums = computed<RelatedAlbums<AlbumBasic>[]>(() => ([
     {
       docs: relatedAlbumsByArtist.value?.docs || [],
-      name: album.value?.artist.title || ''
+      name: primaryArtist.value?.title || ''
     },
     {
       docs: relatedAlbumsByGenre.value?.docs || [],

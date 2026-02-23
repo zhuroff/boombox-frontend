@@ -80,7 +80,7 @@ const selectWikiResult = (id: number) => {
   max-width: 1200px;
   max-height: calc(100vh - 50px);
   overflow: hidden;
-  background-color: var.$white;
+  background-color: var.$light;
   border-radius: var.$borderRadiusLG;
   position: relative;
   display: flex;

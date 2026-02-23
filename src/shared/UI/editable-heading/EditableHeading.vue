@@ -116,7 +116,7 @@ watch(localHeroTitle, (newValue) => {
   }
 
   &-block {
-    color: var.$warning;
+    color: var.$accent;
     padding: 0;
     border: 0;
     box-shadow: none;
@@ -136,7 +136,7 @@ watch(localHeroTitle, (newValue) => {
 
   &-footer {
     font-weight: 600;
-    color: var.$white;
+    color: var.$light;
   }
 }
 </style>

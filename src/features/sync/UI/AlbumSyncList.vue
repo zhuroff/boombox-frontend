@@ -74,7 +74,7 @@ const contentSections = computed(() => {
 
 .synclist {
   padding: var.$mainPadding;
-  background-color: var.$white;
+  background-color: var.$light;
   border-radius: var.$borderRadiusMD;
   display: flex;
   flex-direction: column;
