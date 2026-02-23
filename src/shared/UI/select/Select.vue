@@ -96,10 +96,10 @@ watch(
   position: relative;
   cursor: pointer;
   padding: 0 0.25rem;
-  border-color: var.$paleLT;
+  border-color: var.$light;
   border-radius: var.$borderRadiusMD;
   background-color: transparent;
-  border: 1px solid var.$black;
+  border: 1px solid var.$dark;
   max-width: inherit;
   height: inherit;
   font-weight: 700;
@@ -113,7 +113,7 @@ watch(
   }
 
   &.--active {
-    border: 2px solid var.$info;
+    border: 2px solid var.$accent;
   }
 
   &.--small {

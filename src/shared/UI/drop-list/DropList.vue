@@ -65,7 +65,7 @@ const { localize } = useLocalization()
   max-height: 12rem;
   overflow-y: auto;
   padding: 0.5rem 0;
-  color: var.$black;
+  color: var.$dark;
 
   &.--small {
     font-size: 0.875rem;
@@ -84,7 +84,7 @@ const { localize } = useLocalization()
     }
 
     &.--create {
-      color: var.$info;
+      color: var.$accent;
     }
   }
 }

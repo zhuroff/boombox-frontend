@@ -169,7 +169,7 @@ const slideChanged = (payload: BookletSlideState) => {
     justify-content: center;
     align-items: center;
     height: 100%;
-    color: var.$warning;
+    color: var.$accent;
     @include var.serif(3rem);
   }
 
@@ -203,7 +203,7 @@ const slideChanged = (payload: BookletSlideState) => {
       }
 
       .icon {
-        color: var.$white;
+        color: var.$light;
       }
     }
 

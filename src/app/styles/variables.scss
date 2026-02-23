@@ -3,24 +3,20 @@
 @use 'sass:meta';
 
 :root {
-  --paleDP: #828c9b;
+  --paleDP: #5F534A;
 }
 
 $font: 'Nunito', sans-serif;
 $fontSerif: 'Old Standard TT', serif;
 
-$white: #fff;
-$black: #2b2b2b;
-$dark: #0f1e36;
+$dark: #29292B;
+$light: #FDF5E6;
 $paleDP: var(--paleDP);
-$paleMD: #b3b7bf;
-$paleLW: #dcdfe7;
-$paleLT: #eee;
-$accent: #f51e38;
+$paleMD: #847870;
+$paleLW: #C7BBB2;
+$accent: #C9A84B;
 $error: #ff3860;
 $success: #48c78e;
-$warning: #fcd568;
-$info: #3e8ed0;
 $transBlack: rgba(43, 43, 43, 0.95);
 $transDark: rgba(15, 30, 54, 0.9);
 $transLight: rgba(255, 255, 255, 0.7);
@@ -62,7 +58,7 @@ $shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
   z-index: 10;
 
   .icon {
-    color: $white;
+    color: $light;
   }
 }
 

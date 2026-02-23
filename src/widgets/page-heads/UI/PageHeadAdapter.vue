@@ -212,7 +212,7 @@ const activateEditMode = () => {
     &-heading {
       margin: 0.5rem 0 1.75rem;
       max-width: 850px;
-      color: var.$warning;
+      color: var.$accent;
 
       @include var.media('<desktop-md') {
         @include var.serif(1.75rem);

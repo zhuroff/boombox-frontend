@@ -130,7 +130,7 @@ const cardElement = computed(() => (
       border-radius: 5px;
       width: inherit !important;
       height: 100% !important;
-      background-color: var.$paleLT;
+      background-color: var.$light;
     }
   }
 

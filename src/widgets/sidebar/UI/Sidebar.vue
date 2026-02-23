@@ -88,7 +88,7 @@ const isTopAligned = computed(() => (
     width: 100vw;
     overflow: auto;
     z-index: 9100;
-    background-color: var.$black;
+    background-color: var.$dark;
 
     &.--top-aligned {
       top: 0;
@@ -180,10 +180,10 @@ const isTopAligned = computed(() => (
         line-height: 4;
 
         &.router-link-active {
-          color: var.$warning;
+          color: var.$accent;
 
           .icon {
-            fill: var.$warning;
+            fill: var.$accent;
           }
         }
 
@@ -196,13 +196,13 @@ const isTopAligned = computed(() => (
       }
 
       @include var.media('>=desktop') {
-        color: var.$white;
+        color: var.$light;
         padding: 0 var.$mainPadding;
 
         &:hover,
         &.router-link-active {
           transition: all 0.2s ease;
-          background-color: var.$paleLT;
+          background-color: var.$light;
           color: var.$dark;
         }
       }

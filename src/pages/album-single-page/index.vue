@@ -217,7 +217,7 @@ watch(
     text-align: center;
     
     @include var.media('<=mobile') {
-      color: var.$info;
+      color: var.$accent;
     }
 
     @include var.media('>=desktop') {

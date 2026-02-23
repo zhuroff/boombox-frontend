@@ -31,10 +31,10 @@ defineProps<Props>()
     }
     
     &.--active {
-      color: var.$info;
+      color: var.$accent;
 
       .button {
-        color: var.$info;
+        color: var.$accent;
       }
 
       &:after {
@@ -44,7 +44,7 @@ defineProps<Props>()
         left: 0;
         width: 100%;
         height: 4px;
-        background-color: var.$info;
+        background-color: var.$accent;
         border-top-left-radius: var.$borderRadiusSM;
         border-top-right-radius: var.$borderRadiusSM;
       }

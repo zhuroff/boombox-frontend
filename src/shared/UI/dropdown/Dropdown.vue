@@ -98,7 +98,7 @@ onUnmounted(() => {
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: var.$paleLT;
+    background-color: var.$light;
     margin: 0;
     padding: 0.5rem 0;
     box-shadow: var.$shadowMedium;

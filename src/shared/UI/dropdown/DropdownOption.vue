@@ -50,8 +50,8 @@ const className = computed(() => [
   transition: all 0.2s var.$animation;
 
   &:hover {
-    background-color: var.$black;
-    color: var.$white;
+    background-color: var.$dark;
+    color: var.$light;
     transition: all 0.2s var.$animation;
   }
 

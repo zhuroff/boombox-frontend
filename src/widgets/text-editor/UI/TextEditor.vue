@@ -264,7 +264,7 @@ onUnmounted(() => {
   position: relative;
 
   &.--editable {
-    background-color: var.$white;
+    background-color: var.$light;
 
     &:deep(.tiptap) {
       padding: var.$mainPadding;
@@ -290,7 +290,7 @@ onUnmounted(() => {
         left: 0;
         height: 3.5rem;
         width: 100%;
-        background: linear-gradient(180deg,rgba(238, 238, 238, 0.5) 0%, rgba(238, 238, 238, 1) 70%);
+        background: linear-gradient(180deg, rgba(253, 245, 230, 0.3) 0%, rgba(253, 245, 230, 1) 90%);
 
         @include var.media('<=mobile') {
           display: none;
@@ -299,7 +299,7 @@ onUnmounted(() => {
     }
 
     @include var.media('<=mobile') {
-      color: var.$white;
+      color: var.$light;
     }
   }
 
@@ -314,8 +314,8 @@ onUnmounted(() => {
 
 .toolbar {
   padding: var.$fieldPadding;
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
+  background: var.$paleLW;
+  border: 1px solid var.$paleLW;
   border-radius: var.$borderRadiusMD;
   position: sticky;
   top: 0;
@@ -365,7 +365,7 @@ onUnmounted(() => {
       justify-content: center;
       width: 32px;
       height: 32px;
-      background-color: var.$white;
+      background-color: var.$light;
       border: 1px solid var.$paleLW;
       border-radius: var.$borderRadiusMD;
       cursor: pointer;
@@ -373,10 +373,10 @@ onUnmounted(() => {
       transition: all 0.2s ease;
       
       &:hover:not(:disabled) {
-        background-color: var.$black;
-        border-color: var.$black;
+        background-color: var.$paleDP;
+        border-color: var.$paleDP;
         transition: all 0.2s ease;
-        color: var.$paleLT;
+        color: var.$light;
       }
       
       &:disabled {
@@ -385,9 +385,9 @@ onUnmounted(() => {
       }
       
       &.is-active {
-        background-color: var.$info;
+        background-color: var.$paleDP;
         color: white;
-        border-color: var.$info;
+        border-color: var.$paleDP;
       }
     }
   }
@@ -452,14 +452,14 @@ onUnmounted(() => {
     margin: var.$fieldPadding 0;
     font-style: italic;
     color: var.$transDark;
-    background-color: var.$paleLT;
+    background-color: var.$light;
     padding: var.$minPadding var.$mainPadding;
     border-radius: var.$borderRadiusMD;
   }
   
   a.editor-link {
     color: inherit;
-    color: var.$info;
+    color: var.$accent;
   }
   
   p {

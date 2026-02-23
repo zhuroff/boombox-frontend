@@ -130,7 +130,7 @@ const switchLimit = (payload: [string, number | string | null]) => {
 
       @include var.media('>=desktop') {
         background-color: var.$dark;
-        color: var.$white;
+        color: var.$light;
       }
     }
   }

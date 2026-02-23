@@ -113,12 +113,12 @@ const { localize } = useLocalization()
   &-metadata {
 
     @include var.media('<desktop') {
-      color: var.$white;
+      color: var.$light;
       line-height: 1.7;
     }
 
     @include var.media('>=desktop') {
-      color: var.$paleDP;
+      color: var.$paleMD;
       margin-top: auto;
       line-height: 1.5;
     }
@@ -128,7 +128,7 @@ const { localize } = useLocalization()
     color: inherit;
 
     &.--link {
-      color: var.$white;
+      color: var.$light;
     }
 
     &[disabled=true] {

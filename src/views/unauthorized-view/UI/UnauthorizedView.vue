@@ -54,7 +54,7 @@ const handleLogin = async (formData: FormPayload) => {
     width: 100%;
     max-width: 500px;
     height: auto;
-    background-color: var.$paleLT;
+    background-color: var.$light;
 
     @include var.media('<desktop') {
       display: flex;

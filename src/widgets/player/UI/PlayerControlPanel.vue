@@ -143,8 +143,8 @@ const searchOnYouTube = () => {
         border-color: var.$paleDP;
 
         .icon {
-          color: var.$white;
-          fill: var.$white;
+          color: var.$light;
+          fill: var.$light;
         }
 
         &:hover {

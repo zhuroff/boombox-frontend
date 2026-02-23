@@ -150,7 +150,7 @@ const trackSign = computed(() => {
   }
 
   &__title {
-    color: var.$white;
+    color: var.$light;
 
     @include var.media('<desktop') {
       text-align: center;

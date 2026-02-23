@@ -67,7 +67,7 @@ defineProps<Props>()
     &:hover {
 
       @include var.media('>=desktop') {
-        background-color: var.$paleLT;
+        background-color: var.$light;
         transition: background-color 0.3s var.$animation;
       }
     }
@@ -83,7 +83,7 @@ defineProps<Props>()
     }
 
     strong {
-      color: var.$black;
+      color: var.$dark;
       display: block;
     }
 
