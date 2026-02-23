@@ -2,7 +2,7 @@ import type { Entity } from '~shared/lib'
 import type { TrackBasic } from '~entities/track'
 
 export type AlbumBasic = Entity & {
-  artist: Entity
+  artists: Entity[]
   genre: Entity
   period: Entity
   coverURL?: string

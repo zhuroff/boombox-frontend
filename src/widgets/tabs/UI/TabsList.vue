@@ -49,12 +49,12 @@ const activeTabData = computed(() => (
 
     @include var.media('<desktop') {
       top: 0;
-      background-color: var.$black;
+      background-color: var.$dark;
     }
 
     @include var.media('>=desktop') {
       top: var.$desktopHeaderHeight;
-      background-color: var.$paleLT;
+      background-color: var.$light;
     }
   }
 

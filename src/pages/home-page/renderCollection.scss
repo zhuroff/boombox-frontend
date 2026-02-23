@@ -42,11 +42,11 @@
         margin-bottom: var.$fieldPadding;
 
         @include var.media('<desktop') {
-          color: var.$white;
+          color: var.$light;
         }
 
         @include var.media('>=desktop') {
-          color: var.$black;
+          color: var.$dark;
         }
 
         &:hover {
@@ -60,7 +60,7 @@
         color: var.$paleDP;
 
         a {
-          color: var.$info;
+          color: var.$accent;
           text-decoration: underline;
 
           &:hover {

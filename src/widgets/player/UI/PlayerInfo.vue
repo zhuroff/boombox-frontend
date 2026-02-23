@@ -38,8 +38,6 @@ const proxiedAlbumCover = computed(() => proxyCloudUrl(playingTrack.value?.album
 
 const albumRoute = computed(() => {
   switch(playingTrack.value?.albumKind) {
-    case 'toy':
-      return `/toy/${playingTrack.value?.genre.title}/${playingTrack.value?.period.title}`
     case 'album':
       return `/albums/${playingTrack.value?.albumId}`
     case 'compilation':
@@ -152,7 +150,7 @@ const trackSign = computed(() => {
   }
 
   &__title {
-    color: var.$white;
+    color: var.$light;
 
     @include var.media('<desktop') {
       text-align: center;

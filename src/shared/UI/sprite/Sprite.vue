@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import SpriteHome from './SpriteHome.vue'
 import SpriteEllipsis from './SpriteEllipsis.vue'
 import SpriteEllipsisVertical from './SpriteEllipsisVertical.vue'
 import SpritePlay from './SpritePlay.vue'
@@ -52,6 +53,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const IconsMap = new Map([
+  ['home', SpriteHome],
   ['ellipsis', SpriteEllipsis],
   ['ellipsis-vertical', SpriteEllipsisVertical],
   ['play', SpritePlay],

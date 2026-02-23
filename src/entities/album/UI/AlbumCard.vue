@@ -4,7 +4,6 @@
     :cardTitle="card.title"
     :cardCover="cardCover"
     :cardCaption="cardCaption"
-    :cardFrame="'frame' in card ? card.frame : undefined"
   />
 </template>
 
@@ -27,11 +26,11 @@ const props = defineProps<Props>()
 const { localize } = useLocalization()
 
 const dynamicEntityKey = computed(() => (
-  'frame' in props.card ? 'embedded' : props.entityKey || 'albums'
+  props.entityKey || 'albums'
 ))
 
 const routePath = computed(() => {
-  const id = props.card._id || ('path' in props.card ? props.card.path.replace('MelodyMap/TOY/', '') : '')
+  const id = props.card._id
 
   return {
     path: `/${dynamicEntityKey.value}/${id}`
@@ -41,8 +40,7 @@ const routePath = computed(() => {
 const cardCaption = computed(() => {
   switch (props.card.kind) {
     case 'album':
-    case 'embedded':
-      return `${props.card.artist.title } / ${props.card.period.title} / ${props.card.genre.title}`
+      return `${(props.card.artists ?? []).map((a) => a.title).join(', ') || '—'} / ${props.card.period.title} / ${props.card.genre.title}`
     case 'collection':
     case 'compilation':
       return localize('collections.cardCaption')
@@ -59,8 +57,6 @@ const cardCover = computed(() => {
     case 'compilation':
     case 'collection':
       return props.card.avatar ? hostString(props.card.avatar) : props.placeholderPreview
-    case 'embedded':
-      return props.placeholderPreview
     default:
       assertNever(props.card)
       return props.placeholderPreview

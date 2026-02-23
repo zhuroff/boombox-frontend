@@ -143,7 +143,7 @@ const { localize } = useLocalization()
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-color: var.$black;
+      background-color: var.$dark;
 
       iframe {
         width: 100% !important;

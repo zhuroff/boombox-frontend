@@ -80,7 +80,7 @@ const playNow = () => {
 
       &:hover {
         @include var.media('>=desktop') {
-          background-color: var.$paleLT;
+          background-color: var.$light;
           transition: background-color 0.3s var.$animation;
         }
       }
@@ -97,7 +97,7 @@ const playNow = () => {
       }
 
       strong {
-        color: var.$black;
+        color: var.$dark;
         display: block;
       }
 
@@ -138,8 +138,8 @@ const playNow = () => {
           background-color: var.$dark;
           
           .icon {
-            fill: var.$white;
-            color: var.$white;
+            fill: var.$light;
+            color: var.$light;
           }
         }
       }

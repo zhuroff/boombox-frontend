@@ -2,14 +2,13 @@ import { ref } from 'vue'
 import { hostString, coverPlaceholders } from '~shared/utils'
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 import type { TrackBasic } from '~entities/track'
-import type { EmbeddedFull } from '~entities/embedded'
 import type { CollectionFull } from '~entities/collection'
 import type { PlaylistTrack } from '~features/player'
 import type { AlbumFull } from '~entities/album'
 import type { ReorderPayload } from '~shared/lib'
 
 const createPlaylistTrack = (
-  album: Exclude<UnifiedEntityFullCard, EmbeddedFull>,
+  album: UnifiedEntityFullCard,
   track: TrackBasic,
   index = 0
 ): PlaylistTrack => {
@@ -25,7 +24,7 @@ const createPlaylistTrack = (
     ...track,
     order: ++index,
     albumId: album._id,
-    albumKind: album.title.startsWith('TOY') ? 'toy' : album.kind,
+    albumKind: album.kind,
     albumCover
   }
 }
@@ -35,7 +34,7 @@ const secondaryPlaylist = ref<PlaylistTrack[]>([])
 const isPlayingStarted = ref(false)
 
 const usePlaylistService = () => {
-  const initPlaylist = (album: Exclude<UnifiedEntityFullCard, EmbeddedFull | CollectionFull>) => {
+  const initPlaylist = (album: Exclude<UnifiedEntityFullCard, CollectionFull>) => {
     const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => (
       createPlaylistTrack(album, track, index)
     ))
@@ -49,10 +48,11 @@ const usePlaylistService = () => {
 
   const initWavePlaylist = (tracks: TrackBasic[]) => {
     secondaryPlaylist.value = tracks.map<PlaylistTrack>((track, index) => {
+      const inAlbum = track.inAlbum as { artists?: { _id: string; title: string }[]; artist?: { _id: string; title: string }; period: { _id: string; title: string }; genre?: { _id: string; title: string }; path?: string; _id: string; title: string }
       const album: AlbumFull = {
         ...track.inAlbum,
         coverURL: track.coverURL,
-        artist: track.artist,
+        artists: inAlbum.artists ?? (inAlbum.artist ? [inAlbum.artist] : []),
         period: track.period,
         genre: track.genre,
         path: track.path,
@@ -141,10 +141,15 @@ const usePlaylistService = () => {
     let targetTrack = searchTrackInPlaylists(track)
 
     if (!targetTrack) {
+      const inAlbum = track.inAlbum as { artists?: { _id: string; title: string }[]; artist?: { _id: string; title: string }; period?: { _id: string; title: string }; genre?: { _id: string; title: string }; path?: string; _id: string; title: string }
       targetTrack = createPlaylistTrack(
         {
           ...track.inAlbum,
           coverURL: track.coverURL,
+          artists: inAlbum?.artists ?? (inAlbum?.artist ? [inAlbum.artist] : []),
+          period: track.period,
+          genre: track.genre,
+          path: track.path,
           kind: 'album'
         } as AlbumFull,
         track,

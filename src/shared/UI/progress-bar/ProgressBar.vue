@@ -83,14 +83,13 @@ const setProgressValue = (event: MouseEvent) => {
     }
 
     @include var.media('>=desktop') {
-      color: var.$white;
+      color: var.$light;
       opacity: 0.5;
     }
   }
 
   &-bar {
     appearance: none;
-    background-color: var.$white;
     cursor: pointer;
     border: 0;
 
@@ -111,6 +110,7 @@ const setProgressValue = (event: MouseEvent) => {
 
     &::-webkit-progress-bar {
       border: 0;
+      background-color: var.$paleDP;
 
       @include var.media('<desktop') {
         height: 5px;
@@ -129,7 +129,7 @@ const setProgressValue = (event: MouseEvent) => {
   }
 
   &-time {
-    color: var.$white;
+    color: var.$light;
     opacity: 0.5;
     font-size: 12px;
     position: relative;

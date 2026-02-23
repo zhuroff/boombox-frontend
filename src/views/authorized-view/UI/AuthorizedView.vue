@@ -42,7 +42,7 @@ const { isMobile } = useDevice()
   }
 
   @include var.media('>=desktop') {
-    background-color: var.$paleLT;
+    background-color: var.$light;
     overflow: hidden;
     height: 100vh;
   }
@@ -54,7 +54,7 @@ const { isMobile } = useDevice()
   @include var.media('<desktop') {
     width: 100vw;
     min-height: 100vh;
-    background-color: var.$black;
+    background-color: var.$dark;
   }
 
   @include var.media('>=desktop') {
@@ -63,7 +63,7 @@ const { isMobile } = useDevice()
     overflow: auto;
     width: calc(100% - var.$asideWidth);
     height: calc(100vh - var.$playerHeight);
-    background-color: var.$paleLT;
+    background-color: var.$light;
   }
 
   .content {

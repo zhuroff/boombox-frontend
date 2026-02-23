@@ -33,10 +33,8 @@ export const localesBY: LocaleDictionary = {
     artists: 'Артысты',
     genres: 'Жанры',
     periods: 'Перыяды',
-    embedded: 'Фрэймы',
     collections: 'Калекцыi',
     compilations: 'Кампіляцыi',
-    toy: 'TOY',
     settings: 'Налады',
     tracks: 'Трэкi'
   },
@@ -93,28 +91,6 @@ export const localesBY: LocaleDictionary = {
     releaseFormat: 'Фармат',
     label: 'Лэйбл',
     resetFilters: 'Скінуць фільтры'
-  },
-  embeddedForm: {
-    title: 'Назва альбому',
-    titlePlaceholder: 'Увядзiце назву альбому',
-    titleRequired: 'Назва альбому абавязковая',
-    artist: 'Артыст',
-    artistPlaceholder: 'Увядзiце iмя артыста',
-    artistRequired: 'Імя артыста абавязковае',
-    genre: 'Жанр',
-    genrePlaceholder: 'Увядзiце назву жанру',
-    genreRequired: 'Назва жанру абавязковая',
-    period: 'Год выдання',
-    periodPlaceholder: 'Увядзiце год выдання',
-    periodRequired: 'Год выдання абавязковы',
-    frame: 'Код фрэйму',
-    framePlaceholder: 'Увядзiце код фрэйму',
-    frameRequired: 'Код фрэйму абавязковы',
-    frameInvalid: 'Недапушчальны код фрэйму',
-    collections: 'У калекцыi',
-    addAlbum: 'Дадаць альбом',
-    submit: 'Стварыць альбом',
-    entityCreated: 'Альбом паспяхова створаны'
   },
   loginForm: {
     email: 'Email',
@@ -220,10 +196,6 @@ export const localesBY: LocaleDictionary = {
       invalid_tracks_names: 'Назва трэкаў не адпавядае патэрну: \'Нумар. Назва трэка.пашырэнне файла\'',
       no_tracks: 'Альбом не змяшчае ніводнага трэка'
     }
-  },
-  toy: {
-    emptyGenres: 'Калекцыі пакуль няма',
-    emptyYears: 'Перыядаў пакуль няма'
   },
   createEntityLabel: 'Стварыць iстоту "{x}" з назвай: "{x}"',
   heroActions: {

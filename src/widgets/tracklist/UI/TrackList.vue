@@ -10,7 +10,6 @@
         :key="track._id"
         :track="track"
         :order="index + 1"
-        :isTOYTrack="isTOYTracks"
         @refetchTracklist="emit('refetchTracklist')"
       />
     </VueDraggableNext>
@@ -28,7 +27,6 @@ import type { TrackBasic } from '~entities/track'
 
 type Props = {
   tracks: TrackBasic[]
-  isTOYTracks?: boolean
 }
 
 type Emits = {
@@ -37,10 +35,7 @@ type Emits = {
 }
 
 const emit = defineEmits<Emits>()
-
-const props = withDefaults(defineProps<Props>(), {
-  isTOYTracks: false
-})
+const props = defineProps<Props>()
 
 const { primaryPlaylist, secondaryPlaylist } = usePlaylistService()
 

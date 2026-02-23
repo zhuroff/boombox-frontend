@@ -63,7 +63,6 @@
     >
       <TrackLyrics
         :heading="trackArtistAndTitle"
-        :possibleToSave="!isTOYTrack"
         :track="track"
       />
     </Modal>
@@ -102,17 +101,13 @@ import type { SelectInputFieldSchema } from '~shared/lib'
 type Props = {
   track: PlaylistTrack
   order: number
-  isTOYTrack?: boolean
 }
 
 type Emits = {
   (e: 'refetchTracklist'): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  isTOYTrack: false
-})
-
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const dbService = new DatabaseService()
@@ -202,20 +197,16 @@ const trackOptions = computed(() => (() => {
     }
   }
 
-  if (!props.isTOYTrack) {
-    options.push({
-      label: localize('trackActions.toCompilation'),
-      value: 'toCompilation'
-    })
-  }
+  options.push({
+    label: localize('trackActions.toCompilation'),
+    value: 'toCompilation'
+  })
 
   return options
 })())
 
 const trackArtistAndTitle = computed(() => (
-  props.isTOYTrack
-    ? props.track.title
-    : `${props.track.artist.title} - ${props.track.title}`
+  `${props.track.artist.title} - ${props.track.title}`
 ))
 
 const handleClickOutside = (event: MouseEvent) => {
@@ -263,11 +254,11 @@ onUnmounted(() => {
   cursor: pointer;
 
   @include var.media('<desktop') {
-    color: var.$paleLT;
+    color: var.$light;
   }
 
   @include var.media('>=desktop') {
-    color: var.$black;
+    color: var.$dark;
   }
 
   &__container {
@@ -279,7 +270,7 @@ onUnmounted(() => {
       @include var.media('>=desktop') {
         border-radius: var.$borderRadiusSM;
         background-color: var.$dark;
-        color: var.$white;
+        color: var.$light;
         transition: all 0.1s var.$animation;
       }
     }
@@ -328,15 +319,15 @@ onUnmounted(() => {
       transition: fill 0.2s ease;
 
       &.spinner {
-        stroke: var.$white;
+        stroke: var.$light;
       }
     }
 
     &:hover {
 
       .icon {
-        color: var.$white;
-        fill: var.$white;
+        color: var.$light;
+        fill: var.$light;
         transition: fill 0.2s ease;
       }
     }
@@ -348,7 +339,7 @@ onUnmounted(() => {
 
   &.--playing {
     background-color: var.$dark;
-    color: var.$white;
+    color: var.$light;
 
     @include var.media('>=desktop') {
       border-radius: var.$borderRadiusSM;
@@ -360,12 +351,12 @@ onUnmounted(() => {
     .trackrow__container {
       background-color: var.$paleDP;
       border-radius: var.$borderRadiusSM;
-      color: var.$white;
+      color: var.$light;
     }
 
     .icon {
-      color: var.$white;
-      fill: var.$white;
+      color: var.$light;
+      fill: var.$light;
     }
   }
 

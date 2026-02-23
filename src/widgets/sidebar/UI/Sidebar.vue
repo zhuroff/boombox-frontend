@@ -3,13 +3,23 @@
     <router-link
       class="aside__homelink"
       to="/"
-      @click="collapsePlayer"
     >
       <Sprite name="vinyl" />
       <span>MelodyMap</span>
     </router-link>
     <nav class="aside__nav">
       <ul class="aside__nav-list">
+        <li
+          v-if="isMobile"
+          class="aside__nav-item"
+        >
+          <router-link
+            to="/"
+            class="aside__nav-link"
+          >
+            <Sprite name="home" />
+          </router-link>
+        </li>
         <li
           v-for="(item, index) in navbar"
           :key="index"
@@ -18,7 +28,6 @@
           <router-link
             :to="`/${item.route}`"
             class="aside__nav-link"
-            @click="collapsePlayer"
           >{{ item.title }}</router-link>
         </li>
       </ul>
@@ -29,34 +38,22 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { usePlayer } from '~features/player'
 import { useDevice } from '~shared/model'
 import { Sprite } from '~shared/UI'
 import { useLocalization } from '~shared/model'
 
+const router = useRouter()
 const { isMobile } = useDevice()
 const { localize } = useLocalization()
-const { screensaveMode, isPlaylistExpanded } = usePlayer()
-
-const router = useRouter()
 
 const mobileNavbarTopSections = new Set([
   'album-single-page',
-  'embedded-single-page',
   'compilation-single-page',
   'collection-single-page',
-  'toy-genres-page',
-  'toy-years-page',
-  'toy-album-page',
   'artist-single-page',
   'genre-single-page',
   'period-single-page'
 ])
-
-const collapsePlayer = () => {
-  screensaveMode.value = false
-  isPlaylistExpanded.value = false
-}
 
 const navbar = computed(() => {
   return router
@@ -91,7 +88,7 @@ const isTopAligned = computed(() => (
     width: 100vw;
     overflow: auto;
     z-index: 9100;
-    background-color: var.$black;
+    background-color: var.$dark;
 
     &.--top-aligned {
       top: 0;
@@ -183,18 +180,29 @@ const isTopAligned = computed(() => (
         line-height: 4;
 
         &.router-link-active {
-          color: var.$warning;
+          color: var.$accent;
+
+          .icon {
+            fill: var.$accent;
+          }
+        }
+
+        .icon {
+          width: 20px;
+          fill: var.$paleMD;
+          position: relative;
+          top: -2px;
         }
       }
 
       @include var.media('>=desktop') {
-        color: var.$white;
+        color: var.$light;
         padding: 0 var.$mainPadding;
 
         &:hover,
         &.router-link-active {
           transition: all 0.2s ease;
-          background-color: var.$paleLT;
+          background-color: var.$light;
           color: var.$dark;
         }
       }

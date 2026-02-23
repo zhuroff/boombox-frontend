@@ -77,10 +77,7 @@ const useAudioService = (dbService: DatabaseService) => {
     
     currentTrack.duration = duration
     setTrackDuration(trackId, duration)
-
-    if (currentTrack.albumKind !== 'toy') {
-      updateEntity({ _id: trackId, duration })
-    }
+    updateEntity({ _id: trackId, duration })
   }
 
   const playTrackStream = (src: string) => {

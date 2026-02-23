@@ -97,7 +97,7 @@ const orderChanged = (event: DraggableEvent) => {
   width: 100vw;
   right: 0;
   top: 0;
-  background-color: var.$white;
+  background-color: var.$light;
   height: 100vh;
   overflow: auto;
   border-radius: 0;

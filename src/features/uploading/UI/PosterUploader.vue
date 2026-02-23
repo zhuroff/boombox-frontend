@@ -105,7 +105,7 @@ const upload = () => {
     }
 
     .icon {
-      color: var.$white;
+      color: var.$light;
     }
   }
 }

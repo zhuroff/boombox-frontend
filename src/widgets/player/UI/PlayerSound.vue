@@ -83,7 +83,7 @@ const changeSoundVolume = (event: Event) => {
     &::-webkit-slider-thumb {
       width: 16px;
       height: 16px;
-      background-color: var.$white;
+      background-color: var.$light;
       appearance: none;
       border-radius: 50%;
       position: relative;

@@ -68,7 +68,7 @@ const { screensaveMode, isPlaylistExpanded, playingTrack } = usePlayer()
 
     &:not(.--screensave) {
       height: 3.5rem;
-      background-color: var.$black;
+      background-color: var.$dark;
       grid-template-columns: 1fr 150px;
       display: flex;
       align-items: center;
@@ -171,7 +171,7 @@ const { screensaveMode, isPlaylistExpanded, playingTrack } = usePlayer()
       z-index: 1000;
 
       .icon {
-        fill: var.$white;
+        fill: var.$light;
       }
     }
   }

@@ -95,7 +95,7 @@ const upload = () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var.$black;
+    background-color: var.$dark;
     opacity: 1;
     transition: opacity 0.3s var.$animation;
   }
@@ -117,7 +117,7 @@ const upload = () => {
     }
 
     .icon {
-      color: var.$white;
+      color: var.$light;
     }
   }
 }

@@ -50,20 +50,12 @@ defineProps<Props>()
     background-color: var.$transDark;
     
     .preloader__icon {
-      fill: var.$white;
+      fill: var.$light;
     }
   }
 
   &.--light {
     background-color: var.$transLight;
-
-    // @include var.media('<desktop') {
-    //   height: 100%;
-    // }
-
-    // @include var.media('>=desktop') {
-    //   height: calc(100% - var.$playerHeight);
-    // }
   }
 
   &__icon {

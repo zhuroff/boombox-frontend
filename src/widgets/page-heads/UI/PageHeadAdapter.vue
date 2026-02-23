@@ -58,8 +58,6 @@ import { assertNever } from '~shared/utils'
 
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
-import EmbeddedPageHead from './EmbeddedPageHead.vue'
-import TOYPageHead from './TOYPageHead.vue'
 
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 
@@ -125,13 +123,7 @@ const totalTracksTime = computed(() => {
 const PageHeadComponent = computed(() => {
   switch (props.album.kind) {
     case 'album':
-      return (
-        'metadataContent' in props.album
-          ? h(TOYPageHead, { album: props.album, length: '' })
-          : h(AlbumPageHead, { album: props.album, length: totalTracksTime.value })
-      )
-    case 'embedded':
-      return h(EmbeddedPageHead, { album: props.album })
+      return h(AlbumPageHead, { album: props.album, length: totalTracksTime.value })
     case 'compilation':
     case 'collection':
       return h(CompilationPageHead, { album: props.album, length: totalTracksTime.value })
@@ -220,7 +212,7 @@ const activateEditMode = () => {
     &-heading {
       margin: 0.5rem 0 1.75rem;
       max-width: 850px;
-      color: var.$warning;
+      color: var.$accent;
 
       @include var.media('<desktop-md') {
         @include var.serif(1.75rem);

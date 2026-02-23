@@ -534,6 +534,20 @@
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.14.1.tgz#5f7c5c335643cff62ad8e6a9432d708a9c51e98c"
   integrity sha512-jGTk8UD/RdjsNZW8qq10r0RBvxL8OWtoT+kImlzPDFilmozzM+9QmIJsmze9UiSBrFU45ZxhTYBypn9q9z/VfQ==
 
+"@tanstack/devtools-event-client@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.npmjs.org/@tanstack/devtools-event-client/-/devtools-event-client-0.4.0.tgz#7c586e5bf4bc18999f8a19d0fa53657e4646e2a5"
+  integrity sha512-RPfGuk2bDZgcu9bAJodvO2lnZeHuz4/71HjZ0bGb/SPg8+lyTA+RLSKQvo7fSmPSi8/vcH3aKQ8EM9ywf1olaw==
+
+"@tanstack/form-core@1.28.3":
+  version "1.28.3"
+  resolved "https://registry.npmjs.org/@tanstack/form-core/-/form-core-1.28.3.tgz#8f2f63b9671b57bc4b4ac4eae49be15b57b79a9e"
+  integrity sha512-DBhnu1d5VfACAYOAZJO8tsEUHjWczZMJY8v/YrtAJNWpwvL/3ogDuz8e6yUB2m/iVTNq6K8yrnVN2nrX0/BX/w==
+  dependencies:
+    "@tanstack/devtools-event-client" "^0.4.0"
+    "@tanstack/pacer-lite" "^0.1.1"
+    "@tanstack/store" "^0.8.1"
+
 "@tanstack/match-sorter-utils@^8.19.4":
   version "8.19.4"
   resolved "https://registry.npmjs.org/@tanstack/match-sorter-utils/-/match-sorter-utils-8.19.4.tgz#dacf772b5d94f4684f10dbeb2518cf72dccab8a5"
@@ -541,10 +555,28 @@
   dependencies:
     remove-accents "0.5.0"
 
+"@tanstack/pacer-lite@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.npmjs.org/@tanstack/pacer-lite/-/pacer-lite-0.1.1.tgz#431d3b0ac871280e8326fdbf156bb171d9bb0aa3"
+  integrity sha512-y/xtNPNt/YeyoVxE/JCx+T7yjEzpezmbb+toK8DDD1P4m7Kzs5YR956+7OKexG3f8aXgC3rLZl7b1V+yNUSy5w==
+
 "@tanstack/query-core@5.90.5":
   version "5.90.5"
   resolved "https://registry.npmjs.org/@tanstack/query-core/-/query-core-5.90.5.tgz#0175f9f517514906db8ab379589ed3f96694ecc4"
   integrity sha512-wLamYp7FaDq6ZnNehypKI5fNvxHPfTYylE0m/ZpuuzJfJqhR5Pxg9gvGBHZx4n7J+V5Rg5mZxHHTlv25Zt5u+w==
+
+"@tanstack/store@0.8.1", "@tanstack/store@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.npmjs.org/@tanstack/store/-/store-0.8.1.tgz#2a323df1824b399201913b98616513b29bfca1c3"
+  integrity sha512-PtOisLjUZPz5VyPRSCGjNOlwTvabdTBQ2K80DpVL1chGVr35WRxfeavAPdNq6pm/t7F8GhoR2qtmkkqtCEtHYw==
+
+"@tanstack/vue-form@^1.28.3":
+  version "1.28.3"
+  resolved "https://registry.npmjs.org/@tanstack/vue-form/-/vue-form-1.28.3.tgz#53fa3c89a326fd2506e16b1ef2edeea0658c1038"
+  integrity sha512-WHs9oBmMLvp5RIqa33mSLYgEM9nbG6UlwXEXWyG8S25gn8gOgcaLpPoE7kvqlT+nyPbZhPAjJXBsn7Uzsd8xvA==
+  dependencies:
+    "@tanstack/form-core" "1.28.3"
+    "@tanstack/vue-store" "^0.8.1"
 
 "@tanstack/vue-query@^5.74.9":
   version "5.90.5"
@@ -554,6 +586,14 @@
     "@tanstack/match-sorter-utils" "^8.19.4"
     "@tanstack/query-core" "5.90.5"
     "@vue/devtools-api" "^6.6.3"
+    vue-demi "^0.14.10"
+
+"@tanstack/vue-store@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.npmjs.org/@tanstack/vue-store/-/vue-store-0.8.1.tgz#99b8e2db2753042caae0de7c9531b521f64c38fe"
+  integrity sha512-37rNptEo86+2Jm2kTLvgVtboRRwHkksjxCKCrdl73eeZIU0jU34ZMP/ayd5+bCCo6epdbrqcb13gjUBSGp4Blg==
+  dependencies:
+    "@tanstack/store" "0.8.1"
     vue-demi "^0.14.10"
 
 "@tiptap/core@^3.11.1":

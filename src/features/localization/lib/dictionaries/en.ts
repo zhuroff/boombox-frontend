@@ -33,12 +33,15 @@ export const localesEN: LocaleDictionary = {
     artists: 'Artists',
     genres: 'Genres',
     periods: 'Periods',
-    embedded: 'Embedded',
     collections: 'Collections',
     compilations: 'Compilations',
-    toy: 'TOY',
     settings: 'Settings',
     tracks: 'Tracks'
+  },
+  albumPageMetadata: {
+    artists: 'Artists',
+    genre: 'Genre',
+    period: 'Period'
   },
   settings: {
     createUser: 'Create user',
@@ -93,28 +96,6 @@ export const localesEN: LocaleDictionary = {
     releaseFormat: 'Format',
     label: 'Label',
     resetFilters: 'Reset filters'
-  },
-  embeddedForm: {
-    title: 'Album title',
-    titlePlaceholder: 'Enter the album title',
-    titleRequired: 'Album title is required',
-    artist: 'Artist',
-    artistPlaceholder: 'Enter the artist name',
-    artistRequired: 'Artist name is required',
-    genre: 'Genre',
-    genrePlaceholder: 'Enter the genre title',
-    genreRequired: 'Genre title is required',
-    period: 'Period',
-    periodPlaceholder: 'Enter the year of release',
-    periodRequired: 'Year of release is required',
-    frame: 'Frame code',
-    framePlaceholder: 'Enter the frame code snippet',
-    frameRequired: 'Frame code is required',
-    frameInvalid: 'Invalid frame code',
-    collections: 'In collection',
-    addAlbum: 'Add album',
-    submit: 'Create album',
-    entityCreated: 'Embedded album was successfully created'
   },
   loginForm: {
     email: 'Email',
@@ -220,10 +201,6 @@ export const localesEN: LocaleDictionary = {
       invalid_tracks_names: 'The tracks names doesn\'t match the pattern: \'Number. Track title.file extension\'',
       no_tracks: 'Album doesn\'t contain any track'
     }
-  },
-  toy: {
-    emptyGenres: 'There are no any collection yet',
-    emptyYears: 'There are no any periods yet'
   },
   createEntityLabel: 'Create entity "{x}" with name: "{x}"',
   heroActions: {

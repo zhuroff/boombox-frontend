@@ -24,23 +24,6 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/embedded',
-    component: RouterView,
-    children: [
-      {
-        path: '/embedded',
-        name: 'embedded-list-page',
-        meta: { navLocaleKey: 'embedded' },
-        component: () => import(/* webpackChunkName: 'embedded-list-page' */ '~pages/embedded-list-page/index.vue')
-      },
-      {
-        path: '/embedded/:id',
-        name: 'embedded-single-page',
-        component: () => import(/* webpackChunkName: 'embedded-single-page' */ '~pages/embedded-single-page/index.vue')
-      }
-    ]
-  },
-  {
     path: '/compilations',
     component: RouterView,
     children: [
@@ -71,28 +54,6 @@ const routes: Array<RouteRecordRaw> = [
         path: '/collections/:id',
         name: 'collection-single-page',
         component: () => import(/* webpackChunkName: 'collection-single-page' */ '~pages/collection-single-page/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/toy',
-    meta: { navLocaleKey: 'toy' },
-    component: RouterView,
-    children: [
-      {
-        path: '/toy',
-        name: 'toy-genres-page',
-        component: () => import(/* webpackChunkName: 'toy-genres-page' */ '~pages/toy-genres-page/index.vue')
-      },
-      {
-        path: '/toy/:genre',
-        name: 'toy-years-page',
-        component: () => import(/* webpackChunkName: 'toy-years-page' */ '~pages/toy-years-page/index.vue')
-      },
-      {
-        path: '/toy/:genre/:id',
-        name: 'toy-album-page',
-        component: () => import(/* webpackChunkName: 'toy-album-page' */ '~pages/toy-album-page/index.vue')
       }
     ]
   },
