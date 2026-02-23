@@ -45,7 +45,7 @@ const {
 } = useCategory(pageEntityKey, dbService)
 
 const totalCounts = computed(() => (
-  localize('totalAlbums') + `: ${(category.value?.albums?.length || 0) + (category.value?.embeddedAlbums?.length || 0)}`
+  localize('totalAlbums') + `: ${(category.value?.albums?.length || 0)}`
 ))
 
 const setUploadedImage = (payload: UploadImageResult) => {

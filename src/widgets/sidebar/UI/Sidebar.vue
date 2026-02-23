@@ -48,7 +48,6 @@ const { localize } = useLocalization()
 
 const mobileNavbarTopSections = new Set([
   'album-single-page',
-  'embedded-single-page',
   'compilation-single-page',
   'collection-single-page',
   'artist-single-page',

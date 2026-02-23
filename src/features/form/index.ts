@@ -1,1 +1,1 @@
-export { default as Form } from './UI/Form.vue'
+export { default as FieldLabel } from './UI/FieldLabel.vue'

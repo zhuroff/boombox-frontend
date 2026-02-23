@@ -58,7 +58,6 @@ import { assertNever } from '~shared/utils'
 
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
-import EmbeddedPageHead from './EmbeddedPageHead.vue'
 
 import type { UnifiedEntityFullCard } from '~widgets/entity-cards'
 
@@ -125,8 +124,6 @@ const PageHeadComponent = computed(() => {
   switch (props.album.kind) {
     case 'album':
       return h(AlbumPageHead, { album: props.album, length: totalTracksTime.value })
-    case 'embedded':
-      return h(EmbeddedPageHead, { album: props.album })
     case 'compilation':
     case 'collection':
       return h(CompilationPageHead, { album: props.album, length: totalTracksTime.value })

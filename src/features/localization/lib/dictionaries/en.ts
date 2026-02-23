@@ -33,11 +33,15 @@ export const localesEN: LocaleDictionary = {
     artists: 'Artists',
     genres: 'Genres',
     periods: 'Periods',
-    embedded: 'Embedded',
     collections: 'Collections',
     compilations: 'Compilations',
     settings: 'Settings',
     tracks: 'Tracks'
+  },
+  albumPageMetadata: {
+    artists: 'Artists',
+    genre: 'Genre',
+    period: 'Period'
   },
   settings: {
     createUser: 'Create user',
@@ -92,28 +96,6 @@ export const localesEN: LocaleDictionary = {
     releaseFormat: 'Format',
     label: 'Label',
     resetFilters: 'Reset filters'
-  },
-  embeddedForm: {
-    title: 'Album title',
-    titlePlaceholder: 'Enter the album title',
-    titleRequired: 'Album title is required',
-    artist: 'Artist',
-    artistPlaceholder: 'Enter the artist name',
-    artistRequired: 'Artist name is required',
-    genre: 'Genre',
-    genrePlaceholder: 'Enter the genre title',
-    genreRequired: 'Genre title is required',
-    period: 'Period',
-    periodPlaceholder: 'Enter the year of release',
-    periodRequired: 'Year of release is required',
-    frame: 'Frame code',
-    framePlaceholder: 'Enter the frame code snippet',
-    frameRequired: 'Frame code is required',
-    frameInvalid: 'Invalid frame code',
-    collections: 'In collection',
-    addAlbum: 'Add album',
-    submit: 'Create album',
-    entityCreated: 'Embedded album was successfully created'
   },
   loginForm: {
     email: 'Email',

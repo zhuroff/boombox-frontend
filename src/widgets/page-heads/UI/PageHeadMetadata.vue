@@ -1,31 +1,37 @@
 <template>
   <div class="album__hero-metadata">
     <div
-      v-if="'artist' in album"
+      v-if="'artists' in album && Number(album.artists?.length) > 0"
       class="album__hero-metadata-row"
     >
-      {{ localize('embeddedForm.artist') }}:&nbsp;
-      <RouterLink
-        v-if="album.artist?._id"
-        :to="`/artists/${album.artist._id}`"
-        :disabled="!album.artist._id"
-        class="album__hero-category --link"
+      {{ localize('albumPageMetadata.artists') }}:&nbsp;
+      <template
+        v-for="(artist, idx) in album.artists"
+        :key="artist._id"
       >
-        {{ album.artist.title }}
-      </RouterLink>
-      <span
-        v-else
-        class="album__hero-category --link"
-      >
-        {{ album.artist.title }}
-      </span>
+        <RouterLink
+          v-if="artist?._id"
+          :to="`/artists/${artist._id}`"
+          :disabled="!artist._id"
+          class="album__hero-category --link"
+        >
+          {{ artist.title }}
+        </RouterLink>
+        <span
+          v-else
+          class="album__hero-category --link"
+        >
+          {{ artist.title }}
+        </span>
+        <span v-if="idx < album.artists.length - 1">, </span>
+      </template>
     </div>
 
     <div
       v-if="'period' in album"
       class="album__hero-metadata-row"
     >
-      {{ localize('embeddedForm.period') }}:&nbsp;
+      {{ localize('albumPageMetadata.period') }}:&nbsp;
       <RouterLink
         v-if="album.period?._id"
         :to="`/periods/${album.period._id}`"
@@ -46,7 +52,7 @@
       v-if="'genre' in album"
       class="album__hero-metadata-row"
     >
-      {{ localize('embeddedForm.genre') }}:&nbsp;
+      {{ localize('albumPageMetadata.genre') }}:&nbsp;
       <RouterLink
         v-if="album.genre?._id"
         :to="`/genres/${album.genre._id}`"

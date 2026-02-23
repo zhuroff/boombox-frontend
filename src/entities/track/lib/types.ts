@@ -5,7 +5,8 @@ export type TrackBasic = Entity & {
   path: string
   listened: number
   inAlbum: Entity & {
-    artist: Entity
+    artists?: Entity[]
+    artist?: Entity
     period: Entity
   }
   artist: Entity

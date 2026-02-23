@@ -5,13 +5,7 @@
     :class="[{ '--rounded' : coverClasses.includes('--rounded') }, 'cardlist__item-link']"
   >
     <div class="cardlist__item-image">
-      <div
-        v-if="cardFrame"
-        v-html="cardFrame"
-        class="cardlist__item-cover --blind"
-      />
       <img
-        v-else
         :src="cardCover"
         :alt="cardTitle"
         referrerpolicy="no-referrer"
@@ -44,7 +38,6 @@ type Props = {
   cardTitle: string
   cardCover: string
   isRouteLink?: boolean
-  cardFrame?: string
   cardCaption?: string
   coverClasses?: string[]
   withVinyl?: boolean

@@ -54,7 +54,6 @@ const cardsMap: Record<string, Component> = {
   albums: AlbumCard,
   collections: AlbumCard,
   compilations: AlbumCard,
-  embedded: AlbumCard,
   artists: CategoryCard,
   periods: CategoryCard,
   genres: CategoryCard

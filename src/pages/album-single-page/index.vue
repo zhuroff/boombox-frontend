@@ -147,7 +147,7 @@ const editorFormatConfig: TextEditorFormatConfig = new Set([
 
 const minimumAlbumData = computed(() => ({
   albumTitle: album.value?.title || '',
-  albumArtist: album.value?.artist?.title || ''
+  albumArtist: (album.value?.artists ?? []).map((a) => a.title).join(', ') || ''
 }))
 
 type TrackGroup = {
@@ -160,15 +160,12 @@ const groupedTracks = computed<TrackGroup[]>(() => {
   
   const tracks = album.value.tracks
   
-  // Проверяем, есть ли треки с release
   const hasReleases = tracks.some(track => track.release)
   
   if (!hasReleases) {
-    // Если нет релизов - возвращаем все треки как одну группу
     return [{ release: null, tracks }]
   }
   
-  // Группируем треки по релизам
   const groupsMap = new Map<string | null, typeof tracks>()
   
   tracks.forEach(track => {
@@ -182,7 +179,6 @@ const groupedTracks = computed<TrackGroup[]>(() => {
     }
   })
   
-  // Преобразуем Map в массив объектов
   return Array.from(groupsMap.entries()).map(([release, tracks]) => ({
     release,
     tracks

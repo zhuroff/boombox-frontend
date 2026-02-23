@@ -1,38 +1,31 @@
 <template>
   <div class="login">
     <main class="main --unauth">
-      <Form
-        :formSchema="formSchema"
-        :isLoading="isLoggingIn"
-        @formSubmit="handleLogin"
-      >
-        <template #submit>
+      <AuthForm :on-submit="handleLogin">
+        <template #submit="{ canSubmit, isSubmitting }">
           <Button
             type="submit"
             :label="localize('signIn')"
+            :disabled="!canSubmit || isSubmitting || isLoggingIn"
           />
         </template>
-      </Form>
+      </AuthForm>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
 import { Button } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
 import { useLocalization } from '~shared/model'
 import { useUserApi, UserService } from '~entities/user'
-import { authFormSchema } from '~features/authorization'
-import { Form } from '~features/form'
+import { AuthForm } from '~features/authorization'
 import type { FormPayload } from '~shared/lib'
 
 const dbService = new DatabaseService()
 const userService = new UserService()
 
 const { localize } = useLocalization()
-
-const formSchema = reactive(authFormSchema(localize))
 
 const { login, isLoggingIn } = useUserApi(userService, dbService)
 
