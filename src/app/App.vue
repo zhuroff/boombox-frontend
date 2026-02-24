@@ -1,5 +1,5 @@
 <template>
-  <Loader v-if="isRefreshing" mode="light" />
+  <Loader v-if="isRefreshing" :mode="isMobile ? 'dark' : 'light'" />
   <AuthorizedView v-else-if="isAuthorized" />
   <UnauthorizedView v-else />
 </template>
@@ -14,7 +14,7 @@ import { useUserApi, UserService } from '~entities/user'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import { useLocalization, useUser } from '~shared/model'
+import { useLocalization, useUser, useDevice } from '~shared/model'
 
 const { checkAndSetLocale } = useLocalization()
 
@@ -23,6 +23,7 @@ const userService = new UserService()
 
 const { checkAuthorization, isRefreshing } = useUserApi(userService, dbService)
 const { isAuthorized } = useUser()
+const { isMobile } = useDevice()
 
 onBeforeMount(() => {
   checkAndSetLocale()

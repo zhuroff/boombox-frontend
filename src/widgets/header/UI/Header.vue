@@ -76,7 +76,7 @@ const onSearch = (value: string) => {
   }
 
   &__heading {
-    color: var.$paleMD;
+    color: var.$paleLW;
 
     @include var.media('<desktop') {
       @include var.serif(1.25rem);

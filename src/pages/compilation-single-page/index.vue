@@ -3,7 +3,7 @@
     <transition name="fade">
       <Loader
         v-if="!isFetched"
-        mode="light"
+        :mode="isMobile ? 'dark' : 'light'"
       />
     </transition>
 
@@ -68,7 +68,7 @@ import { PageHeadAdapter } from '~widgets/page-heads'
 import { TrackList } from '~widgets/tracklist'
 
 import { Modal, Loader, Confirmation, Button } from '~shared/UI'
-import { useDeleteEntity, useGetPage, useLocalization, useSnackbar, useUpdateEntity } from '~shared/model'
+import { useDeleteEntity, useDevice, useGetPage, useLocalization, useSnackbar, useUpdateEntity } from '~shared/model'
 import { DatabaseService } from '~shared/api'
 
 import type { ReorderPayload } from '~shared/lib'
@@ -76,6 +76,7 @@ import type { CompilationFull } from '~entities/compilation'
 
 const dbService = new DatabaseService()
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
 const { initPlaylist } = usePlaylistService()

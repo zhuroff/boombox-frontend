@@ -171,7 +171,7 @@ onMounted(() => {
       top: 50%;
       transform: translateY(-50%);
       box-shadow: var.$shadowMedium;
-      background-color: var.$transBlack;
+      background-color: var.$transDark;
     }
 
     &-actions {

@@ -88,11 +88,10 @@ const isTopAligned = computed(() => (
     width: 100vw;
     overflow: auto;
     z-index: 9100;
-    background-color: var.$dark;
 
     &.--top-aligned {
       top: 0;
-      position: fixed;
+      position: absolute;
     }
   }
 
@@ -121,7 +120,7 @@ const isTopAligned = computed(() => (
       height: 70px;
       padding: 0 var.$mainPadding;
       font-size: 1.15rem;
-      color: var.$paleMD;
+      color: var.$paleLW;
     }
 
     .icon-vinyl {
@@ -175,7 +174,7 @@ const isTopAligned = computed(() => (
 
       @include var.media('<desktop') {
         text-align: right;
-        color: var.$paleMD;
+        color: var.$paleLW;
         font-size: 0.875rem;
         line-height: 4;
 

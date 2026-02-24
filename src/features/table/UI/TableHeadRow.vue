@@ -23,7 +23,7 @@ defineProps<Props>()
 @use '~/app/styles/variables' as var;
 
 .table__head-row {
-  background-color: var.$paleMD;
+  background-color: var.$paleLW;
 
   th {
     font-weight: 600;

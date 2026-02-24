@@ -3,7 +3,7 @@
     <transition name="fade">
       <Loader
         v-if="!isAlbumReady"
-        mode="light"
+        :mode="isMobile ? 'dark' : 'light'"
       />
     </transition>
 

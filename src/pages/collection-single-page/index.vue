@@ -3,7 +3,7 @@
     <transition name="fade">
       <Loader
         v-if="!isFetched || isRefetching"
-        mode="light"
+        :mode="isMobile ? 'dark' : 'light'"
       />
     </transition>
 
@@ -32,7 +32,7 @@ import { useGetPage, useUpdateEntity } from '~shared/model'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/model'
+import { useLocalization, useDevice } from '~shared/model'
 
 import type { CollectionFull } from '~entities/collection'
 import type { DraggableEvent, ReorderPayload } from '~shared/lib'
@@ -41,6 +41,7 @@ const dbService = new DatabaseService()
 
 const pageEntityKey = ref('collections')
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 const { data: collection, isFetched, isRefetching, refetch } = useGetPage<CollectionFull>(pageEntityKey, dbService)
 

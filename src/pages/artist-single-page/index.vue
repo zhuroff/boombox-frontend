@@ -3,7 +3,7 @@
     <transition name="fade">
       <Loader
         v-if="!isFetched"
-        mode="light"
+        :mode="isMobile ? 'dark' : 'light'"
       />
     </transition>
 
@@ -30,13 +30,14 @@ import type { UploadImageResult } from '~features/uploading'
 
 import { Loader } from '~shared/UI'
 import { DatabaseService } from '~shared/api'
-import { useLocalization } from '~shared/model'
+import { useLocalization, useDevice } from '~shared/model'
 
 const dbService = new DatabaseService()
 
 const pageEntityKey = ref('artists')
 
 const { localize } = useLocalization()
+const { isMobile } = useDevice()
 
 const {
   category,

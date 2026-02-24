@@ -81,7 +81,9 @@ const usePlayer = () => {
     }
   }
 
-  const playPauseTrack = () => {
+  const playPauseTrack = (e?: MouseEvent) => {
+    e?.stopPropagation()
+
     if (!playingTrack.value || !playingTrackRef.value) return
 
     if (playingTrack.value.isOnPause) {

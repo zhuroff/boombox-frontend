@@ -160,20 +160,16 @@ const cellComponent = (key: keyof TableRow) => {
 @use '~/app/styles/variables' as var;
 
 .table__body-row {
-  border-bottom: 1px solid var.$paleMD;
-  transition: background-color 0.2s var.$animation;
+  border-bottom: 1px solid var.$paleLW;
+  transition: color 0.2s var.$animation;
 
   &:last-of-type {
     border-bottom: none
   }
 
-  &:nth-of-type(odd) {
-    background-color: var.$paleLW;
-  }
-
   &:hover {
-    background-color: var.$paleMD;
-    transition: background-color 0.2s var.$animation;
+    color: var.$accent;
+    transition: color 0.2s var.$animation;
   }
 
   td {

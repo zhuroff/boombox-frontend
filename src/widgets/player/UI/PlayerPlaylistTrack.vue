@@ -95,7 +95,7 @@ const isTrackPlaying = computed(() => {
   }
 
   &.--active {
-    background-color: var.$dark;
+    background-color: var.$paleMD;
 
     strong {
       color: var.$light;
@@ -120,26 +120,7 @@ const isTrackPlaying = computed(() => {
 
   &:hover {
     @include var.media('>=desktop') {
-      background-color: var.$dark;
-
-      strong {
-        color: var.$light;
-        transition: color 0.1s var.$animation;
-      }
-
-      time,
-      .playlist__track-sign {
-        color: var.$light;
-        transition: color 0.1s var.$animation;
-      }
-
-      .button {
-
-        .icon {
-          color: var.$light;
-          transition: color 0.1s var.$animation;
-        }
-      }
+      background-color: var.$paleLW;
     }
   }
 
