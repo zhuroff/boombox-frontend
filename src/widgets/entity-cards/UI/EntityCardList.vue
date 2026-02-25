@@ -58,6 +58,7 @@ const emit = defineEmits<Emits>()
 
   &.--col {
     flex-direction: column;
+    gap: var.$mainPadding;
 
     .cardlist__item {
       width: 100%;

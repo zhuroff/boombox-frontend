@@ -62,9 +62,9 @@ $shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
 }
 
 @mixin serif($size) {
-  font: $size 'Yeseva One', serif;
+  font: $size 'Old Standard TT', serif;
   letter-spacing: 1px;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 @mixin cardHeading() {
