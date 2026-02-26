@@ -233,6 +233,7 @@ const openCloseActions = (e: MouseEvent) => {
 
   @include var.media('>=desktop') {
     color: var.$dark;
+    transition: all 0.1s var.$animation;
   }
 
   &__container {
@@ -367,40 +368,26 @@ const openCloseActions = (e: MouseEvent) => {
     }
   }
 
-  &.--playing {
+  &.--playing,
+  &.--paused {
     @include var.media('<desktop') {
       color: var.$accent;
     }
 
     @include var.media('>=desktop') {
-      border-radius: var.$borderRadiusSM;
-      background-color: var.$paleDP;
-      color: var.$light;
+      box-shadow: var.$shadowMedium;
+      padding-top: var.$fieldPadding;
+      padding-bottom: var.$fieldPadding;
+      transition: all 0.1s var.$animation;
     }
 
     .trackrow {
 
-      &__action {
-        .icon {
-          color: var.$light;
-          fill: var.$light;
-          transition: fill 0.2s ease;
+      &__container {
+        &:after {
+          content: none;
         }
       }
-    }
-  }
-
-  &.--paused {
-
-    .trackrow__container {
-      background-color: var.$paleLW;
-      border-radius: var.$borderRadiusSM;
-      color: var.$light;
-    }
-
-    .icon {
-      color: var.$light;
-      fill: var.$light;
     }
   }
 
