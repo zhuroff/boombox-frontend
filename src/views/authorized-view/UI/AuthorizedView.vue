@@ -15,14 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { Sidebar } from '~widgets/sidebar'
 import { Player } from '~widgets/player'
 import { Snackbar } from '~shared/UI'
 import { useDevice } from '~shared/model'
 import { usePlayer } from '~features/player'
 
-const main = ref(null)
 const { screensaveMode } = usePlayer()
 const { isMobile } = useDevice()
 </script>

@@ -3,7 +3,7 @@
     <transition name="fade">
       <Loader
         v-if="isDiscogsCollectionLoading"
-        mode="light"
+        :mode="isMobile ? 'dark' : 'light'"
       />
     </transition>
     <Header
@@ -42,10 +42,13 @@ import { Paginator, usePaginator } from '~features/paginator'
 import { Header } from '~widgets/header'
 import { TabsList } from '~widgets/tabs'
 import { Loader, Button } from '~shared/UI'
+import { useDevice } from '~shared/model'
 import { DiscogsService, useDiscogs, type DiscogsCollectionRow } from '~features/discogs'
 import { renderCollection } from './renderCollection'
 
 const discogsService = new DiscogsService()
+
+const { isMobile } = useDevice()
 
 const activeTabId = ref<number | null>(null)
 const discogsCollection = ref<DiscogsCollectionRow[]>([])

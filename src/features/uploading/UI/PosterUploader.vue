@@ -66,7 +66,7 @@ const upload = () => {
 
   &:before {
     content: '';
-    background-color: var.$transBlack;
+    background-color: var.$transDark;
     position: absolute;
     top: 0;
     left: 0;

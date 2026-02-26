@@ -54,9 +54,9 @@ const { localize } = useLocalization()
 @use '~/app/styles/variables' as var;
 
 .droplist {
-  background-color: var.$paleLW;
-  border-bottom-left-radius: var.$borderRadiusSM;
-  border-bottom-right-radius: var.$borderRadiusSM;
+  background-color: var.$light;
+  border-bottom-left-radius: var.$borderRadiusMD;
+  border-bottom-right-radius: var.$borderRadiusMD;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   box-shadow: var.$shadowMedium;
@@ -80,7 +80,7 @@ const { localize } = useLocalization()
     cursor: pointer;
 
     &:hover {
-      background: var.$paleMD;
+      background: var.$paleLW;
     }
 
     &.--create {

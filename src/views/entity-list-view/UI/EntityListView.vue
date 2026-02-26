@@ -3,7 +3,7 @@
     <transition name="fade">
       <Loader
         v-if="!isFetched || isFetching"
-        mode="light"
+        :mode="isMobile ? 'dark' : 'light'"
       />
     </transition>
 
@@ -77,7 +77,7 @@ import { Paginator, usePaginator } from '~features/paginator'
 
 import { DatabaseService } from '~shared/api'
 import { Modal, Loader, Confirmation, Button } from '~shared/UI'
-import { useLocalization, useGetList, useDeleteEntity, useSnackbar } from '~shared/model'
+import { useLocalization, useGetList, useDeleteEntity, useSnackbar, useDevice } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 import type { DeletePayload } from '~shared/lib'
 
@@ -95,6 +95,7 @@ const props = defineProps<Props>()
 
 const dbService = new DatabaseService()
 
+const { isMobile } = useDevice()
 const { localize } = useLocalization()
 const { setSnackbarMessage } = useSnackbar()
 

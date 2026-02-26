@@ -17,9 +17,8 @@ $paleLW: #C7BBB2;
 $accent: #C9A84B;
 $error: #ff3860;
 $success: #48c78e;
-$transBlack: rgba(43, 43, 43, 0.95);
-$transDark: rgba(15, 30, 54, 0.9);
-$transLight: rgba(255, 255, 255, 0.7);
+$transDark: rgba(41, 41, 43, 0.9);
+$transLight: rgba(253, 245, 230, 0.7);
 
 $borderRadiusSM: 3px;
 $borderRadiusMD: 5px;
@@ -46,8 +45,7 @@ $doublePadding: 3.125rem;
 
 $animation: cubic-bezier(.06,.28,.26,.81);
 
-$shadowLight: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-$shadowMedium: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+$shadowMedium: $paleMD 0px 5px 15px;
 $shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
 
 @mixin buttonClose {
@@ -63,9 +61,9 @@ $shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
 }
 
 @mixin serif($size) {
-  font: $size 'Yeseva One', serif;
+  font: $size 'Old Standard TT', serif;
   letter-spacing: 1px;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 @mixin cardHeading() {

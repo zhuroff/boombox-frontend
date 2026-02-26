@@ -6,18 +6,19 @@
       @end="orderChanged"
     >
       <TrackRow
-        v-for="(track, index) in trackList"
+        v-for="(track) in trackList"
         :key="track._id"
         :track="track"
-        :order="index + 1"
+        :trackOptionsMenu="trackOptionsMenu"
         @refetchTracklist="emit('refetchTracklist')"
+        @setTrackOptionsMenu="setTrackOptionsMenu"
       />
     </VueDraggableNext>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, type ComputedRef } from 'vue'
+import { computed, onMounted, onUnmounted, ref, type ComputedRef } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { usePlaylistService, type PlaylistTrack } from '~features/player'
 import TrackRow from './TrackRow.vue'
@@ -38,6 +39,12 @@ const emit = defineEmits<Emits>()
 const props = defineProps<Props>()
 
 const { primaryPlaylist, secondaryPlaylist } = usePlaylistService()
+
+const trackOptionsMenu = ref<string | null>(null)
+
+const setTrackOptionsMenu = (trackId: string | null) => {
+  trackOptionsMenu.value = trackId === trackOptionsMenu.value ? null : trackId
+}
 
 const dragOptions = computed(() => ({
   animation: 300
@@ -64,6 +71,19 @@ const trackList: ComputedRef<PlaylistTrack[]> = computed(() => {
       duration: playlistTrack?.duration || track.duration
     }
   })
+})
+
+const handleClickOutside = (e: MouseEvent) => {
+  e.stopPropagation()
+  trackOptionsMenu.value = null
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 

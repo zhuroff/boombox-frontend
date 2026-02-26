@@ -157,7 +157,7 @@ const useAudioService = (dbService: DatabaseService) => {
   }
 
   onMounted(() => {
-    trackVolume.value = Number(localStorage.getItem('playerVolume')) || 1
+    trackVolume.value = Number(localStorage.getItem('playerVolume')) ?? 1
     crackleAudioRef.value.volume = trackVolume.value
     crackleAudioRef.value.loop = true
   })

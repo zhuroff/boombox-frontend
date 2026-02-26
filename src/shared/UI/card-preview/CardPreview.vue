@@ -151,7 +151,7 @@ const cardElement = computed(() => (
     @include var.cardHeading();
 
     @include var.media('<desktop') {
-      color: var.$paleMD;
+      color: var.$paleLW;
     }
   }
 
@@ -159,7 +159,7 @@ const cardElement = computed(() => (
     @include var.cardCaption();
 
     @include var.media('<desktop') {
-      color: var.$paleDP;
+      color: var.$paleMD;
     }
 
     @include var.media('>=desktop') {

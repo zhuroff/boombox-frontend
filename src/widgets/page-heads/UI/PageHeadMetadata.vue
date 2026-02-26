@@ -111,14 +111,13 @@ const { localize } = useLocalization()
 .album__hero {
 
   &-metadata {
+    color: var.$paleMD;
 
     @include var.media('<desktop') {
-      color: var.$light;
       line-height: 1.7;
     }
 
     @include var.media('>=desktop') {
-      color: var.$paleMD;
       margin-top: auto;
       line-height: 1.5;
     }

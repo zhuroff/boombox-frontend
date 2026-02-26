@@ -85,6 +85,7 @@ const isTrackPlaying = computed(() => {
   display: flex;
   align-items: center;
   cursor: pointer;
+  transition: all 0.3s var.$animation;
 
   @include var.media('<desktop') {
     padding: 0.25rem 0;
@@ -95,50 +96,33 @@ const isTrackPlaying = computed(() => {
   }
 
   &.--active {
-    background-color: var.$dark;
+    color: var.$paleDP;
+    box-shadow: var.$shadowMedium;
+    padding-top: var.$fieldPadding;
+    padding-bottom: var.$fieldPadding;
+    transition: all 0.1s var.$animation;
 
-    strong {
-      color: var.$light;
-      transition: color 0.1s var.$animation;
-    }
-
-    time,
     .playlist__track-sign {
-      color: var.$light;
-      transition: color 0.1s var.$animation;
+      color: var.$paleDP;
     }
 
-    .button {
+    .playlist__track-cover {
+      img {
+        filter: brightness(0.3);
+      }
 
       .icon {
-        color: var.$light;
-        fill: var.$light;
-        transition: color 0.1s var.$animation;
+        fill: var.$accent;
       }
     }
   }
 
   &:hover {
     @include var.media('>=desktop') {
-      background-color: var.$dark;
+      color: var.$paleDP;
 
-      strong {
-        color: var.$light;
-        transition: color 0.1s var.$animation;
-      }
-
-      time,
       .playlist__track-sign {
-        color: var.$light;
-        transition: color 0.1s var.$animation;
-      }
-
-      .button {
-
-        .icon {
-          color: var.$light;
-          transition: color 0.1s var.$animation;
-        }
+        color: var.$paleDP;
       }
     }
   }

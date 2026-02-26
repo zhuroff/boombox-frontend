@@ -12,9 +12,6 @@
         className="trackrow__action --drag"
         :isDisabled="track?.idDisabled"
       />
-      <div class="trackrow__cell --numeric">
-        {{ order }}
-      </div>
       <Button
         v-if="track?.idDisabled"
         icon="disable"
@@ -43,10 +40,11 @@
         className="trackrow__action --options"
         @click="openCloseActions"
       />
+      
     </div>
     <transition name="fade">
       <DropList
-        v-if="isActionsOpen"
+        v-if="trackOptionsMenu === track._id"
         ref="droplistRef"
         name=""
         query=""
@@ -86,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onUnmounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { usePlayer } from '~features/player'
 import { useCompilations } from '~features/compilation'
 import { usePlaylistService, type PlaylistTrack } from '~features/player'
@@ -100,11 +98,12 @@ import type { SelectInputFieldSchema } from '~shared/lib'
 
 type Props = {
   track: PlaylistTrack
-  order: number
+  trackOptionsMenu: string | null
 }
 
 type Emits = {
   (e: 'refetchTracklist'): void
+  (e: 'setTrackOptionsMenu', trackId: string | null): void
 }
 
 const props = defineProps<Props>()
@@ -117,9 +116,7 @@ const { localize } = useLocalization()
 const { playingTrack, playingTrackIndex, playTrack, playPauseTrack } = usePlayer()
 const { toggleTrackAvailability, isTrackInPlaylist, addTrackToPlaylist } = usePlaylistService()
 
-const isActionsOpen = ref(false)
 const isLyricsModalActive = ref(false)
-const droplistRef = ref<InstanceType<typeof DropList> | null>(null)
 
 const {
   compilations,
@@ -145,8 +142,11 @@ const trackDuration = computed(() => {
   return `${minutes}:${seconds}`
 })
 
-const trackRowActionHandler = () => {
+const trackRowActionHandler = (e: MouseEvent) => {
+  e.stopPropagation()
+
   if (props.track.idDisabled) return
+
   playingTrack.value && playingTrack.value._id === props.track._id
     ? playPauseTrack()
     : playTrack(props.track)
@@ -209,41 +209,15 @@ const trackArtistAndTitle = computed(() => (
   `${props.track.artist.title} - ${props.track.title}`
 ))
 
-const handleClickOutside = (event: MouseEvent) => {
-  if (droplistRef.value?.$el && !droplistRef.value.$el.contains(event.target as Node)) {
-    isActionsOpen.value = !isActionsOpen.value
-  }
-}
-
 const applyAction = (action: SelectInputFieldSchema['options'][number]) => {
-  isActionsOpen.value = !isActionsOpen.value
   trackActions[action.value]?.()
+  emit('setTrackOptionsMenu', null)
 }
 
-const openCloseActions = (event: MouseEvent) => {
-  if (!document.querySelector('.droplist')) {
-    event.stopPropagation()
-    isActionsOpen.value = !isActionsOpen.value
-  } else if (isActionsOpen.value) {
-    isActionsOpen.value = false
-  } else {
-    setTimeout(() => {
-      isActionsOpen.value = !isActionsOpen.value
-    })
-  }
+const openCloseActions = (e: MouseEvent) => {
+  e.stopPropagation()
+  emit('setTrackOptionsMenu', props.track._id)
 }
-
-watch(isActionsOpen, (newValue) => {
-  if (newValue) {
-    document.addEventListener('click', handleClickOutside)
-  } else {
-    document.removeEventListener('click', handleClickOutside)
-  }
-})
-
-onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
 </script>
 
 <style lang="scss">
@@ -259,19 +233,21 @@ onUnmounted(() => {
 
   @include var.media('>=desktop') {
     color: var.$dark;
+    transition: all 0.1s var.$animation;
   }
 
   &__container {
     height: 3rem;
     display: flex;
     align-items: center;
+    position: relative;
 
     &:hover:not(.--disabled) {
       @include var.media('>=desktop') {
-        border-radius: var.$borderRadiusSM;
-        background-color: var.$dark;
-        color: var.$light;
-        transition: all 0.1s var.$animation;
+        .trackrow__cell.--title {
+          color: var.$accent;
+          transition: color 0.2s var.$animation;
+        }
       }
     }
 
@@ -280,6 +256,53 @@ onUnmounted(() => {
       & > *:not(.--options) {
         opacity: 0.5;
         pointer-events: none;
+      }
+    }
+    
+    @include var.media('>=desktop') {
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8), 0 -1px 0 rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  &:first-child {
+    @include var.media('>=desktop') {
+      .trackrow__container {
+        &:before {
+          content: '';
+          position: absolute;
+          top: -1px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          z-index: 1;
+          background-color: var.$light;
+        }
+      }
+    }
+  }
+
+  &:last-child {
+    @include var.media('>=desktop') {
+      .trackrow__container {
+        &:before {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          z-index: 10;
+          background-color: var.$light;
+        }
       }
     }
   }
@@ -292,6 +315,10 @@ onUnmounted(() => {
       white-space: nowrap;
       min-width: var.$elementHeightSM;
       flex: none;
+
+      @include var.media('<desktop') {
+        font-size: 0.875rem;
+      }
     }
 
     &.--title {
@@ -300,6 +327,10 @@ onUnmounted(() => {
       text-overflow: ellipsis;
       overflow: hidden;
       padding-right: var.$basicPadding;
+
+      @include var.media('<desktop') {
+        font-size: 0.875rem;
+      }
     }
   }
 
@@ -326,8 +357,8 @@ onUnmounted(() => {
     &:hover {
 
       .icon {
-        color: var.$light;
-        fill: var.$light;
+        color: var.$accent;
+        fill: var.$accent;
         transition: fill 0.2s ease;
       }
     }
@@ -337,33 +368,33 @@ onUnmounted(() => {
     }
   }
 
-  &.--playing {
-    background-color: var.$dark;
-    color: var.$light;
+  &.--playing,
+  &.--paused {
+    @include var.media('<desktop') {
+      color: var.$accent;
+    }
 
     @include var.media('>=desktop') {
-      border-radius: var.$borderRadiusSM;
-    }
-  }
-
-  &.--paused {
-
-    .trackrow__container {
-      background-color: var.$paleDP;
-      border-radius: var.$borderRadiusSM;
-      color: var.$light;
+      box-shadow: var.$shadowMedium;
+      padding-top: var.$fieldPadding;
+      padding-bottom: var.$fieldPadding;
+      transition: all 0.1s var.$animation;
     }
 
-    .icon {
-      color: var.$light;
-      fill: var.$light;
+    .trackrow {
+
+      &__container {
+        &:after {
+          content: none;
+        }
+      }
     }
   }
 
   .droplist {
     position: absolute;
     top: 100%;
-    right: 0;
+    right: var.$fieldPadding;
     z-index: 1000;
     width: auto;
   }
