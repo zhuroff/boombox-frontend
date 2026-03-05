@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
 import { DatabaseService } from '~shared/api'
+import { useDevice } from '~shared/model'
 import useAudioService from '../api/useAudioService'
 import usePlaylistService from '../api/usePlaylistService'
 import type { TrackBasic } from '~entities/track'
@@ -34,6 +35,8 @@ const usePlayer = () => {
     replacePlaylist,
     searchTrackInPlaylists
   } = usePlaylistService()
+
+  const { isMobile } = useDevice()
 
   const isPrevTrackAvailable = computed(() => {
     const previousTrack = getPrevTrack(playingTrack.value?._id)
@@ -124,6 +127,7 @@ const usePlayer = () => {
   }
 
   const setSoundVolume = (value: number) => {
+    if (isMobile) return
     trackVolume.value = value
     playingTrackRef.value!.volume = value
     crackleAudioRef.value.volume = value

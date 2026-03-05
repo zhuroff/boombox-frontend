@@ -1,6 +1,6 @@
 import { ref, onMounted } from 'vue'
 import { useMutation } from '@tanstack/vue-query'
-import { useUpdateEntity } from '~shared/model'
+import { useUpdateEntity, useDevice } from '~shared/model'
 import { proxyCloudUrl } from '~shared/lib'
 import { CRACKLE_PATHS } from '~shared/constants'
 import usePlaylistService from './usePlaylistService'
@@ -22,6 +22,7 @@ const isSwitchingTrack = ref(false)
 
 const useAudioService = (dbService: DatabaseService) => {
   const entityKey = ref('tracks')
+  const { isMobile } = useDevice()
 
   const { isPlayingStarted, getNextTrack, setTrackDuration } = usePlaylistService()
 
@@ -157,7 +158,7 @@ const useAudioService = (dbService: DatabaseService) => {
   }
 
   onMounted(() => {
-    trackVolume.value = Number(localStorage.getItem('playerVolume')) ?? 1
+    trackVolume.value = isMobile ? 1 : Number(localStorage.getItem('playerVolume')) ?? 1
     crackleAudioRef.value.volume = trackVolume.value
     crackleAudioRef.value.loop = true
   })

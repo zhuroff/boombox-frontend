@@ -211,7 +211,6 @@ const activateEditMode = () => {
 
     &-heading {
       margin: 0.5rem 0 1.75rem;
-      max-width: 850px;
       color: var.$accent;
 
       @include var.media('<desktop-md') {
