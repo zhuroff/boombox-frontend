@@ -127,7 +127,7 @@ const usePlayer = () => {
   }
 
   const setSoundVolume = (value: number) => {
-    if (isMobile) return
+    if (isMobile.value) return
     trackVolume.value = value
     playingTrackRef.value!.volume = value
     crackleAudioRef.value.volume = value
