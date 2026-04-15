@@ -23,7 +23,7 @@
         >
           {{ artist.title }}
         </span>
-        <span v-if="idx < album.artists.length - 1">, </span>
+        <span v-if="idx < album.artists.length - 1"> | </span>
       </template>
     </div>
 

@@ -79,6 +79,8 @@ const contentSections = computed(() => {
   display: flex;
   flex-direction: column;
   gap: var.$mainPadding;
+  max-height: calc(100vh - #{var.$doublePadding});
+  overflow: auto;
 
   &__empty {
     @include var.serif(2rem);

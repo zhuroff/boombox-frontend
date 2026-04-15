@@ -375,7 +375,7 @@ const openCloseActions = (e: MouseEvent) => {
     }
 
     @include var.media('>=desktop') {
-      box-shadow: var.$shadowMedium;
+      box-shadow: #c5c5c5 0px 5px 15px;
       padding-top: var.$fieldPadding;
       padding-bottom: var.$fieldPadding;
       transition: all 0.1s var.$animation;
