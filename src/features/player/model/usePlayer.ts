@@ -19,6 +19,7 @@ const usePlayer = () => {
     crackleAudioRef,
     fetchTrackStreamURL,
     destroyPlayingTrack,
+    clearNextPreload,
     fetchingTrackId,
     playTrackStream,
     playNextTrack,
@@ -69,6 +70,7 @@ const usePlayer = () => {
       return playingTrackRef.value?.play()
     }
 
+    clearNextPreload()
     fetchingTrackId.value = track._id
     destroyPlayingTrack()
 
