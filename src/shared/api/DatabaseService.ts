@@ -90,8 +90,8 @@ export default class DatabaseService {
     return response.data
   }
 
-  sync = async () => {  
-    const response = await api.post('/api/sync')
+  sync = async <T>() => {
+    const response = await api.post<T>('/api/sync')
     return response.data
   }
 }

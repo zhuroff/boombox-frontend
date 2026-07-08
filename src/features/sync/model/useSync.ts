@@ -12,7 +12,7 @@ const useSync = (dbService: DatabaseService) => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
-    queryFn: () => dbService.sync()
+    queryFn: () => dbService.sync<SyncResponse>()
   })
 
   const reset = () => {

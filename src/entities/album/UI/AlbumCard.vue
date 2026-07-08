@@ -40,7 +40,7 @@ const routePath = computed(() => {
 const cardCaption = computed(() => {
   switch (props.card.kind) {
     case 'album':
-      return `${(props.card.artists ?? []).map((a) => a.title).join(', ') || '—'} / ${props.card.period.title} / ${props.card.genre.title}`
+      return `${(props.card.artists ?? []).map((a) => a.title).join('; ') || '—'} / ${props.card.period.title} / ${props.card.genre.title}`
     case 'collection':
     case 'compilation':
       return localize('collections.cardCaption')
