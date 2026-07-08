@@ -2,7 +2,7 @@ import { api } from '~shared/api'
 
 export default class BackupService {
   fetchBackups = async () => {
-    const response = await api.get('/api/backup')
+    const response = await api.get<string[]>('/api/backup')
     return response.data
   }
 
