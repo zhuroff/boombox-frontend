@@ -132,7 +132,11 @@ $breakpoints: (
 
 @mixin media($query1, $query2: null) {
   $condition1: parse-condition($query1);
-  $condition2: if($query2 != null, parse-condition($query2), null);
+  $condition2: null;
+
+  @if $query2 != null {
+    $condition2: parse-condition($query2);
+  }
 
   @if $condition1 != null and ($query2 == null or $condition2 != null) {
     $isFullQuery1: meta.type-of($condition1) == 'string' and string.index($condition1, '(') == 1;

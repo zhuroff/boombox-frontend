@@ -49,7 +49,7 @@ import { UploadService } from '~features/uploading'
 import { DatabaseService } from '~shared/api'
 import type { CategoryFull } from '~entities/category'
 import type { CollectionFull } from '~entities/collection'
-import type { AxiosError } from 'axios'
+import { ApiError } from '~shared/api'
 
 interface Props {
   data: CategoryFull | CollectionFull
@@ -96,7 +96,7 @@ const uploadAndShowImage = (payload: [EntityImagesKeys, File | undefined]) => {
         url: data[type]
       })
     })
-    .catch((error: AxiosError<{ error: string }>) => {
+    .catch((error: ApiError<{ error: string }>) => {
       const errMessage = error.response?.data.error
       setSnackbarMessage({
         message: localize(`errors.${errMessage}`),

@@ -45,6 +45,7 @@ import SpriteQuestion from './SpriteQuestion.vue'
 import SpriteTarget from './SpriteTarget.vue'
 import SpriteAddBox from './SpriteAddBox.vue'
 import SpriteCheck from './SpriteCheck.vue'
+import SpriteCloudDownload from './SpriteCloudDownload.vue'
 
 interface Props {
   name: string
@@ -93,7 +94,8 @@ const IconsMap = new Map([
   ['question', SpriteQuestion],
   ['target', SpriteTarget],
   ['add-box', SpriteAddBox],
-  ['check', SpriteCheck]
+  ['check', SpriteCheck],
+  ['cloud-download', SpriteCloudDownload]
 ])
 
 const IconComponent = computed(() => (
