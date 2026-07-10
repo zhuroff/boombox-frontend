@@ -130,10 +130,10 @@
 <script setup lang="ts">
 import { watch, onUnmounted, onMounted, ref } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
-import { Placeholder } from '@tiptap/extensions'
 import { debounce } from '~shared/utils'
 import { TextEditorFormatting, type TextEditorFormatConfig } from '../model/types'
 import StarterKit from '@tiptap/starter-kit'
+import Link from '@tiptap/extension-link'
 
 type Props = {
   content: string
@@ -171,25 +171,22 @@ const handleClickOutside = (event: MouseEvent) => {
 }
 
 const editor = useEditor({
-  content: props.content || '<p></p>',
-  editable: isEditMode.value,
+  content: props.content || props.placeholder,
   extensions: [
     StarterKit.configure({
       heading: {
         levels: [2, 3]
-      },
-      link: {
-        openOnClick: false,
-        HTMLAttributes: {
-          class: 'editor-link'
-        }
       }
     }),
-    Placeholder.configure({
-      placeholder: props.placeholder
+    Link.configure({
+      openOnClick: false,
+      HTMLAttributes: {
+        class: 'editor-link'
+      }
     })
   ],
   editorProps: {
+    editable: () => isEditMode.value,
     attributes: {
       spellcheck: 'false',
     }
@@ -199,13 +196,6 @@ const editor = useEditor({
     emit('updateContent', content)
   }, 1000)
 })
-
-watch(
-  isEditMode,
-  (value) => {
-    editor.value?.setEditable(value)
-  }
-)
 
 const setLink = () => {
   if (!editor.value) return
@@ -233,7 +223,7 @@ watch(
   () => props.content,
   (newContent) => {
     if (editor.value && newContent !== editor.value.getHTML()) {
-      editor.value.commands.setContent(newContent || '<p></p>')
+      editor.value.commands.setContent(newContent || props.placeholder)
     }
   }
 )
@@ -474,14 +464,6 @@ onUnmounted(() => {
   
   p {
     margin: var.$fieldPadding 0;
-  }
-
-  p.is-empty::before {
-    color: var.$transDark;
-    content: attr(data-placeholder);
-    float: left;
-    height: 0;
-    pointer-events: none;
   }
 
   i, em {
