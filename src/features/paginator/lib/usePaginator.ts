@@ -1,4 +1,4 @@
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
 import type {
@@ -15,8 +15,9 @@ const usePaginator = ({
   isRouted = true,
   localStorageKey
 }: UsePaginationProps) => {
-  const { query } = useRoute()
+  const route = useRoute()
   const router = useRouter()
+  const { query } = route
 
   const paginationState = ref<PaginationState>({
     page: Number(query.page) || 1,
@@ -32,11 +33,11 @@ const usePaginator = ({
     totalPages: 0,
     selected: paginationState.value.limit
   })
-  
+
   const updatePaginationState: PaginationStateSetter = (key, value) => {
     paginationState.value[key] = value
 
-    switch(key) {
+    switch (key) {
       case 'page':
         changeRouteQuery({ page: String(value) })
         break
@@ -56,9 +57,9 @@ const usePaginator = ({
     paginationConfig[key] = value
   }
 
-  const changeRouteQuery = (query: Record<string, number | string>) => {
+  const changeRouteQuery = (updates: Record<string, number | string>) => {
     if (!isRouted) return
-    router.push({ query })
+    router.push({ query: { ...route.query, ...updates } })
   }
 
   onMounted(() => {
@@ -66,6 +67,17 @@ const usePaginator = ({
       changeRouteQuery({ page: paginationState.value.page })
     }
   })
+
+  watch(
+    () => route.query.page,
+    (page) => {
+      const nextPage = Number(page) || 1
+
+      if (paginationState.value.page !== nextPage) {
+        paginationState.value.page = nextPage
+      }
+    }
+  )
 
   return {
     paginationState,

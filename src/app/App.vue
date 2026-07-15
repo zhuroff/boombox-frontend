@@ -1,5 +1,8 @@
 <template>
-  <Loader v-if="isRefreshing" :mode="isMobile ? 'dark' : 'light'" />
+  <Loader
+    v-if="isRefreshing"
+    :mode="isMobile ? 'dark' : 'light'"
+  />
   <AuthorizedView v-else-if="isAuthorized" />
   <UnauthorizedView v-else />
 </template>

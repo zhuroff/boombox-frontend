@@ -3,18 +3,18 @@
 @use 'sass:meta';
 
 :root {
-  --paleDP: #5F534A;
+  --paleDP: #5f534a;
 }
 
 $font: 'Nunito', sans-serif;
 $fontSerif: 'Old Standard TT', serif;
 
-$dark: #29292B;
-$light: #FDF5E6;
+$dark: #29292b;
+$light: #fdf5e6;
 $paleDP: var(--paleDP);
 $paleMD: #847870;
-$paleLW: #C7BBB2;
-$accent: #C9A84B;
+$paleLW: #c7bbb2;
+$accent: #c9a84b;
 $error: #ff3860;
 $success: #48c78e;
 $transDark: rgba(41, 41, 43, 0.9);
@@ -43,7 +43,7 @@ $fieldPadding: 0.5rem;
 $mainPadding: 1.563rem;
 $doublePadding: 3.125rem;
 
-$animation: cubic-bezier(.06,.28,.26,.81);
+$animation: cubic-bezier(0.06, 0.28, 0.26, 0.81);
 
 $shadowMedium: $paleMD 0px 5px 15px;
 $shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
@@ -61,7 +61,9 @@ $shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
 }
 
 @mixin serif($size) {
-  font: $size 'Old Standard TT', serif;
+  font:
+    $size 'Old Standard TT',
+    serif;
   letter-spacing: 1px;
   font-weight: 600;
 }
@@ -77,7 +79,7 @@ $shadowInner: rgba(0, 0, 0, 0.07) 3px 3px 4px -1px inset;
 @mixin cardCaption() {
   font-weight: 600;
   color: $paleDP;
-  font-size: .75rem;
+  font-size: 0.75rem;
   position: relative;
 }
 
@@ -88,7 +90,7 @@ $breakpoints: (
   'desktop-lg': 1780px,
   'desktop-hg': 2048px,
   'landscape': '(orientation: landscape)'
-  ) !default;
+) !default;
 
 @function parse-condition($query) {
   $operator: null;
@@ -140,15 +142,15 @@ $breakpoints: (
 
   @if $condition1 != null and ($query2 == null or $condition2 != null) {
     $isFullQuery1: meta.type-of($condition1) == 'string' and string.index($condition1, '(') == 1;
-    
+
     $mediaQuery: '';
-    
+
     @if $isFullQuery1 {
       $mediaQuery: $condition1;
     } @else {
       $mediaQuery: 'screen and #{$condition1}';
     }
-    
+
     @if $condition2 != null {
       $mediaQuery: '#{$mediaQuery} and #{$condition2}';
     }

@@ -31,17 +31,10 @@ const service = new BackupService()
 
 const { localize } = useLocalization()
 
-const {
-  data,
-  isEnabled,
-  targetAction
-} = useBackup(props.action, service, props.value)
+const { data, isEnabled, targetAction } = useBackup(props.action, service, props.value)
 
-watch(
-  data,
-  (value) => {
-    data && emit('onEmit', value)
-    isEnabled.value = false
-  }
-)
+watch(data, (value) => {
+  data && emit('onEmit', value)
+  isEnabled.value = false
+})
 </script>

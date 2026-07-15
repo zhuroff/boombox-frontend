@@ -10,11 +10,13 @@
     :required="required"
     :value="modelValue"
     ref="textInputElement"
-    @input="(e) => {
-      const value = (e.target as HTMLInputElement).value
-      emit('update:modelValue', value)
-      emit('onInput', value)
-    }"
+    @input="
+      (e) => {
+        const value = (e.target as HTMLInputElement).value
+        emit('update:modelValue', value)
+        emit('onInput', value)
+      }
+    "
     @blur="emit('blur')"
   />
 </template>

@@ -1,4 +1,4 @@
-<template>  
+<template>
   <div class="player__sound">
     <div class="player__sound-range">
       <input
@@ -13,7 +13,7 @@
     </div>
     <Button
       :icon="isTrackMuted ? 'volume-off' : 'volume'"
-      :class="[{ '--muted' : isTrackMuted }]"
+      :class="[{ '--muted': isTrackMuted }]"
       isRounded
       @click="toggleMuteState"
     />

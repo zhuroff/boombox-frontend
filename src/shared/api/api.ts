@@ -90,12 +90,7 @@ const request = async <T>(
     method,
     credentials: 'include',
     headers,
-    body:
-      body === undefined
-        ? undefined
-        : isFormData
-          ? body
-          : JSON.stringify(body)
+    body: body === undefined ? undefined : isFormData ? body : JSON.stringify(body)
   })
 
   if (response.status === 403) {
@@ -117,20 +112,15 @@ const request = async <T>(
 }
 
 export const api = {
-  get: <T>(path: string, config?: ApiRequestConfig) =>
-    request<T>('GET', path, undefined, config),
+  get: <T>(path: string, config?: ApiRequestConfig) => request<T>('GET', path, undefined, config),
 
-  post: <T>(path: string, body?: unknown, config?: ApiRequestConfig) =>
-    request<T>('POST', path, body, config),
+  post: <T>(path: string, body?: unknown, config?: ApiRequestConfig) => request<T>('POST', path, body, config),
 
-  patch: <T>(path: string, body?: unknown, config?: ApiRequestConfig) =>
-    request<T>('PATCH', path, body, config),
+  patch: <T>(path: string, body?: unknown, config?: ApiRequestConfig) => request<T>('PATCH', path, body, config),
 
-  put: <T>(path: string, body?: unknown, config?: ApiRequestConfig) =>
-    request<T>('PUT', path, body, config),
+  put: <T>(path: string, body?: unknown, config?: ApiRequestConfig) => request<T>('PUT', path, body, config),
 
-  delete: <T>(path: string, config?: ApiRequestConfig) =>
-    request<T>('DELETE', path, undefined, config)
+  delete: <T>(path: string, config?: ApiRequestConfig) => request<T>('DELETE', path, undefined, config)
 }
 
 export const updateAuthHeaders = () => {

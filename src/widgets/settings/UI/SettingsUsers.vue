@@ -32,7 +32,7 @@ const emit = defineEmits<Emits>()
 
 const { localize } = useLocalization()
 
-const tableHeaderConfig = computed<TableHeaderConfig[]>(() => (
+const tableHeaderConfig = computed<TableHeaderConfig[]>(() =>
   props.usersTableState.schema.order.map((key) => {
     const heading = localize(`usersTable.${key}`)
 
@@ -41,7 +41,7 @@ const tableHeaderConfig = computed<TableHeaderConfig[]>(() => (
       element: h('span', {}, heading)
     }
   })
-))
+)
 </script>
 
 <style lang="scss" scoped>
@@ -52,7 +52,7 @@ const tableHeaderConfig = computed<TableHeaderConfig[]>(() => (
 
   &-heading {
     @include var.serif(1.75rem);
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 }
 </style>

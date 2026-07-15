@@ -60,7 +60,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'setUploadedImage', payload: { key: EntityImagesKeys, url: string }): void
+  (e: 'setUploadedImage', payload: { key: EntityImagesKeys; url: string }): void
   (e: 'saveTitle', value: string): void
 }
 
@@ -130,7 +130,6 @@ onMounted(() => {
   }
 
   &:hover {
-
     .poster__label {
       opacity: 1;
       transition: opacity 0.3s var.$animation;
@@ -175,7 +174,6 @@ onMounted(() => {
     }
 
     &-actions {
-
       @include var.media('<desktop') {
         margin-top: 0.75rem;
       }

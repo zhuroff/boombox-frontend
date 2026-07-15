@@ -28,7 +28,8 @@
           <router-link
             :to="`/${item.route}`"
             class="aside__nav-link"
-          >{{ item.title }}</router-link>
+            >{{ item.title }}</router-link
+          >
         </li>
       </ul>
     </nav>
@@ -58,19 +59,16 @@ const mobileNavbarTopSections = new Set([
 const navbar = computed(() => {
   return router
     .getRoutes()
-    .filter(({ meta }) => (
-      meta?.navLocaleKey && (!isMobile.value || meta.navLocaleKey !== 'settings')
-    ))
+    .filter(({ meta }) => meta?.navLocaleKey && (!isMobile.value || meta.navLocaleKey !== 'settings'))
     .map(({ meta, path }) => ({
       title: localize(`navigation.${meta.navLocaleKey as string}`),
       route: path.replace('/', '')
     }))
 })
 
-const isTopAligned = computed(() => (
-  isMobile.value &&
-  mobileNavbarTopSections.has(String(router.currentRoute.value.name))
-))
+const isTopAligned = computed(
+  () => isMobile.value && mobileNavbarTopSections.has(String(router.currentRoute.value.name))
+)
 </script>
 
 <style lang="scss" scoped>
@@ -124,7 +122,6 @@ const isTopAligned = computed(() => (
     }
 
     .icon-vinyl {
-
       @include var.media('<desktop') {
         display: none;
       }
@@ -141,7 +138,6 @@ const isTopAligned = computed(() => (
   }
 
   &__nav {
-
     @include var.media('<desktop') {
       display: flex;
     }

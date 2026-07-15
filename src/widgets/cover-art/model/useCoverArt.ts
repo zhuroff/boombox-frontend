@@ -9,11 +9,7 @@ type UnifiedAlbum = ExcludeFromUnifiedEntityCard<'CategoryBasic'>
 type QueryPredicate = (album: UnifiedAlbum | undefined) => boolean
 type QueryFormatter = (album: UnifiedAlbum) => string
 
-const useCoverArt = (
-  entityKey: string,
-  entity: Ref<UnifiedAlbum | undefined>,
-  dbService: DatabaseService
-) => {
+const useCoverArt = (entityKey: string, entity: Ref<UnifiedAlbum | undefined>, dbService: DatabaseService) => {
   const isActive = ref(false)
   const limit = 10
   const offset = ref(0)
@@ -24,22 +20,13 @@ const useCoverArt = (
   const queryTrigger = ref(0)
   const shouldExecuteQuery = ref(false)
 
-  const isQueryEnabled = computed(() => (
-    isActive.value
-    && !!entity.value
-    && !isCompleted.value
-    && shouldExecuteQuery.value
-  ))
+  const isQueryEnabled = computed(
+    () => isActive.value && !!entity.value && !isCompleted.value && shouldExecuteQuery.value
+  )
 
   const pathsMap = new Map<QueryPredicate, QueryFormatter>([
-    [
-      (album): album is undefined => !album,
-      () => ''
-    ],
-    [
-      (album): album is UnifiedAlbum => Boolean(album && isRegularAlbum(album)),
-      (album) => `${album._id}/booklet`
-    ]
+    [(album): album is undefined => !album, () => ''],
+    [(album): album is UnifiedAlbum => Boolean(album && isRegularAlbum(album)), (album) => `${album._id}/booklet`]
   ])
 
   const path = computed(() => {
@@ -71,12 +58,9 @@ const useCoverArt = (
           accumulatedBooklet.value = newData
           isInitialLoad.value = false
         } else {
-          accumulatedBooklet.value = [
-            ...accumulatedBooklet.value,
-            ...newData
-          ]
+          accumulatedBooklet.value = [...accumulatedBooklet.value, ...newData]
         }
-        
+
         totalItems.value = accumulatedBooklet.value.length
 
         if (newData.length < limit) {
@@ -89,7 +73,7 @@ const useCoverArt = (
 
   const loadMoreImages = (currentIndex: number) => {
     const remainingItems = accumulatedBooklet.value.length - currentIndex
-    
+
     if (remainingItems <= 3 && !isCompleted.value && !isFetching.value) {
       offset.value += limit
     }
@@ -120,9 +104,7 @@ const useCoverArt = (
       items: accumulatedBooklet.value,
       total: totalItems.value
     })),
-    isFetching: computed(() => (
-      isInitialLoad.value && isFetching.value
-    )),
+    isFetching: computed(() => isInitialLoad.value && isFetching.value),
     loadMoreImages,
     resetBooklet,
     isActive

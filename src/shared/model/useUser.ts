@@ -6,7 +6,7 @@ export const createUser = (user?: User): User => {
     _id: user?._id || '',
     login: user?.login || '',
     email: user?.email || '',
-    role: user?.role || UserRole.guest,
+    role: user?.role || UserRole.guest
   }
 }
 

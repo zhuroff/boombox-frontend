@@ -19,25 +19,24 @@ import { RouterLink } from 'vue-router'
 import type { JSONSchema4, JSONSchema4Type } from 'json-schema'
 import type { LocaleItem, TableRow, TableSchema } from '~shared/lib'
 
-const componentModules = import.meta.glob<any>([
-  '/src/features/**/UI/*.vue',
-  '/src/entities/**/UI/*.vue'
-], { eager: false })
+const componentModules = import.meta.glob<any>(['/src/features/**/UI/*.vue', '/src/entities/**/UI/*.vue'], {
+  eager: false
+})
 
 const allModulesMap = new Map<string, any>()
 
 Object.keys(componentModules).forEach((path) => {
   const loader = componentModules[path]
-  
-  allModulesMap.set(path, loader)  
-  allModulesMap.set(path.replace(/^\/src\//, '~/'), loader)  
-  allModulesMap.set(path.replace(/^\/src/, ''), loader)  
+
+  allModulesMap.set(path, loader)
+  allModulesMap.set(path.replace(/^\/src\//, '~/'), loader)
+  allModulesMap.set(path.replace(/^\/src/, ''), loader)
   allModulesMap.set(path.replace(/^\/src\//, ''), loader)
 })
 
 type Props = {
   row: TableRow
-  schema: TableSchema,
+  schema: TableSchema
   isActionable?: boolean
   currentLocale?: LocaleItem
 }
@@ -65,10 +64,7 @@ const dateConfig = {
 
 const formatValue = (value: string, schema: JSONSchema4) => {
   if (schema.format === 'date-time' && props.currentLocale) {
-    return (
-      new Date(Number(value))
-        .toLocaleDateString(props.currentLocale.intlName, dateConfig)
-    )
+    return new Date(Number(value)).toLocaleDateString(props.currentLocale.intlName, dateConfig)
   }
 
   return value
@@ -81,74 +77,52 @@ const unwrapValue = (value: JSONSchema4Type) => {
 const renderElement = (key: keyof TableRow, schema: JSONSchema4) => {
   const value = unwrapValue(props.row[key])
 
-  switch(schema.element) {
+  switch (schema.element) {
     case 'img':
-      return h(
-        'img',
-        { src: value },
-      )
+      return h('img', { src: value })
     case 'RouterLink':
-      return h(
-        RouterLink,
-        { to: value }
-      )
+      return h(RouterLink, { to: value })
     case 'a':
-      return h(
-        'a',
-        {
-          href: value,
-          target: schema.isInnerPage ? '_self' : '_blank'
-        }
-      )
+      return h('a', {
+        href: value,
+        target: schema.isInnerPage ? '_self' : '_blank'
+      })
     default:
-      return h(
-        'span',
-        {},
-        formatValue(value, schema)
-      )
+      return h('span', {}, formatValue(value, schema))
   }
 }
 
 const cellComponent = (key: keyof TableRow) => {
   const schemaConfig = props.schema.properties?.[key]
   const value = unwrapValue(props.row[key])
-  
+
   if (!schemaConfig) {
     return h('td', {}, value)
   }
 
   if ('element' in schemaConfig) {
-    return h(
-      'td',
-      {},
-      renderElement(key, schemaConfig)
-    )
+    return h('td', {}, renderElement(key, schemaConfig))
   }
 
   if ('component' in schemaConfig) {
     const componentPath = schemaConfig.component
-    
+
     const componentLoader = allModulesMap.get(componentPath)
-    
+
     if (!componentLoader) {
       console.error(`Component not found: ${componentPath}`)
       console.error('Available components:', Array.from(allModulesMap.keys()))
       return h('td', {}, `Component not found: ${componentPath}`)
     }
-    
+
     return h(
       'td',
       {},
-      h(
-        defineAsyncComponent(componentLoader as any),
-        {
-          ...(schemaConfig.props || {}),
-          value: schemaConfig.props?.valueRef
-            ? props.row[schemaConfig.props.valueRef]
-            : schemaConfig.props.value,
-          onOnEmit: onEmit
-        }
-      )
+      h(defineAsyncComponent(componentLoader as any), {
+        ...(schemaConfig.props || {}),
+        value: schemaConfig.props?.valueRef ? props.row[schemaConfig.props.valueRef] : schemaConfig.props.value,
+        onOnEmit: onEmit
+      })
     )
   }
 
@@ -164,7 +138,7 @@ const cellComponent = (key: keyof TableRow) => {
   transition: color 0.2s var.$animation;
 
   &:last-of-type {
-    border-bottom: none
+    border-bottom: none;
   }
 
   &:hover {

@@ -6,7 +6,7 @@
       @end="orderChanged"
     >
       <TrackRow
-        v-for="(track) in trackList"
+        v-for="track in trackList"
         :key="track._id"
         :track="track"
         :trackOptionsMenu="trackOptionsMenu"
@@ -53,7 +53,7 @@ const dragOptions = computed(() => ({
 const orderChanged = (event: DraggableEvent) => {
   const payload: ReorderPayload = {
     oldOrder: event.oldIndex,
-    newOrder: event.newIndex,
+    newOrder: event.newIndex
   }
 
   emit('trackOrderChanged', payload)
@@ -61,13 +61,15 @@ const orderChanged = (event: DraggableEvent) => {
 
 const trackList: ComputedRef<PlaylistTrack[]> = computed(() => {
   const primaryPlaylistMap = new Map<string, PlaylistTrack>(primaryPlaylist.value.map((track) => [track._id, track]))
-  const secondaryPlaylistMap = new Map<string, PlaylistTrack>(secondaryPlaylist.value.map((track) => [track._id, track]))
+  const secondaryPlaylistMap = new Map<string, PlaylistTrack>(
+    secondaryPlaylist.value.map((track) => [track._id, track])
+  )
 
   return props.tracks.map<PlaylistTrack>((track) => {
     const playlistTrack = (primaryPlaylistMap.get(track._id) || secondaryPlaylistMap.get(track._id))!
 
     return {
-      ...(playlistTrack),
+      ...playlistTrack,
       duration: playlistTrack?.duration || track.duration
     }
   })

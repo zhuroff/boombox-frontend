@@ -1,15 +1,13 @@
 <template>
   <SearchWrapper isWithHeader>
-    <template #header>
-      Collections
-    </template>
+    <template #header> Collections </template>
     <template #body>
       <SearchCreate
         :error="errorMessage"
         :isSaveDisabled="!!isCreatingDisabled"
         :inputValue="newGatheringTitle"
         :inputPlaceholder="inputPlaceholder"
-        @passInputValue="(value) => newGatheringTitle = value"
+        @passInputValue="(value) => (newGatheringTitle = value)"
         @createEntity="createNewGathering"
       />
       <SearchResults
@@ -32,7 +30,14 @@
 <script setup lang="ts">
 import { computed, ref, h } from 'vue'
 import { hostString } from '~shared/utils'
-import { SearchWrapper, SearchCreate, SearchResults, SearchBlock, type SearchResultState, type SearchResultData } from '~features/search'
+import {
+  SearchWrapper,
+  SearchCreate,
+  SearchResults,
+  SearchBlock,
+  type SearchResultState,
+  type SearchResultData
+} from '~features/search'
 import { Sprite } from '~shared/UI'
 import type { CollectionBasic } from '~entities/collection'
 import type { CompilationBasic } from '~entities/compilation'
@@ -56,38 +61,30 @@ const emit = defineEmits<Emits>()
 
 const newGatheringTitle = ref('')
 
-const coveredGatherings = computed(() => (
+const coveredGatherings = computed(() =>
   props.gatherings?.map((el) => ({
     ...el,
     avatar: el.avatar ? hostString(el.avatar) : props.placeholderImage,
     isInGathering: el.entities.some((id) => id === props.entityID)
   }))
-))
+)
 
-const isCreatingDisabled = computed(() => (
-  isNewGatheringTitleSmall.value || isNewGatheringTitleDuplicated.value
-))
+const isCreatingDisabled = computed(() => isNewGatheringTitleSmall.value || isNewGatheringTitleDuplicated.value)
 
-const isNewGatheringTitleSmall = computed(() => (
-  newGatheringTitle.value.length < 3
-))
+const isNewGatheringTitleSmall = computed(() => newGatheringTitle.value.length < 3)
 
-const isNewGatheringTitleDuplicated = computed(() => (
-  props.gatherings?.some(({ title }) => (
-    title.toLowerCase() === newGatheringTitle.value.toLowerCase()
-  ))
-))
+const isNewGatheringTitleDuplicated = computed(() =>
+  props.gatherings?.some(({ title }) => title.toLowerCase() === newGatheringTitle.value.toLowerCase())
+)
 
-const errorMessage = computed(() => (
-  isNewGatheringTitleDuplicated.value
-    ? 'This title is already exists'
-    : null
-))
+const errorMessage = computed(() => (isNewGatheringTitleDuplicated.value ? 'This title is already exists' : null))
 
-const gatheringBlocks = computed<SearchResultState[]>(() => [{
-  key: 'gathering',
-  data: coveredGatherings.value || []
-}])
+const gatheringBlocks = computed<SearchResultState[]>(() => [
+  {
+    key: 'gathering',
+    data: coveredGatherings.value || []
+  }
+])
 
 const getRowComponent = (_: string, data: SearchResultData) => {
   const isInGathering: boolean = 'isInGathering' in data ? !!data.isInGathering : false
@@ -99,22 +96,12 @@ const getRowComponent = (_: string, data: SearchResultData) => {
       onClick: () => selectGathering(isInGathering, data._id)
     },
     [
-      h(
-        'img',
-        { src: 'avatar' in data ? data.avatar : props.placeholderImage }
-      ),
-      h(
-        'strong',
-        {},
-        data.title
-      ),
-      h(
-        Sprite,
-        {
-          name: isInGathering ? 'check' : 'plus',
-          class: [{ '--active' : isInGathering }]
-        }
-      )
+      h('img', { src: 'avatar' in data ? data.avatar : props.placeholderImage }),
+      h('strong', {}, data.title),
+      h(Sprite, {
+        name: isInGathering ? 'check' : 'plus',
+        class: [{ '--active': isInGathering }]
+      })
     ]
   )
 }

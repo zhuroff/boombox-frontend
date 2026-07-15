@@ -1,6 +1,6 @@
 <template>
   <li
-    :class="[{ '--active' : isTrackPlaying }, 'playlist__track']"
+    :class="[{ '--active': isTrackPlaying }, 'playlist__track']"
     @click="() => playTrack(track)"
   >
     <Button
@@ -65,9 +65,7 @@ const { toggleTrackAvailability } = usePlaylistService()
 
 const proxiedAlbumCover = computed(() => proxyCloudUrl(props.track.albumCover))
 
-const trackTitle = computed(() => (
-  (props.order < 10 ? `0${props.order}` : props.order) + `. ${props.track.title}`
-))
+const trackTitle = computed(() => (props.order < 10 ? `0${props.order}` : props.order) + `. ${props.track.title}`)
 
 const trackDuration = computed(() => {
   return secondsToMinutes(props.track.duration)
@@ -193,7 +191,6 @@ const isTrackPlaying = computed(() => {
   }
 
   &-disable {
-
     @include var.media('<desktop') {
       padding: 0.75rem;
     }

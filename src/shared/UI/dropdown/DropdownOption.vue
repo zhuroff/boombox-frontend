@@ -3,7 +3,10 @@
     :class="className"
     @click="() => emit('applyValue', option)"
   >
-    <Sprite v-if="option.icon" :name="option.icon" />
+    <Sprite
+      v-if="option.icon"
+      :name="option.icon"
+    />
     <span class="dropdown__option-label">
       {{ option.path }}
     </span>
@@ -25,7 +28,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 'medium',
+  size: 'medium'
 })
 
 const emit = defineEmits<Emits>()
@@ -57,7 +60,7 @@ const className = computed(() => [
 
   &.--small {
     padding: 0 0.5rem;
-    font-size: .75rem;
+    font-size: 0.75rem;
 
     .icon {
       width: 1rem;
@@ -69,7 +72,7 @@ const className = computed(() => [
   }
 
   &.--medium {
-    padding: .25rem 1rem;
+    padding: 0.25rem 1rem;
     font-size: 1rem;
 
     .icon {
@@ -82,7 +85,7 @@ const className = computed(() => [
   }
 
   &.--large {
-    padding: .5rem 1.5rem;
+    padding: 0.5rem 1.5rem;
     font-size: 1.25rem;
 
     .icon {

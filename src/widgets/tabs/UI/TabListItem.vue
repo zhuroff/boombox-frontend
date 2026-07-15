@@ -20,7 +20,6 @@ defineProps<Props>()
 @use '~app/styles/variables' as var;
 
 .tabs {
-  
   &__item {
     position: relative;
     padding-left: var.$fieldPadding;
@@ -29,7 +28,7 @@ defineProps<Props>()
     .button {
       color: var.$paleDP;
     }
-    
+
     &.--active {
       color: var.$accent;
 

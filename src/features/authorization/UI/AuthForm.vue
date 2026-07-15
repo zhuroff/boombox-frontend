@@ -7,7 +7,7 @@
       <form.Field
         name="email"
         :validators="{
-          onChange: ({ value }) => !value ? localize('loginForm.emailRequired') : undefined
+          onChange: ({ value }) => (!value ? localize('loginForm.emailRequired') : undefined)
         }"
       >
         <template v-slot="{ field, state }">
@@ -33,7 +33,7 @@
       <form.Field
         name="password"
         :validators="{
-          onChange: ({ value }) => !value ? localize('loginForm.passwordRequired') : undefined
+          onChange: ({ value }) => (!value ? localize('loginForm.passwordRequired') : undefined)
         }"
       >
         <template v-slot="{ field, state }">

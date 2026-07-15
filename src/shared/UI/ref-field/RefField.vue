@@ -7,11 +7,11 @@
       :size="size"
       :isError="isError"
       :modelValue="refQuery || selectedOption?.label"
-      @onInput="(value) => {
-        value.length > 0
-          ? debouncedAssigning(value)
-          : refQuery = ''
-      }"
+      @onInput="
+        (value) => {
+          value.length > 0 ? debouncedAssigning(value) : (refQuery = '')
+        }
+      "
     />
 
     <Button

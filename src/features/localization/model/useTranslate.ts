@@ -44,7 +44,7 @@ const useTranslate = () => {
 
     if (!value) return `{${path}}`
     if (!vars.length) return value
-    
+
     return value.replace(/{x}/g, () => String(vars.shift() ?? '{...}'))
   }
 

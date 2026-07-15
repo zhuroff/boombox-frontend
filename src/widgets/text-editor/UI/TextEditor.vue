@@ -1,8 +1,14 @@
 <template>
-  <div ref="editorWrapper" class="editor-wrapper">
-    <div v-if="editor && !isMobile && isEditMode" class="toolbar">
+  <div
+    ref="editorWrapper"
+    class="editor-wrapper"
+  >
+    <div
+      v-if="editor && !isMobile && isEditMode"
+      class="toolbar"
+    >
       <div class="toolbar__format">
-        <div 
+        <div
           v-if="hasAnyFormat(TextEditorFormatting.BOLD, TextEditorFormatting.ITALIC)"
           class="toolbar__group"
         >
@@ -27,8 +33,8 @@
             <i>I</i>
           </button>
         </div>
-        
-        <div 
+
+        <div
           v-if="hasAnyFormat(TextEditorFormatting.HEADING_2, TextEditorFormatting.HEADING_3)"
           class="toolbar__group"
         >
@@ -51,8 +57,8 @@
             H3
           </button>
         </div>
-        
-        <div 
+
+        <div
           v-if="hasAnyFormat(TextEditorFormatting.BULLET_LIST, TextEditorFormatting.ORDERED_LIST)"
           class="toolbar__group"
         >
@@ -75,8 +81,8 @@
             OL
           </button>
         </div>
-        
-        <div 
+
+        <div
           v-if="hasAnyFormat(TextEditorFormatting.BLOCKQUOTE)"
           class="toolbar__group"
         >
@@ -90,8 +96,8 @@
             Q
           </button>
         </div>
-        
-        <div 
+
+        <div
           v-if="hasAnyFormat(TextEditorFormatting.LINK)"
           class="toolbar__group"
         >
@@ -107,22 +113,18 @@
         </div>
       </div>
     </div>
-    
+
     <EditorContent
       :editor="editor"
-      :class="[
-        { '--editable' : isEditMode },
-        { '--expanded' : isExpanded },
-        'editor-content'
-      ]"
+      :class="[{ '--editable': isEditMode }, { '--expanded': isExpanded }, 'editor-content']"
       @dblclick="!isEditMode && (isEditMode = true)"
     />
 
-    <slot 
+    <slot
       name="expand-controls"
       :isExpanded="isExpanded"
       :isEditMode="isEditMode"
-      :toggleExpanded="() => isExpanded = !isExpanded"
+      :toggleExpanded="() => (isExpanded = !isExpanded)"
     />
   </div>
 </template>
@@ -161,7 +163,7 @@ const isExpanded = ref(props.defaultExpanded)
 const editorWrapper = ref<HTMLElement | null>(null)
 
 const hasAnyFormat = (...formats: TextEditorFormatting[]) => {
-  return formats.some(format => props.formatConfig.has(format))
+  return formats.some((format) => props.formatConfig.has(format))
 }
 
 const handleClickOutside = (event: MouseEvent) => {
@@ -188,7 +190,7 @@ const editor = useEditor({
   editorProps: {
     editable: () => isEditMode.value,
     attributes: {
-      spellcheck: 'false',
+      spellcheck: 'false'
     }
   },
   onUpdate: debounce(({ editor }) => {
@@ -206,16 +208,16 @@ const setLink = () => {
   }
 
   const url = window.prompt('Введите URL:')
-  
+
   if (url === null) {
     return
   }
-  
+
   if (url === '') {
     editor.value.chain().focus().extendMarkRange('link').unsetLink().run()
     return
   }
-  
+
   editor.value.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
 }
 
@@ -276,7 +278,6 @@ onUnmounted(() => {
     overflow: hidden;
 
     &:not(.--expanded) {
-
       @include var.media('<=mobile') {
         max-height: 0;
         padding: 0;
@@ -338,7 +339,7 @@ onUnmounted(() => {
     gap: var.$fieldPadding;
     flex-wrap: wrap;
   }
-  
+
   &__group {
     display: flex;
     gap: var.$fieldPadding;
@@ -349,7 +350,7 @@ onUnmounted(() => {
       gap: 0.375rem;
       padding-right: 0.375rem;
     }
-    
+
     &:last-child {
       border-right: none;
       padding-right: 0;
@@ -371,19 +372,19 @@ onUnmounted(() => {
       cursor: pointer;
       font-size: 14px;
       transition: all 0.2s ease;
-      
+
       &:hover:not(:disabled) {
         background-color: var.$paleDP;
         border-color: var.$paleDP;
         transition: all 0.2s ease;
         color: var.$light;
       }
-      
+
       &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
       }
-      
+
       &.is-active {
         background-color: var.$paleDP;
         color: white;
@@ -415,22 +416,23 @@ onUnmounted(() => {
   & > *:last-child {
     margin-bottom: 0 !important;
   }
-  
+
   &:focus {
     box-shadow: var.$shadowInner;
   }
-  
+
   h2 {
     @include var.serif(1.75rem);
     margin: var.$minPadding 0;
   }
-  
+
   h3 {
     @include var.serif(1.5rem);
     margin: var.$minPadding 0;
   }
-  
-  ul, ol {
+
+  ul,
+  ol {
     padding-left: var.$mainPadding;
     margin: var.$fieldPadding 0;
   }
@@ -442,11 +444,11 @@ onUnmounted(() => {
   ol {
     list-style-type: decimal;
   }
-  
+
   li {
     margin: calc(var.$fieldPadding / 2) 0;
   }
-  
+
   blockquote {
     border-left: 4px solid var.$paleDP;
     margin: var.$fieldPadding 0;
@@ -456,17 +458,18 @@ onUnmounted(() => {
     padding: var.$minPadding var.$mainPadding;
     border-radius: var.$borderRadiusMD;
   }
-  
+
   a.editor-link {
     color: inherit;
     color: var.$accent;
   }
-  
+
   p {
     margin: var.$fieldPadding 0;
   }
 
-  i, em {
+  i,
+  em {
     font-style: italic;
   }
 }

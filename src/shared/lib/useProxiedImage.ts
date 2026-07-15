@@ -7,4 +7,3 @@ export const useProxiedImage = (imageUrl: Ref<string | undefined> | string | und
     return proxyCloudUrl(url)
   })
 }
-

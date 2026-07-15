@@ -59,17 +59,14 @@ const cardsMap: Record<string, Component> = {
   genres: CategoryCard
 }
 
-const entityCardComponent = computed(() => (
-  h(
-    cardsMap[props.entityKey],
-    {
-      card: props.card,
-      entityKey: props.entityKey,
-      placeholderPreview: props.placeholderPreview,
-      cardFrame: 'frame' in props.card ? props.card.frame : undefined
-    }
-  )
-))
+const entityCardComponent = computed(() =>
+  h(cardsMap[props.entityKey], {
+    card: props.card,
+    entityKey: props.entityKey,
+    placeholderPreview: props.placeholderPreview,
+    cardFrame: 'frame' in props.card ? props.card.frame : undefined
+  })
+)
 
 const { isAdmin } = useUser()
 
@@ -93,7 +90,7 @@ const deleteEntity = () => {
   &:hover {
     .cardlist__item-action {
       opacity: 1;
-      transition: opacity .3s var.$animation;
+      transition: opacity 0.3s var.$animation;
     }
   }
 
@@ -136,7 +133,7 @@ const deleteEntity = () => {
     }
 
     &.--offset {
-      width: calc(20% - var.$basicPadding);  
+      width: calc(20% - var.$basicPadding);
     }
   }
 
@@ -158,7 +155,7 @@ const deleteEntity = () => {
     right: 2.5rem;
     z-index: 10;
     background-color: var.$light;
-    transition: opacity .3s var.$animation;
+    transition: opacity 0.3s var.$animation;
   }
 }
 </style>

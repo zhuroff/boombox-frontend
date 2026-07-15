@@ -48,7 +48,7 @@ defineProps<Props>()
 
   &.--dark {
     background-color: var.$transDark;
-    
+
     .preloader__icon {
       fill: var.$light;
     }
@@ -59,7 +59,6 @@ defineProps<Props>()
   }
 
   &__icon {
-    
     path {
       fill: var.$paleDP;
     }

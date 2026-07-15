@@ -1,4 +1,4 @@
-<template>  
+<template>
   <div class="slider">
     <Carousel
       ref="slider"
@@ -11,14 +11,19 @@
         :key="item"
       >
         <div class="carousel__item">
-          <img class="carousel__image" :src="item">
+          <img
+            class="carousel__image"
+            :src="item"
+          />
         </div>
       </Slide>
       <template #addons="{ currentSlide }">
-        <Navigation :class="{
-          '--full' : isFullSlideSet,
-          '--first' : currentSlide === 0
-        }" />
+        <Navigation
+          :class="{
+            '--full': isFullSlideSet,
+            '--first': currentSlide === 0
+          }"
+        />
       </template>
     </Carousel>
   </div>
@@ -48,7 +53,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const proxiedData = computed(() => props.data.map(url => proxyCloudUrl(url) || url))
+const proxiedData = computed(() => props.data.map((url) => proxyCloudUrl(url) || url))
 
 const handleSlideStart = (data: BookletSlideState) => {
   emit('slideChanged', data)
@@ -68,23 +73,23 @@ const handleSlideStart = (data: BookletSlideState) => {
 
   .carousel {
     height: 100%;
-  
+
     &__viewport,
     &__track,
     &__slide {
       height: inherit;
     }
-  
+
     &__slide {
       padding: var.$mainPadding;
     }
-  
+
     &__image {
       display: block;
       max-height: calc(100vh - 50px);
       max-width: calc(100vw - 50px);
     }
-  
+
     &__prev {
       background-color: transparent;
       color: var.$paleDP;
@@ -117,7 +122,7 @@ const handleSlideStart = (data: BookletSlideState) => {
         height: 75px;
       }
     }
-  
+
     &__next {
       background-color: transparent;
       color: var.$paleDP;

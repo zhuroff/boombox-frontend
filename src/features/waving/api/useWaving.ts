@@ -6,7 +6,7 @@ import type { TrackBasic } from '~entities/track'
 
 const useWaving = (dbService: DatabaseService, path = 'tracks/wave') => {
   const waveTracks = ref<TrackBasic[]>([])
-  
+
   const { mutate: fetchWaving } = useMutation({
     mutationFn: ([entityKey, entityTitle]: [string, string]) => {
       return dbService.getEntityList<TrackBasic[]>(path, {

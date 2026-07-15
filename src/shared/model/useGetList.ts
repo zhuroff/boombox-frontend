@@ -13,10 +13,7 @@ const useGetList = <T>(
     enabled: isEnabled,
     refetchOnWindowFocus: false,
     queryKey: [payload],
-    queryFn: () => dbService.getEntityList(
-      payload.value.entityKey,
-      payload.value.requestConfig
-    ),
+    queryFn: () => dbService.getEntityList(payload.value.entityKey, payload.value.requestConfig)
   })
 
   return {

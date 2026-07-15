@@ -12,7 +12,7 @@ const useCategory = (categoryKey: Ref<string>, dbService: DatabaseService) => {
 
       return {
         ...oldData,
-        [key]: value,
+        [key]: value
       }
     })
   }

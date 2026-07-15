@@ -86,7 +86,7 @@
       {{ localize('totalLength') }}:&nbsp;
       <span class="album__hero-category">
         {{ length }}
-    </span>
+      </span>
     </div>
   </div>
 </template>
@@ -109,7 +109,6 @@ const { localize } = useLocalization()
 @use '~/app/styles/variables' as var;
 
 .album__hero {
-
   &-metadata {
     color: var.$paleMD;
 
@@ -130,7 +129,7 @@ const { localize } = useLocalization()
       color: var.$light;
     }
 
-    &[disabled=true] {
+    &[disabled='true'] {
       pointer-events: none;
       cursor: default;
     }

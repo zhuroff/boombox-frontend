@@ -15,7 +15,7 @@ const backupsTableSchema: TableSchema = {
         action: 'restore',
         size: 'small',
         align: 'right',
-        valueRef: 'timestamp',
+        valueRef: 'timestamp'
       }
     },
     delete: {
@@ -25,7 +25,7 @@ const backupsTableSchema: TableSchema = {
         action: 'delete',
         size: 'small',
         align: 'right',
-        valueRef: 'timestamp',
+        valueRef: 'timestamp'
       }
     }
   }

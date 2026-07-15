@@ -11,7 +11,6 @@
           isRounded
           :isDisabled="!isPrevTrackAvailable || isSwitchingTrack"
           @click="playPrev"
-
         />
         <Button
           :icon="playingTrack.isOnPause ? 'play' : 'pause'"
@@ -40,18 +39,10 @@
       <div :class="[{ '--screensave': screensaveMode }, 'player__control-group']">
         <PlayerSound v-if="!isMobile" />
         <Button
-          icon="vinyl"
-          title="Activate vinyl mode"
-          isRounded
-          :isDisabled="playingTrack?.isOnPause"
-          :class="[{ '--active' : isVinylMode }]"
-          @click="toggleVinylMode"
-        />
-        <Button
           icon="repeat"
           title="Repeat track"
           isRounded
-          :class="[{ '--active' : playingTrack.isOnRepeat }]"
+          :class="[{ '--active': playingTrack.isOnRepeat }]"
           @click="playingTrack.isOnRepeat = !playingTrack.isOnRepeat"
         />
         <Button
@@ -64,7 +55,7 @@
           icon="playlist"
           title="Show playlist"
           isRounded
-          :class="[{ '--active' : isPlaylistExpanded }]"
+          :class="[{ '--active': isPlaylistExpanded }]"
           @click="isPlaylistExpanded = !isPlaylistExpanded"
         />
       </div>
@@ -83,12 +74,10 @@ const { isMobile } = useDevice()
 const {
   playNext,
   playPrev,
-  isVinylMode,
   playingTrack,
   progressTime,
   progressLine,
   screensaveMode,
-  toggleVinylMode,
   isPlaylistExpanded,
   isNextTrackAvailable,
   isPrevTrackAvailable,
@@ -108,13 +97,11 @@ const searchOnYouTube = () => {
 </script>
 
 <style lang="scss">
-@use "sass:math";
+@use 'sass:math';
 @use '~app/styles/variables' as var;
 
 .player {
-
   &__control {
-    
     @include var.media('<desktop') {
       position: relative;
       z-index: 100;
@@ -167,7 +154,6 @@ const searchOnYouTube = () => {
       gap: var.$basicPadding;
 
       &.--main {
-
         @include var.media('<desktop') {
           flex-wrap: wrap;
           justify-content: center;

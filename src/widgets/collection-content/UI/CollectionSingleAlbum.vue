@@ -8,7 +8,7 @@
       :isDraggable="true"
       @deleteEntity="(payload: DeletePayload) => emit('deleteEntity', payload)"
     />
-    
+
     <TextEditor
       :content="album.post || ''"
       :isMobile="isMobile"
@@ -16,7 +16,7 @@
       @updateContent="(content: string) => emit('updatePost', [content, album._id])"
     >
       <template #expand-controls="{ isExpanded, isEditMode, toggleExpanded }">
-        <div 
+        <div
           v-if="!isEditMode && !isExpanded"
           class="editor-expand-trigger"
           @click="toggleExpanded"
@@ -24,7 +24,7 @@
           <span class="editor-expand-text">Expand article</span>
         </div>
 
-        <div 
+        <div
           v-if="!isEditMode && isExpanded"
           class="editor-collapse-trigger"
           @click="toggleExpanded"
@@ -66,7 +66,7 @@ const editorFormatConfig: TextEditorFormatConfig = new Set([
   TextEditorFormatting.BULLET_LIST,
   TextEditorFormatting.ORDERED_LIST,
   TextEditorFormatting.BLOCKQUOTE,
-  TextEditorFormatting.LINK,
+  TextEditorFormatting.LINK
 ])
 </script>
 
@@ -74,7 +74,6 @@ const editorFormatConfig: TextEditorFormatConfig = new Set([
 @use '~app/styles/variables' as var;
 
 .collection {
-
   &__entry {
     display: flex;
     align-items: flex-start;
@@ -93,7 +92,6 @@ const editorFormatConfig: TextEditorFormatConfig = new Set([
     }
 
     .cardlist__item {
-
       @include var.media('<=mobile') {
         &.--row {
           width: 100%;
