@@ -31,11 +31,7 @@ const routePath = computed(() => ({
   path: `/${props.entityKey}/${props.card._id}`
 }))
 
-const cardCover = computed(() => (
-  props.card.avatar ? host(props.card.avatar) : props.placeholderPreview
-))
+const cardCover = computed(() => (props.card.avatar ? host(props.card.avatar) : props.placeholderPreview))
 
-const cardCaption = computed(() => (
-  `${localize('navigation.albums')}: ${props.card.albums}`
-))
+const cardCaption = computed(() => `${localize('navigation.albums')}: ${props.card.albums}`)
 </script>

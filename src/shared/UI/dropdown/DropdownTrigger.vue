@@ -1,16 +1,20 @@
 <template>
-  <div :class="[
-    'dropdown__trigger',
-    {
-      '--small': size === 'small',
-      '--medium': size === 'medium',
-      '--large': size === 'large'
-    }
-  ]">
+  <div
+    :class="[
+      'dropdown__trigger',
+      {
+        '--small': size === 'small',
+        '--medium': size === 'medium',
+        '--large': size === 'large',
+        '--inverted': isInverted
+      }
+    ]"
+  >
     <span
       v-if="placeholder && !currentValue.label"
       class="dropdown__trigger-label"
-    >{{ placeholder }}</span>
+      >{{ placeholder }}</span
+    >
     <Button
       type="button"
       :label="currentValue.label"
@@ -32,13 +36,16 @@ interface Props {
     label: string
     icon?: string
   }
+  isInverted?: boolean
 }
 
 interface Emits {
   (e: 'triggerToggle'): void
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  isInverted: false
+})
 const emit = defineEmits<Emits>()
 </script>
 
@@ -70,11 +77,39 @@ const emit = defineEmits<Emits>()
     pointer-events: none;
   }
 
-  &.--small {
+  &.--inverted {
+    & > .button {
+      border-color: var.$paleLW;
+      color: var.$paleLW;
+      background-color: transparent;
 
+      .icon {
+        fill: var.$paleLW;
+      }
+
+      &:hover {
+        background-color: transparent;
+        color: var.$light;
+
+        .icon {
+          fill: var.$light;
+        }
+      }
+    }
+
+    & > .icon {
+      fill: var.$paleLW;
+    }
+
+    &:hover > .icon {
+      fill: var.$light;
+    }
+  }
+
+  &.--small {
     .dropdown__trigger-label {
-      font-size: .75rem;
-      left: .875rem;
+      font-size: 0.75rem;
+      left: 0.875rem;
     }
 
     & > .icon {
@@ -84,9 +119,8 @@ const emit = defineEmits<Emits>()
   }
 
   &.--medium {
-
     .dropdown__trigger-label {
-      font-size: .875rem;
+      font-size: 0.875rem;
       left: 1rem;
     }
 
@@ -97,7 +131,6 @@ const emit = defineEmits<Emits>()
   }
 
   &.--large {
-
     .dropdown__trigger-label {
       font-size: 1rem;
       left: 1.25rem;

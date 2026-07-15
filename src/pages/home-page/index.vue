@@ -53,21 +53,13 @@ const { isMobile } = useDevice()
 const activeTabId = ref<number | null>(null)
 const discogsCollection = ref<DiscogsCollectionRow[]>([])
 
-const {
-  paginationState,
-  paginationConfig,
-  updatePaginationState,
-  updatePaginationConfig
-} = usePaginator({
+const { paginationState, paginationConfig, updatePaginationState, updatePaginationConfig } = usePaginator({
   isRouted: false,
   docsSort: ref({ date_added: -1 }),
   localStorageKey: 'discogs-collection'
 })
 
-const {
-  getDiscogsCollection,
-  isDiscogsCollectionLoading
-} = useDiscogs(discogsService)
+const { getDiscogsCollection, isDiscogsCollectionLoading } = useDiscogs(discogsService)
 
 const discogsCollectionQueryConfig = computed(() => ({
   folderName: activeTabId.value
@@ -75,22 +67,18 @@ const discogsCollectionQueryConfig = computed(() => ({
     : null
 }))
 
-const renderCollectionTitle = (item: DiscogsCollectionRow) => (
-  h(
-    Button,
-    {
-      label: `${item.name}: ${item.count}`,
-      isText: true,
-      onClick: () => {
-        activeTabId.value = item.id
-        paginationState.value.page = 1
-      }
+const renderCollectionTitle = (item: DiscogsCollectionRow) =>
+  h(Button, {
+    label: `${item.name}: ${item.count}`,
+    isText: true,
+    onClick: () => {
+      activeTabId.value = item.id
+      paginationState.value.page = 1
     }
-  )
-)
+  })
 
 const activeCollection = computed(() => {
-  return discogsCollection.value.find(col => col.id === activeTabId.value)
+  return discogsCollection.value.find((col) => col.id === activeTabId.value)
 })
 
 watch(
@@ -99,31 +87,27 @@ watch(
     getDiscogsCollection({
       ...discogsCollectionQueryConfig.value,
       ...value
+    }).then((data) => {
+      if (!activeTabId.value) {
+        activeTabId.value = data[0].id
+        discogsCollection.value = data
+      } else {
+        const currentCollection = data[0]
+        discogsCollection.value = discogsCollection.value.map((folder) =>
+          folder.id === currentCollection.id ? currentCollection : folder
+        )
+      }
     })
-      .then((data) => {
-        if (!activeTabId.value) {
-          activeTabId.value = data[0].id
-          discogsCollection.value = data
-        } else {
-          const currentCollection = data[0]
-          discogsCollection.value = discogsCollection.value.map((folder) => (
-            folder.id === currentCollection.id ? currentCollection : folder
-          ))
-        }
-      })
   },
   { immediate: true }
 )
 
-watch(
-  activeCollection,
-  (collection) => {
-    if (collection?.pagination) {
-      updatePaginationConfig('totalDocs', collection.pagination.items)
-      updatePaginationConfig('totalPages', collection.pagination.pages)
-    }
+watch(activeCollection, (collection) => {
+  if (collection?.pagination) {
+    updatePaginationConfig('totalDocs', collection.pagination.items)
+    updatePaginationConfig('totalPages', collection.pagination.pages)
   }
-)
+})
 </script>
 
 <style lang="scss" scoped>

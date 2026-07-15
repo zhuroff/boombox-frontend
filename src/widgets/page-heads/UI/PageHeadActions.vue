@@ -9,6 +9,7 @@
       isInverted
       @click="action.action"
     />
+    <slot name="append"></slot>
   </div>
 </template>
 
@@ -30,7 +31,6 @@ const { localize } = useLocalization()
 @use '~/app/styles/variables' as var;
 
 .album__hero {
-
   &-actions {
     display: flex;
     align-items: center;
@@ -45,6 +45,50 @@ const { localize } = useLocalization()
       position: absolute;
       bottom: 0;
       right: 0;
+    }
+
+    :deep(.button.--vinyl-toggle) {
+      .icon {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    :deep(.button.--vinyl-toggle:not(.--inverted)) {
+      border-color: var.$paleLW;
+      color: var.$paleLW;
+
+      .icon {
+        fill: var.$paleLW;
+      }
+
+      &:hover {
+        background-color: transparent;
+        color: var.$light;
+
+        .icon {
+          fill: var.$light;
+        }
+      }
+    }
+
+    :deep(.button.--vinyl-toggle.--inverted) {
+      background-color: var.$light;
+      border-color: var.$light;
+      color: var.$dark;
+
+      .icon {
+        fill: var.$dark;
+      }
+
+      &:hover {
+        background-color: var.$light;
+        color: var.$dark;
+
+        .icon {
+          fill: var.$dark;
+        }
+      }
     }
   }
 }

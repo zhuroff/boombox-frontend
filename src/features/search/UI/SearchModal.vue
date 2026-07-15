@@ -25,10 +25,8 @@
       </SearchResults>
     </template>
     <template #footer>
-      {{ localize('search.byAlbum') }} &nbsp;&bull;&nbsp;
-      {{ localize('search.byArtist') }} &nbsp;&bull;&nbsp;
-      {{ localize('search.byGenre') }} &nbsp;&bull;&nbsp;
-      {{ localize('search.byPeriod') }} &nbsp;&bull;&nbsp;
+      {{ localize('search.byAlbum') }} &nbsp;&bull;&nbsp; {{ localize('search.byArtist') }} &nbsp;&bull;&nbsp;
+      {{ localize('search.byGenre') }} &nbsp;&bull;&nbsp; {{ localize('search.byPeriod') }} &nbsp;&bull;&nbsp;
       {{ localize('search.byTrack') }}
     </template>
   </SearchWrapper>
@@ -68,55 +66,22 @@ const debouncedSearch = debounce((value: string) => {
 })
 
 const getRowComponent = (key: string, data: SearchResultData) => {
-  switch(key) {
+  switch (key) {
     case 'albums':
-      return h(
-        RouterLink,
-        { to: `/albums/${data._id}`, class: 'search__block-action' },
-        [
-          h(
-            'img',
-            { src: proxyCloudUrl((data as AlbumBasic).coverURL) || coverPlaceholders('album') },
-          ),
-          h(
-            'div',
-            {},
-            [
-              h(
-                'strong',
-                {},
-                (data as AlbumBasic).title
-              ),
-              h(
-                'span',
-                {},
-                (data as AlbumBasic).artists?.map((a) => a.title).join(', ')
-              )
-            ]
-          )
-        ]
-      )
+      return h(RouterLink, { to: `/albums/${data._id}`, class: 'search__block-action' }, [
+        h('img', { src: proxyCloudUrl((data as AlbumBasic).coverURL) || coverPlaceholders('album') }),
+        h('div', {}, [
+          h('strong', {}, (data as AlbumBasic).title),
+          h('span', {}, (data as AlbumBasic).artists?.map((a) => a.title).join(', '))
+        ])
+      ])
     case 'tracks':
-      return h(
-        SearchBlockTrack,
-        { track: data as TrackBasic }
-      )
+      return h(SearchBlockTrack, { track: data as TrackBasic })
     default:
-      return h(
-        RouterLink,
-        { to: `/${key}/${data._id}`, class: 'search__block-action' },
-        [
-          h(
-            'img',
-            { src: 'avatar' in data ? hostString(String(data.avatar)) : coverPlaceholders(key) },
-          ),
-          h(
-            'strong',
-            {},
-            data.title
-          )
-        ]
-      )
+      return h(RouterLink, { to: `/${key}/${data._id}`, class: 'search__block-action' }, [
+        h('img', { src: 'avatar' in data ? hostString(String(data.avatar)) : coverPlaceholders(key) }),
+        h('strong', {}, data.title)
+      ])
   }
 }
 </script>

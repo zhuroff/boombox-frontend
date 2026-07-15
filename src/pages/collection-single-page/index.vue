@@ -21,7 +21,6 @@
         @saveTitle="saveTitle"
       />
     </transition>
-
   </section>
 </template>
 
@@ -49,7 +48,7 @@ const collectionId = computed(() => collection.value?._id || null)
 
 const { updateEntry, reorderEntities } = useUpdateEntity(pageEntityKey, dbService, collectionId)
 
-const saveNewPost = (config: { payload: { albumId: string; post: string }, path: 'post' }) => {
+const saveNewPost = (config: { payload: { albumId: string; post: string }; path: 'post' }) => {
   updateEntry(config).catch(console.error)
 }
 
@@ -67,11 +66,8 @@ const changeAlbumsOrder = (event: DraggableEvent) => {
 }
 
 const saveTitle = (value: string) => {
-  updateEntry({ payload: { title: value }, path: 'title' })
-    .catch(console.error)
+  updateEntry({ payload: { title: value }, path: 'title' }).catch(console.error)
 }
 
-const totalCounts = computed(() => (
-  localize('totalAlbums') + `: ${(collection.value?.albums?.length || 0)}`
-))
+const totalCounts = computed(() => localize('totalAlbums') + `: ${collection.value?.albums?.length || 0}`)
 </script>

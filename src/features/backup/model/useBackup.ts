@@ -58,22 +58,34 @@ const useBackup = (action: BackupAction, backupService: BackupService, payload?:
   }
 
   const actionsMap = new Map<BackupAction, BackupActionConfig>([
-    ['get', {
-      label: 'settings.getBackups',
-      handler: backupService.fetchBackups
-    }],
-    ['create', {
-      label: 'settings.createBackup',
-      handler: createBackupHandler
-    }],
-    ['restore', {
-      label: 'settings.restoreBackup',
-      handler: restoreBackupHandler
-    }],
-    ['delete', {
-      label: 'settings.deleteBackup',
-      handler: deleteBackupHandler
-    }]
+    [
+      'get',
+      {
+        label: 'settings.getBackups',
+        handler: backupService.fetchBackups
+      }
+    ],
+    [
+      'create',
+      {
+        label: 'settings.createBackup',
+        handler: createBackupHandler
+      }
+    ],
+    [
+      'restore',
+      {
+        label: 'settings.restoreBackup',
+        handler: restoreBackupHandler
+      }
+    ],
+    [
+      'delete',
+      {
+        label: 'settings.deleteBackup',
+        handler: deleteBackupHandler
+      }
+    ]
   ])
 
   const targetAction = computed(() => {

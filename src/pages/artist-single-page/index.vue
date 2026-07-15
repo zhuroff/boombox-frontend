@@ -39,15 +39,9 @@ const pageEntityKey = ref('artists')
 const { localize } = useLocalization()
 const { isMobile } = useDevice()
 
-const {
-  category,
-  isFetched,
-  updateCategoryValue
-} = useCategory(pageEntityKey, dbService)
+const { category, isFetched, updateCategoryValue } = useCategory(pageEntityKey, dbService)
 
-const totalCounts = computed(() => (
-  localize('totalAlbums') + `: ${(category.value?.albums?.length || 0)}`
-))
+const totalCounts = computed(() => localize('totalAlbums') + `: ${category.value?.albums?.length || 0}`)
 
 const setUploadedImage = (payload: UploadImageResult) => {
   if (category.value) {

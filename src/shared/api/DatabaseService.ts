@@ -5,10 +5,7 @@ export default class DatabaseService {
   #configToQueryString(config: RequestConfig) {
     const params = new URLSearchParams()
 
-    const appendParams = (
-      obj: Record<string, any>,
-      prefix = ''
-    ) => {
+    const appendParams = (obj: Record<string, any>, prefix = '') => {
       for (const [key, value] of Object.entries(obj)) {
         const fullKey = prefix ? `${prefix}.${key}` : key
 
@@ -51,7 +48,7 @@ export default class DatabaseService {
     if (!payload) {
       throw new Error('Query payload is not defined')
     }
-    
+
     const response = await api.patch<T>(`/api/${entityKey}/update`, payload)
     return response.data
   }

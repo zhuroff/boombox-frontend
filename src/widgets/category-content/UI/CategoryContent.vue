@@ -41,9 +41,7 @@ defineProps<Props>()
 @use '~/app/styles/variables' as var;
 
 .category {
-
   &__content {
-
     @include var.media('<desktop') {
       padding: var.$minPadding var.$minPadding var.$mainPadding;
     }

@@ -2,11 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import type { Ref, ComputedRef } from 'vue'
 import type DatabaseService from '~shared/api/DatabaseService'
 
-const useUpdateEntity = <T, U>(
-  entityKey: Ref<string>,
-  dbService: DatabaseService,
-  id?: ComputedRef<string | null>
-) => {
+const useUpdateEntity = <T, U>(entityKey: Ref<string>, dbService: DatabaseService, id?: ComputedRef<string | null>) => {
   const queryClient = useQueryClient()
 
   const {
@@ -16,9 +12,7 @@ const useUpdateEntity = <T, U>(
     error: updateEntityError,
     data: updatedEntity
   } = useMutation({
-    mutationFn: (payload: U) => (
-      dbService.updateEntity<T, U>(entityKey.value, payload)
-    ),
+    mutationFn: (payload: U) => dbService.updateEntity<T, U>(entityKey.value, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [entityKey] })
     }

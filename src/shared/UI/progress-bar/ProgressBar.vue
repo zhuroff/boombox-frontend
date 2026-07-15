@@ -64,7 +64,7 @@ const setProgressValue = (event: MouseEvent) => {
 </script>
 
 <style lang="scss">
-@use "sass:math";
+@use 'sass:math';
 @use '~app/styles/variables' as var;
 
 .player__progress {
@@ -77,7 +77,6 @@ const setProgressValue = (event: MouseEvent) => {
   }
 
   &-separator {
-
     @include var.media('<desktop') {
       display: none;
     }

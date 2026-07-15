@@ -54,7 +54,7 @@ const stateClasses = computed(() => [
     '--borderless': props.isBorderless
   },
   `--${props.size}`,
-  props.className,
+  props.className
 ])
 </script>
 
@@ -85,7 +85,6 @@ const stateClasses = computed(() => [
   }
 
   &.--small {
-
     &.--rounded {
       width: var.$elementHeightSM;
     }
@@ -100,7 +99,6 @@ const stateClasses = computed(() => [
   }
 
   &.--medium {
-
     &.--rounded {
       width: var.$elementHeightMD;
     }
@@ -115,7 +113,6 @@ const stateClasses = computed(() => [
   }
 
   &.--large {
-
     &.--rounded {
       width: var.$elementHeightLG;
     }
@@ -187,7 +184,7 @@ const stateClasses = computed(() => [
 
   &__label {
     display: block;
-    margin: 0 .75rem;
+    margin: 0 0.75rem;
     white-space: nowrap;
   }
 

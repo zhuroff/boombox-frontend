@@ -11,7 +11,7 @@
         isText
         isInverted
         @click="closeModal"
-      />    
+      />
       <slot></slot>
     </div>
   </transition>

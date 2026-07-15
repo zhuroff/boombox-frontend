@@ -32,16 +32,13 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const activeTabData = computed(() => (
-  props.items.find((item) => item.id === props.activeTabId)
-))
+const activeTabData = computed(() => props.items.find((item) => item.id === props.activeTabId))
 </script>
 
 <style lang="scss" scoped>
 @use '~app/styles/variables' as var;
 
 .tabview {
-
   &__tabs {
     display: flex;
     border-bottom: 1px solid var.$paleDP;

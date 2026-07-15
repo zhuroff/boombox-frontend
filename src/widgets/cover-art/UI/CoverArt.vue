@@ -1,11 +1,11 @@
-<template>  
+<template>
   <div class="cover">
     <img
       :src="cover || '/img/album.webp'"
       class="cover__image"
       referrerpolicy="no-referrer"
       @click="toggleBookletModal"
-    >
+    />
     <transition name="fade">
       <Modal
         :isModalActive="isActive"
@@ -38,7 +38,7 @@
           type="file"
           ref="coverElement"
           @change="setCover"
-        >
+        />
         <Sprite name="camera" />
       </label>
     </form>
@@ -129,7 +129,6 @@ const slideChanged = (payload: BookletSlideState) => {
   }
 
   &:hover {
-
     .album__cover_upload {
       opacity: 1;
       transition: opacity 0.3s ease;
@@ -137,7 +136,6 @@ const slideChanged = (payload: BookletSlideState) => {
   }
 
   & + .button {
-
     @include var.media('<desktop') {
       width: auto;
       position: absolute;

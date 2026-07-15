@@ -29,8 +29,9 @@
         :key="button"
         isText
         @click="switchPagination(button)"
-        :class="[{ '--current' : button === paginationState.page }]"
-      >{{ button }}</Button>
+        :class="[{ '--current': button === paginationState.page }]"
+        >{{ button }}</Button
+      >
     </div>
     <Button
       v-if="paginationConfig.increment"
@@ -88,7 +89,7 @@ const switchLimit = (payload: [string, number | string | null]) => {
   const [_, value] = payload
 
   if (!value) return
-  
+
   props.updatePaginationState('limit', Number(value))
 }
 </script>
@@ -110,7 +111,7 @@ const switchLimit = (payload: [string, number | string | null]) => {
   .button {
     width: var.$elementHeightMD;
     height: var.$elementHeightMD;
-    
+
     @include var.media('<desktop') {
       color: var.$paleDP;
     }

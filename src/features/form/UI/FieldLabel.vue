@@ -1,7 +1,7 @@
 <template>
   <label
     :for="targetId"
-    :class="[{'--error': !!errors?.length}, 'label']"
+    :class="[{ '--error': !!errors?.length }, 'label']"
   >
     <span
       v-if="!!labelText && ['top', 'left'].includes(labelTextPosition)"
@@ -45,14 +45,14 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'medium'
 })
 
-const stateClasses = computed(() => ([
+const stateClasses = computed(() => [
   'label__text',
   `--${props.size}`,
   `--${props.labelTextPosition}`,
   {
     '--error': props.isError
   }
-]))
+])
 </script>
 
 <style setup lang="scss">

@@ -1,12 +1,14 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const mediaQuery = '(width < 1280px)'
-const isMobile = ref<boolean>((() => {
-  if (typeof window !== 'undefined') {
-    return window.matchMedia(mediaQuery).matches
-  }
-  return false
-})())
+const isMobile = ref<boolean>(
+  (() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia(mediaQuery).matches
+    }
+    return false
+  })()
+)
 
 const useDevice = () => {
   const deviceSetter = (e: MediaQueryListEvent) => {

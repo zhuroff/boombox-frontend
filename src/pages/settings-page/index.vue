@@ -86,7 +86,7 @@ const handleCloseSyncDataModal = () => {
   padding: 0 var.$basicPadding;
   display: grid;
   grid-template-columns: var.$coverWidth 1fr;
-  grid-template-areas: 
+  grid-template-areas:
     'actions users'
     'actions backups';
   gap: var.$mainPadding;

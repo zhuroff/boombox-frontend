@@ -37,7 +37,6 @@ const { localize } = useLocalization()
 @use '~/app/styles/variables' as var;
 
 .search {
-
   &__results {
     min-height: 120px;
     max-height: calc(100vh - var.$doublePadding * 4 - var.$minPadding * 2);

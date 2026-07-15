@@ -62,7 +62,7 @@ export type FileInputFieldSchema = BaseInputFieldSchema & {
 
 export type SelectInputFieldSchema = BaseInputFieldSchema & {
   type: 'select' | 'multiselect'
-  options: Array<{ label: string, value: string }>
+  options: Array<{ label: string; value: string }>
 }
 
 export type RefMultiFieldSchema = BaseInputFieldSchema & {

@@ -8,6 +8,7 @@
       :placeholder="placeholder"
       :size="size"
       :currentValue="currentValue"
+      :isInverted="isInverted"
       @triggerToggle="isOptionsOpened = !isOptionsOpened"
     />
     <transition name="fade">
@@ -41,6 +42,7 @@ interface Props {
   selectedValue?: string
   isRequired?: boolean
   errorMessage?: string
+  isInverted?: boolean
 }
 
 interface Emits {
@@ -50,6 +52,7 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   size: 'medium',
+  isInverted: false
 })
 const emit = defineEmits<Emits>()
 

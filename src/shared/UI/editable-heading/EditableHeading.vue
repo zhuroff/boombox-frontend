@@ -5,7 +5,9 @@
       class="editable__heading-block"
       :contenteditable="isEditable"
       @input="changeHeading"
-    >{{ localHeroTitle }}</div>
+    >
+      {{ localHeroTitle }}
+    </div>
     <div class="editable__heading-footer">
       {{ description }}
     </div>
@@ -110,9 +112,8 @@ watch(localHeroTitle, (newValue) => {
 @use '~/app/styles/variables' as var;
 
 .editable__heading {
-
   &-input {
-    color: inherit
+    color: inherit;
   }
 
   &-block {

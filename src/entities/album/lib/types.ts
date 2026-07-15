@@ -13,5 +13,6 @@ export type AlbumBasic = Entity & {
 export type AlbumFull = AlbumBasic & {
   tracks: TrackBasic[]
   note?: string
+  availableOnVinyl?: boolean
   inCollections?: Entity[]
 }

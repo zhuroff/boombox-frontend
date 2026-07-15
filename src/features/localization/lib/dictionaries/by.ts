@@ -21,13 +21,35 @@ export const localesBY: LocaleDictionary = {
   signIn: 'Увайсцi',
   save: 'Захаваць',
   offline: 'Няма далучэння да Iнтэрнэту',
-  delConfirmMessage: 'Вы ўпэўнены, што хочаце выдаліць гэты аб\'ект?',
+  delConfirmMessage: "Вы ўпэўнены, што хочаце выдаліць гэты аб'ект?",
   pageNotFound: 'Старонка не знойдзена',
   noBooklet: 'Альбом не мае буклета',
   goBack: 'Назад',
   album: {
-    notePlaceholder: 'Заўвага да альбому'
+    notePlaceholder: 'Заўвага да альбому',
+    vinylConfirmMessage: 'Выдаліць гэты альбом з вініловай калекцыі?'
   },
+  albumNoteFilter: {
+    all: 'Усе альбомы',
+    withReviews: 'З рэцэнзіямі',
+    withoutReviews: 'Без рэцэнзій'
+  },
+  albumVinylFilter: {
+    all: 'Усе альбомы',
+    onVinyl: 'На вініле',
+    notOnVinyl: 'Не на вініле'
+  },
+  albumSort: {
+    'title-asc': 'Назва: А → Я',
+    'title-desc': 'Назва: Я → А',
+    'period-asc': 'Перыяд: А → Я',
+    'period-desc': 'Перыяд: Я → А',
+    'dateCreated-asc': 'Дададзены: спачатку старыя',
+    'dateCreated-desc': 'Дададзены: спачатку новыя',
+    'modified-asc': 'Зменены: спачатку старыя',
+    'modified-desc': 'Зменены: спачатку новыя'
+  },
+  confirm: 'Пацвердзіць',
   navigation: {
     albums: 'Альбомы',
     artists: 'Артысты',
@@ -192,8 +214,8 @@ export const localesBY: LocaleDictionary = {
       album: 'Альбом',
       cloud: 'URL воблака',
       reason: 'Прычына',
-      invalid_folder_name: 'Назва папкі не адпавядае патэрну: \'Iмя артыста [год выдання] Назва альбома #Жанр\'',
-      invalid_tracks_names: 'Назва трэкаў не адпавядае патэрну: \'Нумар. Назва трэка.пашырэнне файла\'',
+      invalid_folder_name: "Назва папкі не адпавядае патэрну: 'Iмя артыста [год выдання] Назва альбома #Жанр'",
+      invalid_tracks_names: "Назва трэкаў не адпавядае патэрну: 'Нумар. Назва трэка.пашырэнне файла'",
       no_tracks: 'Альбом не змяшчае ніводнага трэка'
     }
   },
@@ -203,7 +225,8 @@ export const localesBY: LocaleDictionary = {
     wiki: 'Атрымаць iнфармацыю з Вiкіпедыі',
     addToCollection: 'Дадаць у калекцыю',
     getRandomAlbum: 'Выпадковы альбом',
-    deleteAlbum: 'Выдаліць альбом'
+    deleteAlbum: 'Выдаліць альбом',
+    vinylAvailability: 'Даступны на вініле'
   },
   trackActions: {
     getLyrics: 'Знайсцi тэкст песнi',
@@ -225,7 +248,7 @@ export const localesBY: LocaleDictionary = {
     id: 'ID',
     email: 'Электронная пошта',
     role: 'Роля',
-    delete: 'Выдаліць карыстальніка',
+    delete: 'Выдаліць карыстальніка'
   },
   backupsTable: {
     timestamp: 'Таймстамп',

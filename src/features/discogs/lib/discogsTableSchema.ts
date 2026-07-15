@@ -8,7 +8,7 @@ const discogsTableSchema: TableSchema = {
       type: 'integer'
     },
     country: {
-      type: 'string',
+      type: 'string'
     },
     cover: {
       type: 'string',
@@ -35,14 +35,7 @@ const discogsTableSchema: TableSchema = {
       pattern: '^[0-9]{4}$'
     }
   },
-  order: [
-    'cover',
-    'releaseTitle',
-    'country',
-    'releaseFormat',
-    'label',
-    'releaseYear'
-  ],
+  order: ['cover', 'releaseTitle', 'country', 'releaseFormat', 'label', 'releaseYear'],
   definitions: {
     stringArray: {
       type: 'array',

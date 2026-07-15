@@ -2,7 +2,7 @@ import type { Ref } from 'vue'
 
 export enum LocaleKeys {
   EN = 'en',
-  BY = 'by',
+  BY = 'by'
 }
 
 export type LocaleItem = {

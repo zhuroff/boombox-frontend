@@ -1,15 +1,13 @@
 import type { LocaleItem } from '../lib'
 
 export const hostString = (pathname: string) => {
-  const host = import.meta.env.DEV
-    ? import.meta.env.VITE_DEV_HOST
-    : import.meta.env.VITE_LIVE_HOST
+  const host = import.meta.env.DEV ? import.meta.env.VITE_DEV_HOST : import.meta.env.VITE_LIVE_HOST
 
   return `${host}${pathname}`
 }
 
 export const coverPlaceholders = (slug: string) => {
-  switch(slug) {
+  switch (slug) {
     case 'artists':
       return '/img/artist.webp'
     case 'genres':
@@ -23,10 +21,10 @@ export const coverPlaceholders = (slug: string) => {
   }
 }
 
-export function debounce <T extends (...args: any[]) => void>(
+export function debounce<T extends (...args: any[]) => void>(
   callback: T,
   delay: number = 500
-): ((...args: Parameters<T>) => void) {
+): (...args: Parameters<T>) => void {
   let timerID: ReturnType<typeof setTimeout>
   return function (this: unknown, ...args: Parameters<T>) {
     clearTimeout(timerID)
@@ -51,7 +49,7 @@ export const cleanAndCapitalize = (str: string): string => {
   const trimmedStr = str.trim().replace(/\s+/g, ' ')
   return trimmedStr
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ')
 }
 

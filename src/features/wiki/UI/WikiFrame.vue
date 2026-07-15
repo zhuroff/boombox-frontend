@@ -7,19 +7,17 @@
       <li
         v-for="result in wikiSearchResults.results"
         :key="result.pageid"
-        :class="[{ '--selected' : selected === result.pageid }, 'wikiframe__results-item']"
+        :class="[{ '--selected': selected === result.pageid }, 'wikiframe__results-item']"
         @click="() => selectWikiResult(result.pageid)"
-      >{{ result.title }}</li>
+      >
+        {{ result.title }}
+      </li>
     </ul>
     <div
       v-if="!isLoading && !wikiFrameURL"
       class="wikiframe__placeholder"
     >
-      {{
-        wikiSearchResults?.results?.length
-          ? localize('wiki.frameHeading')
-          : 'Nothing was found'
-      }}
+      {{ wikiSearchResults?.results?.length ? localize('wiki.frameHeading') : 'Nothing was found' }}
     </div>
     <iframe
       v-if="wikiFrameURL"
@@ -51,19 +49,14 @@ const { localize } = useLocalization()
 
 const wikiService = new WikiService()
 
-const {
-  isWikiSearching,
-  isWikiPageLoading,
-  wikiSearchResults,
-  wikiFrameURL,
-  wikiPageID
-} = useWiki(props.entity, wikiService)
+const { isWikiSearching, isWikiPageLoading, wikiSearchResults, wikiFrameURL, wikiPageID } = useWiki(
+  props.entity,
+  wikiService
+)
 
 const selected = ref<number>(-1)
 
-const isLoading = computed(() => (
-  isWikiSearching.value || isWikiPageLoading.value
-))
+const isLoading = computed(() => isWikiSearching.value || isWikiPageLoading.value)
 
 const selectWikiResult = (id: number) => {
   selected.value = id

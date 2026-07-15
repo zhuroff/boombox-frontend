@@ -16,9 +16,11 @@
         <template #hero>
           <PageHeadAdapter
             :album="album"
-            @getRandomAlbum="() => preRandomState = album?._id || ''"
+            :is-vinyl-available="isVinylAvailable"
+            @getRandomAlbum="() => (preRandomState = album?._id || '')"
             @addToCollection="isCollectionsModalEnabled = true"
             @getWikiInfo="isWikiFrameEnabled = true"
+            @toggleVinylAvailability="onToggleVinylAvailability"
           />
         </template>
 
@@ -63,7 +65,10 @@
           </div>
         </template>
 
-        <template v-if="!isMobile" #footer>
+        <template
+          v-if="!isMobile"
+          #footer
+        >
           <DiscogsTable :entity="minimumAlbumData" />
         </template>
       </AlbumContent>
@@ -89,6 +94,30 @@
     >
       <WikiFrame :entity="minimumAlbumData" />
     </Modal>
+
+    <Modal
+      :isModalActive="isVinylConfirmModalEnabled"
+      @closeModal="isVinylConfirmModalEnabled = false"
+    >
+      <Confirmation :message="localize('album.vinylConfirmMessage')">
+        <template #actions>
+          <Button
+            :label="localize('confirm')"
+            @click="unsetVinylAvailability"
+          />
+          <Button
+            :label="localize('cancel')"
+            @click="isVinylConfirmModalEnabled = false"
+          />
+        </template>
+        <template #loader>
+          <Loader
+            v-if="isVinylUpdating"
+            mode="light"
+          />
+        </template>
+      </Confirmation>
+    </Modal>
   </section>
 </template>
 
@@ -108,7 +137,7 @@ import { WikiFrame } from '~features/wiki'
 import { useAlbum } from '~entities/album'
 import type { TrackBasic } from '~entities/track'
 
-import { Modal, Loader } from '~shared/UI'
+import { Modal, Loader, Confirmation, Button } from '~shared/UI'
 import { TextEditor, TextEditorFormatting, type TextEditorFormatConfig } from '~widgets/text-editor'
 import { DatabaseService } from '~shared/api'
 import { useDevice, useLocalization } from '~shared/model'
@@ -120,29 +149,29 @@ const { isMobile } = useDevice()
 const { localize } = useLocalization()
 const { initPlaylist, changePlaylistOrder } = usePlaylistService()
 
-const {
-  album,
-  isAlbumReady,
-  preRandomState,
-  updateAlbumNote,
-  relatedAlbums
-} = useAlbum(dbService)
+const { album, isAlbumReady, preRandomState, updateAlbumNote, updateAlbumVinyl, isVinylUpdating, relatedAlbums } =
+  useAlbum(dbService)
 
-const {
-  collections,
-  selectCollection,
-  createCollection,
-  isGatheringFetching,
-  isCollectionsModalEnabled
-} = useCollections(album, dbService)
+const { collections, selectCollection, createCollection, isGatheringFetching, isCollectionsModalEnabled } =
+  useCollections(album, dbService)
 
 const isWikiFrameEnabled = ref(false)
+const isVinylConfirmModalEnabled = ref(false)
+const isVinylAvailable = ref(false)
+
+watch(
+  () => album.value?.availableOnVinyl,
+  (value) => {
+    isVinylAvailable.value = Boolean(value)
+  },
+  { immediate: true }
+)
 
 const editorFormatConfig: TextEditorFormatConfig = new Set([
   TextEditorFormatting.BOLD,
   TextEditorFormatting.ITALIC,
   TextEditorFormatting.BLOCKQUOTE,
-  TextEditorFormatting.LINK,
+  TextEditorFormatting.LINK
 ])
 
 const minimumAlbumData = computed(() => ({
@@ -157,18 +186,18 @@ type TrackGroup = {
 
 const groupedTracks = computed<TrackGroup[]>(() => {
   if (!album.value?.tracks) return []
-  
+
   const tracks = album.value.tracks
-  
-  const hasReleases = tracks.some(track => track.release)
-  
+
+  const hasReleases = tracks.some((track) => track.release)
+
   if (!hasReleases) {
     return [{ release: null, tracks }]
   }
-  
+
   const groupsMap = new Map<string | null, typeof tracks>()
-  
-  tracks.forEach(track => {
+
+  tracks.forEach((track) => {
     const release = track.release || null
     if (!groupsMap.has(release)) {
       groupsMap.set(release, [])
@@ -178,7 +207,7 @@ const groupedTracks = computed<TrackGroup[]>(() => {
       groupTracks.push(track)
     }
   })
-  
+
   return Array.from(groupsMap.entries()).map(([release, tracks]) => ({
     release,
     tracks
@@ -189,12 +218,33 @@ const changeAlbumNote = debounce((value: string) => {
   album.value?._id && updateAlbumNote([album.value._id, value])
 }, 1000)
 
-watch(
-  [isAlbumReady, album],
-  ([isAlbumReady, album]) => {
-    isAlbumReady && album && initPlaylist(album)
+const setVinylAvailability = (availableOnVinyl: boolean) => {
+  if (!album.value?._id) return
+
+  updateAlbumVinyl([album.value._id, availableOnVinyl], {
+    onSuccess: () => {
+      isVinylAvailable.value = availableOnVinyl
+      isVinylConfirmModalEnabled.value = false
+    }
+  })
+}
+
+const onToggleVinylAvailability = () => {
+  if (isVinylAvailable.value) {
+    isVinylConfirmModalEnabled.value = true
+    return
   }
-)
+
+  setVinylAvailability(true)
+}
+
+const unsetVinylAvailability = () => {
+  setVinylAvailability(false)
+}
+
+watch([isAlbumReady, album], ([isAlbumReady, album]) => {
+  isAlbumReady && album && initPlaylist(album)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -202,7 +252,7 @@ watch(
 
 .album__release {
   margin-top: var.$mainPadding;
-  
+
   &:first-of-type {
     @include var.media('>=desktop') {
       margin-top: 5rem;
@@ -215,7 +265,7 @@ watch(
     margin-bottom: var.$fieldPadding;
     padding: 0 var.$minPadding;
     text-align: center;
-    
+
     @include var.media('<=mobile') {
       color: var.$accent;
     }

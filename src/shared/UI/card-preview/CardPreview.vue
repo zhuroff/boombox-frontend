@@ -2,7 +2,7 @@
   <component
     :is="cardElement"
     :to="routePath"
-    :class="[{ '--rounded' : coverClasses.includes('--rounded') }, 'cardlist__item-link']"
+    :class="[{ '--rounded': coverClasses.includes('--rounded') }, 'cardlist__item-link']"
   >
     <div class="cardlist__item-image">
       <img
@@ -49,16 +49,13 @@ const props = withDefaults(defineProps<Props>(), {
   coverClasses: () => []
 })
 
-const cardElement = computed(() => (
-  props.isRouteLink ? 'router-link' : 'div'
-))
+const cardElement = computed(() => (props.isRouteLink ? 'router-link' : 'div'))
 </script>
 
 <style lang="scss">
 @use '~app/styles/variables' as var;
 
 .cardlist__item {
-
   &-link {
     display: flex;
     flex-direction: column;
@@ -136,7 +133,7 @@ const cardElement = computed(() => (
 
   &-vinyl {
     @include var.media('<desktop') {
-      display: none
+      display: none;
     }
 
     @include var.media('>=desktop') {

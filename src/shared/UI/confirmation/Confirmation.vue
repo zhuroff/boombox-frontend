@@ -35,7 +35,7 @@ defineProps<Props>()
   &__actions {
     display: flex;
     justify-content: flex-end;
-    gap: 1rem
+    gap: 1rem;
   }
 
   .preloader {

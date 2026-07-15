@@ -37,7 +37,7 @@ const { progressTime, playingTrack } = usePlayer()
 const proxiedAlbumCover = computed(() => proxyCloudUrl(playingTrack.value?.albumCover))
 
 const albumRoute = computed(() => {
-  switch(playingTrack.value?.albumKind) {
+  switch (playingTrack.value?.albumKind) {
     case 'album':
       return `/albums/${playingTrack.value?.albumId}`
     case 'compilation':
@@ -57,11 +57,10 @@ const trackSign = computed(() => {
 </script>
 
 <style lang="scss">
-@use "sass:math";
+@use 'sass:math';
 @use '~app/styles/variables' as var;
 
 .player {
-
   &__info {
     flex: none;
     transition: all 0.3s var.$animation;
@@ -85,10 +84,13 @@ const trackSign = computed(() => {
         border-radius: 50%;
         box-shadow: var.$shadowMedium;
         background:
-          linear-gradient(30deg, transparent 40%, rgba(42, 41, 40, .85) 40%) no-repeat 100% 0,
-          linear-gradient(60deg, rgba(42, 41, 40, .85) 60%, transparent 60%) no-repeat 0 100%,
+          linear-gradient(30deg, transparent 40%, rgba(42, 41, 40, 0.85) 40%) no-repeat 100% 0,
+          linear-gradient(60deg, rgba(42, 41, 40, 0.85) 60%, transparent 60%) no-repeat 0 100%,
           repeating-radial-gradient(#2a2928, #2a2928 4px, #ada9a0 5px, #2a2928 6px);
-        background-size: 50% 100%, 100% 50%, 100% 100%;
+        background-size:
+          50% 100%,
+          100% 50%,
+          100% 100%;
       }
 
       &:after {
@@ -112,7 +114,6 @@ const trackSign = computed(() => {
     }
 
     &-content {
-
       @include var.media('<desktop') {
         height: 100%;
         display: flex;
@@ -127,7 +128,6 @@ const trackSign = computed(() => {
   }
 
   &__cover {
-
     @include var.media('<desktop') {
       border-radius: 50%;
       width: 94px;
@@ -182,7 +182,6 @@ const trackSign = computed(() => {
     }
 
     &-sign {
-
       @include var.media('<desktop') {
         font-size: 14px;
       }

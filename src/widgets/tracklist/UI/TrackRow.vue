@@ -40,7 +40,6 @@
         className="trackrow__action --options"
         @click="openCloseActions"
       />
-      
     </div>
     <transition name="fade">
       <DropList
@@ -118,13 +117,8 @@ const { toggleTrackAvailability, isTrackInPlaylist, addTrackToPlaylist } = usePl
 
 const isLyricsModalActive = ref(false)
 
-const {
-  compilations,
-  selectCompilation,
-  createCompilation,
-  isGatheringFetching,
-  isCompilationsModalEnabled
-} = useCompilations(props.track, dbService)
+const { compilations, selectCompilation, createCompilation, isGatheringFetching, isCompilationsModalEnabled } =
+  useCompilations(props.track, dbService)
 
 const trackRowClassList = computed(() => [
   'trackrow',
@@ -138,7 +132,9 @@ const trackDuration = computed(() => {
   if (!props.track.duration) return '--/--'
 
   const minutes = Math.floor(props.track.duration / 60)
-  const seconds = Math.floor(props.track.duration % 60).toString().padStart(2, '0')
+  const seconds = Math.floor(props.track.duration % 60)
+    .toString()
+    .padStart(2, '0')
   return `${minutes}:${seconds}`
 })
 
@@ -147,9 +143,7 @@ const trackRowActionHandler = (e: MouseEvent) => {
 
   if (props.track.idDisabled) return
 
-  playingTrack.value && playingTrack.value._id === props.track._id
-    ? playPauseTrack()
-    : playTrack(props.track)
+  playingTrack.value && playingTrack.value._id === props.track._id ? playPauseTrack() : playTrack(props.track)
 }
 
 const toggleLyricsModal = () => {
@@ -160,7 +154,7 @@ const showCompilationModal = () => {
   isCompilationsModalEnabled.value = true
 }
 
-const trackActions: Record<typeof trackOptions.value[number]['value'], () => void> = {
+const trackActions: Record<(typeof trackOptions.value)[number]['value'], () => void> = {
   getLyrics: toggleLyricsModal,
   toCompilation: showCompilationModal,
   disableTrack: () => toggleTrackAvailability(props.track),
@@ -168,46 +162,46 @@ const trackActions: Record<typeof trackOptions.value[number]['value'], () => voi
   toPlaylist: () => addTrackToPlaylist(props.track)
 }
 
-const trackOptions = computed(() => (() => {
-  const options = [
-    {
-      label: localize('trackActions.getLyrics'),
-      value: 'getLyrics'
-    }
-  ]
+const trackOptions = computed(() =>
+  (() => {
+    const options = [
+      {
+        label: localize('trackActions.getLyrics'),
+        value: 'getLyrics'
+      }
+    ]
 
-  if (playingTrack.value?._id !== props.track._id) {
-    options.push({
-      label: localize(props.track?.idDisabled ? 'trackActions.enableTrack' : 'trackActions.disableTrack'),
-      value: 'disableTrack'
-    })
-
-    if (!isTrackInPlaylist(props.track._id)) {
+    if (playingTrack.value?._id !== props.track._id) {
       options.push({
-        label: localize('trackActions.toPlaylist'),
-        value: 'toPlaylist'
+        label: localize(props.track?.idDisabled ? 'trackActions.enableTrack' : 'trackActions.disableTrack'),
+        value: 'disableTrack'
       })
 
-      if (playingTrack.value?._id) {
+      if (!isTrackInPlaylist(props.track._id)) {
         options.push({
-          label: localize('trackActions.playNext'),
-          value: 'playNext'
+          label: localize('trackActions.toPlaylist'),
+          value: 'toPlaylist'
         })
+
+        if (playingTrack.value?._id) {
+          options.push({
+            label: localize('trackActions.playNext'),
+            value: 'playNext'
+          })
+        }
       }
     }
-  }
 
-  options.push({
-    label: localize('trackActions.toCompilation'),
-    value: 'toCompilation'
-  })
+    options.push({
+      label: localize('trackActions.toCompilation'),
+      value: 'toCompilation'
+    })
 
-  return options
-})())
+    return options
+  })()
+)
 
-const trackArtistAndTitle = computed(() => (
-  `${props.track.artist.title} - ${props.track.title}`
-))
+const trackArtistAndTitle = computed(() => `${props.track.artist.title} - ${props.track.title}`)
 
 const applyAction = (action: SelectInputFieldSchema['options'][number]) => {
   trackActions[action.value]?.()
@@ -252,13 +246,12 @@ const openCloseActions = (e: MouseEvent) => {
     }
 
     &.--disabled {
-
       & > *:not(.--options) {
         opacity: 0.5;
         pointer-events: none;
       }
     }
-    
+
     @include var.media('>=desktop') {
       &:after {
         content: '';
@@ -268,7 +261,9 @@ const openCloseActions = (e: MouseEvent) => {
         width: 100%;
         height: 100%;
         z-index: -1;
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8), 0 -1px 0 rgba(0, 0, 0, 0.15);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.8),
+          0 -1px 0 rgba(0, 0, 0, 0.15);
       }
     }
   }
@@ -355,7 +350,6 @@ const openCloseActions = (e: MouseEvent) => {
     }
 
     &:hover {
-
       .icon {
         color: var.$accent;
         fill: var.$accent;
@@ -382,7 +376,6 @@ const openCloseActions = (e: MouseEvent) => {
     }
 
     .trackrow {
-
       &__container {
         &:after {
           content: none;

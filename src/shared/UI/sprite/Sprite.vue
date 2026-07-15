@@ -98,7 +98,5 @@ const IconsMap = new Map([
   ['cloud-download', SpriteCloudDownload]
 ])
 
-const IconComponent = computed(() => (
-  IconsMap.get(props.name) || null
-))
+const IconComponent = computed(() => IconsMap.get(props.name) || null)
 </script>

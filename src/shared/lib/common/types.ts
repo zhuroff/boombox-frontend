@@ -24,7 +24,7 @@ export type DeletePayload = {
 export type SortingValue = Record<string, 1 | -1>
 
 export type ListPageResponse<T> = {
-  docs: T[],
+  docs: T[]
   pagination: Pagination
 }
 
@@ -49,10 +49,26 @@ export type RelatedAlbums<T> = {
   docs: T[]
 }
 
+export type AlbumNoteFilter = 'all' | 'withReviews' | 'withoutReviews'
+
+export type AlbumVinylFilter = 'all' | 'onVinyl' | 'notOnVinyl'
+
+export type AlbumSortOption =
+  | 'title-asc'
+  | 'title-desc'
+  | 'period-asc'
+  | 'period-desc'
+  | 'dateCreated-asc'
+  | 'dateCreated-desc'
+  | 'modified-asc'
+  | 'modified-desc'
+
 export type RequestConfig = PaginationState & {
   isRandom?: true | 1
   path?: string
   filter?: RandomEntityReqFilter | RelatedAlbumsReqFilter
+  noteFilter?: AlbumNoteFilter
+  vinylFilter?: AlbumVinylFilter
 }
 
 export type UseEntityListPayload = {
