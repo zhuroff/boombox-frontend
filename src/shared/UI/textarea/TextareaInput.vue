@@ -1,4 +1,4 @@
-<template>  
+<template>
   <textarea
     :placeholder="placeholder"
     :class="stateClasses"
@@ -86,12 +86,12 @@ const emitTextareaValue = () => {
 
 .textarea-field {
   overflow-y: hidden;
-  font-size: .875rem;
+  font-size: 0.875rem;
   display: block;
   width: 100%;
   border-radius: var.$borderRadiusSM;
   border: 1px solid var.$paleMD;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
 
   &.--error {
     border-color: var.$error;

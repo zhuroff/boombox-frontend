@@ -29,7 +29,7 @@
           :isDraggable="isDraggable"
           :isDeletable="isDeletable"
           :placeholderPreview="placeholderPreview"
-          @deleteEntity="(payload: DeletePayload) => deletedEntityId = payload.id"
+          @deleteEntity="(payload: DeletePayload) => (deletedEntityId = payload.id)"
         />
 
         <Paginator
@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watchEffect, watch } from 'vue'
+import { ref, computed, watchEffect, watch, toValue, type MaybeRefOrGetter } from 'vue'
 
 import { Header } from '~widgets/header'
 import { EntityCardList, type UnifiedEntityCard } from '~widgets/entity-cards'
@@ -79,16 +79,17 @@ import { DatabaseService } from '~shared/api'
 import { Modal, Loader, Confirmation, Button } from '~shared/UI'
 import { useLocalization, useGetList, useDeleteEntity, useSnackbar, useDevice } from '~shared/model'
 import { DEFAULT_PAGE_DOCS_LIMIT } from '~shared/constants'
-import type { DeletePayload } from '~shared/lib'
+import type { DeletePayload, RequestConfig } from '~shared/lib'
 
 type Props = {
   entityKey: string
   placeholderPreview: string
   pageHeadingKey?: string
-  isDraggable?: boolean 
+  isDraggable?: boolean
   isDeletable?: boolean
   withSearch?: boolean
   isRefresh?: boolean
+  additionalRequestConfig?: MaybeRefOrGetter<Partial<RequestConfig>>
 }
 
 const props = defineProps<Props>()
@@ -101,49 +102,43 @@ const { setSnackbarMessage } = useSnackbar()
 
 const deletedEntityId = ref<string | null>(null)
 
-const docsLimit = ref((() => {
-  const cachedDocsLimit = localStorage.getItem(`docs-limit:${props.entityKey}`)
+const docsLimit = ref(
+  (() => {
+    const cachedDocsLimit = localStorage.getItem(`docs-limit:${props.entityKey}`)
 
-  if (cachedDocsLimit) {
-    return Number(cachedDocsLimit)
-  } else {
-    localStorage.setItem(`docs-limit:${props.entityKey}`, String(DEFAULT_PAGE_DOCS_LIMIT))
-    return DEFAULT_PAGE_DOCS_LIMIT
-  }
-})())
+    if (cachedDocsLimit) {
+      return Number(cachedDocsLimit)
+    } else {
+      localStorage.setItem(`docs-limit:${props.entityKey}`, String(DEFAULT_PAGE_DOCS_LIMIT))
+      return DEFAULT_PAGE_DOCS_LIMIT
+    }
+  })()
+)
 
-const {
-  paginationState,
-  paginationConfig,
-  updatePaginationState,
-  updatePaginationConfig
-} = usePaginator({
+const { paginationState, paginationConfig, updatePaginationState, updatePaginationConfig } = usePaginator({
   docsLimit,
   localStorageKey: `docs-limit:${props.entityKey}`
 })
 
 const listQueryConfig = computed(() => ({
   entityKey: props.entityKey,
-  requestConfig: paginationState.value
+  requestConfig: {
+    ...paginationState.value,
+    ...toValue(props.additionalRequestConfig ?? {})
+  }
 }))
 
 const { data, refetch, isFetched, isFetching } = useGetList<UnifiedEntityCard>(listQueryConfig, dbService)
 
-const {
-  deletedEntity,
-  deleteEntity,
-  isDeleting
-} = useDeleteEntity<UnifiedEntityCard>(
+const { deletedEntity, deleteEntity, isDeleting } = useDeleteEntity<UnifiedEntityCard>(
   props.entityKey,
   deletedEntityId,
-  dbService,
+  dbService
 )
 
 const docsCount = computed(() => String(data.value?.pagination.totalDocs || 0))
 
-const isPaginated = computed(() => (
-  isFetched.value && Number(data.value?.pagination.totalPages) > 1
-))
+const isPaginated = computed(() => isFetched.value && Number(data.value?.pagination.totalPages) > 1)
 
 watchEffect(() => {
   if (isFetched.value) {
@@ -159,17 +154,14 @@ watch(
   }
 )
 
-watch(
-  deletedEntity,
-  (value) => {
-    if (value) {
-      deletedEntityId.value = null
-      setSnackbarMessage({
-        message: localize(`snackbars.delete.${value.message}`),
-        type: 'success'
-      })
-      refetch()
-    }
+watch(deletedEntity, (value) => {
+  if (value) {
+    deletedEntityId.value = null
+    setSnackbarMessage({
+      message: localize(`snackbars.delete.${value.message}`),
+      type: 'success'
+    })
+    refetch()
   }
-)
+})
 </script>

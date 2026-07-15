@@ -16,7 +16,7 @@
           <PageHeadAdapter
             :album="compilation"
             isEditable
-            @getRandomAlbum="() => preRandomState = compilation?._id || ''"
+            @getRandomAlbum="() => (preRandomState = compilation?._id || '')"
             @deleteAlbum="isDeleteModalEnabled = true"
           />
         </template>
@@ -86,44 +86,29 @@ const preRandomState = ref('')
 const isDeleteModalEnabled = ref(false)
 const router = useRouter()
 
-const {
-  data: compilation,
-  isFetched,
-  refetch
-} = useGetPage<CompilationFull>(entityKey, dbService, preRandomState)
+const { data: compilation, isFetched, refetch } = useGetPage<CompilationFull>(entityKey, dbService, preRandomState)
 
 const currentCompilationId = computed(() => compilation.value?._id || null)
 
 const { reorderEntities } = useUpdateEntity(entityKey, dbService, currentCompilationId)
 
-const {
-  deletedEntity,
-  deleteEntity,
-  isDeleting
-} = useDeleteEntity(entityKey, currentCompilationId, dbService)
+const { deletedEntity, deleteEntity, isDeleting } = useDeleteEntity(entityKey, currentCompilationId, dbService)
 
 const changeTracksOrder = (payload: ReorderPayload) => {
-  reorderEntities(payload)
-    .then(() => refetch())
+  reorderEntities(payload).then(() => refetch())
 }
 
-watch(
-  deletedEntity,
-  (isDeleted) => {
-    if (isDeleted) {
-      setSnackbarMessage({
-        message: localize('deletedEmbeddedMessage'),
-        type: 'success'
-      })
-      router.push('/compilations')
-    }
+watch(deletedEntity, (isDeleted) => {
+  if (isDeleted) {
+    setSnackbarMessage({
+      message: localize('deletedEmbeddedMessage'),
+      type: 'success'
+    })
+    router.push('/compilations')
   }
-)
+})
 
-watch(
-  [isFetched, compilation],
-  ([isFetched, compilation]) => {
-    isFetched && compilation && initPlaylist(compilation)
-  }
-)
+watch([isFetched, compilation], ([isFetched, compilation]) => {
+  isFetched && compilation && initPlaylist(compilation)
+})
 </script>

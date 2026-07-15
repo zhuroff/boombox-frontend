@@ -43,12 +43,12 @@ const emit = defineEmits<Emits>()
 const stateClasses = computed(() => [
   'select',
   {
-    '--active': props.isMarkedSelected && (!!props.modelValue && props.modelValue !== normalizedOptions.value[0].value),
+    '--active': props.isMarkedSelected && !!props.modelValue && props.modelValue !== normalizedOptions.value[0].value,
     '--inverted': props.isInverted,
     '--text': props.isText
   },
   `--${props.size}`,
-  props.className,
+  props.className
 ])
 
 const normalizedOptions = computed(() => {
@@ -106,7 +106,6 @@ watch(
   outline: none;
 
   option {
-
     &:first-of-type {
       display: none;
     }

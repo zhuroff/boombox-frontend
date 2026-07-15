@@ -10,4 +10,5 @@ export interface HeadEmits {
   (e: 'addToCollection'): void
   (e: 'getWikiInfo'): void
   (e: 'deleteAlbum'): void
+  (e: 'toggleVinylAvailability'): void
 }

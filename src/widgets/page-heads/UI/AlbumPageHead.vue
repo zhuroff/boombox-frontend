@@ -15,7 +15,18 @@
       :length="length"
     />
 
-    <PageHeadActions :actions="actions" />
+    <PageHeadActions :actions="actions">
+      <template #append>
+        <Button
+          className="--vinyl-toggle"
+          icon="vinyl"
+          :title="localize('heroActions.vinylAvailability')"
+          isRounded
+          :isInverted="isVinylAvailable"
+          @click="toggleVinylAvailability"
+        />
+      </template>
+    </PageHeadActions>
   </div>
 </template>
 
@@ -23,6 +34,8 @@
 import { reactive, computed } from 'vue'
 import { coverPlaceholders } from '~shared/utils'
 import { proxyCloudUrl } from '~shared/lib'
+import { Button } from '~shared/UI'
+import { useLocalization } from '~shared/model'
 import { CoverArt } from '~widgets/cover-art'
 import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'
@@ -32,17 +45,20 @@ import type { AlbumFull } from '~/entities/album'
 interface Props {
   album: AlbumFull
   length: string
+  isVinylAvailable: boolean
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<HeadEmits>()
 
-const albumCover = computed(() => proxyCloudUrl(props.album.coverURL) || coverPlaceholders('album'))
+const { localize } = useLocalization()
 
+const albumCover = computed(() => proxyCloudUrl(props.album.coverURL) || coverPlaceholders('album'))
 const getRandomAlbum = () => emit('getRandomAlbum')
 const callSearchBlock = () => emit('callSearchBlock')
 const addToCollection = () => emit('addToCollection')
 const getWikiInfo = () => emit('getWikiInfo')
+const toggleVinylAvailability = () => emit('toggleVinylAvailability')
 
 const actions: ActionPropertyItem[] = reactive([
   {

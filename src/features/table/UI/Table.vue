@@ -28,7 +28,7 @@ import TableBodyRow from './TableBodyRow.vue'
 
 type Props = {
   rows: TableRow[]
-  schema: TableSchema,
+  schema: TableSchema
   headerConfig: TableHeaderConfig[]
   filters?: TableFilters
   isHeadless?: boolean

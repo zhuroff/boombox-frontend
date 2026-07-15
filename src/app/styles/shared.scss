@@ -7,13 +7,13 @@
 }
 
 .--small {
-  font-size: .75rem;
+  font-size: 0.75rem;
   height: var.$elementHeightSM;
   border-radius: var.$borderRadiusSM;
 }
 
 .--medium {
-  font-size: .875rem;
+  font-size: 0.875rem;
   height: var.$elementHeightMD;
   border-radius: var.$borderRadiusMD;
 }
@@ -29,9 +29,7 @@
 }
 
 .cardlist__item {
-
   button.--inverted {
-
     .icon {
       fill: var.$dark !important;
     }

@@ -2,11 +2,7 @@ import { watch, type Ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type { SearchResultState, SearchService } from '~features/search'
 
-const useSearch = (
-  query: Ref<string>,
-  searchService: SearchService,
-  entityKey?: Ref<string>
-) => {
+const useSearch = (query: Ref<string>, searchService: SearchService, entityKey?: Ref<string>) => {
   const { refetch, isFetched, isFetching, data, error } = useQuery<SearchResultState[]>({
     queryKey: [query, entityKey],
     refetchOnWindowFocus: false,

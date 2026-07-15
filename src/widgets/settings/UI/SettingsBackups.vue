@@ -54,7 +54,7 @@ const tableHeaderConfig = computed<TableHeaderConfig[]>(() => {
 
   &-heading {
     @include var.serif(1.75rem);
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 }
 </style>

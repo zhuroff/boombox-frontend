@@ -25,9 +25,7 @@ const props = defineProps<Props>()
 
 const { localize } = useLocalization()
 
-const dynamicEntityKey = computed(() => (
-  props.entityKey || 'albums'
-))
+const dynamicEntityKey = computed(() => props.entityKey || 'albums')
 
 const routePath = computed(() => {
   const id = props.card._id

@@ -6,7 +6,7 @@ import type DatabaseService from '~/shared/api/DatabaseService'
 const useDeleteEntity = <T>(
   entityKey: Ref<string> | string,
   entityId: Ref<string | null>,
-  dbService: DatabaseService,
+  dbService: DatabaseService
 ) => {
   const queryClient = useQueryClient()
 
@@ -16,12 +16,11 @@ const useDeleteEntity = <T>(
     error: deleteEntityError,
     data: deletedEntity
   } = useMutation({
-    mutationFn: () => (
+    mutationFn: () =>
       dbService.deleteEntity<ListPageResponse<T>>(
         typeof entityKey === 'string' ? entityKey : entityKey.value,
         entityId.value
-      )
-    ),
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [entityKey] })
     }

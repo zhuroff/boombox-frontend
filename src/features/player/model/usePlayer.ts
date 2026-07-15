@@ -13,10 +13,8 @@ const isPlaylistExpanded = ref(false)
 const usePlayer = () => {
   const {
     trackVolume,
-    isVinylMode,
     playingTrack,
     playingTrackRef,
-    crackleAudioRef,
     fetchTrackStreamURL,
     destroyPlayingTrack,
     clearNextPreload,
@@ -28,14 +26,8 @@ const usePlayer = () => {
     isTrackMuted,
     isSwitchingTrack
   } = useAudioService(dbService)
-  
-  const {
-    getNextTrack,
-    getPrevTrack,
-    primaryPlaylist,
-    replacePlaylist,
-    searchTrackInPlaylists
-  } = usePlaylistService()
+
+  const { getNextTrack, getPrevTrack, primaryPlaylist, replacePlaylist, searchTrackInPlaylists } = usePlaylistService()
 
   const { isMobile } = useDevice()
 
@@ -65,7 +57,7 @@ const usePlayer = () => {
 
   const playTrack = (track: TrackBasic) => {
     if (isSwitchingTrack.value) return
-    
+
     if (track._id === playingTrack.value?._id) {
       return playingTrackRef.value?.play()
     }
@@ -78,7 +70,7 @@ const usePlayer = () => {
     if (!targetTrack) return
 
     playingTrack.value = targetTrack
-    
+
     if (!targetTrack.streamURL) {
       fetchTrackStreamURL()
     } else {
@@ -93,10 +85,8 @@ const usePlayer = () => {
 
     if (playingTrack.value.isOnPause) {
       playingTrackRef.value.play()
-      isVinylMode.value && crackleAudioRef.value.play()
     } else {
       playingTrackRef.value.pause()
-      isVinylMode.value && crackleAudioRef.value.pause()
     }
 
     playingTrack.value.isOnPause = !playingTrack.value.isOnPause
@@ -106,33 +96,19 @@ const usePlayer = () => {
     if (!playingTrackRef.value) return
 
     progressLine.value = value
-    progressTime.value = value * (playingTrack.value?.duration || 1)    
+    progressTime.value = value * (playingTrack.value?.duration || 1)
     playingTrackRef.value.currentTime = progressTime.value
   }
 
   const toggleMuteState = () => {
     playingTrackRef.value!.muted = !playingTrackRef.value!.muted
-    crackleAudioRef.value.muted = !crackleAudioRef.value.muted
     isTrackMuted.value = !isTrackMuted.value
-  }
-
-  const toggleVinylMode = () => {
-    if (!playingTrackRef.value || playingTrack.value?.isOnPause) return
-    
-    if (isVinylMode.value) {
-      crackleAudioRef.value.pause()
-      isVinylMode.value = false
-    } else {
-      crackleAudioRef.value.play()
-      isVinylMode.value = true
-    }
   }
 
   const setSoundVolume = (value: number) => {
     if (isMobile.value) return
     trackVolume.value = value
     playingTrackRef.value!.volume = value
-    crackleAudioRef.value.volume = value
     localStorage.setItem('playerVolume', value.toString())
   }
 
@@ -153,10 +129,8 @@ const usePlayer = () => {
     isPlaylistExpanded,
     screensaveMode,
     setTrackPosition,
-    toggleVinylMode,
     setSoundVolume,
     isTrackMuted,
-    isVinylMode,
     isSwitchingTrack
   }
 }

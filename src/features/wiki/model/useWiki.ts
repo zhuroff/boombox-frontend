@@ -9,9 +9,7 @@ const useWiki = (entity: MinimumAlbumInfo, wikiService: WikiService) => {
   const wikiPageID = ref<string | null>(null)
   const wikiFrameResults = ref(null)
 
-  const isWikiPageLoadingEnabled = computed(() => (
-    !!wikiPageID.value
-  ))
+  const isWikiPageLoadingEnabled = computed(() => !!wikiPageID.value)
 
   const resetWikiData = () => {
     wikiFrameURL.value = ''
@@ -26,7 +24,7 @@ const useWiki = (entity: MinimumAlbumInfo, wikiService: WikiService) => {
     } else if (str.match(/[а-яА-Я]/g)) {
       return 'ru'
     }
-  
+
     return 'en'
   }
 
@@ -40,17 +38,14 @@ const useWiki = (entity: MinimumAlbumInfo, wikiService: WikiService) => {
     if (!albumLang || !artistLang) false
 
     if (albumLang === 'ru' || artistLang === 'ru') {
-     wikiLang = 'ru'
+      wikiLang = 'ru'
     }
 
     wikiService.setLang(wikiLang)
     return true
   }
 
-  const {
-    isFetching: isWikiSearching,
-    data: wikiSearchResults
-  } = useQuery<wikiSearchResult>({
+  const { isFetching: isWikiSearching, data: wikiSearchResults } = useQuery<wikiSearchResult>({
     retry: 3,
     refetchOnWindowFocus: false,
     queryKey: [entity],
@@ -77,14 +72,11 @@ const useWiki = (entity: MinimumAlbumInfo, wikiService: WikiService) => {
     }
   })
 
-  watch(
-    isWikiPageFetched,
-    (isFetched) => {
-      if (isFetched) {
-        wikiFrameURL.value = wikiPageData.value?.canonicalurl || ''
-      }
+  watch(isWikiPageFetched, (isFetched) => {
+    if (isFetched) {
+      wikiFrameURL.value = wikiPageData.value?.canonicalurl || ''
     }
-  )
+  })
 
   return {
     isWikiSearching,

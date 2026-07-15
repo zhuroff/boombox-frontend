@@ -1,12 +1,6 @@
 <template>
   <header class="header">
     <h1 class="header__heading">{{ heading }}</h1>
-    <Button
-      icon="loupe"
-      isRounded
-      isInverted
-      @click="isSearchMode = !isSearchMode"
-    />
     <Modal
       :isModalActive="isSearchMode"
       @closeModal="isSearchMode = false"
@@ -18,6 +12,12 @@
       />
     </Modal>
     <slot></slot>
+    <Button
+      icon="loupe"
+      isRounded
+      isInverted
+      @click="isSearchMode = !isSearchMode"
+    />
   </header>
 </template>
 
@@ -73,6 +73,10 @@ const onSearch = (value: string) => {
     position: sticky;
     top: 0;
     z-index: 1000;
+
+    & > .button {
+      margin-left: 1rem;
+    }
   }
 
   &__heading {

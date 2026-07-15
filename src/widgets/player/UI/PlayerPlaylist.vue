@@ -1,5 +1,5 @@
 <template>
-  <section 
+  <section
     class="playlist"
     @touchstart="onTouchStart"
     @touchmove="onTouchMove"
@@ -61,7 +61,7 @@ const onTouchMove = (e: TouchEvent) => {
   if (!isMobile.value) return
   const deltaX = Math.abs(e.touches[0].clientX - touchStartX.value)
   const deltaY = Math.abs(e.touches[0].clientY - touchStartY.value)
-  
+
   if (deltaX > deltaY && deltaX > 10) {
     e.preventDefault()
   }
@@ -69,10 +69,10 @@ const onTouchMove = (e: TouchEvent) => {
 
 const onTouchEnd = (e: TouchEvent) => {
   if (!isMobile.value) return
-  
+
   touchEndX.value = e.changedTouches[0].clientX
   const swipeDistance = touchEndX.value - touchStartX.value
-  
+
   if (swipeDistance > minSwipeDistance) {
     isPlaylistExpanded.value = false
   }
@@ -81,7 +81,7 @@ const onTouchEnd = (e: TouchEvent) => {
 const orderChanged = (event: DraggableEvent) => {
   const payload: ReorderPayload = {
     oldOrder: event.oldIndex,
-    newOrder: event.newIndex,
+    newOrder: event.newIndex
   }
 
   changePlaylistOrder(payload)
@@ -102,7 +102,10 @@ const orderChanged = (event: DraggableEvent) => {
   overflow: auto;
   border-radius: 0;
   transition: all 0.5s var.$animation;
-  box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%);
+  box-shadow:
+    0 11px 15px -7px rgb(0 0 0 / 20%),
+    0 24px 38px 3px rgb(0 0 0 / 14%),
+    0 9px 46px 8px rgb(0 0 0 / 12%);
 
   @include var.media('<desktop') {
     padding-top: 2.5rem;

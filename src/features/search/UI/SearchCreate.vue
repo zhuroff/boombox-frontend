@@ -19,7 +19,9 @@
     <div
       v-if="!!error"
       class="search__error"
-    >{{ error }}</div>
+    >
+      {{ error }}
+    </div>
   </div>
 </template>
 
@@ -40,7 +42,7 @@ interface Emits {
 }
 
 withDefaults(defineProps<Props>(), {
-  inputPlaceholder: 'search.placeholder',
+  inputPlaceholder: 'search.placeholder'
 })
 const emit = defineEmits<Emits>()
 const { localize } = useLocalization()
@@ -50,7 +52,6 @@ const { localize } = useLocalization()
 @use '~/app/styles/variables' as var;
 
 .search {
-
   &__create {
     position: relative;
 

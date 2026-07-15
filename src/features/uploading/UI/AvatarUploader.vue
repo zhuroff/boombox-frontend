@@ -5,7 +5,7 @@
       :src="avatarUrl"
       :alt="entityTitle"
       class="avatar__image"
-    >
+    />
     <form
       v-if="isAdmin"
       class="avatar__form"
@@ -19,7 +19,7 @@
           ref="avatarElement"
           :disabled="isMobile"
           @change="upload"
-        >
+        />
         <Sprite name="camera" />
       </label>
     </form>

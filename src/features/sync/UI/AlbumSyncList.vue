@@ -2,8 +2,10 @@
   <div class="synclist">
     <div
       v-if="!contentSections.length"
-      class="synclist__empty"    
-    >{{ localize('syncResponse.synchronizeEmpty') }}</div>
+      class="synclist__empty"
+    >
+      {{ localize('syncResponse.synchronizeEmpty') }}
+    </div>
     <div
       class="synclist__section"
       v-for="[key, section] in contentSections"
@@ -36,9 +38,7 @@
             v-for="[k, reason] in Object.entries(row)"
             :key="k"
           >
-            <strong>
-              {{ localize(`syncResponse.invalidValue.${k}`) }}
-            </strong>: {{ reason }}
+            <strong> {{ localize(`syncResponse.invalidValue.${k}`) }} </strong>: {{ reason }}
           </div>
         </li>
       </ul>
@@ -62,10 +62,7 @@ const props = defineProps<Props>()
 const { localize } = useLocalization()
 
 const contentSections = computed(() => {
-  return (
-    Object.entries(props.sections)
-      .filter(([_, value]) => value.length > 0)
-  ) as [string, AlbumBasic[]][]
+  return Object.entries(props.sections).filter(([_, value]) => value.length > 0) as [string, AlbumBasic[]][]
 })
 </script>
 

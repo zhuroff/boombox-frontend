@@ -49,27 +49,26 @@ const isOnHover = ref(false)
 
 const { playTrack, playPauseTrack, playingTrack, fetchingTrackId } = usePlayer()
 
-const isTrackPlaying = computed(() => (
-  playingTrack.value &&
-  playingTrack.value._id === props.track._id &&
-  playingTrack.value.isOnPlaying &&
-  !playingTrack.value.isOnPause &&
-  !isOnHover.value
-))
+const isTrackPlaying = computed(
+  () =>
+    playingTrack.value &&
+    playingTrack.value._id === props.track._id &&
+    playingTrack.value.isOnPlaying &&
+    !playingTrack.value.isOnPause &&
+    !isOnHover.value
+)
 
-const isTrackPaused = computed(() => (
-  playingTrack.value &&
-  playingTrack.value._id === props.track._id &&
-  playingTrack.value.isOnPause ||
-  isOnHover.value
-))
+const isTrackPaused = computed(
+  () =>
+    (playingTrack.value && playingTrack.value._id === props.track._id && playingTrack.value.isOnPause) ||
+    isOnHover.value
+)
 </script>
 
 <style lang="scss">
 @use '~/app/styles/variables' as var;
 
 .trackrow__action {
-  
   &.--rounded {
     border-radius: 50%;
     margin: 0 var.$minPadding 0 var.$fieldPadding;
@@ -89,7 +88,7 @@ const isTrackPaused = computed(() => (
 
   &.--highlighted {
     margin: 0 var.$minPadding 0 var.$fieldPadding;
-    
+
     .icon {
       fill: var.$accent !important;
       color: var.$accent !important;

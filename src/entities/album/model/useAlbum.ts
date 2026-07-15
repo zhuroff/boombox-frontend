@@ -9,18 +9,20 @@ const useAlbum = (dbService: DatabaseService) => {
   const pageEntityKey = ref('albums')
 
   const { mutate: updateAlbumNote } = useMutation({
-    mutationFn: ([albumId, note]: [string, string]) => (
+    mutationFn: ([albumId, note]: [string, string]) =>
       dbService.updateEntry(pageEntityKey.value, albumId, 'note', { note })
-    )
+  })
+
+  const { mutate: updateAlbumVinyl, isPending: isVinylUpdating } = useMutation({
+    mutationFn: ([albumId, availableOnVinyl]: [string, boolean]) =>
+      dbService.updateEntry(pageEntityKey.value, albumId, 'vinyl', { availableOnVinyl })
   })
 
   return {
     updateAlbumNote,
-    ...useAlbumsWithRelated<AlbumFull>(
-      pageEntityKey,
-      dbService,
-      preRandomState
-    )
+    updateAlbumVinyl,
+    isVinylUpdating,
+    ...useAlbumsWithRelated<AlbumFull>(pageEntityKey, dbService, preRandomState)
   }
 }
 

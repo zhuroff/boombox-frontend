@@ -55,7 +55,6 @@ const changeAlbumsOrder = (event: DraggableEvent) => {
   emit('orderChanged', event)
 }
 
-
 const saveTitle = (value: string) => {
   emit('saveTitle', value)
 }
@@ -65,9 +64,7 @@ const saveTitle = (value: string) => {
 @use '~/app/styles/variables' as var;
 
 .collection {
-
   &__content {
-
     @include var.media('<desktop') {
       padding: var.$minPadding var.$minPadding var.$mainPadding;
     }

@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import type { DatabaseService } from '~shared/api'
 import type { Entity } from '../lib'
 
-const useGetPage = <T extends Entity & { genre?: Partial<Entity>, period?: Partial<Entity> }>(
+const useGetPage = <T extends Entity & { genre?: Partial<Entity>; period?: Partial<Entity> }>(
   entityKey: Ref<string>,
   dbService: DatabaseService,
   preRandomState?: Ref<string>
@@ -12,19 +12,17 @@ const useGetPage = <T extends Entity & { genre?: Partial<Entity>, period?: Parti
   const route = useRoute()
   const router = useRouter()
   const queryClient = useQueryClient()
-  
+
   const routePath = computed(() => {
     if (preRandomState?.value) {
       return 'random'
     }
-    
+
     if ('genre' in route.params) {
       return `${route.params.genre}/${route.params.id}`
     }
 
-    return typeof route.params.id === 'string'
-      ? route.params.id
-      : route.params.id.join('/')
+    return typeof route.params.id === 'string' ? route.params.id : route.params.id.join('/')
   })
 
   const queryKey = reactive([routePath, preRandomState])
@@ -36,28 +34,20 @@ const useGetPage = <T extends Entity & { genre?: Partial<Entity>, period?: Parti
     queryFn: () => dbService.getEntityPage(entityKey.value, routePath.value)
   })
 
-  watch(
-    [isFetched, data],
-    ([newFetched, newData]) => {
-      const newRoute = 'genre' in route.params
-        ? `${newData?.genre?.title}/${newData?.period?.title}`
-        : newData?._id
-      
-      if (newFetched && preRandomState?.value) {
-        router.replace(`/${entityKey.value}/${newRoute}`)
-      }
-    },
-  )
+  watch([isFetched, data], ([newFetched, newData]) => {
+    const newRoute = 'genre' in route.params ? `${newData?.genre?.title}/${newData?.period?.title}` : newData?._id
 
-  watch(
-    [route, data],
-    ([newRouteState, newDataState], [_, prevDataState]) => {
-      if (!prevDataState?._id || !newDataState?._id || !preRandomState) return
-      if (newDataState._id !== newRouteState.params.id) {
-        preRandomState.value = ''
-      }
+    if (newFetched && preRandomState?.value) {
+      router.replace(`/${entityKey.value}/${newRoute}`)
     }
-  )
+  })
+
+  watch([route, data], ([newRouteState, newDataState], [_, prevDataState]) => {
+    if (!prevDataState?._id || !newDataState?._id || !preRandomState) return
+    if (newDataState._id !== newRouteState.params.id) {
+      preRandomState.value = ''
+    }
+  })
 
   return {
     isRefetching,

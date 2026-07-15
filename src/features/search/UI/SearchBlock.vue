@@ -26,11 +26,16 @@ import type { SearchResultState, SearchResultData } from '../lib/types'
 interface Props {
   block: SearchResultState
   heading?: string
-  renderer: (key: string, data: SearchResultData) => (
-    VNode<RendererNode, RendererElement, {
+  renderer: (
+    key: string,
+    data: SearchResultData
+  ) => VNode<
+    RendererNode,
+    RendererElement,
+    {
       [key: string]: any
-    }>
-  )
+    }
+  >
 }
 
 defineProps<Props>()
@@ -65,7 +70,6 @@ defineProps<Props>()
     transition: background-color 0.3s var.$animation;
 
     &:hover {
-
       @include var.media('>=desktop') {
         background-color: var.$light;
         transition: background-color 0.3s var.$animation;

@@ -7,18 +7,15 @@ import type { PlaylistTrack } from '~features/player'
 import type { AlbumFull } from '~entities/album'
 import type { ReorderPayload } from '~shared/lib'
 
-const createPlaylistTrack = (
-  album: UnifiedEntityFullCard,
-  track: TrackBasic,
-  index = 0
-): PlaylistTrack => {
-  const albumCover = album.kind === 'album'
-    ? album.coverURL
+const createPlaylistTrack = (album: UnifiedEntityFullCard, track: TrackBasic, index = 0): PlaylistTrack => {
+  const albumCover =
+    album.kind === 'album'
       ? album.coverURL
-      : coverPlaceholders('album')
-    : album.avatar
-      ? hostString(album.avatar)
-      : coverPlaceholders('album')
+        ? album.coverURL
+        : coverPlaceholders('album')
+      : album.avatar
+        ? hostString(album.avatar)
+        : coverPlaceholders('album')
 
   return {
     ...track,
@@ -35,9 +32,7 @@ const isPlayingStarted = ref(false)
 
 const usePlaylistService = () => {
   const initPlaylist = (album: Exclude<UnifiedEntityFullCard, CollectionFull>) => {
-    const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => (
-      createPlaylistTrack(album, track, index)
-    ))
+    const playerTracks = album.tracks.map<PlaylistTrack>((track, index) => createPlaylistTrack(album, track, index))
 
     if (!primaryPlaylist.value.length || !isPlayingStarted.value) {
       primaryPlaylist.value = playerTracks
@@ -48,7 +43,15 @@ const usePlaylistService = () => {
 
   const initWavePlaylist = (tracks: TrackBasic[]) => {
     secondaryPlaylist.value = tracks.map<PlaylistTrack>((track, index) => {
-      const inAlbum = track.inAlbum as { artists?: { _id: string; title: string }[]; artist?: { _id: string; title: string }; period: { _id: string; title: string }; genre?: { _id: string; title: string }; path?: string; _id: string; title: string }
+      const inAlbum = track.inAlbum as {
+        artists?: { _id: string; title: string }[]
+        artist?: { _id: string; title: string }
+        period: { _id: string; title: string }
+        genre?: { _id: string; title: string }
+        path?: string
+        _id: string
+        title: string
+      }
       const album: AlbumFull = {
         ...track.inAlbum,
         coverURL: track.coverURL,
@@ -78,7 +81,7 @@ const usePlaylistService = () => {
         console.warn('Track not found in playlists')
         return
       }
-      
+
       callback?.()
     }
 
@@ -87,7 +90,7 @@ const usePlaylistService = () => {
 
   const getNextTrack = (playingTrackId: string | undefined): PlaylistTrack | undefined => {
     if (!playingTrackId) return
-    
+
     let playlist = primaryPlaylist
     let currentTrackIndex = playlist.value.findIndex(({ _id }) => _id === playingTrackId)
 
@@ -102,11 +105,7 @@ const usePlaylistService = () => {
 
     if (!targetTrack) return
 
-    return (
-      targetTrack.idDisabled
-        ? getNextTrack(targetTrack._id)
-        : targetTrack
-    )
+    return targetTrack.idDisabled ? getNextTrack(targetTrack._id) : targetTrack
   }
 
   const getPrevTrack = (playingTrackId: string | undefined): PlaylistTrack | undefined => {
@@ -126,11 +125,7 @@ const usePlaylistService = () => {
 
     if (!targetTrack) return
 
-    return (
-      targetTrack.idDisabled
-        ? getPrevTrack(targetTrack._id)
-        : targetTrack
-    )
+    return targetTrack.idDisabled ? getPrevTrack(targetTrack._id) : targetTrack
   }
 
   const isTrackInPlaylist = (trackId: string) => {
@@ -141,7 +136,15 @@ const usePlaylistService = () => {
     let targetTrack = searchTrackInPlaylists(track)
 
     if (!targetTrack) {
-      const inAlbum = track.inAlbum as { artists?: { _id: string; title: string }[]; artist?: { _id: string; title: string }; period?: { _id: string; title: string }; genre?: { _id: string; title: string }; path?: string; _id: string; title: string }
+      const inAlbum = track.inAlbum as {
+        artists?: { _id: string; title: string }[]
+        artist?: { _id: string; title: string }
+        period?: { _id: string; title: string }
+        genre?: { _id: string; title: string }
+        path?: string
+        _id: string
+        title: string
+      }
       targetTrack = createPlaylistTrack(
         {
           ...track.inAlbum,
@@ -157,7 +160,7 @@ const usePlaylistService = () => {
       )
     }
 
-    if (typeof currentIndex !== 'number') {      
+    if (typeof currentIndex !== 'number') {
       targetTrack && primaryPlaylist.value.push(targetTrack)
     } else {
       targetTrack && primaryPlaylist.value.splice(currentIndex + 1, 0, targetTrack)

@@ -20,14 +20,36 @@ export const localesEN: LocaleDictionary = {
   submit: 'Submit',
   signIn: 'Sign in',
   save: 'Save',
-  offline: 'You\'re offline',
+  offline: "You're offline",
   delConfirmMessage: 'Are you sure you want to delete this entity?',
   pageNotFound: 'Page not found',
   noBooklet: 'Album has no booklet',
   goBack: 'Go back',
   album: {
-    notePlaceholder: 'Album note'
+    notePlaceholder: 'Album note',
+    vinylConfirmMessage: 'Remove this album from your vinyl collection?'
   },
+  albumNoteFilter: {
+    all: 'All albums',
+    withReviews: 'With reviews',
+    withoutReviews: 'Without reviews'
+  },
+  albumVinylFilter: {
+    all: 'All albums',
+    onVinyl: 'On vinyl',
+    notOnVinyl: 'Not on vinyl'
+  },
+  albumSort: {
+    'title-asc': 'Title: A → Z',
+    'title-desc': 'Title: Z → A',
+    'period-asc': 'Period: A → Z',
+    'period-desc': 'Period: Z → A',
+    'dateCreated-asc': 'Added: oldest first',
+    'dateCreated-desc': 'Added: newest first',
+    'modified-asc': 'Modified: oldest first',
+    'modified-desc': 'Modified: newest first'
+  },
+  confirm: 'Confirm',
   navigation: {
     albums: 'Albums',
     artists: 'Artists',
@@ -100,7 +122,7 @@ export const localesEN: LocaleDictionary = {
   loginForm: {
     email: 'Email',
     password: 'Password',
-    emailPlaceholder: 'Enter the email you\'ve registered on',
+    emailPlaceholder: "Enter the email you've registered on",
     passwordPlaceholder: 'Enter the account password'
   },
   userForm: {
@@ -191,15 +213,16 @@ export const localesEN: LocaleDictionary = {
     added: 'Added albums',
     updated: 'Updated albums',
     deleted: 'Deleted albums',
-    invalid: 'Albums that didn\'t pass validation',
+    invalid: "Albums that didn't pass validation",
     synchronizeEmpty: 'No albums to synchronize',
     invalidValue: {
       album: 'Album',
       cloud: 'Cloud URL',
       reason: 'Reason',
-      invalid_folder_name: 'The folder name does not match the pattern: \'Artist name [release year] Album title #Genre\'',
-      invalid_tracks_names: 'The tracks names doesn\'t match the pattern: \'Number. Track title.file extension\'',
-      no_tracks: 'Album doesn\'t contain any track'
+      invalid_folder_name:
+        "The folder name does not match the pattern: 'Artist name [release year] Album title #Genre'",
+      invalid_tracks_names: "The tracks names doesn't match the pattern: 'Number. Track title.file extension'",
+      no_tracks: "Album doesn't contain any track"
     }
   },
   createEntityLabel: 'Create entity "{x}" with name: "{x}"',
@@ -208,7 +231,8 @@ export const localesEN: LocaleDictionary = {
     wiki: 'Get wiki info',
     addToCollection: 'Add to collection',
     getRandomAlbum: 'Get random album',
-    deleteAlbum: 'Delete album'
+    deleteAlbum: 'Delete album',
+    vinylAvailability: 'Available on vinyl'
   },
   trackActions: {
     getLyrics: 'Get lyrics',
@@ -230,7 +254,7 @@ export const localesEN: LocaleDictionary = {
     id: 'ID',
     email: 'Email',
     role: 'Role',
-    delete: 'Delete user',
+    delete: 'Delete user'
   },
   backupsTable: {
     timestamp: 'Timestamp',

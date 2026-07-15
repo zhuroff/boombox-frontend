@@ -26,23 +26,15 @@ const dbService = new DatabaseService()
 
 const { localize } = useLocalization()
 
-const {
-  data,
-  isFetching,
-  refetch,
-  reset
-} = useSync(dbService)
+const { data, isFetching, refetch, reset } = useSync(dbService)
 
 const handleSync = () => {
   refetch()
 }
 
-watch(
-  data,
-  (value) => {
-    value && emit('passSyncData', { data: value, reset })
-  }
-)
+watch(data, (value) => {
+  value && emit('passSyncData', { data: value, reset })
+})
 
 onUnmounted(() => {
   reset()

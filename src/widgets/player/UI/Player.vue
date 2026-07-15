@@ -163,7 +163,6 @@ const { screensaveMode, isPlaylistExpanded, playingTrack } = usePlayer()
   }
 
   &__collapse {
-
     @include var.media('<desktop') {
       position: absolute;
       top: 0;

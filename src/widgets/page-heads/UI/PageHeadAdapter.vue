@@ -1,12 +1,15 @@
 <template>
   <div class="album__hero">
-    <component
-      :is="PageHeadComponent"
+    <AlbumPageHead
+      v-if="album.kind === 'album'"
+      :album="album"
+      :length="totalTracksTime"
+      :is-vinyl-available="isVinylAvailable"
       @getRandomAlbum="getRandomAlbum"
       @callSearchBlock="isSearchMode = true"
       @addToCollection="addToCollection"
       @getWikiInfo="getWikiInfo"
-      @deleteAlbum="deleteAlbum"
+      @toggleVinylAvailability="toggleVinylAvailability"
     >
       <template #heading>
         <h1 class="album__hero-heading">
@@ -14,7 +17,9 @@
             ref="headingRef"
             :contenteditable="isEditable && isEditMode"
             @input="setNewTitle"
-          >{{ album.title }}</div>
+          >
+            {{ album.title }}
+          </div>
 
           <Button
             v-if="isEditable && !isEditMode"
@@ -33,7 +38,46 @@
           />
         </h1>
       </template>
-    </component>
+    </AlbumPageHead>
+
+    <CompilationPageHead
+      v-else
+      :album="album"
+      :length="totalTracksTime"
+      @getRandomAlbum="getRandomAlbum"
+      @callSearchBlock="isSearchMode = true"
+      @addToCollection="addToCollection"
+      @getWikiInfo="getWikiInfo"
+      @deleteAlbum="deleteAlbum"
+    >
+      <template #heading>
+        <h1 class="album__hero-heading">
+          <div
+            ref="headingRef"
+            :contenteditable="isEditable && isEditMode"
+            @input="setNewTitle"
+          >
+            {{ album.title }}
+          </div>
+
+          <Button
+            v-if="isEditable && !isEditMode"
+            icon="pencil"
+            isInverted
+            isRounded
+            @click="activateEditMode"
+          />
+
+          <Button
+            v-if="isEditable && isEditMode"
+            icon="save"
+            isInverted
+            isRounded
+            @click="saveNewTitle"
+          />
+        </h1>
+      </template>
+    </CompilationPageHead>
 
     <Modal
       :isModalActive="isSearchMode"
@@ -49,12 +93,11 @@
 </template>
 
 <script setup lang="ts">
-import { h, computed, ref, nextTick } from 'vue'
+import { computed, ref, nextTick } from 'vue'
 import { useSearch, SearchService, SearchModal } from '~features/search'
 
 import { Modal, Button } from '~shared/UI'
 import { useLocalization } from '~shared/model'
-import { assertNever } from '~shared/utils'
 
 import AlbumPageHead from './AlbumPageHead.vue'
 import CompilationPageHead from './CompilationPageHead.vue'
@@ -65,6 +108,7 @@ interface Props {
   album: UnifiedEntityFullCard
   withSearch?: boolean
   isEditable?: boolean
+  isVinylAvailable?: boolean
 }
 
 interface Emits {
@@ -73,10 +117,13 @@ interface Emits {
   (e: 'getWikiInfo'): void
   (e: 'deleteAlbum'): void
   (e: 'saveNewTitle'): void
+  (e: 'toggleVinylAvailability'): void
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const isVinylAvailable = computed(() => Boolean(props.isVinylAvailable))
 
 const { localize } = useLocalization()
 
@@ -97,15 +144,11 @@ const onSearch = (value: string) => {
 const totalTracksTime = computed(() => {
   if (!('tracks' in props.album)) return ''
 
-  const isAllTracksHaveDuration = !!props.album.tracks.every((track) => (
-    Number(track.duration)
-  ))
+  const isAllTracksHaveDuration = !!props.album.tracks.every((track) => Number(track.duration))
 
   if (!isAllTracksHaveDuration) return localize('unknownTime')
 
-  const totalDurationInSeconds = props.album.tracks.reduce((acc, next) => (
-    acc + (Number(next.duration) || 0)
-  ), 0)
+  const totalDurationInSeconds = props.album.tracks.reduce((acc, next) => acc + (Number(next.duration) || 0), 0)
 
   const hours = Math.floor(totalDurationInSeconds / 3600)
   const minutes = Math.floor((totalDurationInSeconds % 3600) / 60)
@@ -120,22 +163,11 @@ const totalTracksTime = computed(() => {
   return formattedTime
 })
 
-const PageHeadComponent = computed(() => {
-  switch (props.album.kind) {
-    case 'album':
-      return h(AlbumPageHead, { album: props.album, length: totalTracksTime.value })
-    case 'compilation':
-    case 'collection':
-      return h(CompilationPageHead, { album: props.album, length: totalTracksTime.value })
-    default:
-      return assertNever(props.album)
-  }
-})
-
 const getRandomAlbum = () => emit('getRandomAlbum')
 const addToCollection = () => emit('addToCollection')
 const getWikiInfo = () => emit('getWikiInfo')
 const deleteAlbum = () => emit('deleteAlbum')
+const toggleVinylAvailability = () => emit('toggleVinylAvailability')
 
 const setNewTitle = (e: Event) => {
   const target = e.target as HTMLDivElement
@@ -158,9 +190,7 @@ const activateEditMode = () => {
 @use '~/app/styles/variables' as var;
 
 .album {
-
   &__hero {
-
     @include var.media('<desktop') {
       display: flex;
       flex-direction: column;

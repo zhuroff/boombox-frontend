@@ -31,12 +31,14 @@ const routes: Array<RouteRecordRaw> = [
         path: '/compilations',
         name: 'compilation-list-page',
         meta: { navLocaleKey: 'compilations' },
-        component: () => import(/* webpackChunkName: 'compilation-list-page' */ '~pages/compilation-list-page/index.vue')
+        component: () =>
+          import(/* webpackChunkName: 'compilation-list-page' */ '~pages/compilation-list-page/index.vue')
       },
       {
         path: '/compilations/:id',
         name: 'compilation-single-page',
-        component: () => import(/* webpackChunkName: 'compilation-single-page' */ '~pages/compilation-single-page/index.vue')
+        component: () =>
+          import(/* webpackChunkName: 'compilation-single-page' */ '~pages/compilation-single-page/index.vue')
       }
     ]
   },
@@ -53,7 +55,8 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/collections/:id',
         name: 'collection-single-page',
-        component: () => import(/* webpackChunkName: 'collection-single-page' */ '~pages/collection-single-page/index.vue')
+        component: () =>
+          import(/* webpackChunkName: 'collection-single-page' */ '~pages/collection-single-page/index.vue')
       }
     ]
   },

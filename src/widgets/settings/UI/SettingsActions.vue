@@ -16,9 +16,7 @@
       action="get"
       @onEmit="backupDataEmit"
     />
-    <SyncAction
-      @passSyncData="syncDataEmit"
-    />
+    <SyncAction @passSyncData="syncDataEmit" />
     <Button
       :label="localize('settings.logout')"
       @click="logout"

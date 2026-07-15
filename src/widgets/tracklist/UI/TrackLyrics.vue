@@ -1,4 +1,4 @@
-<template>  
+<template>
   <div class="lyrics">
     <header class="lyrics__header">
       <div class="lyrics__heading">
@@ -28,7 +28,9 @@
         <div
           v-if="!lyricsLocal && !externalLyrics.length"
           class="lyrics__empty"
-        >{{ localize('lyrics.empty') }}</div>
+        >
+          {{ localize('lyrics.empty') }}
+        </div>
       </transition>
 
       <TextareaInput
@@ -60,9 +62,7 @@
             />
 
             <div class="lyrics__item_content">
-              <div class="lyrics__item_title">
-                {{ item.artist }} - {{ item.title }}
-              </div>
+              <div class="lyrics__item_title">{{ item.artist }} - {{ item.title }}</div>
 
               <Button
                 size="small"
@@ -70,7 +70,7 @@
                 :style="lyricsActionStyle"
                 :label="expandCollapseLabel(index)"
                 @click="expandLyrics(index)"
-              />&nbsp;&nbsp;              
+              />&nbsp;&nbsp;
 
               <Button
                 size="small"
@@ -121,13 +121,10 @@ const dbService = new DatabaseService()
 const lyricsLocal = ref<null | string>(null)
 const expandedLyrics = ref<null | number>(null)
 
-const {
-  lyricsRes,
-  saveLyrics,
-  fetchExternalLyrics,
-  isFetchingExternalLyrics,
-  externalLyrics
-} = useTrack(props.track._id, dbService)
+const { lyricsRes, saveLyrics, fetchExternalLyrics, isFetchingExternalLyrics, externalLyrics } = useTrack(
+  props.track._id,
+  dbService
+)
 
 const lyricsActionStyle = {
   color: 'var(--paleDP)',
@@ -162,18 +159,12 @@ const expandCollapseLabel = (index: number) => {
 }
 
 const expandLyrics = (index: number) => {
-  expandedLyrics.value =
-    index === expandedLyrics.value
-      ? null
-      : index
+  expandedLyrics.value = index === expandedLyrics.value ? null : index
 }
 
-watch(
-  lyricsRes,
-  (newValue) => {
-    lyricsLocal.value = newValue?.lyrics || ''
-  }
-)
+watch(lyricsRes, (newValue) => {
+  lyricsLocal.value = newValue?.lyrics || ''
+})
 </script>
 
 <style lang="scss">

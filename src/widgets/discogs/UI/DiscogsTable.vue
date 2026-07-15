@@ -50,7 +50,7 @@ const discogsPayload = computed(() => {
       page: 1
     }))
   }
-  
+
   return {
     artist: props.entity.albumArtist,
     album: props.entity.albumTitle,
@@ -69,40 +69,30 @@ const {
   discogsFilters
 } = useDiscogs(discogsService)
 
-const {
-  paginationState,
-  paginationConfig,
-  updatePaginationConfig,
-  updatePaginationState
-} = usePaginator({ isRouted: false })
+const { paginationState, paginationConfig, updatePaginationConfig, updatePaginationState } = usePaginator({
+  isRouted: false
+})
 
 const discogsPagination = computed(() => ({
   ...paginationState.value,
   totalDocs: filteredDiscogsData.value.length,
-  totalPages: Math.floor(filteredDiscogsData.value.length / paginationState.value.limit),
+  totalPages: Math.floor(filteredDiscogsData.value.length / paginationState.value.limit)
 }))
 
-const paginatedDiscogsData: ComputedRef<TableRow[]> = computed(() => (
+const paginatedDiscogsData: ComputedRef<TableRow[]> = computed(() =>
   [...filteredDiscogsData.value]
-    .splice(
-      (discogsPagination.value.page - 1) * discogsPagination.value.limit,
-      discogsPagination.value.limit
-    )
-    .map(row => ({
+    .splice((discogsPagination.value.page - 1) * discogsPagination.value.limit, discogsPagination.value.limit)
+    .map((row) => ({
       ...row,
       id: String(row.id)
     }))
-))
+)
 
-const isTableReady = computed(() => (
-  !isDiscogsSearching.value && paginatedDiscogsData.value.length
-))
+const isTableReady = computed(() => !isDiscogsSearching.value && paginatedDiscogsData.value.length)
 
-const isFiltersApplied = computed(() => (
-  Object.values(discogsFiltersState).some((value) => value !== null)
-))
+const isFiltersApplied = computed(() => Object.values(discogsFiltersState).some((value) => value !== null))
 
-const tableHeaderConfig = computed<TableHeaderConfig[]>(() => (
+const tableHeaderConfig = computed<TableHeaderConfig[]>(() =>
   discogsTableSchema.order.map((key) => {
     const filter = discogsTableSchema.filters?.[key]
     const heading = localize(`discogsTable.${key}`)
@@ -116,39 +106,30 @@ const tableHeaderConfig = computed<TableHeaderConfig[]>(() => (
 
     return {
       key,
-      element: h(
-        Select,
-        {
-          options: [
-            heading,
-            ...discogsFilters[key]
-          ],
-          modelValue: discogsFiltersState[key],
-          localeKey: 'discogsTable',
-          entityKey: key,
-          size: 'small',
-          onPassSelectedValue: (value) => {
-            setDiscogsFilterValue(value)
-            updatePaginationState('page', 1)
-          }
+      element: h(Select, {
+        options: [heading, ...discogsFilters[key]],
+        modelValue: discogsFiltersState[key],
+        localeKey: 'discogsTable',
+        entityKey: key,
+        size: 'small',
+        onPassSelectedValue: (value) => {
+          setDiscogsFilterValue(value)
+          updatePaginationState('page', 1)
         }
-      )
+      })
     }
   })
-))
+)
 
 const handleTableRowClick = (row: TableRow) => {
   window.open(String(row.pageURL))
 }
 
-watch(
-  filteredDiscogsData,
-  (value) => {
-    if (!value) return
-    updatePaginationConfig('totalDocs', value.length)
-    updatePaginationConfig('totalPages', Math.ceil(value.length / paginationState.value.limit))
-  }
-)
+watch(filteredDiscogsData, (value) => {
+  if (!value) return
+  updatePaginationConfig('totalDocs', value.length)
+  updatePaginationConfig('totalPages', Math.ceil(value.length / paginationState.value.limit))
+})
 
 watchEffect(() => {
   if (discogsPayload.value && !isMobile.value) {

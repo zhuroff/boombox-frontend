@@ -17,9 +17,7 @@
         :key="name"
         :class="`album__related --${cardsTemplate}`"
       >
-        <div class="album__related-title">
-          {{ localize('moreOf') }} {{ name }}
-        </div>
+        <div class="album__related-title">{{ localize('moreOf') }} {{ name }}</div>
         <EntityCardList
           :entities="docs"
           :entityKey="entityKey"
@@ -69,7 +67,7 @@ const { localize } = useLocalization()
 
   &__content {
     flex: 1 1 0;
-    position: relative;    
+    position: relative;
 
     @include var.media('<desktop') {
       border-top-left-radius: var.$borderRadiusMD;
@@ -161,7 +159,6 @@ const { localize } = useLocalization()
   }
 
   &__related {
-
     @include var.media('<desktop') {
       margin-bottom: var.$mainPadding;
       display: flex;

@@ -17,19 +17,14 @@ import type { DropdownItem } from '~shared/lib'
 const { localize, locales, currentLocale, setLocale } = useLocalization()
 
 const localesSelector = computed<DropdownItem[]>(() => {
-  return (
-    Array.from(locales.values())
-      .map(({ locale }) => ({
-        path: localize(`languages.${locale}`),
-        value: locale,
-        icon: `flag-${locale}`
-      }))
-  )
+  return Array.from(locales.values()).map(({ locale }) => ({
+    path: localize(`languages.${locale}`),
+    value: locale,
+    icon: `flag-${locale}`
+  }))
 })
 
-const selectedValue = computed(() => (
-  currentLocale.value.locale as string
-))
+const selectedValue = computed(() => currentLocale.value.locale as string)
 
 const applySelect = (option: DropdownItem) => {
   const locale = locales.get(option.value as LocaleKeys)

@@ -5,7 +5,7 @@
       :src="posterUrl"
       :alt="entityTitle"
       class="poster__image"
-    >
+    />
     <form
       v-if="isAdmin"
       class="poster__form"
@@ -19,7 +19,7 @@
           ref="posterElement"
           :disabled="isMobile"
           @change="upload"
-        >
+        />
         <Sprite name="camera" />
       </label>
     </form>

@@ -25,7 +25,7 @@ const useAlbumsWithRelated = <T extends AlbumFull>(
     return undefined
   })
 
-  const artistConfig = computed<UseEntityListPayload>(() => (
+  const artistConfig = computed<UseEntityListPayload>(() =>
     album.value && primaryArtist.value
       ? {
           entityKey: 'albums',
@@ -40,10 +40,10 @@ const useAlbumsWithRelated = <T extends AlbumFull>(
             }
           }
         }
-      : {} as UseEntityListPayload
-  ))
-  
-  const genreConfig = computed<UseEntityListPayload>(() => (
+      : ({} as UseEntityListPayload)
+  )
+
+  const genreConfig = computed<UseEntityListPayload>(() =>
     album.value
       ? {
           entityKey: 'albums',
@@ -61,8 +61,8 @@ const useAlbumsWithRelated = <T extends AlbumFull>(
             }
           }
         }
-      : {} as UseEntityListPayload
-  ))
+      : ({} as UseEntityListPayload)
+  )
 
   const isAlbumReady = computed(() => !!album.value && isAlbumFetched.value)
   const isReadyForRelated = computed(() => isAlbumReady.value && !isMobile.value)
@@ -71,34 +71,24 @@ const useAlbumsWithRelated = <T extends AlbumFull>(
     data: album,
     refetch: refetchAlbumPage,
     isFetched: isAlbumFetched
-  } = useGetPage<T>(
-    pageEntityKey,
-    dbService,
-    preRandomState
-  )
+  } = useGetPage<T>(pageEntityKey, dbService, preRandomState)
 
-  const { data: relatedAlbumsByArtist } = useGetList<AlbumBasic>(
-    artistConfig,
-    dbService,
-    isReadyForRelated
-  )
+  const { data: relatedAlbumsByArtist } = useGetList<AlbumBasic>(artistConfig, dbService, isReadyForRelated)
 
-  const { data: relatedAlbumsByGenre } = useGetList<AlbumBasic>(
-    genreConfig,
-    dbService,
-    isReadyForRelated
-  )
+  const { data: relatedAlbumsByGenre } = useGetList<AlbumBasic>(genreConfig, dbService, isReadyForRelated)
 
-  const relatedAlbums = computed<RelatedAlbums<AlbumBasic>[]>(() => ([
-    {
-      docs: relatedAlbumsByArtist.value?.docs || [],
-      name: primaryArtist.value?.title || ''
-    },
-    {
-      docs: relatedAlbumsByGenre.value?.docs || [],
-      name: album.value?.genre.title || ''
-    }
-  ]).filter(({ docs }) => !!docs.length))
+  const relatedAlbums = computed<RelatedAlbums<AlbumBasic>[]>(() =>
+    [
+      {
+        docs: relatedAlbumsByArtist.value?.docs || [],
+        name: primaryArtist.value?.title || ''
+      },
+      {
+        docs: relatedAlbumsByGenre.value?.docs || [],
+        name: album.value?.genre.title || ''
+      }
+    ].filter(({ docs }) => !!docs.length)
+  )
 
   return {
     album,

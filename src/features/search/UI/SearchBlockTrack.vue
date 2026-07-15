@@ -3,12 +3,10 @@
     <img
       :alt="track.inAlbum.title"
       :src="trackCover"
-    >
+    />
     <div>
       <strong>{{ track.title }}</strong>
-      <span>
-        {{ track.artist.title }} - {{ track.inAlbum.title }}
-      </span>
+      <span> {{ track.artist.title }} - {{ track.inAlbum.title }} </span>
     </div>
     <div class="input-search__results-actions">
       <Button
@@ -69,9 +67,7 @@ const playNow = () => {
 @use '~/app/styles/variables' as var;
 
 .input-search {
-
   &__results {
-
     &-track {
       padding: 5px;
       display: flex;
@@ -127,7 +123,7 @@ const playNow = () => {
         width: 2rem !important;
         height: 2rem !important;
         border: 1px solid var.$dark;
-        
+
         .icon {
           fill: var.$dark;
           color: var.$dark;
@@ -136,7 +132,7 @@ const playNow = () => {
         &:hover,
         &.--active {
           background-color: var.$dark;
-          
+
           .icon {
             fill: var.$light;
             color: var.$light;

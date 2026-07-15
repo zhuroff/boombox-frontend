@@ -2,10 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import type { Ref } from 'vue'
 import type DatabaseService from '~/shared/api/DatabaseService'
 
-const useCreateEntity = <T, U extends {}>(
-  entityKey: Ref<string>,
-  dbService: DatabaseService,
-) => {
+const useCreateEntity = <T, U extends {}>(entityKey: Ref<string>, dbService: DatabaseService) => {
   const queryClient = useQueryClient()
 
   const {

@@ -26,4 +26,3 @@ export type ExternalTrackLyricsResponse = {
 export type TrackLyricsResponse = {
   lyrics: string | null
 }
-

@@ -2,7 +2,6 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useMutation } from '@tanstack/vue-query'
 import { useUpdateEntity, useDevice } from '~shared/model'
 import { proxyCloudUrl } from '~shared/lib'
-import { CRACKLE_PATHS } from '~shared/constants'
 import usePlaylistService from './usePlaylistService'
 import type { PlaylistTrack } from '~features/player'
 import type { DatabaseService } from '~shared/api'
@@ -15,13 +14,11 @@ const CROSSFADE_BEGIN_SLACK_SECONDS = 0.02
 const CROSSFADE_CANCEL_SLACK_SECONDS = 0.03
 
 const playingTrack = ref<PlaylistTrack | null>(null)
-const crackleAudioRef = ref<HTMLAudioElement>(new Audio(CRACKLE_PATHS[0]))
 const playingTrackRef = ref<HTMLAudioElement | null>(null)
 const trackVolume = ref(1)
 const progressLine = ref(0)
 const progressTime = ref(0)
 const isTrackMuted = ref(false)
-const isVinylMode = ref(false)
 const fetchingTrackId = ref<string | null>(null)
 const isSwitchingTrack = ref(false)
 const preloadedNextAudioRef = ref<HTMLAudioElement | null>(null)
@@ -53,17 +50,10 @@ const useAudioService = (dbService: DatabaseService) => {
 
   const { isPlayingStarted, getNextTrack, setTrackDuration } = usePlaylistService()
 
-  const { updateEntity } = useUpdateEntity<ListPageResponse<TrackBasic>, Partial<TrackBasic>>(
-    entityKey,
-    dbService
-  )
+  const { updateEntity } = useUpdateEntity<ListPageResponse<TrackBasic>, Partial<TrackBasic>>(entityKey, dbService)
 
   const getStreamUrlForTrack = (track: PlaylistTrack) => {
-    return dbService.getCloudFiles<string>(
-      `${entityKey.value}/audio`,
-      `${track.path}`,
-      `cloudURL=${track.cloudURL}`
-    )
+    return dbService.getCloudFiles<string>(`${entityKey.value}/audio`, `${track.path}`, `cloudURL=${track.cloudURL}`)
   }
 
   const { mutateAsync: fetchTrackStreamURLAsync } = useMutation<string>({
@@ -72,7 +62,7 @@ const useAudioService = (dbService: DatabaseService) => {
       return getStreamUrlForTrack(playingTrack.value)
     }
   })
-  
+
   const { mutate: fetchTrackStreamURL } = useMutation<string>({
     mutationFn: () => {
       if (!playingTrack.value) throw new Error('No track')
@@ -259,11 +249,11 @@ const useAudioService = (dbService: DatabaseService) => {
   const checkAndSetDuration = (trackId: string) => {
     const { duration } = playingTrackRef.value || {}
     if (!duration || duration === Infinity) return
-    
+
     const currentTrack = playingTrack.value
-    
+
     if (!currentTrack || currentTrack._id !== trackId || currentTrack.duration) return
-    
+
     currentTrack.duration = duration
     setTrackDuration(trackId, duration)
     updateEntity({ _id: trackId, duration })
@@ -271,14 +261,15 @@ const useAudioService = (dbService: DatabaseService) => {
 
   const playTrackStream = (src: string) => {
     if (!playingTrack.value) return
-    
+
     const currentTrackId = playingTrack.value._id
     playingTrack.value.streamURL = src
     const proxyURL = proxyCloudUrl(src) || src
-    
+
     playingTrackRef.value = new Audio(proxyURL)
     playingTrackRef.value.volume = trackVolume.value
-    playingTrackRef.value.play()
+    playingTrackRef.value
+      .play()
       .then(() => checkAndSetDuration(currentTrackId))
       .then(() => playingTrackRef.value && playingStateHandler(playingTrackRef.value, currentTrackId))
       .then(() => playingTrack.value && (playingTrack.value.isOnPlaying = true))
@@ -332,10 +323,10 @@ const useAudioService = (dbService: DatabaseService) => {
     clearNextPreload()
 
     destroyPlayingTrack()
-    
+
     fetchingTrackId.value = track._id
     playingTrack.value = track
-    
+
     if (!track.streamURL) {
       fetchTrackStreamURLAsync()
         .then((src) => {
@@ -406,12 +397,7 @@ const useAudioService = (dbService: DatabaseService) => {
 
       const hasPreloadBuffer = preloadedForTrackId.value === next._id && preloadedNextAudioRef.value
 
-      if (
-        !crossfadeNextEl &&
-        hasPreloadBuffer &&
-        dur &&
-        isFinite(dur)
-      ) {
+      if (!crossfadeNextEl && hasPreloadBuffer && dur && isFinite(dur)) {
         const remaining = dur - audio.currentTime
         const overlap = getOverlapSeconds(dur)
         if (remaining <= overlap + CROSSFADE_BEGIN_SLACK_SECONDS) {
@@ -469,9 +455,7 @@ const useAudioService = (dbService: DatabaseService) => {
   }
 
   onMounted(() => {
-    trackVolume.value = isMobile.value ? 1 : Number(localStorage.getItem('playerVolume')) ?? 1
-    crackleAudioRef.value.volume = trackVolume.value
-    crackleAudioRef.value.loop = true
+    trackVolume.value = isMobile.value ? 1 : (Number(localStorage.getItem('playerVolume')) ?? 1)
   })
 
   onUnmounted(() => {
@@ -480,7 +464,6 @@ const useAudioService = (dbService: DatabaseService) => {
 
   return {
     trackVolume,
-    isVinylMode,
     isTrackMuted,
     playingTrack,
     progressLine,
@@ -488,7 +471,6 @@ const useAudioService = (dbService: DatabaseService) => {
     playNextTrack,
     fetchingTrackId,
     playingTrackRef,
-    crackleAudioRef,
     playTrackStream,
     fetchTrackStreamURL,
     destroyPlayingTrack,
