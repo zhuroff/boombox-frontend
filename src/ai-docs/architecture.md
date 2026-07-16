@@ -124,5 +124,5 @@ pages/album-single-page → AlbumContent + PageHeadAdapter + TrackList + note ed
 
 ## Env
 
-- `VITE_DEV_HOST` / `VITE_LIVE_HOST` — `hostString()` in utils (no `.env` committed; set locally for dev/prod builds).
-- Dev API: Vite proxy `/api` → `http://localhost:3001`.
+- `VITE_DEV_HOST` / `VITE_LIVE_HOST` — `hostString()` in utils (no `.env` committed; set locally for dev/prod builds). In dev, point `VITE_DEV_HOST` at the Vite origin (e.g. `http://localhost:5173`) so API and upload URLs stay same-origin and cookies work.
+- Dev proxy (Vite): `/api` and `/uploads` → `http://localhost:3001` (uploads require auth cookie, same as production).
