@@ -4,7 +4,7 @@ Documentation for LLM agents working on **boombox-frontend** (SPA **MelodyMap**)
 
 ## What this project is
 
-Vue 3 SPA for managing and playing a personal music collection: albums, artists, genres, periods, collections, compilations, player, sync, backup, Discogs integration. Talks to **boombox-backend** on port 3001 (`/api` proxy in dev).
+Vue 3 SPA for managing and playing a personal music collection: albums, artists, genres, periods, collections, compilations, player, sync, backup, Discogs integration. Talks to **boombox-backend** on port 3001 (`/api` and `/uploads` proxied in dev).
 
 ## Tech stack
 
@@ -35,7 +35,7 @@ Vue 3 SPA for managing and playing a personal music collection: albums, artists,
 ## Commands
 
 ```bash
-yarn dev          # Vite dev server, proxies /api → localhost:3001
+yarn dev          # Vite dev server, proxies /api and /uploads → localhost:3001
 yarn build        # type-check + production build
 yarn type-check   # vue-tsc only
 yarn test:unit    # Vitest
