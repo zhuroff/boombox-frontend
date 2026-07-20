@@ -60,26 +60,7 @@ const renderCollectionRelease = (release: DiscogsReleaseRow) => {
               class: 'collection-release__info'
             },
             `${localize('release.added')}: ${formatDate(release.date_added, currentLocale.value)}`
-          ),
-          release.melodymap_link
-            ? h(
-                'div',
-                {
-                  class: 'collection-release__info'
-                },
-                [
-                  h('span', `${localize('release.listen')}: `),
-                  release.melodymap_link.split(';').flatMap((link, index, array) => {
-                    const linkElement = h(RouterLink, { to: link.trim() }, () => index + 1)
-
-                    if (index < array.length - 1) {
-                      return [linkElement, ', ']
-                    }
-                    return [linkElement]
-                  })
-                ]
-              )
-            : null
+          )
         ]
       )
     ]

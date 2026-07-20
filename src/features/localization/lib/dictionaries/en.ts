@@ -268,7 +268,6 @@ export const localesEN: LocaleDictionary = {
     }
   },
   release: {
-    added: 'Added',
-    listen: 'Listen'
+    added: 'Added'
   }
 }
