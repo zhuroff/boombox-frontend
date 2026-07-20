@@ -262,7 +262,6 @@ export const localesBY: LocaleDictionary = {
     }
   },
   release: {
-    added: 'Дададзена',
-    listen: 'Слухаць'
+    added: 'Дададзена'
   }
 }
