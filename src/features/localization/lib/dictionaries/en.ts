@@ -63,7 +63,7 @@ export const localesEN: LocaleDictionary = {
   albumPageMetadata: {
     artists: 'Artists',
     genre: 'Genre',
-    period: 'Period'
+    period: 'Release year'
   },
   settings: {
     createUser: 'Create user',

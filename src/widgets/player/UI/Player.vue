@@ -13,9 +13,6 @@
     />
     <PlayerInfo />
     <PlayerControlPanel />
-    <transition name="slide-in">
-      <PlayerPlaylist v-if="isPlaylistExpanded" />
-    </transition>
   </section>
 </template>
 
@@ -24,11 +21,10 @@ import { useDevice } from '~shared/model'
 import { usePlayer } from '~features/player'
 import { Button } from '~shared/UI'
 import PlayerInfo from './PlayerInfo.vue'
-import PlayerPlaylist from './PlayerPlaylist.vue'
 import PlayerControlPanel from './PlayerControlPanel.vue'
 
 const { isMobile } = useDevice()
-const { screensaveMode, isPlaylistExpanded, playingTrack } = usePlayer()
+const { screensaveMode, playingTrack } = usePlayer()
 </script>
 
 <style lang="scss">

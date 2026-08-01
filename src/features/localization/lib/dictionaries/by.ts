@@ -60,6 +60,11 @@ export const localesBY: LocaleDictionary = {
     settings: 'Налады',
     tracks: 'Трэкi'
   },
+  albumPageMetadata: {
+    artists: 'Артыст',
+    genre: 'Жанр',
+    period: 'Год выпуску'
+  },
   settings: {
     createUser: 'Стварыць карыстальніка',
     showUsers: 'Паказаць усiх карыстальнікаў',

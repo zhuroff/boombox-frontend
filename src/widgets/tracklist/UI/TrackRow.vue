@@ -5,7 +5,7 @@
   >
     <div :class="[{ '--disabled': track?.idDisabled }, 'trackrow__container']">
       <Button
-        v-if="!isMobile"
+        v-if="!isMobile && isDraggable"
         icon="drag"
         size="small"
         isText
@@ -97,6 +97,7 @@ import type { SelectInputFieldSchema } from '~shared/lib'
 
 type Props = {
   track: PlaylistTrack
+  isDraggable: boolean
   trackOptionsMenu: string | null
 }
 
@@ -274,12 +275,13 @@ const openCloseActions = (e: MouseEvent) => {
         &:before {
           content: '';
           position: absolute;
-          top: -1px;
+          top: -2px;
           left: 0;
           width: 100%;
           height: 2px;
           z-index: 1;
           background-color: var.$light;
+          box-shadow: none;
         }
       }
     }
@@ -366,21 +368,6 @@ const openCloseActions = (e: MouseEvent) => {
   &.--paused {
     @include var.media('<desktop') {
       color: var.$accent;
-    }
-
-    @include var.media('>=desktop') {
-      box-shadow: #c5c5c5 0px 5px 15px;
-      padding-top: var.$fieldPadding;
-      padding-bottom: var.$fieldPadding;
-      transition: all 0.1s var.$animation;
-    }
-
-    .trackrow {
-      &__container {
-        &:after {
-          content: none;
-        }
-      }
     }
   }
 

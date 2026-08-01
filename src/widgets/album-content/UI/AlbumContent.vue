@@ -120,7 +120,7 @@ const { localize } = useLocalization()
 
   &__note {
     margin-top: var.$basicPadding;
-    border-top: 1px solid var.$paleLW;
+    border-top: 1px solid var.$paleMD;
 
     @include var.media('<desktop') {
       padding: var.$mainPadding var.$basicPadding 0;
