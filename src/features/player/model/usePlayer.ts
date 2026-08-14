@@ -15,7 +15,7 @@ const usePlayer = () => {
     trackVolume,
     playingTrack,
     playingTrackRef,
-    fetchTrackStreamURL,
+    fetchTrackStreamURLAsync,
     destroyPlayingTrack,
     clearNextPreload,
     fetchingTrackId,
@@ -56,10 +56,19 @@ const usePlayer = () => {
   }
 
   const playTrack = (track: TrackBasic) => {
-    if (isSwitchingTrack.value) return
+    isSwitchingTrack.value = false
 
-    if (track._id === playingTrack.value?._id) {
-      return playingTrackRef.value?.play()
+    if (track._id === playingTrack.value?._id && playingTrackRef.value) {
+      playingTrack.value.isOnPause = false
+      void playingTrackRef.value
+        .play()
+        .then(() => {
+          if (playingTrack.value?._id === track._id) {
+            playingTrack.value.isOnPlaying = true
+          }
+        })
+        .catch(console.error)
+      return
     }
 
     clearNextPreload()
@@ -67,12 +76,28 @@ const usePlayer = () => {
     destroyPlayingTrack()
 
     const targetTrack = searchTrackInPlaylists(track, replacePlaylist)
-    if (!targetTrack) return
+    if (!targetTrack) {
+      fetchingTrackId.value = null
+      return
+    }
 
+    targetTrack.isOnPause = false
     playingTrack.value = targetTrack
 
     if (!targetTrack.streamURL) {
-      fetchTrackStreamURL()
+      fetchTrackStreamURLAsync()
+        .then((src) => {
+          if (playingTrack.value?._id !== track._id) return
+          targetTrack.streamURL = src
+          playTrackStream(src)
+        })
+        .catch((error) => {
+          console.error('Failed to fetch track stream URL:', error)
+          if (fetchingTrackId.value === track._id) {
+            fetchingTrackId.value = null
+          }
+          isSwitchingTrack.value = false
+        })
     } else {
       playTrackStream(targetTrack.streamURL)
     }

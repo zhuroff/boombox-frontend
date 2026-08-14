@@ -7,7 +7,7 @@
       />
     </transition>
 
-    <transition-group name="flyUp">
+    <transition-group name="fade">
       <Header
         v-if="pageHeadingKey"
         key="header"

@@ -32,7 +32,8 @@ export const localesBY: LocaleDictionary = {
   albumNoteFilter: {
     all: 'Усе альбомы',
     withReviews: 'З рэцэнзіямі',
-    withoutReviews: 'Без рэцэнзій'
+    withoutReviews: 'Без рэцэнзій',
+    withoutDescription: 'Без апісання'
   },
   albumVinylFilter: {
     all: 'Усе альбомы',

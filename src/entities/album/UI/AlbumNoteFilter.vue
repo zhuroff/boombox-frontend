@@ -27,7 +27,7 @@ const emit = defineEmits<Emits>()
 
 const { localize } = useLocalization()
 
-const filterValues: AlbumNoteFilter[] = ['all', 'withReviews', 'withoutReviews']
+const filterValues: AlbumNoteFilter[] = ['all', 'withReviews', 'withoutReviews', 'withoutDescription']
 
 const filterOptions = computed<DropdownItem[]>(() =>
   filterValues.map((value) => ({
