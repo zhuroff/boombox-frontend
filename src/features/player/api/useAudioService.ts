@@ -26,6 +26,7 @@ const preloadedForTrackId = ref<string | null>(null)
 const preloadAttemptedForPlayingId = ref<string | null>(null)
 
 let preloadGeneration = 0
+let playSessionGeneration = 0
 let nextPreloadInFlight: Promise<void> | null = null
 let nextPreloadInFlightForId: string | null = null
 let crossfadeNextEl: HTMLAudioElement | null = null
@@ -60,16 +61,6 @@ const useAudioService = (dbService: DatabaseService) => {
     mutationFn: () => {
       if (!playingTrack.value) throw new Error('No track')
       return getStreamUrlForTrack(playingTrack.value)
-    }
-  })
-
-  const { mutate: fetchTrackStreamURL } = useMutation<string>({
-    mutationFn: () => {
-      if (!playingTrack.value) throw new Error('No track')
-      return getStreamUrlForTrack(playingTrack.value)
-    },
-    onSuccess: (src) => {
-      playTrackStream(src)
     }
   })
 
@@ -189,11 +180,13 @@ const useAudioService = (dbService: DatabaseService) => {
   }
 
   const adoptPreloadedNext = (track: PlaylistTrack) => {
+    const sessionGen = ++playSessionGeneration
     const currentTrackId = track._id
     const audio = preloadedNextAudioRef.value!
     preloadedNextAudioRef.value = null
     preloadedForTrackId.value = null
 
+    track.isOnPause = false
     playingTrack.value = track
     playingTrackRef.value = audio
     audio.volume = trackVolume.value
@@ -201,18 +194,31 @@ const useAudioService = (dbService: DatabaseService) => {
 
     audio
       .play()
-      .then(() => checkAndSetDuration(currentTrackId))
-      .then(() => playingTrackRef.value && playingStateHandler(playingTrackRef.value, currentTrackId))
-      .then(() => playingTrack.value && (playingTrack.value.isOnPlaying = true))
       .then(() => {
+        if (sessionGen !== playSessionGeneration) return
+        checkAndSetDuration(currentTrackId)
+      })
+      .then(() => {
+        if (sessionGen !== playSessionGeneration || !playingTrackRef.value) return
+        playingStateHandler(playingTrackRef.value, currentTrackId)
+      })
+      .then(() => {
+        if (sessionGen !== playSessionGeneration || !playingTrack.value) return
+        playingTrack.value.isOnPlaying = true
+      })
+      .then(() => {
+        if (sessionGen !== playSessionGeneration) return
         setTimeout(() => {
+          if (sessionGen !== playSessionGeneration) return
           if (playingTrack.value?._id === currentTrackId) {
             isSwitchingTrack.value = false
           }
         }, 100)
       })
       .catch((error) => {
+        if (sessionGen !== playSessionGeneration) return
         console.error(error)
+        fetchingTrackId.value = null
         isSwitchingTrack.value = false
       })
   }
@@ -260,29 +266,49 @@ const useAudioService = (dbService: DatabaseService) => {
   }
 
   const playTrackStream = (src: string) => {
-    if (!playingTrack.value) return
+    const sessionGen = ++playSessionGeneration
+
+    if (!playingTrack.value) {
+      fetchingTrackId.value = null
+      isSwitchingTrack.value = false
+      return
+    }
 
     const currentTrackId = playingTrack.value._id
     playingTrack.value.streamURL = src
+    playingTrack.value.isOnPause = false
     const proxyURL = proxyCloudUrl(src) || src
 
     playingTrackRef.value = new Audio(proxyURL)
     playingTrackRef.value.volume = trackVolume.value
     playingTrackRef.value
       .play()
-      .then(() => checkAndSetDuration(currentTrackId))
-      .then(() => playingTrackRef.value && playingStateHandler(playingTrackRef.value, currentTrackId))
-      .then(() => playingTrack.value && (playingTrack.value.isOnPlaying = true))
       .then(() => {
+        if (sessionGen !== playSessionGeneration) return
+        checkAndSetDuration(currentTrackId)
+      })
+      .then(() => {
+        if (sessionGen !== playSessionGeneration || !playingTrackRef.value) return
+        playingStateHandler(playingTrackRef.value, currentTrackId)
+      })
+      .then(() => {
+        if (sessionGen !== playSessionGeneration || !playingTrack.value) return
+        playingTrack.value.isOnPlaying = true
+      })
+      .then(() => {
+        if (sessionGen !== playSessionGeneration) return
         fetchingTrackId.value = null
         setTimeout(() => {
+          if (sessionGen !== playSessionGeneration) return
           if (playingTrack.value?._id === currentTrackId) {
             isSwitchingTrack.value = false
           }
         }, 100)
       })
       .catch((error) => {
+        if (sessionGen !== playSessionGeneration) return
         console.error(error)
+        fetchingTrackId.value = null
         isSwitchingTrack.value = false
       })
   }
@@ -472,7 +498,7 @@ const useAudioService = (dbService: DatabaseService) => {
     fetchingTrackId,
     playingTrackRef,
     playTrackStream,
-    fetchTrackStreamURL,
+    fetchTrackStreamURLAsync,
     destroyPlayingTrack,
     isSwitchingTrack,
     clearNextPreload

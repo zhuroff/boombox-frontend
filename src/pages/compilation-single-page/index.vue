@@ -24,6 +24,7 @@
         <template #content>
           <TrackList
             :tracks="compilation.tracks"
+            isDraggable
             @refetchTracklist="refetch"
             @trackOrderChanged="changeTracksOrder"
           />

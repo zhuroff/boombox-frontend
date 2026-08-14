@@ -3,7 +3,7 @@ import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 import type { AlbumNoteFilter, RequestConfig } from '~shared/lib'
 
 const parseNoteFilter = (value: unknown): AlbumNoteFilter => {
-  if (value === 'withReviews' || value === 'withoutReviews') {
+  if (value === 'withReviews' || value === 'withoutReviews' || value === 'withoutDescription') {
     return value
   }
 

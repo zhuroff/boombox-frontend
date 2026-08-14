@@ -32,7 +32,8 @@ export const localesEN: LocaleDictionary = {
   albumNoteFilter: {
     all: 'All albums',
     withReviews: 'With reviews',
-    withoutReviews: 'Without reviews'
+    withoutReviews: 'Without reviews',
+    withoutDescription: 'Without description'
   },
   albumVinylFilter: {
     all: 'All albums',
@@ -63,7 +64,7 @@ export const localesEN: LocaleDictionary = {
   albumPageMetadata: {
     artists: 'Artists',
     genre: 'Genre',
-    period: 'Period'
+    period: 'Release year'
   },
   settings: {
     createUser: 'Create user',

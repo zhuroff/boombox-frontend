@@ -9,6 +9,7 @@
         v-for="track in trackList"
         :key="track._id"
         :track="track"
+        :isDraggable="!!isDraggable"
         :trackOptionsMenu="trackOptionsMenu"
         @refetchTracklist="emit('refetchTracklist')"
         @setTrackOptionsMenu="setTrackOptionsMenu"
@@ -28,6 +29,7 @@ import type { TrackBasic } from '~entities/track'
 
 type Props = {
   tracks: TrackBasic[]
+  isDraggable?: boolean
 }
 
 type Emits = {
@@ -47,7 +49,8 @@ const setTrackOptionsMenu = (trackId: string | null) => {
 }
 
 const dragOptions = computed(() => ({
-  animation: 300
+  animation: 300,
+  disabled: !props.isDraggable
 }))
 
 const orderChanged = (event: DraggableEvent) => {

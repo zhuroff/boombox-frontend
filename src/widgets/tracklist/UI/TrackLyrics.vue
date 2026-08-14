@@ -14,84 +14,76 @@
     </header>
 
     <div class="lyrics__content">
-      <transition name="fade">
-        <Loader
-          v-if="isFetchingExternalLyrics"
-          mode="light"
-        />
-      </transition>
+      <Loader
+        v-if="!isLyricsFetched || isFetchingExternalLyrics"
+        mode="light"
+      />
 
-      <transition
-        name="flyUp"
-        v-if="!isFetchingExternalLyrics"
-      >
+      <template v-if="isLyricsFetched">
         <div
           v-if="!lyricsLocal && !externalLyrics.length"
           class="lyrics__empty"
         >
           {{ localize('lyrics.empty') }}
         </div>
-      </transition>
 
-      <TextareaInput
-        v-if="!isFetchingExternalLyrics && !externalLyrics.length"
-        className="lyrics__text"
-        name="lyrics"
-        type="textarea"
-        :modelValue="lyricsLocal || ''"
-        :placeholder="localize('lyrics.placeholder')"
-        @onInput="updateLyrics"
-      />
+        <TextareaInput
+          v-if="!externalLyrics.length"
+          className="lyrics__text"
+          name="lyrics"
+          type="textarea"
+          :modelValue="lyricsLocal"
+          :placeholder="localize('lyrics.placeholder')"
+          @onInput="onLyricsInput"
+        />
 
-      <div
-        v-if="!isFetchingExternalLyrics"
-        class="lyrics__results"
-      >
-        <ul
-          v-if="externalLyrics.length"
-          class="lyrics__list"
-        >
-          <li
-            v-for="(item, index) in externalLyrics"
-            :key="index"
-            class="lyrics__item"
+        <div class="lyrics__results">
+          <ul
+            v-if="externalLyrics.length"
+            class="lyrics__list"
           >
-            <img
-              :src="item.thumbnail"
-              class="lyrics__item_thumbnail"
-            />
-
-            <div class="lyrics__item_content">
-              <div class="lyrics__item_title">{{ item.artist }} - {{ item.title }}</div>
-
-              <Button
-                size="small"
-                isText
-                :style="lyricsActionStyle"
-                :label="expandCollapseLabel(index)"
-                @click="expandLyrics(index)"
-              />&nbsp;&nbsp;
-
-              <Button
-                size="small"
-                isText
-                :style="lyricsActionStyle"
-                :label="localize('lyrics.save')"
-                @click="saveLyrics(item.lyrics).then(postSaveHandler)"
+            <li
+              v-for="(item, index) in externalLyrics"
+              :key="index"
+              class="lyrics__item"
+            >
+              <img
+                :src="item.thumbnail"
+                class="lyrics__item_thumbnail"
               />
 
-              <TextareaInput
-                v-if="expandedLyrics === index"
-                :modelValue="item.lyrics"
-                name="lyrics"
-                type="textarea"
-                className="lyrics__text"
-                disabled
-              />
-            </div>
-          </li>
-        </ul>
-      </div>
+              <div class="lyrics__item_content">
+                <div class="lyrics__item_title">{{ item.artist }} - {{ item.title }}</div>
+
+                <Button
+                  size="small"
+                  isText
+                  :style="lyricsActionStyle"
+                  :label="expandCollapseLabel(index)"
+                  @click="expandLyrics(index)"
+                />&nbsp;&nbsp;
+
+                <Button
+                  size="small"
+                  isText
+                  :style="lyricsActionStyle"
+                  :label="localize('lyrics.save')"
+                  @click="saveLyrics(item.lyrics).then(postSaveHandler)"
+                />
+
+                <TextareaInput
+                  v-if="expandedLyrics === index"
+                  :modelValue="item.lyrics"
+                  name="lyrics"
+                  type="textarea"
+                  className="lyrics__text"
+                  disabled
+                />
+              </div>
+            </li>
+          </ul>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -113,18 +105,16 @@ interface Props {
 const props = defineProps<Props>()
 
 const { localize } = useLocalization()
-
 const { setSnackbarMessage } = useSnackbar()
 
 const dbService = new DatabaseService()
 
-const lyricsLocal = ref<null | string>(null)
+const lyricsLocal = ref('')
+const isLyricsInitialized = ref(false)
 const expandedLyrics = ref<null | number>(null)
 
-const { lyricsRes, saveLyrics, fetchExternalLyrics, isFetchingExternalLyrics, externalLyrics } = useTrack(
-  props.track._id,
-  dbService
-)
+const { lyricsRes, saveLyrics, fetchExternalLyrics, isFetchingExternalLyrics, isLyricsFetched, externalLyrics } =
+  useTrack(props.track._id, dbService)
 
 const lyricsActionStyle = {
   color: 'var(--paleDP)',
@@ -136,6 +126,11 @@ const lyricsActionStyle = {
 const updateLyrics = debounce((value?: string) => {
   saveLyrics(value || '')
 }, 1000)
+
+const onLyricsInput = (value?: string) => {
+  lyricsLocal.value = value || ''
+  updateLyrics(value)
+}
 
 const postSaveHandler = () => {
   externalLyrics.value = []
@@ -162,8 +157,11 @@ const expandLyrics = (index: number) => {
   expandedLyrics.value = index === expandedLyrics.value ? null : index
 }
 
-watch(lyricsRes, (newValue) => {
-  lyricsLocal.value = newValue?.lyrics || ''
+watch(isLyricsFetched, (fetched) => {
+  if (!fetched || isLyricsInitialized.value) return
+
+  lyricsLocal.value = lyricsRes.value?.lyrics || ''
+  isLyricsInitialized.value = true
 })
 </script>
 
@@ -199,20 +197,14 @@ watch(lyricsRes, (newValue) => {
   &__content {
     padding: var.$mainPadding;
     position: relative;
-    flex-grow: 1;
-    max-height: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow: auto;
 
     .loader {
       position: absolute;
-      background: var.$light;
-      z-index: 100;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      inset: 0;
+      z-index: 1;
     }
   }
 

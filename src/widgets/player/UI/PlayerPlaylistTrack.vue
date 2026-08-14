@@ -94,11 +94,6 @@ const isTrackPlaying = computed(() => {
   }
 
   &.--active {
-    color: var.$paleDP;
-    box-shadow: var.$shadowMedium;
-    padding-top: var.$fieldPadding;
-    padding-bottom: var.$fieldPadding;
-    transition: all 0.1s var.$animation;
 
     .playlist__track-sign {
       color: var.$paleDP;
@@ -106,7 +101,7 @@ const isTrackPlaying = computed(() => {
 
     .playlist__track-cover {
       img {
-        filter: brightness(0.3);
+        filter: brightness(0.5);
       }
 
       .icon {

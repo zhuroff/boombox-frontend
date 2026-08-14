@@ -11,6 +11,9 @@
     </main>
     <Player />
     <Snackbar />
+    <transition name="slide-in">
+      <PlayerPlaylist v-if="isPlaylistExpanded" />
+    </transition>
   </div>
 </template>
 
@@ -20,8 +23,9 @@ import { Player } from '~widgets/player'
 import { Snackbar } from '~shared/UI'
 import { useDevice } from '~shared/model'
 import { usePlayer } from '~features/player'
+import PlayerPlaylist from '~widgets/player/UI/PlayerPlaylist.vue'
 
-const { screensaveMode } = usePlayer()
+const { screensaveMode, isPlaylistExpanded } = usePlayer()
 const { isMobile } = useDevice()
 </script>
 
