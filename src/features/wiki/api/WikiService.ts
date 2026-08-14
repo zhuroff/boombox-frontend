@@ -1,7 +1,13 @@
-import wiki from 'wikipedia'
+import wikiModule from 'wikipedia'
+
+type WikipediaClient = typeof wikiModule & {
+  default?: typeof wikiModule
+}
+
+const wiki = (wikiModule as WikipediaClient).default ?? wikiModule
 
 export default class WikiService {
-  private client: typeof wiki
+  private client: WikipediaClient
 
   constructor() {
     this.client = wiki

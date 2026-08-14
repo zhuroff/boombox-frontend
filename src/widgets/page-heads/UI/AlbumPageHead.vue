@@ -40,7 +40,7 @@ import { CoverArt } from '~widgets/cover-art'
 import PageHeadMetadata from './PageHeadMetadata.vue'
 import PageHeadActions from './PageHeadActions.vue'
 import type { ActionPropertyItem, HeadEmits } from '~widgets/page-heads'
-import type { AlbumFull } from '~/entities/album'
+import type { AlbumFull } from '~entities/album'
 
 interface Props {
   album: AlbumFull

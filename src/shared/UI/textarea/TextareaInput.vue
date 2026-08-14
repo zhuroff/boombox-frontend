@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, watchEffect, ref, type Ref, type StyleValue } from 'vue'
+import { onMounted, onUnmounted, computed, watch, ref, type Ref, type StyleValue } from 'vue'
 import type { ElementSize, TextareaInputFieldSchema } from '~shared/lib'
 
 interface Props {
@@ -58,22 +58,53 @@ const stateClasses = computed(() => [
   }
 ])
 
+const getScrollParent = (el: HTMLElement | null): HTMLElement | null => {
+  if (!el) return null
+
+  let parent = el.parentElement
+  while (parent) {
+    const { overflowY } = getComputedStyle(parent)
+    if (overflowY === 'auto' || overflowY === 'scroll') return parent
+    parent = parent.parentElement
+  }
+
+  return null
+}
+
 const resizeTextarea = () => {
-  if (textareaElement.value) {
-    textareaElement.value.setAttribute('style', 'height: auto;')
-    textareaElement.value.setAttribute('style', `height: ${textareaElement.value.scrollHeight + 2}px;`)
+  const el = textareaElement.value
+  if (!el) return
+
+  const scrollParent = getScrollParent(el)
+  const parentScrollTop = scrollParent?.scrollTop ?? 0
+
+  el.style.height = 'auto'
+  el.style.height = `${el.scrollHeight + 2}px`
+
+  if (scrollParent) {
+    scrollParent.scrollTop = parentScrollTop
   }
 }
 
 onMounted(() => {
   resizeTextarea()
-  window.onresize = resizeTextarea
+  window.addEventListener('resize', resizeTextarea)
 })
 
-watchEffect(() => {
-  text.value = props.modelValue || ''
-  setTimeout(resizeTextarea, 0)
+onUnmounted(() => {
+  window.removeEventListener('resize', resizeTextarea)
 })
+
+watch(
+  () => props.modelValue,
+  (modelValue) => {
+    const next = modelValue || ''
+    if (next === text.value) return
+
+    text.value = next
+    setTimeout(resizeTextarea, 0)
+  }
+)
 
 const emitTextareaValue = () => {
   resizeTextarea()
