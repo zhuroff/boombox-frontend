@@ -27,6 +27,12 @@
     >
       {{ cardCaption }}
     </div>
+    <div
+      v-if="cardMeta"
+      class="cardlist__item-info"
+    >
+      {{ cardMeta }}
+    </div>
   </component>
 </template>
 
@@ -39,6 +45,7 @@ type Props = {
   cardCover: string
   isRouteLink?: boolean
   cardCaption?: string
+  cardMeta?: string
   coverClasses?: string[]
   withVinyl?: boolean
 }

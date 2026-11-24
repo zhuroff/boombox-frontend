@@ -4,6 +4,7 @@
     :cardTitle="card.title"
     :cardCover="cardCover"
     :cardCaption="cardCaption"
+    :cardMeta="addedAt"
   />
 </template>
 
@@ -33,6 +34,26 @@ const routePath = computed(() => {
   return {
     path: `/${dynamicEntityKey.value}/${id}`
   }
+})
+
+const formatAddedAt = (value: string) => {
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return ''
+  }
+
+  const pad = (part: number) => String(part).padStart(2, '0')
+
+  return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}, ${pad(date.getHours())}.${pad(date.getMinutes())}`
+}
+
+const addedAt = computed(() => {
+  if (props.entityKey !== 'albums' || props.card.kind !== 'album' || !props.card.dateCreated) {
+    return undefined
+  }
+
+  return formatAddedAt(props.card.dateCreated) || undefined
 })
 
 const cardCaption = computed(() => {
