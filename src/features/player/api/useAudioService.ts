@@ -32,6 +32,7 @@ let nextPreloadInFlightForId: string | null = null
 let crossfadeNextEl: HTMLAudioElement | null = null
 let crossfadeNextTrack: PlaylistTrack | null = null
 let crossfadeFromTrackId: string | null = null
+let backgroundResumeBound = false
 
 const getOverlapSeconds = (dur: number) => {
   if (!dur || !isFinite(dur)) return CROSSFADE_SECONDS
@@ -367,9 +368,56 @@ const useAudioService = (dbService: DatabaseService) => {
     }
   }
 
+  const publishMediaSession = (trackId: string) => {
+    if (!('mediaSession' in navigator)) return
+
+    const track = playingTrack.value
+    if (!track || track._id !== trackId) return
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.title,
+      artist: track.artist?.title || '',
+      album: track.inAlbum?.title || ''
+    })
+    navigator.mediaSession.playbackState = 'playing'
+  }
+
+  const continueOnSameElement = (audio: HTMLAudioElement, track: PlaylistTrack, src: string) => {
+    isSwitchingTrack.value = true
+    clearNextPreload()
+
+    const proxyURL = proxyCloudUrl(src) || src
+    track.streamURL = src
+    track.isOnPause = false
+    playingTrack.value = track
+    playingTrackRef.value = audio
+    audio.volume = audio.muted ? 0 : trackVolume.value
+    audio.src = proxyURL
+    void audio.play().catch((error) => {
+      console.error(error)
+      isSwitchingTrack.value = false
+    })
+    playingStateHandler(audio, track._id)
+    track.isOnPlaying = true
+    fetchingTrackId.value = null
+    window.setTimeout(() => {
+      if (playingTrack.value?._id === track._id) {
+        isSwitchingTrack.value = false
+      }
+    }, 100)
+  }
+
   const playingStateHandler = (audio: HTMLAudioElement, trackId: string) => {
     isPlayingStarted.value = true
     preloadAttemptedForPlayingId.value = null
+    publishMediaSession(trackId)
+
+    if (!playingTrack.value?.isOnRepeat) {
+      const upcoming = getNextTrack(trackId)
+      if (upcoming) {
+        void ensureNextTrackPreloaded(upcoming, trackId)
+      }
+    }
 
     audio.onended = () => {
       if (playingTrack.value?._id !== trackId || isSwitchingTrack.value) return
@@ -379,13 +427,18 @@ const useAudioService = (dbService: DatabaseService) => {
         return
       }
 
-      if (playingTrack.value.isOnRepeat) {
-        clearNextPreload()
-        playTrackStream(playingTrack.value.streamURL!)
-      } else {
-        const nextTrack = getNextTrack(trackId)
-        void playNextTrack(nextTrack)
+      if (playingTrack.value.isOnRepeat && playingTrack.value.streamURL) {
+        continueOnSameElement(audio, playingTrack.value, playingTrack.value.streamURL)
+        return
       }
+
+      const nextTrack = getNextTrack(trackId)
+      if (nextTrack?.streamURL) {
+        continueOnSameElement(audio, nextTrack, nextTrack.streamURL)
+        return
+      }
+
+      void playNextTrack(nextTrack)
     }
 
     audio.ontimeupdate = () => {
@@ -478,6 +531,31 @@ const useAudioService = (dbService: DatabaseService) => {
     setTimeout(() => {
       if (playingTrack.value?._id === id) isSwitchingTrack.value = false
     }, 100)
+  }
+
+  const resumeAfterBackground = () => {
+    if (document.visibilityState !== 'visible') return
+
+    const audio = playingTrackRef.value
+    const current = playingTrack.value
+    if (!audio || !current || current.isOnPause || isSwitchingTrack.value) return
+
+    if (audio.ended) {
+      const next = current.isOnRepeat ? current : getNextTrack(current._id)
+      void playNextTrack(next)
+      return
+    }
+
+    if (audio.paused) {
+      void audio.play().catch((error) => {
+        console.error(error)
+      })
+    }
+  }
+
+  if (!backgroundResumeBound && typeof document !== 'undefined') {
+    backgroundResumeBound = true
+    document.addEventListener('visibilitychange', resumeAfterBackground)
   }
 
   onMounted(() => {
