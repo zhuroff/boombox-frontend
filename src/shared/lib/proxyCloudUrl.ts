@@ -1,3 +1,5 @@
+import { hostString } from '~shared/utils'
+
 export const proxyCloudUrl = (url?: string): string | undefined => {
   if (!url) return url
 
@@ -5,7 +7,7 @@ export const proxyCloudUrl = (url?: string): string | undefined => {
   const isYandexDownload = url.includes('downloader.disk.yandex.ru')
 
   if (isPCloud || isYandexDownload) {
-    return `/api/proxy?url=${encodeURIComponent(url)}`
+    return hostString(`/api/proxy?url=${encodeURIComponent(url)}`)
   }
 
   return url
