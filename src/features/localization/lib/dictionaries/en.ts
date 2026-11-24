@@ -31,9 +31,8 @@ export const localesEN: LocaleDictionary = {
   },
   albumNoteFilter: {
     all: 'All albums',
-    withReviews: 'With reviews',
-    withoutReviews: 'Without reviews',
-    withoutDescription: 'Without description'
+    withNote: 'With a note',
+    withoutNote: 'Without a note'
   },
   albumVinylFilter: {
     all: 'All albums',

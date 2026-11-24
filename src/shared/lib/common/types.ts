@@ -49,7 +49,7 @@ export type RelatedAlbums<T> = {
   docs: T[]
 }
 
-export type AlbumNoteFilter = 'all' | 'withReviews' | 'withoutReviews' | 'withoutDescription'
+export type AlbumNoteFilter = 'all' | 'withNote' | 'withoutNote'
 
 export type AlbumVinylFilter = 'all' | 'onVinyl' | 'notOnVinyl'
 
